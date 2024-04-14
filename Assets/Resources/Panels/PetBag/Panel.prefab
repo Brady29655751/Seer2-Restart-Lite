@@ -1878,7 +1878,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &4601052831848458830
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2002,6 +2002,18 @@ MonoBehaviour:
         m_TargetAssemblyTypeName: PetPersonalityController, Assembly-CSharp
         m_MethodName: SetActive
         m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 9204424932545141636}
+        m_TargetAssemblyTypeName: PetBagController, Assembly-CSharp
+        m_MethodName: RemovePetTrainSubscription
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -7905,6 +7917,7 @@ MonoBehaviour:
   skinController: {fileID: 6373803924818842143}
   personalityController: {fileID: 1193421894842685737}
   switchController: {fileID: 0}
+  teamController: {fileID: 0}
 --- !u!1 &7220097708781135954
 GameObject:
   m_ObjectHideFlags: 0

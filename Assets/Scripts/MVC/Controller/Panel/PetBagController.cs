@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
@@ -26,9 +27,6 @@ public class PetBagController : Module
 
     private void InitSubscriptions() {
         selectController.onSelectIndexEvent += buttonView.OnSelect;
-        
-        if (mode == PetBagMode.Normal)
-            personalityController.onSelectPersonalityEvent += ToBestPet;
     }
 
     private Pet[] GetPetBag() {
@@ -56,15 +54,29 @@ public class PetBagController : Module
     }
 
     public void SetPetTrain() {
+        personalityController.onSelectPersonalityEvent += ToBestPet;
         personalityController.SetActive(true);
     }
 
     public void ToBestPet(Personality personality) {
+        personalityController.onSelectPersonalityEvent -= ToBestPet;
         personalityController.SetActive(false);
         if (buttonModel.SetPetTrain() == null)
             return;
 
         buttonView.OnSetPetTrain();
+        RefreshPetBag();
+    }
+
+    public void SetPetPersonality() {
+        personalityController.onSelectPersonalityEvent += ToPersonalityPet;
+        personalityController.SetActive(true);
+    }
+
+    public void ToPersonalityPet(Personality personality) {
+        personalityController.onSelectPersonalityEvent -= ToPersonalityPet;
+        personalityController.SetActive(false);
+        
         RefreshPetBag();
     }
 

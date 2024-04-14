@@ -429,7 +429,7 @@ public class ResourceManager : Singleton<ResourceManager>
 
     private void LoadMissionInfoDict(int startIndex, int count, Action<int, MissionInfo> onSuccess) {
         for (int i = 1; i <= count; i++) {
-            int id = startIndex + count;
+            int id = startIndex + i;
             LoadXML<MissionInfo>(missionUrl + id + ".xml", (x) => onSuccess?.Invoke(id, x), (x) => {});
         }
     }

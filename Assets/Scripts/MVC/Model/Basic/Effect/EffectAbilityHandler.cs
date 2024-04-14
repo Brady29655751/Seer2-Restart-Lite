@@ -517,8 +517,18 @@ public static class EffectAbilityHandler
 
         if (state == null) {
             Pet pet = (Pet)effect.invokeUnit;
+
             if (type == "evReset") {
                 pet.talent.ResetEV();
+                return true;
+            }
+
+            if ((type == "personality") && (value == "-1")) {
+                var petBagController = GameObject.FindObjectOfType<PetBagController>();
+                if (petBagController == null)
+                    return false;
+
+                petBagController.SetPetPersonality();
                 return true;
             }
 
