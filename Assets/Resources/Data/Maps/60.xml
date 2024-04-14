@@ -1,0 +1,954 @@
+<map name="教官室" category="1" id="60" weather="0">
+	<resource>10006</resource>
+	<fightMap>100011</fightMap>
+	<initialPoint>600,150</initialPoint>
+	<music category="1">
+		<bgm>MU_000</bgm>
+	</music>
+	<entities>
+<!-- 		主宠神迹  神遁 ================ -->
+<!-- 		 <npc id="3047" resId="3047" name="" dir="1" width="75" height="100"  pos="815,520" actorPos="815,520">
+			<eventHandler>
+				<mouseOver>
+					<HandlerShowNpcSlogan><![CDATA[神遁试炼开启]]></HandlerShowNpcSlogan>
+				</mouseOver>
+				<click>
+					<HandlerToggleModule><![CDATA[LaAoYeWakeupMainPanel]]></HandlerToggleModule>
+				</click>
+			</eventHandler>
+		</npc>
+		
+		 <npc id="3035" resId="3035" name="" dir="1" width="75" height="100"  pos="724,600"   actorPos="724,540">
+			<eventHandler>
+				<mouseOver>
+					<HandlerShowNpcSlogan><![CDATA[三主宠神迹试炼开启]]></HandlerShowNpcSlogan>
+				</mouseOver>
+				<click>
+					<HandlerToggleModule><![CDATA[DiLanTeWakeupMainPanel]]></HandlerToggleModule>
+				</click>
+			</eventHandler>
+		</npc>
+		
+		   <npc id="396" resId="396" name="" dir="1" width="110" height="145"  pos="845,620" actorPos="845,620" path="">
+			<eventHandler>
+				<mouseOver>
+					<HandlerShowNpcSlogan><![CDATA[三主宠神迹试炼开启]]></HandlerShowNpcSlogan>
+				</mouseOver>
+				<click>
+					<HandlerToggleModule><![CDATA[XiuLuoWakeupMainPanel]]></HandlerToggleModule>
+				</click>
+			</eventHandler>
+		</npc>-->
+<!-- 		================== -->
+
+		<npc id="6001" resId="6001" name="克拉克" size="150,105" pos="250,230">
+			<description><![CDATA[英雄出少年啊！]]></description>
+			<dialog>
+				<branch id="default" name="克拉克" icon="6001" size="180,130" pos="0,45">
+					<content><![CDATA[稍息，立正！严肃点，机灵点！SPT的所有任务只有智勇双全的小赛尔才能接取。你呢，够格吗？]]></content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[会比雷神强吗？]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+					</replyHandler>
+				</branch>
+			</dialog>
+			<eventHandler>
+				<button type="click">
+					<action>openDialog</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<npc id="6002" resId="Pets/pet/3.png" name="迪兰特" size="100,108" pos="60,140" namePos="20,0">
+			<description><![CDATA[主宠训练营——迪兰特]]></description>
+			<dialog>
+				<branch id="default" name="迪兰特" icon="Pets/pet/3.png" size="100,108" pos="-10,45">
+					<content><![CDATA[水系主宠训练营的训练，需要有聪颖的智慧，你们准备好了吗？]]></content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[我待会再来找你]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+						<reply type="click">
+							<description><![CDATA[是的，现在就开始训练吧！]]></description>
+							<action>battle</action>
+							<param>1</param>
+							<condition>firstPet.levelLTE20</condition>
+						</reply>
+						<reply type="branch">
+							<action>battle</action>
+							<param>2</param>
+							<condition>firstPet.levelGTE21</condition>
+							<condition>firstPet.levelLTE40</condition>
+						</reply>
+						<reply type="branch">
+							<action>battle</action>
+							<param>3</param>
+							<condition>firstPet.levelGTE41</condition>
+							<condition>firstPet.levelLTE60</condition>
+						</reply>
+						<reply type="branch">
+							<action>battle</action>
+							<param>4</param>
+							<condition>firstPet.levelGTE61</condition>
+							<condition>firstPet.levelLTE80</condition>
+						</reply>
+						<reply type="branch">
+							<action>battle</action>
+							<param>5</param>
+							<condition>firstPet.levelGTE81</condition>
+						</reply>
+					</replyHandler>
+				</branch>
+				<branch id="wrong_pet" name="迪兰特" icon="Pets/pet/3.png" size="100,108" pos="-10,45">
+					<content><![CDATA[将迪兰、迪迪兰或迪兰特设为首发精灵再来挑战吧！]]></content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[我待会再来找你]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+					</replyHandler>
+				</branch>
+				<branch id="done" name="迪兰特" icon="Pets/pet/3.png" size="100,108" pos="-10,45">
+					<content><![CDATA[你的水系主宠今天已经训练过了，明天再来吧！]]></content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[我明天再来找你]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+					</replyHandler>
+				</branch>
+			</dialog>
+			<battle>
+				<branch id="1">
+					<settings count="1"/>
+					<enemy>
+						<pet id="1" level="10">
+							<status>
+								<hp>40</hp>
+							</status>
+							<loopSkill>10002</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setItem</action>
+							<param>add</param>
+							<param>10201,10</param>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=10个砂糖甜饼已经放入精灵背包</param>
+							<param>item_icon=item[10201]</param>
+							<param>option_num=1</param>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>10000</param>
+							<param>done[1]=true</param>
+						</button>
+					</winHandler>
+				</branch>
+				<branch id="2">
+					<settings count="1"/>
+					<enemy>
+						<pet id="2" level="30">
+							<status>
+								<hp>100</hp>
+							</status>
+							<initBuff>23</initBuff>
+							<loopSkill>10007</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setItem</action>
+							<param>add</param>
+							<param>10201,30</param>
+							<param>10202,10</param>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=30个砂糖甜饼已经放入精灵背包</param>
+							<param>item_icon=item[10201]</param>
+							<param>option_num=1</param>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=10个蔬菜甜饼已经放入精灵背包</param>
+							<param>item_icon=item[10202]</param>
+							<param>option_num=1</param>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>10000</param>
+							<param>done[1]=true</param>
+						</button>
+					</winHandler>
+				</branch>
+				<branch id="3">
+					<settings count="1"/>
+					<enemy>
+						<pet id="3" level="50">
+							<status>
+								<atk>100</atk>
+								<hp>250</hp>
+							</status>
+							<headerSkill>10003</headerSkill>
+							<loopSkill>10010</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setItem</action>
+							<param>add</param>
+							<param>10201,50</param>
+							<param>10202,25</param>
+							<param>10203,10</param>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=50个砂糖甜饼已经放入精灵背包</param>
+							<param>item_icon=item[10201]</param>
+							<param>option_num=1</param>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=25个蔬菜甜饼已经放入精灵背包</param>
+							<param>item_icon=item[10202]</param>
+							<param>option_num=1</param>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=10个果泥甜饼已经放入精灵背包</param>
+							<param>item_icon=item[10203]</param>
+							<param>option_num=1</param>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>10000</param>
+							<param>done[1]=true</param>
+						</button>
+					</winHandler>
+				</branch>
+				<branch id="4">
+					<settings count="1"/>
+					<enemy>
+						<pet id="3" level="70">
+							<status>
+								<mat>500</mat>
+								<def>400</def>
+								<mdf>400</mdf>
+								<hp>350</hp>
+							</status>
+							<initBuff>12</initBuff>
+							<loopSkill>10016,10011</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setItem</action>
+							<param>add</param>
+							<param>10202,25</param>
+							<param>10203,20</param>
+							<param>10204,10</param>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=25个蔬菜甜饼已经放入精灵背包</param>
+							<param>item_icon=item[10202]</param>
+							<param>option_num=1</param>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=20个果泥甜饼已经放入精灵背包</param>
+							<param>item_icon=item[10203]</param>
+							<param>option_num=1</param>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=10个褐蕈甜饼已经放入精灵背包</param>
+							<param>item_icon=item[10204]</param>
+							<param>option_num=1</param>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>10000</param>
+							<param>done[1]=true</param>
+						</button>
+					</winHandler>
+				</branch>
+				<branch id="5">
+					<settings count="1"/>
+					<enemy>
+						<pet id="3" level="90">
+							<status>
+								<hp>500</hp>
+							</status>
+							<initBuff>18</initBuff>
+							<loopSkill>10016,10011</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setItem</action>
+							<param>add</param>
+							<param>10203,20</param>
+							<param>10204,10</param>
+							<param>10205,5</param>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=20个果泥甜饼已经放入精灵背包</param>
+							<param>item_icon=item[10203]</param>
+							<param>option_num=1</param>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=10个褐蕈甜饼已经放入精灵背包</param>
+							<param>item_icon=item[10204]</param>
+							<param>option_num=1</param>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=5个炼乳甜饼已经放入精灵背包</param>
+							<param>item_icon=item[10205]</param>
+							<param>option_num=1</param>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>10000</param>
+							<param>done[1]=true</param>
+						</button>
+					</winHandler>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>openDialog</action>
+					<param>done</param>
+					<condition>activity[10000].done[1]=[bool]true[default]false</condition>
+				</button>
+				<button type="click">
+					<action>openDialog</action>
+					<param>default</param>
+					<condition>firstPet.baseId=1</condition>
+					<condition>activity[10000].done[1]=[bool]false[default]false</condition>
+				</button>
+				<button type="click">
+					<action>openDialog</action>
+					<param>wrong_pet</param>
+					<condition>firstPet.baseIdNOT1</condition>
+					<condition>activity[10000].done[1]=[bool]false[default]false</condition>
+				</button>
+			</eventHandler>
+		</npc>
+		<npc id="6003" resId="Pets/pet/6.png" name="休罗斯" size="134,109" pos="190,95" namePos="10,-5">
+			<description><![CDATA[主宠训练营——休罗斯]]></description>
+			<dialog>
+				<branch id="default" name="休罗斯" icon="Pets/pet/6.png" size="134,109" pos="5,50">
+					<content><![CDATA[火系主宠训练营的训练，需要有强健的体能，你们准备好了吗？]]></content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[我待会再来找你]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+						<reply type="click">
+							<description><![CDATA[是的，现在就开始训练吧！]]></description>
+							<action>battle</action>
+							<param>1</param>
+							<condition>firstPet.levelLTE20</condition>
+						</reply>
+						<reply type="branch">
+							<action>battle</action>
+							<param>2</param>
+							<condition>firstPet.levelGTE21</condition>
+							<condition>firstPet.levelLTE40</condition>
+						</reply>
+						<reply type="branch">
+							<action>battle</action>
+							<param>3</param>
+							<condition>firstPet.levelGTE41</condition>
+							<condition>firstPet.levelLTE60</condition>
+						</reply>
+						<reply type="branch">
+							<action>battle</action>
+							<param>4</param>
+							<condition>firstPet.levelGTE61</condition>
+							<condition>firstPet.levelLTE80</condition>
+						</reply>
+						<reply type="branch">
+							<action>battle</action>
+							<param>5</param>
+							<condition>firstPet.levelGTE81</condition>
+						</reply>
+					</replyHandler>
+				</branch>
+				<branch id="wrong_pet" name="休罗斯" icon="Pets/pet/6.png" size="134,109" pos="5,50">
+					<content><![CDATA[将休咻、休伊尔或休罗斯设为首发精灵再来挑战吧！]]></content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[我待会再来找你]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+					</replyHandler>
+				</branch>
+				<branch id="done" name="休罗斯" icon="Pets/pet/6.png" size="134,109" pos="5,50">
+					<content><![CDATA[你的火系主宠今天已经训练过了，明天再来吧！]]></content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[我明天再来找你]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+					</replyHandler>
+				</branch>
+			</dialog>
+			<battle>
+				<branch id="1">
+					<settings count="1"/>
+					<enemy>
+						<pet id="4" level="10">
+							<status>
+								<hp>40</hp>
+							</status>
+							<loopSkill>10019</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setItem</action>
+							<param>add</param>
+							<param>10231,10</param>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=10个嘉木青苹已经放入精灵背包</param>
+							<param>item_icon=item[10231]</param>
+							<param>option_num=1</param>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>10000</param>
+							<param>done[2]=true</param>
+						</button>
+					</winHandler>
+				</branch>
+				<branch id="2">
+					<settings count="1"/>
+					<enemy>
+						<pet id="5" level="30">
+							<status>
+								<hp>100</hp>
+							</status>
+							<headerSkill>10021,10020,10020</headerSkill>
+							<loopSkill>10024,10022</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setItem</action>
+							<param>add</param>
+							<param>10231,10</param>
+							<param>10232,5</param>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=10个嘉木青苹已经放入精灵背包</param>
+							<param>item_icon=item[10231]</param>
+							<param>option_num=1</param>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=5个蓝薄冰糖已经放入精灵背包</param>
+							<param>item_icon=item[10232]</param>
+							<param>option_num=1</param>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>10000</param>
+							<param>done[2]=true</param>
+						</button>
+					</winHandler>
+				</branch>
+				<branch id="3">
+					<settings count="1"/>
+					<enemy>
+						<pet id="6" level="50">
+							<status>
+								<def>99999</def>
+								<mdf>99999</mdf>
+								<hp>250</hp>
+							</status>
+							<loopSkill>10026,10025,10026</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setItem</action>
+							<param>add</param>
+							<param>10232,10</param>
+							<param>10233,2</param>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=10个蓝薄冰糖已经放入精灵背包</param>
+							<param>item_icon=item[10232]</param>
+							<param>option_num=1</param>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=2个烈叶赤樱已经放入精灵背包</param>
+							<param>item_icon=item[10233]</param>
+							<param>option_num=1</param>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>10000</param>
+							<param>done[2]=true</param>
+						</button>
+					</winHandler>
+				</branch>
+				<branch id="4">
+					<settings count="1"/>
+					<enemy>
+						<pet id="6" level="70">
+							<status>
+								<def>99999</def>
+								<mdf>99999</mdf>
+								<hp>350</hp>
+							</status>
+							<initBuff>13</initBuff>
+							<loopSkill>10027</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setItem</action>
+							<param>add</param>
+							<param>10233,2</param>
+							<param>10234,2</param>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=2个烈叶赤樱已经放入精灵背包</param>
+							<param>item_icon=item[10233]</param>
+							<param>option_num=1</param>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=2个沁雪冻梨已经放入精灵背包</param>
+							<param>item_icon=item[10234]</param>
+							<param>option_num=1</param>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>10000</param>
+							<param>done[2]=true</param>
+						</button>
+					</winHandler>
+				</branch>
+				<branch id="5">
+					<settings count="1"/>
+					<enemy>
+						<pet id="6" level="90">
+							<status>
+								<hp>1500</hp>
+							</status>
+							<initBuff>13,19</initBuff>
+							<loopSkill>10031,10032</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setItem</action>
+							<param>add</param>
+							<param>10234,2</param>
+							<param>10235,1</param>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=2个沁雪冻梨已经放入精灵背包</param>
+							<param>item_icon=item[10234]</param>
+							<param>option_num=1</param>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=1个腴土金杏已经放入精灵背包</param>
+							<param>item_icon=item[10235]</param>
+							<param>option_num=1</param>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>10000</param>
+							<param>done[2]=true</param>
+						</button>
+					</winHandler>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>openDialog</action>
+					<param>done</param>
+					<condition>activity[10000].done[2]=[bool]true[default]false</condition>
+				</button>
+				<button type="click">
+					<action>openDialog</action>
+					<param>default</param>
+					<condition>firstPet.baseId=4</condition>
+					<condition>activity[10000].done[2]=[bool]false[default]false</condition>
+				</button>
+				<button type="click">
+					<action>openDialog</action>
+					<param>wrong_pet</param>
+					<condition>firstPet.baseIdNOT4</condition>
+					<condition>activity[10000].done[2]=[bool]false[default]false</condition>
+				</button>
+			</eventHandler>
+		</npc>
+		<npc id="6004" resId="Pets/pet/9.png" name="拉奥叶" size="131,119" pos="365,100" namePos="0,-15">
+			<description><![CDATA[主宠训练营——拉奥叶]]></description>
+			<dialog>
+				<branch id="default" name="拉奥叶" icon="Pets/pet/9.png" size="131,119" pos="0,45">
+					<content><![CDATA[草系主宠训练营的训练，需要有坚强的耐力，你们准备好了吗？]]></content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[我待会再来找你]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+						<reply type="click">
+							<description><![CDATA[是的，现在就开始训练吧！]]></description>
+							<action>battle</action>
+							<param>1</param>
+							<condition>firstPet.levelLTE20</condition>
+						</reply>
+						<reply type="branch">
+							<action>battle</action>
+							<param>2</param>
+							<condition>firstPet.levelGTE21</condition>
+							<condition>firstPet.levelLTE40</condition>
+						</reply>
+						<reply type="branch">
+							<action>battle</action>
+							<param>3</param>
+							<condition>firstPet.levelGTE41</condition>
+							<condition>firstPet.levelLTE60</condition>
+						</reply>
+						<reply type="branch">
+							<action>battle</action>
+							<param>4</param>
+							<condition>firstPet.levelGTE61</condition>
+							<condition>firstPet.levelLTE80</condition>
+						</reply>
+						<reply type="branch">
+							<action>battle</action>
+							<param>5</param>
+							<condition>firstPet.levelGTE81</condition>
+						</reply>
+					</replyHandler>
+				</branch>
+				<branch id="wrong_pet" name="拉奥叶" icon="Pets/pet/9.png" size="131,119" pos="0,45">
+					<content><![CDATA[将拉奥、拉奥苗或拉奥叶设为首发精灵再来挑战吧！]]></content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[我待会再来找你]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+					</replyHandler>
+				</branch>
+				<branch id="done" name="拉奥叶" icon="Pets/pet/9.png" size="131,119" pos="0,45">
+					<content><![CDATA[你的草系主宠今天已经训练过了，明天再来吧！]]></content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[我明天再来找你]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+					</replyHandler>
+				</branch>
+			</dialog>
+			<battle>
+				<branch id="1">
+					<settings count="1"/>
+					<enemy>
+						<pet id="7" level="10">
+							<status>
+								<hp>40</hp>
+							</status>
+							<loopSkill>10035</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setItem</action>
+							<param>add</param>
+							<param>10221,5</param>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=5个灵华凝素果片已经放入精灵背包</param>
+							<param>item_icon=item[10221]</param>
+							<param>option_num=1</param>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>10000</param>
+							<param>done[3]=true</param>
+						</button>
+					</winHandler>
+				</branch>
+				<branch id="2">
+					<settings count="1"/>
+					<enemy>
+						<pet id="8" level="30">
+							<status>
+								<hp>100</hp>
+							</status>
+							<headerSkill>10037,10039,10039</headerSkill>
+							<loopSkill>10037,10036,10036,10036</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setItem</action>
+							<param>add</param>
+							<param>10221,5</param>
+							<param>10222,3</param>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=5个灵华凝素果片已经放入精灵背包</param>
+							<param>item_icon=item[10221]</param>
+							<param>option_num=1</param>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=3个灵华凝素幼果已经放入精灵背包</param>
+							<param>item_icon=item[10222]</param>
+							<param>option_num=1</param>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>10000</param>
+							<param>done[3]=true</param>
+						</button>
+					</winHandler>
+				</branch>
+				<branch id="3">
+					<settings count="1"/>
+					<enemy>
+						<pet id="9" level="50">
+							<status>
+								<mat>400</mat>
+								<hp>150</hp>
+							</status>
+							<loopSkill>10037,10038,10044</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setItem</action>
+							<param>add</param>
+							<param>10222,5</param>
+							<param>10223,2</param>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=5个灵华凝素幼果已经放入精灵背包</param>
+							<param>item_icon=item[10222]</param>
+							<param>option_num=1</param>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=2个灵华凝素熟果已经放入精灵背包</param>
+							<param>item_icon=item[10223]</param>
+							<param>option_num=1</param>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>10000</param>
+							<param>done[3]=true</param>
+						</button>
+					</winHandler>
+				</branch>
+				<branch id="4">
+					<settings count="1"/>
+					<enemy>
+						<pet id="9" level="70">
+							<status>
+								<def>99999</def>
+								<mdf>99999</mdf>
+								<hp>250</hp>
+							</status>
+							<headerSkill>10045</headerSkill>
+							<loopSkill>10047</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setItem</action>
+							<param>add</param>
+							<param>10223,3</param>
+							<param>10224,1</param>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=3个灵华凝素熟果已经放入精灵背包</param>
+							<param>item_icon=item[10223]</param>
+							<param>option_num=1</param>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=1个灵华凝素異果已经放入精灵背包</param>
+							<param>item_icon=item[10224]</param>
+							<param>option_num=1</param>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>10000</param>
+							<param>done[3]=true</param>
+						</button>
+					</winHandler>
+				</branch>
+				<branch id="5">
+					<settings count="1"/>
+					<enemy>
+						<pet id="9" level="90">
+							<status>
+								<def>99999</def>
+								<mdf>99999</mdf>
+								<hp>500</hp>
+							</status>
+							<loopSkill>10037,10048,10049,10036</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setItem</action>
+							<param>add</param>
+							<param>10223,3</param>
+							<param>10224,1</param>
+							<param>10225,1</param>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=3个灵华凝素熟果已经放入精灵背包</param>
+							<param>item_icon=item[10223]</param>
+							<param>option_num=1</param>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=1个灵华凝素異果已经放入精灵背包</param>
+							<param>item_icon=item[10224]</param>
+							<param>option_num=1</param>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=1个灵华凝素珀糖已经放入精灵背包</param>
+							<param>item_icon=item[10225]</param>
+							<param>option_num=1</param>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>10000</param>
+							<param>done[3]=true</param>
+						</button>
+					</winHandler>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>openDialog</action>
+					<param>done</param>
+					<condition>activity[10000].done[3]=[bool]true[default]false</condition>
+				</button>
+				<button type="click">
+					<action>openDialog</action>
+					<param>default</param>
+					<condition>firstPet.baseId=7</condition>
+					<condition>activity[10000].done[3]=[bool]false[default]false</condition>
+				</button>
+				<button type="click">
+					<action>openDialog</action>
+					<param>wrong_pet</param>
+					<condition>firstPet.baseIdNOT7</condition>
+					<condition>activity[10000].done[3]=[bool]false[default]false</condition>
+				</button>
+			</eventHandler>
+		</npc>
+		<teleport id="1" name="传送室" pos="660,240" targetMapId="70"/>
+		<teleport id="2" name="船长室" pos="640,60" targetMapId="10"/>
+	</entities>
+</map>

@@ -1,0 +1,266 @@
+
+<map name="巨石洞穴" category="2" id="142">
+	<!-- <resource>10014_2</resource> -->
+	<fightMap>100002</fightMap>
+	<initialPoint>360,100</initialPoint>
+	<music category="2">
+		<bgm>BGM_140</bgm>
+		<fx>FX_115</fx>
+	</music>
+	<entities>
+		<npc id="14201" resId="Pets/pet/17.png" name="Lv 20 布鲁托" size="176,144" pos="230,240">
+			<description>SPT</description>
+			<dialog>
+				<branch id="default" name="布鲁托" icon="Pets/pet/17.png" size="123,101" pos="0,55">
+					<content><![CDATA[哇哈哈！我要拿小树根当板凳！]]></content>
+					<functionHandler>
+						<func type="click">
+							<description><![CDATA[普通挑战]]></description>
+							<action>battle</action>
+							<param>default</param>
+						</func>
+						<func type="click">
+							<description><![CDATA[挑战1]]></description>
+							<action>battle</action>
+							<param>challenge_1</param>
+							<condition>firstPet.id=17</condition>
+						</func>
+						<func type="branch">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=把布鲁托设为首发之后再来挑战吧</param>
+							<param>option_num=1</param>
+							<param>item_icon=pet[17]</param>
+							<condition>firstPet.idNOT17</condition>
+						</func>
+						<func type="click">
+							<description><![CDATA[挑战2]]></description>
+							<action>battle</action>
+							<param>challenge_2</param>
+						</func>
+						<func type="click">
+							<description><![CDATA[超进化挑战]]></description>
+							<action>battle</action>
+							<param>evolve</param>
+							<condition>firstPet.id=17</condition>
+						</func>
+						<func type="branch">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=把布鲁托设为首发之后再来挑战吧</param>
+							<param>option_num=1</param>
+							<param>item_icon=pet[17]</param>
+							<condition>firstPet.idNOT17</condition>
+						</func>
+					</functionHandler>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[好可怕啊]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+					</replyHandler>
+				</branch>
+			</dialog>
+			<battle>
+				<branch id="default">
+					<settings count="1" simulate="true">
+						<mode>3</mode>
+					</settings>
+					<player>
+						<pet id="18" level="20">
+							<normalSkill>10263,10264,10265,10266</normalSkill>
+						</pet>
+					</player>
+					<enemy>
+						<pet id="17" level="20">
+							<status>
+								<hp>200</hp>
+							</status>
+							<initBuff>17</initBuff>
+							<headerSkill>10243,10243</headerSkill>
+							<loopSkill>10246,10244,10244,10244,10244</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>getPet</action>
+							<param>16,10</param>
+							<condition>activity[spt].done[north][1][default]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=【布尔】已经放入精灵仓库</param>
+							<param>item_icon=pet[16]</param>
+							<param>option_num=1</param>
+							<condition>activity[spt].done[north][1][default]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>spt</param>
+							<param>done[north][1][default]=true</param>
+							<condition>activity[spt].done[north][1][default]=[bool]false[default]false</condition>
+						</button>
+					</winHandler>
+				</branch>
+				<branch id="challenge_1">
+					<settings count="1">
+						<mode>3</mode>
+					</settings>
+					<enemy>
+						<pet id="17" level="100">
+							<status>
+								<hp>2000</hp>
+							</status>
+							<initBuff>13,20</initBuff>
+							<headerSkill>10253</headerSkill>
+							<loopSkill>10246,10250</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setPet</action>
+							<param>emblem=1</param>
+							<condition>activity[spt].done[north][1][challenge_1]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=【布鲁托】获得了【重量】纹章</param>
+							<param>item_icon=emblem[16]</param>
+							<param>option_num=1</param>
+							<condition>activity[spt].done[north][1][challenge_1]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>spt</param>
+							<param>done[north][1][challenge_1]=true</param>
+							<condition>activity[spt].done[north][1][challenge_1]=[bool]false[default]false</condition>
+						</button>
+					</winHandler>
+				</branch>
+				<branch id="challenge_2">
+					<settings count="6">
+						<mode>3</mode>
+					</settings>
+					<enemy>
+						<pet id="17" level="100">
+							<status>
+								<hp>1000</hp>
+							</status>
+							<initBuff>12,13,14,17,99,-3001</initBuff>
+							<loopSkill>10246,10244,10251</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setItem</action>
+							<param>add</param>
+							<param>2,50</param>
+							<condition>activity[spt].done[north][1][challenge_2]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=50 星钻已经放入背包</param>
+							<param>item_icon=item[2]</param>
+							<param>option_num=1</param>
+							<condition>activity[spt].done[north][1][challenge_2]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>spt</param>
+							<param>done[north][1][challenge_2]=true</param>
+							<condition>activity[spt].done[north][1][challenge_2]=[bool]false[default]false</condition>
+						</button>
+					</winHandler>
+				</branch>
+				<branch id="evolve">
+					<settings count="1">
+						<mode>3</mode>
+					</settings>
+					<enemy>
+						<pet id="691" level="105">
+							<status>
+								<hp>1500</hp>
+							</status>
+							<initBuff>14,20,21,23,-3002</initBuff>
+							<headerSkill>10253</headerSkill>
+							<loopSkill>10248,10257</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>evolvePet</action>
+							<param>691</param>
+							<condition>activity[spt].done[north][1][evolve]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=布鲁托已成功超进化</param>
+							<param>item_icon=pet[691]</param>
+							<param>option_num=1</param>
+							<condition>activity[spt].done[north][1][evolve]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>spt</param>
+							<param>done[north][1][evolve]=true</param>
+							<condition>activity[spt].done[north][1][evolve]=[bool]false[default]false</condition>
+						</button>
+					</winHandler>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>openDialog</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<npc id="14202" resId="Maps/mine/green.png" name="绿碧矿脉" size="100,72" pos="640,300">
+			<description>绿碧矿脉</description>
+			<eventHandler>
+				<button type="click">
+					<action>openHintbox</action>
+					<param>type=Item</param>
+					<param>title=提示</param>
+					<param>content=矿脉需要合理开发，明天再来吧！</param>
+					<param>item_icon=item[1003]</param>
+					<param>option_num=1</param>
+					<condition>activity[mine].done[142]=[bool]true[default]false</condition>
+				</button>
+				<button type="click">
+					<action>setItem</action>
+					<param>add</param>
+					<param>1003,7</param>
+					<condition>activity[mine].done[142]=[bool]false[default]false</condition>
+				</button>
+				<button type="click">
+					<action>openHintbox</action>
+					<param>type=Item</param>
+					<param>title=提示</param>
+					<param>content=7个绿碧石已经放入背包</param>
+					<param>item_icon=item[1003]</param>
+					<param>option_num=1</param>
+					<condition>activity[mine].done[142]=[bool]false[default]false</condition>
+				</button>
+				<button type="click">
+					<action>setActivity</action>
+					<param>mine</param>
+					<param>done[142]=true</param>
+					<condition>activity[mine].done[142]=[bool]false[default]false</condition>
+				</button>
+			</eventHandler>
+		</npc>
+		<teleport id="1" name="幻影崖" pos="160,70" targetMapId="141"/>
+	</entities>
+</map>

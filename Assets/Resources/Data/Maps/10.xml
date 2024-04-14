@@ -1,0 +1,54 @@
+<map name="船长室" category="1" id="10" weather="0">
+	<!-- <resource>10001</resource> -->
+	<fightMap>100011</fightMap>
+	<initialPoint>460,100</initialPoint>
+	<music category="1">
+		<bgm>MU_000</bgm>
+	</music>
+	<entities>
+		<npc id="1001" resId="1001" name="" size="245,136" pos="-5,210"/>
+		<npc id="1003" resId="1003" name="雷霆" size="130,83" pos="460,170">
+			<description><![CDATA[雷霆]]></description>
+			<dialog>
+				<branch id="default" name="雷霆" icon="1003" size="130,83" pos="0,55">
+					<content><![CDATA[强大、责任、忠诚是我的信念！雷霆之名守护阿卡迪亚！]]></content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[原来你就是船长的精灵]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+					</replyHandler>
+				</branch>
+			</dialog>
+			<eventHandler>
+				<button type="click">
+					<action>openDialog</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<npc id="1002" resId="1002" name="船长辛迪" size="100,125" pos="390,170">
+			<description><![CDATA[欢迎来到约瑟传说！]]></description>
+			<dialog>
+				<branch id="default" name="船长辛迪" icon="1002" size="100,125" pos="0,40">
+					<content><![CDATA[我是伟大的船长辛迪，飞船的航行目前遇到阻碍，不过我相信我们一定能让飞船重新启航！]]></content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[是！船长！]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+					</replyHandler>
+				</branch>
+			</dialog>
+			<eventHandler>
+				<button type="click">
+					<action>openDialog</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<teleport id="1" name="教官室" pos="100,75" targetMapId="60"/>
+	</entities>
+</map>

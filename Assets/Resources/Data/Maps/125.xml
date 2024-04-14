@@ -1,0 +1,36 @@
+<map name="七味小厨 " category="2" id="125">
+	<!-- <resource>10012_5</resource> -->
+	<fightMap>100002</fightMap>
+	<initialPoint>340,80</initialPoint>
+	<music category="2">
+		<bgm>BGM_100</bgm>
+		<fx>FX_113</fx>
+	</music>
+	<entities>
+		<npc id="12501" resId="12501" name="舒尔" size="60,81" pos="690,210" namePos="0,-5">
+			<description><![CDATA[烹饪可是门学问呐！]]></description>
+			<dialog>
+				<branch id="default" name="舒尔" icon="12501" size="75,100" pos="0,55">
+					<content><![CDATA[来来来！这里的料理最新鲜！这里的料理最特别！尝一尝来看一看！看到是缘分，吃到是运气哟！]]></content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[好囧的台词……]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+					</replyHandler>
+				</branch>
+			</dialog>
+			<eventHandler>
+				<button type="click">
+					<action>openDialog</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<npc id="12502" resId="12502" name="烹饪料理" size="206,238" pos="448,183" namePos="0,-80">
+			<description><![CDATA[烹饪料理（暂未开放）]]></description>
+		</npc>
+		<teleport id="1" name="草目氏族主城" pos="750,100" targetMapId="90"/>
+	</entities>
+</map>

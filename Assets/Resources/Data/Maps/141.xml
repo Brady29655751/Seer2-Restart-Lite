@@ -1,0 +1,50 @@
+<map name="幻影崖" category="2" id="141">
+	<resource>10014_1</resource>
+	<fightMap>100002</fightMap>
+	<music category="2">
+		<bgm>BGM_140</bgm>
+		<fx>FX_115</fx>
+	</music>
+	<initialPoint>550,100</initialPoint>
+	<entities>
+		<npc id="14101" resId="Pets/pet/18.png" name="Lv8 小树根" size="43,40" pos="220,210" namePos="0,0">
+			<battle>
+				<branch id="default">
+					<settings count="6" capture="true"/>
+					<enemy>
+						<pet id="18" level="8">
+							<loopSkill>10263</loopSkill>
+						</pet>
+					</enemy>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>battle</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<npc id="14102" resId="Pets/pet/18.png" name="Lv9 小树根" size="43,40" pos="380,70" namePos="0,0">
+			<battle>
+				<branch id="default">
+					<settings count="6" capture="true"/>
+					<enemy>
+						<pet id="18" level="9">
+							<loopSkill>10263</loopSkill>
+						</pet>
+					</enemy>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>battle</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<teleport id="1" name="荆棘林" pos="150,300" targetMapId="131"/>
+		<teleport id="2" name="巨石洞穴" pos="660,390" targetMapId="142"/>
+		<!-- <teleport id="3" name="灰烬岔口" pos="939,555" targetMapId="302" targetPos="1012,437"/> -->
+	</entities>
+</map>

@@ -1,0 +1,66 @@
+<map name="小屋" category="200" id="50000" weather="0">
+	<fightMap>100000</fightMap>
+	<initialPoint>460,150</initialPoint>
+	<music category="1">
+		<bgm>MU_000</bgm>
+	</music>
+	<!--
+	<entities>		
+		<npc id="187" resId="187" name="" dir="1" width="105" height="130" pos="860,303" actorPos="465,371" path="">
+			<eventHandler>
+				<mouseOver>
+					<HandlerShowNpcSlogan><![CDATA[精元孵化器]]></HandlerShowNpcSlogan>
+				</mouseOver>
+				<click>
+					<HandlerToggleModule><![CDATA[PetSpiritTrainPanel]]></HandlerToggleModule>
+				</click>
+			</eventHandler>
+		</npc>
+		<teleport id="1" name="传送室" pos="130,350" targetMapId="70" targetPos="440,470"/>
+	</entities>
+	-->
+	<entities>
+		<npc id="5000001" resId="5000001" name="" size="256,115" pos="280,357.5"/>
+		<npc id="5000002" resId="5000002" name="" size="77,59" pos="730,270"/>
+		<npc id="5000003" resId="5000003" name="" size="56,58" pos="758,330" color="255,255,255,0">
+			<description>精灵仓库</description>
+			<eventHandler>
+				<button type="enter">
+					<action>setNpcParam</action>
+					<param>5000003</param>
+					<param>color=255,255,255,255</param>
+				</button>
+				<button type="exit">
+					<action>setNpcParam</action>
+					<param>5000003</param>
+					<param>color=255,255,255,0</param>
+				</button>
+				<button type="click">
+					<action>openPanel</action>
+					<param>PetStorage</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<npc id="5000004" resId="5000004" name="" size="99,238" pos="5,190" color="255,255,255,0">
+			<description>传送室</description>
+			<transport>120,170</transport>
+			<eventHandler>
+				<button type="enter">
+					<action>setNpcParam</action>
+					<param>5000004</param>
+					<param>color=255,255,255,255</param>
+				</button>
+				<button type="exit">
+					<action>setNpcParam</action>
+					<param>5000004</param>
+					<param>color=255,255,255,0</param>
+				</button>
+				<button type="click">
+					<action>teleport</action>
+					<param>70</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<teleport id="1" name="传送室" pos="120,170" targetMapId="70"/>
+	</entities>
+</map>

@@ -1,0 +1,72 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class AttackPhase : BattlePhase
+{
+    public AttackPhase() {
+        this.state = new BattleState(battle.currentState);
+        this.phase = EffectTiming.OnAttack;
+    }
+
+    public override void DoWork()
+    {
+        if (state.atkUnit.isDone)
+            return;
+
+        if (!IsAttackLegal())
+            return;
+        
+        ApplySkillsAndBuffs();
+        ConsumeAnger();
+        OnHit();
+    }
+
+    public override BattlePhase GetNextPhase()
+    {
+        if (state.isAllTurnDone)
+            return new TurnEndPhase();
+
+        return new AfterAttackPhase();
+    }
+
+    private void ConsumeAnger() {
+        var lastState = new BattleState(battle.currentState);
+        var atkUnit = state.atkUnit;
+        var defUnit = state.defUnit;
+
+        atkUnit.pet.anger -= atkUnit.skill.anger;
+        atkUnit.hudSystem.OnAttack(atkUnit, true);
+        defUnit.hudSystem.OnAttack(defUnit, false);
+        
+        SetUIState(lastState);
+
+        state = new BattleState(state);
+        state.atkUnit.hudSystem.OnAttackUndo();
+        state.defUnit.hudSystem.OnAttackUndo();
+    }
+
+    private void OnHit() {
+        var lastState = new BattleState(state);
+        var atkUnit = state.atkUnit;
+        var defUnit = state.defUnit;
+
+        if (atkUnit.skillSystem.isHit) {
+            defUnit.pet.hp -= atkUnit.skillSystem.skillDamage;
+            defUnit.pet.anger += Mathf.FloorToInt((defUnit.pet.maxAnger / 2 - 1) * (1f * atkUnit.skillSystem.skillDamage / defUnit.pet.maxHp) * (defUnit.pet.battleStatus.angrec / 100f));
+        }
+        atkUnit.hudSystem.OnHit(atkUnit, true);
+        defUnit.hudSystem.OnHit(defUnit, false);
+
+        SetUIState(lastState);
+
+        state = new BattleState(state);
+        atkUnit = state.atkUnit;
+        defUnit = state.defUnit;
+
+        atkUnit.hudSystem.OnHitUndo(true);
+        defUnit.hudSystem.OnHitUndo(false);
+        
+    }
+
+}

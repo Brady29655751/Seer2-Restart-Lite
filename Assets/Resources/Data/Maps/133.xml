@@ -1,0 +1,101 @@
+<map name="深幽沼泽" category="2" id="133">
+	<!-- <resource>10013</resource> -->
+	<fightMap>100002</fightMap>
+	<initialPoint>480,90</initialPoint>
+	<music category="2">
+		<bgm>BGM_130</bgm>
+		<fx>FX_114</fx>
+	</music>
+	<entities>
+		<npc id="13301" resId="Pets/pet/200.png" name="Lv10 荧光蝶" size="62,62" pos="320,60" namePos="0,0">
+			<battle>
+				<branch id="default">
+					<settings count="6" capture="true" />
+					<enemy>
+						<pet id="200" level="8">
+							<loopSkill>10188</loopSkill>
+						</pet>
+					</enemy>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>battle</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<npc id="13302" resId="Pets/pet/200.png" name="Lv11 荧光蝶" size="62,62" pos="200,90" namePos="0,0">
+			<battle>
+				<branch id="default">
+					<settings count="6" capture="true" />
+					<enemy>
+						<pet id="200" level="9">
+							<loopSkill>10188</loopSkill>
+						</pet>
+					</enemy>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>battle</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<npc id="13303" resId="Pets/pet/200.png" name="Lv12 荧光蝶" size="62,62" pos="130,180" namePos="0,0">
+			<battle>
+				<branch id="default">
+					<settings count="6" capture="true" />
+					<enemy>
+						<pet id="200" level="10">
+							<loopSkill>10188</loopSkill>
+						</pet>
+					</enemy>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>battle</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<npc id="13304" resId="Maps/mine/red.png" name="赤晶矿脉" size="109,71" pos="90,280">
+			<description>赤晶矿脉</description>
+			<eventHandler>
+				<button type="click">
+					<action>openHintbox</action>
+					<param>type=Item</param>
+					<param>title=提示</param>
+					<param>content=矿脉需要合理开发，明天再来吧！</param>
+					<param>item_icon=item[1002]</param>
+					<param>option_num=1</param>
+					<condition>activity[mine].done[133]=[bool]true[default]false</condition>
+				</button>
+				<button type="click">
+					<action>setItem</action>
+					<param>add</param>
+					<param>1002,10</param>
+					<condition>activity[mine].done[133]=[bool]false[default]false</condition>
+				</button>
+				<button type="click">
+					<action>openHintbox</action>
+					<param>type=Item</param>
+					<param>title=提示</param>
+					<param>content=10个赤晶矿已经放入背包</param>
+					<param>item_icon=item[1002]</param>
+					<param>option_num=1</param>
+					<condition>activity[mine].done[133]=[bool]false[default]false</condition>
+				</button>
+				<button type="click">
+					<action>setActivity</action>
+					<param>mine</param>
+					<param>done[133]=true</param>
+					<condition>activity[mine].done[133]=[bool]false[default]false</condition>
+				</button>
+			</eventHandler>
+		</npc>
+		<teleport id="1" name="荆棘小徑" pos="550,60" targetMapId="132"/>
+	</entities>
+</map>

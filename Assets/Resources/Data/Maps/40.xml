@@ -1,0 +1,73 @@
+<map name="动力室" category="1" id="40" weather="0">
+	<!-- <resource>10004</resource> -->
+	<fightMap>100011</fightMap>
+	<initialPoint>460,100</initialPoint>
+	<music category="1">
+		<bgm>MU_000</bgm>
+	</music>
+	<entities>
+		<!--
+		<npc id="374" resId="374" name="星钻融合机" dir="0" width="75" height="120" pos="903,477" actorPos="273,294" path="">
+			<eventHandler>
+				<mouseOver>
+					<HandlerShowNpcSlogan><![CDATA[快点我！]]></HandlerShowNpcSlogan>
+				</mouseOver>
+				<click>
+					<HandlerToggleModule><![CDATA[MoneySwapMachinePanel]]></HandlerToggleModule>
+				</click>
+			</eventHandler>
+		</npc>
+		-->
+		<npc id="4002" resId="4002" name="" size="384,384" pos="290,205">
+			<eventHandler>
+				<button type="enter">
+					<action>setNpcParam</action>
+					<param>4002</param>
+					<param>sprite=4003</param>
+				</button>
+				<button type="exit">
+					<action>setNpcParam</action>
+					<param>4002</param>
+					<param>sprite=4002</param>
+				</button>
+				<button type="click">
+					<action>openPanel</action>
+					<param>ItemShop</param>
+					<param>mode=sell</param>
+					<param>type=mine</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<npc id="4004" resId="4004" name="乔休尔" size="95,98" pos="660,120">
+			<description>我可不能出半点岔子！</description>
+			<dialog>
+				<branch id="default" name="乔休尔" icon="4004" size="130,130" pos="0,45">
+					<content><![CDATA[能源呢？矿石呢？飞船起飞了吗，这到底是怎么了。我……决不能让飞船陷入困境，我可是工程师乔休尔。]]></content>
+					<functionHandler>
+						<func type="click">
+							<description><![CDATA[矿石回收]]></description>
+							<action>openPanel</action>
+							<param>ItemShop</param>
+							<param>mode=sell</param>
+							<param>type=mine</param>
+						</func>
+					</functionHandler>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[这个……那个……]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+					</replyHandler>
+				</branch>
+			</dialog>
+			<eventHandler>
+				<button type="click">
+					<action>openDialog</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<teleport id="1" name="资料室" pos="30,140" targetMapId="30"/>
+	</entities>
+</map>

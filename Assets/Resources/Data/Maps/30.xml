@@ -1,0 +1,98 @@
+<map name="资料室" category="1" id="30" weather="0">
+	<!-- <resource>10003</resource> -->
+	<fightMap>100011</fightMap>
+	<initialPoint>460,100</initialPoint>
+	<music category="1">
+		<bgm>MU_000</bgm>
+	</music>
+	<entities>
+		<!--
+		<npc id="7" resId="7" name="娜威拉" dir="1" width="75" height="105" pos="783,348" actorPos="690,464" path="">
+			<dialog npcId="7" transport="1,300,400">
+				<branch id="default">
+					<node emotion="1"><![CDATA[事实上我可是整个宇宙中最最聪明最最美丽的情报员。想得到最新消息吗，那就拿出你的真心，好好夸夸我吧！]]></node>
+					<reply action="close"><![CDATA[囧………]]></reply>
+				</branch>
+			</dialog>
+			<functionality>
+				<node type="" name="5周年大游行" params="activityAnniversaryParade" />
+				<node type="module" name="M5活动奖品兑换" params="ActivityRewardSwapPanel" />
+				<node type="module" name="50元米米卡礼包兑换" params="MimiBigGiftPanel" />
+			</functionality>
+			<eventHandler>
+				<mouseOver>
+					<HandlerShowNpcSlogan><![CDATA[你觉得我美吗？]]></HandlerShowNpcSlogan>
+				</mouseOver>
+				<click>
+					<HandlerOpenDialogPanel/>
+				</click>
+				
+			</eventHandler>
+		</npc>
+		<npc id="300" resId="300" name="冲级活动大使" dir="0" width="75" height="105" pos="785,430" actorPos="655,477" path="">
+			<dialog npcId="300" transport="1,300,400">
+				<branch id="default">
+					<node emotion="1"><![CDATA[还没得到我身上穿的行头？好吧……那我就再给你点时间！现在只要有精灵达到60级就能获得我这身青蛙套装咯！哟呼！]]></node>
+					<reply action="close"><![CDATA[我走错了……（这家伙笑的好傻）]]></reply>
+				</branch>
+			</dialog>
+			<functionality>
+				<node type="reward" name="10级新手礼包" params="10 63" />
+				<node type="reward" name="20级新手礼包" params="20 64" />
+				<node type="reward" name="60级冲级礼包" params="60 26" />
+			</functionality>
+			<eventHandler>
+				<mouseOver>
+					<HandlerShowNpcSlogan><![CDATA[瞧一瞧来！看一看！]]></HandlerShowNpcSlogan>
+				</mouseOver>
+				<click>
+					<HandlerOpenDialogPanel/>
+				</click>
+			</eventHandler>
+		</npc>
+		<npc id="301" resId="301" name="分子密码大使" dir="1" width="75" height="105" pos="654,398" actorPos="655,477" path="">
+			<dialog npcId="301" transport="1,300,400">
+				<branch id="default">
+					<node emotion="4"><![CDATA[嗨~~~你好！我需要收集分子密码，解读它们，改造一切。欢迎你用分子密码来兑换各种奖品！]]></node>
+					<reply action="close"><![CDATA[我走错了，再见！]]></reply>
+				</branch>
+			</dialog>
+			<functionality>
+				<node type="" name="输入分子密码" params="molecularPassword" />
+				<node type="" name="星钻券兑换" params="swapZuan"/>
+			</functionality>
+			<eventHandler>
+				<mouseOver>
+					<HandlerShowNpcSlogan><![CDATA[我比旁边那家伙帅多了！]]></HandlerShowNpcSlogan>
+				</mouseOver>
+				<click>
+					<HandlerOpenDialogPanel/>
+				</click>
+			</eventHandler>
+		</npc>
+		<npc id="104" resId="104" name="突击队长" dir="1" width="75" height="105" pos="455,423" actorPos="655,477" path="">
+			<dialog npcId="103" transport="1,300,400">
+				<branch id="default">
+					<node emotion="0"><![CDATA[赛尔小队突击！！]]></node>
+					<reply action="close"><![CDATA[在资料室喊口号是要闹哪样……]]></reply>
+				</branch>
+			</dialog>
+			<functionality>
+				<node type="" name="图鉴奖励兑换" params="mapSwap" />
+			</functionality>
+			<eventHandler>
+				<mouseOver>
+					<HandlerShowNpcSlogan><![CDATA[突击队员们！来领绝版精灵吧！]]></HandlerShowNpcSlogan>
+				</mouseOver>
+				<click>
+					<HandlerOpenDialogPanel/>
+				</click>
+			</eventHandler>
+		</npc>
+		-->	
+		<teleport id="1" name="游戏室" pos="550,60" targetMapId="80"/>
+		<teleport id="2" name="动力室" pos="320,180" targetMapId="40"/>
+		<teleport id="3" name="实验室" pos="820,180" targetMapId="20"/>
+	</entities>
+
+</map>

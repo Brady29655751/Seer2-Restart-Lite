@@ -1,0 +1,74 @@
+<map name="荆棘林" category="2" id="131" weather="1" switch="1">
+	<!-- <resource>10013_1</resource> -->
+	<fightMap>100002</fightMap>
+	<initialPoint>480,90</initialPoint>
+	<music category="2">
+		<bgm>BGM_130</bgm>
+		<fx>FX_109</fx>
+	</music>
+	<entities>
+		<npc id="13101" resId="Pets/pet/13.png" name="Lv5 小小葵" size="36,38" pos="290,150" namePos="0,0">
+			<battle>
+				<branch id="default">
+					<settings count="6" capture="true">
+						<weather>1</weather>
+					</settings>
+					<enemy>
+						<pet id="13" level="5">
+							<loopSkill>10154</loopSkill>
+						</pet>
+					</enemy>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>battle</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<npc id="13102" resId="Pets/pet/13.png" name="Lv6 小小葵" size="36,38" pos="420,120" namePos="0,0">
+			<battle>
+				<branch id="default">
+					<settings count="6" capture="true">
+						<weather>1</weather>
+					</settings>
+					<enemy>
+						<pet id="13" level="6">
+							<loopSkill>10154</loopSkill>
+						</pet>
+					</enemy>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>battle</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<npc id="13103" resId="Pets/pet/13.png" name="Lv7 小小葵" size="36,38" pos="580,80" namePos="0,0">
+			<battle>
+				<branch id="default">
+					<settings count="6" capture="true">
+						<weather>1</weather>
+					</settings>
+					<enemy>
+						<pet id="13" level="7">
+							<loopSkill>10154</loopSkill>
+						</pet>
+					</enemy>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>battle</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<teleport id="1" name="草系主城" pos="350,60" targetMapId="90"/>
+		<teleport id="2" name="荆棘小徑" pos="150,150" targetMapId="132"/>
+		<teleport id="3" name="幻影崖" pos="650,90" targetMapId="141"/>
+	</entities>
+</map>

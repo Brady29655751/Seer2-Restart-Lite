@@ -1,0 +1,101 @@
+<map name="船长室" category="1" id="50001" resId="10" weather="0">
+	<fightMap>100011</fightMap>
+	<initialPoint>460,100</initialPoint>
+	<music category="1">
+		<bgm>MU_000</bgm>
+	</music>
+	<entities>
+		<npc id="1001" resId="1001" name="" size="245,136" pos="-5,210"/>
+		<npc id="1002" resId="1002" name="船长辛迪" size="100,125" pos="390,170">
+			<description><![CDATA[欢迎来到约瑟传说！]]></description>
+			<dialog>
+				<branch id="default" name="船长辛迪" icon="1002" size="100,125" pos="0,40">
+					<content><![CDATA[我是伟大的船长辛迪，飞船的航行目前遇到阻碍，不过我相信我们一定能找到让飞船搁浅的原因！]]></content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[离开]]></description>
+							<action>teleport</action>
+							<param>70</param>
+						</reply>
+						<reply type="click">
+							<description><![CDATA[【主线任务】阿卡迪亚星]]></description>
+							<action>openDialog</action>
+							<param>mission_1_default_1</param>
+						</reply>
+					</replyHandler>
+				</branch>
+				<branch id="mission_1_default_1" name="船长辛迪" icon="1002" size="100,125" pos="0,40">
+					<content><![CDATA[目前我们的情况不容乐观，飞船被紧紧牵引，无法离开阿卡迪亚星，同时我们受到了一股势力的袭击……]]></content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[！！！]]></description>
+							<action>openDialog</action>
+							<param>mission_1_default_2</param>
+						</reply>
+					</replyHandler>
+				</branch>
+				<branch id="mission_1_default_2" name="船长辛迪" icon="1002" size="100,125" pos="0,40">
+					<content><![CDATA[根据克拉克提供的消息，离我们最近的草目氏族是和平爱好者。也许，和他们搞好关系，我们能探知到飞船无法离开的原因]]></content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[船长，把任务交给我吧]]></description>
+							<action>openDialog</action>
+							<param>mission_1_default_3</param>
+						</reply>
+					</replyHandler>
+				</branch>
+				<branch id="mission_1_default_3" name="船长辛迪" icon="1002" size="100,125" pos="0,40">
+					<content><![CDATA[很好！ 把这封问候信带给草目氏族的酋长，表达我们结盟的意愿。 记住，随机应变，结盟，只能成功！]]></content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[是！船长！]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+						<reply type="branch">
+							<action>setMission</action>
+							<param>1</param>
+							<param>complete</param>
+						</reply>
+						<reply type="branch">
+							<action>setItem</action>
+							<param>add</param>
+							<param>1,1000</param>
+							<param>2,50</param>
+						</reply>
+						<reply type="branch">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=1000 赛尔豆和 50 星钻已经放入背包</param>
+							<param>option_num=1</param>
+							<param>item_icon=item[2]</param>
+						</reply>
+					</replyHandler>
+				</branch>
+				<branch id="mission_1_complete_1" name="船长辛迪" icon="1002" size="100,125" pos="0,40">
+					<content><![CDATA[我是伟大的船长辛迪，飞船的航行目前遇到阻碍，不过我相信我们一定能找到让飞船搁浅的原因！]]></content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[离开]]></description>
+							<action>teleport</action>
+							<param>70</param>
+						</reply>
+					</replyHandler>
+				</branch>
+			</dialog>
+			<eventHandler>
+				<button type="click">
+					<action>openDialog</action>
+					<param>default</param>
+					<condition>mission[1].done=false</condition>
+				</button>
+				<button type="click">
+					<action>openDialog</action>
+					<param>mission_1_complete_1</param>
+					<condition>mission[1].done=true</condition>
+				</button>
+			</eventHandler>
+		</npc>
+	</entities>
+</map>

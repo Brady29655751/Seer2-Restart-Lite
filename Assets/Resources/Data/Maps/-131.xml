@@ -1,0 +1,101 @@
+<map name="荆棘林" category="2" id="-131" weather="1" switch="-1">
+	<!-- <resource>10013_1</resource> -->
+	<fightMap>100002</fightMap>
+	<initialPoint>480,90</initialPoint>
+	<music category="2">
+		<bgm>BGM_130</bgm>
+		<fx>FX_109</fx>
+	</music>
+	<entities>
+		<npc id="-13101" resId="Pets/pet/13.png" name="小小葵梦境" size="36,38" pos="290,150" namePos="0,0">
+			<eventHandler>
+				<button type="click">
+					<action>teleport</action>
+					<param>-139</param>
+					<condition>activity[dream].done[-139]=[bool]false[default]false</condition>
+					<condition>firstPet.baseId=10</condition>
+				</button>
+				<button type="click">				
+					<action>openHintbox</action>
+					<param>type=Item</param>
+					<param>title=提示</param>
+					<param>content=小小葵今天已经很累了，不要打扰她</param>
+					<param>item_icon=pet[13]</param>
+					<param>option_num=1</param>
+					<condition>activity[dream].done[-139]=[bool]true[default]false</condition>
+					<condition>firstPet.baseId=10</condition>
+				</button>
+				<button type="click">
+					<action>openHintbox</action>
+					<param>type=Item</param>
+					<param>title=提示</param>
+					<param>content=将入梦特性的精灵设为首发才能进入梦境哦！</param>
+					<param>item_icon=pet[10]</param>
+					<param>option_num=1</param>
+					<condition>firstPet.baseIdNOT10</condition>
+				</button>
+			</eventHandler>
+		</npc>
+		<npc id="-13102" resId="Pets/pet/13.png" name="小小葵梦境" size="36,38" pos="420,120" namePos="0,0">
+			<eventHandler>
+				<button type="click">
+					<action>teleport</action>
+					<param>-139</param>
+					<condition>activity[dream].done[-139]=[bool]false[default]false</condition>
+					<condition>firstPet.baseId=10</condition>
+				</button>
+				<button type="click">				
+					<action>openHintbox</action>
+					<param>type=Item</param>
+					<param>title=提示</param>
+					<param>content=小小葵今天已经很累了，不要打扰她</param>
+					<param>item_icon=pet[13]</param>
+					<param>option_num=1</param>
+					<condition>activity[dream].done[-139]=[bool]true[default]false</condition>
+					<condition>firstPet.baseId=10</condition>
+				</button>
+				<button type="click">
+					<action>openHintbox</action>
+					<param>type=Item</param>
+					<param>title=提示</param>
+					<param>content=将入梦特性的精灵设为首发才能进入梦境哦！</param>
+					<param>item_icon=pet[10]</param>
+					<param>option_num=1</param>
+					<condition>firstPet.baseIdNOT10</condition>
+				</button>
+			</eventHandler>
+		</npc>
+		<npc id="-13103" resId="Pets/pet/13.png" name="小小葵梦境" size="36,38" pos="580,80" namePos="0,0">
+			<eventHandler>
+				<button type="click">
+					<action>teleport</action>
+					<param>-139</param>
+					<condition>activity[dream].done[-139]=[bool]false[default]false</condition>
+					<condition>firstPet.baseId=10</condition>
+				</button>
+				<button type="click">				
+					<action>openHintbox</action>
+					<param>type=Item</param>
+					<param>title=提示</param>
+					<param>content=小小葵今天已经很累了，不要打扰她</param>
+					<param>item_icon=pet[13]</param>
+					<param>option_num=1</param>
+					<condition>activity[dream].done[-139]=[bool]true[default]false</condition>
+					<condition>firstPet.baseId=10</condition>
+				</button>
+				<button type="click">
+					<action>openHintbox</action>
+					<param>type=Item</param>
+					<param>title=提示</param>
+					<param>content=将入梦特性的精灵设为首发才能进入梦境哦！</param>
+					<param>item_icon=pet[10]</param>
+					<param>option_num=1</param>
+					<condition>firstPet.baseIdNOT10</condition>
+				</button>
+			</eventHandler>
+		</npc>
+		<teleport id="1" name="草系主城" pos="350,60" targetMapId="90"/>
+		<teleport id="2" name="荆棘小徑" pos="150,150" targetMapId="-132"/>
+		<teleport id="3" name="幻影崖" pos="650,90" targetMapId="141"/>
+	</entities>
+</map>

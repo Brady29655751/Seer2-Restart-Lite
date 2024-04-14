@@ -1,0 +1,80 @@
+<map name="观星台" category="1" id="1" weather="12">
+	<!-- <resource>10008</resource> -->
+	<fightMap>100011</fightMap>
+	<initialPoint>800,130</initialPoint>
+	<music category="100">
+		<bgm>MU_083</bgm>
+	</music>
+	<entities>
+		<npc id="101" resId="Pets/pet/961.png" name="Lv 105 星之首影" size="135,137" pos="350,360" namePos="0,-20">
+			<description><![CDATA[星之首影]]></description>
+			<dialog>
+				<branch id="default" name="星之首影" icon="Pets/pet/961.png" size="135,137" pos="10,35">
+					<content><![CDATA[万物起于星空，终于星空。大地为万物之源，星空为大地之源。星之首影，象征着源泉。]]></content>
+					<functionHandler>
+						<func type="click">
+							<description><![CDATA[普通挑战]]></description>
+							<action>battle</action>
+							<param>default</param>
+						</func>
+					</functionHandler>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[好神秘阿]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+					</replyHandler>
+				</branch>
+			</dialog>
+			<battle>
+				<branch id="default">
+					<settings count="6">
+						<mode>4</mode>
+						<weather>12</weather>
+					</settings>
+					<enemy>
+						<pet id="961" level="105">
+							<status>
+								<atk>500</atk>
+								<mat>500</mat>
+								<hp>10000</hp>
+							</status>
+							<initBuff>12,13,14,17,20,23,27,99,-3003,-3004</initBuff>
+							<loopSkill>10312,10315,10315</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>getPet</action>
+							<param>961,100</param>
+							<condition>activity[20003].done[1]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=【星之首影】已经放入精灵仓库</param>
+							<param>item_icon=pet[961]</param>
+							<param>option_num=1</param>
+							<condition>activity[20003].done[1]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>20003</param>
+							<param>done[1]=true</param>
+							<condition>activity[20003].done[1]=[bool]false[default]false</condition>
+						</button>
+					</winHandler>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>openDialog</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<teleport id="1" name="传送室" pos="720,60" targetMapId="70"/>
+	</entities>
+</map>
