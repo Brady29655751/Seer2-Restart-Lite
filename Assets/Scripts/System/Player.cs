@@ -28,9 +28,9 @@ public class Player : Singleton<Player>
     }
 
     protected override void OnApplicationQuit() {
-        if (gameDataId != -1) {
-            SaveSystem.SaveData(gameData);
-        }
+        // if (gameDataId != -1) {
+        //     SaveSystem.SaveData(gameData);
+        // }
         base.OnApplicationQuit();
     }    
 

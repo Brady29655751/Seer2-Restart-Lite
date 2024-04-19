@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,7 +8,7 @@ using UnityEngine.UI;
 public class BattlePetSkillView : BattleBaseView
 {
     private BattlePet pet;
-    [SerializeField] private IButton superSkillButton;
+    [SerializeField] private IButton noOpSkillButton, superSkillButton;
     [SerializeField] private Image[] superSkillButtonBackground = new Image[3];
     [SerializeField] private BattlePetSkillBlockView[] skillBlockViews = new BattlePetSkillBlockView[4];
 
@@ -23,6 +24,7 @@ public class BattlePetSkillView : BattleBaseView
         int anger = (interactable && !pet.isDead) ? pet.anger : -1;
         SetNormalSkillInteractable(anger);
         SetSuperSkillInteractable(anger);
+        SetNoOpSkillInteractable((anger == -1) ? int.MaxValue : anger);
     }
 
     private void SetNormalSkill() {
@@ -74,6 +76,21 @@ public class BattlePetSkillView : BattleBaseView
         descriptionBox.SetBoxSize(new Vector2(170, boxSizeY));
         descriptionBox.SetBoxPosition(new Vector2(5, 115));
         descriptionBox.SetText((pet?.superSkill != null) ? pet.superSkill.description : "尚未习得必杀技");
+    }
+
+    public void SetNoOpSkillInteractable(int petAnger) {
+        bool isNormalSkillUsable = pet.normalSkill.Where(x => x != null).Any(x => petAnger >= x.anger);
+        bool isSuperSkillUsable = (pet.superSkill != null) && (petAnger >= pet.superSkill.anger);
+        bool isAnySkillUsable = isNormalSkillUsable || isSuperSkillUsable;
+        noOpSkillButton.SetInteractable(!isAnySkillUsable);
+    }
+
+    public void SelectNoOpSkill() {
+        battle.SetSkill(Skill.GetNoOpSkill(), true);
+    }
+
+    public void ShowNoOpSkillInfo() {
+        infoPrompt.SetSkill(Skill.GetNoOpSkill(), false);
     }
 
 }

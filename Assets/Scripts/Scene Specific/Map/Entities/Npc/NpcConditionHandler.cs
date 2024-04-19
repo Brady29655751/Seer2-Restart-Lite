@@ -33,6 +33,13 @@ public static class NpcConditionHandler
             return () => GetBattle(op, trimKey, value);
         }
 
+        if (key.TryTrimStart("item", out trimKey)) {
+            int id = int.Parse(trimKey.TrimParentheses());
+            string dataKey = trimKey.Substring(trimKey.IndexOf('.') + 1);
+            Item item = Item.Find(id);
+            return () => GetItem(item, op, dataKey, value);
+        }
+
         return () => true;
     }
 
@@ -83,8 +90,14 @@ public static class NpcConditionHandler
     public static bool GetBattle(string op, string key, string value) {
         var battle = Player.instance.currentBattle;
         if (battle == null)
-            return false;
+            return op != "=";
 
         return Operator.Condition(op, battle.GetBattleIdentifier(key), float.Parse(value));
+    }
+
+    public static bool GetItem(Item item, string op, string key, string value) {
+        return key switch {
+            _ => Operator.Condition(op, item?.num ?? 0, int.Parse(value)),
+        };
     }
 }

@@ -38,7 +38,7 @@ public class Mission
 
     public static Mission Start(int id) {
         Mission mission = new Mission(id);
-        if (mission.info.preMissions != null) {
+        if (!string.IsNullOrEmpty(mission.info.preMissionId)) {
             foreach (var preId in mission.info.preMissions) {
                 Mission preMission = Mission.Find(preId);
                 if ((preMission == null) || (!preMission.isDone)) {
@@ -63,10 +63,10 @@ public class Mission
 
         mission.isDone = true;
         mission.checkPointId = "complete";
-        if (mission.info.nextMissionId == null)
+        if (string.IsNullOrEmpty(mission.info.nextMissionId))
             return;
 
-        foreach (var nextId in mission.info.nextMissionId) {
+        foreach (var nextId in mission.info.nextMissions) {
             Mission.Start(nextId);
         }
     }

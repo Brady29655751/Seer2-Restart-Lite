@@ -70,8 +70,8 @@ public class UnitSkillSystem
 
         level = (2 * atkPet.level + 10) / 250f;
         var status = BattlePet.GetSkillTypeStatus(skill, atkPet, defPet);
-        atk = status.Key;
-        def = status.Value;
+        atk = Mathf.Max(status.Key, 1);
+        def = Mathf.Max(status.Value, 1);
         weatherBuff = PetElementSystem.GetWeatherBuff(skill.element, weather);
         elementRelation = PetElementSystem.GetElementRelation(skill, defPet);
         sameElementBuff = (skill.element == atkPet.element) ? 1.5f : 1f;

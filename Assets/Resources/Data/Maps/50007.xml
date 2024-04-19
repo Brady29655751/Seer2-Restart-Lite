@@ -1,0 +1,129 @@
+<map name="权力之帐" category="2" id="50002" resId="110" weather="0">
+    <!-- <resource>10011</resource> -->
+    <fightMap>100002</fightMap>
+    <initialPoint>320,80</initialPoint>
+    <music category="2">
+        <bgm>BGM_100</bgm>
+        <fx>FX_108</fx>
+    </music>
+    <entities>
+        <npc id="11001" resId="11001" name="草目酋长巴特" size="105,92" pos="350,140">
+            <description><![CDATA[确定、一定以及肯定]]></description>
+            <dialog>
+                <branch id="default" name="草目酋长" icon="11001" size="105,92" pos="0,55">
+                    <content><![CDATA[吼吼吼，欢迎来到草目氏族！我的客人，你可以到处去走走，我相信你会喜欢这里！]]></content>
+                    <replyHandler>
+                        <reply type="click">
+                            <description><![CDATA[草目氏族！我来咯！]]></description>
+                            <action>openDialog</action>
+                            <param>null</param>
+                        </reply>
+                    </replyHandler>
+                </branch>
+                <branch id="mission_3_thank_1" name="草目酋长" icon="11001" size="105,92" pos="0,55">
+                    <content><![CDATA[吼吼吼，欢迎来到草目氏族！我的客人，你可以到处去走走，我相信你会喜欢这里！]]></content>
+                    <replyHandler>
+                        <reply type="click">
+                            <description><![CDATA[草目氏族！我来咯！]]></description>
+                            <action>openDialog</action>
+                            <param>null</param>
+                        </reply>
+                        <reply type="click">
+                            <description><![CDATA[【主线任务】荒谬的谎言]]></description>
+                            <action>openDialog</action>
+                            <param>mission_3_thank_2</param>
+                        </reply>
+                    </replyHandler>
+                </branch>
+                <branch id="mission_3_thank_2" name="草目酋长" icon="11001" size="105,92" pos="0,55">
+                    <content>
+                        <![CDATA[我代表草目氏族所有族人向你们赛尔表示感谢！谢谢......尽情在我们这里享乐吧！维拉的美酒可是出了名的香......吼吼吼......]]></content>
+                    <replyHandler>
+                        <reply type="click">
+                            <description><![CDATA[哇！Cool！听起来很不错呢！]]></description>
+                            <action>openDialog</action>
+                            <param>null</param>
+                        </reply>
+                        
+                        <reply type="branch">
+                            <action>setMission</action>
+                            <param>3</param>
+                            <param>complete</param>
+                        </reply>
+                        <reply type="branch">
+                            <action>setItem</action>
+                            <param>add</param>
+                            <param>1,2000</param>
+                            <param>2,50</param>
+                        </reply>
+                        <reply type="branch">
+                            <action>openHintbox</action>
+                            <param>type=Item</param>
+                            <param>title=提示</param>
+                            <param>content=2000 赛尔豆和 50 星钻已经放入背包</param>
+                            <param>option_num=1</param>
+                            <param>item_icon=item[1]</param>
+                        </reply>
+
+                    </replyHandler>
+                </branch>
+
+
+            </dialog>
+            <eventHandler>
+                <button type="click">
+                    <action>openDialog</action>
+                    <param>mission_3_thank_1</param>
+                    <condition>mission[3].checkpoint=thank</condition>
+                </button>
+                <button type="click">
+                    <action>openDialog</action>
+                    <param>default</param>
+                    <condition>mission[3].checkpointNOTthank</condition>
+                </button>
+            </eventHandler>
+        </npc>
+        <npc id="11002" resId="11002" name="目灵兽雕像" size="266,288" pos="660,112">
+            <dialog>
+                <branch id="default" name="目灵兽雕像" icon="11002" size="133,144" pos="0,25">
+                    <content><![CDATA[（似乎散发着强大的力量）]]></content>
+                    <replyHandler>
+                        <reply type="click">
+                            <description><![CDATA[（似乎散发着强大的力量）]]></description>
+                            <action>openDialog</action>
+                            <param>null</param>
+                        </reply>
+                    </replyHandler>
+                </branch>
+            </dialog>
+            <eventHandler>
+                <button type="click">
+                    <action>openDialog</action>
+                    <param>default</param>
+                </button>
+            </eventHandler>
+        </npc>
+        <npc id="11003" resId="11003" name="特鲁伊" size="74,71" pos="440,120" namePos="0,-5">
+            <description><![CDATA[我将永远守护巴特！直至我死亡！]]></description>
+            <dialog>
+                <branch id="default" name="特鲁伊" icon="11003" size="111,106" pos="10,45">
+                    <content><![CDATA[我将永远守护巴特！直至我死亡！]]></content>
+                    <replyHandler>
+                        <reply type="click">
+                            <description><![CDATA[这就是精灵之间的感情吗？]]></description>
+                            <action>openDialog</action>
+                            <param>null</param>
+                        </reply>
+                    </replyHandler>
+                </branch>
+            </dialog>
+            <eventHandler>
+                <button type="click">
+                    <action>openDialog</action>
+                    <param>default</param>
+                </button>
+            </eventHandler>
+        </npc>
+        <!-- <teleport id="1" name="草目氏族主城" pos="100,60" targetMapId="90"/> -->
+    </entities>
+</map>

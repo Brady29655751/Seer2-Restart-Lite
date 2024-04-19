@@ -1,0 +1,34 @@
+<map name="水脉氏族主城" category="3" id="160">
+	<fightMap>100003</fightMap>
+	<music category="3">
+		<bgm>BGM_160</bgm>
+		<fx>FX_118</fx>
+	</music>
+	<initialPoint>550,100</initialPoint>
+	<entities>
+		<npc id="16001" resId="16001" name="神谕祭司洛水" size="115,118" pos="620,240" namePos="0,-10">
+            <description>灵脉之水，与你同在</description>
+            <dialog>
+	            <branch id="default" name="神谕祭司洛水" icon="16001" size="115,118" pos="0,45">
+                    <content><![CDATA[在这里你将得到水脉氏族的祝福！永远幸福、快乐！]]></content>
+                    <replyHandler>
+                    	<reply type="click">
+                    		<description><![CDATA[好可怕啊]]></description>
+                    		<action>openDialog</action>
+                    		<param>null</param>
+                    	</reply>
+                    </replyHandler>
+                </branch>
+            </dialog>
+			<eventHandler>
+				<button type="click">
+					<action>openDialog</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+        <teleport id="1" name="深水之城" pos="60,110" targetMapId="170"/>
+        <!-- <teleport id="2" name="银脉山脊" pos="357,407" targetMapId="180" targetPos="980,400"/> -->
+        <!-- <teleport id="3" name="漩涡谷地" pos="1111,507" targetMapId="211" targetPos="380,530"/> -->
+	</entities>
+</map>

@@ -82,12 +82,12 @@ public class MapSceneView : UIModule
 
     public void CheckBattleResult() {
         if (player?.currentBattle?.info == null) {
-            player.currentBattle = null;
+            // player.currentBattle = null;
             return;
         }
 
         if (player.currentNpcId == 0) {
-            player.currentBattle = null;
+            // player.currentBattle = null;
             return;
         }
 
@@ -103,6 +103,6 @@ public class MapSceneView : UIModule
         foreach (var action in actionList) {
             action.Invoke();
         }
-        player.currentBattle = null;
+        Player.instance.currentNpcId = 0;
     }
 }

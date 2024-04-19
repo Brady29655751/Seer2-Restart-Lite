@@ -3,6 +3,7 @@ using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Xml.Serialization;
 using UnityEngine;
+using SimpleFileBrowser;
 
 public static class SaveSystem
 {
@@ -55,17 +56,17 @@ public static class SaveSystem
     }
 
     public static bool TryLoadXML<T>(string XmlPath, out T result, out string error) {
-        if (!File.Exists(XmlPath)) {
+        if (!FileBrowserHelpers.FileExists(XmlPath)) {
             error = "档案不存在";
             result = default(T);
             return false;
         }
 
         try {
-            using (StreamReader reader = new StreamReader(XmlPath)) {
+            string docs = FileBrowserHelpers.ReadTextFromFile(XmlPath);
+            using (TextReader reader = new StringReader(docs)) {
                 XmlSerializer serializer = new XmlSerializer(typeof(T));
-                result = (T)serializer.Deserialize(reader.BaseStream);
-                reader.Close();
+                result = (T)serializer.Deserialize(reader);
             };
             error = string.Empty;
             return true;
@@ -78,10 +79,10 @@ public static class SaveSystem
 
     public static bool TrySaveXML(object item, string XmlPath, out string error) {
         try {
-            using (StreamWriter writer = new StreamWriter(XmlPath)) {
+            using (StringWriter writer = new StringWriter()) {
                 XmlSerializer serializer = new XmlSerializer(item.GetType());
-                serializer.Serialize(writer.BaseStream, item);
-                writer.Close();
+                serializer.Serialize(writer, item);
+                FileBrowserHelpers.WriteTextToFile(XmlPath, writer.ToString());
             };
             error = string.Empty;
             return true;

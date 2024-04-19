@@ -55,13 +55,16 @@ public class PetSkill
 
     public PetSkill() {}
 
-    public PetSkill(int _id, int _level, Skill[] defaultNormalSkill = null) {
+    public PetSkill(int _id, int _level, PetSkill originalPetSkill = null) {
         id = _id;
-        CheckNewSkill(_level);
-        if (defaultNormalSkill == null)
-            return;
 
-        defaultNormalSkill = defaultNormalSkill.Where(x => x != null).ToArray();
+        ownSkill = originalPetSkill?.ownSkill ?? new List<Skill>();
+        CheckNewSkill(_level);
+
+        if (originalPetSkill == null)
+            return;
+        
+        Skill[] defaultNormalSkill = originalPetSkill.normalSkill.Where(x => x != null).ToArray();
         for (int i = 0; i < Mathf.Min(4, defaultNormalSkill.Length); i++) {
             normalSkillId[i] = defaultNormalSkill[i].id;
         }

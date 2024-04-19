@@ -1,0 +1,44 @@
+<map name="深水之城" category="3" id="170">
+	<fightMap>100003</fightMap>
+	<music category="3">
+		<bgm>BGM_160</bgm>
+		<fx>FX_120</fx>
+	</music>
+	<initialPoint>400,100</initialPoint>
+	<entities>
+		<!--
+		<npc id="25" resId="25" name="莱斯" dir="0" width="70" height="85" pos="495,417" actorPos="312,345" path="">
+			<dialog npcId="25" transport="1,300,400">
+				<branch id="default">
+					<node emotion="4"><![CDATA[这里守卫森严！休想浑水摸虾！！]]></node>
+					<reply action="close"><![CDATA[（是浑水摸鱼吧……）]]></reply>
+				</branch>
+			</dialog>
+			<eventHandler>
+				<mouseOver>
+					<HandlerShowNpcSlogan><![CDATA[和平源自力量]]></HandlerShowNpcSlogan>
+				</mouseOver>
+				<click>
+					<HandlerOpenDialogPanel/>
+				</click>
+			</eventHandler>
+		</npc>
+		<npc id="26" resId="26" name="莱克" dir="0" width="70" height="85" pos="780,450" actorPos="489,492" path="">
+			<dialog npcId="26" transport="1,300,400">
+				<branch id="default">
+					<node emotion="2"><![CDATA[守护这里是我的职责！洛水是整个水脉氏族的灵魂！绝不容许任何人伤害她！]]></node>
+					<reply action="close"><![CDATA[原来莱斯和莱克是双胞胎哦！]]></reply>
+				</branch>
+			</dialog>
+			<eventHandler>
+				<click>
+					<HandlerOpenDialogPanel><![CDATA[守护这里是我的职责]]></HandlerOpenDialogPanel>
+				</click>
+			</eventHandler>
+		</npc>
+		-->
+		<!-- <teleport id="1" name="彩虹珊瑚湾" pos="227,229" targetMapId="201" targetPos="770,520"/> -->
+		<teleport id="2" name="水脉氏族主城" pos="780,200" targetMapId="160"/>
+		<teleport id="3" name="水源之心" pos="450,220" targetMapId="171"/>
+	</entities>
+</map>

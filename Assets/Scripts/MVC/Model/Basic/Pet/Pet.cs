@@ -155,7 +155,7 @@ public class Pet
         feature = new PetFeature(evolvePetId, originalPet.feature.hasEmblem);
         exp = new PetExp(evolvePetId, originalPet.level, originalPet.totalExp);
         talent = new PetTalent(evolvePetId, originalPet.talent);
-        skills = new PetSkill(evolvePetId, originalPet.level, originalPet.skills.normalSkill);
+        skills = new PetSkill(evolvePetId, originalPet.level, originalPet.skills);
         record = new PetRecord(originalPet.record);
         ui = new PetUI(info.ui.defaultSkinId, info.ui.baseId);
 

@@ -1,0 +1,244 @@
+<map name="经验之门" category="100" id="82" resId="81" weather="0">
+	<!-- <resource>3831</resource> -->
+	<fightMap>100011</fightMap>
+	<initialPoint>650,110</initialPoint>
+	<music category="100">
+		<bgm>BGM_113</bgm>
+	</music>
+	<entities>
+		<npc id="8201" resId="8101" name="Lv 20 第一层守护者" size="119,91" pos="425,200" namePos="0,0">
+			<description>第一层守护者</description>
+			<battle>
+				<branch id="default">
+					<settings count="6"/>
+					<enemy>
+						<pet id="12" level="20">
+							<loopSkill>10051</loopSkill>
+						</pet>
+						<pet id="12" level="20">
+							<loopSkill>10051</loopSkill>
+						</pet>
+						<pet id="12" level="20">
+							<loopSkill>10051</loopSkill>
+						</pet>
+						<pet id="12" level="20">
+							<loopSkill>10051</loopSkill>
+						</pet>
+						<pet id="12" level="20">
+							<loopSkill>10051</loopSkill>
+						</pet>
+						<pet id="12" level="20">
+							<loopSkill>10051</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setNpcParam</action>
+							<param>8201</param>
+							<param>active=false</param>
+						</button>
+						<button type="auto">
+							<action>setNpcParam</action>
+							<param>8202</param>
+							<param>active=true</param>
+						</button>
+					</winHandler>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>battle</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<npc id="8202" resId="8101" name="Lv 40 第二层守护者" size="119,91" pos="425,200" namePos="0,0" active="false">
+			<description>第二层守护者</description>
+			<battle>
+				<branch id="default">
+					<settings count="6"/>
+					<enemy>
+						<pet id="17" level="40">
+							<loopSkill>10244</loopSkill>
+						</pet>
+						<pet id="17" level="40">
+							<loopSkill>10244</loopSkill>
+						</pet>
+						<pet id="17" level="40">
+							<loopSkill>10244</loopSkill>
+						</pet>
+						<pet id="17" level="40">
+							<loopSkill>10244</loopSkill>
+						</pet>
+						<pet id="17" level="40">
+							<loopSkill>10244</loopSkill>
+						</pet>
+						<pet id="17" level="40">
+							<loopSkill>10244</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setNpcParam</action>
+							<param>8201</param>
+							<param>active=false</param>
+						</button>
+						<button type="auto">
+							<action>setNpcParam</action>
+							<param>8203</param>
+							<param>active=true</param>
+						</button>
+					</winHandler>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>battle</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<npc id="8203" resId="8101" name="Lv 60 第三层守护者" size="119,91" pos="425,200" namePos="0,0" active="false">
+			<description>第三层守护者</description>
+			<battle>
+				<branch id="default">
+					<settings count="6"/>
+					<enemy>
+						<pet id="691" level="60">
+							<loopSkill>10259</loopSkill>
+						</pet>
+						<pet id="691" level="60">
+							<loopSkill>10259</loopSkill>
+						</pet>
+						<pet id="691" level="60">
+							<loopSkill>10259</loopSkill>
+						</pet>
+						<pet id="691" level="60">
+							<loopSkill>10259</loopSkill>
+						</pet>
+						<pet id="691" level="60">
+							<loopSkill>10259</loopSkill>
+						</pet>
+						<pet id="691" level="60">
+							<loopSkill>10259</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setNpcParam</action>
+							<param>8201</param>
+							<param>active=false</param>
+						</button>
+						<button type="auto">
+							<action>setNpcParam</action>
+							<param>8204</param>
+							<param>active=true</param>
+						</button>
+					</winHandler>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>battle</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<npc id="8204" resId="8101" name="Lv 80 第四层守护者" size="119,91" pos="425,200" namePos="0,0" active="false">
+			<description>第四层守护者</description>
+			<battle>
+				<branch id="default">
+					<settings count="6"/>
+					<enemy>
+						<pet id="946" level="80">
+							<loopSkill>10208</loopSkill>
+						</pet>
+						<pet id="946" level="80">
+							<loopSkill>10208</loopSkill>
+						</pet>
+						<pet id="946" level="80">
+							<loopSkill>10208</loopSkill>
+						</pet>
+						<pet id="946" level="80">
+							<loopSkill>10208</loopSkill>
+						</pet>
+						<pet id="946" level="80">
+							<loopSkill>10208</loopSkill>
+						</pet>
+						<pet id="946" level="80">
+							<loopSkill>10208</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setNpcParam</action>
+							<param>8201</param>
+							<param>active=false</param>
+						</button>
+						<button type="auto">
+							<action>setNpcParam</action>
+							<param>8205</param>
+							<param>active=true</param>
+						</button>
+					</winHandler>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>battle</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<npc id="8205" resId="8101" name="Lv 100 第五层守护者" size="119,91" pos="425,200" namePos="0,0" active="false">
+			<description>第五层守护者</description>
+			<battle>
+				<branch id="default">
+					<settings count="6"/>
+					<enemy>
+						<pet id="961" level="100">
+							<loopSkill>10315</loopSkill>
+						</pet>
+						<pet id="961" level="100">
+							<loopSkill>10315</loopSkill>
+						</pet>
+						<pet id="961" level="100">
+							<loopSkill>10315</loopSkill>
+						</pet>
+						<pet id="961" level="100">
+							<loopSkill>10315</loopSkill>
+						</pet>
+						<pet id="961" level="100">
+							<loopSkill>10315</loopSkill>
+						</pet>
+						<pet id="961" level="100">
+							<loopSkill>10315</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setItem</action>
+							<param>add</param>
+							<param>1,3000</param>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=3000 赛尔豆已经放入背包</param>
+							<param>item_icon=item[1]</param>
+							<param>option_num=1</param>
+						</button>
+					</winHandler>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>battle</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<teleport id="1" name="英格瓦要塞" pos="250,75" targetMapId="81"/>
+	</entities>		
+</map>

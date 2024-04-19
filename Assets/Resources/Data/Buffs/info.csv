@@ -61,6 +61,7 @@ id,name,type,copyType,turn,options,description
 102,害怕,abnormal,replace,2,none,害怕对手，无法行动
 103,瘫痪,abnormal,replace,2,none,无法行动，被攻击会复原
 104,麻痹,abnormal,replace,5,none,攻击时40%几率被迫中断
+105,昏迷,abnormal,replace,2,none,昏迷中，无法行动
 106,睡眠,abnormal,replace,2,none,无法行动，被攻击会苏醒
 109,冰冻,abnormal,replace,2,none,受到冰冻，无法行动[ENDL]受到暴击伤害提升20%，且受到暴击会解冻
 113,混乱,abnormal,replace,-1,none,下次造成的攻击伤害将转为作用于自身
@@ -125,6 +126,8 @@ id,name,type,copyType,turn,options,description
 3047,针刺冲撞,mark,replace,-1,none,物理攻击造成的伤害减少25%
 3048,收回金针,turn,replace,3,res=19,每回合回复1/12体力
 3049,剧毒身体,turn,replace,3,none,受到攻击时50%使对手中毒
+3050,蓄电,turn,replace,3,none,使自身电系技能伤害增加70%
+3051,星尘幻盾,mark,max,-1,none,受到的伤害不超过400且每回合刷新并记录上一次受到的伤害值
 3143,焦点腐蚀,mark,replace,-1,none,特定攻击技能造成伤害的1/4将恢复自身体力
 3279,蜂纹,mark,stack,-1,auto_remove=true&max_val=3,每一层使中毒造成的伤害增加30，最多叠加3层。[ENDL]当前为[value]层
 3280,青蜂之舞,turn,replace,3,res=18,闪避率增加50%
@@ -140,10 +143,13 @@ id,name,type,copyType,turn,options,description
 100055,连攻,feature,replace,-1,none,替换上场时造成的伤害增加10%
 100061,有爱,feature,replace,-1,none,以爱的名义伤害增加10%
 100146,腐蚀,feature,replace,-1,none,自身具有焦点腐蚀时，技能威力增加10
+100149,连击,feature,replace,-1,none,使连击2次以上的技能连击次数增加1次
 100151,青蜂,feature,replace,-1,none,攻击技能命中处于中毒状态的对手会重置中毒状态为3回合
+100154,紫电,feature,replace,-1,none,特攻技能伤害增加10%，物攻技能命中率增加10%
 100200,毒粉,feature,replace,-1,none,自身具有花粉弥漫时，每回合使对手失去25点体力
 100301,森林,feature,replace,-1,none,自身具有森林祝福时受到的伤害减少10%
 100961,首星,feature,replace,-1,none,星移环境下命中率增加50%
+100962,躯星,feature,replace,-1,none,星移环境下受到的伤害减少10%
 200001,追击,emblem,replace,-1,none,命中率和闪避率提高10%
 200004,怒火,emblem,replace,-1,none,怒气回复率提高20%（攻击命中与回合结束回复的怒气除外）
 200007,治愈,emblem,replace,-1,none,体力回复率提高20%
@@ -156,10 +162,13 @@ id,name,type,copyType,turn,options,description
 200055,针灸,emblem,replace,-1,none,增加2回合针灸的持续时间
 200061,爱的,emblem,replace,-1,none,出场时自带爱的名义
 200146,吸取,emblem,replace,-1,none,攻击技能未命中时吸取对手10怒气
+200149,麻痹,emblem,replace,-1,none,使技能所附带的麻痹几率提高10%
 200151,蜂纹,emblem,replace,-1,none,对手具有蜂纹时，自身攻击技能造成伤害的1/10会恢复自身的体力
+200154,挑衅,emblem,replace,-1,none,挑衅也增加自身20点怒气
 200200,荧光,emblem,replace,-1,none,对手具有荧光花粉时，每回合恢复自身25点体力
 200301,祝福,emblem,replace,-1,none,使森林祝福提升的体力回复率提高5%
 200961,首魅,emblem,replace,-1,none,使幻魅之眼的魅惑效果延长1回合
+200962,躯徽,emblem,replace,-1,none,使星尘幻盾回复自身120点体力
 900001,骇浪,feature,replace,-1,none,雨天环境下使用攻击技能恢复自身5怒气
 900004,魔焰,feature,replace,-1,none,炎热环境下暴击率增加15%
 900007,飞叶,feature,replace,-1,none,晴天环境下受到的暴击伤害减少25%
@@ -173,3 +182,4 @@ id,name,type,copyType,turn,options,description
 -3003,星之首影,mark,replace,-1,hide=true,对手免疫异常时使用星徽之怒
 -3004,圣光惩戒,mark,replace,-1,hide=true,对手强化超过2级时消强化
 -3005,麦麦迪挑战2,mark,replace,-1,hide=true,没有不屈状态时获得0伤盾
+-3006,星之躯影,mark,replace,-1,hide=true,储存超过400伤害时使用星尘裁决

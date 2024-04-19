@@ -32,6 +32,13 @@ public static class TeleportHandler
     }
 
     public static void Teleport(TeleportInfo info) {
+        if (info.targetMapId == 0) {
+            Hintbox hintbox = Hintbox.OpenHintbox();
+            hintbox.SetTitle("提示");
+            hintbox.SetContent("地图暂未开放", 16, FontOption.Arial);
+            hintbox.SetOptionNum(1);
+            return;
+        }
         // Player.SetSceneData("mapInitPos", info.targetPos);
         Player.instance.currentMapId = info.targetMapId;
         SceneLoader.instance.ChangeScene(SceneId.Map);

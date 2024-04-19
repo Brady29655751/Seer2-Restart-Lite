@@ -32,6 +32,7 @@ public class DialogManager : Manager<DialogManager>
 
     public void CloseDialog() {
         SetDialogLayerActive(false);
+        Player.instance.currentNpcId = 0;
     }
 
 }

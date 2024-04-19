@@ -1,0 +1,208 @@
+<map name="异蘑世界" category="2" id="50004" resId="121" weather="1">
+    <!-- <resource>10012_1</resource> -->
+    <fightMap>100002</fightMap>
+    <initialPoint>450,150</initialPoint>
+    <music category="2">
+        <bgm>BGM_120</bgm>
+        <fx>FX_109</fx>
+    </music>
+    <entities>
+        <npc id="12101" resId="12101" name="" size="107,121" pos="560,120" target="false"/>
+        <npc id="12102" resId="Pets/pet/10.png" name="Lv2 法拉" size="30,40" pos="480,50" namePos="0,0">
+            <battle>
+                <branch id="default">
+                    <settings count="6" capture="true">
+                        <weather>1</weather>
+                    </settings>
+                    <enemy>
+                        <pet id="10" level="2">
+                            <loopSkill>10050</loopSkill>
+                        </pet>
+                    </enemy>
+                </branch>
+            </battle>
+            <eventHandler>
+                <button type="click">
+                    <action>battle</action>
+                    <param>default</param>
+                </button>
+            </eventHandler>
+        </npc>
+        <npc id="12103" resId="Pets/pet/10.png" name="Lv3 法拉" size="30,40" pos="350,100" namePos="0,0">
+            <battle>
+                <branch id="default">
+                    <settings count="6" capture="true">
+                        <weather>1</weather>
+                    </settings>
+                    <enemy>
+                        <pet id="10" level="3">
+                            <loopSkill>10050</loopSkill>
+                        </pet>
+                    </enemy>
+                </branch>
+            </battle>
+            <eventHandler>
+                <button type="click">
+                    <action>battle</action>
+                    <param>default</param>
+                </button>
+            </eventHandler>
+        </npc>
+        <npc id="12104" resId="Pets/pet/10.png" name="Lv4 法拉" size="30,40" pos="410,200" namePos="0,0">
+            <battle>
+                <branch id="default">
+                    <settings count="6" capture="true">
+                        <weather>1</weather>
+                    </settings>
+                    <enemy>
+                        <pet id="10" level="4">
+                            <loopSkill>10050</loopSkill>
+                        </pet>
+                    </enemy>
+                </branch>
+            </battle>
+            <eventHandler>
+                <button type="click">
+                    <action>battle</action>
+                    <param>default</param>
+                </button>
+            </eventHandler>
+        </npc>
+        <npc id="12105" resId="Maps/mine/blue.png" name="青玉矿脉" size="62,78" pos="240,100">
+            <description>青玉矿脉</description>
+            <eventHandler>
+                <button type="click">
+                    <action>openHintbox</action>
+                    <param>type=Item</param>
+                    <param>title=提示</param>
+                    <param>content=矿脉需要合理开发，明天再来吧！</param>
+                    <param>item_icon=item[1004]</param>
+                    <param>option_num=1</param>
+                    <condition>activity[mine].done[121]=[bool]true[default]false</condition>
+                </button>
+                <button type="click">
+                    <action>setItem</action>
+                    <param>add</param>
+                    <param>1004,5</param>
+                    <condition>activity[mine].done[121]=[bool]false[default]false</condition>
+                </button>
+                <button type="click">
+                    <action>openHintbox</action>
+                    <param>type=Item</param>
+                    <param>title=提示</param>
+                    <param>content=5个青玉石已经放入背包</param>
+                    <param>item_icon=item[1004]</param>
+                    <param>option_num=1</param>
+                    <condition>activity[mine].done[121]=[bool]false[default]false</condition>
+                </button>
+                <button type="click">
+                    <action>setActivity</action>
+                    <param>mine</param>
+                    <param>done[121]=true</param>
+                    <condition>activity[mine].done[121]=[bool]false[default]false</condition>
+                </button>
+            </eventHandler>
+        </npc>
+        <npc id="12106" resId="12106" name="油民" size="77,88" pos="540,100">
+            <description><![CDATA[悲催！悲催！太悲催了！]]></description>
+            <dialog>
+                <branch id="default" name="油民" icon="12106" size="77,88" pos="0,55">
+                    <content><![CDATA[有人说我一脸囧样，但其实我觉得我挺英俊的！为什么没精灵喜欢我呢？]]></content>
+                    <replyHandler>
+                        <reply type="click">
+                            <description><![CDATA[这个……那个……]]></description>
+                            <action>openDialog</action>
+                            <param>null</param>
+                        </reply>
+                    </replyHandler>
+                </branch>
+                <!---->
+                <branch id="mission_3_catch_1" name="油民" icon="12106" size="77,88" pos="0,55">
+                    <content><![CDATA[哼！你又不是草目氏族的族人，我才懒得理你！]]></content>
+                    <replyHandler>
+                        <reply type="click">
+                            <description><![CDATA[这个……那个……]]></description>
+                            <action>openDialog</action>
+                            <param>null</param>
+                        </reply>
+                        <reply type="click">
+                            <description><![CDATA[【主线任务】荒谬的谎言]]></description>
+                            <action>openDialog</action>
+                            <param>mission_3_catch_2</param>
+                        </reply>
+
+                    </replyHandler>
+                </branch>
+                <branch id="mission_3_catch_2" name="油民" icon="12106" size="77,88" pos="0,55">
+                    <content><![CDATA[哼！你又不是草目氏族的族人，我才懒得理你！]]></content>
+                    <replyHandler>
+                        <reply type="click">
+                            <description><![CDATA[（总有办法让油民说的吧？）]]></description>
+                            <action>openDialog</action>
+                            <param>mission_3_catch_3</param>
+                        </reply>
+                    </replyHandler>
+                </branch>
+                <branch id="mission_3_catch_3" name="油民" icon="12106" size="77,88" pos="0,55">
+                    <content><![CDATA[不过......如果......你能捕捉到“法拉”，或许我会改观？哈哈哈！不过这或许不可能！哈哈哈......]]></content>
+                    <replyHandler>
+                        <reply type="click">
+                            <description><![CDATA[你说的哦！一言为定！再加驷马!]]></description>
+                            <action>openDialog</action>
+                            <param>mission_3_catch_4</param>
+                            <condition>battle.result.capturePet.id=10</condition>
+                        </reply>
+                        <reply type="branch">
+                            <action>openDialog</action>
+                            <param>null</param>
+                            <condition>battle.result.capturePet.idNOT10</condition>
+                        </reply>
+                    </replyHandler>
+                </branch>
+                <branch id="mission_3_catch_4" name="油民" icon="12106" size="77,88" pos="0,55">
+                    <content><![CDATA[哇塞！哇塞！！！你好厉害的哇！偶像你说，有什么我能帮你的，我什么都回答！]]></content>
+                    <replyHandler>
+                        <reply type="click">
+                            <description><![CDATA[关于灵目兽的传说，你是听谁说的呀？大概在何时呢？]]></description>
+                            <action>openDialog</action>
+                            <param>mission_3_catch_5</param>
+                        </reply>
+                    </replyHandler>
+                </branch>
+                <branch id="mission_3_catch_5" name="油民" icon="12106" size="77,88" pos="0,55">
+                    <content><![CDATA[四天以前，我正在异蘑世界捕捉法拉，这个时候舒尔告诉了我灵目兽的事情！我！我可是很震惊的哦！要知道它是个传说！]]>
+                    </content>
+                    <replyHandler>
+                        <reply type="click">
+                            <description><![CDATA[▼]]></description>
+                            <action>openDialog</action>
+                            <param>null</param>
+                        </reply>
+                        <reply type="branch">
+                            <action>setMission</action>
+                            <param>3</param>
+                            <param>checkpoint</param>
+                            <param>wake</param>
+                        </reply>
+                    </replyHandler>
+                </branch>
+            </dialog>
+            <eventHandler>
+                <button type="click">
+                    <action>openDialog</action>
+                    <param>mission_3_catch_1</param>
+                    <condition>mission[3].checkpoint=catch</condition>
+                </button>
+                <button type="click">
+                    <action>openDialog</action>
+                    <param>default</param>
+                    <condition>mission[3].checkpointNOTcatch</condition>
+                </button>
+            </eventHandler>
+        </npc>
+        <!--
+        <teleport id="1" name="草系主城" pos="680,60" targetMapId="90"/>
+        <teleport id="2" name="朽木桥" pos="380,220" targetMapId="122"/>
+        -->
+    </entities>
+</map>

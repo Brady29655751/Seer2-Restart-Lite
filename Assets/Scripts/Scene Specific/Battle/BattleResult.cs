@@ -80,6 +80,8 @@ public class BattleResult
         SetTalent(endState);
         SetExp(endState);
         SetSkill(endState);
+        
+        SaveSystem.SaveData();
     }
 
     private void SetBasic(BattleState endState) {

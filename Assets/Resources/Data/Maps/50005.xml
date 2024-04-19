@@ -1,0 +1,100 @@
+<map name="信奉广场" category="2" id="50005" resId="100" weather="0">
+    <!-- <resource>10010</resource> -->
+    <fightMap>100002</fightMap>
+    <initialPoint>450,250</initialPoint>
+    <music category="2">
+        <bgm>BGM_100</bgm>
+        <fx>FX_104</fx>
+    </music>
+    <entities>
+        <npc id="10001" resId="10001" name="斯力普" size="123,102" pos="690,240">
+            <description>吼吼……偶只是打酱油的！</description>
+            <dialog>
+                <branch id="default" name="斯力普" icon="10001" size="123,102" pos="10,55">
+                    <content><![CDATA[我可是草目氏族的睡神……Zzzz……我真的不怕你挠我痒痒……]]></content>
+                    <replyHandler>
+                        <reply type="click">
+                            <description><![CDATA[这不是此地无银三百两嘛！囧]]></description>
+                            <action>openDialog</action>
+                            <param>null</param>
+                        </reply>
+                    </replyHandler>
+                </branch>
+                <branch id="mission_3_wake_1" name="斯力普" icon="10001" size="123,102" pos="10,55">
+                    <content>
+                        <![CDATA[啊哟喂！有没有搞错啊！伦家在比赛啊！睡神大赛就被你个家伙这么摻和了！说说说......找我什么事...]]></content>
+                    <replyHandler>
+                        <!--                        <reply type="click">-->
+                        <!--                            <description><![CDATA[这不是此地无银三百两嘛！囧]]></description>-->
+                        <!--                            <action>openDialog</action>-->
+                        <!--                            <param>null</param>-->
+                        <!--                        </reply>-->
+                        <reply type="click">
+                            <description><![CDATA[实在是不好意思......就是......就是关于灵目兽的事情]]></description>
+                            <action>openDialog</action>
+                            <param>mission_3_wake_2</param>
+                        </reply>
+                    </replyHandler>
+                </branch>
+
+
+                <branch id="mission_3_wake_2" name="斯力普" icon="10001" size="123,102" pos="10,55">
+                    <content>
+                        <![CDATA[回答：舒尔！回答完毕，你可以走了我要继续睡觉！Zzzzz......]]></content>
+                    <replyHandler>
+                        <reply type="click">
+                            <description><![CDATA[实在是不好意思......]]></description>
+                            <action>openDialog</action>
+                            <param>mission_3_wake_3</param>
+                        </reply>
+                    </replyHandler>
+                </branch>
+
+                <branch id="mission_3_wake_3" name="斯力普" icon="10001" size="123,102" pos="10,55">
+                    <content>
+                        <![CDATA[就前几天吧，舒尔那个小子说灵目兽的再次出现，是因为赛尔是不祥之兆······其它的我好像忘记了······]]></content>
+                    <replyHandler>
+                        <reply type="click">
+                            <description><![CDATA[▼]]></description>
+                            <action>openDialog</action>
+                            <param>mission_3_wake_4</param>
+                        </reply>
+                    </replyHandler>
+                </branch>
+                <branch id="mission_3_wake_4" name="我" icon="7001" size="96,149" pos="10,55">
+                    <content>
+                        <![CDATA[又是舒尔......嗯？巴蒂和多罗怎么还没回来！快去维拉这里看看，难道他们遇到麻烦了？]]></content>
+                    <replyHandler>
+                        <reply type="click">
+                            <description><![CDATA[（维拉在水仙草界）]]></description>
+                            <action>openDialog</action>
+                            <param>mission_3_wake_5</param>
+                        </reply>
+
+                        <reply type="branch">
+                            <action>setMission</action>
+                            <param>3</param>
+                            <param>checkpoint</param>
+                            <param>fruit</param>
+                        </reply>
+                    </replyHandler>
+                </branch>
+            </dialog>
+            <eventHandler>
+                <button type="click">
+                    <action>openDialog</action>
+                    <param>mission_3_wake_1</param>
+                    <condition>mission[3].checkpoint=wake</condition>
+                </button>
+                <button type="click">
+                    <action>openDialog</action>
+                    <param>default</param>
+                    <condition>mission[3].checkpointNOTwake</condition>
+                </button>
+            </eventHandler>
+        </npc>
+        <!-- <teleport id="1" name="草系主城" pos="860,255" targetMapId="90"/> -->
+        <!-- <teleport id="2" name="水仙草界" pos="80,210" targetMapId="151"/> -->
+        <!-- <teleport id="3" name="碧玉森林" pos="440,395" targetMapId="101"/> -->
+    </entities>
+</map>

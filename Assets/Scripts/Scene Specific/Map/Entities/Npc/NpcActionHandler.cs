@@ -173,6 +173,7 @@ public static class NpcActionHandler
             var option = handler.param[i].Split('=');
             activity.SetData(option[0], option[1]);
         }
+        SaveSystem.SaveData();
     }
 
     public static void StartBattle(NpcInfo npcInfo, NpcButtonHandler handler) {

@@ -137,6 +137,7 @@ public class Skill
     public static Skill GetNoOpSkill() {
         Skill skill = new Skill(SkillType.空过);
         skill.name = "空过";
+        skill.description = "跳过自己的回合";
         return skill;
     }
 

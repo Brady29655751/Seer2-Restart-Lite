@@ -1,0 +1,251 @@
+<map name="水仙草界" category="2" id="50006" resId="151" weather="2">
+    <!-- <resource>10015_1</resource> -->
+    <fightMap>100002</fightMap>
+    <initialPoint>360,140</initialPoint>
+    <music category="2">
+        <bgm>BGM_150</bgm>
+        <fx>FX_117</fx>
+    </music>
+    <entities>
+        <npc id="15104" resId="15104" name="维拉" size="70,104" pos="220,340">
+            <description>只有想不通的人，没有走不通的路。</description>
+            <dialog>
+                <branch id="default" name="维拉" icon="15104" size="70,104" pos="0,55">
+                    <content><![CDATA[维尔家族世世代代都会为草目氏族做出最香甜的美酒！]]></content>
+                    <replyHandler>
+                        <reply type="click">
+                            <description><![CDATA[哇哦！听起来就很不错呢！]]></description>
+                            <action>openDialog</action>
+                            <param>null</param>
+                        </reply>
+                    </replyHandler>
+                </branch>
+                <branch id="mission_3_letter_1" name="维拉" icon="15104" size="70,104" pos="0,55">
+                    <content><![CDATA[我正为嘉木青苹烦脑呢......暂时就别打扰我了......]]></content>
+                    <replyHandler>
+                        <reply type="click">
+                            <description><![CDATA[我来帮你吧！]]></description>
+                            <action>openDialog</action>
+                            <param>null</param>
+                            <condition>item[10231].num=0</condition>
+                        </reply>
+                        <reply type="branch">
+                            <action>openHintbox</action>
+                            <param>type=Item</param>
+                            <param>title=提示</param>
+                            <param>content=先去寻找嘉木青苹吧！</param>
+                            <param>item_icon=item[10231]</param>
+                            <param>option_num=1</param>
+                            <condition>item[10231].num=0</condition>
+                        </reply>
+                        <reply type="branch">
+                            <action>openDialog</action>
+                            <param>mission_3_letter_3</param>
+                            <condition>item[10231].numNOT0</condition>
+                        </reply>
+                        <reply type="branch">
+                            <action>setItem</action>
+                            <param>remove</param>
+                            <param>10231,1</param>
+                            <condition>item[10231].numNOT0</condition>
+                        </reply>
+                    </replyHandler>
+                </branch>
+                <branch id="mission_3_letter_3" name="维拉" icon="15104" size="70,104" pos="0,55">
+                    <content>
+                        <![CDATA[这不是我一直想要的嘉木青苹吗......太感谢你们了！我想我能酿造出更加美味的美酒......]]></content>
+                    <replyHandler>
+                        <reply type="click">
+                            <description><![CDATA[(继续询问灵目兽的事情)]]></description>
+                            <action>openDialog</action>
+                            <param>mission_3_letter_4</param>
+                        </reply>
+                    </replyHandler>
+                </branch>
+                <branch id="mission_3_letter_4" name="维拉" icon="15104" size="70,104" pos="0,55">
+                    <content>
+                        <![CDATA[额......我也是听舒尔说的......我还为快要来到的美酒节担心呢！真怕会有什么灾难出现......]]></content>
+                    <replyHandler>
+                        <reply type="click">
+                            <description><![CDATA[看来......问题出在舒尔身上......维拉快带我们去找他！]]></description>
+                            <action>openDialog</action>
+                            <param>mission_3_letter_5</param>
+                        </reply>
+                    </replyHandler>
+                </branch>
+                <branch id="mission_3_letter_5" name="舒尔" icon="12501" size="60,81" pos="0,55">
+                    <content>
+                        <![CDATA[是我······是我！都是我在撒谎！根本没有什么灵目兽！]]></content>
+                    <replyHandler>
+                        <reply type="click">
+                            <description><![CDATA[▼]]></description>
+                            <action>openDialog</action>
+                            <param>mission_3_letter_6</param>
+                        </reply>
+                    </replyHandler>
+                </branch>
+                <branch id="mission_3_letter_6" name="舒尔" icon="12501" size="60,81" pos="0,55">
+                    <content>
+                        <![CDATA[马上就是我的生日了，可是爸爸妈妈只知道研究灵目兽，一年到头根本没几天在家······我讨厌他们！]]></content>
+                    <replyHandler>
+                        <reply type="click">
+                            <description><![CDATA[▼]]></description>
+                            <action>openDialog</action>
+                            <param>mission_3_letter_7</param>
+                        </reply>
+                    </replyHandler>
+                </branch>
+
+                <branch id="mission_3_letter_7" name="维拉" icon="15104" size="70,104" pos="0,55">
+                    <content>
+                        <![CDATA[舒尔的爸爸妈妈是最伟大的父母，他们为了部落为了舒尔才研究灵目兽的！这里还有你爸爸妈妈给你的信哦！]]></content>
+                    <replyHandler>
+                        <reply type="click">
+                            <description><![CDATA[▼]]></description>
+                            <action>openDialog</action>
+                            <param>mission_3_letter_8</param>
+                        </reply>
+                    </replyHandler>
+                </branch>
+
+                <branch id="mission_3_letter_8" name="信" icon="15104" size="70,104" pos="0,55">
+                    <content>
+                        <![CDATA[当看到信的时候 爸爸妈妈正在很远的地方呢 
+不过你放心 我们都没有忘记你的生日 
+小宝贝 我们不在家的时候你要乖哦
+记得听酋长和维拉姐姐的话 爸爸妈妈很想你
+你要加油]]>
+                    </content>
+
+                    <replyHandler>
+                        <reply type="click">
+                            <description><![CDATA[（舒尔：呜呜呜）]]></description>
+                            <action>openDialog</action>
+                            <param>mission_3_letter_9</param>
+                        </reply>
+                    </replyHandler>
+                </branch>
+
+                <branch id="mission_3_letter_9" name="信" icon="15104" size="70,104" pos="0,55">
+                    <content>
+                        <![CDATA[小傻瓜 换个角度去看待父母的爱 
+多一点沟通 看到爸爸妈妈记得对他们说
+“我爱你们”]]>
+                    </content>
+
+                    <replyHandler>
+                        <reply type="click">
+                            <description><![CDATA[（维拉：来抱抱）]]></description>
+                            <action>openDialog</action>
+                            <param>mission_3_letter_10</param>
+                        </reply>
+                    </replyHandler>
+                </branch>
+
+
+                <branch id="mission_3_letter_10" name="舒尔" icon="12501" size="60,81" pos="0,55">
+                    <content>
+                        <![CDATA[嗯嗯，我要加油
+在爸爸妈妈回来之前 我要很努力]]>
+                    </content>
+
+                    <replyHandler>
+                        <reply type="click">
+                            <description><![CDATA[（大家：哈哈哈）]]></description>
+                            <action>teleport</action>
+                            <param>50007</param>
+                        </reply>
+                        <reply type="branch">
+                            <action>setMission</action>
+                            <param>3</param>
+                            <param>checkpoint</param>
+                            <param>thank</param>
+                        </reply>
+                    </replyHandler>
+                </branch>
+
+            </dialog>
+            <eventHandler>
+                <button type="click">
+                    <action>openDialog</action>
+                    <param>mission_3_letter_1</param>
+                    <condition>mission[3].checkpoint=letter</condition>
+                </button>
+                <button type="click">
+                    <action>openDialog</action>
+                    <param>default</param>
+                    <condition>mission[3].checkpointNOTletter</condition>
+                </button>
+            </eventHandler>
+        </npc>
+        <npc id="7003" resId="7003" name="巴蒂" size="53,71" pos="290,310">
+            <description>TAT</description>
+            <dialog>
+                <branch id="mission_3_fruit_1" name="我" icon="7001" size="96,149" pos="0,55">
+                    <content><![CDATA[你们这是怎么啦？让你们来找维拉的，怎么哭丧个脸？]]></content>
+                    <replyHandler>
+                        <reply type="click">
+                            <description><![CDATA[事情是这样的]]></description>
+                            <action>openDialog</action>
+                            <param>mission_3_fruit_2</param>
+                        </reply>
+                    </replyHandler>
+                </branch>
+                <branch id="mission_3_fruit_2" name="巴蒂" icon="7003" size="80,100" pos="10,55">
+                    <content><![CDATA[队长，维拉正为嘉木青苹烦恼，我们帮她采集，但不小心从树上摔下来了]]></content>
+                    <replyHandler>
+                        <reply type="click">
+                            <description><![CDATA[嘉木青苹？我也來帮忙（点击维拉）]]></description>
+                            <action>openDialog</action>
+                            <param>null</param>
+                        </reply>
+                        <reply type="branch">
+                            <action>setMission</action>
+                            <param>3</param>
+                            <param>checkpoint</param>
+                            <param>letter</param>
+                        </reply>
+                    </replyHandler>
+                </branch>
+            </dialog>
+            <eventHandler>
+                <button type="click">
+                    <action>openDialog</action>
+                    <param>mission_3_fruit_1</param>
+                    <condition>mission[3].checkpoint=fruit</condition>
+                </button>
+                <button type="click">
+                    <action>openDialog</action>
+                    <param>default</param>
+                    <condition>mission[3].checkpointNOTfruit</condition>
+                </button>
+            </eventHandler>
+        </npc>
+        <npc id="7002" resId="7002" name="多罗" size="53,71" pos="340,310"/>
+        <npc id="10231" resId="Items/10231.png" name="" size="33,33" pos="400,438" rotation="0,0,10">
+            <eventHandler>
+                <button type="click">
+                    <action>setItem</action>
+                    <param>add</param>
+                    <param>10231,1</param>
+                </button>
+                <button type="click">
+                    <action>setNpcParam</action>
+                    <param>10231</param>
+                    <param>active=false</param>
+                </button>
+                <button type="click">
+                    <action>openHintbox</action>
+                    <param>type=Item</param>
+                    <param>title=提示</param>
+                    <param>content=1个嘉木青苹已经放入背包</param>
+                    <param>item_icon=item[10231]</param>
+                    <param>option_num=1</param>
+                </button>
+            </eventHandler>
+        </npc>
+        <!-- <teleport id="1" name="水仙溪口" pos="540,50" targetMapId="152"/> -->
+        <!-- <teleport id="2" name="信奉广场" pos="400,245" targetMapId="100"/> -->
+        <!-- <teleport id="3" name="狂暴漩涡" pos="160,300" targetMapId="213"/> -->
+    </entities>
+</map>

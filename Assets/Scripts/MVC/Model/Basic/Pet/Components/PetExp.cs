@@ -49,7 +49,7 @@ public class PetExp
             totalExp += levelUpExp;
             level++;
         }
-        return (level >= evolveLevel) && (info.evolvePetId != 0);
+        return (level >= evolveLevel) && (info.evolvePetId != 0) && (info.evolveLevel != 0);
     }
 
 }
