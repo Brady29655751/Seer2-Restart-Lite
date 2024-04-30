@@ -18,6 +18,7 @@ public class MapPetCornerModel : Module
                 p.currentStatus.hp = p.normalStatus.hp;
             }
         }
+        SaveSystem.SaveData();
         SetPet(player.petBag.FirstOrDefault());
     }   
 }

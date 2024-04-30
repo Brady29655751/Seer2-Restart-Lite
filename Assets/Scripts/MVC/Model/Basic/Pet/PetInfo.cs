@@ -17,6 +17,8 @@ public class PetInfo
     public PetSkillInfo skills;
     public PetUIInfo ui;
 
+    public static bool IsMod(int id) => (id < -12);
+
     public PetInfo() {}
 
     public PetInfo(PetBasicInfo basicInfo, PetFeatureInfo featureInfo, PetExpInfo expInfo, PetTalentInfo talentInfo, PetSkillInfo skillInfo, PetUIInfo uiInfo) {

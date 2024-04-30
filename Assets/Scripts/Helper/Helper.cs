@@ -6,6 +6,14 @@ using UnityEngine;
 
 namespace System {
     public static class String {
+        public static string ConcatToString(this IEnumerable<string> stringList, string eachConcatWith) {
+            string result = string.Empty;
+            foreach (var str in stringList) {   
+                result += (str + eachConcatWith);
+            }
+            return result.TrimEnd(eachConcatWith);
+        }
+
         public static string TrimEmpty(this string str) {
             return str.Replace(" ", string.Empty).Replace("\n", string.Empty).Replace("\t", string.Empty);
         } 

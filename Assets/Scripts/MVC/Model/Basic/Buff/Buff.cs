@@ -103,10 +103,16 @@ public class Buff
         return new Buff(id, -1, 1);
     }
 
-    public string GetDescription() {
-        string desc;
-        desc = info.description.Replace("[value]", value.ToString()).Replace("[ENDL]", "\n");
+    public static string GetBuffDescriptionPreview(string rawDescription, string valueReplace = "0") {
+        string desc = rawDescription;
+        desc = desc.Replace("[value]", valueReplace).Replace("[ENDL]", "\n");
         desc = desc.Replace("[-]", "</color>").Replace("[", "<color=#").Replace("]", ">");
+        return desc;
+    }
+
+    public string GetDescription() {
+        string desc = GetBuffDescriptionPreview(info.description, value.ToString());
+
         if (!info.keep && !IsUnhealthy() && !IsAbnormal()) {
             desc += "（若精灵换场则不保留）";
         }

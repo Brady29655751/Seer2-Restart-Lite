@@ -1,10 +1,16 @@
 id,timing,priority,target,condition,cond_option,effect,effect_option
 1,none,-1,none,none,none,none,none
 2,none,-1,none,none,none,none,none
+3,none,-1,none,none,none,none,none
 1001,none,-1,none,none,none,none,none
 1002,none,-1,none,none,none,none,none
 1003,none,-1,none,none,none,none,none
 1004,none,-1,none,none,none,none,none
+8001,resident,-1,pet,pet,type=level&level_op=<&level_cmp=100,set_pet,type=exp&op=+&value=50000
+8002,resident,-1,pet,pet,type=iv&iv_op=<&iv_cmp=31,set_pet,type=iv&op=+&value=1
+8003,resident,-1,pet,none,none,set_pet,type=evStorage&op=+&value=510
+8004,on_before_attack,-1,pet,none,none,capture,prob=100
+8005,resident,-1,pet,none,none,set_pet,type=personality&op=SET&value=-1
 10001,on_before_attack,-1,pet,pet,who=op&type=level&level_op=LTE&level_cmp=30,capture,prob=25
 10002,on_before_attack,-1,pet,pet,who=op&type=level&level_op=LTE&level_cmp=60,capture,prob=25
 10003,on_before_attack,-1,pet,none,none,capture,prob=35

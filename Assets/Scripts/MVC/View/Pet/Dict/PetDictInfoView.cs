@@ -13,6 +13,12 @@ public class PetDictInfoView : Module
     [SerializeField] private Text descriptionText;
     [SerializeField] private List<IText> baseStatusTextList;
     [SerializeField] private IButton linkButton;
+    [SerializeField] private PetBagPanel examplePetBagPanel;
+
+    protected override void Awake() {
+        examplePetBagPanel?.SetActive(true);
+        examplePetBagPanel?.SetActive(false);
+    }
 
     public void SetPetInfo(PetInfo info) {
         if (info == null) {
@@ -34,6 +40,7 @@ public class PetDictInfoView : Module
         habitatText?.SetText(string.Empty);
         descriptionText?.SetText(string.Empty);
         SetBaseStatus(Status.zero);
+
     }
 
     public void SetID(int id) {
@@ -75,5 +82,10 @@ public class PetDictInfoView : Module
     public void SetHabitatInfoPromptContent(string habitat) {
         infoPrompt.SetInfoPromptWithAutoSize(habitat, TextAnchor.MiddleLeft);
     } 
+
+    public void OpenExamplePetBagPanel(int id) {
+        examplePetBagPanel?.SetActive(true);
+        examplePetBagPanel?.SetPetBag(new Pet[] { Pet.GetExamplePet(id) });
+    }
 
 }

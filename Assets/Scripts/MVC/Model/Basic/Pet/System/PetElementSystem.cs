@@ -55,8 +55,8 @@ public static class PetElementSystem {
         { Weather.雷暴天, new List<Element>() { Element.电 } },
         { Weather.飓风, new List<Element>() { Element.飞行, Element.风 } },
         { Weather.夜幕, new List<Element>() { Element.暗影 } },
-        { Weather.异空間, new List<Element>() { Element.超能 } },
-        { Weather.古战场, new List<Element>() { Element.战斗 } },
+        { Weather.异空間, new List<Element>() { Element.超能, Element.神秘 } },
+        { Weather.古战场, new List<Element>() { Element.战斗, Element.龙 } },
         { Weather.星移, new List<Element>() { Element.特质 } },
         { Weather.虫群, new List<Element>() { Element.虫 } },
     };  

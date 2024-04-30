@@ -88,7 +88,7 @@ public class PetDemoView : Module
     }
 
     public void SetIVRank(IVRanking ranking) {
-        IVButton.SetSprite(ranking.GetSprite());
+        IVButton?.SetSprite(ranking.GetSprite());
     }
 
     public void SetIVInfoPromptContent(int iv) {

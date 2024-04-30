@@ -126,7 +126,11 @@ public static class EffectAbilityHandler
         int healAdd = (int)(heal * ((heal > 0) ? (lhsUnit.pet.battleStatus.rec / 100f) : 1));
 
         if (set != "none") {
-            lhsUnit.pet.hp = (int)Parser.ParseEffectOperation(set, effect, lhsUnit, rhsUnit);
+            var setHp = (int)Parser.ParseEffectOperation(set, effect, lhsUnit, rhsUnit);;
+            if ((setHp == 0) && (lhsUnit.pet.buffController.GetBuff(99) != null))
+                return false;
+            
+            lhsUnit.pet.hp = setHp;
             return true;
         }
 
@@ -270,10 +274,10 @@ public static class EffectAbilityHandler
         string who = effect.abilityOptionDict.Get("who", "me");
         string op = effect.abilityOptionDict.Get("op", "+");
         string idList = effect.abilityOptionDict.Get("id_list", "0");
-        string idRange = effect.abilityOptionDict.Get("id_range", "0/0");
+        string typeList = effect.abilityOptionDict.Get("type_list", "none");
 
         List<int> idBlockList = idList.ToIntList('/');
-        List<int> idBlockRange = idRange.ToIntList('/');
+        List<BuffType> typeBlockList = typeList.Split('/').Select(x => x.ToBuffType()).ToList();
 
         Unit invokeUnit = (Unit)effect.invokeUnit;
         Unit lhsUnit = (who == "me") ? state.GetUnitById(invokeUnit.id) : state.GetRhsUnitById(invokeUnit.id);
@@ -282,10 +286,10 @@ public static class EffectAbilityHandler
 
         if (op == "+") {
             buffController.BlockBuff(idBlockList);
-            buffController.BlockRangeBuff(idBlockRange);
+            buffController.BlockBuffWithType(typeBlockList);
         } else if (op == "-") {
             buffController.UnblockBuff(idBlockList);
-            buffController.UnblockRangeBuff(idBlockRange);
+            buffController.UnblockBuffWithType(typeBlockList);
         }
         return true;
     }
@@ -333,10 +337,10 @@ public static class EffectAbilityHandler
         if (isType) {
             foreach (var type in typeRange) {
                 var buffType = type.ToBuffType();
-                buffController.RemoveRangeBuff(x => x.info.type == buffType, lhsUnit, state);
-                if (buffType == BuffType.TurnBased) {
-                    buffController.RemoveRangeBuff(x => (x.id > 0) && (x.info.type == BuffType.Mark) && (x.turn > 0), lhsUnit, state);
-                }
+                if (buffType == BuffType.TurnBased)
+                    buffController.RemoveRangeBuff(x => (!x.id.IsWithin(-10_0000, 0)) && (x.turn > 0), lhsUnit, state);
+                else 
+                    buffController.RemoveRangeBuff(x => x.info.type == buffType, lhsUnit, state);
             }
         }
         if (isId) {

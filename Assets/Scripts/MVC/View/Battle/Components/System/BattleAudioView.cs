@@ -25,6 +25,7 @@ public class BattleAudioView : BattleBaseView
     private AudioClip GetBattleBGM(BattleMode mode) {
         return mode switch {
             BattleMode.SPT => battleBGM[1],
+            BattleMode.SelfSimulation => battleBGM[2],
             BattleMode.PVP => battleBGM[2],
             BattleMode.Special => battleBGM[3],
             _ => battleBGM[0],

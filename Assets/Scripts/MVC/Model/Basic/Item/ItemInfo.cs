@@ -13,6 +13,7 @@ public class ItemInfo
 
     public int id { get; private set; }
     public string resId { get; private set; }
+    public int getId { get; private set; }
     public string name { get; private set; }
     public ItemType type { get; private set; }
     public int currencyType { get; private set; }
@@ -39,6 +40,7 @@ public class ItemInfo
         effectDescription = _slicedData[6].Trim().Replace("[ENDL]", "\n");
 
         resId = options.Get("resId", id.ToString());
+        getId = int.Parse(options.Get("getId", id.ToString()));
         removable = bool.Parse(options.Get("removable", "true"));
     }
 

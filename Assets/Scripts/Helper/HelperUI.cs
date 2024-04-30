@@ -68,6 +68,18 @@ public static class SpriteSize {
 }
 
 public static class SpriteSet {
+    public static Sprite GetDefaultIconSprite(bool bold = false) => RM.instance.Get<Sprite>("Panels/PetBag/Sprites/" + (bold ? 87 : 85));
+    public static bool TryCreateSpriteFromBytes(byte[] bytes, out Sprite sprite) {
+        sprite = null;
+        Texture2D texture2D = new Texture2D(2, 2);
+
+        if (!texture2D.LoadImage(bytes))
+            return false;
+
+        sprite = Sprite.Create(texture2D, new Rect(0, 0, texture2D.width, texture2D.height), new Vector2(0, 0), 100f, 0, SpriteMeshType.Tight);
+        return true;
+    }
+
     public static void SetSprite(this Image image, Sprite sprite) {
         if (image == null)
             return;

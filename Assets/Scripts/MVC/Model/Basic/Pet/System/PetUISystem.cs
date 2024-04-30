@@ -9,15 +9,15 @@ using UnityEngine.AddressableAssets;
 public static class PetUISystem
 {
     public static Sprite GetPetIcon(int petId) {
-        return ResourceManager.instance.GetLocalAddressables<Sprite>("Pets/icon/" + petId);
+        return ResourceManager.instance.GetLocalAddressables<Sprite>("Pets/icon/" + petId, PetInfo.IsMod(petId));
     }
 
     public static Sprite GetEmblemIcon(int petId) {
-        return ResourceManager.instance.GetLocalAddressables<Sprite>("Emblems/" + petId);
+        return ResourceManager.instance.GetLocalAddressables<Sprite>("Emblems/" + petId, PetInfo.IsMod(petId));
     }
 
     public static Sprite GetPetBattleImage(int petId) {
-        return ResourceManager.instance.GetLocalAddressables<Sprite>("Pets/battle/" + petId);
+        return ResourceManager.instance.GetLocalAddressables<Sprite>("Pets/battle/" + petId, PetInfo.IsMod(petId));
     }
 
     public static Sprite GetSprite(this Element element) {

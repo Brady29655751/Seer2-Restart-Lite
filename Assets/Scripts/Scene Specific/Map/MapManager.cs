@@ -39,7 +39,7 @@ public class MapManager : Manager<MapManager>
     private void PetTest() {
         //Item.Add(new Item(10205, 1000));
         //Player.instance.gameData.petStorage.Add(new Pet(3,61));
-        //Player.instance.gameData.petStorage.Add(new Pet(4));
+        //Panel.OpenPanel("Workshop");
         //Player.instance.gameData.petStorage.Add(new Pet(301,100));
     }
 

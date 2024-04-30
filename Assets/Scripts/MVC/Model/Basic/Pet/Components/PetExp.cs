@@ -36,7 +36,7 @@ public class PetExp
     /// <param name="exp">Gain how much exp</param>
     /// <returns>evolve or not</returns>
     public bool GainExp(uint exp) {
-        if (level == 100)
+        if (level >= 100)
             return false;
 
         if (exp < levelUpExp) {

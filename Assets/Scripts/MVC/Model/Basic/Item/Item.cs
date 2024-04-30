@@ -61,11 +61,12 @@ public class Item
     }
 
     public static void Add(Item item) {
-        int index = itemStorage.FindIndex(x => x.id == item.id);
+        var addItem = new Item(item.info.getId, item.num);
+        int index = itemStorage.FindIndex(x => x.id == addItem.id);
         if (index != -1) {
-            itemStorage[index].num += item.num;
+            itemStorage[index].num += addItem.num;
         } else {
-            itemStorage.Add(item);
+            itemStorage.Add(addItem);
         }
         SaveSystem.SaveData();
     }

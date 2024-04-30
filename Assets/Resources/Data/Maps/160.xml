@@ -27,6 +27,160 @@
 				</button>
 			</eventHandler>
 		</npc>
+		<npc id="16002" resId="Pets/pet/302.png" name="爱丽斯" size="73,109" pos="555,270" namePos="0,-10">
+		    <description>呼呼……呼……呼呼……</description>
+		    <dialog>
+		        <branch id="default" name="爱丽斯" icon="Pets/pet/302.png" size="73,109" pos="0,45">
+		            <content><![CDATA[呼呼……呼……呼呼……]]></content>
+					<functionHandler>
+						<func type="click">
+							<description><![CDATA[挑战一]]></description>
+							<action>battle</action>
+							<param>challenge_1</param>
+						</func>
+						<func type="click">
+							<description><![CDATA[挑战二]]></description>
+							<action>battle</action>
+							<param>challenge_2</param>
+							<condition>firstPet.id=302</condition>
+						</func>
+						<func type="branch">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=把爱丽斯设为首发之后再来挑战吧</param>
+							<param>option_num=1</param>
+							<param>item_icon=pet[302]</param>
+							<condition>firstPet.idNOT302</condition>
+						</func>
+						<func type="click">
+							<description><![CDATA[挑战三]]></description>
+							<action>battle</action>
+							<param>challenge_3</param>
+						</func>
+					</functionHandler>
+		            <replyHandler>
+		            	<reply type="click">
+		            		<description><![CDATA[（看上去好厉害的样子！）]]></description>
+		            		<action>openDialog</action>
+		            		<param>null</param>
+		            	</reply>
+		            </replyHandler>
+		        </branch>
+		    </dialog>
+			<battle>
+				<branch id="challenge_1">
+					<settings count="1"/>
+					<enemy>
+						<pet id="302" level="60">
+							<status>
+								<hp>3500</hp>
+							</status>
+							<initBuff>-4,17,20</initBuff>
+							<loopSkill>10351,10363,10358,10364,10362</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>getPet</action>
+							<param>302,10,0</param>
+							<condition>activity[11002].done[1]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=【爱丽斯】已经放入精灵仓库</param>
+							<param>item_icon=pet[302]</param>
+							<param>option_num=1</param>
+							<condition>activity[11002].done[1]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>11002</param>
+							<param>done[1]=true</param>
+							<condition>activity[11002].done[1]=[bool]false[default]false</condition>
+						</button>
+					</winHandler>
+				</branch>
+				<branch id="challenge_2">
+					<settings count="1"/>
+					<enemy>
+						<pet id="302" level="60">
+							<status>
+								<hp>3500</hp>
+							</status>
+							<initBuff>17,20</initBuff>
+							<loopSkill>10351,10363,10363</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setPet</action>
+							<param>emblem=1</param>
+							<condition>activity[11002].done[2]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=【爱丽斯】获得了【蓝球】纹章</param>
+							<param>item_icon=emblem[302]</param>
+							<param>option_num=1</param>
+							<condition>activity[11002].done[2]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>11002</param>
+							<param>done[2]=true</param>
+							<condition>activity[11002].done[2]=[bool]false[default]false</condition>
+						</button>
+					</winHandler>
+				</branch>
+				<branch id="challenge_3">
+					<settings count="6"/>
+					<enemy>
+						<pet id="302" level="60">
+							<status>
+								<hp>3500</hp>
+							</status>
+							<initBuff>12,13,14,17,20,23,44,99</initBuff>
+							<loopSkill>10351,10358,10363,10363,10357</loopSkill>
+							<superSkill>10360</superSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setItem</action>
+							<param>add</param>
+							<param>2,100</param>
+							<condition>activity[11002].done[3]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=100 星钻已经放入背包</param>
+							<param>item_icon=item[2]</param>
+							<param>option_num=1</param>
+							<condition>activity[11002].done[3]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>11002</param>
+							<param>done[3]=true</param>
+							<condition>activity[11002].done[3]=[bool]false[default]false</condition>
+						</button>
+					</winHandler>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>openDialog</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
         <teleport id="1" name="深水之城" pos="60,110" targetMapId="170"/>
         <!-- <teleport id="2" name="银脉山脊" pos="357,407" targetMapId="180" targetPos="980,400"/> -->
         <!-- <teleport id="3" name="漩涡谷地" pos="1111,507" targetMapId="211" targetPos="380,530"/> -->

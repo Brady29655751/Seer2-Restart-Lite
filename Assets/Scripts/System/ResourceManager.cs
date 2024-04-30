@@ -69,7 +69,18 @@ public class ResourceManager : Singleton<ResourceManager>
         T res = (T)resDict.Get(item);
         return (res == null) ? Load<T>(item) : res;
     }
-    public T GetLocalAddressables<T>(string item) where T : Object {
+    public T GetLocalAddressables<T>(string item, bool isMod = false) where T : Object {
+        if (isMod && (typeof(T) == typeof(Sprite))) {
+            item = Application.persistentDataPath + "/Mod/" + item + (item.EndsWith(".png") ? string.Empty : ".png");
+            if (!SaveSystem.TryLoadAllBytes(item, out var bytes))
+                return default(T);
+            
+            if (!SpriteSet.TryCreateSpriteFromBytes(bytes, out var sprite))
+                return default(T);
+
+            return sprite as T;
+        }
+
         var dotIndex = item.IndexOf('.');
         if (dotIndex >= 0)
             item = item.Substring(0, dotIndex);
@@ -243,7 +254,19 @@ public class ResourceManager : Singleton<ResourceManager>
     }
 
     private void LoadSkillEffect(string[] info, Action<Dictionary<int, Skill>> onSuccess = null, Action<string> onFail = null) {
-        LoadCSV(skillUrl + "effect.csv", (data) => onSuccess?.Invoke(GetSkill(info, data)));
+        LoadCSV(skillUrl + "effect.csv", (data) => {
+            var originalDict = GetSkill(info, data);
+            if (SaveSystem.TryLoadSkillMod(out var modDict)) {
+                try {
+                    foreach (var entry in modDict) {
+                        originalDict.Set(entry.Key, entry.Value);
+                    }
+                } catch (Exception) {
+                    originalDict = GetSkill(info, data);
+                }
+            }
+            onSuccess?.Invoke(originalDict);
+        }, onFail);
     }
 
     public void LoadPetInfo(Action<Dictionary<int, PetInfo>> onSuccess = null) {
@@ -351,7 +374,7 @@ public class ResourceManager : Singleton<ResourceManager>
     }
 
     public Dictionary<int, BuffInfo> GetBuffInfo(string[] data, string[] effects) {
-        Dictionary<int, BuffInfo> buffInfoDict = new Dictionary<int, BuffInfo>();
+        var buffInfoDict = new Dictionary<int, BuffInfo>();
         var effectLists = GetEffectLists(effects);
         int dataCol = BuffInfo.DATA_COL;
         int dataRow = data.Length / dataCol;
@@ -369,7 +392,19 @@ public class ResourceManager : Singleton<ResourceManager>
     }
 
     private void LoadBuffEffect(string[] info, Action<Dictionary<int, BuffInfo>> onSuccess = null) {
-        LoadCSV(buffUrl + "effect.csv", (data) => onSuccess?.Invoke(GetBuffInfo(info, data)), (x) => {});
+        LoadCSV(buffUrl + "effect.csv", (data) => {
+            var originalDict = GetBuffInfo(info, data);
+            if (SaveSystem.TryLoadBuffMod(out var modDict)) {
+                try {
+                    foreach (var entry in modDict) {
+                        originalDict.Set(entry.Key, entry.Value);
+                    }
+                } catch (Exception) {
+                    originalDict = GetBuffInfo(info, data);
+                }
+            }
+            onSuccess?.Invoke(originalDict);
+        }, (x) => {});
     }
 
     public Dictionary<int, ItemInfo> GetItemInfo(string[] data, string[] effects) {

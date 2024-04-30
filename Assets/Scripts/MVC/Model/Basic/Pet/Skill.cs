@@ -22,7 +22,8 @@ public class Skill
     public int power;
     public int anger;
     public int accuracy;
-    public string description;
+    public string rawDescription;
+    public string description => GetDescription(rawDescription);
     public List<Effect> effects = new List<Effect>();
     public Dictionary<string, string> options = new Dictionary<string, string>();
 
@@ -33,6 +34,7 @@ public class Skill
     public int combo;
     public int priority;
     public bool ignoreShield = false;
+    public bool ignorePowerup = false;
 
 
     /* Properties */
@@ -43,6 +45,10 @@ public class Skill
 
     public PetAnimationType petAnimType => GetPetAnimationType();
     public PetAnimationType captureAnimType => GetCaptureAnimationType();
+
+    public static bool IsMod(int id) {
+        return id < -10000;
+    }
 
     public Skill() {}
 
@@ -60,13 +66,35 @@ public class Skill
         accuracy = int.Parse(_slicedData[6]);
         options.ParseOptions(_slicedData[7]);
 
+        combo = 1;
+        InitOptionsProperty();
+
+        rawDescription = _slicedData[8];
+    }
+
+    public Skill(int id, string name, Element element, SkillType type,
+        int power, int anger, int accuracy, string options, string rawDescription) {
+        this.id = id;
+        this.name = name;
+        this.element = element;
+        this.type = type;
+        this.power = power;
+        this.anger = anger;
+        this.accuracy = accuracy;
+        this.options.ParseOptions(options);
+        
+        combo = 1;
+        InitOptionsProperty();
+
+        this.rawDescription = rawDescription;
+    }
+
+    private void InitOptionsProperty() {
         isSecondSuper = bool.Parse(options.Get("second_super", "false"));
         critical = float.Parse(options.Get("critical", "5"));
-        combo = 1;
         priority = int.Parse(options.Get("priority", "0"));
         ignoreShield = bool.Parse(options.Get("ignore_shield", "false"));
-
-        description = GetDescription(_slicedData[8]);
+        ignorePowerup = bool.Parse(options.Get("ignore_powerup", "false"));
     }
 
     public Skill(Skill rhs) {
@@ -79,7 +107,7 @@ public class Skill
         anger = rhs.anger;
         accuracy = rhs.accuracy;
         options = rhs.options.ToDictionary(entry => entry.Key, entry => entry.Value);
-        description = rhs.description;
+        rawDescription = rhs.rawDescription;
         SetEffects(rhs.effects.Select(x => new Effect(x)).ToList());
 
         isSecondSuper = rhs.isSecondSuper;
@@ -94,6 +122,19 @@ public class Skill
         type = specialType;
         power = anger = 0;
         accuracy = 100;
+    }
+
+    public string[] GetRawInfoStringArray() {
+        var rawOptionString = ((critical == 5) ? string.Empty : ("critical=" + critical + "&")) +
+            ((priority == 0) ? string.Empty : ("priority=" + priority + "&")) + 
+            (isSecondSuper ? ("second_super=true&") : string.Empty) +
+            (ignoreShield ? ("ignore_shield=" + ignoreShield + "&") : string.Empty) + 
+            (ignorePowerup ? ("ignore_powerup=" + ignorePowerup + "&") : string.Empty);
+
+        rawOptionString = string.IsNullOrEmpty(rawOptionString) ? "none" : rawOptionString;
+
+        return new string[] { id.ToString(), name, elementId.ToString(), ((int)type).ToString(),
+            power.ToString(), anger.ToString(), accuracy.ToString(), rawOptionString.TrimEnd("&"), rawDescription  };
     }
 
     public static Skill GetSkill(int id, bool avoidNull = true) {
@@ -137,7 +178,7 @@ public class Skill
     public static Skill GetNoOpSkill() {
         Skill skill = new Skill(SkillType.空过);
         skill.name = "空过";
-        skill.description = "跳过自己的回合";
+        skill.rawDescription = "跳过自己的回合";
         return skill;
     }
 
@@ -166,6 +207,10 @@ public class Skill
         return skill;
     }
 
+    public static string GetSkillDescriptionPreview(string plainText) {
+        return plainText.Replace("[ENDL]", "\n").Replace("[-]", "</color>").Replace("[", "<color=#").Replace("]", ">");
+    }
+
     public string GetDescription(string plainText) {
         string desc;
         desc = plainText.Trim();
@@ -179,8 +224,7 @@ public class Skill
         if ((accuracy <= 100) && (accuracy != (isAttack ? 95 : 100))) {
             desc = "[52e5f9]【命中率 " + accuracy + "%】[-][ENDL]" + desc;
         }
-        desc = desc.Replace("[ENDL]", "\n").Replace("[-]", "</color>").Replace("[", "<color=#").Replace("]", ">");
-        return desc;
+        return Skill.GetSkillDescriptionPreview(desc);
     }   
 
     public void SetEffects(Effect _effect) {
@@ -244,6 +288,7 @@ public class Skill
             "critical" => critical,
             "combo" => combo,
             "ignoreShield" => ignoreShield ? 1 : 0,
+            "ignorePowerup" => ignorePowerup ? 1 : 0,
             _ => float.MinValue,
         };
     }

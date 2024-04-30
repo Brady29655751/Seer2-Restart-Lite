@@ -14,8 +14,7 @@ public static class Parser {
         for (int i = 0; i < _options.Length; i++) {
             var result = _options[i].Split(new char[] {'='}, StringSplitOptions.RemoveEmptyEntries);
             if (result.Length != 2) {
-                Debug.LogError("Option parsing failure.");
-                continue;
+                throw new Exception("Option Parsing Failure");
             }
             dict.Add(result[0], result[1]);
         }

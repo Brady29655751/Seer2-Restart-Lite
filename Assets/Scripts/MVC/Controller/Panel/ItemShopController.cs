@@ -25,6 +25,10 @@ public class ItemShopController : Module
         selectNumController.onValueChangedEvent += OnItemNumChange;
     }   
 
+    public void SetCurrencyType(int coinType, int diamondType) {
+        playerInfoController.SetCurrencyType(coinType, diamondType);
+    }
+
     public void SetTitle(string title) {
         itemDetailView.SetTitle(title);
     }

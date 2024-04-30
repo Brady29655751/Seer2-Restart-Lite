@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -71,16 +72,32 @@ public static class EffectDatabase {
         return timingConvDict.Get(timing, EffectTiming.None);
     }
 
+    public static string ToRawString(this EffectTiming timing) {
+        return timingConvDict.ContainsValue(timing) ? timingConvDict.First(x => x.Value == timing).Key : "none";
+    }
+
     public static EffectTarget ToEffectTarget(this string target) {
         return targetConvDict.Get(target, EffectTarget.None);
+    }
+
+    public static string ToRawString(this EffectTarget target) {
+        return targetConvDict.ContainsValue(target) ? targetConvDict.First(x => x.Value == target).Key : "none";
     }
 
     public static EffectCondition ToEffectCondition(this string condition) {
         return condConvDict.Get(condition, EffectCondition.None);
     }
 
+    public static string ToRawString(this EffectCondition condition) {
+        return condConvDict.ContainsValue(condition) ? condConvDict.First(x => x.Value == condition).Key : "none";
+    }
+
     public static EffectAbility ToEffectAbility(this string ability) {
         return typeConvDict.Get(ability, EffectAbility.None);
+    }
+
+    public static string ToRawString(this EffectAbility ability) {
+        return typeConvDict.ContainsValue(ability) ? typeConvDict.First(x => x.Value == ability).Key : "none";
     }
 }
 

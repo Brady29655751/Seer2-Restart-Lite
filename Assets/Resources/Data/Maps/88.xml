@@ -1,0 +1,208 @@
+<map name="王者之门" category="100" id="88">
+	<fightMap>100011</fightMap>
+	<music category="100">
+		<bgm>BGM_113</bgm>
+	</music>
+	<initialPoint>650,110</initialPoint>
+	<entities>
+		<npc id="8801" resId="8101" name="上尉门罗" size="170,130" pos="415,180" namePos="0,0">
+			<description>这里是王者之门，去迎接各种挑战吧！</description>
+			<dialog>
+				<branch id="default" name="上尉门罗" icon="8101" size="119,91" pos="0,55">
+					<content><![CDATA[这里是王者之门，去迎接各种挑战吧！]]></content>
+					<functionHandler>
+						<func type="click">
+							<description><![CDATA[王者之门]]></description>
+							<action>openPanel</action>
+							<param>Door</param>
+							<param>door=king</param>
+						</func>
+						<func type="click">
+							<description><![CDATA[荣誉兑换]]></description>
+							<action>openPanel</action>
+							<param>ItemShop</param>
+							<param>type=honor</param>
+							<param>currency=3/0</param>
+						</func>
+					</functionHandler>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[好的]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+					</replyHandler>
+				</branch>
+			</dialog>
+			<battle>
+			    <branch id="1">
+			    	<settings count="6">
+						<mode>1</mode>
+					</settings>
+			    	<enemy>
+			    		<pet id="9" level="100">
+			                <status>
+			                    <hp>3000</hp>
+			                </status>
+			                <initBuff>17,20</initBuff>
+			    			<loopSkill>10037,10041,10039,10044,10043</loopSkill>
+			                <superSkill>10046</superSkill>
+			    		</pet>
+			            <pet id="3" level="100">
+			                <status>
+			                    <hp>3000</hp>
+			                </status>
+			                <initBuff>17,20</initBuff>
+			            	<loopSkill>10012,10009,10015,10014</loopSkill>
+			                <superSkill>10013</superSkill>
+			            </pet>
+			            <pet id="6" level="100">
+			                <status>
+			                    <hp>3000</hp>
+			                </status>
+			                <initBuff>17,20</initBuff>
+			            	<loopSkill>10026,10025,10026</loopSkill>
+			            </pet>
+			            <pet id="-6" level="100">
+			                <status>
+			                    <hp>3000</hp>
+			                </status>
+			                <initBuff>17,20</initBuff>
+			                <headerSkill>10124</headerSkill>
+			            	<loopSkill>10113,10125,10126,10119,10121</loopSkill>
+			            </pet>
+			            <pet id="-9" level="100">
+			                <status>
+			                    <hp>3000</hp>
+			                </status>
+			                <initBuff>17,20,23</initBuff>
+			            	<loopSkill>10137,10130,10141,10142,10139</loopSkill>
+			            </pet>
+			            <pet id="-3" level="100">
+			                <status>
+			                    <hp>3000</hp>
+			                </status>
+			                <initBuff>17,20</initBuff>
+			            	<loopSkill>10111</loopSkill>
+			            </pet>
+			    	</enemy>
+			    	<winHandler>
+			    		<button type="auto">
+			    			<action>setItem</action>
+			    			<param>add</param>
+			    			<param>3,50</param>
+			    		</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=50 荣誉点已经放入背包</param>
+							<param>option_num=1</param>
+							<param>item_icon=item[3]</param>
+						</button>
+			    		<button type="auto">
+			    			<action>setActivity</action>
+			    			<param>door</param>
+			    			<param>king[floor]=2</param>
+			    		</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>door</param>
+							<param>king[max]=1</param>
+							<condition>activity[door].king[max]=[int]0[default]0</condition>
+						</button>
+			    	</winHandler>
+			    </branch>
+				<branch id="2">
+					<settings count="6">
+						<mode>1</mode>
+					</settings>
+					<enemy>
+						<pet id="12" level="100">
+				            <status>
+								<mat>600</mat>
+				                <hp>4000</hp>
+				            </status>
+				            <initBuff>13,14,17,20</initBuff>
+							<headerSkill>10057,10053</headerSkill>
+							<loopSkill>10057,10063</loopSkill>
+						</pet>
+						<pet id="21" level="100">
+						    <status>
+						        <hp>4000</hp>
+						    </status>
+						    <initBuff>13,14,17,20</initBuff>
+							<loopSkill>10240</loopSkill>
+							<superSkill>10236</superSkill>
+						</pet>
+						<pet id="24" level="100">
+						    <status>
+						        <hp>4000</hp>
+						    </status>
+						    <initBuff>13,14,17,20</initBuff>
+							<loopSkill>10306,10308</loopSkill>
+							<superSkill>10307</superSkill>
+						</pet>
+				        <pet id="201" level="100">
+				            <status>
+				                <hp>4000</hp>
+				            </status>
+				            <initBuff>13,14,17,20</initBuff>
+							<headerSkill>10196</headerSkill>
+				        	<loopSkill>10194</loopSkill>
+				        </pet>
+				        <pet id="-12" level="100">
+				            <status>
+								<atk>600</atk>
+				                <hp>4000</hp>
+				            </status>
+				            <initBuff>13,14,17,20</initBuff>
+				        	<loopSkill>10150,10145</loopSkill>
+							<superSkill>10151</superSkill>
+				        </pet>
+						<pet id="15" level="100">
+						    <status>
+						        <hp>4000</hp>
+						    </status>
+						    <initBuff>12,14,17,20,23</initBuff>
+							<loopSkill>10162</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setItem</action>
+							<param>add</param>
+							<param>3,50</param>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=50 荣誉点已经放入背包</param>
+							<param>option_num=1</param>
+							<param>item_icon=item[3]</param>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>door</param>
+							<param>king[floor]=2</param>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>door</param>
+							<param>king[max]=2</param>
+							<condition>activity[door].king[max]=[int]1[default]1</condition>
+						</button>
+					</winHandler>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>openDialog</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+        <teleport id="1" name="英格瓦要塞" pos="250,75" targetMapId="81"/>
+	</entities>
+</map>

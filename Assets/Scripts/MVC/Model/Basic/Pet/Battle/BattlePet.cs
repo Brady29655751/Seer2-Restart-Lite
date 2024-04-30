@@ -104,10 +104,17 @@ public class BattlePet : Pet
     }
 
     public static KeyValuePair<int, int> GetSkillTypeStatus(Skill skill, BattlePet lhs, BattlePet rhs) {
-        Status status = new Status(lhs.battleStatus.atk, lhs.battleStatus.mat, 
+        Status battleStatus = new Status(lhs.battleStatus.atk, lhs.battleStatus.mat, 
             rhs.battleStatus.def, rhs.battleStatus.mdf, 0, 0);
-        status.spd = (status.atk + status.mat) / 2;
-        status.hp = (status.def + status.mdf) / 2;
+        battleStatus.spd = (battleStatus.atk + battleStatus.mat) / 2;
+        battleStatus.hp = (battleStatus.def + battleStatus.mdf) / 2;
+
+        Status initStatus = new Status(lhs.battleStatus.atk, lhs.battleStatus.mat,
+            rhs.initStatus.def, rhs.initStatus.mdf, 0, 0);
+        initStatus.spd = (initStatus.atk + initStatus.mat) / 2;
+        initStatus.hp = (initStatus.def + initStatus.mdf) / 2;
+
+        var status = skill.ignorePowerup ? initStatus : battleStatus;
 
         if (skill.type == SkillType.物理) {
             return new KeyValuePair<int, int>((int)status.atk, (int)status.def);

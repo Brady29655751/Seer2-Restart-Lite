@@ -94,15 +94,23 @@ public class MapSceneView : UIModule
         NpcController npc = npcDict.Get(Player.instance.currentNpcId);
         BattleInfo battleInfo = player.currentBattle.info;
         BattleResult result = player.currentBattle.result;
+        Pet[] petBag = player.petBag;
+        VersionPetData petData = GameManager.versionData.petData;
         IEnumerable<Action> actionList = null;
-        if (result.isMyWin) {
-            actionList = battleInfo.winHandler.Select(x => NpcHandler.GetNpcEntity(npc, x, npcDict));
-        } else if (result.isOpWin) {
-            actionList = battleInfo.loseHandler.Select(x => NpcHandler.GetNpcEntity(npc, x, npcDict));
+
+        // Use mod pet to battle does not count.
+        if (!petBag.Any(x => PetInfo.IsMod(x?.id ?? 0))) {
+            if (result.isMyWin) { 
+                actionList = battleInfo.winHandler.Select(x => NpcHandler.GetNpcEntity(npc, x, npcDict));
+            } else if (result.isOpWin) {
+                actionList = battleInfo.loseHandler.Select(x => NpcHandler.GetNpcEntity(npc, x, npcDict));
+            }
         }
+
         foreach (var action in actionList) {
             action.Invoke();
         }
+
         Player.instance.currentNpcId = 0;
     }
 }

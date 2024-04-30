@@ -1,0 +1,73 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class WorkshopBuffController : Module
+{
+    [SerializeField] private WorkshopBuffModel buffModel;
+    [SerializeField] private WorkshopBuffView buffView;
+    [SerializeField] private WorkshopEffectController effectController;
+
+    protected override void Awake() {
+        buffModel.onUploadIconEvent += OnUploadIconSuccess;
+    }
+
+    public void OpenHelpPanel(string type) {
+        buffView.OpenHelpPanel(type);
+    }
+
+    public void OnUploadIcon() {
+        buffModel.OnUploadIcon();
+    }
+
+    private void OnUploadIconSuccess(Sprite sprite) {
+        buffView.OnUploadIcon(sprite);
+    }
+
+    public void OnClearIcon() {
+        buffModel.OnClearIcon();
+        buffView.OnClearIcon();
+    }
+
+    public void OnAddEffect() {
+        effectController.SetDIYSuccessCallback(OnAddEffectSuccess);
+        buffView.OpenEffectPanel();
+    }
+
+    private void OnAddEffectSuccess(Effect effect) {
+        buffModel.OnAddEffect(effect);
+        buffView.OnAddEffect(effect);
+
+        Hintbox.OpenHintboxWithContent("效果添加成功", 16);
+    }
+
+    public void OnRemoveEffect() {
+        buffModel.OnRemoveEffect();
+        buffView.OnRemoveEffect();
+    }
+
+    public void OnPreviewDescription() {
+        Hintbox.OpenHintboxWithContent(buffModel.descriptionPreview, 18);
+    }
+
+    public void OnDIYBuff() {
+        if (!VerifyDIYBuff(out var error)) {
+            Hintbox.OpenHintboxWithContent(error, 16);
+            return;
+        }
+        var hintbox = Hintbox.OpenHintbox();
+        hintbox.SetTitle("提示");
+        hintbox.SetContent("记得先导出存档并另外保存\n以避免任何存档毁损而无法游戏之情形\n确认存档保存完整后再按下确认以完成DIY", 16, FontOption.Arial);
+        hintbox.SetOptionNum(2);
+        hintbox.SetOptionCallback(OnConfirmDIYBuff);
+    }   
+
+    private bool VerifyDIYBuff(out string error) {
+        return buffModel.VerifyDIYBuff(out error);
+    }
+
+    private void OnConfirmDIYBuff() {
+        var message = "DIY写入" + (buffModel.CreateDIYBuff() ? "成功" : "失败");
+        Hintbox.OpenHintboxWithContent(message, 16);
+    }
+}

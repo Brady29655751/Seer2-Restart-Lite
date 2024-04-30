@@ -24,4 +24,8 @@ public class PetDictInfoController : Module
         infoView.SetHabitatInfoPromptContent(infoModel.petInfo.basic.habitat);
     }
 
+    public void OpenExamplePetBagPanel() {
+        infoView.OpenExamplePetBagPanel(infoModel.petInfo.id);
+    }
+
 }

@@ -58,6 +58,29 @@ public class Effect {
         abilityOptionDict = new Dictionary<string, string>(rhs.abilityOptionDict);
     }
 
+    public static string[] GetRawEffectListStringArray(int id, List<Effect> effectList) {
+        var result = Enumerable.Repeat(string.Empty, DATA_COL + 1).ToArray();
+        var rawStringArrays = effectList.Select(x => x.GetRawEffectStringArray()).ToList();
+
+        result[0] = id.ToString();
+
+        for (int i = 0; i < DATA_COL; i++) {
+            int copy = i;
+            result[copy + 1] = rawStringArrays.Select(array => array[copy]).ConcatToString("\\");
+        }
+        return result;
+    }
+
+    public string[] GetRawEffectStringArray() {
+        var rawConditionOptions = ((condOptionDictList.FirstOrDefault()?.Count ?? 0) == 0) ? "none" :
+            condOptionDictList.Select(cond => cond.Select(entry => entry.Key + "=" + entry.Value).ConcatToString("&")).ConcatToString("|");
+        var rawAbilityOptions = (abilityOptionDict.Count == 0) ? "none" : 
+            abilityOptionDict.Select(entry => entry.Key + "=" + entry.Value).ConcatToString("&");
+
+        return new string[] { timing.ToRawString(), priority.ToString(), target.ToRawString(),
+            condition.ToRawString(), rawConditionOptions, ability.ToRawString(), rawAbilityOptions };
+    }
+
     public static Effect GetEscapeEffect() {
         return new Effect(EffectTiming.OnBeforeAttack, -1, EffectTarget.None, EffectCondition.None, null, EffectAbility.Escape, null);
     }

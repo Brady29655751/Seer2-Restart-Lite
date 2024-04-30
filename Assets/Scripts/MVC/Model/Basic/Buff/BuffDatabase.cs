@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -29,8 +30,16 @@ public static class BuffDatabase
         return typeConvDict.Get(type, BuffType.None);
     }
 
+    public static string ToRawString(this BuffType type) {
+        return typeConvDict.ContainsValue(type) ? typeConvDict.First(x => x.Value == type).Key : "none";
+    }
+
     public static CopyHandleType ToCopyHandleType(this string type) {
         return copyConvDict.Get(type, CopyHandleType.New);
+    }
+
+    public static string ToRawString(this CopyHandleType type) {
+        return copyConvDict.ContainsValue(type) ? copyConvDict.First(x => x.Value == type).Key : "none";
     }
 }
 
@@ -38,7 +47,7 @@ public enum BuffType {
     None = 0,       // 無
     Feature = 1,    // 特性類狀態
     Emblem = 2,     // 紋章類狀態
-    Mark = 3,       // 印記類狀態（僅為顯示用）
+    Mark = 3,       // 標記類狀態（僅為顯示用）
     Unhealthy = 4,  // 不良狀態
     Abnormal = 5,   // 異常狀態
     TurnBased = 6,  // 回合類狀態

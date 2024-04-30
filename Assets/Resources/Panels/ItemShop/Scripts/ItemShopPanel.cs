@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
@@ -15,6 +16,7 @@ public class ItemShopPanel : Panel
         { ItemShopType.None, "道具商店" },
         { ItemShopType.PetPotion, "精灵道具商店" },
         { ItemShopType.Mine, "矿石回收商店" },
+        { ItemShopType.Honor, "荣誉商店" },
     };
 
     protected Dictionary<ItemShopType, List<int>> shopItemIdDict = new Dictionary<ItemShopType, List<int>>() {
@@ -25,6 +27,9 @@ public class ItemShopPanel : Panel
         } },
         { ItemShopType.Mine, new List<int>() { 
             1001,   1002,   1003,   1004,
+        } },
+        { ItemShopType.Honor, new List<int>() { 
+            8001,   8002,   8003,   8004,   8005,
         } },
     };
 
@@ -58,9 +63,14 @@ public class ItemShopPanel : Panel
                 var type = param switch {
                     "pet_potion" => ItemShopType.PetPotion,
                     "mine" => ItemShopType.Mine,
+                    "honor" => ItemShopType.Honor,
                     _ => ItemShopType.None,
                 };
                 SetShopType(type);
+                break;
+            case "currency":
+                var currency = param.ToIntList('/');
+                SetCurrencyType(currency[0], currency[1]);
                 break;
         }
     }
@@ -75,6 +85,10 @@ public class ItemShopPanel : Panel
         this.shopType = shopType;
         SetTitle();
         SetStorage();
+    }
+
+    public void SetCurrencyType(int coinType, int diamondType) {
+        shopController.SetCurrencyType(coinType, diamondType);
     }
 
     private void SetTitle() {
@@ -105,4 +119,5 @@ public enum ItemShopType {
     None,
     PetPotion,
     Mine,
+    Honor,
 }

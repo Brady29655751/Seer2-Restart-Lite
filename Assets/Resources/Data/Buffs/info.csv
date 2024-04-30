@@ -45,7 +45,7 @@ id,name,type,copyType,turn,options,description
 41,暴击率提升,mark,replace,-1,res=27,暴击率增加15%
 42,暴击伤害提升,mark,replace,-1,res=28,暴击时造成的伤害增加35%
 43,软甲,mark,replace,-1,none,免疫克制伤害
-44,硬甲,mark,replace,-1,res=43,免疫非微弱伤害
+44,硬甲,mark,replace,-1,res=43,免疫非暴击伤害
 45,纯净,mark,replace,-1,none,获得的能力强化效果翻倍
 46,浑浊,mark,replace,-1,none,受到的能力弱化效果翻倍
 47,反射,mark,replace,-1,none,反射一半攻击伤害，最高不超过自身最大体力的一半
@@ -56,6 +56,8 @@ id,name,type,copyType,turn,options,description
 52,反射物攻,chance,replace,-1,res=47,反射下一次物理攻击的全部伤害，最高不超过自身最大体力
 53,反射特攻,chance,replace,-1,res=47,反射下一次特殊攻击的一半伤害，最高不超过自身最大体力的一半
 54,反射特攻,chance,replace,-1,res=47,反射下一次特殊攻击的一半伤害，最高不超过自身最大体力
+55,星刃解封,mark,replace,-1,none,使物攻伤害不低于150
+56,星辉解封,mark,replace,-1,res=56,使特攻伤害不低于150
 99,王者体质,mark,replace,-1,none,免疫秒杀效果
 101,魅惑,abnormal,replace,2,none,受到魅惑，无法行动
 102,害怕,abnormal,replace,2,none,害怕对手，无法行动
@@ -128,6 +130,9 @@ id,name,type,copyType,turn,options,description
 3049,剧毒身体,turn,replace,3,none,受到攻击时50%使对手中毒
 3050,蓄电,turn,replace,3,none,使自身电系技能伤害增加70%
 3051,星尘幻盾,mark,max,-1,none,受到的伤害不超过400且每回合刷新并记录上一次受到的伤害值
+3052,蓝色水球,mark,max,-1,auto_remove=true,使特攻技能附加效果
+3053,红色水球,mark,max,-1,auto_remove=true,使物攻技能附加效果
+3054,涟漪盾,turn,replace,5,res=16&keep=false,受到的水系攻击伤害减半
 3143,焦点腐蚀,mark,replace,-1,none,特定攻击技能造成伤害的1/4将恢复自身体力
 3279,蜂纹,mark,stack,-1,auto_remove=true&max_val=3,每一层使中毒造成的伤害增加30，最多叠加3层。[ENDL]当前为[value]层
 3280,青蜂之舞,turn,replace,3,res=18,闪避率增加50%
@@ -148,8 +153,10 @@ id,name,type,copyType,turn,options,description
 100154,紫电,feature,replace,-1,none,特攻技能伤害增加10%，物攻技能命中率增加10%
 100200,毒粉,feature,replace,-1,none,自身具有花粉弥漫时，每回合使对手失去25点体力
 100301,森林,feature,replace,-1,none,自身具有森林祝福时受到的伤害减少10%
+100302,红球,feature,replace,-1,none,当仅有红色水球时，水系技能伤害增加20%
 100961,首星,feature,replace,-1,none,星移环境下命中率增加50%
 100962,躯星,feature,replace,-1,none,星移环境下受到的伤害减少10%
+100963,臂星,feature,replace,-1,none,星移环境下攻击前有15%几率使对手冻伤3回合
 200001,追击,emblem,replace,-1,none,命中率和闪避率提高10%
 200004,怒火,emblem,replace,-1,none,怒气回复率提高20%（攻击命中与回合结束回复的怒气除外）
 200007,治愈,emblem,replace,-1,none,体力回复率提高20%
@@ -167,8 +174,10 @@ id,name,type,copyType,turn,options,description
 200154,挑衅,emblem,replace,-1,none,挑衅也增加自身20点怒气
 200200,荧光,emblem,replace,-1,none,对手具有荧光花粉时，每回合恢复自身25点体力
 200301,祝福,emblem,replace,-1,none,使森林祝福提升的体力回复率提高5%
+200302,蓝球,emblem,replace,-1,none,每消耗1个蓝色水球时增加自身10点怒气
 200961,首魅,emblem,replace,-1,none,使幻魅之眼的魅惑效果延长1回合
 200962,躯徽,emblem,replace,-1,none,使星尘幻盾回复自身120点体力
+200963,臂骈,emblem,replace,-1,none,使星刃解封提升自身速度1级
 900001,骇浪,feature,replace,-1,none,雨天环境下使用攻击技能恢复自身5怒气
 900004,魔焰,feature,replace,-1,none,炎热环境下暴击率增加15%
 900007,飞叶,feature,replace,-1,none,晴天环境下受到的暴击伤害减少25%

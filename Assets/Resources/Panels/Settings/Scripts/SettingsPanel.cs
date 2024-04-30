@@ -27,5 +27,9 @@ public class SettingsPanel : Panel
     private void OnExportCancel() {
 
     }
+
+    public void OpenWorkshopPanel() {
+        Panel.OpenPanel<WorkshopPanel>();
+    }
     
 }

@@ -62,6 +62,7 @@ public class GameManager : Singleton<GameManager>
             RequestManager.OnRequestFail("获取版本档案失败，请重新启动游戏");
         } 
         
+        SaveSystem.CreateMod();
         Utility.InitScreenSizeWithRatio(16, 9);
         ResourceManager.LoadXML<VersionData>(versionDataUrl, OnRequestSuccess, OnRequestFail);
     }

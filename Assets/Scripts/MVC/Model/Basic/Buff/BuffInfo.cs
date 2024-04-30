@@ -28,6 +28,22 @@ public class BuffInfo
     public List<Effect> effects { get; private set; }
     public Sprite icon { get => GetIcon(); }
 
+    public static bool IsMod(int id) {
+        return id.IsWithin(80_0013, 89_9999) || id.IsWithin(90_0013, 99_9999) || (id < -10_0000);
+    }
+
+    public BuffInfo(int id, string name, BuffType type, CopyHandleType copyHandleType, int turn, string options, string description) {
+        this.id = id;
+        this.name = name;
+        this.type = type;
+        this.copyHandleType = copyHandleType;
+        this.turn = turn;
+        this.options.ParseOptions(options);
+        this.description = description;
+
+        InitOptionsProperty();
+    }
+
     public BuffInfo(string[] _data, int startIndex = 0) {
         string[] _slicedData = new string[DATA_COL];
         Array.Copy(_data, startIndex, _slicedData, 0, _slicedData.Length);
@@ -39,19 +55,45 @@ public class BuffInfo
         options.ParseOptions(_slicedData[5]);
         description = _slicedData[6].Trim();
 
+        InitOptionsProperty();
+    }
+
+    private void InitOptionsProperty() {
         resId = int.Parse(options.Get("res", id.ToString()));
-        keep = (type == BuffType.Unhealthy || type == BuffType.Abnormal) ? false : bool.Parse(options.Get("keep", "true"));
-        inherit = bool.Parse(options.Get("inherit", "false"));
-        hide = bool.Parse(options.Get("hide", "false"));
+        keep = GetKeepInfo();
+        inherit = ((type == BuffType.Feature) || (type == BuffType.Emblem)) ? false : bool.Parse(options.Get("inherit", "false"));
+        hide = ((type == BuffType.Feature) || (type == BuffType.Emblem)) ? false : bool.Parse(options.Get("hide", "false"));
         autoRemove = bool.Parse(options.Get("auto_remove", "false"));
         minValue = int.Parse(options.Get("min_val", int.MinValue.ToString()));
         maxValue = int.Parse(options.Get("max_val", int.MaxValue.ToString()));
+    }
+
+    private bool GetKeepInfo() {
+        if ((type == BuffType.Unhealthy) || (type == BuffType.Abnormal))
+            return false;
+
+        if ((type == BuffType.Feature) || (type == BuffType.Emblem))
+            return true;
+
+        return bool.Parse(options.Get("keep", "true"));
     }
 
     public void SetEffects(List<Effect> _effects) {
         effects = _effects;
     }
 
+    public string[] GetRawInfoStringArray() {
+        string resRawString = (id == resId) ? string.Empty : ("res=" + resId + "&");
+        string hideString = hide ? ("hide=true&") : string.Empty;
+        string minValueString = (minValue == int.MinValue) ? string.Empty : ("min_val=" + minValue + "&");
+        string maxValueString = (maxValue == int.MaxValue) ? string.Empty : ("max_val=" + maxValue + "&");
+
+        string rawOptionString = resRawString + minValueString + maxValueString + hideString +
+            "keep=" + keep + "&inherit=" + inherit + "&auto_remove=" + autoRemove;
+
+        return new string[] { id.ToString(), name, type.ToRawString(), copyHandleType.ToRawString(),
+            turn.ToString(), rawOptionString.TrimEnd("&"), description };
+    }
 
     public int GetSortPriority() {
         int mod = 10_0000;
@@ -75,7 +117,7 @@ public class BuffInfo
         if (type == BuffType.Emblem)
             return   PetUISystem.GetEmblemIcon(_pet * (_type < 5 ? 1 : -1));
 
-        return ResourceManager.instance.GetLocalAddressables<Sprite>("Buffs/" + resId);
+        return ResourceManager.instance.GetLocalAddressables<Sprite>("Buffs/" + resId, IsMod(id));
     }
 
 }

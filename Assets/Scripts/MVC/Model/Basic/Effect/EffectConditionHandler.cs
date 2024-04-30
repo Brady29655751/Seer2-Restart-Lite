@@ -57,7 +57,7 @@ public static class EffectConditionHandler
         if ((move != "all") && !bool.TryParse(move, out isMove))
             return false;
 
-        return (lhsUnit.skillSystem.isHit == isHit) && (lhsUnit.pet.isMovable == isMove);
+        return ((hit == "all") || (lhsUnit.skillSystem.isHit == isHit)) && ((move == "all") || (lhsUnit.pet.isMovable == isMove));
     }
 
     public static bool RandomNumber(this Effect effect, BattleState state, Dictionary<string, string> condOptions) {
@@ -191,7 +191,7 @@ public static class EffectConditionHandler
         var buff = pet.buffController.GetBuff(buffId);
         bool isOwnCorrect = (ownBuff == (buff != null));
 
-        if (!ownBuff || !isOwnCorrect || (type == "none"))
+        if ((!ownBuff) || (!isOwnCorrect) || (type == "none"))
             return isOwnCorrect;
 
         for (int i = 0; i < typeList.Length; i++) {

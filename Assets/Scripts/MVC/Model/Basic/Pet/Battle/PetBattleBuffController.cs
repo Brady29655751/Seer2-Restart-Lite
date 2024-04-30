@@ -8,6 +8,8 @@ public class PetBattleBuffController
 {
     private Element element;
     private List<int> blockBuffIds = new List<int>();
+    private List<BuffType> blockBuffTypes = new List<BuffType>();
+
     public List<Buff> buffs = new List<Buff>();
     public bool isMovable => !IsUnmovableEffected();
 
@@ -40,7 +42,8 @@ public class PetBattleBuffController
     }
 
     public bool IsBuffBlocked(int id) {
-        return blockBuffIds.Contains(id);
+        var type = Buff.GetBuffInfo(id)?.type ?? BuffType.None;
+        return blockBuffIds.Contains(id) || blockBuffTypes.Contains(type);
     }
 
     public Buff GetBuff(int id) {
@@ -180,24 +183,16 @@ public class PetBattleBuffController
         blockBuffIds.AddRange(idList);
     }
 
-    /// <summary>
-    /// Block buffs.
-    /// </summary>
-    /// <param name="idRange">Max exclusive.</param>
-    public void BlockRangeBuff(List<int> idRange) {
-        blockBuffIds.AddRange(Enumerable.Range(idRange[0], idRange[1] - idRange[0] + 1));
+    public void BlockBuffWithType(List<BuffType> typeList) {
+        blockBuffTypes.AddRange(typeList);
     }
 
     public void UnblockBuff(List<int> idList) {
         blockBuffIds.RemoveRange(idList);
     }
 
-    /// <summary>
-    /// Unblock buffs.
-    /// </summary>
-    /// <param name="idRange">Max exclusive.</param>
-    public void UnblockRangeBuff(List<int> idRange) {
-        blockBuffIds.RemoveRange(Enumerable.Range(idRange[0], idRange[1] - idRange[0]).ToList());
+    public void UnblockBuffWithType(List<BuffType> typeList) {
+        blockBuffTypes.RemoveRange(typeList);
     }
 
     public void OnTurnStart(Unit thisUnit, BattleState state) {

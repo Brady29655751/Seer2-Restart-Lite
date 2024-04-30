@@ -184,6 +184,17 @@ public static class NpcActionHandler
         Player.instance.currentNpcId = (npcInfo == null) ? 0 : npcInfo.id;
         BattleInfo battleInfo = npcInfo.battleHandler.Find(x => x.id == handler.param[0]);
 
+        if (battleInfo == null) {
+            if (handler.param.Count <= 1)
+                return;
+
+            Hintbox hintbox = Hintbox.OpenHintbox();
+            hintbox.SetTitle("提示");
+            hintbox.SetContent(handler.param[1], 14, FontOption.Arial);
+            hintbox.SetOptionNum(1);
+            return;
+        }
+
         bool isPlayerPetBag = (battleInfo.playerInfo == null) || (battleInfo.playerInfo.Count == 0);
         bool isFirstPetDead = (Player.instance.petBag[0] == null) || (Player.instance.petBag[0].currentStatus.hp == 0);
         if (isPlayerPetBag && isFirstPetDead) {

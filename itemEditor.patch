@@ -1,0 +1,2263 @@
+Subject: [PATCH] Editor-物品编辑器
+---
+Index: Assets/Scripts/Editor/EditorData.meta
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/Assets/Scripts/Editor/EditorData.meta b/Assets/Scripts/Editor/EditorData.meta
+new file mode 100644
+--- /dev/null	(revision 13e85d4a87d7f5c3f257eff343dd6974a7c29fa2)
++++ b/Assets/Scripts/Editor/EditorData.meta	(revision 13e85d4a87d7f5c3f257eff343dd6974a7c29fa2)
+@@ -0,0 +1,3 @@
++fileFormatVersion: 2
++guid: c3fef903eedb4488a08b4e1f5996d82d
++timeCreated: 1713681701
+\ No newline at end of file
+Index: Assets/Scripts/Editor/EditorData/CSVExporter.cs
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/Assets/Scripts/Editor/EditorData/CSVExporter.cs b/Assets/Scripts/Editor/EditorData/CSVExporter.cs
+new file mode 100644
+--- /dev/null	(revision 13e85d4a87d7f5c3f257eff343dd6974a7c29fa2)
++++ b/Assets/Scripts/Editor/EditorData/CSVExporter.cs	(revision 13e85d4a87d7f5c3f257eff343dd6974a7c29fa2)
+@@ -0,0 +1,101 @@
++using System.Collections.Generic;
++using UnityEngine;
++using System.IO;
++using System.Linq;
++
++public static class CSVExporter
++{
++    public static void ExportToCSV(ItemDataList_SO itemDataList)
++    {
++        ExportInfoCSV(itemDataList.itemDetailsList);
++        ExportEffectCSV(itemDataList.itemDetailsList);
++    }
++
++    private static void ExportInfoCSV(List<ItemInfos> itemInfosList)
++    {
++        using (StreamWriter sw = new StreamWriter("Assets/Resources/Data/Items/info.csv"))
++        {
++            sw.WriteLine("id,name,type,price,option,description,effect");
++
++            foreach (ItemInfos item in itemInfosList)
++            {
++                sw.WriteLine(
++                    $"{item.id},{item.name},{item.type.ToItemString()},{item.price},{item.option},{item.description},{item.effect}");
++            }
++        }
++    }
++
++
++    private static void ExportEffectCSV(List<ItemInfos> itemInfosList)
++    {
++        using (StreamWriter sw = new StreamWriter("Assets/Resources/Data/Items/effect.csv"))
++        {
++            sw.WriteLine("id,timing,priority,target,condition,cond_option,effect,effect_option");
++
++            // 用于跟踪已经处理过的 id
++            HashSet<int> processedIds = new HashSet<int>();
++
++            foreach (ItemInfos item in itemInfosList)
++            {
++                // 处理 ItemEffect
++                if (item.ItemEffect != null && !processedIds.Contains(item.ItemEffect.id))
++                {
++                    if (item.ItemEffect.id == item.ItemEffect1.id &&
++                        item.ItemEffect.timing != item.ItemEffect1.timing &&
++                        item.ItemEffect1.timing != EffectTiming.None)
++                    {
++                        //目的就是不让他们同一个id的写入，在merge时候写入
++                    }
++                    else
++                    {
++                        // 写入 ItemEffect 数据
++                        sw.WriteLine(FormatEffectCSVLine(item.ItemEffect));
++                    }
++
++
++                    // 标记已处理的 id
++                    processedIds.Add(item.ItemEffect.id);
++                }
++
++                // 处理 ItemEffect1
++                if (item.ItemEffect1 != null && item.ItemEffect1.id != 0 &&
++                    item.ItemEffect1.timing != EffectTiming.None && processedIds.Contains(item.ItemEffect1.id))
++                {
++                    string mergedLine = MergeEffectCSVLine(item.ItemEffect, item.ItemEffect1);
++                    sw.WriteLine(mergedLine);
++                }
++            }
++        }
++    }
++
++    private static string FormatEffectCSVLine(ItemEffect itemEffect)
++    {
++        // 格式化每个字段
++        string timing = itemEffect.timing.ToEffectTimingString();
++        string priority = itemEffect.priority.ToString();
++        string target = itemEffect.target.ToEffectTargetString();
++        string condition = itemEffect.condition.ToEffectConditionString();
++        string cond_option = itemEffect.cond_option;
++        string effect = itemEffect.effect.ToEffectAbilityString();
++        string effect_option = itemEffect.effect_option;
++
++        return $"{itemEffect.id},{timing},{priority},{target},{condition},{cond_option},{effect},{effect_option}";
++    }
++
++
++    private static string MergeEffectCSVLine(ItemEffect itemEffect, ItemEffect itemEffect1)
++    {
++        // 合并数据并用 "\" 分隔
++        string timing = $"{itemEffect.timing.ToEffectTimingString()}\\{itemEffect1.timing.ToEffectTimingString()}";
++        string priority = $"{itemEffect.priority}\\{itemEffect1.priority}";
++        string target = $"{itemEffect.target.ToEffectTargetString()}\\{itemEffect1.target.ToEffectTargetString()}";
++        string condition = $"{itemEffect.condition.ToEffectConditionString()}\\{itemEffect1.condition.ToEffectConditionString()}";
++        string cond_option =
++            $"{itemEffect.cond_option.Replace(",", "\\,")}\\{itemEffect1.cond_option.Replace(",", "\\,")}";
++        string effect = $"{itemEffect.effect.ToEffectAbilityString()}\\{itemEffect1.effect.ToEffectAbilityString()}";
++        string effect_option =
++            $"{itemEffect.effect_option.Replace(",", "\\,")}\\{itemEffect1.effect_option.Replace(",", "\\,")}";
++
++        return $"{itemEffect.id},{timing},{priority},{target},{condition},{cond_option},{effect},{effect_option}";
++    }
++}
+\ No newline at end of file
+Index: Assets/Scripts/Editor/EditorData/CSVExporter.cs.meta
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/Assets/Scripts/Editor/EditorData/CSVExporter.cs.meta b/Assets/Scripts/Editor/EditorData/CSVExporter.cs.meta
+new file mode 100644
+--- /dev/null	(revision 13e85d4a87d7f5c3f257eff343dd6974a7c29fa2)
++++ b/Assets/Scripts/Editor/EditorData/CSVExporter.cs.meta	(revision 13e85d4a87d7f5c3f257eff343dd6974a7c29fa2)
+@@ -0,0 +1,3 @@
++fileFormatVersion: 2
++guid: efbe0b49f7e646f6a2df410786d6ed58
++timeCreated: 1714140268
+\ No newline at end of file
+Index: Assets/Scripts/Editor/EditorData/EffectsData.cs
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/Assets/Scripts/Editor/EditorData/EffectsData.cs b/Assets/Scripts/Editor/EditorData/EffectsData.cs
+new file mode 100644
+--- /dev/null	(revision 13e85d4a87d7f5c3f257eff343dd6974a7c29fa2)
++++ b/Assets/Scripts/Editor/EditorData/EffectsData.cs	(revision 13e85d4a87d7f5c3f257eff343dd6974a7c29fa2)
+@@ -0,0 +1,10 @@
++using System.Collections.Generic;
++
++namespace Editor.EditorData
++{
++    public class EffectsData
++    {
++        public Dictionary<int, List<ItemEffect>> EffectsDict { get; set; }
++        public Dictionary<int, List<ItemEffect>> EffectsDict1 { get; set; }
++    }
++}
+\ No newline at end of file
+Index: Assets/Scripts/Editor/EditorData/EffectsData.cs.meta
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/Assets/Scripts/Editor/EditorData/EffectsData.cs.meta b/Assets/Scripts/Editor/EditorData/EffectsData.cs.meta
+new file mode 100644
+--- /dev/null	(revision 13e85d4a87d7f5c3f257eff343dd6974a7c29fa2)
++++ b/Assets/Scripts/Editor/EditorData/EffectsData.cs.meta	(revision 13e85d4a87d7f5c3f257eff343dd6974a7c29fa2)
+@@ -0,0 +1,3 @@
++fileFormatVersion: 2
++guid: 6da3c48656e34ea2bd5def6ce7d81af4
++timeCreated: 1713962430
+\ No newline at end of file
+Index: Assets/Scripts/Editor/EditorData/ItemDataList_SO.asset
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/Assets/Scripts/Editor/EditorData/ItemDataList_SO.asset b/Assets/Scripts/Editor/EditorData/ItemDataList_SO.asset
+new file mode 100644
+--- /dev/null	(revision 13e85d4a87d7f5c3f257eff343dd6974a7c29fa2)
++++ b/Assets/Scripts/Editor/EditorData/ItemDataList_SO.asset	(revision 13e85d4a87d7f5c3f257eff343dd6974a7c29fa2)
+@@ -0,0 +1,977 @@
++%YAML 1.1
++%TAG !u! tag:unity3d.com,2011:
++--- !u!114 &11400000
++MonoBehaviour:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  m_GameObject: {fileID: 0}
++  m_Enabled: 1
++  m_EditorHideFlags: 0
++  m_Script: {fileID: 11500000, guid: 429cf37987d248e59ce7fe06e24b26b7, type: 3}
++  m_Name: ItemDataList_SO
++  m_EditorClassIdentifier: 
++  itemDetailsList:
++  - id: 1
++    name: "\u8D5B\u5C14\u8C46"
++    type: 1
++    price: 1
++    option: none
++    description: none
++    effect: "\u98DE\u8239\u4E0A\u6D41\u901A\u7684\u8D27\u5E01\uFF0C\u53EF\u4EE5\u8D2D\u4E70\u65E5\u5E38\u7528\u54C1"
++    icon: {fileID: 21300000, guid: a21dba7da6af65248b3e0256e43c4913, type: 3}
++    ItemEffect:
++      id: 1
++      timing: 0
++      priority: -1
++      target: 0
++      condition: 0
++      cond_option: none
++      effect: 0
++      effect_option: none
++    ItemEffect1:
++      id: 1
++      timing: 0
++      priority: 0
++      target: 0
++      condition: 0
++      cond_option: 
++      effect: 0
++      effect_option: 
++  - id: 2
++    name: "\u661F\u94BB"
++    type: 1
++    price: 1[D]
++    option: none
++    description: none
++    effect: "\u963F\u5361\u8FEA\u4E9A\u661F\u51FA\u4EA7\u7684\u94BB\u77F3\uFF0C\u975E\u5E38\u7A00\u6709"
++    icon: {fileID: 21300000, guid: 03b1b30b6627f8a448dcbeeacafd2e3c, type: 3}
++    ItemEffect:
++      id: 2
++      timing: 0
++      priority: -1
++      target: 0
++      condition: 0
++      cond_option: none
++      effect: 0
++      effect_option: none
++    ItemEffect1:
++      id: 2
++      timing: 0
++      priority: 0
++      target: 0
++      condition: 0
++      cond_option: 
++      effect: 0
++      effect_option: 
++  - id: 1001
++    name: "\u9EC4\u94C1\u77FF"
++    type: 8
++    price: 10
++    option: none
++    description: none
++    effect: "\u53EF\u8F6C\u5316\u4E3A\u98DE\u8239\u80FD\u6E90\uFF0C\u5728\u52A8\u529B\u5BA4\u5151\u6362\u8D5B\u5C14\u8C46"
++    icon: {fileID: 21300000, guid: b37cbbe54eb8fd24899bb5fa70b9e8ee, type: 3}
++    ItemEffect:
++      id: 1001
++      timing: 0
++      priority: -1
++      target: 0
++      condition: 0
++      cond_option: none
++      effect: 0
++      effect_option: none
++    ItemEffect1:
++      id: 1001
++      timing: 0
++      priority: 0
++      target: 0
++      condition: 0
++      cond_option: 
++      effect: 0
++      effect_option: 
++  - id: 1002
++    name: "\u8D64\u6676\u77FF"
++    type: 8
++    price: 20
++    option: none
++    description: none
++    effect: "\u53EF\u8F6C\u5316\u4E3A\u98DE\u8239\u80FD\u6E90\uFF0C\u5728\u52A8\u529B\u5BA4\u5151\u6362\u8D5B\u5C14\u8C46"
++    icon: {fileID: 21300000, guid: e47d19ace4c30ab41832fca58c6d0e77, type: 3}
++    ItemEffect:
++      id: 1002
++      timing: 0
++      priority: -1
++      target: 0
++      condition: 0
++      cond_option: none
++      effect: 0
++      effect_option: none
++    ItemEffect1:
++      id: 1002
++      timing: 0
++      priority: 0
++      target: 0
++      condition: 0
++      cond_option: 
++      effect: 0
++      effect_option: 
++  - id: 1003
++    name: "\u7EFF\u78A7\u77F3"
++    type: 8
++    price: 30
++    option: none
++    description: none
++    effect: "\u53EF\u8F6C\u5316\u4E3A\u98DE\u8239\u80FD\u6E90\uFF0C\u5728\u52A8\u529B\u5BA4\u5151\u6362\u8D5B\u5C14\u8C46"
++    icon: {fileID: 21300000, guid: 8b41f60366960c941ba3e72bfa04010a, type: 3}
++    ItemEffect:
++      id: 1003
++      timing: 0
++      priority: -1
++      target: 0
++      condition: 0
++      cond_option: none
++      effect: 0
++      effect_option: none
++    ItemEffect1:
++      id: 1003
++      timing: 0
++      priority: 0
++      target: 0
++      condition: 0
++      cond_option: 
++      effect: 0
++      effect_option: 
++  - id: 1004
++    name: "\u9752\u7389\u77F3"
++    type: 8
++    price: 40
++    option: none
++    description: none
++    effect: "\u53EF\u8F6C\u5316\u4E3A\u98DE\u8239\u80FD\u6E90\uFF0C\u5728\u52A8\u529B\u5BA4\u5151\u6362\u8D5B\u5C14\u8C46"
++    icon: {fileID: 21300000, guid: 834b965c53bc87b4283506f38854c605, type: 3}
++    ItemEffect:
++      id: 1004
++      timing: 0
++      priority: -1
++      target: 0
++      condition: 0
++      cond_option: none
++      effect: 0
++      effect_option: none
++    ItemEffect1:
++      id: 1004
++      timing: 0
++      priority: 0
++      target: 0
++      condition: 0
++      cond_option: 
++      effect: 0
++      effect_option: 
++  - id: 10001
++    name: "\u521D\u7EA7\u7CBE\u7075\u80F6\u56CA"
++    type: 3
++    price: 200
++    option: none
++    description: none
++    effect: "\u7528\u6765\u6355\u83B730\u7EA7\u4EE5\u4E0B\u7684\u7CBE\u7075"
++    icon: {fileID: 21300000, guid: 4c99ff921762e3e40bbd36e5ca96c06f, type: 3}
++    ItemEffect:
++      id: 10001
++      timing: 7
++      priority: -1
++      target: 5
++      condition: 2
++      cond_option: who=op&type=level&level_op=LTE&level_cmp=30
++      effect: 3
++      effect_option: prob=25
++    ItemEffect1:
++      id: 10001
++      timing: 0
++      priority: 0
++      target: 0
++      condition: 0
++      cond_option: 
++      effect: 0
++      effect_option: 
++  - id: 10002
++    name: "\u4E2D\u7EA7\u7CBE\u7075\u80F6\u56CA"
++    type: 3
++    price: 400
++    option: none
++    description: none
++    effect: "\u7528\u6765\u6355\u83B760\u7EA7\u4EE5\u4E0B\u7684\u7CBE\u7075"
++    icon: {fileID: 21300000, guid: fe4bdd3b49049304297f8b013b23554c, type: 3}
++    ItemEffect:
++      id: 10002
++      timing: 7
++      priority: -1
++      target: 5
++      condition: 2
++      cond_option: who=op&type=level&level_op=LTE&level_cmp=60
++      effect: 3
++      effect_option: prob=25
++    ItemEffect1:
++      id: 10002
++      timing: 0
++      priority: 0
++      target: 0
++      condition: 0
++      cond_option: 
++      effect: 0
++      effect_option: 
++  - id: 10003
++    name: "\u9AD8\u7EA7\u7CBE\u7075\u80F6\u56CA"
++    type: 3
++    price: 1000
++    option: none
++    description: none
++    effect: "\u53EF\u5C0F\u5E45\u63D0\u5347\u6355\u83B7\u51E0\u7387\u7684\u7CBE\u7075\u80F6\u56CA"
++    icon: {fileID: 21300000, guid: 3ada2a591d13c214c9df61ccd7b71d77, type: 3}
++    ItemEffect:
++      id: 10003
++      timing: 7
++      priority: -1
++      target: 5
++      condition: 0
++      cond_option: none
++      effect: 3
++      effect_option: prob=35
++    ItemEffect1:
++      id: 10003
++      timing: 0
++      priority: 0
++      target: 0
++      condition: 0
++      cond_option: 
++      effect: 0
++      effect_option: 
++  - id: 10004
++    name: "\u7279\u7EA7\u7CBE\u7075\u80F6\u56CA"
++    type: 3
++    price: 3500
++    option: none
++    description: none
++    effect: "\u53EF\u5927\u5E45\u63D0\u5347\u6355\u83B7\u51E0\u7387\u7684\u7CBE\u7075\u80F6\u56CA"
++    icon: {fileID: 21300000, guid: 269cb545aec7ad44894b8b0b591b38dc, type: 3}
++    ItemEffect:
++      id: 10004
++      timing: 7
++      priority: -1
++      target: 5
++      condition: 0
++      cond_option: none
++      effect: 3
++      effect_option: prob=50
++    ItemEffect1:
++      id: 10004
++      timing: 0
++      priority: 0
++      target: 0
++      condition: 0
++      cond_option: 
++      effect: 0
++      effect_option: 
++  - id: 10005
++    name: "\u65E0\u654C\u7CBE\u7075\u80F6\u56CA"
++    type: 3
++    price: 50[D]
++    option: none
++    description: none
++    effect: "\u5FC5\u5B9A\u6210\u529F\u6355\u83B7\u7684\u7CBE\u7075\u80F6\u56CA"
++    icon: {fileID: 21300000, guid: 1bd182a68107d5743a8ce345ba89249f, type: 3}
++    ItemEffect:
++      id: 10005
++      timing: 7
++      priority: -1
++      target: 5
++      condition: 0
++      cond_option: none
++      effect: 3
++      effect_option: prob=100
++    ItemEffect1:
++      id: 10005
++      timing: 0
++      priority: 0
++      target: 0
++      condition: 0
++      cond_option: 
++      effect: 0
++      effect_option: 
++  - id: 10011
++    name: "\u521D\u7EA7\u4F53\u529B\u836F\u5242"
++    type: 2
++    price: 20
++    option: none
++    description: none
++    effect: "\u6062\u590D\u7CBE\u707520\u4F53\u529B"
++    icon: {fileID: 21300000, guid: 5ab6d69a279124f4a9fdf257ce044bf0, type: 3}
++    ItemEffect:
++      id: 10011
++      timing: 1
++      priority: -1
++      target: 5
++      condition: 3
++      cond_option: status_type=hp&op=<&cmp_value=1/1
++      effect: 5
++      effect_option: type=item&add=20
++    ItemEffect1:
++      id: 10011
++      timing: 7
++      priority: -1
++      target: 5
++      condition: 3
++      cond_option: status_type=hp&op=<&cmp_value=1/1
++      effect: 5
++      effect_option: type=item&add=20
++  - id: 10012
++    name: "\u4E2D\u7EA7\u4F53\u529B\u836F\u5242"
++    type: 2
++    price: 50
++    option: none
++    description: none
++    effect: "\u6062\u590D\u7CBE\u707550\u4F53\u529B"
++    icon: {fileID: 21300000, guid: 96c7ab4aea0eb354d82657199a8160cb, type: 3}
++    ItemEffect:
++      id: 10012
++      timing: 1
++      priority: -1
++      target: 5
++      condition: 3
++      cond_option: status_type=hp&op=<&cmp_value=1/1
++      effect: 5
++      effect_option: type=item&add=50
++    ItemEffect1:
++      id: 10012
++      timing: 7
++      priority: -1
++      target: 5
++      condition: 3
++      cond_option: status_type=hp&op=<&cmp_value=1/1
++      effect: 5
++      effect_option: type=item&add=50
++  - id: 10013
++    name: "\u9AD8\u7EA7\u4F53\u529B\u836F\u5242"
++    type: 2
++    price: 100
++    option: none
++    description: none
++    effect: "\u6062\u590D\u7CBE\u7075100\u4F53\u529B"
++    icon: {fileID: 21300000, guid: 2bfcbba4a828e2b43abd3c451ab7b468, type: 3}
++    ItemEffect:
++      id: 10013
++      timing: 1
++      priority: -1
++      target: 5
++      condition: 3
++      cond_option: status_type=hp&op=<&cmp_value=1/1
++      effect: 5
++      effect_option: type=item&add=100
++    ItemEffect1:
++      id: 10013
++      timing: 7
++      priority: -1
++      target: 5
++      condition: 3
++      cond_option: status_type=hp&op=<&cmp_value=1/1
++      effect: 5
++      effect_option: type=item&add=100
++  - id: 10014
++    name: "\u7279\u7EA7\u4F53\u529B\u836F\u5242"
++    type: 2
++    price: 200
++    option: none
++    description: none
++    effect: "\u6062\u590D\u7CBE\u7075200\u4F53\u529B"
++    icon: {fileID: 21300000, guid: f6bf93e049c0afe489da6c402b93c563, type: 3}
++    ItemEffect:
++      id: 10014
++      timing: 1
++      priority: -1
++      target: 5
++      condition: 3
++      cond_option: status_type=hp&op=<&cmp_value=1/1
++      effect: 5
++      effect_option: type=item&add=200
++    ItemEffect1:
++      id: 10014
++      timing: 7
++      priority: -1
++      target: 5
++      condition: 3
++      cond_option: status_type=hp&op=<&cmp_value=1/1
++      effect: 5
++      effect_option: type=item&add=200
++  - id: 10015
++    name: "\u8D85\u7EA7\u4F53\u529B\u836F\u5242"
++    type: 2
++    price: 300
++    option: none
++    description: none
++    effect: "\u6062\u590D\u7CBE\u7075300\u4F53\u529B"
++    icon: {fileID: 21300000, guid: 9c061adc18afa0148878515f71244792, type: 3}
++    ItemEffect:
++      id: 10015
++      timing: 1
++      priority: -1
++      target: 5
++      condition: 3
++      cond_option: status_type=hp&op=<&cmp_value=1/1
++      effect: 5
++      effect_option: type=item&add=300
++    ItemEffect1:
++      id: 10015
++      timing: 7
++      priority: -1
++      target: 5
++      condition: 3
++      cond_option: status_type=hp&op=<&cmp_value=1/1
++      effect: 5
++      effect_option: type=item&add=300
++  - id: 10016
++    name: "\u9876\u7EA7\u4F53\u529B\u836F\u5242"
++    type: 2
++    price: 350
++    option: none
++    description: none
++    effect: "\u6062\u590D\u7CBE\u7075350\u4F53\u529B"
++    icon: {fileID: 21300000, guid: 2f319abfa06f6434cbdf240d29e036ac, type: 3}
++    ItemEffect:
++      id: 10016
++      timing: 1
++      priority: -1
++      target: 5
++      condition: 3
++      cond_option: status_type=hp&op=<&cmp_value=1/1
++      effect: 5
++      effect_option: type=item&add=350
++    ItemEffect1:
++      id: 10016
++      timing: 7
++      priority: -1
++      target: 5
++      condition: 3
++      cond_option: status_type=hp&op=<&cmp_value=1/1
++      effect: 5
++      effect_option: type=item&add=350
++  - id: 10201
++    name: "\u7802\u7CD6\u751C\u997C"
++    type: 4
++    price: 100
++    option: none
++    description: none
++    effect: "\u4F7F\u7CBE\u7075\u83B7\u5F971000\u70B9\u7ECF\u9A8C"
++    icon: {fileID: 21300000, guid: b5d7a8e6cdc1fd94eaa17b45f6b9e23f, type: 3}
++    ItemEffect:
++      id: 10201
++      timing: 1
++      priority: -1
++      target: 5
++      condition: 2
++      cond_option: type=level&level_op=<&level_cmp=100
++      effect: 16
++      effect_option: type=exp&op=+&value=1000
++    ItemEffect1:
++      id: 10201
++      timing: 0
++      priority: 0
++      target: 0
++      condition: 0
++      cond_option: 
++      effect: 0
++      effect_option: 
++  - id: 10202
++    name: "\u852C\u83DC\u751C\u997C"
++    type: 4
++    price: 200
++    option: none
++    description: none
++    effect: "\u4F7F\u7CBE\u7075\u83B7\u5F972000\u70B9\u7ECF\u9A8C"
++    icon: {fileID: 21300000, guid: 6e2c43974fcfc8f4290d9e5739383044, type: 3}
++    ItemEffect:
++      id: 10202
++      timing: 1
++      priority: -1
++      target: 5
++      condition: 2
++      cond_option: type=level&level_op=<&level_cmp=100
++      effect: 16
++      effect_option: type=exp&op=+&value=2000
++    ItemEffect1:
++      id: 10202
++      timing: 0
++      priority: 0
++      target: 0
++      condition: 0
++      cond_option: 
++      effect: 0
++      effect_option: 
++  - id: 10203
++    name: "\u679C\u6CE5\u751C\u997C"
++    type: 4
++    price: 500
++    option: none
++    description: none
++    effect: "\u4F7F\u7CBE\u7075\u83B7\u5F975000\u70B9\u7ECF\u9A8C"
++    icon: {fileID: 21300000, guid: 9e0f3cd0ddef5f846ab09b09a2777c5a, type: 3}
++    ItemEffect:
++      id: 10203
++      timing: 1
++      priority: -1
++      target: 5
++      condition: 2
++      cond_option: type=level&level_op=<&level_cmp=100
++      effect: 16
++      effect_option: type=exp&op=+&value=5000
++    ItemEffect1:
++      id: 10203
++      timing: 0
++      priority: 0
++      target: 0
++      condition: 0
++      cond_option: 
++      effect: 0
++      effect_option: 
++  - id: 10204
++    name: "\u8910\u8548\u751C\u997C"
++    type: 4
++    price: 1500
++    option: none
++    description: none
++    effect: "\u4F7F\u7CBE\u7075\u83B7\u5F9715000\u70B9\u7ECF\u9A8C"
++    icon: {fileID: 21300000, guid: a27e696562c6f01419118c2e6c4c480a, type: 3}
++    ItemEffect:
++      id: 10204
++      timing: 1
++      priority: -1
++      target: 5
++      condition: 2
++      cond_option: type=level&level_op=<&level_cmp=100
++      effect: 16
++      effect_option: type=exp&op=+&value=15000
++    ItemEffect1:
++      id: 10204
++      timing: 0
++      priority: 0
++      target: 0
++      condition: 0
++      cond_option: 
++      effect: 0
++      effect_option: 
++  - id: 10205
++    name: "\u70BC\u4E73\u751C\u997C"
++    type: 4
++    price: 5000
++    option: none
++    description: none
++    effect: "\u4F7F\u7CBE\u7075\u83B7\u5F9750000\u70B9\u7ECF\u9A8C"
++    icon: {fileID: 21300000, guid: 47fc911f6914b2546bb3e6be5ba4078a, type: 3}
++    ItemEffect:
++      id: 10205
++      timing: 1
++      priority: -1
++      target: 5
++      condition: 2
++      cond_option: type=level&level_op=<&level_cmp=100
++      effect: 16
++      effect_option: type=exp&op=+&value=50000
++    ItemEffect1:
++      id: 10205
++      timing: 0
++      priority: 0
++      target: 0
++      condition: 0
++      cond_option: 
++      effect: 0
++      effect_option: 
++  - id: 10221
++    name: "\u7075\u534E\u51DD\u7D20\u679C\u7247"
++    type: 6
++    price: 1000
++    option: none
++    description: "\u7075\u534E\u51DD\u7D20\u679C\u5B9E\u5207\u7247\u800C\u6210\uFF0C\u8574\u542B\u7740\u8DB3\u4EE5\u6539\u53D8\u8D44\u8D28\u7684\u8425\u517B\u7CBE\u534E"
++    effect: "3%\u4F7F\u7CBE\u7075\u6210\u4E3A\u6781\u54C1\u8D44\u8D28"
++    icon: {fileID: 21300000, guid: dadb5f94470442249989252f5f7ccf23, type: 3}
++    ItemEffect:
++      id: 10221
++      timing: 1
++      priority: -1
++      target: 5
++      condition: 0
++      cond_option: none
++      effect: 16
++      effect_option: type=iv&op=SET&value=random[0~31]
++    ItemEffect1:
++      id: 10221
++      timing: 0
++      priority: 0
++      target: 0
++      condition: 0
++      cond_option: 
++      effect: 0
++      effect_option: 
++  - id: 10222
++    name: "\u7075\u534E\u51DD\u7D20\u5E7C\u679C"
++    type: 6
++    price: 2000
++    option: none
++    description: "\u5C1A\u672A\u53D1\u80B2\u5B8C\u5168\u7684\u7075\u534E\u51DD\u7D20\u679C\u5B9E\uFF0C\u867D\u7136\u82E6\u6DA9\u4F46\u5BCC\u542B\u5927\u91CF\u8425\u517B\u7CBE\u534E"
++    effect: "5%\u4F7F\u7CBE\u7075\u6210\u4E3A\u6781\u54C1\u8D44\u8D28\uFF0C\u4E14\u8D44\u8D28\u5FC5\u4E3A\u826F\u4EE5\u4E0A"
++    icon: {fileID: 21300000, guid: 53ed751c44c07ba44ad2f4ba112cf24c, type: 3}
++    ItemEffect:
++      id: 10222
++      timing: 1
++      priority: -1
++      target: 5
++      condition: 0
++      cond_option: none
++      effect: 16
++      effect_option: type=iv&op=SET&value=random[11~31]
++    ItemEffect1:
++      id: 10222
++      timing: 0
++      priority: 0
++      target: 0
++      condition: 0
++      cond_option: 
++      effect: 0
++      effect_option: 
++  - id: 10223
++    name: "\u7075\u534E\u51DD\u7D20\u719F\u679C"
++    type: 6
++    price: 5000
++    option: none
++    description: "\u5473\u9053\u751C\u7F8E\u7684\u7075\u534E\u51DD\u7D20\u679C\u5B9E\uFF0C\u5E38\u5E38\u4EE4\u7CBE\u7075\u7231\u4E0D\u91CA\u624B"
++    effect: "10%\u4F7F\u7CBE\u7075\u6210\u4E3A\u6781\u54C1\u8D44\u8D28\uFF0C\u4E14\u8D44\u8D28\u5FC5\u4E3A\u4F18\u4EE5\u4E0A"
++    icon: {fileID: 21300000, guid: 486bb0446029d84468e9d47f3378416f, type: 3}
++    ItemEffect:
++      id: 10223
++      timing: 1
++      priority: -1
++      target: 5
++      condition: 0
++      cond_option: none
++      effect: 16
++      effect_option: type=iv&op=SET&value=random[21~31]
++    ItemEffect1:
++      id: 10223
++      timing: 0
++      priority: 0
++      target: 0
++      condition: 0
++      cond_option: 
++      effect: 0
++      effect_option: 
++  - id: 10224
++    name: "\u7075\u534E\u51DD\u7D20\u7570\u679C"
++    type: 6
++    price: 15000
++    option: none
++    description: "\u53D8\u5F02\u7684\u7075\u534E\u51DD\u7D20\u679C\u5B9E\uFF0C\u6781\u4E3A\u7F55\u89C1"
++    effect: "25%\u4F7F\u7CBE\u7075\u6210\u4E3A\u6781\u54C1\u8D44\u8D28\uFF0C\u4E14\u8D44\u8D28\u5FC5\u4E3A\u7A00\u4EE5\u4E0A"
++    icon: {fileID: 21300000, guid: 30deb2dae10ccd946b39533ad77a8a1e, type: 3}
++    ItemEffect:
++      id: 10224
++      timing: 1
++      priority: -1
++      target: 5
++      condition: 0
++      cond_option: none
++      effect: 16
++      effect_option: type=iv&op=SET&value=random[28~31]
++    ItemEffect1:
++      id: 10224
++      timing: 0
++      priority: 0
++      target: 0
++      condition: 0
++      cond_option: 
++      effect: 0
++      effect_option: 
++  - id: 10225
++    name: "\u7075\u534E\u51DD\u7D20\u73C0\u7CD6"
++    type: 6
++    price: 50000
++    option: none
++    description: "\u7531\u7075\u534E\u51DD\u7D20\u679C\u5B9E\u52A0\u5DE5\u800C\u6210\u7684\u7CD6\u679C\uFF0C\u63D0\u70BC\u5E76\u6D53\u7F29\u4E86\u5176\u4E2D\u7684\u8425\u517B\u7CBE\u534E\uFF0C\u6563\u53D1\u7740\u5982\u540C\u7425\u73C0\u822C\u6E29\u6DA6\u7684\u5149\u6CFD"
++    effect: "\u4F7F\u7CBE\u7075\u8D44\u8D28+1"
++    icon: {fileID: 21300000, guid: 3331920515d95624693d429a485220c5, type: 3}
++    ItemEffect:
++      id: 10225
++      timing: 1
++      priority: -1
++      target: 5
++      condition: 2
++      cond_option: type=iv&iv_op=<&iv_cmp=31
++      effect: 16
++      effect_option: type=iv&op=+&value=1
++    ItemEffect1:
++      id: 10225
++      timing: 0
++      priority: 0
++      target: 0
++      condition: 0
++      cond_option: 
++      effect: 0
++      effect_option: 
++  - id: 10231
++    name: "\u5609\u6728\u9752\u82F9"
++    type: 5
++    price: 500
++    option: none
++    description: "\u8349\u76EE\u6C0F\u65CF\u53E4\u6811\u4E0A\u751F\u957F\u800C\u51FA\u7684\u679C\u5B9E\uFF0C\u9971\u542B\u5C81\u6708\u7684\u539A\u91CD\u4E0E\u751F\u547D\u7684\u7E41\u76DB"
++    effect: "\u4F7F\u7CBE\u7075\u83B7\u5F975\u70B9\u5B66\u4E60\u529B"
++    icon: {fileID: 21300000, guid: fc4f71a32c4503e4eab6ac57feeed95f, type: 3}
++    ItemEffect:
++      id: 10231
++      timing: 1
++      priority: -1
++      target: 5
++      condition: 0
++      cond_option: none
++      effect: 16
++      effect_option: type=evStorage&op=+&value=5
++    ItemEffect1:
++      id: 10231
++      timing: 0
++      priority: 0
++      target: 0
++      condition: 0
++      cond_option: 
++      effect: 0
++      effect_option: 
++  - id: 10232
++    name: "\u84DD\u8584\u51B0\u7CD6"
++    type: 5
++    price: 1000
++    option: none
++    description: "\u52A0\u5165\u6C34\u8109\u6C0F\u65CF\u7279\u4EA7\u7684\u84DD\u8584\u8377\u6C41\u7684\u51B0\u7CD6\uFF0C\u53E3\u611F\u51B0\u51C9\u723D\u51BD"
++    effect: "\u4F7F\u7CBE\u7075\u83B7\u5F9710\u70B9\u5B66\u4E60\u529B"
++    icon: {fileID: 21300000, guid: 17647e4fdba46de499005b06490baf36, type: 3}
++    ItemEffect:
++      id: 10232
++      timing: 1
++      priority: -1
++      target: 5
++      condition: 0
++      cond_option: none
++      effect: 16
++      effect_option: type=evStorage&op=+&value=10
++    ItemEffect1:
++      id: 10232
++      timing: 0
++      priority: 0
++      target: 0
++      condition: 0
++      cond_option: 
++      effect: 0
++      effect_option: 
++  - id: 10233
++    name: "\u70C8\u53F6\u8D64\u6A31"
++    type: 5
++    price: 2500
++    option: none
++    description: "\u6765\u81EA\u706B\u5E7B\u6C0F\u65CF\uFF0C\u53F6\u7247\u5F62\u72B6\u4EFF\u4F5B\u706B\u820C\u7684\u8D64\u7EA2\u8272\u6A31\u6843\uFF0C\u5473\u9053\u9178\u751C\u53EF\u53E3"
++    effect: "\u4F7F\u7CBE\u7075\u83B7\u5F9725\u70B9\u5B66\u4E60\u529B"
++    icon: {fileID: 21300000, guid: 888ba6f6051e366458de87853b6f7354, type: 3}
++    ItemEffect:
++      id: 10233
++      timing: 1
++      priority: -1
++      target: 5
++      condition: 0
++      cond_option: none
++      effect: 16
++      effect_option: type=evStorage&op=+&value=25
++    ItemEffect1:
++      id: 10233
++      timing: 0
++      priority: 0
++      target: 0
++      condition: 0
++      cond_option: 
++      effect: 0
++      effect_option: 
++  - id: 10234
++    name: "\u6C81\u96EA\u51BB\u68A8"
++    type: 5
++    price: 6000
++    option: none
++    description: "\u51B0\u6C81\u6C0F\u65CF\u7279\u4EA7\u7684\u51B0\u51BB\u6C34\u679C\uFF0C\u8C61\u5F81\u4ECE\u82E6\u96BE\u4E2D\u83B7\u5F97\u6536\u83B7"
++    effect: "\u4F7F\u7CBE\u7075\u83B7\u5F9760\u70B9\u5B66\u4E60\u529B"
++    icon: {fileID: 21300000, guid: a44c3b5cb43cfeb42b407290673e2d42, type: 3}
++    ItemEffect:
++      id: 10234
++      timing: 1
++      priority: -1
++      target: 5
++      condition: 0
++      cond_option: none
++      effect: 16
++      effect_option: type=evStorage&op=+&value=60
++    ItemEffect1:
++      id: 10234
++      timing: 0
++      priority: 0
++      target: 0
++      condition: 0
++      cond_option: 
++      effect: 0
++      effect_option: 
++  - id: 10235
++    name: "\u8174\u571F\u91D1\u674F"
++    type: 5
++    price: 15000
++    option: none
++    description: "\u5730\u6708\u6C0F\u65CF\u6C83\u571F\u57F9\u80B2\u7684\u674F\u5B50\uFF0C\u53E3\u5473\u9178\u751C\u76F8\u6D4E"
++    effect: "\u4F7F\u7CBE\u7075\u83B7\u5F97150\u70B9\u5B66\u4E60\u529B"
++    icon: {fileID: 21300000, guid: 07e101f45a202174ebf8e34ada827cfc, type: 3}
++    ItemEffect:
++      id: 10235
++      timing: 1
++      priority: -1
++      target: 5
++      condition: 0
++      cond_option: none
++      effect: 16
++      effect_option: type=evStorage&op=+&value=150
++    ItemEffect1:
++      id: 10235
++      timing: 0
++      priority: 0
++      target: 0
++      condition: 0
++      cond_option: 
++      effect: 0
++      effect_option: 
++  - id: 10236
++    name: "\u6C99\u57DF\u5F02\u74DC"
++    type: 5
++    price: 50000
++    option: none
++    description: "\u79CD\u690D\u4E8E\u6C99\u722A\u6C0F\u65CF\u91D1\u9EC4\u6C99\u5730\u7684\u9C9C\u7F8E\u6C34\u679C\uFF0C\u5E38\u4F1A\u88AB\u91CE\u751F\u7CBE\u7075\u5077\u5403"
++    effect: "\u4F7F\u7CBE\u7075\u83B7\u5F97510\u70B9\u5B66\u4E60\u529B"
++    icon: {fileID: 21300000, guid: 32c8a07176c1a7440bec289121ce75ce, type: 3}
++    ItemEffect:
++      id: 10236
++      timing: 1
++      priority: -1
++      target: 5
++      condition: 0
++      cond_option: none
++      effect: 16
++      effect_option: type=evStorage&op=+&value=510
++    ItemEffect1:
++      id: 10236
++      timing: 0
++      priority: 0
++      target: 0
++      condition: 0
++      cond_option: 
++      effect: 0
++      effect_option: 
++  - id: 10237
++    name: "\u98D8\u9038\u68C9\u82B1"
++    type: 5
++    price: 0
++    option: removable=false
++    description: "[ffbb33]\u3010\u65E0\u9650\u518D\u751F\u3011[-][ENDL]\u98DE\u7FFC\u6C0F\u65CF\u7684\u4E91\u6735\u5E7B\u5316\u800C\u6210\u7684\u795E\u5947\u68C9\u82B1\u7CD6\uFF0C\u84EC\u677E\u67D4\u8F6F\u4F7F\u5F97\u7CBE\u7075\u4F3C\u4E4E\u80FD\u5FD8\u8BB0\u4E00\u5207"
++    effect: "\u91CD\u7F6E\u7CBE\u7075\u7684\u5B66\u4E60\u529B"
++    icon: {fileID: 21300000, guid: 77064cde644a866409428188adfa6949, type: 3}
++    ItemEffect:
++      id: 10237
++      timing: 1
++      priority: -1
++      target: 5
++      condition: 0
++      cond_option: none
++      effect: 16
++      effect_option: type=evReset&op=SET&value=0
++    ItemEffect1:
++      id: 10237
++      timing: 0
++      priority: 0
++      target: 0
++      condition: 0
++      cond_option: 
++      effect: 0
++      effect_option: 
++  - id: 10238
++    name: "\u7EB7\u7EDA\u679C\u8403"
++    type: 7
++    price: 1000
++    option: none
++    description: "\u6C47\u96C6\u80FD\u6E90\u4E4B\u6811\u4E03\u79CD\u5143\u7D20\u6C34\u679C\u7684\u679C\u8403\uFF0C\u636E\u8BF4\u7CBE\u7075\u98DF\u7528\u4E4B\u540E\u4F1A\u6539\u53D8\u6027\u683C"
++    effect: "\u968F\u673A\u6539\u53D8\u7CBE\u7075\u6027\u683C"
++    icon: {fileID: 21300000, guid: 6b5f5199504e37b45ab0ac0adc0949c7, type: 3}
++    ItemEffect:
++      id: 10238
++      timing: 1
++      priority: -1
++      target: 5
++      condition: 0
++      cond_option: none
++      effect: 16
++      effect_option: type=personality&op=SET&value=random[0~24]
++    ItemEffect1:
++      id: 10238
++      timing: 0
++      priority: 0
++      target: 0
++      condition: 0
++      cond_option: 
++      effect: 0
++      effect_option: 
++  - id: 10239
++    name: "\u6D53\u7EF5\u679C\u952D"
++    type: 7
++    price: 50[D]
++    option: none
++    description: "\u7EB7\u7EDA\u679C\u8403\u7684\u7CBE\u534E\u6D53\u7F29\u63D0\u70BC\u5236\u6210\uFF0C\u66F4\u65B9\u4FBF\u7CBE\u7075\u5438\u6536"
++    effect: "\u6307\u5B9A\u6539\u53D8\u7CBE\u7075\u6027\u683C"
++    icon: {fileID: 21300000, guid: 210705654a62c4c489ae25a16e695da1, type: 3}
++    ItemEffect:
++      id: 10239
++      timing: 1
++      priority: -1
++      target: 5
++      condition: 0
++      cond_option: none
++      effect: 16
++      effect_option: type=personality&op=SET&value=-1
++    ItemEffect1:
++      id: 10239
++      timing: 0
++      priority: 0
++      target: 0
++      condition: 0
++      cond_option: 
++      effect: 0
++      effect_option: 
++  - id: 10240
++    name: test
++    type: 2
++    price: 350
++    option: none
++    description: none
++    effect: "\u6062\u590D\u7CBE\u707535000\u4F53\u529B"
++    icon: {fileID: 21300000, guid: f4fcf6ed514a44a08c47cb8c802b4c32, type: 3}
++    ItemEffect:
++      id: 10240
++      timing: 1
++      priority: -1
++      target: 5
++      condition: 3
++      cond_option: status_type=hp&op=<&cmp_value=1/1
++      effect: 5
++      effect_option: type=item&add=35000
++    ItemEffect1:
++      id: 10240
++      timing: 7
++      priority: -1
++      target: 5
++      condition: 3
++      cond_option: status_type=hp&op=<&cmp_value=1/1
++      effect: 5
++      effect_option: type=item&add=35000
+Index: Assets/Scripts/Editor/EditorData/ItemDataList_SO.asset.meta
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/Assets/Scripts/Editor/EditorData/ItemDataList_SO.asset.meta b/Assets/Scripts/Editor/EditorData/ItemDataList_SO.asset.meta
+new file mode 100644
+--- /dev/null	(revision 13e85d4a87d7f5c3f257eff343dd6974a7c29fa2)
++++ b/Assets/Scripts/Editor/EditorData/ItemDataList_SO.asset.meta	(revision 13e85d4a87d7f5c3f257eff343dd6974a7c29fa2)
+@@ -0,0 +1,8 @@
++fileFormatVersion: 2
++guid: a5e504781709a49219eb73075767568d
++NativeFormatImporter:
++  externalObjects: {}
++  mainObjectFileID: 11400000
++  userData: 
++  assetBundleName: 
++  assetBundleVariant: 
+Index: Assets/Scripts/Editor/EditorData/ItemDataList_SO.cs
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/Assets/Scripts/Editor/EditorData/ItemDataList_SO.cs b/Assets/Scripts/Editor/EditorData/ItemDataList_SO.cs
+new file mode 100644
+--- /dev/null	(revision 13e85d4a87d7f5c3f257eff343dd6974a7c29fa2)
++++ b/Assets/Scripts/Editor/EditorData/ItemDataList_SO.cs	(revision 13e85d4a87d7f5c3f257eff343dd6974a7c29fa2)
+@@ -0,0 +1,9 @@
++using System.Collections.Generic;
++using UnityEngine;
++
++
++[CreateAssetMenu(fileName = "ItemDataList_SO", menuName = "Inventory/ItemDataList")]
++public class ItemDataList_SO : ScriptableObject
++{
++    public List<ItemInfos> itemDetailsList;
++}
+\ No newline at end of file
+Index: Assets/Scripts/Editor/EditorData/ItemDataList_SO.cs.meta
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/Assets/Scripts/Editor/EditorData/ItemDataList_SO.cs.meta b/Assets/Scripts/Editor/EditorData/ItemDataList_SO.cs.meta
+new file mode 100644
+--- /dev/null	(revision 13e85d4a87d7f5c3f257eff343dd6974a7c29fa2)
++++ b/Assets/Scripts/Editor/EditorData/ItemDataList_SO.cs.meta	(revision 13e85d4a87d7f5c3f257eff343dd6974a7c29fa2)
+@@ -0,0 +1,3 @@
++fileFormatVersion: 2
++guid: 429cf37987d248e59ce7fe06e24b26b7
++timeCreated: 1713677817
+\ No newline at end of file
+Index: Assets/Scripts/Editor/EditorData/ItemDataLoader.cs
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/Assets/Scripts/Editor/EditorData/ItemDataLoader.cs b/Assets/Scripts/Editor/EditorData/ItemDataLoader.cs
+new file mode 100644
+--- /dev/null	(revision 13e85d4a87d7f5c3f257eff343dd6974a7c29fa2)
++++ b/Assets/Scripts/Editor/EditorData/ItemDataLoader.cs	(revision 13e85d4a87d7f5c3f257eff343dd6974a7c29fa2)
+@@ -0,0 +1,178 @@
++using System;
++using UnityEngine;
++using System.Collections.Generic;
++using System.Linq;
++using System.IO;
++using Editor.EditorData;
++using UnityEditor;
++
++public class ItemDataLoader : MonoBehaviour
++{
++    public ItemDataList_SO itemDataList; // Reference to your ScriptableObject
++
++    public void LoadItemDataFromCSV(string itemCSVPath, string effectCSVPath)
++    {
++        // Load item data from CSV
++        List<ItemInfos> items = LoadItemsFromCSV(itemCSVPath);
++
++        // Load effect data from CSV
++        EffectsData effectsData = LoadEffectsFromCSV(effectCSVPath);
++
++
++        // 将 effectsData 数据存入 items 中
++        foreach (ItemInfos item in items)
++        {
++            // 检查 EffectsDict 中是否包含与当前物品的 id 匹配的键
++            if (effectsData.EffectsDict.ContainsKey(item.id))
++            {
++                // 如果包含，则将第一个 ItemEffect 对象存入 ItemInfos.ItemEffect 中
++                item.ItemEffect = effectsData.EffectsDict[item.id][0];
++            }
++
++            // 检查 EffectsDict1 中是否包含与当前物品的 id 匹配的键
++            if (effectsData.EffectsDict1.ContainsKey(item.id))
++            {
++                // 如果包含，则将第一个 ItemEffect 对象存入 ItemInfos.ItemEffect1 中
++                item.ItemEffect1 = effectsData.EffectsDict1[item.id][0];
++            }
++            else
++            {
++                item.ItemEffect1 = new ItemEffect();
++                item.ItemEffect1.id = item.id;
++            }
++        }
++
++        //给数据赋值给so
++        itemDataList.itemDetailsList = items;
++    }
++
++
++    private List<ItemInfos> LoadItemsFromCSV(string filePath)
++    {
++        List<ItemInfos> items = new List<ItemInfos>();
++
++        // Read CSV file
++        using (StreamReader reader = new StreamReader(filePath))
++        {
++            // Read and split header line
++            string[] headers = reader.ReadLine().Split(',');
++
++            // Read data lines
++            while (!reader.EndOfStream)
++            {
++                string[] data = reader.ReadLine().Split(',');
++
++                // Create new ItemInfos object
++                ItemInfos item = new ItemInfos();
++
++                // Assign values from data array to corresponding ItemInfos properties
++                item.id = int.Parse(data[0]); // Assuming id is the first column
++                item.name = data[1]; // Assuming name is the second column
++                // Parse ItemType enum or handle accordingly
++                item.type = data[2].ToItemType(); // Assuming type is the third column
++                item.price = data[3]; // Assuming price is the fourth column
++                item.option = data[4]; // Assuming option is the fifth column
++                item.description = data[5]; // Assuming description is the sixth column
++                item.effect = data[6]; // Assuming effect is the seventh column
++
++                // Add other fields as needed
++
++                // Add ItemInfos object to the list
++                items.Add(item);
++            }
++        }
++
++        // Load icons for each item outside the loop
++        foreach (var item in items)
++        {
++            item.icon = AssetDatabase.LoadAssetAtPath<Sprite>($"Assets/Resources/Addressables/Items/{item.id}.png");
++        }
++
++        return items;
++    }
++
++
++    // item.icon = AssetDatabase.LoadAssetAtPath<Sprite>($"$Assets/Resources/Addressables/Items/{data[i]}.png");
++    private EffectsData LoadEffectsFromCSV(string filePath)
++    {
++        EffectsData effectsData = new EffectsData();
++        effectsData.EffectsDict = new Dictionary<int, List<ItemEffect>>();
++        effectsData.EffectsDict1 = new Dictionary<int, List<ItemEffect>>();
++
++
++        int id1 = -1;
++        EffectTiming timing1 = EffectTiming.None;
++        int priority1 = -1;
++        EffectTarget target1 = EffectTarget.None;
++        EffectCondition condition1 = EffectCondition.None;
++        string cond_option1 = "";
++        EffectAbility effect1 = EffectAbility.None;
++        string effect_option1 = "";
++        ItemEffect itemEffect1 = new ItemEffect();
++
++
++        // Read CSV file
++        using (StreamReader reader = new StreamReader(filePath))
++        {
++            string[] headers = reader.ReadLine().Split(',');
++            while (!reader.EndOfStream)
++            {
++                string[] data = reader.ReadLine().Split(',');
++
++                string[] idStrings = data[0].Split('\\');
++                string[] timingStrings = data[1].Split('\\');
++                string[] priorityStrings = data[2].Split('\\');
++                string[] targetStrings = data[3].Split('\\');
++                string[] conditionStrings = data[4].Split('\\');
++                string[] cond_optionStrings = data[5].Split('\\');
++                string[] effectStrings = data[6].Split('\\');
++                string[] effect_optionStrings = data[7].Split('\\');
++
++
++                for (int i = 0; i < 2; i++)
++                {
++                    int id = int.Parse(idStrings[0]);
++                    EffectTiming timing = timingStrings[0].ToEffectTiming();
++                    int priority = int.Parse(priorityStrings[0]);
++                    EffectTarget target = targetStrings[0].ToEffectTarget();
++                    EffectCondition condition = conditionStrings[0].ToEffectCondition();
++                    string cond_option = cond_optionStrings[0];
++                    EffectAbility effect = effectStrings[0].ToEffectAbility();
++                    string effect_option = effect_optionStrings[0];
++
++                    ItemEffect itemEffect = new ItemEffect(id, timing, priority, target, condition, cond_option, effect,
++                        effect_option);
++
++                    if (!effectsData.EffectsDict.ContainsKey(id))
++                    {
++                        effectsData.EffectsDict[id] = new List<ItemEffect>();
++                    }
++
++                    effectsData.EffectsDict[id].Add(itemEffect);
++                    if (timingStrings.Length > 1)
++                    {
++                        id1 = id;
++                        timing1 = timingStrings[1].ToEffectTiming();
++                        priority1 = int.Parse(priorityStrings[1]);
++                        target1 = targetStrings[1].ToEffectTarget();
++                        condition1 = conditionStrings[1].ToEffectCondition();
++                        cond_option1 = cond_optionStrings[1];
++                        effect1 = effectStrings[1].ToEffectAbility();
++                        effect_option1 = effect_optionStrings[1];
++                        itemEffect1 = new ItemEffect(id1, timing1, priority1, target1, condition1, cond_option1,
++                            effect1, effect_option1);
++
++                        if (!effectsData.EffectsDict1.ContainsKey(id1))
++                        {
++                            effectsData.EffectsDict1[id1] = new List<ItemEffect>();
++                        }
++
++                        effectsData.EffectsDict1[id1].Add(itemEffect1);
++                    }
++                }
++            }
++        }
++
++        return effectsData;
++    }
++}
+\ No newline at end of file
+Index: Assets/Scripts/Editor/EditorData/ItemDataLoader.cs.meta
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/Assets/Scripts/Editor/EditorData/ItemDataLoader.cs.meta b/Assets/Scripts/Editor/EditorData/ItemDataLoader.cs.meta
+new file mode 100644
+--- /dev/null	(revision 13e85d4a87d7f5c3f257eff343dd6974a7c29fa2)
++++ b/Assets/Scripts/Editor/EditorData/ItemDataLoader.cs.meta	(revision 13e85d4a87d7f5c3f257eff343dd6974a7c29fa2)
+@@ -0,0 +1,3 @@
++fileFormatVersion: 2
++guid: fd357f7d731240659f807b7a6a306e13
++timeCreated: 1713697513
+\ No newline at end of file
+Index: Assets/Scripts/Editor/EditorData/ItemEffect.cs
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/Assets/Scripts/Editor/EditorData/ItemEffect.cs b/Assets/Scripts/Editor/EditorData/ItemEffect.cs
+new file mode 100644
+--- /dev/null	(revision 13e85d4a87d7f5c3f257eff343dd6974a7c29fa2)
++++ b/Assets/Scripts/Editor/EditorData/ItemEffect.cs	(revision 13e85d4a87d7f5c3f257eff343dd6974a7c29fa2)
+@@ -0,0 +1,46 @@
++using UnityEngine;
++
++[System.Serializable]
++public class ItemEffect
++{
++    public int id;
++
++    public EffectTiming timing;
++
++    public int priority;
++    public EffectTarget target;
++    public EffectCondition condition;
++    public string cond_option;
++    public EffectAbility effect;
++    public string effect_option;
++
++    public ItemEffect()
++    {
++    }
++
++    public ItemEffect(int id, EffectTiming timing, int priority, EffectTarget target, EffectCondition condition, string condOption, EffectAbility effect, string effectOption)
++    {
++        this.id = id;
++        this.timing = timing;
++        this.priority = priority;
++        this.target = target;
++        this.condition = condition;
++        cond_option = condOption;
++        this.effect = effect;
++        effect_option = effectOption;
++    }
++
++    public override string ToString()
++    {
++        return $"Item Effect:\n" +
++               $"ID: {id}\n" +
++               $"Timing: {timing}\n" +
++               $"Priority: {priority}\n" +
++               $"Target: {target}\n" +
++               $"Condition: {condition}\n" +
++               $"Condition Option: {cond_option}\n" +
++               $"Effect: {effect}\n" +
++               $"Effect Option: {effect_option}";
++    }
++
++}
+\ No newline at end of file
+Index: Assets/Scripts/Editor/EditorData/ItemEffect.cs.meta
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/Assets/Scripts/Editor/EditorData/ItemEffect.cs.meta b/Assets/Scripts/Editor/EditorData/ItemEffect.cs.meta
+new file mode 100644
+--- /dev/null	(revision 13e85d4a87d7f5c3f257eff343dd6974a7c29fa2)
++++ b/Assets/Scripts/Editor/EditorData/ItemEffect.cs.meta	(revision 13e85d4a87d7f5c3f257eff343dd6974a7c29fa2)
+@@ -0,0 +1,3 @@
++fileFormatVersion: 2
++guid: a315e72f186b4a47a3db1540aa98fbdc
++timeCreated: 1713681897
+\ No newline at end of file
+Index: Assets/Scripts/Editor/EditorData/ItemInfo.cs
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/Assets/Scripts/Editor/EditorData/ItemInfo.cs b/Assets/Scripts/Editor/EditorData/ItemInfo.cs
+new file mode 100644
+--- /dev/null	(revision 13e85d4a87d7f5c3f257eff343dd6974a7c29fa2)
++++ b/Assets/Scripts/Editor/EditorData/ItemInfo.cs	(revision 13e85d4a87d7f5c3f257eff343dd6974a7c29fa2)
+@@ -0,0 +1,35 @@
++using System.Collections.Generic;
++using UnityEngine;
++
++[System.Serializable]
++public class ItemInfos
++{
++    public int id;
++
++    public string name;
++    public ItemType type;
++
++    public string price;
++    public string option;
++    public string description;
++
++    public string effect;
++    public Sprite icon;
++    public ItemEffect ItemEffect;
++    public ItemEffect ItemEffect1;
++
++    public override string ToString()
++    {
++        return $"Item Info:\n" +
++               $"ID: {id}\n" +
++               $"Name: {name}\n" +
++               $"Type: {type}\n" +
++               $"Price: {price}\n" +
++               $"Option: {option}\n" +
++               $"Description: {description}\n" +
++               $"Effect: {effect}\n" +
++               $"Icon: {icon}\n" +
++               $"ItemEffect: {ItemEffect}\n" +
++               $"ItemEffect1: {ItemEffect1}";
++    }
++}
+\ No newline at end of file
+Index: Assets/Scripts/Editor/EditorData/ItemInfo.cs.meta
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/Assets/Scripts/Editor/EditorData/ItemInfo.cs.meta b/Assets/Scripts/Editor/EditorData/ItemInfo.cs.meta
+new file mode 100644
+--- /dev/null	(revision 13e85d4a87d7f5c3f257eff343dd6974a7c29fa2)
++++ b/Assets/Scripts/Editor/EditorData/ItemInfo.cs.meta	(revision 13e85d4a87d7f5c3f257eff343dd6974a7c29fa2)
+@@ -0,0 +1,3 @@
++fileFormatVersion: 2
++guid: ab4bb556e68741d397abe926d31809cc
++timeCreated: 1713677769
+\ No newline at end of file
+Index: Assets/Scripts/Editor/UIBuilder.meta
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/Assets/Scripts/Editor/UIBuilder.meta b/Assets/Scripts/Editor/UIBuilder.meta
+new file mode 100644
+--- /dev/null	(revision 13e85d4a87d7f5c3f257eff343dd6974a7c29fa2)
++++ b/Assets/Scripts/Editor/UIBuilder.meta	(revision 13e85d4a87d7f5c3f257eff343dd6974a7c29fa2)
+@@ -0,0 +1,8 @@
++fileFormatVersion: 2
++guid: 1233c5aa39020435289c63687770e924
++folderAsset: yes
++DefaultImporter:
++  externalObjects: {}
++  userData: 
++  assetBundleName: 
++  assetBundleVariant: 
+Index: Assets/Scripts/Editor/UIBuilder/ItemEditor.cs
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/Assets/Scripts/Editor/UIBuilder/ItemEditor.cs b/Assets/Scripts/Editor/UIBuilder/ItemEditor.cs
+new file mode 100644
+--- /dev/null	(revision 13e85d4a87d7f5c3f257eff343dd6974a7c29fa2)
++++ b/Assets/Scripts/Editor/UIBuilder/ItemEditor.cs	(revision 13e85d4a87d7f5c3f257eff343dd6974a7c29fa2)
+@@ -0,0 +1,408 @@
++using System;
++using System.Collections.Generic;
++using System.Linq;
++using UnityEditor;
++using UnityEditor.UIElements;
++using UnityEngine;
++using UnityEngine.UIElements;
++
++public class ItemEditor : EditorWindow
++{
++    private ItemDataList_SO dataBase; // 存储原数据
++    private List<ItemInfos> itemList = new List<ItemInfos>(); // 物品列表
++    private VisualTreeAsset itemRowTemplate; // itemListView内的单模板文件
++    private VisualElement topView;
++    private ListView itemListView;
++    private ScrollView itemDetailsSection;
++    private ItemInfos activeItem; // 选中的item
++    private VisualElement iconPreview; // icon的预览
++    private Sprite defaultIcon; // 默认预览Icon
++
++
++    private ObjectField objectField;
++    private ItemDataLoader loader;
++
++
++    [MenuItem("Seer2/ItemEditor")]
++    public static void ShowExample()
++    {
++        ItemEditor wnd = GetWindow<ItemEditor>();
++        wnd.titleContent = new GUIContent("ItemEditor");
++    }
++
++    public void CreateGUI()
++    {
++        // Each editor window contains a root VisualElement object
++        VisualElement root = rootVisualElement;
++
++        // VisualElements objects can contain other VisualElement following a tree hierarchy.
++        //VisualElement label = new Label("Hello World! From C#");
++        //root.Add(label);
++
++
++        // Import UXML
++        var visualTree =
++            AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Assets/Scripts/Editor/UIBuilder/ItemEditor.uxml");
++        VisualElement labelFromUXML = visualTree.Instantiate();
++        root.Add(labelFromUXML);
++
++
++        // 拿到模板数据
++        itemRowTemplate =
++            AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Assets/Scripts/Editor/UIBuilder/ItemRowTemplate.uxml");
++
++        // 拿默认图片数据
++        defaultIcon = AssetDatabase.LoadAssetAtPath<Sprite>("Assets/Resources/Addressables/Items/1.png");
++
++
++        // 查找模板
++        // 1. 查找到VisualElement元素下ListView元素并赋值
++
++        topView = root.Q<VisualElement>("Top");
++        objectField = topView.Q<ObjectField>("ItemDataListSO");
++        objectField.objectType = typeof(ItemDataList_SO);
++
++
++        // 根部先查询名为为ItemList的VisualElement元素，在查找下面的
++        itemListView = root.Q<VisualElement>("ItemList").Q<ListView>("ListView");
++
++        // 2. 查找到ScrollView元素并赋值
++        itemDetailsSection = root.Q<ScrollView>("ItemDetails");
++
++
++        // 初始化Type的选择默认类型
++        itemDetailsSection.Q<EnumField>("ItemType").Init(ItemType.None);
++
++        //left
++        itemDetailsSection.Q<EnumField>("EffectTiming").Init(EffectTiming.None);
++        itemDetailsSection.Q<EnumField>("EffectTarget").Init(EffectTarget.None);
++        itemDetailsSection.Q<EnumField>("EffectCondition").Init(EffectCondition.None);
++        itemDetailsSection.Q<EnumField>("Effect").Init(EffectAbility.None);
++
++        //right
++        itemDetailsSection.Q<EnumField>("EffectTiming1").Init(EffectTiming.None);
++        itemDetailsSection.Q<EnumField>("EffectTarget1").Init(EffectTarget.None);
++        itemDetailsSection.Q<EnumField>("EffectCondition1").Init(EffectCondition.None);
++        itemDetailsSection.Q<EnumField>("Effect1").Init(EffectAbility.None);
++
++        // 3. 查找icon的物体位置
++        iconPreview = itemDetailsSection.Q<VisualElement>("Icon");
++
++        // 4. 获得Button
++
++        root.Q<Button>("AddButton").clicked += OnAddButtonClicked;
++        root.Q<Button>("DeleteButton").clicked += onDeleteButtonClicked;
++        root.Q<Button>("ExportButton").clicked += OnExportButtonClicked;
++        root.Q<Button>("LoadButton").clicked += OnLoadButtonClicked;
++
++
++        LoadDataBase();
++
++        GenerateListView();
++    }
++
++    /// <summary>
++    /// 删除 Item
++    /// </summary>
++    /// <exception cref="NotImplementedException"></exception>
++    private void onDeleteButtonClicked()
++    {
++        if (itemList.Count == 0) return;
++
++        int itemIndex = itemList.IndexOf(activeItem);
++
++        itemList.Remove(activeItem);
++
++
++        if (itemIndex != 0)
++        {
++            itemListView.SetSelection(itemIndex - 1);
++            itemListView.ScrollToItem(itemIndex - 1);
++        }
++
++        if (itemIndex == 0 && itemList.Count > 0)
++        {
++            itemListView.SetSelection(0);
++            itemListView.ScrollToItem(0);
++        }
++
++        itemListView.Rebuild();
++    }
++
++    /// <summary>
++    /// 添加 Item
++    /// </summary>
++    /// <exception cref="NotImplementedException"></exception>
++    private void OnAddButtonClicked()
++    {
++        // 创建新的物品，添加到物品列表
++        ItemInfos newItem = new ItemInfos();
++        ItemEffect newEffect = new ItemEffect();
++        ItemEffect newEffect1 = new ItemEffect();
++        newItem.name = "NET ITEM";
++        newItem.id = itemList.Count == 0 ? 1000 : itemList[itemList.Count - 1].id + 1;
++        newEffect.id = newItem.id;
++        newEffect1.id = newItem.id;
++
++        newItem.ItemEffect = newEffect;
++        newItem.ItemEffect1 = newEffect1;
++        itemList.Add(newItem);
++
++        // 新的物品展示在信息栏，
++        activeItem = newItem;
++
++        // 重新绘制
++        dataBase.itemDetailsList = itemList;
++        itemListView.Rebuild();
++
++        // ListView焦点聚焦在新的物品上（最后一个物品）
++        itemListView.SetSelection(itemList.Count - 1);
++        itemListView.ScrollToItem(itemList.Count - 1);
++    }
++
++
++    private void OnExportButtonClicked()
++    {
++        CSVExporter.ExportToCSV(dataBase);
++    }
++
++    private void OnLoadButtonClicked()
++    {
++        // loader = new ItemDataLoader();
++        //  loader.itemDataList =(ItemDataList_SO)objectField.value;
++        //  loader.LoadItemDataFromCSV("Assets/Resources/Data/Items/info.csv","Assets/Resources/Data/Items/effect.csv");
++        //  /////////////////////////////
++        // LoadDataBase();
++        // GenerateListView();
++    }
++
++    private void LoadDataBase()
++    {
++        loader = new ItemDataLoader();
++
++        string[] dataArray = AssetDatabase.FindAssets("ItemDataList_SO");
++
++        // 判断是否有数据
++        if (dataArray.Length > 1)
++        {
++            // 根据GUID 找到dataBase的路径
++            var path = AssetDatabase.GUIDToAssetPath(dataArray[0]);
++
++            dataBase = AssetDatabase.LoadAssetAtPath(path, typeof(ItemDataList_SO)) as ItemDataList_SO;
++            objectField.value = dataBase;
++        }
++
++
++        loader.itemDataList = dataBase;
++
++        loader.LoadItemDataFromCSV("Assets/Resources/Data/Items/info.csv", "Assets/Resources/Data/Items/effect.csv");
++
++        itemList = dataBase.itemDetailsList;
++        // 如果不标记则无法保存数据
++        EditorUtility.SetDirty(dataBase);
++    }
++
++
++    private void GenerateListView()
++    {
++        // 创建项目：将模板文件生成一份给到makeItem
++        Func<VisualElement> makeItem = () => itemRowTemplate.CloneTree();
++
++        // 绑定生成项目
++        Action<VisualElement, int> bindItem = (e, i) =>
++        {
++            // 判断列表数据的个数 > i
++            if (i < itemList.Count)
++            {
++                if (itemList[i].icon != null)
++                {
++                    // Q用于查找UI Tookit 的UI Document 文件内部的命名
++                    // element 查找对应的Icon，并且把backgroundImage 赋值
++                    e.Q<VisualElement>("Icon").style.backgroundImage = itemList[i].icon.texture;
++                }
++
++                e.Q<Label>("Name").text = itemList[i] == null ? "NO ITEM" : itemList[i].name;
++            }
++        };
++        // 生成ListView
++        // itemSource 源文件
++        itemListView.fixedItemHeight = 48;
++        itemListView.itemsSource = itemList;
++        itemListView.makeItem = makeItem;
++        itemListView.bindItem = bindItem;
++
++
++        itemListView.onSelectionChange += OnListSelectionChange;
++
++        itemDetailsSection.visible = false; // 当前不显示
++    }
++
++    private void OnListSelectionChange(IEnumerable<object> selectedItem)
++    {
++        activeItem = (ItemInfos)selectedItem.First();
++        GetItemDetails(); // 激活
++        itemDetailsSection.visible = true; //  显示
++    }
++
++    private void GetItemDetails()
++    {
++        // MarkDirtyRepaint 右侧面板有数据的更改，撤销等其他动作都可以保存
++        itemDetailsSection.MarkDirtyRepaint();
++
++        itemDetailsSection.Q<IntegerField>("ItemID").value = activeItem.id;
++        itemDetailsSection.Q<IntegerField>("ItemID").RegisterValueChangedCallback(evt => activeItem.id = evt.newValue);
++
++
++        itemDetailsSection.Q<TextField>("ItemName").value = activeItem.name;
++        itemDetailsSection.Q<TextField>("ItemName").RegisterValueChangedCallback(evt =>
++        {
++            activeItem.name = evt.newValue;
++            itemListView.Rebuild(); // 修改name时，重新刷新ListView
++        });
++
++        itemDetailsSection.Q<EnumField>("ItemType").value = activeItem.type;
++        itemDetailsSection.Q<EnumField>("ItemType").RegisterValueChangedCallback(evt =>
++        {
++            activeItem.type = (ItemType)evt.newValue;
++        });
++        // Price
++        itemDetailsSection.Q<TextField>("ItemPrice").value = activeItem.price;
++        itemDetailsSection.Q<TextField>("ItemPrice").RegisterValueChangedCallback(evt =>
++        {
++            activeItem.price = evt.newValue;
++        });
++
++        // Option
++        itemDetailsSection.Q<TextField>("ItemOption").value = activeItem.option;
++        itemDetailsSection.Q<TextField>("ItemOption").RegisterValueChangedCallback(evt =>
++        {
++            activeItem.option = evt.newValue;
++        });
++        // effect
++        itemDetailsSection.Q<TextField>("ItemEffect").value = activeItem.effect;
++        itemDetailsSection.Q<TextField>("ItemEffect").RegisterValueChangedCallback(evt =>
++        {
++            activeItem.effect = evt.newValue;
++        });
++        //icon
++        iconPreview.style.backgroundImage =
++            activeItem.icon == null ? defaultIcon.texture : activeItem.icon.texture; // 预览图赋值背景
++        itemDetailsSection.Q<ObjectField>("ItemIcon").value = activeItem.icon; // 图片赋值
++        itemDetailsSection.Q<ObjectField>("ItemIcon").RegisterValueChangedCallback(evt =>
++        {
++            Sprite newIcon = evt.newValue as Sprite;
++            activeItem.icon = newIcon;
++            iconPreview.style.backgroundImage = newIcon == null ? defaultIcon.texture : newIcon.texture;
++            itemListView.Rebuild(); // 修改图片时，重新刷新ListView
++        });
++
++        itemDetailsSection.Q<TextField>("Description").value = activeItem.description;
++        itemDetailsSection.Q<TextField>("Description").RegisterValueChangedCallback(evt =>
++        {
++            activeItem.description = evt.newValue;
++        });
++
++
++
++        // Bottom
++
++
++        itemDetailsSection.Q<IntegerField>("EffectID").value = activeItem.ItemEffect.id;
++        itemDetailsSection.Q<IntegerField>("EffectID").RegisterValueChangedCallback(evt =>
++        {
++            activeItem.ItemEffect.id = evt.newValue;
++            if (activeItem.ItemEffect1 != null)
++            {
++                activeItem.ItemEffect1.id = evt.newValue;
++            }
++        });
++
++
++        itemDetailsSection.Q<EnumField>("EffectTiming").value = activeItem.ItemEffect.timing;
++        itemDetailsSection.Q<EnumField>("EffectTiming").RegisterValueChangedCallback(evt =>
++        {
++            activeItem.ItemEffect.timing = (EffectTiming)evt.newValue;
++        });
++        // EffectPriority
++        itemDetailsSection.Q<IntegerField>("EffectPriority").value = activeItem.ItemEffect.priority;
++        itemDetailsSection.Q<IntegerField>("EffectPriority").RegisterValueChangedCallback(evt =>
++        {
++            activeItem.ItemEffect.priority = evt.newValue;
++        });
++
++        itemDetailsSection.Q<EnumField>("EffectTarget").value = activeItem.ItemEffect.target;
++        itemDetailsSection.Q<EnumField>("EffectTarget").RegisterValueChangedCallback(evt =>
++        {
++            activeItem.ItemEffect.target = (EffectTarget)evt.newValue;
++        });
++        itemDetailsSection.Q<EnumField>("EffectCondition").value = activeItem.ItemEffect.condition;
++        itemDetailsSection.Q<EnumField>("EffectCondition").RegisterValueChangedCallback(evt =>
++        {
++            activeItem.ItemEffect.condition = (EffectCondition)evt.newValue;
++        });
++
++
++        itemDetailsSection.Q<TextField>("EffectCond_option").value = activeItem.ItemEffect.cond_option;
++        itemDetailsSection.Q<TextField>("EffectCond_option").RegisterValueChangedCallback(evt =>
++        {
++            activeItem.ItemEffect.cond_option = evt.newValue;
++        });
++        itemDetailsSection.Q<EnumField>("Effect").value = activeItem.ItemEffect.effect;
++        itemDetailsSection.Q<EnumField>("Effect").RegisterValueChangedCallback(evt =>
++        {
++            activeItem.ItemEffect.effect = (EffectAbility)evt.newValue;
++        });
++
++        itemDetailsSection.Q<TextField>("Effect_option").value = activeItem.ItemEffect.effect_option;
++        itemDetailsSection.Q<TextField>("Effect_option").RegisterValueChangedCallback(evt =>
++        {
++            activeItem.ItemEffect.effect_option = evt.newValue;
++        });
++
++
++        #region Right
++
++        itemDetailsSection.Q<EnumField>("EffectTiming1").value = activeItem.ItemEffect1.timing;
++        itemDetailsSection.Q<EnumField>("EffectTiming1").RegisterValueChangedCallback(evt =>
++        {
++            activeItem.ItemEffect1.timing = (EffectTiming)evt.newValue;
++        });
++        // EffectPriority
++        itemDetailsSection.Q<IntegerField>("EffectPriority1").value = activeItem.ItemEffect1.priority;
++        itemDetailsSection.Q<IntegerField>("EffectPriority1").RegisterValueChangedCallback(evt =>
++        {
++            activeItem.ItemEffect1.priority = evt.newValue;
++        });
++
++        itemDetailsSection.Q<EnumField>("EffectTarget1").value = activeItem.ItemEffect1.target;
++        itemDetailsSection.Q<EnumField>("EffectTarget1").RegisterValueChangedCallback(evt =>
++        {
++            activeItem.ItemEffect1.target = (EffectTarget)evt.newValue;
++        });
++        itemDetailsSection.Q<EnumField>("EffectCondition1").value = activeItem.ItemEffect1.condition;
++        itemDetailsSection.Q<EnumField>("EffectCondition1").RegisterValueChangedCallback(evt =>
++        {
++            activeItem.ItemEffect1.condition = (EffectCondition)evt.newValue;
++        });
++
++
++        itemDetailsSection.Q<TextField>("EffectCond_option1").value = activeItem.ItemEffect1.cond_option;
++        itemDetailsSection.Q<TextField>("EffectCond_option1").RegisterValueChangedCallback(evt =>
++        {
++            activeItem.ItemEffect1.cond_option = evt.newValue;
++        });
++        itemDetailsSection.Q<EnumField>("Effect1").value = activeItem.ItemEffect1.effect;
++        itemDetailsSection.Q<EnumField>("Effect1").RegisterValueChangedCallback(evt =>
++        {
++            activeItem.ItemEffect1.effect = (EffectAbility)evt.newValue;
++        });
++
++        itemDetailsSection.Q<TextField>("Effect_option1").value = activeItem.ItemEffect1.effect_option;
++        itemDetailsSection.Q<TextField>("Effect_option1").RegisterValueChangedCallback(evt =>
++        {
++            activeItem.ItemEffect1.effect_option = evt.newValue;
++        });
++
++        #endregion
++    }
++}
+\ No newline at end of file
+Index: Assets/Scripts/Editor/UIBuilder/ItemEditor.cs.meta
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/Assets/Scripts/Editor/UIBuilder/ItemEditor.cs.meta b/Assets/Scripts/Editor/UIBuilder/ItemEditor.cs.meta
+new file mode 100644
+--- /dev/null	(revision 13e85d4a87d7f5c3f257eff343dd6974a7c29fa2)
++++ b/Assets/Scripts/Editor/UIBuilder/ItemEditor.cs.meta	(revision 13e85d4a87d7f5c3f257eff343dd6974a7c29fa2)
+@@ -0,0 +1,11 @@
++fileFormatVersion: 2
++guid: f24aca5a7182148c38966660a0744252
++MonoImporter:
++  externalObjects: {}
++  serializedVersion: 2
++  defaultReferences: []
++  executionOrder: 0
++  icon: {instanceID: 0}
++  userData: 
++  assetBundleName: 
++  assetBundleVariant: 
+Index: Assets/Scripts/Editor/UIBuilder/ItemEditor.uss
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/Assets/Scripts/Editor/UIBuilder/ItemEditor.uss b/Assets/Scripts/Editor/UIBuilder/ItemEditor.uss
+new file mode 100644
+--- /dev/null	(revision 13e85d4a87d7f5c3f257eff343dd6974a7c29fa2)
++++ b/Assets/Scripts/Editor/UIBuilder/ItemEditor.uss	(revision 13e85d4a87d7f5c3f257eff343dd6974a7c29fa2)
+@@ -0,0 +1,5 @@
++Label {
++    font-size: 20px;
++    -unity-font-style: bold;
++    color: rgb(68, 138, 255);
++}
+\ No newline at end of file
+Index: Assets/Scripts/Editor/UIBuilder/ItemEditor.uss.meta
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/Assets/Scripts/Editor/UIBuilder/ItemEditor.uss.meta b/Assets/Scripts/Editor/UIBuilder/ItemEditor.uss.meta
+new file mode 100644
+--- /dev/null	(revision 13e85d4a87d7f5c3f257eff343dd6974a7c29fa2)
++++ b/Assets/Scripts/Editor/UIBuilder/ItemEditor.uss.meta	(revision 13e85d4a87d7f5c3f257eff343dd6974a7c29fa2)
+@@ -0,0 +1,11 @@
++fileFormatVersion: 2
++guid: a1d37ff5985c64004b1f0698c43c39b4
++ScriptedImporter:
++  internalIDToNameTable: []
++  externalObjects: {}
++  serializedVersion: 2
++  userData: 
++  assetBundleName: 
++  assetBundleVariant: 
++  script: {fileID: 12385, guid: 0000000000000000e000000000000000, type: 0}
++  disableValidation: 0
+Index: Assets/Scripts/Editor/UIBuilder/ItemEditor.uxml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/Assets/Scripts/Editor/UIBuilder/ItemEditor.uxml b/Assets/Scripts/Editor/UIBuilder/ItemEditor.uxml
+new file mode 100644
+--- /dev/null	(revision 13e85d4a87d7f5c3f257eff343dd6974a7c29fa2)
++++ b/Assets/Scripts/Editor/UIBuilder/ItemEditor.uxml	(revision 13e85d4a87d7f5c3f257eff343dd6974a7c29fa2)
+@@ -0,0 +1,73 @@
++<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="True">
++    <ui:VisualElement name="Top" style="height: 59px; width: 937px; justify-content: space-between; align-items: flex-end; flex-grow: 1; flex-direction: row; flex-basis: auto;">
++        <ui:Button tabindex="-1" text="Export" display-tooltip-when-elided="true" name="ExportButton" style="flex-shrink: 1; flex-grow: 1; width: 50%;" />
++        <uie:ObjectField label="ItemDataList_SO" name="ItemDataListSO" type="UnityEngine.ScriptableObject, UnityEngine.CoreModule" style="flex-shrink: 1; flex-grow: 1; width: 50%;" />
++        <ui:Button tabindex="-1" text="Load" display-tooltip-when-elided="true" name="LoadButton" style="flex-shrink: 1; flex-grow: 1; width: 50%;" />
++    </ui:VisualElement>
++    <ui:VisualElement name="Container" style="flex-grow: 1; flex-shrink: 1; flex-direction: row;">
++        <ui:VisualElement name="ItemList" style="width: 30%; height: 100%;">
++            <ui:VisualElement name="Header" style="flex-direction: row; justify-content: space-between; border-left-width: 0; border-right-width: 0; border-top-width: 0; border-bottom-width: 0; border-left-color: rgb(255, 255, 255); border-right-color: rgb(255, 255, 255); border-top-color: rgb(255, 255, 255); border-bottom-color: rgb(255, 255, 255);">
++                <ui:Label tabindex="-1" text="ItemList" display-tooltip-when-elided="true" name="Label" style="-unity-text-align: middle-left; font-size: 18px; -unity-font-style: bold;" />
++                <ui:Button tabindex="-1" text="+" display-tooltip-when-elided="true" name="AddButton" />
++            </ui:VisualElement>
++            <ui:ListView focusable="true" name="ListView" reorderable="true" show-add-remove-footer="false" show-border="true" style="flex-grow: 1;" />
++        </ui:VisualElement>
++        <ui:ScrollView name="ItemDetails" style="width: 70%; -unity-font: none; color: rgb(255, 255, 255);">
++            <ui:VisualElement name="Header" style="flex-direction: row; justify-content: space-between; border-left-width: 0; border-right-width: 0; border-top-width: 0; border-bottom-width: 0; border-left-color: rgb(255, 255, 255); border-right-color: rgb(255, 255, 255); border-top-color: rgb(255, 255, 255); border-bottom-color: rgb(255, 255, 255);">
++                <ui:Label tabindex="-1" text="Details Information" display-tooltip-when-elided="true" name="Label" enable-rich-text="false" style="-unity-text-align: middle-left; font-size: 18px; -unity-font-style: bold;" />
++                <ui:Button tabindex="-1" text="Delete" display-tooltip-when-elided="true" name="DeleteButton" style="background-color: rgb(229, 120, 120); color: rgb(7, 7, 7); -unity-font-style: bold;" />
++            </ui:VisualElement>
++            <ui:VisualElement name="Content" style="flex-grow: 1;">
++                <ui:VisualElement name="Row1" style="margin-left: 8px; margin-right: 8px; margin-top: 2px; margin-bottom: 2px; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; border-left-width: 1px; border-right-width: 1px; border-top-width: 1px; border-bottom-width: 1px; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0);">
++                    <ui:Label tabindex="-1" text="General" display-tooltip-when-elided="true" style="border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0); border-left-width: 1px; border-right-width: 1px; border-top-width: 1px; border-bottom-width: 1px; padding-left: 10px; padding-right: 2px; padding-top: 3px; padding-bottom: 3px; -unity-font-style: bold; font-size: 14px; background-color: rgb(38, 38, 38);" />
++                    <ui:VisualElement name="Container" style="flex-direction: row; justify-content: flex-start; align-items: center; border-left-width: 1px; border-right-width: 1px; border-top-width: 1px; border-bottom-width: 1px; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0);">
++                        <ui:VisualElement name="Icon" style="background-image: resource(&apos;Addressables/Items/1&apos;); width: 80px; height: 80px; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; margin-left: 8px; margin-right: 8px; margin-top: 8px; margin-bottom: 8px;" />
++                        <ui:VisualElement name="General" style="flex-grow: 1; flex-direction: column; margin-left: 0; margin-right: 6px; margin-top: 6px; margin-bottom: 6px; flex-shrink: 1; border-left-width: 1px; border-right-width: 1px; border-top-width: 1px; border-bottom-width: 1px; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0); flex-wrap: nowrap; flex-basis: auto;">
++                            <uie:IntegerField label="id" value="42" name="ItemID" />
++                            <ui:TextField picking-mode="Ignore" label="Name" name="ItemName" style="justify-content: flex-start; padding-top: 0; margin-top: 4px; margin-bottom: 4px; padding-left: 0; padding-right: 0; padding-bottom: 0; -unity-font-style: normal; -unity-text-align: middle-left;" />
++                            <uie:EnumField label="type" value="Center" name="ItemType" />
++                            <ui:TextField picking-mode="Ignore" label="price" name="ItemPrice" style="justify-content: flex-start; padding-top: 0; margin-top: 4px; margin-bottom: 4px; padding-left: 0; padding-right: 0; padding-bottom: 0; -unity-font-style: normal; -unity-text-align: middle-left;" />
++                            <ui:TextField picking-mode="Ignore" label="option" name="ItemOption" />
++                            <ui:TextField picking-mode="Ignore" label="efffect" name="ItemEffect" />
++                            <uie:ObjectField label="Icon" type="UnityEngine.Sprite, UnityEngine.CoreModule" name="ItemIcon" style="padding-top: 0; margin-top: 4px; margin-bottom: 4px; padding-left: 0; padding-right: 0; padding-bottom: 0; -unity-font-style: bold;" />
++                        </ui:VisualElement>
++                    </ui:VisualElement>
++                    <ui:VisualElement name="Row2" style="margin-left: 8px; margin-right: 8px; margin-top: 2px; margin-bottom: 2px; border-left-width: 1px; border-right-width: 1px; border-top-width: 1px; border-bottom-width: 1px; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0);">
++                        <ui:Label tabindex="-1" text="Description" display-tooltip-when-elided="true" style="border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0); border-left-width: 1px; border-right-width: 1px; border-top-width: 1px; border-bottom-width: 1px; padding-left: 10px; padding-right: 2px; padding-top: 3px; padding-bottom: 3px; -unity-font-style: bold; font-size: 14px; background-color: rgb(38, 38, 38);" />
++                        <ui:VisualElement name="Container">
++                            <ui:TextField picking-mode="Ignore" name="Description" multiline="true" style="height: 80px;" />
++                        </ui:VisualElement>
++                    </ui:VisualElement>
++                    <ui:VisualElement name="Row3" style="margin-left: 8px; margin-right: 8px; margin-top: 2px; margin-bottom: 2px; border-left-width: 1px; border-right-width: 1px; border-top-width: 1px; border-bottom-width: 1px; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0); flex-direction: column; flex-grow: 1;">
++                        <ui:Label tabindex="-1" text="Effect" display-tooltip-when-elided="true" style="border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0); border-left-width: 1px; border-right-width: 1px; border-top-width: 1px; border-bottom-width: 1px; padding-left: 10px; padding-right: 2px; padding-top: 3px; padding-bottom: 3px; -unity-font-style: bold; font-size: 14px; background-color: rgb(38, 38, 38); flex-shrink: 1;" />
++                        <uie:IntegerField label="id" value="42" name="EffectID" />
++                        <ui:VisualElement name="Container" style="flex-direction: row; height: 239px; width: 630px; flex-grow: 1; flex-shrink: 1; align-items: stretch; justify-content: space-around;">
++                            <ui:VisualElement name="Left" style="width: 50%; flex-grow: 1; border-left-width: 1px; border-right-width: 1px; border-top-width: 1px; border-bottom-width: 1px; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0); justify-content: space-between;">
++                                <ui:VisualElement name="List" style="margin-left: 1px; flex-direction: column; border-left-width: 0; border-right-width: 0; border-top-width: 0; border-bottom-width: 0; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0); margin-right: 1px; margin-top: 1px; margin-bottom: 1px; justify-content: space-between; flex-grow: 1; width: 100%;">
++                                    <uie:EnumField label="Timing" name="EffectTiming" include-obsolete-values="false" style="align-items: stretch;" />
++                                    <uie:IntegerField label="Priority" value="0" name="EffectPriority" />
++                                    <uie:EnumField label="Target" value="Center" name="EffectTarget" />
++                                    <uie:EnumField label="Condition" value="Center" name="EffectCondition" />
++                                    <ui:TextField picking-mode="Ignore" label="Cond_option" name="EffectCond_option" />
++                                    <uie:EnumField label="Effect" value="Center" name="Effect" />
++                                    <ui:TextField picking-mode="Ignore" label="Effect_option" name="Effect_option" />
++                                </ui:VisualElement>
++                            </ui:VisualElement>
++                            <ui:VisualElement name="Right" style="width: 50%; flex-grow: 1; border-left-width: 1px; border-right-width: 1px; border-top-width: 1px; border-bottom-width: 1px; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0); margin-left: 3px; margin-right: 3px; margin-top: 3px; margin-bottom: 3px; align-items: stretch; justify-content: space-between;">
++                                <ui:VisualElement name="List" style="margin-left: 1px; flex-direction: column; border-left-width: 0; border-right-width: 0; border-top-width: 0; border-bottom-width: 0; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0); margin-right: 1px; margin-top: 1px; margin-bottom: 1px; justify-content: space-between; flex-grow: 1; width: 100%;">
++                                    <uie:EnumField label="Timing" name="EffectTiming1" include-obsolete-values="false" style="align-items: stretch;" />
++                                    <uie:IntegerField label="Priority" value="0" name="EffectPriority1" />
++                                    <uie:EnumField label="Target" value="Center" name="EffectTarget1" />
++                                    <uie:EnumField label="Condition" value="Center" name="EffectCondition1" />
++                                    <ui:TextField picking-mode="Ignore" label="Cond_option" name="EffectCond_option1" />
++                                    <uie:EnumField label="Effect" value="Center" name="Effect1" />
++                                    <ui:TextField picking-mode="Ignore" label="Effect_option" name="Effect_option1" />
++                                </ui:VisualElement>
++                            </ui:VisualElement>
++                        </ui:VisualElement>
++                    </ui:VisualElement>
++                </ui:VisualElement>
++            </ui:VisualElement>
++        </ui:ScrollView>
++    </ui:VisualElement>
++</ui:UXML>
+Index: Assets/Scripts/Editor/UIBuilder/ItemEditor.uxml.meta
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/Assets/Scripts/Editor/UIBuilder/ItemEditor.uxml.meta b/Assets/Scripts/Editor/UIBuilder/ItemEditor.uxml.meta
+new file mode 100644
+--- /dev/null	(revision 13e85d4a87d7f5c3f257eff343dd6974a7c29fa2)
++++ b/Assets/Scripts/Editor/UIBuilder/ItemEditor.uxml.meta	(revision 13e85d4a87d7f5c3f257eff343dd6974a7c29fa2)
+@@ -0,0 +1,10 @@
++fileFormatVersion: 2
++guid: e920c66cb892a4d7caafeed49199caab
++ScriptedImporter:
++  internalIDToNameTable: []
++  externalObjects: {}
++  serializedVersion: 2
++  userData: 
++  assetBundleName: 
++  assetBundleVariant: 
++  script: {fileID: 13804, guid: 0000000000000000e000000000000000, type: 0}
+Index: Assets/Scripts/Editor/UIBuilder/ItemRowTemplate.uxml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/Assets/Scripts/Editor/UIBuilder/ItemRowTemplate.uxml b/Assets/Scripts/Editor/UIBuilder/ItemRowTemplate.uxml
+new file mode 100644
+--- /dev/null	(revision 13e85d4a87d7f5c3f257eff343dd6974a7c29fa2)
++++ b/Assets/Scripts/Editor/UIBuilder/ItemRowTemplate.uxml	(revision 13e85d4a87d7f5c3f257eff343dd6974a7c29fa2)
+@@ -0,0 +1,6 @@
++<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="True">
++    <ui:VisualElement name="Row" style="height: 80px; flex-direction: row; align-items: center; justify-content: flex-start; margin-top: 0; margin-bottom: 0; margin-left: 0; margin-right: 0;">
++        <ui:VisualElement name="Icon" style="background-image: resource(&apos;Addressables/Items/1&apos;); width: 40px; height: 40px; align-items: auto; justify-content: flex-start; margin-left: 5px; margin-right: 5px; margin-top: 5px; margin-bottom: 5px;" />
++        <ui:Label tabindex="-1" text="Name" display-tooltip-when-elided="true" name="Name" style="font-size: 14px;" />
++    </ui:VisualElement>
++</ui:UXML>
+Index: Assets/Scripts/Editor/UIBuilder/ItemRowTemplate.uxml.meta
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/Assets/Scripts/Editor/UIBuilder/ItemRowTemplate.uxml.meta b/Assets/Scripts/Editor/UIBuilder/ItemRowTemplate.uxml.meta
+new file mode 100644
+--- /dev/null	(revision 13e85d4a87d7f5c3f257eff343dd6974a7c29fa2)
++++ b/Assets/Scripts/Editor/UIBuilder/ItemRowTemplate.uxml.meta	(revision 13e85d4a87d7f5c3f257eff343dd6974a7c29fa2)
+@@ -0,0 +1,10 @@
++fileFormatVersion: 2
++guid: 37d4c1c2cfa06491dbde966a21733ca1
++ScriptedImporter:
++  internalIDToNameTable: []
++  externalObjects: {}
++  serializedVersion: 2
++  userData: 
++  assetBundleName: 
++  assetBundleVariant: 
++  script: {fileID: 13804, guid: 0000000000000000e000000000000000, type: 0}
+Index: Assets/Scripts/Helper/HelperCollections.cs
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/Assets/Scripts/Helper/HelperCollections.cs b/Assets/Scripts/Helper/HelperCollections.cs
+--- a/Assets/Scripts/Helper/HelperCollections.cs	(revision 3aa3e136457aaecd96f8e93a3019e9d66ffbbaaf)
++++ b/Assets/Scripts/Helper/HelperCollections.cs	(revision 13e85d4a87d7f5c3f257eff343dd6974a7c29fa2)
+@@ -21,6 +21,20 @@
+             dict.Add(key, value);
+         }
+     }
++   
++    //通过value获取key
++    public static TKey GetKeyByValue<TKey, TValue>(this IDictionary<TKey, TValue> dictionary, TValue value)
++    {
++        foreach (var pair in dictionary)
++        {
++            if (EqualityComparer<TValue>.Default.Equals(pair.Value, value))
++            {
++                return pair.Key;
++            }
++        }
++        throw new KeyNotFoundException($"The given value '{value}' was not found in the dictionary.");
++    }
++    
+ }
+ 
+ public static class List {
+Index: Assets/Scripts/MVC/Model/Basic/Effect/EffectDatabase.cs
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/Assets/Scripts/MVC/Model/Basic/Effect/EffectDatabase.cs b/Assets/Scripts/MVC/Model/Basic/Effect/EffectDatabase.cs
+--- a/Assets/Scripts/MVC/Model/Basic/Effect/EffectDatabase.cs	(revision 3aa3e136457aaecd96f8e93a3019e9d66ffbbaaf)
++++ b/Assets/Scripts/MVC/Model/Basic/Effect/EffectDatabase.cs	(revision 13e85d4a87d7f5c3f257eff343dd6974a7c29fa2)
+@@ -82,6 +82,23 @@
+     public static EffectAbility ToEffectAbility(this string ability) {
+         return typeConvDict.Get(ability, EffectAbility.None);
+     }
++    
++    public static string ToEffectTimingString(this EffectTiming timing) {
++        return timingConvDict.GetKeyByValue(timing);
++    }
++    
++    public static string ToEffectTargetString(this EffectTarget target) {
++        return targetConvDict.GetKeyByValue(target);
++    }
++    public static string ToEffectConditionString(this EffectCondition condition) {
++        return condConvDict.GetKeyByValue(condition);
++    }
++
++    public static string ToEffectAbilityString(this EffectAbility ability) {
++        return typeConvDict.GetKeyByValue(ability);
++    }
++    
++    
+ }
+ 
+ public enum EffectTiming {
+Index: Assets/Scripts/MVC/Model/Basic/Item/ItemDatabase.cs
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/Assets/Scripts/MVC/Model/Basic/Item/ItemDatabase.cs b/Assets/Scripts/MVC/Model/Basic/Item/ItemDatabase.cs
+--- a/Assets/Scripts/MVC/Model/Basic/Item/ItemDatabase.cs	(revision 3aa3e136457aaecd96f8e93a3019e9d66ffbbaaf)
++++ b/Assets/Scripts/MVC/Model/Basic/Item/ItemDatabase.cs	(revision 13e85d4a87d7f5c3f257eff343dd6974a7c29fa2)
+@@ -28,6 +28,9 @@
+         return typeConvDict.Get(type, ItemType.None);
+     }
+ 
++    public static string ToItemString(this ItemType type) {
++        return typeConvDict.GetKeyByValue(type);
++    }
+     public static bool IsInCategory(this ItemType type, ItemCategory category) {
+         if (category == ItemCategory.All)
+             return (type != ItemType.Currency);
