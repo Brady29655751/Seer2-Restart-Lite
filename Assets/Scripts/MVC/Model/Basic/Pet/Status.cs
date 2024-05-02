@@ -74,6 +74,10 @@ public class Status
         return repr;
     }
 
+    public virtual string ToString(string delimeter) {
+        return Status.FloorToInt(this).status.Select(x => x.ToString()).ConcatToString(delimeter);
+    }
+
     public virtual float[] ToArray() {
         return status.ToArray();
     }
@@ -247,6 +251,10 @@ public class BattleStatus : Status {
             repr += (hiddenTypeNames[i] + ": " + floorStatus[i] + " ");
         }
         return base.ToString() + "\n" + repr;
+    }
+
+    public override string ToString(string delimeter) {
+        return base.ToString(delimeter) + delimeter + GetHiddenStatus().ToString(delimeter);
     }
 
     public override float Get(int type)

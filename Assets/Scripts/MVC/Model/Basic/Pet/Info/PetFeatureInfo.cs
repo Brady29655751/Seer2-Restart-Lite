@@ -25,6 +25,16 @@ public class PetFeatureInfo
         emblem = new Emblem() { baseId = baseId, name = _slicedData[3], description = _slicedData[4] };
     }
 
+    public PetFeatureInfo(int baseId, Feature feature, Emblem emblem) {
+        this.baseId = baseId;
+        this.feature = feature;
+        this.emblem = emblem;
+    }
+
+    public string[] GetRawInfoStringArray() {
+        return new string[] { baseId.ToString(), feature.name, feature.description, emblem.name, emblem.description };
+    }
+
 }
 
 [XmlRoot("feature")]

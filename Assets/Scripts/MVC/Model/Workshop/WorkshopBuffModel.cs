@@ -57,7 +57,7 @@ public class WorkshopBuffModel : Module
         }
 
         if (!SpriteSet.TryCreateSpriteFromBytes(iconBytes, out iconSprite)) {
-            Hintbox.OpenHintboxWithContent("创造buff图标失败", 16);
+            Hintbox.OpenHintboxWithContent("创造印记图标失败", 16);
             return;
         }
 
@@ -153,13 +153,18 @@ public class WorkshopBuffModel : Module
     private bool VerifyName(out string error) {
         error = string.Empty;
 
-        if (string.IsNullOrEmpty(nameInputField.inputString)) {
+        if (string.IsNullOrEmpty(buffName)) {
             error = "名字不能为空！";
             return false;
         }
 
-        if (nameInputField.inputString.Contains(',')) {
+        if (buffName.Contains(',')) {
             error = "名字不能有半形逗号";
+            return false;
+        }
+
+        if (((type == BuffType.Feature) || (type == BuffType.Emblem)) && (buffName.Length != 2)) {
+            error = "特性、纹章类印记名称只能填写两个字";
             return false;
         }
 

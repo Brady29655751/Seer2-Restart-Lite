@@ -112,7 +112,7 @@ id,timing,priority,target,condition,cond_option,effect,effect_option
 3031,on_turn_end,100,pet,none,none,heal,type=buff&add=me.pet.status.maxHp*1/16
 3032,on_turn_end,100,pet,none,none,heal,type=buff&add=me.pet.status.maxHp*1/12
 3033,on_add_buff\on_remove_buff,-1\-1,pet\pet,none\none,none\none,add_status\add_status,type=6&add=-15\type=6&add=15
-3034,on_after_attack\on_after_attack,-1\-1,skill\pet,skill\skill,whos_turn=op&who=op&type=type&type_op=>&type_cmp=0\whos_turn=op&who=op&type=type&type_op=>&type_cmp=0,set_damage\set_buff,who=op&op=*&value=-0.15*value+1\id=3034&type=value&op=+&value=1
+3034,on_after_dmg_cal\on_after_attack,-1\-1,skill\pet,skill\skill,whos_turn=op&who=op&type=type&type_op=>&type_cmp=0\whos_attack=op&whos_turn=op&who=op&type=type&type_op=>&type_cmp=0,set_damage\set_buff,who=op&op=*&value=0-0.15*value+1\id=3034&type=value&op=+&value=1
 3035,on_after_attack\on_after_attack,-1000\-1,pet\pet,pet\pet,who=op&type=dead&dead_cmp=1\who=op&type=dead&dead_cmp=1,heal\remove_buff,add=200\id=3035
 3036,on_add_buff\on_remove_buff,-1\-1,pet\pet,none\none,none\none,rage\rage,min=20\min=0
 3037,on_add_buff\on_remove_buff,-1\-1,pet\pet,none\none,none\none,add_status\add_status,type=10&add=me.pet.buff[200301].value*5+25\type=10&add=-me.pet.buff[200301].value*5+25

@@ -56,7 +56,7 @@ public class Database : Singleton<Database>
             error = "获取技能档案失败";
             return false;
         }
-        if (petInfoDict.Count != GameManager.versionData.petData.petNum) {
+        if (petInfoDict.Count == 0) {
             error = "获取精灵档案失败";
             return false;
         }

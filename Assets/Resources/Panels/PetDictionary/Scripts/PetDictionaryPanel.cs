@@ -6,6 +6,7 @@ using UnityEngine;
 public class PetDictionaryPanel : Panel
 {
     private List<Pet> petStorage => Player.instance.gameData.petStorage;
+    [SerializeField] private PetDictionaryController dictController;
     [SerializeField] private PetSelectController selectController;
     [SerializeField] private PetDemoController demoController;
     [SerializeField] private PetDictInfoController infoController;
@@ -20,6 +21,14 @@ public class PetDictionaryPanel : Panel
     private void InitSelectSubscriptions() {
         selectController.onSelectPetEvent += demoController.SetPet;
         selectController.onSelectPetEvent += infoController.SetPet;
+    }
+
+    public void SelectMode(PetDictionaryMode mode) {
+        dictController.SelectMode((int)mode);
+    }
+
+    public void SetStorage(List<Pet> storage) {
+        dictController.SetPetStorage(storage);
     }
 
 }

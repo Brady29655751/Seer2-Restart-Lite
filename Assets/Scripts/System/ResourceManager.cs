@@ -257,13 +257,8 @@ public class ResourceManager : Singleton<ResourceManager>
         LoadCSV(skillUrl + "effect.csv", (data) => {
             var originalDict = GetSkill(info, data);
             if (SaveSystem.TryLoadSkillMod(out var modDict)) {
-                try {
-                    foreach (var entry in modDict) {
-                        originalDict.Set(entry.Key, entry.Value);
-                    }
-                } catch (Exception) {
-                    originalDict = GetSkill(info, data);
-                }
+                foreach (var entry in modDict)
+                    originalDict.Set(entry.Key, entry.Value);
             }
             onSuccess?.Invoke(originalDict);
         }, onFail);
@@ -302,13 +297,18 @@ public class ResourceManager : Singleton<ResourceManager>
                 PetInfo info = new PetInfo(basic, featureInfo.Get(basic.baseId), expInfo.Get(basic.id), new PetTalentInfo(), skillInfo.Get(basic.id), uiInfo.Get(basic.id, new PetUIInfo(basic.id, basic.baseId)));
                 petInfos.Set(info.id, info);
             }
+
+            if (SaveSystem.TryLoadPetMod(out var modDict)) {
+                foreach (var entry in modDict)
+                    petInfos.Set(entry.Key, entry.Value);
+            }
             onSuccess?.Invoke(petInfos);
         } catch (Exception) {
             onSuccess?.Invoke(new Dictionary<int, PetInfo>());
         }
     }
 
-    private List<PetBasicInfo> GetPetBasicInfo(string[] data) {
+    public List<PetBasicInfo> GetPetBasicInfo(string[] data) {
         List<PetBasicInfo> petBasicInfos = new List<PetBasicInfo>();
 
         int dataCol = PetBasicInfo.DATA_COL;
@@ -321,7 +321,7 @@ public class ResourceManager : Singleton<ResourceManager>
         return petBasicInfos;
     }
 
-    private Dictionary<int, PetFeatureInfo> GetPetFeatureInfo(string[] data) {
+    public Dictionary<int, PetFeatureInfo> GetPetFeatureInfo(string[] data) {
         Dictionary<int, PetFeatureInfo> petFeatureInfos = new Dictionary<int, PetFeatureInfo>();
 
         int dataCol = PetFeatureInfo.DATA_COL;
@@ -334,7 +334,7 @@ public class ResourceManager : Singleton<ResourceManager>
         return petFeatureInfos;
     }
 
-    private Dictionary<int, PetExpInfo> GetPetExpInfo(string[] data) {
+    public Dictionary<int, PetExpInfo> GetPetExpInfo(string[] data) {
         Dictionary<int, PetExpInfo> petExpInfos = new Dictionary<int, PetExpInfo>();
 
         int dataCol = PetExpInfo.DATA_COL;
@@ -347,7 +347,7 @@ public class ResourceManager : Singleton<ResourceManager>
         return petExpInfos;
     }
 
-    private Dictionary<int, PetSkillInfo> GetPetSkillInfo(string[] data) {
+    public Dictionary<int, PetSkillInfo> GetPetSkillInfo(string[] data) {
         Dictionary<int, PetSkillInfo> petSkillInfos = new Dictionary<int, PetSkillInfo>();
 
         int dataCol = PetSkillInfo.DATA_COL;
@@ -360,7 +360,7 @@ public class ResourceManager : Singleton<ResourceManager>
         return petSkillInfos;
     }
 
-    private Dictionary<int, PetUIInfo> GetPetUIInfo(string[] data) {
+    public Dictionary<int, PetUIInfo> GetPetUIInfo(string[] data) {
         Dictionary<int, PetUIInfo> petUIInfos = new Dictionary<int, PetUIInfo>();
 
         int dataCol = PetUIInfo.DATA_COL;
@@ -395,13 +395,8 @@ public class ResourceManager : Singleton<ResourceManager>
         LoadCSV(buffUrl + "effect.csv", (data) => {
             var originalDict = GetBuffInfo(info, data);
             if (SaveSystem.TryLoadBuffMod(out var modDict)) {
-                try {
-                    foreach (var entry in modDict) {
-                        originalDict.Set(entry.Key, entry.Value);
-                    }
-                } catch (Exception) {
-                    originalDict = GetBuffInfo(info, data);
-                }
+                foreach (var entry in modDict)
+                    originalDict.Set(entry.Key, entry.Value);
             }
             onSuccess?.Invoke(originalDict);
         }, (x) => {});

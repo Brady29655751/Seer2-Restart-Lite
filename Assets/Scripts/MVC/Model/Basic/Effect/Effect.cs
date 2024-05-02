@@ -59,6 +59,9 @@ public class Effect {
     }
 
     public static string[] GetRawEffectListStringArray(int id, List<Effect> effectList) {
+        if (effectList.Count == 0)
+            return (new string[] { id.ToString() }).Concat(Effect.GetDefaultEffect().GetRawEffectStringArray()).ToArray();
+
         var result = Enumerable.Repeat(string.Empty, DATA_COL + 1).ToArray();
         var rawStringArrays = effectList.Select(x => x.GetRawEffectStringArray()).ToList();
 
@@ -79,6 +82,10 @@ public class Effect {
 
         return new string[] { timing.ToRawString(), priority.ToString(), target.ToRawString(),
             condition.ToRawString(), rawConditionOptions, ability.ToRawString(), rawAbilityOptions };
+    }
+
+    public static Effect GetDefaultEffect() {
+        return new Effect(EffectTiming.None, -1, EffectTarget.None, EffectCondition.None, null, EffectAbility.None, null);
     }
 
     public static Effect GetEscapeEffect() {

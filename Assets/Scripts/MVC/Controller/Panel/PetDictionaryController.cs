@@ -15,10 +15,13 @@ public class PetDictionaryController : Module
     public override void Init()
     {
         base.Init();
-        SetPetStorage(petTopic);
+        SelectMode((int)mode);
     }
 
     public void SelectMode(int modeId) {
+        if (mode == PetDictionaryMode.WorkshopPreview)
+            return;
+
         mode = (PetDictionaryMode)modeId;
         SetPetStorage((mode == PetDictionaryMode.All) ? petDictionary : petTopic);
     }
@@ -32,4 +35,5 @@ public class PetDictionaryController : Module
 public enum PetDictionaryMode {
     All = 0,
     Topic = 1,
+    WorkshopPreview = 2,
 }

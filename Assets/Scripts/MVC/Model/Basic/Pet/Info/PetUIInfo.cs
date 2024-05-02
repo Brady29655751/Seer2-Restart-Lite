@@ -35,6 +35,18 @@ public class PetUIInfo
         defaultSkinId = int.Parse(options.Get("default_skin", id.ToString()));
     }
 
+    public string[] GetRawInfoStringArray() {
+        // If no info, then no need to write.
+        if (List.IsNullOrEmpty(specialSkinList) && List.IsNullOrEmpty(options))
+            return null;
+
+        var rawSkinList = specialSkinList.Select(x => x.ToString()).ConcatToString("/");
+        var rawOptions = options.Select(entry => entry.Key + "=" + entry.Value).ConcatToString("&");
+
+        return new string[] { id.ToString(), baseId.ToString(), ((specialSkinList.Count == 0) ? "none" : rawSkinList),
+            ((options.Count == 0) ? "none" : rawOptions) };
+    }
+
     public List<int> GetAllSkinList(int currentSkinId) {
         var allEvovlePetIds = Pet.GetPetInfo(id).allEvolvePetIds;
         var allDefaultSkinIds = allEvovlePetIds.Select(x => Pet.GetPetInfo(x).ui.defaultSkinId).Distinct().ToList();

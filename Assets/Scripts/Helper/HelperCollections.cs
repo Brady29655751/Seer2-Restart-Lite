@@ -24,6 +24,10 @@ public static class Dictionary {
 }
 
 public static class List {
+    public static bool IsNullOrEmpty<T>(this IEnumerable<T> list) {
+        return (list == null) || (!list.Any());
+    }
+
     public static T Random<T>(this List<T> values) {
         int index = UnityEngine.Random.Range(0, values.Count);
         return values[index];

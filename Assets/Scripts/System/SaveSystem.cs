@@ -104,7 +104,7 @@ public static class SaveSystem
         return true;
     }
 
-    public static bool CreateMod() {
+    public static bool TryCreateMod() {
         try {
             if (FileBrowserHelpers.FileExists(Application.persistentDataPath + "/Mod"))
                 return true;
@@ -136,30 +136,34 @@ public static class SaveSystem
         return true;
     }
 
+    private static bool TryCreateFile(string dirPath, string fileName, string header, out string filePath) {
+        filePath = dirPath + fileName;
+        try {
+            if (!FileBrowserHelpers.FileExists(filePath)) {
+                string parentDirectory = FileBrowserHelpers.GetDirectoryName(filePath);
+                filePath = FileBrowserHelpers.CreateFileInDirectory(parentDirectory, fileName);
+                FileBrowserHelpers.WriteTextToFile(filePath, header);    
+            }
+        } catch (Exception) {
+            return false;
+        }
+        return true;
+    }
+
     public static bool TrySaveBuffMod(BuffInfo info, byte[] iconBytes) {
         var buffPath = Application.persistentDataPath + "/Mod/Buffs/";
         try {
-            // Write icon.
+            if (!TryCreateFile(buffPath, "info.csv", "id,name,type,copyType,turn,options,description\n", out var infoPath))
+                return false;
+
+            if (!TryCreateFile(buffPath, "effect.csv", "id,timing,priority,target,condition,cond_option,effect,effect_option\n", out var effectPath))
+                return false;
+
+            FileBrowserHelpers.AppendTextToFile(infoPath, info.GetRawInfoStringArray().ConcatToString(",") + "\n");
+            FileBrowserHelpers.AppendTextToFile(effectPath, Effect.GetRawEffectListStringArray(info.id, info.effects).ConcatToString(",") + "\n");
+
             if (iconBytes != null)
                 FileBrowserHelpers.WriteBytesToFile(buffPath + info.id + ".png", iconBytes);
-
-            // Write info.
-            string infoPath = buffPath + "info.csv";
-            if (!FileBrowserHelpers.FileExists(infoPath)) {
-                string parentDirectory = FileBrowserHelpers.GetDirectoryName(infoPath);
-                infoPath = FileBrowserHelpers.CreateFileInDirectory(parentDirectory, "info.csv");
-                FileBrowserHelpers.WriteTextToFile(infoPath, "id,name,type,copyType,turn,options,description\n");    
-            }
-            FileBrowserHelpers.AppendTextToFile(infoPath, info.GetRawInfoStringArray().ConcatToString(",") + "\n");
-
-            // Write effect.
-            string effectPath = buffPath + "effect.csv";
-            if (!FileBrowserHelpers.FileExists(effectPath)) {
-                string parentDirectory = FileBrowserHelpers.GetDirectoryName(effectPath);
-                effectPath = FileBrowserHelpers.CreateFileInDirectory(parentDirectory, "effect.csv");
-                FileBrowserHelpers.WriteTextToFile(effectPath, "id,timing,priority,target,condition,cond_option,effect,effect_option\n");    
-            }
-            FileBrowserHelpers.AppendTextToFile(effectPath, Effect.GetRawEffectListStringArray(info.id, info.effects).ConcatToString(",") + "\n");
 
         } catch (Exception) {
             return false;
@@ -191,24 +195,14 @@ public static class SaveSystem
     public static bool TrySaveSkillMod(Skill info) {
         var skillPath = Application.persistentDataPath + "/Mod/Skills/";
         try {
-            // Write info.
-            string infoPath = skillPath + "info.csv";
-            if (!FileBrowserHelpers.FileExists(infoPath)) {
-                string parentDirectory = FileBrowserHelpers.GetDirectoryName(infoPath);
-                infoPath = FileBrowserHelpers.CreateFileInDirectory(parentDirectory, "info.csv");
-                FileBrowserHelpers.WriteTextToFile(infoPath, "id,name,element,type,power,anger,accuracy,option,description\n");    
-            }
+            if (!TryCreateFile(skillPath, "info.csv", "id,name,element,type,power,anger,accuracy,option,description\n", out var infoPath))
+                return false;
+
+            if (!TryCreateFile(skillPath, "effect.csv", "id,timing,priority,target,condition,cond_option,effect,effect_option\n", out var effectPath))
+                return false;
+
             FileBrowserHelpers.AppendTextToFile(infoPath, info.GetRawInfoStringArray().ConcatToString(",") + "\n");
-
-            // Write effect.
-            string effectPath = skillPath + "effect.csv";
-            if (!FileBrowserHelpers.FileExists(effectPath)) {
-                string parentDirectory = FileBrowserHelpers.GetDirectoryName(effectPath);
-                effectPath = FileBrowserHelpers.CreateFileInDirectory(parentDirectory, "effect.csv");
-                FileBrowserHelpers.WriteTextToFile(effectPath, "id,timing,priority,target,condition,cond_option,effect,effect_option\n");    
-            }
             FileBrowserHelpers.AppendTextToFile(effectPath, Effect.GetRawEffectListStringArray(info.id, info.effects).ConcatToString(",") + "\n");
-
         } catch (Exception) {
             return false;
         }
@@ -233,6 +227,108 @@ public static class SaveSystem
         } catch (Exception) {
             return false;
         }
+        return true;
+    }
+
+    public static bool TrySavePetMod(PetInfo info, Dictionary<string, byte[]> bytesDict) {
+        var petPath = Application.persistentDataPath + "/Mod/Pets/";
+        var emblemPath = Application.persistentDataPath + "/Mod/Emblems/";
+        var iconBytes = bytesDict.Get("icon", null);
+        var battleBytes = bytesDict.Get("battle", null);
+        var emblemBytes = bytesDict.Get("emblem", null);
+
+        try {
+            if (!TryCreateFile(petPath, "basic.csv", "id,baseId,name,element,baseStatus,gender,baseHeight/baseWeight,description,habitat,linkId\n", out var basicPath))
+                return false;
+
+            if (!TryCreateFile(petPath, "feature.csv", "baseId,featureName,featureDescription,emblemName,emblemDescription\n", out var featurePath))
+                return false;
+
+            if (!TryCreateFile(petPath, "exp.csv", "id,expType,evolvePetId,evolveLevel,beatExpParam\n", out var expPath))
+                return false;
+
+            if (!TryCreateFile(petPath, "skill.csv", "id,ownSkill,learnLevel\n", out var skillPath))
+                return false;
+
+            if (!TryCreateFile(petPath, "ui.csv", "id,baseId,skinChoice,options\n", out var uiPath))
+                return false;
+
+            FileBrowserHelpers.AppendTextToFile(basicPath, info.basic.GetRawInfoStringArray().ConcatToString(",") + "\n");
+
+            // Only write feature when this is a base pet.
+            if (info.id == info.baseId)
+                FileBrowserHelpers.AppendTextToFile(featurePath, info.feature.GetRawInfoStringArray().ConcatToString(",") + "\n");
+            
+            FileBrowserHelpers.AppendTextToFile(expPath, info.exp.GetRawInfoStringArray().ConcatToString(",") + "\n");
+            FileBrowserHelpers.AppendTextToFile(skillPath, info.skills.GetRawInfoStringArray().ConcatToString(",") + "\n");
+
+            // Do not write ui when no skin info.
+            var uiRawString = info.ui.GetRawInfoStringArray();
+            if (uiRawString != null)
+                FileBrowserHelpers.AppendTextToFile(skillPath, uiRawString.ConcatToString(",") + "\n");
+
+            // Write image bytes.
+            if (iconBytes != null)
+                FileBrowserHelpers.WriteBytesToFile(petPath + "/icon/" + info.id + ".png", iconBytes);
+
+            if (battleBytes != null)
+                FileBrowserHelpers.WriteBytesToFile(petPath + "/battle/" + info.id + ".png", battleBytes);
+
+            if ((info.id == info.baseId) && (emblemBytes != null))
+                FileBrowserHelpers.WriteBytesToFile(emblemPath + info.id + ".png", emblemBytes);
+
+        } catch (Exception) {
+            return false;
+        }
+
+        return true;
+    }
+
+    public static bool TryLoadPetMod(out Dictionary<int, PetInfo> petDict) {
+        petDict = new Dictionary<int, PetInfo>();
+
+        try {
+            // Init path.
+            var petPath = Application.persistentDataPath + "/Mod/Pets/";
+            var basicPath = petPath + "basic.csv";
+            var featurePath = petPath + "feature.csv";
+            var expPath = petPath + "exp.csv";
+            var skillPath = petPath + "skill.csv";
+            var uiPath = petPath + "ui.csv";
+
+            // Check files exist.
+            if ((!FileBrowserHelpers.FileExists(basicPath)) || (!FileBrowserHelpers.FileExists(featurePath)) ||
+                (!FileBrowserHelpers.FileExists(expPath)) || (!FileBrowserHelpers.FileExists(skillPath)) ||
+                (!FileBrowserHelpers.FileExists(uiPath)))
+                return false;
+
+
+            // Get data.
+            var basicData = ResourceManager.GetCSV(FileBrowserHelpers.ReadTextFromFile(basicPath));
+            var featureData = ResourceManager.GetCSV(FileBrowserHelpers.ReadTextFromFile(featurePath));
+            var expData = ResourceManager.GetCSV(FileBrowserHelpers.ReadTextFromFile(expPath));
+            var skillData = ResourceManager.GetCSV(FileBrowserHelpers.ReadTextFromFile(skillPath));
+            var uiData = ResourceManager.GetCSV(FileBrowserHelpers.ReadTextFromFile(uiPath));
+
+            // Set infos.
+            List<PetBasicInfo> basicInfo = ResourceManager.instance.GetPetBasicInfo(basicData);
+            Dictionary<int, PetFeatureInfo> featureInfo = ResourceManager.instance.GetPetFeatureInfo(featureData);
+            Dictionary<int, PetExpInfo> expInfo = ResourceManager.instance.GetPetExpInfo(expData);
+            Dictionary<int, PetSkillInfo> skillInfo = ResourceManager.instance.GetPetSkillInfo(skillData);
+            Dictionary<int, PetUIInfo> uiInfo = ResourceManager.instance.GetPetUIInfo(uiData);
+
+            // Load to dict.
+            for (int i = 0; i < basicInfo.Count; i++) {
+                var basic = basicInfo[i];
+                PetInfo info = new PetInfo(basic, featureInfo.Get(basic.baseId), expInfo.Get(basic.id), new PetTalentInfo(), skillInfo.Get(basic.id), uiInfo.Get(basic.id, new PetUIInfo(basic.id, basic.baseId)));
+                petDict.Set(info.id, info);
+            }            
+
+        } catch (Exception) {
+            Debug.Log("holy shit");
+            return false;
+        }
+
         return true;
     }
 }

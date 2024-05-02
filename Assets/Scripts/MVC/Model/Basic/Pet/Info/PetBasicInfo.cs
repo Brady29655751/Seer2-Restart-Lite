@@ -40,6 +40,28 @@ public class PetBasicInfo
         linkId = _slicedData[9];
     }
 
+    public PetBasicInfo(int id, int baseId, string name, Element element, Status baseStatus,
+        int gender, int baseHeight, int baseWeight, string description, string habitat, string linkId) {
+        this.id = id;
+        this.baseId = baseId;
+        this.name = name;
+        this.elementId = (int)element;
+        this.baseStatus = new Status(baseStatus);
+        this.gender = gender;
+        this.baseHeight = baseHeight;
+        this.baseWeight = baseWeight;
+        this.description = description;
+        this.habitat = habitat;
+        this.linkId = linkId;
+    }
+
+    public string[] GetRawInfoStringArray() {
+        return new string[] { id.ToString(), baseId.ToString(), name, elementId.ToString(),
+            baseStatus.ToString("/"), gender.ToString(), baseHeight + "/" + baseWeight,
+            description, habitat, linkId
+        };
+    }
+
     public List<int> GetAllEvolvePetId() {
         var evloveIdList = new List<int>();
         int currentId = baseId;

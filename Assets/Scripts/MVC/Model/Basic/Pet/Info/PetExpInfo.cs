@@ -24,4 +24,17 @@ public class PetExpInfo
         evolveLevel = int.Parse(_slicedData[3]);
         beatExpParam= int.Parse(_slicedData[4]);
     }
+
+    public PetExpInfo(int id, int expType, int evolvePetId, int evolveLevel, int beatExpParam) {
+        this.id = id;
+        this.expType = expType;
+        this.evolvePetId = evolvePetId;
+        this.evolveLevel = evolveLevel;
+        this.beatExpParam = beatExpParam;
+    }
+
+    public string[] GetRawInfoStringArray() {
+        return new string[] { id.ToString(), expType.ToString(), 
+            evolvePetId.ToString(), evolveLevel.ToString(), beatExpParam.ToString() };
+    }
 }
