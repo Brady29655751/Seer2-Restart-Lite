@@ -2,6 +2,7 @@ using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class WorkshopLearnSkillModel : Module
 {
@@ -47,6 +48,7 @@ public class WorkshopLearnSkillModel : Module
         }
 
         idInputField.SetInputString(skillList[index]?.id.ToString() ?? string.Empty);
+
         if (!int.TryParse(learnLevelInputField.inputString, out _))
             learnLevelInputField.SetInputString("1");
     }

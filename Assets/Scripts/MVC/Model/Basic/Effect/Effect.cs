@@ -75,13 +75,18 @@ public class Effect {
     }
 
     public string[] GetRawEffectStringArray() {
-        var rawConditionOptions = ((condOptionDictList.FirstOrDefault()?.Count ?? 0) == 0) ? "none" :
-            condOptionDictList.Select(cond => cond.Select(entry => entry.Key + "=" + entry.Value).ConcatToString("&")).ConcatToString("|");
-        var rawAbilityOptions = (abilityOptionDict.Count == 0) ? "none" : 
-            abilityOptionDict.Select(entry => entry.Key + "=" + entry.Value).ConcatToString("&");
-
         return new string[] { timing.ToRawString(), priority.ToString(), target.ToRawString(),
-            condition.ToRawString(), rawConditionOptions, ability.ToRawString(), rawAbilityOptions };
+            condition.ToRawString(), GetRawCondtionOptionString(), ability.ToRawString(), GetRawAbilityOptionString() };
+    }
+
+    public string GetRawCondtionOptionString() {
+        return ((condOptionDictList.FirstOrDefault()?.Count ?? 0) == 0) ? "none" :
+            condOptionDictList.Select(cond => cond.Select(entry => entry.Key + "=" + entry.Value).ConcatToString("&")).ConcatToString("|");
+    }
+
+    public string GetRawAbilityOptionString() {
+        return (abilityOptionDict.Count == 0) ? "none" : 
+            abilityOptionDict.Select(entry => entry.Key + "=" + entry.Value).ConcatToString("&");
     }
 
     public static Effect GetDefaultEffect() {

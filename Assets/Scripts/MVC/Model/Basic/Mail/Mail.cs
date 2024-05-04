@@ -42,14 +42,17 @@ public class Mail
 
     public static void Add(Mail mail) {
         Player.instance.gameData.mailStorage.Add(mail);
+        SaveSystem.SaveData();
     }
 
     public static void AddRange(IEnumerable<Mail> mailList) {
         Player.instance.gameData.mailStorage.AddRange(mailList);
+        SaveSystem.SaveData();
     }
 
     public static void Remove(Mail mail) {
         Player.instance.gameData.mailStorage.Remove(mail);
+        SaveSystem.SaveData();
     }
 
     public static void OnGetItemSuccess() {
@@ -75,6 +78,7 @@ public class Mail
             return;
             
         isRead = true;
+        SaveSystem.SaveData();
     }
 
     public void GetItem() {

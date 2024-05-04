@@ -8,6 +8,7 @@ public class PetDictionaryController : Module
     public VersionPetData petData => GameManager.versionData.petData;
     public List<Pet> petDictionary => petData.petDictionary;
     public List<Pet> petTopic => petData.petTopic;
+    public List<Pet> petWorkshop = new List<Pet>();
 
     [SerializeField] private PetDictionaryMode mode = PetDictionaryMode.Topic;
     [SerializeField] private PetSelectController selectController;
@@ -18,16 +19,29 @@ public class PetDictionaryController : Module
         SelectMode((int)mode);
     }
 
-    public void SelectMode(int modeId) {
-        if (mode == PetDictionaryMode.WorkshopPreview)
-            return;
+    public List<Pet> GetStorage() {
+        return mode switch {
+            PetDictionaryMode.All => petDictionary,
+            PetDictionaryMode.Topic => petTopic,
+            PetDictionaryMode.Workshop => petWorkshop,
+            _ => new List<Pet>(),
+        };
+    }
 
+    public void SelectMode(int modeId) {
+        if (mode == PetDictionaryMode.Workshop)
+            return;
+            
         mode = (PetDictionaryMode)modeId;
-        SetPetStorage((mode == PetDictionaryMode.All) ? petDictionary : petTopic);
+        SetPetStorage(GetStorage());
     }
 
     public void SetPetStorage(List<Pet> storage) {
-        selectController.SetStorage(storage.ToList());
+        if ((mode == PetDictionaryMode.Workshop) && (List.IsNullOrEmpty(petWorkshop)))
+            petWorkshop = storage.ToList();
+
+        var petStorage = (mode == PetDictionaryMode.Workshop) ? petWorkshop : storage.ToList();
+        selectController.SetStorage(petStorage);
         selectController.Select(0);
     }
 }
@@ -35,5 +49,5 @@ public class PetDictionaryController : Module
 public enum PetDictionaryMode {
     All = 0,
     Topic = 1,
-    WorkshopPreview = 2,
+    Workshop = 2,
 }

@@ -7,7 +7,12 @@ using UnityEngine.UI;
 public class IDropdown : IMonoBehaviour
 {
     private Dropdown dropdown;
-    public int value => dropdown.value;
+    public int value {
+        get => dropdown.value;
+        set => dropdown.value = value;
+    } 
+
+    public int optionCount => dropdown.options.Count;
 
     protected override void Awake()
     {

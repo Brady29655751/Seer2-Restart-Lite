@@ -11,7 +11,7 @@ public class WorkshopPetAdvanceModel : Module
     [SerializeField] private IInputField emblemInputField, emblemDescriptionInputField;
     
 
-    public int baseId => string.IsNullOrEmpty(baseIdInputField.inputString) ? 0 : int.Parse(baseIdInputField.inputString);
+    public int baseId => string.IsNullOrEmpty(baseIdInputField.inputString) ? 0 : (int.TryParse(baseIdInputField.inputString, out var resultId) ? resultId : 0);
     public int evolveId => int.Parse(evolveIdInputField.inputString);
     public int evolveLevel => int.Parse(evolveLevelInputField.inputString);
     public int expType => expTypeDropdown.value;
@@ -98,6 +98,11 @@ public class WorkshopPetAdvanceModel : Module
             return false;
         }
 
+        if (!int.TryParse(evolveIdInputField.inputString, out _)) {
+            error = "进化型态序号需为整数！";
+            return false;
+        }
+
         if (evolveLevel < 0) {
             error = "进化等级不能为负数！";
             return false;
@@ -150,6 +155,11 @@ public class WorkshopPetAdvanceModel : Module
 
         if (List.IsNullOrEmpty(learnSkillInfoList)) {
             error = "技能不能为空！";
+            return false;
+        }
+
+        if (!learnSkillInfoList.Any(x => x.skill.type != SkillType.必杀)) {
+            error = "至少需要一个非必杀技能";
             return false;
         }
 

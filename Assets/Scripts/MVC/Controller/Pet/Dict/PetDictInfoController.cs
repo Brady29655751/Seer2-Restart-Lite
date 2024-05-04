@@ -13,7 +13,14 @@ public class PetDictInfoController : Module
     }
 
     public void Link() {
-        Panel.Link(infoModel.petInfo.basic.linkId);
+        var info = infoModel.petInfo;
+        if (info.basic.linkId == "Workshop") {
+            Pet.Add(Pet.GetExamplePet(info.id));
+            Hintbox.OpenHintboxWithContent("获得了 " + info.name + " ！", 16);
+            return;
+        }
+
+        Panel.Link(info.basic.linkId);
     }
 
     public void SetInfoPromptActive(bool active) {

@@ -7,11 +7,12 @@ using UnityEngine.UI;
 public class WorkshopPetView : Module
 {
     [SerializeField] private List<GameObject> petContentPages = new List<GameObject>();
-    [SerializeField] private Panel learnSkillPanel, helpPanel;
+    [SerializeField] private Panel petPreviewPanel, learnSkillPanel, helpPanel;
     [SerializeField] private Text helpText;
     [SerializeField] private IButton iconButton, emblemButton, battleButton;
     [SerializeField] private GameObject skillButtonPrefab;
     [SerializeField] private RectTransform skillContentRect;
+    [SerializeField] private Image petPreviewImage, emblemPreviewImage;
 
     private List<GameObject> skillPrefabList = new List<GameObject>();
     
@@ -20,6 +21,14 @@ public class WorkshopPetView : Module
             "icon" => iconButton,
             "emblem" => emblemButton,
             "battle" => battleButton,
+            _ => null,
+        };
+    }
+
+    public Image GetPreviewImage(string type) {
+        return type switch {
+            "emblem" => emblemPreviewImage,
+            "battle" => petPreviewImage,
             _ => null,
         };
     }
@@ -74,7 +83,7 @@ public class WorkshopPetView : Module
                 "为了统一大小方便处理，请上传长宽比为16:9的png档案\n" + 
                 "推荐大小960x540像素，图片需要透明背景\n" +
                 "精灵的中心点大约落在以左方为基准的220像素位置\n" +
-                "资料全部完成后可以按下预览查看\n\n" +
+                "资料全部完成后可以按下预览查看（示意图仅供参考）\n\n" +
                 "注意：档案越大或者DIY越多会导致图片加载时间变久",
             "skin" => "此功能暂不开放\n",
             "option" => "特殊自定义选项，选项如下请自行填写，多个选项请以 & 连接\n\n" +
@@ -88,10 +97,12 @@ public class WorkshopPetView : Module
 
     public void OnUploadSprite(string type, Sprite sprite) {
         GetButton(type)?.SetSprite(sprite);
+        GetPreviewImage(type)?.SetSprite(sprite);
     }
 
     public void OnClearSprite(string type) {
         GetButton(type)?.SetSprite(SpriteSet.GetDefaultIconSprite(type != "battle"));
+        GetPreviewImage(type)?.SetSprite(SpriteSet.GetDefaultIconSprite(type != "battle"));
     }
 
     public void OnAddSkill(LearnSkillInfo info) {
@@ -109,6 +120,8 @@ public class WorkshopPetView : Module
         skillPrefabList.RemoveAt(skillPrefabList.Count - 1);
     }
     
-    
+    public void OnPreviewPet() {
+        petPreviewPanel.SetActive(true);
+    }
     
 }

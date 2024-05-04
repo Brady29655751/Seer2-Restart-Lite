@@ -8,21 +8,20 @@ using UnityEngine.UI;
 public class WorkshopEffectModel : Module
 {
     [SerializeField] private IInputField nameInputField;
-    [SerializeField] private IDropdown timingDropdown, conditionDropdown;
-    [SerializeField] private IInputField condOptionInputField, probabilityInputField;
-    [SerializeField] private IDropdown abilityDropdown, abilityDetailDropdown;
+    [SerializeField] private IDropdown timingDropdown, targetDropdown, conditionDropdown;
+    [SerializeField] private IInputField condOptionInputField, priorityInputField;
+    [SerializeField] private IDropdown abilityDropdown; //, abilityDetailDropdown;
     [SerializeField] private IInputField abilityOptionInputField;
 
     public Effect effect => GetEffect();
     public string effectName => nameInputField.inputString;
     public EffectTiming timing => GetEffectTiming();
-    public int priority => GetEffectPriority();
-    public int probability => string.IsNullOrEmpty(nameInputField.inputString) ? 100 : int.Parse(nameInputField.inputString);
-    public EffectTarget target => GetEffectTarget();
+    public int priority => int.Parse(priorityInputField.inputString);
+    public EffectTarget target => (EffectTarget)(targetDropdown.value);
     public EffectCondition condition => (EffectCondition)(conditionDropdown.value);
     public string conditionOptions => condOptionInputField.inputString;
-    public EffectAbility ability => (EffectAbility)((abilityDropdown.value == 0) ? 0 : (abilityDropdown.value + 4));
-    public int abilityDetail => abilityDetailDropdown.value;
+    public EffectAbility ability => (EffectAbility)(abilityDropdown.value + ((abilityDropdown.value < 3) ? 0 : 1));
+    // public int abilityDetail => abilityDetailDropdown.value;
     public string abilityOptions => abilityOptionInputField.inputString;
 
     public Effect GetEffect() {
@@ -35,47 +34,36 @@ public class WorkshopEffectModel : Module
         return new Effect(timing, priority, target, condition, condOptionDictList, ability, abilityOptionDict);
     }
 
+    public void SetReferredEffect(Effect effect) {
+        SetEffectTiming(effect);
+        priorityInputField.SetInputString(effect.priority.ToString());
+        targetDropdown.value = (int)effect.target;
+        conditionDropdown.value = (int)effect.condition;
+        condOptionInputField.SetInputString(effect.GetRawCondtionOptionString());
+        abilityDropdown.value = ((int)effect.ability) - ((((int)effect.ability) < 3) ? 0 : 1);
+        abilityOptionInputField.SetInputString(effect.GetRawAbilityOptionString());
+    }
+
     public EffectTiming GetEffectTiming() {
+        if (timingDropdown.value.IsWithin(3, 6))
+            return (EffectTiming)(timingDropdown.value - 1);
+
+        if (timingDropdown.value.IsWithin(7, 14))
+            return (EffectTiming)(timingDropdown.value);
+
         return timingDropdown.value switch {
-            0   => EffectTiming.OnTurnStart,
-            1   => EffectTiming.OnDecidePriority,
-            2   => EffectTiming.OnBeforeAttack,
-            3   => EffectTiming.OnBeforeDamageCalculate,
-            4   => EffectTiming.OnDamageCalculate,
-            5   => EffectTiming.OnAfterDamageCalculate,
-            6   => EffectTiming.OnFinalDamageCalculate,
-            7   => EffectTiming.OnAttack,
-            8   => EffectTiming.OnAfterAttack,
-            9   => EffectTiming.OnTurnEnd,
-            10  => EffectTiming.OnAddBuff,
-            11  => EffectTiming.OnRemoveBuff,
-            _ => EffectTiming.None
+            1   => EffectTiming.OnAddBuff,
+            2   => EffectTiming.OnRemoveBuff,
+            15  => EffectTiming.OnBattleEnd,
+            _ => EffectTiming.None,
         };
     }
 
-    public int GetEffectPriority() {
-        if (ability == EffectAbility.SetDamage) {
-            return abilityDetail switch {
-                1 => 900,
-                3 => 100,
-                4 => 100,
-                5 => 100,
-                _ => -1,
-            };
+    private void SetEffectTiming(Effect effect) {
+        for (timingDropdown.value = 0; timingDropdown.value < timingDropdown.optionCount; timingDropdown.value++) {
+            if (effect.timing == GetEffectTiming())
+                break;
         }
-
-        return -1;
-    }
-
-    public EffectTarget GetEffectTarget() {
-        return ability switch {
-            EffectAbility.Win           => EffectTarget.CurrentState,
-            EffectAbility.SetBuff      => EffectTarget.CurrentBuff,
-            EffectAbility.SetDamage    => EffectTarget.CurrentSkill,
-            EffectAbility.SetSkill     => EffectTarget.CurrentSkill,
-            EffectAbility.SetWeather   => EffectTarget.CurrentState,
-            _ => EffectTarget.CurrentPet,
-        };
     }
 
     public void OnAbilityChanged() {
@@ -95,15 +83,7 @@ public class WorkshopEffectModel : Module
             EffectAbility.SetWeather=> new List<string>() { "修改天气" },
             _ => new List<string>() { "无" },
         };
-        abilityDetailDropdown.SetDropdownOptions(abilityDetailOptions);
-    }
-
-    public void OnRemoveConditionOptions() {
-
-    }
-
-    public void OnRemoveAbilityOptions() {
-
+        // abilityDetailDropdown.SetDropdownOptions(abilityDetailOptions);
     }
 
     public bool VerifyDIYEffect(out string error) {
@@ -112,7 +92,7 @@ public class WorkshopEffectModel : Module
         if (!VerfiyName(out error))
             return false;
 
-        if (!VerifyTiming(out error))
+        if (!VerifyTimingAndPriority(out error))
             return false;
 
         if (!VerifyConditionOptions(out error))
@@ -139,10 +119,18 @@ public class WorkshopEffectModel : Module
         return true;
     }
 
-    private bool VerifyTiming(out string error) {
+    private bool VerifyTimingAndPriority(out string error) {
         error = string.Empty;
 
+        if (string.IsNullOrEmpty(priorityInputField.inputString)) {
+            error = "结算顺序不能为空！";
+            return false;
+        }
 
+        if (!int.TryParse(priorityInputField.inputString, out _)) {
+            error = "结算顺序必须为整数";
+            return false;
+        }
 
         return true;
     }

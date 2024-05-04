@@ -70,20 +70,7 @@ public class WorkshopPetController : Module
             Hintbox.OpenHintboxWithContent(error, 16);
             return;
         }
-
-        var originalInfo = Pet.GetPetInfo(petModel.petInfo.id);
-        var petDictionaryPanel = Panel.OpenPanel<PetDictionaryPanel>();
-
-        void OnCompletePreviewPet() {
-            Database.instance.petInfoDict.Set(petModel.petInfo.id, originalInfo);
-            petDictionaryPanel.onCloseEvent -= OnCompletePreviewPet;
-        }
-
-        Database.instance.petInfoDict.Set(petModel.petInfo.id, petModel.petInfo);
-
-        petDictionaryPanel.SelectMode(PetDictionaryMode.WorkshopPreview);
-        petDictionaryPanel.SetStorage(new List<Pet>() { Pet.GetExamplePet(petModel.petInfo.id) });
-        petDictionaryPanel.onCloseEvent += OnCompletePreviewPet;
+        petView.OnPreviewPet();
     }
     
     public void OnDIYPet() {

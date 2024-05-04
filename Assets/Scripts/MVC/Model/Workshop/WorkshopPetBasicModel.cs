@@ -24,7 +24,7 @@ public class WorkshopPetBasicModel : Module
 
     public PetBasicInfo GetPetBasicInfo(int baseId) {
         return new PetBasicInfo(id, baseId, petName, element, baseStatus,
-            gender, height, weight, description, "创意工坊", "none");
+            gender, height, weight, description, "创意工坊", "Workshop");
     }
 
     public bool VerifyDIYPetBasic(int baseId, out string error) {
@@ -56,6 +56,11 @@ public class WorkshopPetBasicModel : Module
 
         if (string.IsNullOrEmpty(idInputField.inputString)) {
             error = "序号不能为空！";
+            return false;
+        }
+
+        if (!int.TryParse(idInputField.inputString, out _)) {
+            error = "序号需为整数！";
             return false;
         }
 

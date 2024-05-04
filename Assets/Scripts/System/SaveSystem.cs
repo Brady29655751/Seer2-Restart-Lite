@@ -104,11 +104,15 @@ public static class SaveSystem
         return true;
     }
 
-    public static bool TryCreateMod() {
-        try {
-            if (FileBrowserHelpers.FileExists(Application.persistentDataPath + "/Mod"))
-                return true;
+    public static bool TryCreateMod(out string error) {
+        error = string.Empty;
 
+        if (IsModExists()) {
+            error = "创建失败，已有mod存在";
+            return false;
+        }
+
+        try {
             var modPath = FileBrowserHelpers.CreateFolderInDirectory(Application.persistentDataPath, "Mod");
 
             var emblemPath = FileBrowserHelpers.CreateFolderInDirectory(modPath, "Emblems");
@@ -131,9 +135,14 @@ public static class SaveSystem
             var mapPathPath = FileBrowserHelpers.CreateFolderInDirectory(mapPath, "path");
             var mapMinePath = FileBrowserHelpers.CreateFolderInDirectory(mapPath, "mine");
         } catch (Exception) {
+            error = "mod资料夹创建失败";
             return false;
         }
         return true;
+    }
+
+    public static bool IsModExists() {
+        return FileBrowserHelpers.DirectoryExists(Application.persistentDataPath + "/Mod");
     }
 
     private static bool TryCreateFile(string dirPath, string fileName, string header, out string filePath) {

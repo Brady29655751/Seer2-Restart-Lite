@@ -14,8 +14,9 @@ public class WorkshopLearnSkillController : Module
         skillView.OnPreviewSkill(skillModel.learnSkillInfo);
     }
 
-    public void SetDIYSuccessCallback(Action<LearnSkillInfo> callback) {
+    public void SetDIYSuccessCallback(Action<LearnSkillInfo> callback, bool learnLevelActive = true) {
         onDIYSuccessCallback = callback;
+        skillView.SetLearnLevelActive(learnLevelActive);
     }
 
     public void Search() {

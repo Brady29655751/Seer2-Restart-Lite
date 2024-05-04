@@ -70,6 +70,9 @@ public class WorkshopSkillModel : Module
         if (!VerifyOptions(out error))
             return false;        
 
+        if (!VerifyDescription(out error))
+            return false;
+
         return true;
     }
 
@@ -78,6 +81,11 @@ public class WorkshopSkillModel : Module
 
         if (string.IsNullOrEmpty(idInputField.inputString)) {
             error = "序号不能为空！";
+            return false;
+        }
+
+        if (!int.TryParse(idInputField.inputString, out _)) {
+            error = "序号需为整数！";
             return false;
         }
 
@@ -122,6 +130,11 @@ public class WorkshopSkillModel : Module
 
         if ((power < 0) || (anger < 0) || (accuracy < 0)) {
             error = "威力、怒气、命中不能为负数！";
+            return false;
+        }
+
+        if (!int.TryParse(priorityInputField.inputString, out _)) {
+            error = "先制需为整数！";
             return false;
         }
 

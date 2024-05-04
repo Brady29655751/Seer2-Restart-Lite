@@ -77,6 +77,15 @@ public class InfoPrompt : IMonoBehaviour
         }
     }
 
+    public void SetBuff(Buff buff, bool showAtRight = true) {
+        string header = "<size=18><color=#52e5f9>" + buff.name + "</color></size><size=4>\n\n</size>";
+        string text = buff.description;
+        Vector2 size = text.GetPreferredSize(15, 14, 21, 21 + 40);
+        Vector2 fixPos = showAtRight ? new Vector2(12, -size.y + 24) : new Vector2(-size.x - 2, -size.y + 24);
+        
+        SetInfoPrompt(size, header + text, fixPos, TextAnchor.MiddleLeft);
+    }
+
     public void SetItem(Item item, bool showAtRight = true) {
         string header = "<size=18><color=#52e5f9>" + item.name + "</color></size><size=4>\n\n</size>";
         string text = ((item.info.itemDescription == string.Empty) ? string.Empty : (item.info.itemDescription + "\n\n")) + item.info.effectDescription;

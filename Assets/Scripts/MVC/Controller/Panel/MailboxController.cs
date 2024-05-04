@@ -90,6 +90,7 @@ public class MailboxController : Module
             mailboxModel.SelectAll(false);
             OnSetStoragePage();
             OnSetContentPage();
+            SaveSystem.SaveData();
         };
     }
 

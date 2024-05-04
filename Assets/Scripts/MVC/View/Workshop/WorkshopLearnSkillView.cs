@@ -7,11 +7,16 @@ using UnityEngine.UI;
 
 public class WorkshopLearnSkillView : UIModule
 {
+    [SerializeField] private GameObject learnLevelObject;
     [SerializeField] private PetSkillBlockView skillBlockView;
     [SerializeField] private RectTransform selectSkillContentRect;
     [SerializeField] private GameObject selectSkillButtonPrefab;
 
     private List<GameObject> selectSkillButtonPrefabList = new List<GameObject>();
+
+    public void SetLearnLevelActive(bool active) {
+        learnLevelObject?.SetActive(active);
+    }
 
     public void SetSelections(List<Skill> selections, Action<int> callback) {
         selectSkillButtonPrefabList.ForEach(Destroy);

@@ -27,7 +27,7 @@ public class PetSkill
     /* Pet current skills */
     [XmlIgnore] public Skill[] normalSkill { 
         get => GetNormalSkill(); 
-        set => normalSkillId = (value == null) ? new int[4] : value.Take(4).Select(x => (x == null) ? 0 : x.id).ToArray();
+        set => normalSkillId = (value == null) ? new int[4] : value.Take(4).Where(x => (x?.type ?? SkillType.属性) != SkillType.必杀).Select(x => (x == null) ? 0 : x.id).ToArray();
     }
     public LearnSkillInfo[] normalSkillInfo => GetLearnSkillInfos(normalSkillId);
 
@@ -109,7 +109,7 @@ public class PetSkill
     }
 
     public Skill[] GetNormalSkill() {
-        Skill[] ret = normalSkillId.Select(x => Skill.GetSkill(x, false)).ToArray(); 
+        Skill[] ret = normalSkillId.Select(x => Skill.GetSkill(x, false)).Where(x => (x?.type ?? SkillType.属性) != SkillType.必杀).ToArray(); 
         Array.Resize(ref ret, 4);
         return ret;
     }

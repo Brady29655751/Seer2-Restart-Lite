@@ -13,18 +13,21 @@ public class BattlePetBuffBlockView : Module
     
     public void SetBuff(Buff _buff, UnityAction onPointerEnter = null, UnityAction onPointerExit = null, UnityAction onPointerOver = null) {
         buff = _buff;
+        button?.SetInteractable(buff != null);
+
         SetSprite();
         SetValue();
         SetActions(onPointerEnter, onPointerExit, onPointerOver);
     }
 
     public void SetSprite() {
-        button.SetSprite(  buff.info.icon);
+        button.SetSprite(buff?.info?.icon ?? SpriteSet.GetDefaultIconSprite(true));
     }
 
     public void SetValue() {
-        valueText.gameObject.SetActive(buff.value != 0);
-        valueText.text = buff.value.ToString();
+        var value = buff?.value ?? 0;
+        valueText.gameObject.SetActive(value != 0);
+        valueText.text = value.ToString();
     }
 
     private void SetActions(UnityAction onPointerEnter, UnityAction onPointerExit, UnityAction onPointerOver) {

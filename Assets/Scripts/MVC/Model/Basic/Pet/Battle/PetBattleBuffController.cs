@@ -21,6 +21,7 @@ public class PetBattleBuffController
     public PetBattleBuffController(PetBattleBuffController rhs) {
         element = rhs.element;
         blockBuffIds = new List<int>(rhs.blockBuffIds);
+        blockBuffTypes = new List<BuffType>(rhs.blockBuffTypes);
         buffs = rhs.buffs.Select(x => new Buff(x)).ToList();
     }
 
@@ -78,7 +79,7 @@ public class PetBattleBuffController
         if (newBuff == null)
             return;
 
-        if (blockBuffIds.Contains(newBuff.id) && !newBuff.IsPower())
+        if (IsBuffBlocked(newBuff.id) && !newBuff.IsPower())
             return;
 
         if (state == null) {

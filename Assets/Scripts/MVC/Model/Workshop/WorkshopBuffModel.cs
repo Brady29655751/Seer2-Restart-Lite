@@ -121,6 +121,11 @@ public class WorkshopBuffModel : Module
             return false;
         }
 
+        if (!int.TryParse(idInputField.inputString, out _)) {
+            error = "序号需为整数！";
+            return false;
+        }
+
         if (Buff.GetBuffInfo(id) != null) {
             error = "此序号已被占用，不可重复！";
             return false;
@@ -190,6 +195,11 @@ public class WorkshopBuffModel : Module
 
         if (string.IsNullOrEmpty(turnInputField.inputString)) {
             error = "回合不能为空！";
+            return false;
+        }
+
+        if (!int.TryParse(turnInputField.inputString, out _)) {
+            error = "回合必须为整数";
             return false;
         }
 

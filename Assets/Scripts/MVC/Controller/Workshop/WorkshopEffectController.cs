@@ -7,8 +7,12 @@ public class WorkshopEffectController : Module
 {
     [SerializeField] private WorkshopEffectModel effectModel;
     [SerializeField] private WorkshopEffectView effectView;
+    [SerializeField] private WorkshopLearnSkillController learnSkillController;
+    [SerializeField] private WorkshopLearnBuffController learnBuffController;
 
     private Action<Effect> onDIYSuccessCallback;
+
+    private List<Effect> multiEffectList = new List<Effect>();
 
     public void OpenHelpPanel(string type) {
         effectView.OpenHelpPanel(type);
@@ -19,26 +23,54 @@ public class WorkshopEffectController : Module
     }
 
     public void OnAbilityChanged(int abilityDropdownValue) {
-        effectModel.OnAbilityChanged();
-        effectView.SetAbility(effectModel.ability, effectModel.abilityDetail);
+        // effectModel.OnAbilityChanged();
+        // effectView.SetAbility(effectModel.ability, effectModel.abilityDetail);
     }
 
-    public void OnAddConditionOptions() {
-        
+    public void OnReferSkill() {
+        learnSkillController.SetDIYSuccessCallback(OnReferSkillSuccess, false);
+        effectView.SetRefSkillPanelActive(true);
     }
 
-    public void OnRemoveConditionOptions() {
-        effectModel.OnRemoveConditionOptions();
-        effectView.OnRemoveConditionOptions();
+    private void OnReferSkillSuccess(LearnSkillInfo skillInfo) {   
+        multiEffectList = skillInfo.skill.effects;
+
+        if (multiEffectList.Count > 1) {
+            effectView.SetMultiEffectPanelActive(true);
+            effectView.SetMultiEffectList(multiEffectList, OnSelectReferredEffect);
+            return;
+        }
+
+        OnSelectReferredEffect(0);
     }
 
-    public void OnAddAbilityOptions() {
-
+    public void OnReferBuff() {
+        learnBuffController.SetDIYSuccessCallback(OnReferBuffSuccess);
+        effectView.SetRefBuffPanelActive(true);
     }
 
-    public void OnRemoveAbilityOptions() {
-        effectModel.OnRemoveAbilityOptions();
-        effectView.OnRemoveAbilityOptions();
+    private void OnReferBuffSuccess(BuffInfo buffInfo) {
+        multiEffectList = buffInfo.effects;
+
+        if (multiEffectList.Count > 1) {
+            effectView.SetMultiEffectPanelActive(true);
+            effectView.SetMultiEffectList(multiEffectList, OnSelectReferredEffect);
+            return;
+        }
+
+        OnSelectReferredEffect(0);
+    }
+
+    public void OnSelectReferredEffect(int index) {
+        OnReferEffectSuccess(multiEffectList[index]);
+    }
+
+    private void OnReferEffectSuccess(Effect effect) {
+        effectModel.SetReferredEffect(effect);
+        effectView.SetRefSkillPanelActive(false);
+        effectView.SetRefBuffPanelActive(false);
+        effectView.SetMultiEffectPanelActive(false);
+        Hintbox.OpenHintboxWithContent("效果参考成功", 16);
     }
 
     public void SetDIYSuccessCallback(Action<Effect> callback) {
