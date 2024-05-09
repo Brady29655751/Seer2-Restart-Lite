@@ -41,10 +41,17 @@ public class PetUIInfo
             return null;
 
         var rawSkinList = specialSkinList.Select(x => x.ToString()).ConcatToString("/");
-        var rawOptions = options.Select(entry => entry.Key + "=" + entry.Value).ConcatToString("&");
+        
 
         return new string[] { id.ToString(), baseId.ToString(), ((specialSkinList.Count == 0) ? "none" : rawSkinList),
-            ((options.Count == 0) ? "none" : rawOptions) };
+            GetRawOptionString() };
+    }
+
+    public string GetRawOptionString() {
+        if (options.Count == 0)
+            return "none";
+
+        return options.Select(entry => entry.Key + "=" + entry.Value).ConcatToString("&");
     }
 
     public List<int> GetAllSkinList(int currentSkinId) {

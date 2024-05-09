@@ -45,6 +45,25 @@ public class WorkshopPetAdvanceModel : Module
         return new PetSkillInfo(id, learnSkillInfoList);
     }
 
+    public void SetPetFeatureInfo(PetFeatureInfo featureInfo) {
+        baseIdInputField.SetInputString(featureInfo.baseId.ToString());
+        featureInputField.SetInputString(featureInfo.feature.name);
+        featureDescriptionInputField.SetInputString(featureInfo.feature.description);
+        emblemInputField.SetInputString(featureInfo.emblem.name);
+        emblemDescriptionInputField.SetInputString(featureInfo.emblem.description);
+    }    
+
+    public void SetPetExpInfo(PetExpInfo expInfo) {
+        evolveIdInputField.SetInputString(expInfo.evolvePetId.ToString());
+        evolveLevelInputField.SetInputString(expInfo.evolveLevel.ToString());
+        expTypeDropdown.value = expInfo.expType;
+    }
+
+    public void SetPetSkillInfo(PetSkillInfo skillInfo) {
+        learnSkillInfoList = skillInfo.skillIdList.Select(skillId => Skill.GetSkill(skillId, false)).Where(x => x != null)
+            .Zip(skillInfo.learnLevelList, (skill, level) => new LearnSkillInfo(skill, level)).ToList();
+    }
+
     public void OnAddSkill(LearnSkillInfo info) {
         learnSkillInfoList.Add(info);
     }
@@ -62,7 +81,7 @@ public class WorkshopPetAdvanceModel : Module
         if (!VerifyBaseId(id, out error))
             return false;
 
-        if (!VerifyExpInfo(out error))
+        if (!VerifyExpInfo(id, out error))
             return false;
 
         if (!VerifySkillInfo(out error))
@@ -90,7 +109,7 @@ public class WorkshopPetAdvanceModel : Module
         return true;
     }
 
-    private bool VerifyExpInfo(out string error) {
+    private bool VerifyExpInfo(int id, out string error) {
         error = string.Empty;
 
         if (string.IsNullOrEmpty(evolveIdInputField.inputString) || string.IsNullOrEmpty(evolveLevelInputField.inputString)) {
@@ -103,12 +122,31 @@ public class WorkshopPetAdvanceModel : Module
             return false;
         }
 
+        if ((id == evolveId) || IsEvolveLoop(id)) {
+            error = "进化型态序号产生回圈！";
+            return false;
+        }
+
         if (evolveLevel < 0) {
             error = "进化等级不能为负数！";
             return false;
         }
 
         return true;
+    }
+
+    private bool IsEvolveLoop(int id) {
+        if (Pet.GetPetInfo(evolveId) == null)
+            return false;
+
+        var petInfo = Pet.GetPetInfo(evolveId);
+        while (petInfo != null) {
+            if (petInfo.exp.evolvePetId == id)
+                return true;
+
+            petInfo = Pet.GetPetInfo(petInfo.exp.evolvePetId);
+        }
+        return false;
     }
 
     private bool VerifyFeatureInfo(out string error) {

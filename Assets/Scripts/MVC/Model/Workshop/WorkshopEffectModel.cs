@@ -19,7 +19,7 @@ public class WorkshopEffectModel : Module
     public int priority => int.Parse(priorityInputField.inputString);
     public EffectTarget target => (EffectTarget)(targetDropdown.value);
     public EffectCondition condition => (EffectCondition)(conditionDropdown.value);
-    public string conditionOptions => condOptionInputField.inputString;
+    public string conditionOptions => string.IsNullOrEmpty(condOptionInputField.inputString) ? "none" : condOptionInputField.inputString;
     public EffectAbility ability => (EffectAbility)(abilityDropdown.value + ((abilityDropdown.value < 3) ? 0 : 1));
     // public int abilityDetail => abilityDetailDropdown.value;
     public string abilityOptions => abilityOptionInputField.inputString;
@@ -34,14 +34,15 @@ public class WorkshopEffectModel : Module
         return new Effect(timing, priority, target, condition, condOptionDictList, ability, abilityOptionDict);
     }
 
-    public void SetReferredEffect(Effect effect) {
+    public void SetReferredEffect(int index, Effect effect) {
+        nameInputField.SetInputString(effect.abilityOptionDict.Get("name", "效果 " + (index + 1)));
         SetEffectTiming(effect);
         priorityInputField.SetInputString(effect.priority.ToString());
         targetDropdown.value = (int)effect.target;
         conditionDropdown.value = (int)effect.condition;
         condOptionInputField.SetInputString(effect.GetRawCondtionOptionString());
         abilityDropdown.value = ((int)effect.ability) - ((((int)effect.ability) < 3) ? 0 : 1);
-        abilityOptionInputField.SetInputString(effect.GetRawAbilityOptionString());
+        abilityOptionInputField.SetInputString(effect.GetRawAbilityOptionString(new List<string>() { "name" }));
     }
 
     public EffectTiming GetEffectTiming() {

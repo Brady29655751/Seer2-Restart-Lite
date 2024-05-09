@@ -35,6 +35,14 @@ public class WorkshopPetController : Module
     public void OpenHelpPanel(string type) {
         petView.OpenHelpPanel(type);
     }
+
+    public void SetPetInfo(PetInfo petInfo) {
+        petModel.SetPage(0);
+        OnPetSetPage();
+
+        petModel.SetPetInfo(petInfo);
+        petView.SetPetInfo(petInfo);
+    }
     
     public void OnAddSkill() {
         learnSkillController.SetDIYSuccessCallback(OnAddSkillSuccess);
@@ -78,15 +86,29 @@ public class WorkshopPetController : Module
             Hintbox.OpenHintboxWithContent(error, 16);
             return;
         }
+
+        if (Pet.GetPetInfo(petModel.petInfo.id) != null) {
+            var overwriteHintbox = Hintbox.OpenHintbox();
+            overwriteHintbox.SetTitle("提示");
+            overwriteHintbox.SetContent("检测到已有相同序号精灵，是否确定编辑覆盖？\n注意：编辑精灵会失去目前获得的同序号精灵", 16, FontOption.Arial);
+            overwriteHintbox.SetOptionNum(2);
+            overwriteHintbox.SetOptionCallback(OnConfirmGameDataSaved);
+            return;
+        }
+
+        OnConfirmGameDataSaved();
+    }
+
+    private bool VerifyDIYPet(out string error) {
+        return petModel.VerifyDIYPet(out error);
+    }
+
+    private void OnConfirmGameDataSaved() {
         var hintbox = Hintbox.OpenHintbox();
         hintbox.SetTitle("提示");
         hintbox.SetContent("记得先导出存档并另外保存\n以避免任何存档毁损而无法游戏之情形\n确认存档保存完整后再按下确认以完成DIY", 16, FontOption.Arial);
         hintbox.SetOptionNum(2);
         hintbox.SetOptionCallback(OnConfirmDIYPet);
-    }
-
-    private bool VerifyDIYPet(out string error) {
-        return petModel.VerifyDIYPet(out error);
     }
 
     private void OnConfirmDIYPet() {

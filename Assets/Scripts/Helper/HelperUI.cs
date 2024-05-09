@@ -106,8 +106,14 @@ public static class SpriteSet {
         image.sprite = ResourceManager.instance.GetSprite("Weathers/" + (int)weather);
     }
 
-    public static void SetSkillBackgroundSprite(this Image image, bool isChosen, bool isSuper, bool isSecret = false) {
-        int index = isSecret ? 4 : (isSuper ? (isChosen ? 3 : 2) : (isChosen ? 1 : 0));
+    public static void SetSkillBackgroundSprite(this Image image, bool isChosen, bool isSuper, SecretType secretType) {
+        int index = 0;
+
+        if (secretType != SecretType.Others)
+            index = (isSuper ? (isChosen ? 3 : 2) : (isChosen ? 1 : 0));
+        else
+            index = isChosen ? 3 : 8;
+
         image.sprite = ResourceManager.instance.GetSprite("Skills/" + index);
     }
 

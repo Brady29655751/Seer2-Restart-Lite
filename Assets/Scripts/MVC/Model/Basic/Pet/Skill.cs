@@ -29,6 +29,7 @@ public class Skill
 
     /* Hidden status */
     public bool isSecondSuper;
+    public List<string> referBuffList = new List<string>();
 
     public float critical;
     public int combo;
@@ -90,6 +91,8 @@ public class Skill
     }
 
     private void InitOptionsProperty() {
+        referBuffList = options.Get("ref_buff", null)?.Split('/').ToList();
+
         isSecondSuper = bool.Parse(options.Get("second_super", "false"));
         critical = float.Parse(options.Get("critical", "5"));
         priority = int.Parse(options.Get("priority", "0"));
@@ -129,7 +132,8 @@ public class Skill
             ((priority == 0) ? string.Empty : ("priority=" + priority + "&")) + 
             (isSecondSuper ? ("second_super=true&") : string.Empty) +
             (ignoreShield ? ("ignore_shield=" + ignoreShield + "&") : string.Empty) + 
-            (ignorePowerup ? ("ignore_powerup=" + ignorePowerup + "&") : string.Empty);
+            (ignorePowerup ? ("ignore_powerup=" + ignorePowerup + "&") : string.Empty) + 
+            (List.IsNullOrEmpty(referBuffList) ? string.Empty : referBuffList.ConcatToString("/"));
 
         rawOptionString = string.IsNullOrEmpty(rawOptionString) ? "none" : rawOptionString;
 
@@ -223,6 +227,15 @@ public class Skill
         }
         if ((accuracy <= 100) && (accuracy != (isAttack ? 95 : 100))) {
             desc = "[52e5f9]【命中率 " + accuracy + "%】[-][ENDL]" + desc;
+        }
+        if (!List.IsNullOrEmpty(referBuffList)) {
+            for (int i = 0; i < referBuffList.Count; i++) {
+                bool isWithValue = referBuffList[i].TryTrimParentheses(out var value);
+                var buffId = int.Parse(isWithValue ? referBuffList[i].Substring(0, referBuffList[i].IndexOf('[')) : referBuffList[i]);
+                var buffValue = isWithValue ? int.Parse(value) : 0;
+                var buff = new Buff(buffId, -2, buffValue);
+                desc += ("[ENDL][ENDL][ffbb33]【" + buff.name + "】[-]：" + buff.description);
+            }
         }
         return Skill.GetSkillDescriptionPreview(desc);
     }   

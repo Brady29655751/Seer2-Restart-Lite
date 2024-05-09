@@ -42,10 +42,19 @@ public class NpcInfo
     [XmlArray("eventHandler"), XmlArrayItem(typeof(NpcButtonHandler), ElementName = "button")] 
     public List<NpcButtonHandler> eventHandler;
 
+    public static bool IsMod(string resId) {
+        if (int.TryParse(resId, out var modId))
+            return modId <= -50001_00;
+
+        return resId.StartsWith("Mod/");
+    }
+
     public static Sprite GetIcon(string resId) {
         if (int.TryParse(resId, out _))
-            return ResourceManager.instance.GetLocalAddressables<Sprite>("Npc/" + resId);
+            return ResourceManager.instance.GetLocalAddressables<Sprite>("Npc/" + resId, IsMod(resId));
         
-        return ResourceManager.instance.GetLocalAddressables<Sprite>(resId);
+        bool isMod = IsMod(resId);
+        var iconId = isMod ? resId.TrimStart("Mod/") : resId;
+        return ResourceManager.instance.GetLocalAddressables<Sprite>(iconId, isMod);
     }
 }

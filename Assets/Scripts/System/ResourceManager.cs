@@ -70,15 +70,20 @@ public class ResourceManager : Singleton<ResourceManager>
         return (res == null) ? Load<T>(item) : res;
     }
     public T GetLocalAddressables<T>(string item, bool isMod = false) where T : Object {
-        if (isMod && (typeof(T) == typeof(Sprite))) {
-            item = Application.persistentDataPath + "/Mod/" + item + (item.EndsWith(".png") ? string.Empty : ".png");
-            if (!SaveSystem.TryLoadAllBytes(item, out var bytes))
-                return default(T);
-            
-            if (!SpriteSet.TryCreateSpriteFromBytes(bytes, out var sprite))
-                return default(T);
+        if (isMod) {
+            var modPath = Application.persistentDataPath + "/Mod/" + item;
 
-            return sprite as T;
+            // sprite only accepts png.
+            if (typeof(T) == typeof(Sprite)) {
+                modPath += (item.EndsWith(".png") ? string.Empty : ".png");
+                if (!SaveSystem.TryLoadAllBytes(modPath, out var bytes))
+                    return default(T);
+
+                if (!SpriteSet.TryCreateSpriteFromBytes(bytes, out var sprite))
+                    return default(T);
+
+                return sprite as T;
+            }
         }
 
         var dotIndex = item.IndexOf('.');
@@ -189,11 +194,15 @@ public class ResourceManager : Singleton<ResourceManager>
 
     public void LoadMap(int id, Action<Map> onSuccess = null, Action<string> onFail = null) {
         void OnRequestSuccess(Map map) => LoadMapResources(map, onSuccess);
-        LoadXML<Map>(mapUrl + id + ".xml", OnRequestSuccess, onFail);
+        if (id >= -50000)
+            LoadXML<Map>(mapUrl + id + ".xml", OnRequestSuccess, error => onFail?.Invoke("地图加载失败，请重新启动游戏"));
+        else
+            SaveSystem.TryLoadMapMod(id, onSuccess, onFail);
     }
 
     private void LoadMapResources(Map map, Action<Map> onSuccess = null) {
         int resId = (map.resId == 0) ? map.id : map.resId;
+
         Sprite bg = GetLocalAddressables<Sprite>(mapPath + "bg/" + resId);
         Sprite pathSprite = GetLocalAddressables<Sprite>(mapPath + "path/" + Mathf.Abs(resId));
         AudioClip bgm = GetLocalAddressables<AudioClip>(BGMPath + map.music.category + "/" + map.music.bgm);

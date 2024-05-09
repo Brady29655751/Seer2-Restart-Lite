@@ -16,6 +16,13 @@ public class WorkshopPetView : Module
 
     private List<GameObject> skillPrefabList = new List<GameObject>();
     
+    protected override void Awake() {
+        petContentPages.ForEach(x => {
+            x.SetActive(true);
+            x.SetActive(false);
+        });
+    }
+
     public IButton GetButton(string type) {
         return type switch {
             "icon" => iconButton,
@@ -59,12 +66,15 @@ public class WorkshopPetView : Module
                 "例：波克尔的最低型态为皮皮",
             "evolveId" => "该精灵进化型态的序号\n" +
                 "无进化型态请填0\n" +
-                "若有分支进化请填写默认进化型态",
+                "若有分支进化请填写默认进化型态\n\n" +
+                "例如：拉奥(ID:7)的进化型态是拉奥苗(ID:8)，因此拉奥(ID:7)的【进化序号】需要填写8",
             "evolveLevel" => "该精灵的进化等级\n" +
                 "不是透过等级自然进化的请填0",
             "expType" => "升级到100级所需的经验总和",
             "skill" => "点击加号新增技能学习信息\n" +
-                "点击减号删除最后一项信息",
+                "点击减号删除最后一项信息\n\n" + 
+                "进化型态精灵的技能只需填写新获得的技能\n" +
+                "但是进化前型态的【进化序号】需要填写此精灵序号",
             "feature" => "需要先去印记那边制作特性与纹章印记\n" +
                 "特性和纹章类buff的序号需要填写900000(纹章800000)+该精灵基础型态之序号（去除负号）\n\n" +
                 "进化型态的精灵无须填写，沿用基础型态的特性和纹章",
@@ -93,6 +103,27 @@ public class WorkshopPetView : Module
         };
         helpText?.SetText(help);
         helpPanel?.SetActive(true);
+    }
+
+    public void SetPetInfo(PetInfo petInfo) {
+        skillPrefabList.ForEach(Destroy);
+        skillPrefabList.Clear();
+
+        var skillInfo = petInfo.skills;
+        for (int i = 0; i < skillInfo.skillIdList.Count; i++) {
+            var skill = Skill.GetSkill(skillInfo.skillIdList[i], false);
+            if (skill == null)
+                continue;
+
+            var level = skillInfo.learnLevelList[i];
+            var learnInfo = new LearnSkillInfo(skill, level);
+
+            OnAddSkill(learnInfo);
+        }
+
+        OnUploadSprite("icon", petInfo.ui.icon);
+        OnUploadSprite("emblem", petInfo.ui.emblemIcon);
+        OnUploadSprite("battle", petInfo.ui.battleImage);
     }
 
     public void OnUploadSprite(string type, Sprite sprite) {

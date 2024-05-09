@@ -1,0 +1,90 @@
+<map name="草目氏族主城" category="2" id="50009" resId="90" weather="0">
+    <!-- <resource>10009</resource> -->
+    <fightMap>100002</fightMap>
+    <initialPoint>380,150</initialPoint>
+    <music category="2">
+        <bgm>BGM_100</bgm>
+        <fx>FX_103</fx>
+    </music>
+    <entities>
+        <npc id="9002" resId="9002" name="" size="614,137" pos="0,0" target="false"/>
+        <npc id="9003" resId="9003" name="" size="71,55" pos="215,415" target="false"/>
+        <npc id="9004" resId="9004" name="" size="192,224" pos="440,80" target="false"/>
+
+        <npc id="11003" resId="11003" name="特鲁伊" size="74,71" pos="440,120" namePos="0,-5">
+            <description><![CDATA[我将永远守护巴特！直至我死亡！]]></description>
+            <dialog>
+                <branch id="default" name="特鲁伊" icon="11003" size="111,106" pos="10,45">
+                    <content><![CDATA[我将永远守护巴特！直至我死亡！]]></content>
+                    <replyHandler>
+                        <reply type="click">
+                            <description><![CDATA[]]></description>
+                            <action>openDialog</action>
+                            <param>null</param>
+                        </reply>
+                    </replyHandler>
+                </branch>
+                 <branch id="mission_4_search_1" name="特鲁伊" icon="11003" size="111,106" pos="10,45">
+                     <content>
+                         <![CDATA[尊贵的客人，你不需要保护我，酋长的病情很严重！我想我们还是分头行动吧]]></content>
+                     <replyHandler>
+                        <reply type="click">
+                            <description><![CDATA[好！你一定要小心！]]></description>
+                            <action>openDialog</action>
+                            <param>mission_4_search_2</param>
+                        </reply>
+                    </replyHandler>
+                </branch>
+                <branch id="mission_4_search_2" name="特鲁伊" icon="11003" size="111,106" pos="10,45">
+                    <content>
+                        <![CDATA[我去深幽沼泽寻找幽藤种子，你去 <color=#FFD700>水仙溪口</color> 寻找 <color=#FFD700>藤蔓花粉</color>，记得七彩蛙会给你提示。]]></content>
+                    <replyHandler>
+                        <reply type="click">
+                            <description><![CDATA[等... 等一下]]></description>
+                            <action>openDialog</action>
+                            <param>mission_4_search_3</param>
+                        </reply>
+                    </replyHandler>
+                </branch>
+
+                <branch id="mission_4_search_3" name="特鲁伊" icon="11003" size="111,106" pos="10,45">
+                    <content>
+                        <![CDATA[找到以后我们在这里汇合，谢谢你！]]></content>
+                    <replyHandler>
+                        <reply type="click">
+                            <description><![CDATA[▼]]></description>
+                            <action>teleport</action>
+                            <param>50010</param>
+                        </reply>
+                        <reply type="branch">
+                            <action>setMission</action>
+                            <param>4</param>
+                            <param>checkpoint</param>
+                            <param>flower</param>
+                        </reply>
+                    </replyHandler>
+                
+                </branch>
+      
+            </dialog>
+            <eventHandler>
+                <button type="click">
+                    <action>openDialog</action>
+                    <param>mission_4_search_1</param>
+                    <condition>mission[4].checkpoint=search</condition>
+                </button>
+                <button type="click">
+                    <action>openDialog</action>
+                    <param>default</param>
+                    <condition>mission[4].checkpointNOTsearch</condition>
+                </button>
+            </eventHandler>
+        </npc>
+        
+        <teleport id="1" name="荆棘林" pos="490,380" targetMapId="131"/>
+        <teleport id="2" name="权力之帐" pos="500,130" targetMapId="110"/>
+        <teleport id="3" name="异蘑世界" pos="600,50" targetMapId="121"/>
+        <teleport id="4" name="信奉广场" pos="30,140" targetMapId="100"/>
+        <teleport id="5" name="七味小厨" pos="250,240" targetMapId="125"/>
+    </entities>
+</map>

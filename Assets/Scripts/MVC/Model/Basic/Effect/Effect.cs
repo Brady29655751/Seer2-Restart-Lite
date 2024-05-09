@@ -84,9 +84,15 @@ public class Effect {
             condOptionDictList.Select(cond => cond.Select(entry => entry.Key + "=" + entry.Value).ConcatToString("&")).ConcatToString("|");
     }
 
-    public string GetRawAbilityOptionString() {
-        return (abilityOptionDict.Count == 0) ? "none" : 
-            abilityOptionDict.Select(entry => entry.Key + "=" + entry.Value).ConcatToString("&");
+    public string GetRawAbilityOptionString(List<string> excludeKeys = null) {
+        if (abilityOptionDict.Count == 0)
+            return "none";
+
+        var dict = new Dictionary<string, string>(abilityOptionDict);
+        if (!List.IsNullOrEmpty(excludeKeys))
+            excludeKeys.ForEach(x => dict.Remove(x));
+
+        return dict.Select(entry => entry.Key + "=" + entry.Value).ConcatToString("&");
     }
 
     public static Effect GetDefaultEffect() {

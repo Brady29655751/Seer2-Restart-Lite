@@ -5,6 +5,235 @@
 	</music>
 	<initialPoint>390,100</initialPoint>
 	<entities>
+		<npc id="79001" resId="79001" name="Lv 90 艾丽希斯" size="138,147" pos="580,320" namePos="0,-10">
+			<description>SPT</description>
+			<dialog>
+				<branch id="default" name="艾丽希斯" icon="Pets/pet/215.png" size="138,147" pos="0,35">
+					<content><![CDATA[我.....是谁？]]></content>
+					<functionHandler>
+						<func type="click">
+							<description><![CDATA[普通挑战]]></description>
+							<action>battle</action>
+							<param>default</param>
+						</func>
+						<func type="click">
+							<description><![CDATA[挑战1]]></description>
+							<action>battle</action>
+							<param>challenge_1</param>
+							<condition>firstPet.baseId=214</condition>
+						</func>
+						<func type="branch">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=把艾丽希斯设为首发之后再来挑战吧</param>
+							<param>option_num=1</param>
+							<param>item_icon=pet[215]</param>
+							<condition>firstPet.baseIdNOT214</condition>
+						</func>
+						<func type="click">
+							<description><![CDATA[挑战2]]></description>
+							<action>battle</action>
+							<param>challenge_2</param>
+						</func>
+						<func type="click">
+							<description><![CDATA[超进化挑战]]></description>
+							<action>battle</action>
+							<param>evolve</param>
+							<condition>firstPet.id=215</condition>
+						</func>
+						<func type="branch">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=把艾丽希斯设为首发之后再来挑战吧</param>
+							<param>option_num=1</param>
+							<param>item_icon=pet[215]</param>
+							<condition>firstPet.idNOT215</condition>
+						</func>
+					</functionHandler>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[我也不知道]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+					</replyHandler>
+				</branch>
+			</dialog>
+			<battle>
+				<branch id="default">
+					<settings count="1" simulate="true">
+						<mode>3</mode>
+						<weather>1</weather>
+					</settings>
+					<player>
+						<pet id="215" level="90">
+							<status>
+								<atk>3000</atk>
+								<mat>3000</mat>
+								<spd>600</spd>
+								<hp>5000</hp>
+							</status>
+							<normalSkill>10377,10384,10387,10376</normalSkill>
+							<superSkill>10386</superSkill>
+						</pet>
+					</player>
+					<enemy>
+						<pet id="215" level="90">
+							<status>
+								<atk>3000</atk>
+								<mat>3000</mat>
+								<spd>500</spd>
+								<hp>5000</hp>
+							</status>
+							<loopSkill>10380,10383,10380,10388,10376</loopSkill>
+							<superSkill>10386</superSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>getPet</action>
+							<param>214,10,0</param>
+							<condition>activity[spt].done[north][9][default]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=【艾希】已经放入精灵仓库</param>
+							<param>item_icon=pet[214]</param>
+							<param>option_num=1</param>
+							<condition>activity[spt].done[north][9][default]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>spt</param>
+							<param>done[north][9][default]=true</param>
+							<condition>activity[spt].done[north][9][default]=[bool]false[default]false</condition>
+						</button>
+					</winHandler>
+				</branch>
+				<branch id="challenge_1">
+					<settings count="1">
+						<mode>3</mode>
+						<weather>1</weather>
+					</settings>
+					<enemy>
+						<pet id="215" level="90">
+							<status>
+								<hp>5000</hp>
+							</status>
+							<loopSkill>10377,10378,10377,10387</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setPet</action>
+							<param>emblem=1</param>
+							<condition>activity[spt].done[north][9][challenge_1]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=【艾丽希斯】获得了【光武】纹章</param>
+							<param>item_icon=emblem[214]</param>
+							<param>option_num=1</param>
+							<condition>activity[spt].done[north][9][challenge_1]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>spt</param>
+							<param>done[north][9][challenge_1]=true</param>
+							<condition>activity[spt].done[north][9][challenge_1]=[bool]false[default]false</condition>
+						</button>
+					</winHandler>
+				</branch>
+				<branch id="challenge_2">
+					<settings count="6">
+						<mode>3</mode>
+						<weather>1</weather>
+					</settings>
+					<enemy>
+						<pet id="215" level="100">
+							<status>
+								<hp>10000</hp>
+							</status>
+							<initBuff>13,14,17,99</initBuff>
+							<loopSkill>10384,10377,10378,10377,10387</loopSkill>
+							<superSkill>10386</superSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setItem</action>
+							<param>add</param>
+							<param>2,50</param>
+							<condition>activity[spt].done[north][9][challenge_2]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=50 星钻已经放入背包</param>
+							<param>item_icon=item[2]</param>
+							<param>option_num=1</param>
+							<condition>activity[spt].done[north][9][challenge_2]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>spt</param>
+							<param>done[north][9][challenge_2]=true</param>
+							<condition>activity[spt].done[north][9][challenge_2]=[bool]false[default]false</condition>
+						</button>
+					</winHandler>
+				</branch>
+				<branch id="evolve">
+					<settings count="1">
+						<mode>3</mode>
+						<weather>1</weather>
+					</settings>
+					<enemy>
+						<pet id="699" level="105">
+							<status>
+								<hp>1250</hp>
+							</status>
+							<headerSkill>10379</headerSkill>
+							<loopSkill>10391</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>evolvePet</action>
+							<param>699</param>
+							<condition>activity[spt].done[north][9][evolve]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=艾丽希斯已成功超进化</param>
+							<param>item_icon=pet[699]</param>
+							<param>option_num=1</param>
+							<condition>activity[spt].done[north][9][evolve]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>spt</param>
+							<param>done[north][9][evolve]=true</param>
+							<condition>activity[spt].done[north][9][evolve]=[bool]false[default]false</condition>
+						</button>
+					</winHandler>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>openDialog</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
         <!-- <teleport id="1" name="视界原野" pos="360,260" targetMapId="800"/> -->
 	</entities>
 </map>

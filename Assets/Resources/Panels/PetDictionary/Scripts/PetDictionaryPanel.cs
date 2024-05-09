@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
@@ -10,7 +11,6 @@ public class PetDictionaryPanel : Panel
     [SerializeField] private PetSelectController selectController;
     [SerializeField] private PetDemoController demoController;
     [SerializeField] private PetDictInfoController infoController;
-    
 
     protected override void Awake()
     {
@@ -23,8 +23,13 @@ public class PetDictionaryPanel : Panel
         selectController.onSelectPetEvent += infoController.SetPet;
     }
 
+    public void SetEditPetCallback(Action<PetInfo> callback) {
+        infoController.SetEditPetCallback(callback);
+    }
+
     public void SelectMode(PetDictionaryMode mode) {
         dictController.SelectMode((int)mode);
+        infoController.SelectMode(dictController.GetMode());
     }
 
     public void SetStorage(List<Pet> storage) {

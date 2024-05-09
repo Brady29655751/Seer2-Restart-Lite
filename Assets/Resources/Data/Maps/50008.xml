@@ -1,0 +1,437 @@
+<map name="权力之帐" category="2" id="50002" resId="110" weather="0">
+    <!-- <resource>10011</resource> -->
+    <fightMap>100002</fightMap>
+    <initialPoint>320,80</initialPoint>
+    <music category="2">
+        <bgm>BGM_100</bgm>
+        <fx>FX_108</fx>
+    </music>
+    <entities>
+        <npc id="11001" resId="11001" name="草目酋长巴特" size="105,92" pos="350,140">
+            <description><![CDATA[确定、一定以及肯定]]></description>
+            <dialog>
+                <branch id="default" name="草目酋长" icon="11001" size="105,92" pos="0,55">
+                    <content><![CDATA[吼吼吼，欢迎来到草目氏族！我的客人，你可以到处去走走，我相信你会喜欢这里！]]></content>
+                    <replyHandler>
+                        <reply type="click">
+                            <description><![CDATA[草目氏族！我来咯！]]></description>
+                            <action>openDialog</action>
+                            <param>null</param>
+                        </reply>
+                    </replyHandler>
+                </branch>
+
+                <branch id="mission_4_default_1" name="草目酋长" icon="11001" size="105,92" pos="0,55">
+                    <content><![CDATA[吼吼吼，欢迎来到草目氏族！我的客人，你可以到处去走走，我相信你会喜欢这里！]]></content>
+                    <replyHandler>
+                        <reply type="click">
+                            <description><![CDATA[草目氏族！我来咯！]]></description>
+                            <action>openDialog</action>
+                            <param>null</param>
+                        </reply>
+                        <reply type="click">
+                            <description><![CDATA[【主线任务】救助草目酋长]]></description>
+                            <action>openDialog</action>
+                            <param>mission_4_default_2</param>
+                        </reply>
+                    </replyHandler>
+                </branch>
+                <branch id="mission_4_default_2" name="草目酋长" icon="11001" size="105,92" pos="0,55">
+                    <content>
+                        <![CDATA[咳咳...... 看来我真是老了....最近一直不停的咳嗽]]></content>
+                    <replyHandler>
+                        <reply type="click">
+                            <description><![CDATA[▼]]></description>
+                            <action>openDialog</action>
+                            <param>mission_4_default_3</param>
+                        </reply>
+                    </replyHandler>
+                </branch>
+                <branch id="mission_4_default_3" name="草目酋长" icon="11001" size="105,92" pos="0,55">
+                    <content>
+                        <![CDATA[对了，发现了萨伦帝国的家伙......咳咳.....]]></content>
+                    <replyHandler>
+                        <reply type="click">
+                            <description><![CDATA[我一会儿再来找你]]></description>
+                            <action>openDialog</action>
+                            <param>null</param>
+                        </reply>
+                        <reply type="click">
+                            <description><![CDATA[酋长你慢点说......]]></description>
+                            <action>openDialog</action>
+                            <param>mission_4_default_4</param>
+                        </reply>
+                    </replyHandler>
+                </branch>
+                <!---->
+
+
+                <branch id="mission_4_default_4" name="草目酋长" icon="11001" size="105,92" pos="0,55">
+                    <content>
+                        <![CDATA[萨伦帝国......那群恐怖的机械魔鬼.....]]></content>
+                    <replyHandler>
+                        <reply type="click">
+                            <description><![CDATA[酋长，这到底是怎么回事......]]></description>
+                            <action>openDialog</action>
+                            <param>mission_4_default_5</param>
+                        </reply>
+                    </replyHandler>
+                </branch>
+                <branch id="mission_4_default_5" name="草目酋长" icon="11001" size="105,92" pos="0,55">
+                    <content>
+                        <![CDATA[是的，他们是来自阿卡迪亚南半球的家伙，他们竟然邪恶的想要统治整个北半球。要求我们无条件投降！]]></content>
+                    <replyHandler>
+                        <reply type="click">
+                            <description><![CDATA[▼]]></description>
+                            <action>openDialog</action>
+                            <param>mission_4_default_6</param>
+                        </reply>
+                    </replyHandler>
+                </branch>
+
+                <branch id="mission_4_default_6" name="草目酋长" icon="11001" size="105,92" pos="0,55">
+                    <content>
+                        <![CDATA[他们每一个月就会入侵一次，算来时间也差不多了，每次我们都伤员惨重！但是面对这样的敌人！我们决不投降！]]></content>
+                    <replyHandler>
+                        <reply type="click">
+                            <description><![CDATA[▼（点击特鲁伊）]]></description>
+                            <action>openDialog</action>
+                            <param>null</param>
+                        </reply>
+                        <reply type="branch">
+                            <action>setMission</action>
+                            <param>4</param>
+                            <param>checkpoint</param>
+                            <param>save</param>
+                        </reply>
+                    </replyHandler>
+                </branch>
+                
+            </dialog>
+            <eventHandler>
+                <button type="click">
+                    <action>openDialog</action>
+                    <param>mission_4_default_1</param>
+                    <condition>mission[4].checkpoint=default</condition>
+                </button>
+                <button type="click">
+                    <action>openDialog</action>
+                    <param>default</param>
+                    <condition>mission[4].checkpointNOTdefault</condition>
+                </button>
+            </eventHandler>
+        </npc>
+        <npc id="11002" resId="11002" name="目灵兽雕像" size="266,288" pos="660,112">
+            <dialog>
+                <branch id="default" name="目灵兽雕像" icon="11002" size="133,144" pos="0,25">
+                    <content><![CDATA[（似乎散发着强大的力量）]]></content>
+                    <replyHandler>
+                        <reply type="click">
+                            <description><![CDATA[（似乎散发着强大的力量）]]></description>
+                            <action>openDialog</action>
+                            <param>null</param>
+                        </reply>
+                    </replyHandler>
+                </branch>
+            </dialog>
+            <eventHandler>
+                <button type="click">
+                    <action>openDialog</action>
+                    <param>default</param>
+                </button>
+            </eventHandler>
+        </npc>
+
+        <npc id="11003" resId="11003" name="特鲁伊" size="74,71" pos="440,120" namePos="0,-5">
+            <description><![CDATA[我将永远守护巴特！直至我死亡！]]></description>
+            <dialog>
+                <branch id="default" name="特鲁伊" icon="11003" size="111,106" pos="10,45">
+                    <content><![CDATA[我将永远守护巴特！直至我死亡！]]></content>
+                    <functionHandler>
+                        <func type="click">
+                            <description><![CDATA[挑战一]]></description>
+                            <action>openDialog</action>
+                            <param>challenge_1</param>
+                        </func>
+                        <func type="click">
+                            <description><![CDATA[挑战二]]></description>
+                            <action>openDialog</action>
+                            <param>challenge_2</param>
+                        </func>
+                        <func type="click">
+                            <description><![CDATA[挑战三]]></description>
+                            <action>openDialog</action>
+                            <param>challenge_3</param>
+                        </func>
+                    </functionHandler>
+                    <replyHandler>
+                        <reply type="click">
+                            <description><![CDATA[这就是精灵之间的感情吗？]]></description>
+                            <action>openDialog</action>
+                            <param>null</param>
+                        </reply>
+                    </replyHandler>
+                </branch>
+                <branch id="lose" name="特鲁伊" icon="11003" size="111,106" pos="10,45">
+                    <content><![CDATA[我可不是一般的精灵，要战胜我不是这么简单的事哦！]]></content>
+                    <replyHandler>
+                        <reply type="click">
+                            <description><![CDATA[等我准备好再来挑战！]]></description>
+                            <action>openDialog</action>
+                            <param>null</param>
+                        </reply>
+                    </replyHandler>
+                </branch>
+                <branch id="challenge_1" name="特鲁伊" icon="11003" size="111,106" pos="10,45">
+                    <content><![CDATA[在五回合内击败我，才能获得我的认可。你准备好了吗？]]></content>
+                    <replyHandler>
+                        <reply type="click">
+                            <description><![CDATA[等我准备好再来挑战！]]></description>
+                            <action>openDialog</action>
+                            <param>null</param>
+                        </reply>
+                        <reply type="click">
+                            <description><![CDATA[我准备好了！]]></description>
+                            <action>battle</action>
+                            <param>challenge_1</param>
+                        </reply>
+                    </replyHandler>
+                </branch>
+                <branch id="challenge_2" name="特鲁伊" icon="11003" size="111,106" pos="10,45">
+                    <content><![CDATA[用特鲁伊击败我，才能获得纹章哦！你准备好了吗？]]></content>
+                    <replyHandler>
+                        <reply type="click">
+                            <description><![CDATA[等我准备好再来挑战！]]></description>
+                            <action>openDialog</action>
+                            <param>null</param>
+                        </reply>
+                        <reply type="click">
+                            <description><![CDATA[我准备好了！]]></description>
+                            <action>battle</action>
+                            <param>challenge_2</param>
+                            <condition>firstPet.id=301</condition>
+                        </reply>
+                        <reply type="branch">
+                            <action>openHintbox</action>
+                            <param>type=Item</param>
+                            <param>title=提示</param>
+                            <param>content=把特鲁伊设为首发之后再来挑战吧</param>
+                            <param>option_num=1</param>
+                            <param>item_icon=pet[301]</param>
+                            <condition>firstPet.idNOT301</condition>
+                        </reply>
+                    </replyHandler>
+                </branch>
+                <branch id="challenge_3" name="特鲁伊" icon="11003" size="111,106" pos="10,45">
+                    <content><![CDATA[准备好面对终极挑战了吗？]]></content>
+                    <replyHandler>
+                        <reply type="click">
+                            <description><![CDATA[等我准备好再来挑战！]]></description>
+                            <action>openDialog</action>
+                            <param>null</param>
+                        </reply>
+                        <reply type="click">
+                            <description><![CDATA[我准备好了！]]></description>
+                            <action>battle</action>
+                            <param>challenge_3</param>
+                        </reply>
+                    </replyHandler>
+                </branch>
+                <branch id="mission_4_save_1" name="特鲁伊" icon="11003" size="111,106" pos="10,45">
+                    <content><![CDATA[我将永远守护巴特！直至我死亡！]]></content>
+                    <replyHandler>
+                        <reply type="click">
+                            <description><![CDATA[这就是精灵之间的感情吗？]]></description>
+                            <action>openDialog</action>
+                            <param>null</param>
+                        </reply>
+                        <reply type="click">
+                            <description><![CDATA[【主线任务】救助草目酋长]]></description>
+                            <action>openDialog</action>
+                            <param>mission_4_save_2</param>
+                        </reply>
+                    </replyHandler>
+                </branch>
+                <branch id="mission_4_save_2" name="特鲁伊" icon="11003" size="111,106" pos="10,45">
+                    <content><![CDATA[巴特酋长，您是整个草目氏族的核心！您必须先关心身体！请允许我去给您采集草药.......]]></content>
+                    <replyHandler>
+                        <reply type="click">
+                            <description><![CDATA[什么 特鲁伊居然会说话......]]></description>
+                            <action>openDialog</action>
+                            <param>mission_4_save_3</param>
+                        </reply>
+                    </replyHandler>
+                </branch>
+
+                <branch id="mission_4_save_3" name="草目酋长" icon="11001" size="105,92" pos="0,55">
+                    <content>
+                        <![CDATA[勇敢的赛尔，请您保护我的精灵特鲁伊！]]></content>
+                    <replyHandler>
+                        <reply type="click">
+                            <description><![CDATA[尊敬的酋长，我很乐意！]]></description>
+                            <action>openDialog</action>
+                            <param>mission_4_save_4</param>
+                        </reply>
+                    </replyHandler>
+                </branch>
+                <branch id="mission_4_save_4" name="特鲁伊" icon="11003" size="111,106" pos="10,45">
+                    <content>
+                        <![CDATA[事不宜迟，快跟着我！]]></content>
+                    <replyHandler>
+                        <reply type="click">
+                            <description><![CDATA[▼]]></description>
+                            <action>teleport</action>
+                            <param>50009</param>
+                        </reply>
+                        <reply type="branch">
+                            <action>setMission</action>
+                            <param>4</param>
+                            <param>checkpoint</param>
+                            <param>search</param>
+                        </reply>
+                    </replyHandler>
+                </branch>
+            </dialog>
+            <battle>
+                <branch id="challenge_1">
+                    <settings count="1"/>
+                    <enemy>
+                        <pet id="301" level="60">
+                            <status>
+                                <hp>5000</hp>
+                            </status>
+                            <initBuff>-4,17,20,99</initBuff>
+                            <headerSkill>10221,10222,10219</headerSkill>
+                            <loopSkill>10224</loopSkill>
+                        </pet>
+                    </enemy>
+                    <winHandler>
+                        <button type="auto">
+                            <action>getPet</action>
+                            <param>301,10,0</param>
+                            <condition>activity[11001].done[1]=[bool]false[default]false</condition>
+                        </button>
+                        <button type="auto">
+                            <action>openHintbox</action>
+                            <param>type=Item</param>
+                            <param>title=提示</param>
+                            <param>content=【特鲁伊】已经放入精灵仓库</param>
+                            <param>item_icon=pet[301]</param>
+                            <param>option_num=1</param>
+                            <condition>activity[11001].done[1]=[bool]false[default]false</condition>
+                        </button>
+                        <button type="auto">
+                            <action>setActivity</action>
+                            <param>11001</param>
+                            <param>done[1]=true</param>
+                            <condition>activity[11001].done[1]=[bool]false[default]false</condition>
+                        </button>
+                    </winHandler>
+                    <loseHandler>
+                        <button type="auto">
+                            <action>openDialog</action>
+                            <param>lose</param>
+                        </button>
+                    </loseHandler>
+                </branch>
+                <branch id="challenge_2">
+                    <settings count="1"/>
+                    <enemy>
+                        <pet id="301" level="60">
+                            <status>
+                                <hp>5000</hp>
+                            </status>
+                            <initBuff>17,20,99</initBuff>
+                            <headerSkill>10221</headerSkill>
+                            <loopSkill>10217</loopSkill>
+                            <superSkill>10220</superSkill>
+                        </pet>
+                    </enemy>
+                    <winHandler>
+                        <button type="auto">
+                            <action>setPet</action>
+                            <param>emblem=1</param>
+                            <condition>activity[11001].done[2]=[bool]false[default]false</condition>
+                        </button>
+                        <button type="auto">
+                            <action>openHintbox</action>
+                            <param>type=Item</param>
+                            <param>title=提示</param>
+                            <param>content=【特鲁伊】获得了【祝福】纹章</param>
+                            <param>item_icon=emblem[301]</param>
+                            <param>option_num=1</param>
+                            <condition>activity[11001].done[2]=[bool]false[default]false</condition>
+                        </button>
+                        <button type="auto">
+                            <action>setActivity</action>
+                            <param>11001</param>
+                            <param>done[2]=true</param>
+                            <condition>activity[11001].done[2]=[bool]false[default]false</condition>
+                        </button>
+                    </winHandler>
+                    <loseHandler>
+                        <button type="auto">
+                            <action>openDialog</action>
+                            <param>lose</param>
+                        </button>
+                    </loseHandler>
+                </branch>
+                <branch id="challenge_3">
+                    <settings count="6"/>
+                    <enemy>
+                        <pet id="301" level="60">
+                            <status>
+                                <hp>5000</hp>
+                            </status>
+                            <initBuff>12,14,17,23,43,99</initBuff>
+                            <headerSkill>10221</headerSkill>
+                            <loopSkill>10222,10216,10215,10217,10224</loopSkill>
+                        </pet>
+                    </enemy>
+                    <winHandler>
+                        <button type="auto">
+                            <action>setItem</action>
+                            <param>add</param>
+                            <param>2,100</param>
+                            <condition>activity[11001].done[3]=[bool]false[default]false</condition>
+                        </button>
+                        <button type="auto">
+                            <action>openHintbox</action>
+                            <param>type=Item</param>
+                            <param>title=提示</param>
+                            <param>content=100 星钻已经放入背包</param>
+                            <param>item_icon=item[2]</param>
+                            <param>option_num=1</param>
+                            <condition>activity[11001].done[3]=[bool]false[default]false</condition>
+                        </button>
+                        <button type="auto">
+                            <action>setActivity</action>
+                            <param>11001</param>
+                            <param>done[3]=true</param>
+                            <condition>activity[11001].done[3]=[bool]false[default]false</condition>
+                        </button>
+                    </winHandler>
+                    <loseHandler>
+                        <button type="auto">
+                            <action>openDialog</action>
+                            <param>lose</param>
+                        </button>
+                    </loseHandler>
+                </branch>
+            </battle>
+            <eventHandler>
+                <button type="click">
+                    <action>openDialog</action>
+                    <param>mission_4_save_1</param>
+                    <condition>mission[4].checkpoint=save</condition>
+                </button>
+                <button type="click">
+                    <action>openDialog</action>
+                    <param>default</param>
+                    <condition>mission[4].checkpointNOTsave</condition>
+                </button>
+            </eventHandler>
+        </npc>
+        <!-- <teleport id="1" name="草目氏族主城" pos="100,60" targetMapId="90"/> -->
+    </entities>
+</map>

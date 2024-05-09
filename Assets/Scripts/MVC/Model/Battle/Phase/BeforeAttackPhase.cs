@@ -14,9 +14,8 @@ public class BeforeAttackPhase : BattlePhase
         if (state.isAllTurnDone)
             return;
 
-        if (!IsAttackLegal()) {
+        if (!IsAttackLegal())
             return;
-        }
         
         base.DoWork();
         CheckAccuracy();

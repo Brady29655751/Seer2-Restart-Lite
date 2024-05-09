@@ -142,23 +142,36 @@ public static class Identifier {
 
     public static float GetBuffIdentifier(string id, PetBattleBuffController buffController) {
         List<Buff> buffs = buffController.buffs;
+
         if (id == ".count")
-            return buffController.buffs.Count;
+            return buffs.Count;
 
         if (id.StartsWith("[")) {
             int buffIdStartIdx = id.IndexOf('[');
             int buffIdEndIdx = id.IndexOf(']');
             string buffIdExpr = id.Substring(buffIdStartIdx + 1, buffIdEndIdx - buffIdStartIdx - 1);
-            int buffId = int.Parse(buffIdExpr);
+            
             id = id.TrimStart("[" + buffIdExpr + "].");
 
-            if (id == "count")
-                return buffs.Count(x => x.id == buffId);
+            // Parse failure => buffIdExpr is BuffType.
+            if (!int.TryParse(buffIdExpr, out int buffId)) {
+                BuffType buffType = buffIdExpr.ToBuffType();
 
+                return id switch {
+                    "count" => buffs.Count(x => x.info.type == buffType),
+                    "block" => buffController.IsBuffTypeBlocked(buffType) ? 1 : 0,
+                    _ => 0,
+                };
+            }
+
+            // Parse success => buffIdExpr is buffId.
             Buff buff = buffs.Find(x => x.id == buffId) ?? new Buff(-1);
 
-            float num = 0;
-            return buff.TryGetBuffIdentifier(id, out num) ? num : GetNumIdentifier(id);
+            return id switch {
+                "count" => buffs.Count(x => x.id == buffId),
+                "block" => buffController.IsBuffBlocked(buffId) ? 1 : 0,
+                _ => buff.TryGetBuffIdentifier(id, out float num) ? num : GetNumIdentifier(id),
+            };
         }
         return GetNumIdentifier(id);
     }

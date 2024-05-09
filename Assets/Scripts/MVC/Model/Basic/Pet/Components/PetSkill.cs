@@ -23,6 +23,7 @@ public class PetSkill
         get => ownSkillId.Select(x => Skill.GetSkill(x, false)).ToList();
         set => ownSkillId = (value == null) ? new int[1] : value.Select(x => x.id).ToArray();
     }
+    [XmlIgnore] public List<Skill> ownSuperSkill => ownSkill.Where(x => (x?.type ?? SkillType.属性) == SkillType.必杀).ToList();
     
     /* Pet current skills */
     [XmlIgnore] public Skill[] normalSkill { 
@@ -41,8 +42,7 @@ public class PetSkill
     public Skill[] backupNormalSkill => ownSkill.Where(x => (x.type != SkillType.必杀) && 
         normalSkill.All(y => (y != null) && (x.id != y.id))).ToArray();
     
-    public Skill backupSuperSkill => ownSkill.Where(x => x.type == SkillType.必杀).Where(
-        x => (superSkill != null) && (x.id != superSkill.id)).FirstOrDefault();
+    public Skill backupSuperSkill => GetBackupSuperSkill();
 
 
     /* Pet secret skills */
@@ -82,7 +82,16 @@ public class PetSkill
     }
 
     public LearnSkillInfo GetLearnSkillInfos(int skillId) {
-        return skillId == 0 ? null : info.learnInfoList.Find(x => x.skill.id == skillId);
+        if (skillId == 0)
+            return null;
+
+        var learnInfo = info.learnInfoList.Find(x => x.skill.id == skillId);
+
+        // Cannot find info but own it => SecretType.Others
+        if (learnInfo == null)
+            return new LearnSkillInfo(Skill.GetSkill(skillId), -1);
+
+        return learnInfo;
     }
 
     public void CheckNewSkill(int level) {
@@ -112,6 +121,17 @@ public class PetSkill
         Skill[] ret = normalSkillId.Select(x => Skill.GetSkill(x, false)).Where(x => (x?.type ?? SkillType.属性) != SkillType.必杀).ToArray(); 
         Array.Resize(ref ret, 4);
         return ret;
+    }
+
+    public Skill GetBackupSuperSkill() {
+        if(List.IsNullOrEmpty(ownSuperSkill) || (ownSuperSkill.Count == 1))
+            return null;
+        
+        int id = ownSuperSkill.Select(x => x.id).IndexOf(superSkillId);
+        if (id < 0)
+            return null;
+
+        return ownSuperSkill[(id + 1) % ownSuperSkill.Count];
     }
 
     public void SwapNormalSkill(Skill oldSkill, Skill newSkill) {

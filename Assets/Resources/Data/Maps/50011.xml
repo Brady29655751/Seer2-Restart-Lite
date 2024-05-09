@@ -1,0 +1,63 @@
+<map name="草目氏族主城" category="2" id="50011" resId="90" weather="0">
+    <!-- <resource>10009</resource> -->
+    <fightMap>100002</fightMap>
+    <initialPoint>380,150</initialPoint>
+    <music category="2">
+        <bgm>BGM_100</bgm>
+        <fx>FX_103</fx>
+    </music>
+    <entities>
+        <npc id="9002" resId="9002" name="" size="614,137" pos="0,0" target="false"/>
+        <npc id="9003" resId="9003" name="" size="71,55" pos="215,415" target="false"/>
+        <npc id="9004" resId="9004" name="" size="192,224" pos="440,80" target="false"/>
+
+        
+        <!--这里设置颜色为透明-->
+        <npc id="11003" resId="11003" name="" size="960,720" pos="0,0" namePos="0,-5" color="0,0,0,0">
+            <dialog>
+                <branch id="default" name="特鲁伊" icon="11003" size="111,106" pos="10,45">
+                </branch>
+
+                <branch id="mission_4_where_1"  name="我" icon="7004" size="136,125" pos="0,35">
+                    <content>
+                        <![CDATA[咦？特鲁伊怎么还没有回来]]></content>
+                    <replyHandler>
+                        <reply type="click">
+                            <description><![CDATA[前往深幽沼泽...]]></description>
+                            <action>teleport</action>
+                            <param>50012</param>
+                        </reply>
+      
+                        <reply type="branch">
+                            <action>setMission</action>
+                            <param>4</param>
+                            <param>checkpoint</param>
+                            <param>goonsearch</param>
+                        </reply>
+                    </replyHandler>
+                </branch>
+
+            </dialog>
+            <eventHandler>
+                <!--这个enter可以实现一进入就打开对话-->
+                <button type="enter">
+                    <action>openDialog</action>
+                    <param>mission_4_where_1</param>
+                    <condition>mission[4].checkpoint=where</condition>
+                </button>
+                <button type="enter">
+                    <action>openDialog</action>
+                    <param>default</param>
+                    <condition>mission[4].checkpointNOTwhere</condition>
+                </button>
+                
+            </eventHandler>
+        </npc>
+
+        <teleport id="1" name="荆棘林" pos="490,380" targetMapId="131"/>
+        <teleport id="2" name="权力之帐" pos="500,130" targetMapId="110"/>
+        <teleport id="3" name="异蘑世界" pos="600,50" targetMapId="121"/>
+        <teleport id="4" name="信奉广场" pos="30,140" targetMapId="100"/>
+        <teleport id="5" name="七味小厨" pos="250,240" targetMapId="125"/>
+    </entities>
+</map>

@@ -211,6 +211,75 @@
 				</button>
 			</eventHandler>
 		</npc>
+		<npc id="104" resId="Pets/pet/964.png" name="Lv 105 星之足影" size="174,100" pos="312,175" namePos="0,-20">
+			<description><![CDATA[星之足影]]></description>
+			<dialog>
+				<branch id="default" name="星之足影" icon="Pets/pet/964.png" size="174,100" pos="0,35">
+					<content><![CDATA[万物起于星空，终于星空。大地摧毁万物，星空蹂躏万物。星之足影，象征着力量。]]></content>
+					<functionHandler>
+						<func type="click">
+							<description><![CDATA[普通挑战]]></description>
+							<action>battle</action>
+							<param>default</param>
+						</func>
+					</functionHandler>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[好神秘阿]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+					</replyHandler>
+				</branch>
+			</dialog>
+			<battle>
+				<branch id="default">
+					<settings count="6">
+						<mode>4</mode>
+						<weather>12</weather>
+					</settings>
+					<enemy>
+						<pet id="964" level="105">
+							<status>
+								<atk>500</atk>
+								<mat>500</mat>
+								<hp>25000</hp>
+							</status>
+							<initBuff>13,14,17,20,27,99</initBuff>
+							<loopSkill>10370,10372</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>getPet</action>
+							<param>964,100</param>
+							<condition>activity[20003].done[4]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=【星之足影】已经放入精灵仓库</param>
+							<param>item_icon=pet[964]</param>
+							<param>option_num=1</param>
+							<condition>activity[20003].done[4]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>20003</param>
+							<param>done[4]=true</param>
+							<condition>activity[20003].done[4]=[bool]false[default]false</condition>
+						</button>
+					</winHandler>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>openDialog</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
 		<teleport id="1" name="传送室" pos="720,60" targetMapId="70"/>
 	</entities>
 </map>

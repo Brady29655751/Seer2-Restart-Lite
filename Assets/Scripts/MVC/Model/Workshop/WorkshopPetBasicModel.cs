@@ -21,10 +21,25 @@ public class WorkshopPetBasicModel : Module
 
     public string description => descriptionInputField.inputString;
 
-
     public PetBasicInfo GetPetBasicInfo(int baseId) {
         return new PetBasicInfo(id, baseId, petName, element, baseStatus,
             gender, height, weight, description, "创意工坊", "Workshop");
+    }
+
+    public void SetPetBasicInfo(PetBasicInfo basicInfo) {
+        idInputField.SetInputString(basicInfo.id.ToString());
+        nameInputField.SetInputString(basicInfo.name);
+
+        elementDropdown.value = (int)basicInfo.element;
+        genderDropdown.value = basicInfo.gender + 1;
+
+        heightInputField.SetInputString(basicInfo.baseHeight.ToString());
+        weightInputField.SetInputString(basicInfo.baseWeight.ToString());
+
+        for (int i = 0; i < baseStatusInputFieldList.Count; i++)
+            baseStatusInputFieldList[i].SetInputString(basicInfo.baseStatus[i].ToString());
+        
+        descriptionInputField.SetInputString(basicInfo.description);
     }
 
     public bool VerifyDIYPetBasic(int baseId, out string error) {
@@ -61,11 +76,6 @@ public class WorkshopPetBasicModel : Module
 
         if (!int.TryParse(idInputField.inputString, out _)) {
             error = "序号需为整数！";
-            return false;
-        }
-
-        if (Pet.GetPetInfo(id) != null) {
-            error = "此序号已被占用，不可重复！";
             return false;
         }
 

@@ -16,6 +16,11 @@ public class WorkshopBuffController : Module
         buffView.OpenHelpPanel(type);
     }
 
+    public void SetBuffInfo(BuffInfo buffInfo) {
+        buffModel.SetBuffInfo(buffInfo);
+        buffView.SetBuffInfo(buffInfo, OnEditEffect);
+    }
+
     public void OnUploadIcon() {
         buffModel.OnUploadIcon();
     }
@@ -31,12 +36,13 @@ public class WorkshopBuffController : Module
 
     public void OnAddEffect() {
         effectController.SetDIYSuccessCallback(OnAddEffectSuccess);
+        effectController.SetEffect(buffModel.effectList.Count, Effect.GetDefaultEffect());
         buffView.OpenEffectPanel();
     }
 
     private void OnAddEffectSuccess(Effect effect) {
         buffModel.OnAddEffect(effect);
-        buffView.OnAddEffect(effect);
+        buffView.OnAddEffect(effect, OnEditEffect);
 
         Hintbox.OpenHintboxWithContent("效果添加成功", 16);
     }
@@ -46,8 +52,20 @@ public class WorkshopBuffController : Module
         buffView.OnRemoveEffect();
     }
 
+    public void OnEditEffect(int index) {
+        effectController.SetDIYSuccessCallback((editEffect) => OnEditEffectSuccess(index, editEffect));
+        effectController.SetEffect(index, buffModel.effectList[index]);
+        buffView.OpenEffectPanel();
+    }
+
+    private void OnEditEffectSuccess(int index, Effect editEffect) {
+        buffModel.OnEditEffect(index, editEffect);
+        buffView.OnEditEffect(index, editEffect);
+        Hintbox.OpenHintboxWithContent("效果编辑成功", 16);
+    }
+
     public void OnPreviewDescription() {
-        Hintbox.OpenHintboxWithContent(buffModel.descriptionPreview, 18);
+        Hintbox.OpenHintboxWithContent(buffModel.descriptionPreview, 14);
     }
 
     public void OnDIYBuff() {
@@ -55,15 +73,28 @@ public class WorkshopBuffController : Module
             Hintbox.OpenHintboxWithContent(error, 16);
             return;
         }
+
+        if (Buff.GetBuffInfo(buffModel.id) != null) {
+            var overwriteHintbox = Hintbox.OpenHintbox();
+            overwriteHintbox.SetTitle("提示");
+            overwriteHintbox.SetContent("检测到已有相同序号印记，是否确定编辑覆盖？", 16, FontOption.Arial);
+            overwriteHintbox.SetOptionNum(2);
+            overwriteHintbox.SetOptionCallback(OnConfirmGameDataSaved);
+        }
+
+        OnConfirmGameDataSaved();
+    }   
+
+    private bool VerifyDIYBuff(out string error) {
+        return buffModel.VerifyDIYBuff(out error);
+    }
+
+    private void OnConfirmGameDataSaved() {
         var hintbox = Hintbox.OpenHintbox();
         hintbox.SetTitle("提示");
         hintbox.SetContent("记得先导出存档并另外保存\n以避免任何存档毁损而无法游戏之情形\n确认存档保存完整后再按下确认以完成DIY", 16, FontOption.Arial);
         hintbox.SetOptionNum(2);
         hintbox.SetOptionCallback(OnConfirmDIYBuff);
-    }   
-
-    private bool VerifyDIYBuff(out string error) {
-        return buffModel.VerifyDIYBuff(out error);
     }
 
     private void OnConfirmDIYBuff() {

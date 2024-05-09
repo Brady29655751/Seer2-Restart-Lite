@@ -42,7 +42,7 @@ public class NoobRewardModel : Module
             if (rewardInfo[0] == "Item") {
                 Item item = new Item(id, num);
                 Item.Add(item);
-                  Item.OpenHintbox(item);
+                Item.OpenHintbox(item);
             } else if (rewardInfo[0] == "Pet") {
                 Pet pet = new Pet(id, num);
                 Pet.Add(pet);
@@ -52,7 +52,7 @@ public class NoobRewardModel : Module
                 itemHintbox.SetContent("获得了 " + pet.name + " ！", 14, FontOption.Arial);
                 itemHintbox.SetOptionNum(1);
 
-                itemHintbox.SetIcon(  pet.ui.icon);
+                itemHintbox.SetIcon( pet.ui.icon);
             }
         }
     }

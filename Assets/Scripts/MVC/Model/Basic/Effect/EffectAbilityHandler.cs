@@ -340,7 +340,7 @@ public static class EffectAbilityHandler
                 if (buffType == BuffType.TurnBased)
                     buffController.RemoveRangeBuff(x => (!x.id.IsWithin(-10_0000, 0)) && (x.turn > 0), lhsUnit, state);
                 else 
-                    buffController.RemoveRangeBuff(x => x.info.type == buffType, lhsUnit, state);
+                    buffController.RemoveRangeBuff(x => (!x.id.IsWithin(-10_0000, 0)) && (x.info.type == buffType), lhsUnit, state);
             }
         }
         if (isId) {
@@ -349,7 +349,12 @@ public static class EffectAbilityHandler
                     continue;
 
                 int buffId = (id - 1) / 2;
-                statusController.SetPowerUp(buffId, 0);
+
+                // id % 2 == 1 => want to clear powerup
+                // powerup < 0 => current is powerdown
+                // ^ is xor operator, which returns false when both true or both false
+                if ((id % 2 == 1) ^ (statusController.powerup[buffId] < 0))
+                    statusController.SetPowerUp(buffId, 0);
             }
             buffController.RemoveRangeBuff(x => idRange.Contains(x.id), lhsUnit, state);
         }
@@ -549,6 +554,35 @@ public static class EffectAbilityHandler
 
         oldValue = battlePet.GetPetIdentifier(type);
         newValue = Parser.ParseEffectOperation(value, effect, lhsUnit, rhsUnit);
+
+        // Switch to special pet.
+        if (type == "id") {
+            if (!bool.TryParse(effect.abilityOptionDict.Get("best", "false"), out var isBest))
+                return false;
+
+            var petSystem = lhsUnit.petSystem;
+            var killList = effect.abilityOptionDict.Get("kill", "none").ToIntList('/');
+            var petBagIds = petSystem.petBag.Where(x => (x != null) && (!x.isDead)).Select(x => x.id).ToList();
+
+            for (int i = 0; i < killList.Count; i++) {
+                if (!petBagIds.Remove(killList[i]))
+                    return false;
+            }
+
+            for (int i = 0; i < killList.Count; i++) {
+                var index = petSystem.petBag.FindIndex(x => (x?.id ?? 0) == killList[i]);
+                petSystem.petBag[index] = null;
+            }
+
+            Pet switchPet = new Pet((int)newValue, battlePet);
+            if (isBest)
+                switchPet = Pet.ToBestPet(switchPet);
+
+            var cursor = lhsUnit.petSystem.cursor;
+            lhsUnit.petSystem.petBag[cursor] = BattlePet.GetBattlePet(switchPet);
+            return true;
+        }
+
         battlePet.SetPetIdentifier(type, Operator.Operate(op, oldValue, newValue));
 
         return true;

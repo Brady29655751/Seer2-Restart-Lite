@@ -72,6 +72,8 @@ public class BattleState
             "phase" => (float)phase,
             "weather" => (float)weather,
             "whosTurn" => whosTurn,
+            "me.order" => (List.IsNullOrEmpty(actionOrder)) ? 0 : (actionOrder.FirstOrDefault() == myUnit.id) ? 1 : 2,
+            "op.order" => (List.IsNullOrEmpty(actionOrder)) ? 0 : (actionOrder.FirstOrDefault() == opUnit.id) ? 1 : 2,
             _ => float.MinValue,
         };
     }

@@ -68,7 +68,7 @@ public class PetBackupSkillModel : SelectModel<Skill>
     public void SwapPetSuperSkill(Skill currentSkill) {
         currentPet.skills.SwapSuperSkill();
         isSuperSkillChosen = false;
-        superSkill = currentSkill ?? superSkill;
+        superSkill = currentPet.skills.backupSuperSkill;
     }
 
     public void SetActive(bool active) {

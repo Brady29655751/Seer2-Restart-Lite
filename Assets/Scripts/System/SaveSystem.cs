@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.Serialization.Formatters.Binary;
@@ -9,6 +10,7 @@ using SimpleFileBrowser;
 
 public static class SaveSystem
 {
+    public const int MAX_SAVE_COUNT = 3;
     public static string savePath => Application.persistentDataPath + "/save" + Player.instance.gameDataId + ".xml";
 
     public static void SaveData() {
@@ -134,6 +136,8 @@ public static class SaveSystem
             var mapFightBgPath = FileBrowserHelpers.CreateFolderInDirectory(mapPath, "fightBg");
             var mapPathPath = FileBrowserHelpers.CreateFolderInDirectory(mapPath, "path");
             var mapMinePath = FileBrowserHelpers.CreateFolderInDirectory(mapPath, "mine");
+
+            var npcPath = FileBrowserHelpers.CreateFolderInDirectory(modPath, "Npc");
         } catch (Exception) {
             error = "mod资料夹创建失败";
             return false;
@@ -145,13 +149,68 @@ public static class SaveSystem
         return FileBrowserHelpers.DirectoryExists(Application.persistentDataPath + "/Mod");
     }
 
-    private static bool TryCreateFile(string dirPath, string fileName, string header, out string filePath) {
+    private static bool TryCreateFile(string dirPath, string fileName, out string filePath) {
         filePath = dirPath + fileName;
         try {
             if (!FileBrowserHelpers.FileExists(filePath)) {
                 string parentDirectory = FileBrowserHelpers.GetDirectoryName(filePath);
-                filePath = FileBrowserHelpers.CreateFileInDirectory(parentDirectory, fileName);
-                FileBrowserHelpers.WriteTextToFile(filePath, header);    
+                filePath = FileBrowserHelpers.CreateFileInDirectory(parentDirectory, fileName);   
+            }   
+        } catch (Exception) {
+            return false;
+        }
+        return true;
+    }
+
+    public static bool TryImportMod(string importPath) {
+        try {
+            var modPath = Application.persistentDataPath + "/Mod";
+            FileBrowserHelpers.CopyDirectory(importPath, modPath);   
+
+            // Remove all mod pet in all game data.
+            for (int id = 0; id < MAX_SAVE_COUNT; id++) {
+                var data = LoadData(id);
+
+                data.petStorage.RemoveAll(x => PetInfo.IsMod(x?.id ?? 0));
+                data.petBag = data.petBag.Where(x => !PetInfo.IsMod(x?.id ?? 0)).ToArray();
+                Array.Resize(ref data.petBag, 6);
+                data.pvpPetTeam.RemoveAll(x => x.value.Any(y => PetInfo.IsMod(y?.id ?? 0)));
+                SaveData(data, id);
+            }
+        } catch (Exception) {
+            return false;
+        }
+        return true;
+    }
+
+    public static bool TryExportMod(string exportPath) {
+        try {
+            var modPath = Application.persistentDataPath + "/Mod";
+            var dirPath = FileBrowserHelpers.CreateFolderInDirectory(exportPath, "Mod");  
+            FileBrowserHelpers.CopyDirectory(modPath, dirPath);  
+        } catch (Exception) {
+            return false;
+        }
+        return true;
+    }
+
+    public static bool TryDeleteMod() {
+        try {
+            var modPath = Application.persistentDataPath + "/Mod";
+            if (!IsModExists())
+                return true;
+
+            FileBrowserHelpers.DeleteDirectory(modPath);
+            
+            // Remove all mod pet in all game data.
+            for (int id = 0; id < MAX_SAVE_COUNT; id++) {
+                var data = LoadData(id);
+
+                data.petStorage.RemoveAll(x => PetInfo.IsMod(x?.id ?? 0));
+                data.petBag = data.petBag.Where(x => !PetInfo.IsMod(x?.id ?? 0)).ToArray();
+                Array.Resize(ref data.petBag, 6);
+                data.pvpPetTeam.RemoveAll(x => x.value.Any(y => PetInfo.IsMod(y?.id ?? 0)));
+                SaveData(data, id);
             }
         } catch (Exception) {
             return false;
@@ -162,14 +221,22 @@ public static class SaveSystem
     public static bool TrySaveBuffMod(BuffInfo info, byte[] iconBytes) {
         var buffPath = Application.persistentDataPath + "/Mod/Buffs/";
         try {
-            if (!TryCreateFile(buffPath, "info.csv", "id,name,type,copyType,turn,options,description\n", out var infoPath))
+            if (!TryCreateFile(buffPath, "info.csv", out var infoPath))
                 return false;
 
-            if (!TryCreateFile(buffPath, "effect.csv", "id,timing,priority,target,condition,cond_option,effect,effect_option\n", out var effectPath))
+            if (!TryCreateFile(buffPath, "effect.csv", out var effectPath))
                 return false;
 
-            FileBrowserHelpers.AppendTextToFile(infoPath, info.GetRawInfoStringArray().ConcatToString(",") + "\n");
-            FileBrowserHelpers.AppendTextToFile(effectPath, Effect.GetRawEffectListStringArray(info.id, info.effects).ConcatToString(",") + "\n");
+            FileBrowserHelpers.WriteTextToFile(infoPath, "id,name,type,copyType,turn,options,description\n"); 
+            FileBrowserHelpers.WriteTextToFile(effectPath, "id,timing,priority,target,condition,cond_option,effect,effect_option\n"); 
+
+            foreach (var entry in Database.instance.buffInfoDict) {
+                if (!BuffInfo.IsMod(entry.Key))
+                    continue;
+
+                FileBrowserHelpers.AppendTextToFile(infoPath, entry.Value.GetRawInfoStringArray().ConcatToString(",") + "\n");
+                FileBrowserHelpers.AppendTextToFile(effectPath, Effect.GetRawEffectListStringArray(entry.Key, entry.Value.effects).ConcatToString(",") + "\n");
+            }
 
             if (iconBytes != null)
                 FileBrowserHelpers.WriteBytesToFile(buffPath + info.id + ".png", iconBytes);
@@ -204,14 +271,22 @@ public static class SaveSystem
     public static bool TrySaveSkillMod(Skill info) {
         var skillPath = Application.persistentDataPath + "/Mod/Skills/";
         try {
-            if (!TryCreateFile(skillPath, "info.csv", "id,name,element,type,power,anger,accuracy,option,description\n", out var infoPath))
+            if (!TryCreateFile(skillPath, "info.csv", out var infoPath))
                 return false;
 
-            if (!TryCreateFile(skillPath, "effect.csv", "id,timing,priority,target,condition,cond_option,effect,effect_option\n", out var effectPath))
+            if (!TryCreateFile(skillPath, "effect.csv", out var effectPath))
                 return false;
 
-            FileBrowserHelpers.AppendTextToFile(infoPath, info.GetRawInfoStringArray().ConcatToString(",") + "\n");
-            FileBrowserHelpers.AppendTextToFile(effectPath, Effect.GetRawEffectListStringArray(info.id, info.effects).ConcatToString(",") + "\n");
+            FileBrowserHelpers.WriteTextToFile(infoPath, "id,name,element,type,power,anger,accuracy,option,description\n"); 
+            FileBrowserHelpers.WriteTextToFile(effectPath, "id,timing,priority,target,condition,cond_option,effect,effect_option\n"); 
+
+            foreach (var entry in Database.instance.skillDict) {
+                if (!Skill.IsMod(entry.Key))
+                    continue;
+
+                FileBrowserHelpers.AppendTextToFile(infoPath, entry.Value.GetRawInfoStringArray().ConcatToString(",") + "\n");
+                FileBrowserHelpers.AppendTextToFile(effectPath, Effect.GetRawEffectListStringArray(entry.Key, entry.Value.effects).ConcatToString(",") + "\n");
+            }
         } catch (Exception) {
             return false;
         }
@@ -247,34 +322,45 @@ public static class SaveSystem
         var emblemBytes = bytesDict.Get("emblem", null);
 
         try {
-            if (!TryCreateFile(petPath, "basic.csv", "id,baseId,name,element,baseStatus,gender,baseHeight/baseWeight,description,habitat,linkId\n", out var basicPath))
+            if (!TryCreateFile(petPath, "basic.csv", out var basicPath))
                 return false;
 
-            if (!TryCreateFile(petPath, "feature.csv", "baseId,featureName,featureDescription,emblemName,emblemDescription\n", out var featurePath))
+            if (!TryCreateFile(petPath, "feature.csv", out var featurePath))
                 return false;
 
-            if (!TryCreateFile(petPath, "exp.csv", "id,expType,evolvePetId,evolveLevel,beatExpParam\n", out var expPath))
+            if (!TryCreateFile(petPath, "exp.csv", out var expPath))
                 return false;
 
-            if (!TryCreateFile(petPath, "skill.csv", "id,ownSkill,learnLevel\n", out var skillPath))
+            if (!TryCreateFile(petPath, "skill.csv", out var skillPath))
                 return false;
 
-            if (!TryCreateFile(petPath, "ui.csv", "id,baseId,skinChoice,options\n", out var uiPath))
+            if (!TryCreateFile(petPath, "ui.csv", out var uiPath))
                 return false;
 
-            FileBrowserHelpers.AppendTextToFile(basicPath, info.basic.GetRawInfoStringArray().ConcatToString(",") + "\n");
+            FileBrowserHelpers.WriteTextToFile(basicPath, "id,baseId,name,element,baseStatus,gender,baseHeight/baseWeight,description,habitat,linkId\n"); 
+            FileBrowserHelpers.WriteTextToFile(featurePath, "baseId,featureName,featureDescription,emblemName,emblemDescription\n"); 
+            FileBrowserHelpers.WriteTextToFile(expPath, "id,expType,evolvePetId,evolveLevel,beatExpParam\n"); 
+            FileBrowserHelpers.WriteTextToFile(skillPath, "id,ownSkill,learnLevel\n"); 
+            FileBrowserHelpers.WriteTextToFile(uiPath, "id,baseId,skinChoice,options\n"); 
 
-            // Only write feature when this is a base pet.
-            if (info.id == info.baseId)
-                FileBrowserHelpers.AppendTextToFile(featurePath, info.feature.GetRawInfoStringArray().ConcatToString(",") + "\n");
-            
-            FileBrowserHelpers.AppendTextToFile(expPath, info.exp.GetRawInfoStringArray().ConcatToString(",") + "\n");
-            FileBrowserHelpers.AppendTextToFile(skillPath, info.skills.GetRawInfoStringArray().ConcatToString(",") + "\n");
+            foreach (var entry in Database.instance.petInfoDict) {
+                if (!PetInfo.IsMod(entry.Key))
+                    continue;
 
-            // Do not write ui when no skin info.
-            var uiRawString = info.ui.GetRawInfoStringArray();
-            if (uiRawString != null)
-                FileBrowserHelpers.AppendTextToFile(skillPath, uiRawString.ConcatToString(",") + "\n");
+                FileBrowserHelpers.AppendTextToFile(basicPath, entry.Value.basic.GetRawInfoStringArray().ConcatToString(",") + "\n");
+
+                // Only write feature when this is a base pet.
+                if (entry.Key == entry.Value.baseId)
+                    FileBrowserHelpers.AppendTextToFile(featurePath, entry.Value.feature.GetRawInfoStringArray().ConcatToString(",") + "\n");
+
+                FileBrowserHelpers.AppendTextToFile(expPath, entry.Value.exp.GetRawInfoStringArray().ConcatToString(",") + "\n");
+                FileBrowserHelpers.AppendTextToFile(skillPath, entry.Value.skills.GetRawInfoStringArray().ConcatToString(",") + "\n");
+
+                // Do not write ui when no skin info.
+                var uiRawString = entry.Value.ui.GetRawInfoStringArray();
+                if (uiRawString != null)
+                    FileBrowserHelpers.AppendTextToFile(uiPath, uiRawString.ConcatToString(",") + "\n");
+            }
 
             // Write image bytes.
             if (iconBytes != null)
@@ -285,6 +371,17 @@ public static class SaveSystem
 
             if ((info.id == info.baseId) && (emblemBytes != null))
                 FileBrowserHelpers.WriteBytesToFile(emblemPath + info.id + ".png", emblemBytes);
+
+            // Remove all pet with same id in game data.
+            for (int id = 0; id < MAX_SAVE_COUNT; id++) {
+                var data = LoadData(id);
+
+                data.petStorage.RemoveAll(x => (x?.id ?? 0) == info.id);
+                data.petBag = data.petBag.Where(x => (x?.id ?? 0) != info.id).ToArray();
+                Array.Resize(ref data.petBag, 6);
+                data.pvpPetTeam.RemoveAll(x => x.value.Any(y => (y?.id ?? 0) == info.id));
+                SaveData(data, id);
+            }
 
         } catch (Exception) {
             return false;
@@ -334,10 +431,67 @@ public static class SaveSystem
             }            
 
         } catch (Exception) {
-            Debug.Log("holy shit");
             return false;
         }
 
         return true;
+    }
+
+    public static bool TryLoadMapMod(int id, Action<Map> onSuccess = null, Action<string> onFail = null) {
+        try {
+            var mapPath = Application.persistentDataPath + "/Mod/Maps/" + id + ".xml";
+            if (!FileBrowserHelpers.FileExists(mapPath)) {
+                onFail?.Invoke("找不到对应的地图档案");
+                return false;
+            }
+
+            Map map = ResourceManager.GetXML<Map>(FileBrowserHelpers.ReadTextFromFile(mapPath));
+            
+            ResourceManager.instance.StartCoroutine(TryLoadMapResourcesMod(map, onSuccess, onFail));
+        } catch (Exception) {
+            onFail?.Invoke("加载地图资料发生错误");
+            return false;
+        }
+
+        return true;
+    }
+
+    private static IEnumerator TryLoadMapResourcesMod(Map map, Action<Map> onSuccess = null, Action<string> onFail = null) {
+        int resId = (map.resId == 0) ? map.id : map.resId;
+        bool isMod = Map.IsMod(map.resId);
+        int pathResId = isMod ? resId : Mathf.Abs(resId);
+
+        var modPath = Application.persistentDataPath + "/Mod/";
+        int doneRequestCount = 0;
+
+        AudioClip bgm = null, fx = null;
+        string error = string.Empty;
+
+        // Audio only accepts mp3
+        RequestManager.instance.DownloadAudioClip("file://" + modPath + "BGM/" + map.music.category + "/" + map.music.bgm + ".mp3", 
+            (clip) => { bgm = clip; doneRequestCount++; }, (message) => { error = message; doneRequestCount++; });
+
+        if (string.IsNullOrEmpty(map.music.fx))
+            doneRequestCount++;
+        else {
+            RequestManager.instance.DownloadAudioClip("file://" + modPath + "BGM/fx/" + map.music.fx + ".mp3", 
+            (clip) => { fx = clip; doneRequestCount++; }, (message) => { error = message; doneRequestCount++; });
+        }
+
+        Sprite bg = ResourceManager.instance.GetLocalAddressables<Sprite>("Maps/bg/" + resId, isMod);
+        Sprite pathSprite = ResourceManager.instance.GetLocalAddressables<Sprite>("Maps/path/" + pathResId, isMod);
+
+        while (doneRequestCount < 2)
+            yield return null;
+
+        if (!string.IsNullOrEmpty(error)) {
+            onFail?.Invoke(error);
+            yield break;
+        }
+
+        MapResources mapResources = new MapResources(bg, pathSprite, bgm, fx);
+        map.SetResources(mapResources);
+
+        onSuccess?.Invoke(map);
     }
 }

@@ -119,4 +119,40 @@ public class RequestManager : Singleton<RequestManager>
         }
     }
 
+    public void DownloadAudioClip(string uri, Action<AudioClip> onSuccess = null, Action<string> onFail = null, Action<float> onProgress = null) {
+        StartCoroutine(DownloadAudioClipRequest(uri, onSuccess, onFail, onProgress));
+    }
+
+    private IEnumerator DownloadAudioClipRequest(string uri, Action<AudioClip> onSuccess = null, Action<string> onFail = null, Action<float> onProgress = null)
+    {
+        using (var webRequest = UnityWebRequestMultimedia.GetAudioClip(uri, AudioType.MPEG))
+        {
+            webRequest.SendWebRequest();
+
+            while (!webRequest.isDone) {
+                onProgress?.Invoke(webRequest.downloadProgress);
+                yield return null;
+            }
+
+            switch (webRequest.result)
+            {
+                case UnityWebRequest.Result.ConnectionError:
+                case UnityWebRequest.Result.DataProcessingError:
+                case UnityWebRequest.Result.ProtocolError:
+                    onFail?.Invoke(webRequest.error);
+                    yield break;
+                case UnityWebRequest.Result.Success:
+                    break;
+            }
+    
+            var clip = DownloadHandlerAudioClip.GetContent(webRequest);
+            if (clip == null) {
+                onFail?.Invoke("加载的音讯档案为空");
+                yield break;
+            }
+
+            onSuccess?.Invoke(clip);
+        }
+    }
+
 }

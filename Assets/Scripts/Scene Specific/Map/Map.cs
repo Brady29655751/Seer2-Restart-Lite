@@ -31,6 +31,8 @@ public class Map
     [XmlIgnore] public MapResources resources;
     [XmlIgnore] public Vector2Int pathSize => resources.pathSize;
 
+    public static bool IsMod(int id) => id < -50000;
+
     public void SetResources(MapResources resources) {
         this.resources = resources;
     }

@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
@@ -62,6 +63,15 @@ public class WorkshopBuffView : Module
         helpPanel?.SetActive(true);
     }
 
+    public void SetBuffInfo(BuffInfo buffInfo, Action<int> effectCallback) {
+        effectPrefabList.ForEach(Destroy);
+        effectPrefabList.Clear();
+        foreach (var effect in buffInfo.effects)
+            OnAddEffect(effect, effectCallback);
+        
+        OnUploadIcon(buffInfo.icon);
+    }
+
     public void OnUploadIcon(Sprite sprite) {
         iconButton?.SetSprite(sprite);
     }
@@ -70,10 +80,11 @@ public class WorkshopBuffView : Module
         iconButton?.SetSprite(SpriteSet.GetDefaultIconSprite(true));
     }
 
-    public void OnAddEffect(Effect effect) {
+    public void OnAddEffect(Effect effect, Action<int> callback = null) {
+        var index = effectPrefabList.Count;
         var effectPrefab = Instantiate(effectButtonPrefab, effectContentRect);
-        effectPrefab.GetComponent<IButton>()?.SetInteractable(false, false);
-        effectPrefab.GetComponentInChildren<Text>()?.SetText(effect.abilityOptionDict.Get("name", "效果 " + (effectPrefabList.Count + 1)));
+        effectPrefab.GetComponent<IButton>()?.onPointerClickEvent.SetListener(() => callback?.Invoke(index));
+        effectPrefab.GetComponentInChildren<Text>()?.SetText(effect.abilityOptionDict.Get("name", "效果 " + (index + 1)));
         effectPrefabList.Add(effectPrefab);
     }
 
@@ -83,5 +94,12 @@ public class WorkshopBuffView : Module
             
         Destroy(effectPrefabList.LastOrDefault());
         effectPrefabList.RemoveAt(effectPrefabList.Count - 1);
+    }
+
+    public void OnEditEffect(int index, Effect effect) {
+        if (!index.IsInRange(0, effectPrefabList.Count))
+            return;
+
+        effectPrefabList[index].GetComponentInChildren<Text>()?.SetText(effect.abilityOptionDict.Get("name", "效果 " + (index + 1)));
     }
 }

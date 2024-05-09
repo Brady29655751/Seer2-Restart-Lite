@@ -62,15 +62,15 @@ public class WorkshopEffectController : Module
     }
 
     public void OnSelectReferredEffect(int index) {
-        OnReferEffectSuccess(multiEffectList[index]);
+        SetEffect(index, multiEffectList[index]);
+        Hintbox.OpenHintboxWithContent("效果参考成功", 16);
     }
 
-    private void OnReferEffectSuccess(Effect effect) {
-        effectModel.SetReferredEffect(effect);
+    public void SetEffect(int index, Effect effect) {
+        effectModel.SetReferredEffect(index, effect);
         effectView.SetRefSkillPanelActive(false);
         effectView.SetRefBuffPanelActive(false);
         effectView.SetMultiEffectPanelActive(false);
-        Hintbox.OpenHintboxWithContent("效果参考成功", 16);
     }
 
     public void SetDIYSuccessCallback(Action<Effect> callback) {

@@ -14,7 +14,7 @@ public class NormalLoadingScreen : LoadingScreen
             loadMapSuccess = 1;
         }
         void OnRequestFail(string error) {
-            loadingText?.SetText("地图载入失败，请重新启动游戏");
+            loadingText?.SetText(error);
             loadMapSuccess = -1;
         }
         loadingText?.SetText("正在载入地图");

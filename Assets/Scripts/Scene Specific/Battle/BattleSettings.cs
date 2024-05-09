@@ -6,6 +6,7 @@ using UnityEngine;
 
 public class BattleSettings
 {
+    [XmlAttribute("mod")] public bool isMod = false;
     [XmlAttribute("simulate")] public bool isSimulate = false;
     [XmlAttribute("escape")] public bool isEscapeOK = true;
     [XmlAttribute("capture")] public bool isCaptureOK = false;
@@ -27,7 +28,8 @@ public class BattleSettings
 
     public BattleSettings() {}
 
-    public BattleSettings(BattleMode _mode, int _petCount = 6, Weather _weather = Weather.无, bool _isEscapeOK = true, bool _isSimulate = false, bool _isCapture = false, bool _isItem = true) {
+    public BattleSettings(BattleMode _mode, int _petCount = 6, Weather _weather = Weather.无, bool _isEscapeOK = true, bool _isSimulate = false, bool _isCapture = false, bool _isItem = true, bool _isMod = false) {
+        isMod = _isMod;
         isSimulate = _isSimulate;
         isEscapeOK = _isEscapeOK;
         isCaptureOK = _isCapture;
@@ -39,6 +41,7 @@ public class BattleSettings
     }
 
     public BattleSettings(BattleSettings rhs) {
+        isMod = rhs.isMod;
         isSimulate = rhs.isSimulate;
         isEscapeOK = rhs.isEscapeOK;
         isCaptureOK = rhs.isCaptureOK;
@@ -54,6 +57,7 @@ public class BattleSettings
             "mode" => modeId,
             "petCount" => petCount,
             "weather" => weatherId,
+            "mod" => isMod ? 1 : 0,
             "simulate" => isSimulate ? 1 : 0,
             "escape" => isEscapeOK ? 1 : 0,
             "item" => isItemOK ? 1 : 0,

@@ -1,0 +1,56 @@
+<map name="水仙溪口" category="2" id="50010" resId="152" weather="0">
+    <!-- <resource>10015_2</resource> -->
+    <fightMap>100002</fightMap>
+    <initialPoint>200,180</initialPoint>
+    <music category="2">
+        <bgm>BGM_150</bgm>
+        <fx>FX_117</fx>
+    </music>152.png
+    <entities>
+        <npc id="15201" resId="Pets/pet/57.png" name="Lv 45 麦麦迪" size="133,108" pos="700,260">
+        </npc>
+        <npc id="5001001" resId="5001001" name="" size="229,163" pos="285,192" rotation="0,0,10">
+
+            <dialog>
+                <branch id="mission_4_flower_1" name="我" icon="7004" size="136,125" pos="0,35">
+                    <content><![CDATA[哈！搞定！现在就去和特鲁伊会合吧！]]></content>
+                    <replyHandler>
+                        <reply type="click">
+                            <description><![CDATA[去草系主城......]]></description>
+                            <action>teleport</action>
+                            <param>50011</param>
+                           
+                        </reply>
+                       
+
+                        <reply type="branch">
+                            <action>setMission</action>
+                            <param>4</param>
+                            <param>checkpoint</param>
+                            <param>where</param>
+                        </reply>
+                    </replyHandler>
+                </branch>
+            </dialog>
+            <eventHandler>
+
+                <button type="click">
+                    <action>openDialog</action>
+                    <param>mission_4_flower_1</param>
+                    <condition>mission[4].checkpoint=flower</condition>
+                </button>
+                <button type="click">
+                    <action>openDialog</action>
+                    <param>default</param>
+                    <condition>mission[4].checkpointNOTflower</condition>
+                </button>
+
+
+            </eventHandler>
+        </npc>
+
+        <npc id="15202" resId="Pets/battle/14.png" name="" size="320,180" pos="605,200" rotation="0,180,0"
+             target="false"/>
+        <teleport id="1" name="水仙草界" pos="240,250" targetMapId="151"/>
+    </entities>
+</map>

@@ -1,0 +1,90 @@
+<map name="权力之帐" category="2" id="50013" resId="110" weather="0">
+    <!-- <resource>10011</resource> -->
+    <fightMap>100002</fightMap>
+    <initialPoint>320,80</initialPoint>
+    <music category="2">
+        <bgm>BGM_100</bgm>
+        <fx>FX_108</fx>
+    </music>
+    <entities>
+        <npc id="11001" resId="11001" name="草目酋长巴特" size="105,92" pos="350,140">
+            <description><![CDATA[确定、一定以及肯定]]></description>
+            <dialog>
+                <branch id="find" name="草目酋长" icon="11001" size="105,92" pos="0,55">
+                    <content><![CDATA[吼吼吼，欢迎来到草目氏族！我的客人，你可以到处去走走，我相信你会喜欢这里！]]></content>
+                    <replyHandler>
+                        <reply type="click">
+                            <description><![CDATA[草目氏族！我来咯！]]></description>
+                            <action>openDialog</action>
+                            <param>null</param>
+                        </reply>
+                    </replyHandler>
+                </branch>
+                <branch id="mission_4_find_1" name="草目酋长" icon="11001" size="105,92" pos="0,55">
+                    <content><![CDATA[吼吼吼，欢迎来到草目氏族！我的客人，你可以到处去走走，我相信你会喜欢这里！]]></content>
+                    <replyHandler>
+                        <reply type="click">
+                            <description><![CDATA[草目氏族！我来咯！]]></description>
+                            <action>openDialog</action>
+                            <param>null</param>
+                        </reply>
+                        <reply type="click">
+                            <description><![CDATA[【主线任务】救助草目酋长]]></description>
+                            <action>openDialog</action>
+                            <param>null</param>
+                        </reply>
+                        <reply type="branch">
+                            <action>setMission</action>
+                            <param>4</param>
+                            <param>complete</param>
+                        </reply>
+                        <reply type="branch">
+                            <action>openHintbox</action>
+                            <param>type=Item</param>
+                            <param>title=提示</param>
+                            <param>content=2000 赛尔豆和 50 星钻已经放入背包</param>
+                            <param>option_num=1</param>
+                            <param>item_icon=item[1]</param>
+                        </reply>
+                    </replyHandler>
+                </branch>
+              
+
+            </dialog>
+            <eventHandler>
+                <button type="click">
+                    <action>openDialog</action>
+                    <param>mission_4_find_1</param>
+                    <condition>mission[4].checkpoint=find</condition>
+                </button>
+                <button type="click">
+                    <action>openDialog</action>
+                    <param>find</param>
+                    <condition>mission[4].checkpointNOTfind</condition>
+                </button>
+            </eventHandler>
+        </npc>
+        
+        <npc id="11002" resId="11002" name="目灵兽雕像" size="266,288" pos="660,112">
+            <dialog>
+                <branch id="find" name="目灵兽雕像" icon="11002" size="133,144" pos="0,25">
+                    <content><![CDATA[（似乎散发着强大的力量）]]></content>
+                    <replyHandler>
+                        <reply type="click">
+                            <description><![CDATA[（似乎散发着强大的力量）]]></description>
+                            <action>openDialog</action>
+                            <param>null</param>
+                        </reply>
+                    </replyHandler>
+                </branch>
+            </dialog>
+            <eventHandler>
+                <button type="click">
+                    <action>openDialog</action>
+                    <param>find</param>
+                </button>
+            </eventHandler>
+        </npc>
+        
+    </entities>
+</map>

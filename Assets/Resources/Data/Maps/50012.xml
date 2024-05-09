@@ -1,0 +1,105 @@
+<map name="深幽沼泽" category="2" id="50012" resId="133" weather="0">
+    <!-- <resource>10013</resource> -->
+    <fightMap>100002</fightMap>
+    <initialPoint>480,90</initialPoint>
+    <music category="2">
+        <bgm>BGM_130</bgm>
+        <fx>FX_114</fx>
+    </music>
+    <entities>
+
+
+        <npc id="13301" resId="Pets/pet/200.png" name="" size="540,100" pos="0,60" namePos="0,0" color="0,0,0,0">
+            <dialog>
+                <branch id="default" name="" icon="11003" size="111,106" pos="10,45">
+                </branch>
+
+                <branch id="mission_4_goonsearch_1" name="我" icon="7004" size="136,125" pos="0,35">
+                    <content>
+                        <![CDATA[特鲁伊，特鲁伊，你听到我在叫你吗？]]></content>
+                    <replyHandler>
+                        <reply type="click">
+                            <description><![CDATA[到处找找...]]></description>
+                            <action>openDialog</action>
+                            <param>null</param>
+                        </reply>
+
+
+                    </replyHandler>
+                </branch>
+            </dialog>
+            <eventHandler>
+                <!--这个enter可以实现一进入就打开对话-->
+                <button type="enter">
+                    <action>openDialog</action>
+                    <param>mission_4_goonsearch_1</param>
+                    <condition>mission[4].checkpoint=goonsearch</condition>
+                </button>
+                <button type="enter">
+                    <action>openDialog</action>
+                    <param>default</param>
+                    <condition>mission[4].checkpointNOTgoonsearch</condition>
+                </button>
+
+            </eventHandler>
+        </npc>
+
+
+        <npc id="5001201" resId="5001201" name="" size="100,70" pos="340,320" rotation="0,0,10">
+            <eventHandler>
+
+                <button type="click">
+                    <action>setNpcParam</action>
+                    <param>5001202</param>
+                    <param>active=true</param>
+                </button>
+                <!--将上一个对话不显示-->
+                <button type="click">
+                    <action>setNpcParam</action>
+                    <param>13301</param>
+                    <param>active=false</param>
+                </button>
+                <button type="click">
+                    <action>openDialog</action>
+                    <param>mission_4_goonsearch_2</param>
+                </button>
+
+            </eventHandler>
+        </npc>
+
+
+        <npc id="5001202" resId="5001202" name="" size="480,270" pos="195,200" active="false">
+            <dialog>
+
+                <branch id="mission_4_goonsearch_3" name="我" icon="7004" size="136,125" pos="0,35">
+                    <content>
+                        <![CDATA[糟糕......出事了！！！都怪我没保护好特鲁伊......快去告诉酋长！]]></content>
+                    <replyHandler>
+                        <reply type="click">
+                            <description><![CDATA[返回权力之帐......]]></description>
+                            <action>teleport</action>
+                            <param>50013</param>
+                        </reply>
+
+                        <reply type="branch">
+                            <action>setMission</action>
+                            <param>4</param>
+                            <param>checkpoint</param>
+                            <param>find</param>
+                        </reply>
+                    </replyHandler>
+                </branch>
+
+            </dialog>
+            <eventHandler>
+                <button type="click">
+                    <action>openDialog</action>
+                    <param>mission_4_goonsearch_3</param>
+                </button>
+
+
+            </eventHandler>
+        </npc>
+        <teleport id="1" name="荆棘小徑" pos="550,60" targetMapId="132"/>
+    </entities>
+</map>

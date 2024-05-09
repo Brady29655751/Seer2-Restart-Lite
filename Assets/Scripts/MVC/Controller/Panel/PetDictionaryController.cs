@@ -19,6 +19,8 @@ public class PetDictionaryController : Module
         SelectMode((int)mode);
     }
 
+    public PetDictionaryMode GetMode() => mode;
+
     public List<Pet> GetStorage() {
         return mode switch {
             PetDictionaryMode.All => petDictionary,

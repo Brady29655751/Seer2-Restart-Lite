@@ -40,6 +40,33 @@ public class WorkshopBuffModel : Module
         return buffInfo;
     }
 
+    public void SetBuffInfo(BuffInfo buffInfo) {
+        idInputField.SetInputString(buffInfo.id.ToString());
+        nameInputField.SetInputString(buffInfo.name);
+        
+        typeDropdown.value = ((int)buffInfo.type) - 1;
+        copyDropdown.value = (int)buffInfo.copyHandleType;
+        
+        turnInputField.SetInputString(buffInfo.turn.ToString());
+
+        keepToggle.isOn = buffInfo.keep;
+        inheritToggle.isOn = buffInfo.inherit;
+        autoRemoveToggle.isOn = buffInfo.autoRemove;
+
+        descriptionInputField.SetInputString(buffInfo.description);
+
+        var rawOptions = new Dictionary<string, string>(buffInfo.options);
+        rawOptions.Remove("keep");
+        rawOptions.Remove("inherit");
+        rawOptions.Remove("auto_remove");
+        optionInputField.SetInputString(rawOptions.Select(entry => entry.Key + "=" + entry.Value).ConcatToString("&"));
+
+        effectList = buffInfo.effects.Select(x => new Effect(x)).ToList();
+
+        iconBytes = null;
+        iconSprite = null;
+    }
+
     public void OnClearIcon() {
         iconBytes = null;
     }
@@ -79,12 +106,22 @@ public class WorkshopBuffModel : Module
         effectList.RemoveAt(effectList.Count - 1);
     }
 
-    public bool CreateDIYBuff() {
-        if (!SaveSystem.TrySaveBuffMod(buffInfo, iconBytes))
-            return false;
+    public void OnEditEffect(int index, Effect effect) {
+        if (!index.IsInRange(0, effectList.Count))
+            return;
 
+        effectList[index] = effect;
+    }
+
+    public bool CreateDIYBuff() {
+        var originalBuffInfo = Buff.GetBuffInfo(buffInfo.id);
         Database.instance.buffInfoDict.Set(buffInfo.id, buffInfo);
-        return true;
+        if (SaveSystem.TrySaveBuffMod(buffInfo, iconBytes))    
+            return true;
+        
+        // rollback
+        Database.instance.buffInfoDict.Set(buffInfo.id, originalBuffInfo);
+        return false;
     }
 
     public bool VerifyDIYBuff(out string error) {
@@ -123,11 +160,6 @@ public class WorkshopBuffModel : Module
 
         if (!int.TryParse(idInputField.inputString, out _)) {
             error = "序号需为整数！";
-            return false;
-        }
-
-        if (Buff.GetBuffInfo(id) != null) {
-            error = "此序号已被占用，不可重复！";
             return false;
         }
 
@@ -284,7 +316,7 @@ public class WorkshopBuffModel : Module
             return false;
         }
 
-        if (iconBytes == null) {
+        if ((Buff.GetBuffInfo(id) == null) && (iconBytes == null)) {
             error = "未指定buff图案或res自定义选项";
             return false;
         }

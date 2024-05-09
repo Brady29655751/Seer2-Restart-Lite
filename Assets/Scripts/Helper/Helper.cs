@@ -49,7 +49,7 @@ namespace System {
 
         public static bool TryTrimParentheses(this string str, out string trim) {
             trim = TrimParentheses(str);
-            return trim == str;
+            return trim != str;
         }
 
         public static string GetDescription(this string str) {

@@ -7,6 +7,7 @@ using UnityEngine.UI;
 public class PetSkillBlockView : Module
 {   
     private Skill currentSkill;
+    private SecretType currentSecretType = SecretType.GreaterThanLevel;
     private bool isNull => (currentSkill == null);
 
     [SerializeField] private bool isSuperSkillBlock = false;
@@ -20,17 +21,18 @@ public class PetSkillBlockView : Module
 
     public void SetSkill(LearnSkillInfo skillInfo) {
         currentSkill = skillInfo?.skill;
+        currentSecretType = skillInfo?.secretType ?? SecretType.GreaterThanLevel;
         skillButton.SetInteractable(!isNull, false);
         SetName();
         SetElement();
         SetType();
         SetPowerAndAnger();
-        SetSecret(!isNull && (skillInfo.secretType != SecretType.GreaterThanLevel));
+        SetSecret(currentSecretType);
         SetChosen(false);
     }
 
     public void SetChosen(bool chosen) {
-        skillButton.image?.SetSkillBackgroundSprite(chosen, isSuperSkillBlock);
+        skillButton.image?.SetSkillBackgroundSprite(chosen, isSuperSkillBlock, currentSecretType);
     }
 
     private void SetName() {
@@ -53,15 +55,16 @@ public class PetSkillBlockView : Module
         angerText.text = isNull ? string.Empty : ("怒气: " + currentSkill.anger.ToString());
     }
 
-    private void SetSecret(bool isSecret) {
+    private void SetSecret(SecretType secretType) {
         if (isNull) {
             nameText.color = powerText.color = angerText.color = ColorHelper.normalSkill;
             innerBackground.gameObject.SetActive(false);
             return;
         }
+        bool isSecret = (secretType != SecretType.GreaterThanLevel);
         Color skillColor = isSecret ? ColorHelper.secretSkill : ColorHelper.normalSkill;
         nameText.color = powerText.color = angerText.color = skillColor;
-        innerBackground.gameObject.SetActive(isSecret);
+        innerBackground.gameObject.SetActive(secretType > SecretType.GreaterThanLevel);
     }
 
 

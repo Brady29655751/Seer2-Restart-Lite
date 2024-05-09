@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,9 +8,19 @@ public class PetDictInfoController : Module
     [SerializeField] private PetDictInfoModel infoModel;
     [SerializeField] private PetDictInfoView infoView;
 
+    private Action<PetInfo> onEditPetCallback;
+
     public void SetPet(Pet pet) {
         infoModel.SetPetId((pet == null) ? 0 : pet.id);
         infoView.SetPetInfo(infoModel.petInfo);
+    }
+
+    public void SetEditPetCallback(Action<PetInfo> callback) {
+        onEditPetCallback = callback;
+    }
+
+    public void SelectMode(PetDictionaryMode mode) {
+        infoView.SelectMode(mode);
     }
 
     public void Link() {
@@ -33,6 +44,10 @@ public class PetDictInfoController : Module
 
     public void OpenExamplePetBagPanel() {
         infoView.OpenExamplePetBagPanel(infoModel.petInfo.id);
+    }
+
+    public void OnEditPet() {
+        onEditPetCallback?.Invoke(infoModel.petInfo);
     }
 
 }

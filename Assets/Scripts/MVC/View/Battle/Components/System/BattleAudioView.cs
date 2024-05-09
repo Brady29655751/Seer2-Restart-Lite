@@ -17,18 +17,29 @@ public class BattleAudioView : BattleBaseView
         
         yield return new WaitForSeconds(1.5f);
 
-        AudioClip bgm = GetBattleBGM(battle.settings.mode);
-        AudioSystem.instance.PlayMusic(bgm, AudioVolumeType.BattleBGM);
+        AudioClip bgm = null;
 
+        if (!battle.settings.isMod)
+            bgm = battleBGM[GetBattleBGMId(battle.settings.mode)];
+        else {
+            bool isRequestDone = false;
+            RequestManager.instance.DownloadAudioClip("file://" + Application.persistentDataPath + "/Mod/BGM/fight/BGM_" + GetBattleBGMId(battle.settings.mode) + ".mp3",
+                (clip) => { bgm = clip; isRequestDone = true; }, (error) => isRequestDone = true);
+
+            while (!isRequestDone)
+                yield return null;
+        }
+
+        AudioSystem.instance.PlayMusic(bgm, AudioVolumeType.BattleBGM);
     }
 
-    private AudioClip GetBattleBGM(BattleMode mode) {
+    private int GetBattleBGMId(BattleMode mode) {
         return mode switch {
-            BattleMode.SPT => battleBGM[1],
-            BattleMode.SelfSimulation => battleBGM[2],
-            BattleMode.PVP => battleBGM[2],
-            BattleMode.Special => battleBGM[3],
-            _ => battleBGM[0],
+            BattleMode.SPT => 1,
+            BattleMode.SelfSimulation => 2,
+            BattleMode.PVP => 2,
+            BattleMode.Special => 3,
+            _ => 0,
         };
     }
 }

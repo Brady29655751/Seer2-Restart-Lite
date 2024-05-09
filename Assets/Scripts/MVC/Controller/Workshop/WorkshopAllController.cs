@@ -7,11 +7,18 @@ public class WorkshopAllController : Module
 {
     [SerializeField] private WorkshopAllModel allModel;
     [SerializeField] private WorkshopAllView allView;
-    
-    
+    [SerializeField] private OptionSelectController optionSelectController;
+    [SerializeField] private WorkshopPetController petController;
+    [SerializeField] private WorkshopSkillController skillController;
+    [SerializeField] private WorkshopBuffController buffController;
+
+    private PetDictionaryPanel petDictionaryPanel = null;
+
     public override void Init() {
         if (SaveSystem.IsModExists())
             allView.CheckCurrentMod();
+        else
+            allView.NeverCreateMod();
     }
 
     public void CreateMod() {
@@ -36,7 +43,8 @@ public class WorkshopAllController : Module
             return;
         }
 
-        var petDictionaryPanel = Panel.OpenPanel<PetDictionaryPanel>();
+        petDictionaryPanel = Panel.OpenPanel<PetDictionaryPanel>();
+        petDictionaryPanel.SetEditPetCallback(OnEditPet);
         petDictionaryPanel.SelectMode(PetDictionaryMode.Workshop);
         petDictionaryPanel.SetStorage(petStorage);
     }
@@ -48,9 +56,43 @@ public class WorkshopAllController : Module
     public void OpenAllBuffPanel() {
         allView.OpenAllBuffPanel();
     }
+
+    public void OnEditPet(PetInfo petInfo) {
+        optionSelectController.Select(1);
+        petController.SetPetInfo(petInfo);
+    }
+
+    public void OnEditSkill() {
+        if (allModel.currentSkill == null) 
+            return;
+
+        if (allModel.currentSkill.IsAction()) {
+            Hintbox.OpenHintboxWithContent("无法查看该技能", 16);
+            return;
+        }
+
+        optionSelectController.Select(2);
+        skillController.SetSkill(allModel.currentSkill);
+    }
+
+    public void OnEditBuff() {
+        if (allModel.currentBuffInfo == null)
+            return;
+
+        optionSelectController.Select(3);
+        buffController.SetBuffInfo(allModel.currentBuffInfo);
+    }
     
+    public void OnImportMod() {
+        allModel.OnImportMod();
+    }
     
-    
-    
-    
+    public void OnExportMod() {
+        allModel.OnExportMod();
+    }
+
+    public void OnDeleteMod() {
+        allModel.OnDeleteMod();
+    }
+
 }

@@ -44,7 +44,11 @@ public class PetBattleBuffController
 
     public bool IsBuffBlocked(int id) {
         var type = Buff.GetBuffInfo(id)?.type ?? BuffType.None;
-        return blockBuffIds.Contains(id) || blockBuffTypes.Contains(type);
+        return blockBuffIds.Contains(id) || IsBuffTypeBlocked(type);
+    }
+
+    public bool IsBuffTypeBlocked(BuffType type) {
+        return blockBuffTypes.Contains(type);
     }
 
     public Buff GetBuff(int id) {

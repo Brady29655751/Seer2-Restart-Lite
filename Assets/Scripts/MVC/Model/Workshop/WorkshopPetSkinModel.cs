@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -27,6 +28,17 @@ public class WorkshopPetSkinModel : Module
         uiInfo.specialSkinList = skinList;
         uiInfo.options.ParseOptions(options);
         return uiInfo;
+    }
+
+    public void SetPetUIInfo(PetUIInfo uiInfo) {
+        skinList = uiInfo.specialSkinList;
+        optionInputField.SetInputString(uiInfo.GetRawOptionString());
+
+        foreach (var key in bytesDict.Keys.ToList())
+            bytesDict.Set(key, null);
+
+        foreach (var key in spriteDict.Keys.ToList())
+            spriteDict.Set(key, null);
     }
 
     public void OnUploadSprite(string type, Action<Sprite> callback = null) {
@@ -65,6 +77,19 @@ public class WorkshopPetSkinModel : Module
     public bool VerifyDIYPetSkin(int id, int baseId, out string error) {
         error = string.Empty;
 
+        if (!VerifyOptions(out error))
+            return false;
+
+        // If already exists (edit mode), no need to check others.
+        var petInfo = Pet.GetPetInfo(id);
+        if (petInfo != null)
+            return true;
+
+        // If not exists (create mode), check default skin first.
+        var defaultSkinId = GetPetUIInfo(id, baseId).defaultSkinId;
+        if (id == defaultSkinId)
+            return true;
+
         if ((bytesDict.Get("icon", null) == null) || (bytesDict.Get("battle", null) == null)) {
             error = "请上传头像和精灵图片！";
             return false;
@@ -72,6 +97,39 @@ public class WorkshopPetSkinModel : Module
 
         if ((id == baseId) && (bytesDict.Get("emblem", null) == null)) {
             error = "请上传纹章图片！";
+            return false;
+        }
+
+        return true;
+    }
+
+    private bool VerifyOptions(out string error) {
+        error = string.Empty;
+
+        if (options.Contains(',')) {
+            error = "【其他】部分不能有半形逗号";
+            return false;
+        }
+
+        var dict = new Dictionary<string, string>();
+        try {
+            dict.ParseOptions(options);
+        } catch (Exception) {
+            error = "【其他】部分有重复或残缺的自定义选项";
+            return false;
+        }
+
+        if (!int.TryParse(dict.Get("default_skin", "0"), out var defaultSkinId)) {
+            error = "【其他】自定义选项的【默认皮肤】序号需为整数";
+            return false;
+        }
+
+        if (defaultSkinId == 0)
+            return true;
+
+        var resInfo = Pet.GetPetInfo(defaultSkinId);
+        if ((resInfo == null) || (resInfo.ui.id != resInfo.ui.defaultSkinId)) {
+            error = "【其他】的【默认皮肤】引用的序号图片不存在";
             return false;
         }
 

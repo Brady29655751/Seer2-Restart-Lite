@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
@@ -32,10 +33,12 @@ public class WorkshopSkillView : Module
                 "按下预览按钮可以预览buff描述",
 
             "option" => "特殊自定义选项，选项如下请自行填写，多个选项请以 & 连接\n\n" +
+                "参照BUFF描述：ref_buff=序号[数值]/序号[数值]...\n" +
                 "暴击率：critical=数值(默认为5%)\n" +
                 "无视护盾：ignore_shield=true\n" + 
                 "无视能力变化：ignore_powerup=true\n\n" +
-                "例1：暴击率35%且無視護盾，critical=35&ignore_shield=true",
+                "例1：暴击率35%且無視護盾，critical=35&ignore_shield=true\n" +
+                "例2：参照流血（30点）和魅惑描述，ref_buff=1004[30]/101",
 
             _ => string.Empty,
         };
@@ -43,10 +46,18 @@ public class WorkshopSkillView : Module
         helpPanel?.SetActive(true);
     }
 
-    public void OnAddEffect(Effect effect) {
+    public void SetSkill(Skill skill, Action<int> effectCallback) {
+        effectPrefabList.ForEach(Destroy);
+        effectPrefabList.Clear();
+        foreach (var effect in skill.effects)
+            OnAddEffect(effect, effectCallback);
+    }
+
+    public void OnAddEffect(Effect effect, Action<int> callback) {
+        var index = effectPrefabList.Count;
         var effectPrefab = Instantiate(effectButtonPrefab, effectContentRect);
-        effectPrefab.GetComponent<IButton>()?.SetInteractable(false, false);
-        effectPrefab.GetComponentInChildren<Text>()?.SetText(effect.abilityOptionDict.Get("name", "效果 " + (effectPrefabList.Count + 1)));
+        effectPrefab.GetComponent<IButton>()?.onPointerClickEvent.SetListener(() => callback?.Invoke(index));
+        effectPrefab.GetComponentInChildren<Text>()?.SetText(effect.abilityOptionDict.Get("name", "效果 " + (index + 1)));
         effectPrefabList.Add(effectPrefab);
     }
 
@@ -56,5 +67,12 @@ public class WorkshopSkillView : Module
 
         Destroy(effectPrefabList.LastOrDefault());
         effectPrefabList.RemoveAt(effectPrefabList.Count - 1);
+    }
+
+    public void OnEditEffect(int index, Effect effect) {
+        if (!index.IsInRange(0, effectPrefabList.Count))
+            return;
+
+        effectPrefabList[index].GetComponentInChildren<Text>()?.SetText(effect.abilityOptionDict.Get("name", "效果 " + (index + 1)));
     }
 }

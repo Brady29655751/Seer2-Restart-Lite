@@ -36,6 +36,27 @@ public class WorkshopSkillModel : Module
         return skill;
     }
 
+    public void SetSkill(Skill skill) {
+        idInputField.SetInputString(skill.id.ToString());
+        nameInputField.SetInputString(skill.name);
+
+        elementDropdown.value = (int)skill.element;
+        typeDropdown.value = Mathf.Min((int)skill.type, 3);
+
+        powerInputField.SetInputString(skill.power.ToString());
+        angerInputField.SetInputString(skill.anger.ToString());
+        accuracyInputField.SetInputString(skill.accuracy.ToString());
+        priorityInputField.SetInputString(skill.priority.ToString());
+
+        descriptionInputField.SetInputString(skill.rawDescription.Replace("[ENDL]", "\n"));
+
+        var rawOptions = new Dictionary<string, string>(skill.options);
+        rawOptions.Remove("priority");
+        optionInputField.SetInputString(rawOptions.Select(entry => entry.Key + "=" + entry.Value).ConcatToString("&"));
+
+        effectList = skill.effects.Select(x => new Effect(x)).ToList();
+    }
+
     public void OnAddEffect(Effect effect) {
         effectList.Add(effect);
     }
@@ -47,12 +68,22 @@ public class WorkshopSkillModel : Module
         effectList.RemoveAt(effectList.Count - 1);
     }
 
-    public bool CreateDIYSkill() {
-        if (!SaveSystem.TrySaveSkillMod(skill))
-            return false;
+    public void OnEditEffect(int index, Effect effect) {
+        if (!index.IsInRange(0, effectList.Count))
+            return;
 
+        effectList[index] = effect;
+    }
+
+    public bool CreateDIYSkill() {
+        var originalSkill = Skill.GetSkill(skill.id, false);
         Database.instance.skillDict.Set(skill.id, skill);
-        return true;
+        if (SaveSystem.TrySaveSkillMod(skill))
+            return true;
+
+        // rollback
+        Database.instance.skillDict.Set(skill.id, originalSkill);
+        return false;
     }
 
     public bool VerifyDIYSkill(out string error) {
@@ -86,11 +117,6 @@ public class WorkshopSkillModel : Module
 
         if (!int.TryParse(idInputField.inputString, out _)) {
             error = "序号需为整数！";
-            return false;
-        }
-
-        if (Skill.GetSkill(id, false) != null) {
-            error = "此序号已被占用，不可重复！";
             return false;
         }
 

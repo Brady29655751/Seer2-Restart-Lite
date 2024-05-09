@@ -24,6 +24,14 @@ public class WorkshopPetModel : SelectModel<GameObject>
         return info;
     }
 
+    public void SetPetInfo(PetInfo petInfo) {
+        petBasicModel.SetPetBasicInfo(petInfo.basic);
+        petAdvanceModel.SetPetFeatureInfo(petInfo.feature);
+        petAdvanceModel.SetPetExpInfo(petInfo.exp);
+        petAdvanceModel.SetPetSkillInfo(petInfo.skills);
+        petSkinModel.SetPetUIInfo(petInfo.ui);
+    }
+
     public void OnUploadSprite(string type) {
         petSkinModel.OnUploadSprite(type, OnUploadSpriteSuccess);
     }
@@ -45,11 +53,14 @@ public class WorkshopPetModel : SelectModel<GameObject>
     }
 
     public bool CreateDIYPet() {
-        if (!SaveSystem.TrySavePetMod(petInfo, petSkinModel.bytesDict))
-            return false;
-
+        var originalPetInfo = Pet.GetPetInfo(petInfo.id);
         Database.instance.petInfoDict.Set(petInfo.id, petInfo);
-        return true;
+        if (SaveSystem.TrySavePetMod(petInfo, petSkinModel.bytesDict))
+            return true;
+
+        // rollback
+        Database.instance.petInfoDict.Set(petInfo.id, originalPetInfo);
+        return false;
     }
 
     public bool VerifyDIYPet(out string error) {

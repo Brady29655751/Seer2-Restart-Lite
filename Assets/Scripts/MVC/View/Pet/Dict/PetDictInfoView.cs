@@ -12,12 +12,17 @@ public class PetDictInfoView : Module
     [SerializeField] private Text habitatText;
     [SerializeField] private Text descriptionText;
     [SerializeField] private List<IText> baseStatusTextList;
-    [SerializeField] private IButton linkButton;
+    [SerializeField] private IButton linkButton, testButton, editButton;
     [SerializeField] private PetBagPanel examplePetBagPanel;
 
     protected override void Awake() {
         examplePetBagPanel?.SetActive(true);
         examplePetBagPanel?.SetActive(false);
+    }
+
+    public void SelectMode(PetDictionaryMode mode) {
+        testButton?.gameObject.SetActive(mode != PetDictionaryMode.Workshop);
+        editButton?.gameObject.SetActive(mode == PetDictionaryMode.Workshop);
     }
 
     public void SetPetInfo(PetInfo info) {
