@@ -24,7 +24,10 @@ public class BattlePet : Pet
         get => statusController.hp;
         set => statusController.hp = value;
     }
-    public int maxHp => statusController.maxHp;
+    public int maxHp {
+        get => statusController.maxHp;
+        set => statusController.maxHp = value;
+    }
 
     public int anger {
         get => statusController.anger;

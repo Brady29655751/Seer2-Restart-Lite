@@ -11,14 +11,17 @@ public static class EffectConditionHandler
         if (state == null)
             return true;
 
+        string turn = condOptions.Get("turn_num", "all");
+        bool isTurnNumCorrect = (turn == "all") || ((turn == "odd") && (state.turn % 2 == 1)) || ((turn == "even") && (state.turn % 2 == 0));
+
         if (state.whosTurn == 0)
-            return true;
+            return isTurnNumCorrect;
 
         string who = condOptions.Get("whos_turn", "me");
         Unit invokeUnit = (Unit)effect.invokeUnit;
 
-        bool result = (invokeUnit.id == ((who == "me") ? state.atkUnit.id : state.defUnit.id));
-        return result;
+        bool isWhosTurnCorrect = (who == "all") || (invokeUnit.id == ((who == "me") ? state.atkUnit.id : state.defUnit.id));
+        return isWhosTurnCorrect && isTurnNumCorrect;
     }
 
     public static bool IsCorrectWeather(this Effect effect, BattleState state, Dictionary<string, string> condOptions) {
@@ -44,6 +47,10 @@ public static class EffectConditionHandler
             return true;
 
         string who = condOptions.Get("whos_attack", "me");
+
+        if (who == "all")
+            return true;
+
         string hit = condOptions.Get("is_hit", "true");
         string move = condOptions.Get("is_move", "true");
         Unit invokeUnit = (Unit)effect.invokeUnit;

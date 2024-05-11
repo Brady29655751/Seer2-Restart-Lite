@@ -33,7 +33,7 @@ id,name,type,copyType,turn,options,description
 29,暴击抵抗,mark,replace,-1,none,暴击抵抗增加100%
 30,暴伤抵抗,mark,replace,-1,none,免疫暴击伤害
 31,护盾,shield,max,-1,auto_remove=true,当前可以吸收[value]点伤害
-32,限伤,mark,min,-1,none,受到的伤害不超过[value]
+32,限伤,shield,min,-1,none,受到的伤害不超过[value]
 33,吸收,chance,replace,-1,res=32&keep=false,吸收对手下一次的攻击伤害
 34,限伤,chance,min,-1,res=32,下一次受到的伤害不超过[value]
 35,必中,chance,replace,-1,res=17&keep=false,下一次技能必中（包括属性技能）
@@ -129,12 +129,12 @@ id,name,type,copyType,turn,options,description
 3048,收回金针,turn,replace,3,res=19,每回合回复1/12体力
 3049,剧毒身体,turn,replace,3,none,受到攻击时50%使对手中毒
 3050,蓄电,turn,replace,3,none,使自身电系技能伤害增加70%
-3051,星尘幻盾,mark,max,-1,none,受到的伤害不超过400且每回合刷新并记录上一次受到的伤害值
+3051,星尘幻盾,shield,max,-1,none,受到的伤害不超过400且每回合刷新并记录上一次受到的伤害值
 3052,蓝色水球,mark,max,-1,auto_remove=true,使特攻技能附加效果
 3053,红色水球,mark,max,-1,auto_remove=true,使物攻技能附加效果
 3054,涟漪盾,turn,replace,5,res=16&keep=false,受到的水系攻击伤害减半
-3055,光武神通,mark,block,-1,none,在承受到一次伤害后记录此次伤害值的一半，使自身下个技能伤害附加记录值
-3056,光武灵通,mark,block,-1,none,在承受到一次伤害后记录此次伤害值的一半，使自身生成一个记录值的护盾
+3055,光武神通,chance,block,-1,none,在承受到一次伤害后记录此次伤害值的一半，使自身下个技能伤害附加记录值
+3056,光武灵通,chance,block,-1,none,在承受到一次伤害后记录此次伤害值的一半，使自身生成一个记录值的护盾
 3057,灵通传达,chance,replace,-1,none,造成的伤害低于100则减少自身15怒气
 3143,焦点腐蚀,mark,replace,-1,none,特定攻击技能造成伤害的1/4将恢复自身体力
 3279,蜂纹,mark,stack,-1,auto_remove=true&max_val=3,每一层使中毒造成的伤害增加30，最多叠加3层。[ENDL]当前为[value]层

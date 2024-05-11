@@ -446,7 +446,14 @@ public class ResourceManager : Singleton<ResourceManager>
     }
 
     public void LoadActivityInfo(Action<Dictionary<string, ActivityInfo>> onSuccess = null) {
-        LoadCSV(activityUrl + "info.csv", (data) => onSuccess?.Invoke(GetActivityInfo(data)));
+        LoadCSV(activityUrl + "info.csv", (data) => {
+            var originalDict = GetActivityInfo(data);
+            if (SaveSystem.TryLoadActivityMod(out var modDict)) {
+                foreach (var entry in modDict)
+                    originalDict.Set(entry.Key, entry.Value);
+            }
+            onSuccess?.Invoke(originalDict);
+        });
     }
 
     public void LoadMissionInfo(Action<Dictionary<int, MissionInfo>> onSuccess = null) {

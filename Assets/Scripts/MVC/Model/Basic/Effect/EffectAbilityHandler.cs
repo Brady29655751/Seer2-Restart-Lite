@@ -107,6 +107,7 @@ public static class EffectAbilityHandler
         string type = effect.abilityOptionDict.Get("type", "skill");
         string add = effect.abilityOptionDict.Get("add", "0");
         string set = effect.abilityOptionDict.Get("set","none");
+        string max = effect.abilityOptionDict.Get("max","none");
         
         float heal = 0;
         if (state == null) {
@@ -126,11 +127,20 @@ public static class EffectAbilityHandler
         int healAdd = (int)(heal * ((heal > 0) ? (lhsUnit.pet.battleStatus.rec / 100f) : 1));
 
         if (set != "none") {
-            var setHp = (int)Parser.ParseEffectOperation(set, effect, lhsUnit, rhsUnit);;
+            var setHp = (int)Parser.ParseEffectOperation(set, effect, lhsUnit, rhsUnit);
             if ((setHp == 0) && (lhsUnit.pet.buffController.GetBuff(99) != null))
                 return false;
             
             lhsUnit.pet.hp = setHp;
+            return true;
+        }
+
+        if (max != "none") {
+            var maxHp = (int)Parser.ParseEffectOperation(max, effect, lhsUnit, rhsUnit);
+            if ((maxHp == 0) && (lhsUnit.pet.buffController.GetBuff(99) != null))
+                return false;
+
+            lhsUnit.pet.maxHp = maxHp;
             return true;
         }
 
@@ -300,13 +310,14 @@ public static class EffectAbilityHandler
         string turn = effect.abilityOptionDict.Get("turn", "-1");
         string value = effect.abilityOptionDict.Get("value", "0");
 
-        int buffId;
-        if (!int.TryParse(id, out buffId))
-            return false;
-
         Unit invokeUnit = (Unit)effect.invokeUnit;
         Unit lhsUnit = (who == "me") ? state.GetUnitById(invokeUnit.id) : state.GetRhsUnitById(invokeUnit.id);
         Unit rhsUnit = state.GetRhsUnitById(lhsUnit.id);
+        
+        int buffId = (int)Parser.ParseEffectOperation(id, effect, lhsUnit, rhsUnit);
+        if (Buff.GetBuffInfo(buffId) == null)
+            return false;
+
         var buffController = lhsUnit.pet.buffController;
         int buffTurn = (int)Parser.ParseEffectOperation(turn, effect, lhsUnit, rhsUnit);
         int buffValue = (int)Parser.ParseEffectOperation(value, effect, lhsUnit, rhsUnit);

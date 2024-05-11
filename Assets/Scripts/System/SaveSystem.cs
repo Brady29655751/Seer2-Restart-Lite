@@ -175,6 +175,9 @@ public static class SaveSystem
                 data.petBag = data.petBag.Where(x => !PetInfo.IsMod(x?.id ?? 0)).ToArray();
                 Array.Resize(ref data.petBag, 6);
                 data.pvpPetTeam.RemoveAll(x => x.value.Any(y => PetInfo.IsMod(y?.id ?? 0)));
+
+                data.activityStorage.RemoveAll(x => ActivityInfo.IsMod(x.id));
+
                 SaveData(data, id);
             }
         } catch (Exception) {
@@ -210,6 +213,9 @@ public static class SaveSystem
                 data.petBag = data.petBag.Where(x => !PetInfo.IsMod(x?.id ?? 0)).ToArray();
                 Array.Resize(ref data.petBag, 6);
                 data.pvpPetTeam.RemoveAll(x => x.value.Any(y => PetInfo.IsMod(y?.id ?? 0)));
+
+                data.activityStorage.RemoveAll(x => ActivityInfo.IsMod(x.id));
+
                 SaveData(data, id);
             }
         } catch (Exception) {
@@ -458,7 +464,7 @@ public static class SaveSystem
 
     private static IEnumerator TryLoadMapResourcesMod(Map map, Action<Map> onSuccess = null, Action<string> onFail = null) {
         int resId = (map.resId == 0) ? map.id : map.resId;
-        bool isMod = Map.IsMod(map.resId);
+        bool isMod = Map.IsMod(resId);
         int pathResId = isMod ? resId : Mathf.Abs(resId);
 
         var modPath = Application.persistentDataPath + "/Mod/";
@@ -493,5 +499,23 @@ public static class SaveSystem
         map.SetResources(mapResources);
 
         onSuccess?.Invoke(map);
+    }
+
+    public static bool TryLoadActivityMod(out Dictionary<string, ActivityInfo> activityDict) {
+        activityDict = null;
+
+        var activityPath = Application.persistentDataPath + "/Mod/Activities/";
+        try {
+            string infoPath = activityPath + "info.csv";
+            if (!FileBrowserHelpers.FileExists(infoPath))
+                return false;
+
+            var data = ResourceManager.GetCSV(FileBrowserHelpers.ReadTextFromFile(infoPath));
+
+            activityDict = ResourceManager.instance.GetActivityInfo(data);
+        } catch (Exception) {
+            return false;
+        }
+        return true;
     }
 }

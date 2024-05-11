@@ -22,7 +22,7 @@ public class ActivityInfo
     public DateTime releaseDate;
     public Dictionary<string, string> options = new Dictionary<string, string>();
 
-    public Sprite activityBackground => GetBackground(resId);
+    public Sprite activityBackground => GetBackground();
 
     public ActivityInfo(string[] _data, int startIndex = 0) {
         string[] _slicedData = new string[DATA_COL];
@@ -43,11 +43,14 @@ public class ActivityInfo
         description = _slicedData[9];
     }
 
-    public static Sprite GetBackground(string resId) {
+    public static bool IsMod(string id) => id.StartsWith("Mod_") || id.StartsWith("mod_");
+
+    public Sprite GetBackground() {
+        bool isMod = IsMod(id);
         if (int.TryParse(resId, out _))
-            return ResourceManager.instance.GetLocalAddressables<Sprite>("Activities/" + resId);
+            return ResourceManager.instance.GetLocalAddressables<Sprite>("Activities/" + resId, isMod);
         else
-            return ResourceManager.instance.GetLocalAddressables<Sprite>(resId);
+            return ResourceManager.instance.GetLocalAddressables<Sprite>(resId, isMod);
     }
 
 }

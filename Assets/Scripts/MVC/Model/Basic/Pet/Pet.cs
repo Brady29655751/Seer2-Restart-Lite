@@ -172,6 +172,7 @@ public class Pet
         return id switch {
             "id" => this.id,
             "baseId" => basic.baseId,
+            "element" => elementId,
             "personality" => (float)basic.personality,
             "height" => basic.height,
             "weight" => basic.weight,

@@ -75,4 +75,5 @@ public enum BattleMode {
     PVP = 2,
     SPT = 3,
     Special = 4,
+    Surprise = 5,
 }

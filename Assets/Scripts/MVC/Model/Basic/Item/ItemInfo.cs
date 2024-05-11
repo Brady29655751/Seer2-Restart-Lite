@@ -72,6 +72,10 @@ public class ItemInfo
         if (int.TryParse(resId, out _))
             return ResourceManager.instance.GetLocalAddressables<Sprite>("Items/" + resId);
 
-        return ResourceManager.instance.GetLocalAddressables<Sprite>(resId);
+        var itemIcon = ResourceManager.instance.GetLocalAddressables<Sprite>(resId);
+        if (itemIcon != null)
+            return itemIcon;
+        
+        return ResourceManager.instance.GetLocalAddressables<Sprite>(resId, true);    
     }
 }
