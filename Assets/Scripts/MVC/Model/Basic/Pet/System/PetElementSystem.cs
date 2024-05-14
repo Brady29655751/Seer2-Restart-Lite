@@ -44,23 +44,6 @@ public static class PetElementSystem {
         { Element.精灵王, new List<float>() { N, R, R, R, R, R, R, R, R, R, R, R, R, R, R, R, R, R, R, W } },
     };
 
-    public static Dictionary<Weather, List<Element>> weatherBuff = new Dictionary<Weather, List<Element>>() {
-        { Weather.无, null },
-        { Weather.晴天, new List<Element>() { Element.草, Element.光 } },
-        { Weather.雨天, new List<Element>() { Element.水 } },
-        { Weather.炎热, new List<Element>() { Element.火 } },
-        { Weather.暴风雪, new List<Element>() { Element.冰 } },
-        { Weather.沙尘暴, new List<Element>() { Element.沙漠 } },
-        { Weather.地震, new List<Element>() { Element.地面 } },
-        { Weather.雷暴天, new List<Element>() { Element.电 } },
-        { Weather.飓风, new List<Element>() { Element.飞行, Element.风 } },
-        { Weather.夜幕, new List<Element>() { Element.暗影 } },
-        { Weather.异空間, new List<Element>() { Element.超能, Element.神秘 } },
-        { Weather.古战场, new List<Element>() { Element.战斗, Element.龙 } },
-        { Weather.星移, new List<Element>() { Element.特质 } },
-        { Weather.虫群, new List<Element>() { Element.虫 } },
-    };  
-
     public static float GetElementRelation(Skill lhs, BattlePet rhs) {
         var defenseRelation = elementDefenseRelation.Get(rhs.element);
         return defenseRelation[lhs.elementId];
@@ -77,13 +60,6 @@ public static class PetElementSystem {
         return attackRelation;
     }
 
-    public static float GetWeatherBuff(Element element, Weather weather = Weather.无) {
-        var buffList = weatherBuff.Get(weather);
-        if (buffList == null)
-            return 1;
-        return buffList.Contains(element) ? 1.35f : 1;
-    }
-
 }
 
 public enum Element {
@@ -95,19 +71,3 @@ public enum Element {
     // 神迹 = 21, 神遁 = 22,
 }
 
-public enum Weather {
-    无 = 0, 
-    晴天 = 1, 
-    雨天 = 2, 
-    炎热 = 3, 
-    暴风雪 = 4, 
-    沙尘暴 = 5, 
-    地震 = 6, 
-    雷暴天 = 7, 
-    飓风 = 8, 
-    夜幕 = 9, 
-    异空間 = 10, 
-    古战场 = 11, 
-    星移 = 12,
-    虫群 = 13,
-}

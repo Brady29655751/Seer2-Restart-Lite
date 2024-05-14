@@ -14,9 +14,9 @@ public class MapInfoView : Module
         weatherBackground.gameObject.SetActive(active);
     }
 
-    public void SetWeather(Weather weather) {
-        bool isWeatherNull = (weather == Weather.无);
-        weatherButton.image?.SetWeatherSprite(weather);
+    public void SetWeather(int weather) {
+        bool isWeatherNull = (weather == 0);
+        weatherButton.image?.SetSprite(Buff.GetWeatherBuff(weather).icon);
         SetWeatherActive(!isWeatherNull);
     }
 

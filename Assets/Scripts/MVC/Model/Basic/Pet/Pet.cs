@@ -62,6 +62,14 @@ public class Pet
         return Database.instance.GetPetInfo(id);
     }
 
+    public static PetInfo GetRandomPetInfo(bool withMod = false) {
+        IEnumerable<KeyValuePair<int, PetInfo>> petInfoDict = Database.instance.petInfoDict;
+        if (!withMod) 
+            petInfoDict = petInfoDict.Where(entry => !PetInfo.IsMod(entry.Key));
+        
+        return petInfoDict.Select(entry => entry.Value).ToList().Random();
+    }
+
     public static Pet GetExamplePet(int id) {
         PetInfo info = GetPetInfo(id);
         if (info == null)
@@ -168,7 +176,13 @@ public class Pet
         return "id: " + id.ToString() + " name: " + name;
     }
 
-    public float GetPetIdentifier(string id) {
+    public virtual float GetPetIdentifier(string id) {
+        if ((id.TryTrimStart("skill", out var trimSkill)) && 
+            (trimSkill.TryTrimParentheses(out var skillIdExpr)) &&
+            (int.TryParse(skillIdExpr, out var skillId))) {
+            return skills.ownSkillId.Contains(skillId) ? 1 : 0;
+        }
+
         return id switch {
             "id" => this.id,
             "baseId" => basic.baseId,
@@ -186,12 +200,12 @@ public class Pet
         };
     }
 
-    public bool TryGetPetIdentifier(string id, out float num) {
+    public virtual bool TryGetPetIdentifier(string id, out float num) {
         num = GetPetIdentifier(id);
         return num != float.MinValue;
     }
 
-    public void SetPetIdentifier(string id, float num) {
+    public virtual void SetPetIdentifier(string id, float num) {
         switch (id) {
             default:
                 return;

@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class PetBattleBuffController
 {
-    private Element element;
+    public Element element { get; private set; }
     private List<int> blockBuffIds = new List<int>();
     private List<BuffType> blockBuffTypes = new List<BuffType>();
 
@@ -25,9 +25,8 @@ public class PetBattleBuffController
         buffs = rhs.buffs.Select(x => new Buff(x)).ToList();
     }
 
-    public void SetElement(Element newElement) {
-        this.element = newElement;
-        int elementBlockId = element switch {
+    private int GetElementBlockId(Element element) {
+        return element switch {
             Element.水 => 1000,
             Element.火 => 1001,
             Element.草 => 1007,
@@ -35,7 +34,13 @@ public class PetBattleBuffController
             Element.冰 => 1002,
             _ => 0
         };
-        blockBuffIds.Add(elementBlockId);
+    }
+
+    public void SetElement(Element newElement) {
+        blockBuffIds.Remove(GetElementBlockId(element));
+        blockBuffIds.Add(GetElementBlockId(newElement));
+
+        this.element = newElement;
     }
 
     public bool IsUnmovableEffected() {

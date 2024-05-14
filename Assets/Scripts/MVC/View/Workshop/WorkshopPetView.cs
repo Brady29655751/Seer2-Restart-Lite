@@ -7,7 +7,7 @@ using UnityEngine.UI;
 public class WorkshopPetView : Module
 {
     [SerializeField] private List<GameObject> petContentPages = new List<GameObject>();
-    [SerializeField] private Panel petPreviewPanel, learnSkillPanel, helpPanel;
+    [SerializeField] private Panel petPreviewPanel, learnSkillPanel, learnBuffPanel, helpPanel;
     [SerializeField] private Text helpText;
     [SerializeField] private IButton iconButton, emblemButton, battleButton;
     [SerializeField] private GameObject skillButtonPrefab;
@@ -50,6 +50,10 @@ public class WorkshopPetView : Module
 
     public void OpenLearnSkillPanel() {
         learnSkillPanel.SetActive(true);
+    }
+
+    public void OpenLearnBuffPanel() {
+        learnBuffPanel.SetActive(true);
     }
 
     public void OpenHelpPanel(string type) {
@@ -97,7 +101,8 @@ public class WorkshopPetView : Module
                 "注意：档案越大或者DIY越多会导致图片加载时间变久",
             "skin" => "此功能暂不开放\n",
             "option" => "特殊自定义选项，选项如下请自行填写，多个选项请以 & 连接\n\n" +
-                "更改默认皮肤：default_skin=精灵序号",
+                "更改默认皮肤：default_skin=精灵序号\n" +
+                "更改默认特性：default_feature=基础序号",
 
             _ => string.Empty,
         };

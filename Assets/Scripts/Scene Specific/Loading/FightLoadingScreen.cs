@@ -28,7 +28,12 @@ public class FightLoadingScreen : LoadingScreen
     }
 
     protected override IEnumerator ChangeSceneCoroutine(int sceneIndex, Action finishedCallback = null) {
-        Player.SetSceneData("fightBg", ResourceManager.instance.GetLocalAddressables<Sprite>("Maps/fightBg/" + Player.instance.currentMap.fightMapId));
+        var currentMap = Player.instance.currentMap;
+        var resId = (currentMap.resId == 0) ? currentMap.id : currentMap.resId;
+        var fightMapId = (currentMap.fightMapId == 0) ? resId : currentMap.fightMapId;
+        var fightMapPath = (currentMap.fightMapId == 0) ? ("Maps/bg/" + resId) : ("Maps/fightBg/" + currentMap.fightMapId);
+        
+        Player.SetSceneData("fightBg", ResourceManager.instance.GetLocalAddressables<Sprite>(fightMapPath, Map.IsMod(fightMapId)));
         Player.SetSceneData("captureAnim", ResourceManager.instance.GetLocalAddressables<RuntimeAnimatorController>("Pets/capture/capture"));
 
         float progress = 0;

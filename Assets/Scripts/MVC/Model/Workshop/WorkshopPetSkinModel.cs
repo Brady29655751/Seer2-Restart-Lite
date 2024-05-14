@@ -119,6 +119,11 @@ public class WorkshopPetSkinModel : Module
             return false;
         }
 
+        if (!int.TryParse(dict.Get("default_feature", "0"), out var defaultFeatureId)) {
+            error = "【其他】自定义选项的【默认特性】序号需为整数";
+            return false;
+        }
+
         if (!int.TryParse(dict.Get("default_skin", "0"), out var defaultSkinId)) {
             error = "【其他】自定义选项的【默认皮肤】序号需为整数";
             return false;

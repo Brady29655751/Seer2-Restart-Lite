@@ -55,7 +55,6 @@ public class ResourceManager : Singleton<ResourceManager>
     }
 
     private void InitGameResources() {
-        InitAll<Sprite>(spritePath + "Game/Weathers", spritePath + "Weathers");
         InitAll<Sprite>(spritePath + "Game/Elements", spritePath + "Elements");
         InitAll<Sprite>(spritePath + "Game/Genders", spritePath + "Genders");
         InitAll<Sprite>(spritePath + "Game/IV/Rank", spritePath + "IVRank");
@@ -64,13 +63,28 @@ public class ResourceManager : Singleton<ResourceManager>
         InitAll<Sprite>(spritePath + "Game/Skills", spritePath + "Skills");
     }
 
-    // Get. If not exists in resDict, load it.
-    public T Get<T>(string item) where T : Object {
+    public void Set<T>(string resPath, T item) where T : Object {
+        resDict.Set(resPath, item);
+    }
+
+    // Get. If not exists in resDict and loadWhenNull is true, load it.
+    public T Get<T>(string item, bool loadWhenNull = true) where T : Object {
         T res = (T)resDict.Get(item);
-        return (res == null) ? Load<T>(item) : res;
+        if (res != null)
+            return res;
+
+        if (!loadWhenNull)
+            return res;
+            
+        return Load<T>(item);
     }
     public T GetLocalAddressables<T>(string item, bool isMod = false) where T : Object {
         if (isMod) {
+            // Get cached resources first to prevent memory overhead.
+            T cachedRes = Get<T>("Mod/" + item.TrimEnd(".png"), false);
+            if (cachedRes != null)
+                return cachedRes;
+
             var modPath = Application.persistentDataPath + "/Mod/" + item;
 
             // sprite only accepts png.
@@ -82,6 +96,7 @@ public class ResourceManager : Singleton<ResourceManager>
                 if (!SpriteSet.TryCreateSpriteFromBytes(bytes, out var sprite))
                     return default(T);
 
+                Set<Sprite>("Mod/" + item.TrimEnd(".png"), sprite);
                 return sprite as T;
             }
         }
@@ -303,7 +318,8 @@ public class ResourceManager : Singleton<ResourceManager>
         try {
             for (int i = 0; i < basicInfo.Count; i++) {
                 var basic = basicInfo[i];
-                PetInfo info = new PetInfo(basic, featureInfo.Get(basic.baseId), expInfo.Get(basic.id), new PetTalentInfo(), skillInfo.Get(basic.id), uiInfo.Get(basic.id, new PetUIInfo(basic.id, basic.baseId)));
+                var ui = uiInfo.Get(basic.id, new PetUIInfo(basic.id, basic.baseId));
+                PetInfo info = new PetInfo(basic, featureInfo.Get(ui.defaultFeatureId), expInfo.Get(basic.id), new PetTalentInfo(), skillInfo.Get(basic.id), ui);
                 petInfos.Set(info.id, info);
             }
 
@@ -430,7 +446,14 @@ public class ResourceManager : Singleton<ResourceManager>
     }
 
     private void LoadItemEffect(string[] info, Action<Dictionary<int, ItemInfo>> onSuccess = null) {
-        LoadCSV(itemUrl + "effect.csv", (data) => onSuccess?.Invoke(GetItemInfo(info, data)));
+        LoadCSV(itemUrl + "effect.csv", (data) => {
+            var originalDict = GetItemInfo(info, data);
+            if (SaveSystem.TryLoadItemMod(out var modDict)) {
+                foreach (var entry in modDict)
+                    originalDict.Set(entry.Key, entry.Value);
+            }
+            onSuccess?.Invoke(originalDict);
+        });
     }
 
     public Dictionary<string, ActivityInfo> GetActivityInfo(string[] data) {

@@ -33,7 +33,7 @@ public static class SecretSkillDescriptionHandler
     }
 
     public static string AtWeather(this LearnSkillInfo secretSkillInfo) {
-        return (Weather)(secretSkillInfo.value) + "环境下击败对手";
+        return Buff.GetWeatherBuff(secretSkillInfo.value).name + "环境下击败对手";
     }
 
     public static string UseSkill(this LearnSkillInfo secretSkillInfo) {

@@ -43,13 +43,15 @@ public class BattlePhase
         
         var buffEffects = invokeUnit.pet.buffs.Select(x => x.effects);
         var handler = new EffectHandler();
+        
+        if (state != null)
+            handler.AddEffects(invokeUnit, state.weatherBuff.effects);
 
-        if (invokeUnit.skill != null) {
+        if (invokeUnit.skill != null) 
             handler.AddEffects(invokeUnit, invokeUnit.skill.effects);
-        }
-        foreach (var e in buffEffects) {
+        
+        foreach (var e in buffEffects)
             handler.AddEffects(invokeUnit, e);
-        }
 
         return handler;
     }

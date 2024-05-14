@@ -73,8 +73,8 @@ public class Unit
         return skillSystem.CalculateAccuracy(pet, rhs.pet);
     }
 
-    public void PrepareDamageParam(Unit rhs, Weather weather = Weather.无) {
-        skillSystem.PrepareDamageParam(pet, rhs.pet, weather);
+    public void PrepareDamageParam(Unit rhs) {
+        skillSystem.PrepareDamageParam(pet, rhs.pet);
     }
 
     public int CalculateDamage(Unit rhs) {

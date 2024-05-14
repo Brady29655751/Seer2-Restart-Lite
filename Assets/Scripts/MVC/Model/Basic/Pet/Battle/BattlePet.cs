@@ -12,6 +12,8 @@ public class BattlePet : Pet
     public PetBattleSkillController skillController;
 
     /* Properties */
+    public int battleElementId => (int)battleElement;
+    public Element battleElement => buffController.element;
     public bool isDead => (battleStatus.hp <= 0);
     public bool isMovable => buffController.isMovable;
 
@@ -135,6 +137,29 @@ public class BattlePet : Pet
             return new KeyValuePair<int, int>((int)status.spd, (int)status.hp);
         }
         return new KeyValuePair<int, int>(0, 1);
+    }
+
+    public override float GetPetIdentifier(string id) {
+        return id switch {
+            "element" => (int)buffController.element,
+            _ => base.GetPetIdentifier(id),
+        };
+    }
+
+    public override bool TryGetPetIdentifier(string id, out float value) {
+        value = GetPetIdentifier(id);
+        return value != float.MinValue;
+    }
+
+    public override void SetPetIdentifier(string id, float value) {
+        switch (id) {
+            default:
+                base.SetPetIdentifier(id, value);
+                return;
+            case "element":
+                buffController.SetElement((Element)value);
+                return;
+        }
     }
 
     public virtual Skill GetDefaultSkill() {

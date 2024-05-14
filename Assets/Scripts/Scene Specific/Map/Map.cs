@@ -11,17 +11,16 @@ public class Map
     [XmlAttribute("id")] public int id;
     [XmlAttribute("resId")] public int resId = 0;
     [XmlAttribute("name")] public string name;
-    [XmlAttribute("weather")] public int weatherId = 0;
-    public Weather weather {
-        get => (Weather)weatherId;
-        set => weatherId = (int)value;
-    }
+    [XmlAttribute("weather")] public int weather = 0;
+    
     [XmlAttribute("category")] public int categoryId;
     public MapCategory category => (MapCategory)categoryId;
     [XmlAttribute("switch")] public int dayNightSwitch;
     [XmlAttribute("dream")] public bool dream;
 
     [XmlElement("fightMap")] public int fightMapId;
+    [XmlElement("fightMapColor")] public string fightMapColorId = "255,255,255,255";
+    public Color fightMapColor => fightMapColorId.ToColor(Color.white);
     [XmlElement("initialPoint")] public string initialPoint;
     public Vector2 initPoint => initialPoint.ToVector2();
     

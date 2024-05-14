@@ -21,8 +21,11 @@ public class BattleResourceView : BattleBaseView
 
     private void LoadBackground() {
         Sprite fightMap = (Sprite)Player.GetSceneData("fightBg");
-        if (fightMap != null)
-            background?.SetSprite(fightMap);
+        if (fightMap == null) 
+            return;
+
+        background.SetSprite(fightMap);
+        background.color = Player.instance.currentMap.fightMapColor;
     }
 
     private void LoadDamage() {

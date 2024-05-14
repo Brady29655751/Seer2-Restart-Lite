@@ -88,7 +88,7 @@ public static class EffectAbilityHandler
         float anger = petChangeUnit.pet.anger;
         var inheritBuffs = petChangeUnit.pet.buffs.FindAll(x => x.info.inherit);
 
-        petChangeUnit.pet.buffController.RemoveRangeBuff(inheritBuffs, petChangeUnit, state);
+        // petChangeUnit.pet.buffController.RemoveRangeBuff(inheritBuffs, petChangeUnit, state);
         petChangeUnit.pet.buffController.RemoveRangeBuff(x => !x.info.keep, petChangeUnit, state);
         petChangeUnit.petSystem.cursor = targetIndex;
         petChangeUnit.pet.anger = Mathf.FloorToInt(anger * 0.8f);
@@ -503,7 +503,8 @@ public static class EffectAbilityHandler
 
         if (type == "id") {
             string setAnger = effect.abilityOptionDict.Get("set_anger", "false");
-            if (!bool.TryParse(setAnger, out bool isSetAnger))
+            string resetParam = effect.abilityOptionDict.Get("reset_param", "false");
+            if ((!bool.TryParse(setAnger, out bool isSetAnger)) || (!bool.TryParse(resetParam, out bool isResetParam)))
                 return false;
 
             Skill newSkill = new Skill(value switch {
@@ -513,11 +514,14 @@ public static class EffectAbilityHandler
                 _ => Skill.GetSkill(int.Parse(value)),
             });
 
-            if (!isSetAnger) {
+            if (!isSetAnger)
                 newSkill.anger = lhsUnit.skill.anger;
-            }
 
             lhsUnit.skillSystem.skill = newSkill;
+
+            if (isResetParam)
+                lhsUnit.skillSystem.PrepareDamageParam(state.atkUnit.pet, state.defUnit.pet);
+
             return true;
         }
 
@@ -538,6 +542,9 @@ public static class EffectAbilityHandler
         if (state == null) {
             Pet pet = (Pet)effect.invokeUnit;
 
+            oldValue = pet.GetPetIdentifier(type);
+            newValue = pet.TryGetPetIdentifier(value, out newValue) ? newValue : Identifier.GetNumIdentifier(value);
+
             if (type == "evReset") {
                 pet.talent.ResetEV();
                 return true;
@@ -552,8 +559,21 @@ public static class EffectAbilityHandler
                 return true;
             }
 
-            oldValue = pet.GetPetIdentifier(type);
-            newValue = pet.TryGetPetIdentifier(value, out newValue) ? newValue : Identifier.GetNumIdentifier(value);
+            if ((type == "skill") && (op == "+")) {
+                if (!int.TryParse(value, out var skillId))
+                    return false;
+
+                var skill = Skill.GetSkill(skillId, false);
+                if (skill == null)
+                    return false;
+
+                if (!pet.skills.LearnNewSkill(skill))
+                    return false;
+                    
+                SaveSystem.SaveData();
+                return true;
+            }
+
             pet.SetPetIdentifier(type, Operator.Operate(op, oldValue, newValue));
             return true;
         }
@@ -568,12 +588,17 @@ public static class EffectAbilityHandler
 
         // Switch to special pet.
         if (type == "id") {
-            if (!bool.TryParse(effect.abilityOptionDict.Get("best", "false"), out var isBest))
+            if (!bool.TryParse(effect.abilityOptionDict.Get("mod", "false"), out var withMod))
                 return false;
 
+            // Special value.
+            if (value == "random")
+                newValue = Pet.GetRandomPetInfo(withMod).id;
+
+            // Prepare kill list.
             var petSystem = lhsUnit.petSystem;
-            var killList = effect.abilityOptionDict.Get("kill", "none").ToIntList('/');
             var petBagIds = petSystem.petBag.Where(x => (x != null) && (!x.isDead)).Select(x => x.id).ToList();
+            var killList = effect.abilityOptionDict.Get("kill", "none").ToIntList('/');
 
             for (int i = 0; i < killList.Count; i++) {
                 if (!petBagIds.Remove(killList[i]))
@@ -585,12 +610,47 @@ public static class EffectAbilityHandler
                 petSystem.petBag[index] = null;
             }
 
-            Pet switchPet = new Pet((int)newValue, battlePet);
-            if (isBest)
-                switchPet = Pet.ToBestPet(switchPet);
+            // Prepare skill param.
+            var normalSkillExpr = effect.abilityOptionDict.Get("normal_skill", "none");
+            var superSkillExpr = effect.abilityOptionDict.Get("super_skill", "0");
+
+            Skill[] normalSkills = null;
+            Skill superSkill = null;
+
+            // If normal_skill/super_skill is shift[COUNT], shift current skill ids with COUNT.
+            // Else take it as an int list and get skill ids.
+            if (normalSkillExpr.TryTrimStart("shift", out var normalTrim) &&
+                normalTrim.TryTrimParentheses(out var normalShift) &&
+                int.TryParse(normalShift, out var normalShiftCount)) {
+                normalSkills = battlePet.normalSkill.Where(x => x != null).Select(x => Skill.GetSkill(x.id + normalShiftCount, false)).ToArray();
+            } else {
+                normalSkills = normalSkillExpr.ToIntList('/').Take(4).Select(id => Skill.GetSkill(id, false)).ToArray();
+            }
+
+            if (superSkillExpr.TryTrimStart("shift", out var superTrim) &&
+                superTrim.TryTrimParentheses(out var superShift) &&
+                int.TryParse(superShift, out var superShiftCount)) {
+                superSkill = (battlePet.superSkill == null) ? null : (Skill.GetSkill(battlePet.superSkill.id + superShiftCount, false));
+            } else {
+                var superSkillId = (int)Parser.ParseEffectOperation(superSkillExpr, effect, lhsUnit, rhsUnit);
+                superSkill = Skill.GetSkill(superSkillId, false);
+            }
+
+            // Switch Pet.
+            Pet switchPet = Pet.GetExamplePet((int)newValue);
+            switchPet.basic.personality = Personality.实干;
+            switchPet.normalSkill = normalSkills;
+            switchPet.superSkill = superSkill;
 
             var cursor = lhsUnit.petSystem.cursor;
             lhsUnit.petSystem.petBag[cursor] = BattlePet.GetBattlePet(switchPet);
+
+            // Add feature and emblem buffs
+            List<Buff> buffs = new List<Buff>();
+            buffs.Add(Buff.GetFeatureBuff(lhsUnit.pet.info));
+            buffs.Add(Buff.GetEmblemBuff(lhsUnit.pet.info));
+            lhsUnit.pet.buffController.AddRangeBuff(buffs, lhsUnit, state);
+
             return true;
         }
 
@@ -605,7 +665,11 @@ public static class EffectAbilityHandler
         if (!int.TryParse(weatherId, out int weather))
             return false;
 
-        state.weather = (Weather)weather;
+        if (state.masterUnit.pet.buffController.IsBuffTypeBlocked(BuffType.Weather) || 
+            state.clientUnit.pet.buffController.IsBuffTypeBlocked(BuffType.Weather))
+            return false;
+
+        state.weather = weather;
         return true;
     }
 }

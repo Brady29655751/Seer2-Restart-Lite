@@ -15,6 +15,7 @@ public static class BuffDatabase
         {"turn", BuffType.TurnBased},
         {"chance", BuffType.ChanceBased},
         {"shield", BuffType.Shield},
+        {"weather", BuffType.Weather},
     };
 
     public static Dictionary<string, CopyHandleType> copyConvDict = new Dictionary<string, CopyHandleType>() {
@@ -53,6 +54,7 @@ public enum BuffType {
     TurnBased = 6,  // 回合類狀態
     ChanceBased = 7,// 次數類狀態 
     Shield = 8,     // 護盾類狀態
+    Weather = 9,    // 天氣類狀態
 }
 
 public enum CopyHandleType {

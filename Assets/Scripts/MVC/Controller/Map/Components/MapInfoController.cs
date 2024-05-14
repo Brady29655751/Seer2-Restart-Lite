@@ -16,13 +16,13 @@ public class MapInfoController : UIModule
         infoView.SetInfoText(text);
     }
 
-    public void SetWeather(Weather weather) {
+    public void SetWeather(int weather) {
         infoModel.SetWeather(weather);
         infoView.SetWeather(weather);
     }
 
     public void ShowWeatherInfo() {
-        SetInfoPromptText(infoModel.weather.ToString());
+        infoPrompt.SetBuff(Buff.GetWeatherBuff(infoModel.weather));
     }
 
     public void SetDayNightSwitch(int dayNightSwitch) {

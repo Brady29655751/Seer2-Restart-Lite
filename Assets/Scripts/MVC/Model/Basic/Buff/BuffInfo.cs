@@ -117,7 +117,7 @@ public class BuffInfo
         if (type == BuffType.Emblem)
             return   PetUISystem.GetEmblemIcon(_pet * (_type < 5 ? 1 : -1));
 
-        return ResourceManager.instance.GetLocalAddressables<Sprite>("Buffs/" + resId, IsMod(id));
+        return ResourceManager.instance.GetLocalAddressables<Sprite>("Buffs/" + resId, IsMod(resId));
     }
 
 }

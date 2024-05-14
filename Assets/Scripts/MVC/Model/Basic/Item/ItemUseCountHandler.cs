@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -32,6 +33,13 @@ public static class ItemUseCountHandler
             return 1;
 
         return Mathf.CeilToInt((510 - pet.talent.ev.sum - pet.talent.evStorage) / ev);
+    }
+
+    public static int StuffMaxUseCount(this Item item, object invokeUnit, BattleState state) {
+        if (List.IsNullOrEmpty(item.effects))
+            return int.MaxValue;
+
+        return item.effects.Select(x => int.Parse(x.abilityOptionDict.Get("max_use", "1"))).Min();
     }
     
 }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,11 +8,16 @@ using System.IO;
 
 public class TitleManager : Manager<TitleManager>
 {
+    [SerializeField] private Image backgroundImage;
+    [SerializeField] private List<GameObject> backgroundGadgetObjectList;
     [SerializeField] private IButton startButton;
     [SerializeField] private IText versionDateText, versionStringText;
 
     private void Start() {
         StartCoroutine(CheckVersionData());
+
+        FileBrowser.AddQuickLink("默认存档位置", Application.persistentDataPath);
+        SetBackgroundPageImage();
     }
 
     private IEnumerator CheckVersionData() {
@@ -26,6 +32,19 @@ public class TitleManager : Manager<TitleManager>
         
         versionDateText?.SetText(GameManager.versionData.releaseDate.ToString("yyyy/MM/dd"));
         versionStringText?.SetText(GameManager.versionData.gameVersion);
+    }
+
+    private void SetBackgroundPageImage() {
+        if (!SaveSystem.IsModExists())
+            return;
+        
+        var modBackgroundSprite = ResourceManager.instance.GetLocalAddressables<Sprite>("Activities/FirstPage", true);
+        if (modBackgroundSprite == null) 
+            return;
+        
+        backgroundImage.SetSprite(modBackgroundSprite);
+        backgroundImage.color = Color.white;
+        backgroundGadgetObjectList.ForEach(x => x?.SetActive(false));
     }
 
     public void GameStart() {
@@ -90,7 +109,7 @@ public class TitleManager : Manager<TitleManager>
         hintbox.SetContent("导入其他mod会覆盖当前mod资料\n也会失去目前所有获得的mod精灵\n请先确定当前mod已经导出保存\n若已保存请点击【确认】继续导入mod", 16, FontOption.Arial);
         hintbox.SetOptionNum(2);
         hintbox.SetOptionCallback(() => {
-            FileBrowser.ShowLoadDialog(OnImportSuccess, OnCancel, FileBrowser.PickMode.Folders, title: "选择要导入的mod");
+            FileBrowser.ShowLoadDialog(OnImportSuccess, OnCancel, FileBrowser.PickMode.Folders, title: "选择要导入的mod（手机端请先点击左边的Browse才能浏览）");
         });
     }
 
@@ -107,7 +126,7 @@ public class TitleManager : Manager<TitleManager>
     public void OnExportMod() {
         var hintbox = Hintbox.OpenHintboxWithContent("导出mod会在选择的资料夹里面自动产生或覆盖一个名为Mod的资料夹，后续导入时选择该资料夹即可", 16);
         hintbox.SetOptionCallback(() => {
-            FileBrowser.ShowSaveDialog(OnExportModSuccess, OnCancel, FileBrowser.PickMode.Folders, title: "选择要导出的位置");
+            FileBrowser.ShowSaveDialog(OnExportModSuccess, OnCancel, FileBrowser.PickMode.Folders, title: "选择要导出的位置（手机端请先点击左边的Browse才能浏览）");
         });
     }
 

@@ -116,7 +116,7 @@ public class WorkshopBuffModel : Module
     public bool CreateDIYBuff() {
         var originalBuffInfo = Buff.GetBuffInfo(buffInfo.id);
         Database.instance.buffInfoDict.Set(buffInfo.id, buffInfo);
-        if (SaveSystem.TrySaveBuffMod(buffInfo, iconBytes))    
+        if (SaveSystem.TrySaveBuffMod(buffInfo, iconBytes, iconSprite))    
             return true;
         
         // rollback
@@ -177,6 +177,13 @@ public class WorkshopBuffModel : Module
 
             error = "纹章类的序号格式不符\n请点击序号右方的问号查看说明";
             return false;
+        }
+
+        if (type == BuffType.Weather) {
+            if (id.IsWithin(51_0001, 59_9999))
+                return true;
+
+            error = "天气类的序号格式不符\n请点击序号右方的问号查看说明";
         }
 
         if (id > -10_0001) {

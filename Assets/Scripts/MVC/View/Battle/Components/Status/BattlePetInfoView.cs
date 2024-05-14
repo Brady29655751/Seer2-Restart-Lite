@@ -15,7 +15,7 @@ public class BattlePetInfoView : BattleBaseView
         icon.sprite =   pet.ui.icon;
         nameText.text = pet.name;
         levelText.text = (levelTextWithLV ? "LV " : string.Empty)  + pet.level.ToString();
-        elementImage.SetElementSprite(pet.element);
+        elementImage.SetElementSprite(pet.battleElement);
     }
 
 }

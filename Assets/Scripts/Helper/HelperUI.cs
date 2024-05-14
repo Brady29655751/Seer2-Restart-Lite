@@ -102,10 +102,6 @@ public static class SpriteSet {
         image.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, (gender == 1) ? 24 : 35);
     }
 
-    public static void SetWeatherSprite(this Image image, Weather weather) {
-        image.sprite = ResourceManager.instance.GetSprite("Weathers/" + (int)weather);
-    }
-
     public static void SetSkillBackgroundSprite(this Image image, bool isChosen, bool isSuper, SecretType secretType) {
         int index = 0;
 

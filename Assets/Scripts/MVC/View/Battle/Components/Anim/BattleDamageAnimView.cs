@@ -32,17 +32,17 @@ public class BattleDamageAnimView : Module
         }
         
         if (currentUnit.hudSystem.applyHealAnim) {
-            SetHealObject(currentUnit.IsMyUnit(), currentUnit.hudSystem.heal);
+            SetHealObject(currentUnit.IsMyUnit(), currentUnit.hudSystem.heal, currentUnit.skill.type == SkillType.道具);
         }
     }
 
-    private void SetHealObject(bool isMe, int heal) {
-        if (heal == 0)
+    private void SetHealObject(bool isMe, int heal, bool forceShowHeal = false) {
+        if ((heal == 0) && (!forceShowHeal))
             return;
 
         GameObject obj = Instantiate(healNumberPrefab, healAnchoredObject.transform);
         Text num = obj.GetComponent<Text>();
-        num.text = ((heal > 0) ? "+" : string.Empty) + heal.ToString();
+        num.text = ((heal >= 0) ? "+" : string.Empty) + heal.ToString();
         num.color = heal > 0 ? healPositiveColor : healNegativeColor;
         StartCoroutine(SetHealAnim(num.rectTransform));
     }

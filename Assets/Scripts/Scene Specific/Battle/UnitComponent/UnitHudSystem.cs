@@ -44,7 +44,7 @@ public class UnitHudSystem
 
     public void OnUseItem(Unit thisUnit, Skill atkSkill, bool isAtkUnit) {
         if (isAtkUnit) {
-            applyHealAnim = (thisUnit.skillSystem.heal > 0);
+            applyHealAnim = (thisUnit.skillSystem.heal > 0) || (atkSkill.effects.Exists(x => x.ability == EffectAbility.Heal));
             heal = thisUnit.skillSystem.heal;
         } else {
             applyPetAnim = atkSkill.isCapture;

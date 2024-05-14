@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Panel : Module
+public class Panel : UIModule
 {
     [SerializeField] protected Image background;
     [SerializeField] protected IButton ESCButton;
@@ -25,15 +25,24 @@ public class Panel : Module
     }
 
     public static Panel OpenPanel(string panelName) {
-        panelName = panelName.TrimEnd("Panel");
+        bool isModPanel = panelName.TryTrimStart("[Mod]", out var trimPanelName);
+        panelName = isModPanel ? "Mod" : panelName.TrimEnd("Panel");
+
         GameObject canvas = GameObject.Find("Canvas");
         GameObject prefab = ResourceManager.instance.GetPanel(panelName);
+
         if (prefab == null)
             return null;
 
         GameObject obj = Instantiate(prefab, canvas.transform);
         obj.transform.SetAsLastSibling();
         Panel panel = obj.GetComponentInChildren<Panel>();
+
+        if (isModPanel) {
+            bool isSuccessLoading = SaveSystem.TryLoadPanelMod(trimPanelName, out var panelData);
+            ((ModPanel)panel).SetPanelData(isSuccessLoading ? panelData : null);
+        }
+
         return panel;
     }
 

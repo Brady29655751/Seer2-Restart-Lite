@@ -8,6 +8,7 @@ public class WorkshopPetController : Module
     [SerializeField] private WorkshopPetView petView;
     [SerializeField] private PageView pageView;
     [SerializeField] private WorkshopLearnSkillController learnSkillController;
+    [SerializeField] private WorkshopLearnBuffController learnBuffController;
 
     protected override void Awake() {
         petModel.onUploadSpriteEvent += OnUploadSpriteSuccess;
@@ -59,6 +60,26 @@ public class WorkshopPetController : Module
         petModel.OnRemoveSkill();
         petView.OnRemoveSkill();
     }
+
+    public void OnSelectFeature() {
+        learnBuffController.SetDIYSuccessCallback(OnSelectFeatureSuccess);
+        petView.OpenLearnBuffPanel();
+    }
+
+    private void OnSelectFeatureSuccess(BuffInfo info) {
+        petModel.OnSelectFeature(info);
+        Hintbox.OpenHintboxWithContent("特性自动填写成功", 16);
+    }    
+
+    public void OnSelectEmblem() {
+        learnBuffController.SetDIYSuccessCallback(OnSelectEmblemSuccess);
+        petView.OpenLearnBuffPanel();
+    }
+
+    private void OnSelectEmblemSuccess(BuffInfo info) {
+        petModel.OnSelectEmblem(info);
+        Hintbox.OpenHintboxWithContent("纹章自动填写成功", 16);
+    }    
 
     public void OnUploadSprite(string type) {
         petModel.OnUploadSprite(type);

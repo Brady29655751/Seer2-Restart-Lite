@@ -122,6 +122,7 @@ public class Effect {
 
         this.invokeUnit = invokeUnit;
 
+        /*
         if (checkTurn && !condOptionDictList.Select(x => this.IsCorrectTurn(state, x)).Any(x => x))
             return false;
 
@@ -133,7 +134,8 @@ public class Effect {
 
         if (!condOptionDictList.Select(x => this.RandomNumber(state, x)).Any(x => x))
             return false;
-        
+        */
+
         Func<Dictionary<string, string>, bool> ConditionFunc = condition switch {
             EffectCondition.CurrentUnit => ((x) => this.UnitCondition(state, x)),
             EffectCondition.CurrentPet => ((x) => this.PetCondition(state, x)),
@@ -144,7 +146,11 @@ public class Effect {
             _ => ((x) => true)
         };
 
-        return condOptionDictList.Select(x => ConditionFunc.Invoke(x)).Any(x => x);
+        return condOptionDictList.Select(x => {
+            return ((!checkTurn) || this.IsCorrectTurn(state, x)) && 
+                this.IsCorrectWeather(state, x) && this.IsAttackAndHit(state, x) && 
+                this.RandomNumber(state, x) && ConditionFunc.Invoke(x);
+        }).Any(x => x);
     }
 
     public bool Apply(object invokeUnit, BattleState state = null) {

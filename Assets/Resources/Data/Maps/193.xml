@@ -1,0 +1,232 @@
+<map name="悲伤残骸" category="3" id="193" weather="2">
+	<fightMap>100003</fightMap>
+	<music category="3">
+		<bgm>BGM_160</bgm>
+		<fx>FX_120</fx>
+	</music>
+	<initialPoint>250,180</initialPoint>
+	<entities>
+		<npc id="19301" resId="19301" name="Lv 30 阿卡纳斯" size="289,184" pos="590,280" namePos="30,-60">
+			<description>SPT</description>
+			<dialog>
+				<branch id="default" name="阿卡纳斯" icon="Pets/pet/31.png" size="172,126" pos="10,35">
+					<content><![CDATA[蓝喵的脑袋越来越硬了]]></content>
+					<functionHandler>
+						<func type="click">
+							<description><![CDATA[普通挑战]]></description>
+							<action>battle</action>
+							<param>default</param>
+						</func>
+						<func type="click">
+							<description><![CDATA[挑战1]]></description>
+							<action>battle</action>
+							<param>challenge_1</param>
+							<condition>firstPet.baseId=30</condition>
+						</func>
+						<func type="branch">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=把阿卡纳斯设为首发之后再来挑战吧</param>
+							<param>option_num=1</param>
+							<param>item_icon=pet[31]</param>
+							<condition>firstPet.baseIdNOT30</condition>
+						</func>
+						<func type="click">
+							<description><![CDATA[挑战2]]></description>
+							<action>battle</action>
+							<param>challenge_2</param>
+						</func>
+						<func type="click">
+							<description><![CDATA[超进化挑战]]></description>
+							<action>battle</action>
+							<param>evolve</param>
+							<condition>firstPet.id=31</condition>
+						</func>
+						<func type="branch">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=把阿卡纳斯设为首发之后再来挑战吧</param>
+							<param>option_num=1</param>
+							<param>item_icon=pet[30]</param>
+							<condition>firstPet.idNOT30</condition>
+						</func>
+					</functionHandler>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[你的屏障也越来越厚了]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+					</replyHandler>
+				</branch>
+			</dialog>
+			<battle>
+				<branch id="default">
+					<settings count="1" simulate="true">
+						<mode>3</mode>
+						<weather>2</weather>
+					</settings>
+					<player>
+						<pet id="28" level="30">
+							<normalSkill>10402,10403,10404,10211</normalSkill>
+						</pet>
+					</player>
+					<enemy>
+						<pet id="31" level="30">
+							<status>
+								<hp>400</hp>
+							</status>
+							<headerSkill>10417</headerSkill>
+							<loopSkill>10420,10419,10003</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>getPet</action>
+							<param>30,10,0</param>
+							<condition>activity[spt].done[north][2][default]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=【阿卡】已经放入精灵仓库</param>
+							<param>item_icon=pet[30]</param>
+							<param>option_num=1</param>
+							<condition>activity[spt].done[north][2][default]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>spt</param>
+							<param>done[north][2][default]=true</param>
+							<condition>activity[spt].done[north][2][default]=[bool]false[default]false</condition>
+						</button>
+					</winHandler>
+				</branch>
+				<branch id="challenge_1">
+					<settings count="1">
+						<mode>3</mode>
+						<weather>2</weather>
+					</settings>
+					<enemy>
+						<pet id="31" level="100">
+							<status>
+								<hp>800</hp>
+							</status>
+							<initBuff>44</initBuff>
+							<loopSkill>10424,10422,10422,10422</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setPet</action>
+							<param>emblem=1</param>
+							<condition>activity[spt].done[north][2][challenge_1]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=【阿卡纳斯】获得了【震击】纹章</param>
+							<param>item_icon=emblem[30]</param>
+							<param>option_num=1</param>
+							<condition>activity[spt].done[north][2][challenge_1]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>spt</param>
+							<param>done[north][2][challenge_1]=true</param>
+							<condition>activity[spt].done[north][2][challenge_1]=[bool]false[default]false</condition>
+						</button>
+					</winHandler>
+				</branch>
+				<branch id="challenge_2">
+					<settings count="6">
+						<mode>3</mode>
+						<weather>2</weather>
+					</settings>
+					<enemy>
+						<pet id="31" level="100">
+							<status>
+								<hp>2000</hp>
+							</status>
+							<initBuff>13,14,17</initBuff>
+							<headerSkill>10417,10420</headerSkill>
+							<loopSkill>10423,10422,10426,10420</loopSkill>
+							<superSkill>10425</superSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setItem</action>
+							<param>add</param>
+							<param>2,50</param>
+							<condition>activity[spt].done[north][2][challenge_2]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=50 星钻已经放入背包</param>
+							<param>item_icon=item[2]</param>
+							<param>option_num=1</param>
+							<condition>activity[spt].done[north][2][challenge_2]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>spt</param>
+							<param>done[north][2][challenge_2]=true</param>
+							<condition>activity[spt].done[north][2][challenge_2]=[bool]false[default]false</condition>
+						</button>
+					</winHandler>
+				</branch>
+				<branch id="evolve">
+					<settings count="1">
+						<mode>3</mode>
+						<weather>2</weather>
+					</settings>
+					<enemy>
+						<pet id="692" level="105">
+							<status>
+								<hp>2000</hp>
+							</status>
+							<initBuff>20</initBuff>
+							<loopSkill>10429,10430,10428,10426,10432</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>evolvePet</action>
+							<param>692</param>
+							<condition>activity[spt].done[north][2][evolve]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=阿卡纳斯已成功超进化</param>
+							<param>item_icon=pet[692]</param>
+							<param>option_num=1</param>
+							<condition>activity[spt].done[north][2][evolve]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>spt</param>
+							<param>done[north][2][evolve]=true</param>
+							<condition>activity[spt].done[north][2][evolve]=[bool]false[default]false</condition>
+						</button>
+					</winHandler>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>openDialog</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+        <teleport id="1" name="残骸通道" pos="230,80" targetMapId="192"/>
+	</entities>
+</map>

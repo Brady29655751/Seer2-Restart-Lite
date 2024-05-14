@@ -34,7 +34,7 @@ public class ImportRoleController : Module
         bool isSuccessSaving = SaveSystem.TryLoadXML<GameData>(paths[0], out var importData, out var message);
         if (isSuccessSaving) {
             SaveSystem.SaveData(importData, importId);
-            message = "导入成功";
+            message = "导入成功，请重新启动游戏";
         }
 
         var hintbox = Hintbox.OpenHintbox();
@@ -43,7 +43,7 @@ public class ImportRoleController : Module
         hintbox.SetOptionNum(1);
         hintbox.SetOptionCallback(() => {
             if (isSuccessSaving)
-                SceneLoader.instance.ChangeScene(SceneId.Title);
+                Application.Quit();
         });
         OnCancel();
     }

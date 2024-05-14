@@ -13,15 +13,17 @@ public static class ItemDatabase
         {"ev", ItemType.EV},
         {"iv", ItemType.IV},
         {"personality", ItemType.Personality},
+        {"skill", ItemType.Skill},
         {"mine", ItemType.Mine},
+        {"stuff", ItemType.Stuff},
     };
 
     public static Dictionary<ItemCategory, List<ItemType>> categoryDict = new Dictionary<ItemCategory, List<ItemType>>() {
         { ItemCategory.Currency, new List<ItemType>() { ItemType.Currency } },
-        { ItemCategory.Pet, new List<ItemType>() { ItemType.HpPotion, ItemType.EXP, ItemType.EV, ItemType.IV, ItemType.Personality } },
+        { ItemCategory.Pet, new List<ItemType>() { ItemType.HpPotion, ItemType.EXP, ItemType.EV, ItemType.IV, ItemType.Personality, ItemType.Skill } },
         { ItemCategory.Battle, new List<ItemType>() { ItemType.HpPotion } },
         { ItemCategory.Capture, new List<ItemType>() { ItemType.Capture } },
-        { ItemCategory.Stuff, new List<ItemType>() { ItemType.Mine }},
+        { ItemCategory.Stuff, new List<ItemType>() { ItemType.Mine, ItemType.Stuff }},
     };
 
     public static ItemType ToItemType(this string type) {
@@ -47,7 +49,9 @@ public enum ItemType {
     EV,
     IV,
     Personality,
+    Skill,
     Mine,
+    Stuff,
 }
 
 public enum ItemCategory {

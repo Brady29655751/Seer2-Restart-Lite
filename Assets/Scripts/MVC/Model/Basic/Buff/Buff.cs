@@ -10,6 +10,7 @@ public class Buff
     public int id;
     public string name => info.name;
     public string description => GetDescription();
+    public Sprite icon => info.icon;
 
     /* Battle Data */
     private int _value;
@@ -90,13 +91,21 @@ public class Buff
         return 2 * type + (powerup > 0 ? 1 : 2);
     }
 
+    public static Buff GetWeatherBuff(int weatherId) {
+        int id = 50_0000 + weatherId;
+        if (GetBuffInfo(id) == null)
+            return new Buff(50_0000);
+
+        return new Buff(id);
+    }
+
     public static Buff GetFeatureBuff(PetInfo info) {
-        Buff featureBuff = new Buff((info.id > 0 ? 10_0000 : 90_0000) + Mathf.Abs(info.basic.baseId));
+        Buff featureBuff = new Buff((info.id > 0 ? 10_0000 : 90_0000) + Mathf.Abs(info.feature.baseId));
         return featureBuff;
     }
 
     public static Buff GetEmblemBuff(PetInfo info) {
-        int id = (info.id > 0 ? 20_0000 : 80_0000) + Mathf.Abs(info.basic.baseId);
+        int id = (info.id > 0 ? 20_0000 : 80_0000) + Mathf.Abs(info.feature.baseId);
         if (GetBuffInfo(id) == null)
             return null;
 
@@ -113,12 +122,12 @@ public class Buff
     public string GetDescription() {
         string desc = GetBuffDescriptionPreview(info.description, value.ToString());
 
-        if (!info.keep && !IsUnhealthy() && !IsAbnormal()) {
+        if (!info.keep && !IsUnhealthy() && !IsAbnormal()) 
             desc += "（若精灵换场则不保留）";
-        }
-        if (turn > 0) {
+        
+        if (turn > 0)
             desc += "\n持续 " + turn + " 回合";
-        }
+        
         return desc;
     }
 

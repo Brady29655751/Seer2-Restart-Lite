@@ -10,8 +10,3 @@ public class WorldMapPanel : Panel
         debugObjectList?.ForEach(x => x?.SetActive(GameManager.instance.debugMode));
     }
 }
-
-public class MiniMapPanel : Panel 
-{
-    
-}

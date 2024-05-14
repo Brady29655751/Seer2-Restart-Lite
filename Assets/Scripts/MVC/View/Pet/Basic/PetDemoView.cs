@@ -57,7 +57,7 @@ public class PetDemoView : Module
     }
 
     public void SetFeature(Feature feature) {
-        featureText.text = feature.name;
+        featureText.text = feature.name.Substring(0, Mathf.Min(feature.name.Length, 2));
     }
 
     public void SetFeatureInfoPromptContent(Feature feature) {

@@ -52,10 +52,18 @@ public class WorkshopPetModel : SelectModel<GameObject>
         petAdvanceModel.OnRemoveSkill();
     }
 
+    public void OnSelectFeature(BuffInfo info) {
+        petAdvanceModel.OnSelectFeature(info);
+    }
+
+    public void OnSelectEmblem(BuffInfo info) {
+        petAdvanceModel.OnSelectEmblem(info);
+    }
+
     public bool CreateDIYPet() {
         var originalPetInfo = Pet.GetPetInfo(petInfo.id);
         Database.instance.petInfoDict.Set(petInfo.id, petInfo);
-        if (SaveSystem.TrySavePetMod(petInfo, petSkinModel.bytesDict))
+        if (SaveSystem.TrySavePetMod(petInfo, petSkinModel.bytesDict, petSkinModel.spriteDict))
             return true;
 
         // rollback
@@ -69,7 +77,7 @@ public class WorkshopPetModel : SelectModel<GameObject>
         if (!petBasicModel.VerifyDIYPetBasic(petAdvanceModel.baseId, out error))
             return false;
 
-        if (!petAdvanceModel.VerifyDIYPetAdvance(petBasicModel.id, out error))
+        if (!petAdvanceModel.VerifyDIYPetAdvance(petBasicModel.id, petSkinModel.options.Contains("default_feature="), out error))
             return false;
 
         if (!petSkinModel.VerifyDIYPetSkin(petBasicModel.id, petAdvanceModel.baseId, out error))

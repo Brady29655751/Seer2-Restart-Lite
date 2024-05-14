@@ -64,7 +64,7 @@ public class UnitSkillSystem
         return isHit;
     }
 
-    public void PrepareDamageParam(BattlePet atkPet, BattlePet defPet, Weather weather = Weather.无) {
+    public void PrepareDamageParam(BattlePet atkPet, BattlePet defPet) {
         if (skill == null)
             return;
 
@@ -72,7 +72,6 @@ public class UnitSkillSystem
         var status = BattlePet.GetSkillTypeStatus(skill, atkPet, defPet);
         atk = Mathf.Max(status.Key, 1);
         def = Mathf.Max(status.Value, 1);
-        weatherBuff = PetElementSystem.GetWeatherBuff(skill.element, weather);
         elementRelation = PetElementSystem.GetElementRelation(skill, defPet);
         sameElementBuff = (skill.element == atkPet.element) ? 1.5f : 1f;
     }

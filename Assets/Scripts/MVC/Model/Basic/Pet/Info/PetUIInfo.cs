@@ -12,6 +12,7 @@ public class PetUIInfo
     public List<int> specialSkinList = new List<int>();
     public Dictionary<string, string> options = new Dictionary<string, string>();
     public int defaultSkinId;
+    public int defaultFeatureId;
 
     public Sprite icon => PetUISystem.GetPetIcon(defaultSkinId);
     public Sprite emblemIcon => PetUISystem.GetEmblemIcon(baseId);
@@ -21,6 +22,7 @@ public class PetUIInfo
         id = petId;
         baseId = petBaseId;
         defaultSkinId = petId;
+        defaultFeatureId = petBaseId;
     }
 
     public PetUIInfo(string[] _data, int startIndex = 0) {
@@ -33,6 +35,7 @@ public class PetUIInfo
         options.ParseOptions(_slicedData[3]);
 
         defaultSkinId = int.Parse(options.Get("default_skin", id.ToString()));
+        defaultFeatureId = int.Parse(options.Get("default_feature", baseId.ToString()));
     }
 
     public string[] GetRawInfoStringArray() {
@@ -42,7 +45,6 @@ public class PetUIInfo
 
         var rawSkinList = specialSkinList.Select(x => x.ToString()).ConcatToString("/");
         
-
         return new string[] { id.ToString(), baseId.ToString(), ((specialSkinList.Count == 0) ? "none" : rawSkinList),
             GetRawOptionString() };
     }

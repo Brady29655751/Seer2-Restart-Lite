@@ -7,6 +7,7 @@ public class BattleWeatherView : BattleBaseView
 {
     private bool isIconMode = false;
     private bool isWeatherNull = true;
+    private int weather = 0;
 
     [SerializeField] private IButton button;
     [SerializeField] private Image weatherIcon;
@@ -30,14 +31,34 @@ public class BattleWeatherView : BattleBaseView
         SetTurn(currentState.turn);
     }
 
-    public void SetWeather(Weather weather) {
-        isWeatherNull = (weather == Weather.无);
-        weatherIcon.SetWeatherSprite(weather);
+    public void SetTurn(int turn) {
+        turnText.text = "回合\n" + turn.ToString();
+    }
+
+    public void SetWeather(int weather) {
+        this.weather= weather;
+        isWeatherNull = (weather == 0);
+        weatherIcon.SetSprite(Buff.GetWeatherBuff(weather).icon);
         SetMode(!isWeatherNull);
     }
 
-    public void SetTurn(int turn) {
-        turnText.text = "回合\n" + turn.ToString();
+    public void SetWeatherInfoPromptActive(bool active) {
+        if (!active) {
+            SetInfoPromptActive(false);
+            return;
+        }
+
+        if (!isIconMode)
+            return;
+
+        SetInfoPromptActive(true);
+    }
+
+    public void ShowWeatherDescription() {
+        if (!isIconMode)
+            return;
+
+        infoPrompt.SetBuff(Buff.GetWeatherBuff(weather));
     }
 
 }

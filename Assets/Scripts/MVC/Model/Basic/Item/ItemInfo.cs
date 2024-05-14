@@ -27,6 +27,8 @@ public class ItemInfo
     public ItemInfo currencyInfo => Item.GetItemInfo(currencyType);
     public bool removable = true;
 
+    public static bool IsMod(int id) => id < 0;
+
     public ItemInfo(string[] _data, int startIndex = 0) {
         string[] _slicedData = new string[DATA_COL];
         Array.Copy(_data, startIndex, _slicedData, 0, _slicedData.Length);
@@ -69,8 +71,8 @@ public class ItemInfo
         if (resId == "none")
             return null;
 
-        if (int.TryParse(resId, out _))
-            return ResourceManager.instance.GetLocalAddressables<Sprite>("Items/" + resId);
+        if (int.TryParse(resId, out var iconId))
+            return ResourceManager.instance.GetLocalAddressables<Sprite>("Items/" + resId, IsMod(iconId));
 
         var itemIcon = ResourceManager.instance.GetLocalAddressables<Sprite>(resId);
         if (itemIcon != null)

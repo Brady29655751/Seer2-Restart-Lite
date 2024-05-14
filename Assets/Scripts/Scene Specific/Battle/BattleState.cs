@@ -12,7 +12,8 @@ public class BattleState
     public int turn;
     public int whosTurn;    // masterTurn: 1, clientTurn: -1
     public EffectTiming phase;
-    public Weather weather;
+    public int weather;
+    public Buff weatherBuff => Buff.GetWeatherBuff(weather);
     public Unit masterUnit, clientUnit;
     public List<int> actionOrder = new List<int>();
 

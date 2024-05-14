@@ -14,7 +14,7 @@ public class PetBattleStatusController
     public Status addStatus => new Status(_addStatus);
     public Status multStatus => new Status(_multStatus);
     public Status currentStatus => GetCurrentStatus();
-    public Status hiddenStatus => new Status(_hiddenStatus);
+    public Status hiddenStatus => GetHiddenStatus();
 
     public Status powerup => Status.FloorToInt(Status.Clamp(_powerup, _minPowerUp, _maxPowerUp));
     public Status minPowerUp => new Status(_minPowerUp);
@@ -97,6 +97,13 @@ public class PetBattleStatusController
     public Status GetCurrentStatus() {
         Status status = new Status(_initStatus * Status.GetPowerUpBuff(powerup) * _multStatus + _addStatus);
         status.hp = hp;
+        return status;
+    }
+
+    public Status GetHiddenStatus() {
+        var status = new Status(_hiddenStatus);
+        status[4] = Mathf.Max(status[4], 0);
+        status[5] = Mathf.Max(status[5], 0);
         return status;
     }
 

@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class MapInfoModel : Module
 {
-    public Weather weather { get; private set; }
+    public int weather { get; private set; }
     public int dayNightSwitch { get; private set; }
 
-    public void SetWeather(Weather weather) {
+    public void SetWeather(int weather) {
         this.weather = weather;
     }
 

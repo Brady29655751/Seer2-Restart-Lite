@@ -10,11 +10,22 @@ public class MapWorldController : UIModule
     }
 
     public void OpenWorldMapPanel() {
+        if (Map.IsMod(Player.instance.currentMapId) && SaveSystem.TryLoadPanelMod("WorldMap", out _)) {
+            Panel.OpenPanel("[Mod]WorldMap");
+            return;
+        }
+
         Panel.OpenPanel<WorldMapPanel>();
     }
 
     public void OpenMiniMapPanel() {
         int categoryId = Player.instance.currentMap.categoryId;
+
+        if (Map.IsMod(Player.instance.currentMapId) && SaveSystem.TryLoadPanelMod("MiniMap" + categoryId, out _)) {
+            Panel.OpenPanel("[Mod]MiniMap" + categoryId);
+            return;
+        }
+
         Panel panel = Panel.OpenPanel("MiniMap" + categoryId);
         if (panel == null)
             Panel.OpenPanel("MiniMap1");

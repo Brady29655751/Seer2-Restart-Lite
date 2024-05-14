@@ -106,8 +106,12 @@ public class PetSkill
         normalSkill = ownSkill.ToArray();
     }
 
-    public void LearnNewSkill(Skill skill) {
+    public bool LearnNewSkill(Skill skill) {
+        if (ownSkillId.Contains(skill.id))
+            return false;
+
         ownSkillId = ownSkillId.Concat(new int[1]{ skill.id }).ToArray();
+        return true;
     }
 
     // This will force normal skills and super skill to change.

@@ -35,7 +35,7 @@ public static class SecretSkillConditionHandler
     }
 
     public static bool AtWeather(this LearnSkillInfo secretSkillInfo, Pet pet, BattleState endState) {
-        return endState.weather == (Weather)secretSkillInfo.value;
+        return endState.weather == secretSkillInfo.value;
     }
 
     public static bool UseSkill(this LearnSkillInfo secretSkillInfo, Pet pet, BattleState endState) {

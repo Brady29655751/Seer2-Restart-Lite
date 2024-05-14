@@ -23,4 +23,13 @@ public class MapBlockView : Module
     public void GoToMap(int mapId) {
         TeleportHandler.Teleport(mapId);
     }
+
+    public void OpenModMapPanel() {
+        if (!SaveSystem.TryLoadPanelMod("WorldMap", out _)) {
+            Hintbox.OpenHintboxWithContent("加载 Mod 地图失败", 16);
+            return;
+        }
+            
+        Panel.OpenPanel("[Mod]WorldMap");
+    }
 }

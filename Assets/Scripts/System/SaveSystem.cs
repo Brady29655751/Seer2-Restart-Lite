@@ -177,6 +177,7 @@ public static class SaveSystem
                 data.pvpPetTeam.RemoveAll(x => x.value.Any(y => PetInfo.IsMod(y?.id ?? 0)));
 
                 data.activityStorage.RemoveAll(x => ActivityInfo.IsMod(x.id));
+                data.itemStorage.RemoveAll(x => ItemInfo.IsMod(x.id));
 
                 SaveData(data, id);
             }
@@ -215,6 +216,7 @@ public static class SaveSystem
                 data.pvpPetTeam.RemoveAll(x => x.value.Any(y => PetInfo.IsMod(y?.id ?? 0)));
 
                 data.activityStorage.RemoveAll(x => ActivityInfo.IsMod(x.id));
+                data.itemStorage.RemoveAll(x => ItemInfo.IsMod(x.id));
 
                 SaveData(data, id);
             }
@@ -224,7 +226,7 @@ public static class SaveSystem
         return true;
     }
 
-    public static bool TrySaveBuffMod(BuffInfo info, byte[] iconBytes) {
+    public static bool TrySaveBuffMod(BuffInfo info, byte[] iconBytes, Sprite iconSprite) {
         var buffPath = Application.persistentDataPath + "/Mod/Buffs/";
         try {
             if (!TryCreateFile(buffPath, "info.csv", out var infoPath))
@@ -244,8 +246,10 @@ public static class SaveSystem
                 FileBrowserHelpers.AppendTextToFile(effectPath, Effect.GetRawEffectListStringArray(entry.Key, entry.Value.effects).ConcatToString(",") + "\n");
             }
 
-            if (iconBytes != null)
+            if (iconBytes != null) {
                 FileBrowserHelpers.WriteBytesToFile(buffPath + info.id + ".png", iconBytes);
+                ResourceManager.instance.Set<Sprite>("Mod/Buffs/" + info.id, iconSprite);
+            }
 
         } catch (Exception) {
             return false;
@@ -320,7 +324,7 @@ public static class SaveSystem
         return true;
     }
 
-    public static bool TrySavePetMod(PetInfo info, Dictionary<string, byte[]> bytesDict) {
+    public static bool TrySavePetMod(PetInfo info, Dictionary<string, byte[]> bytesDict, Dictionary<string, Sprite> spriteDict) {
         var petPath = Application.persistentDataPath + "/Mod/Pets/";
         var emblemPath = Application.persistentDataPath + "/Mod/Emblems/";
         var iconBytes = bytesDict.Get("icon", null);
@@ -369,14 +373,20 @@ public static class SaveSystem
             }
 
             // Write image bytes.
-            if (iconBytes != null)
+            if (iconBytes != null) {
                 FileBrowserHelpers.WriteBytesToFile(petPath + "/icon/" + info.id + ".png", iconBytes);
+                ResourceManager.instance.Set<Sprite>("Mod/Pets/icon/" + info.id, spriteDict.Get("icon"));
+            }
 
-            if (battleBytes != null)
+            if (battleBytes != null) {
                 FileBrowserHelpers.WriteBytesToFile(petPath + "/battle/" + info.id + ".png", battleBytes);
+                ResourceManager.instance.Set<Sprite>("Mod/Pets/battle/" + info.id, spriteDict.Get("battle"));
+            }
 
-            if ((info.id == info.baseId) && (emblemBytes != null))
+            if ((info.id == info.baseId) && (emblemBytes != null)) {
                 FileBrowserHelpers.WriteBytesToFile(emblemPath + info.id + ".png", emblemBytes);
+                ResourceManager.instance.Set<Sprite>("Mod/Emblems/" + info.id, spriteDict.Get("emblem"));
+            }
 
             // Remove all pet with same id in game data.
             for (int id = 0; id < MAX_SAVE_COUNT; id++) {
@@ -432,7 +442,8 @@ public static class SaveSystem
             // Load to dict.
             for (int i = 0; i < basicInfo.Count; i++) {
                 var basic = basicInfo[i];
-                PetInfo info = new PetInfo(basic, featureInfo.Get(basic.baseId), expInfo.Get(basic.id), new PetTalentInfo(), skillInfo.Get(basic.id), uiInfo.Get(basic.id, new PetUIInfo(basic.id, basic.baseId)));
+                var ui = uiInfo.Get(basic.id, new PetUIInfo(basic.id, basic.baseId));
+                PetInfo info = new PetInfo(basic, featureInfo.Get(ui.defaultFeatureId), expInfo.Get(basic.id), new PetTalentInfo(), skillInfo.Get(basic.id), ui);
                 petDict.Set(info.id, info);
             }            
 
@@ -516,6 +527,42 @@ public static class SaveSystem
         } catch (Exception) {
             return false;
         }
+        return true;
+    }
+
+    public static bool TryLoadItemMod(out Dictionary<int, ItemInfo> itemDict) {
+        itemDict = null;
+
+        var itemPath = Application.persistentDataPath + "/Mod/Items/";
+        try {
+            string infoPath = itemPath + "info.csv";
+            string effectPath = itemPath + "effect.csv";
+            if ((!FileBrowserHelpers.FileExists(infoPath)) || (!FileBrowserHelpers.FileExists(effectPath)))
+                return false;
+
+            var data = ResourceManager.GetCSV(FileBrowserHelpers.ReadTextFromFile(infoPath));
+            var effect = ResourceManager.GetCSV(FileBrowserHelpers.ReadTextFromFile(effectPath));
+
+            itemDict = ResourceManager.instance.GetItemInfo(data, effect);
+        } catch (Exception) {
+            return false;
+        }
+        return true;
+    }
+
+    public static bool TryLoadPanelMod(string panelName, out PanelData panelData) {
+        panelData = null;
+
+        var panelPath = Application.persistentDataPath + "/Mod/Panel/" + panelName + "/panel.xml";
+        try {
+            if (!FileBrowserHelpers.FileExists(panelPath))
+                return false;
+
+            panelData = ResourceManager.GetXML<PanelData>(FileBrowserHelpers.ReadTextFromFile(panelPath));
+        } catch (Exception) {
+            return false;
+        }
+
         return true;
     }
 }

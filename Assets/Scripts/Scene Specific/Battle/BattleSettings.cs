@@ -20,15 +20,11 @@ public class BattleSettings
         get => (BattleMode)modeId;
         set => modeId = (int)value;
     }
-    [XmlElement("weather")] public int weatherId = 0;
-    [XmlIgnore] public Weather weather {
-        get => (Weather)weatherId;
-        set => weatherId = (int)value;
-    }
+    [XmlElement("weather")] public int weather = 0;
 
     public BattleSettings() {}
 
-    public BattleSettings(BattleMode _mode, int _petCount = 6, Weather _weather = Weather.无, bool _isEscapeOK = true, bool _isSimulate = false, bool _isCapture = false, bool _isItem = true, bool _isMod = false) {
+    public BattleSettings(BattleMode _mode, int _petCount = 6, int _weather = 0, bool _isEscapeOK = true, bool _isSimulate = false, bool _isCapture = false, bool _isItem = true, bool _isMod = false) {
         isMod = _isMod;
         isSimulate = _isSimulate;
         isEscapeOK = _isEscapeOK;
@@ -56,7 +52,7 @@ public class BattleSettings
         return id switch {
             "mode" => modeId,
             "petCount" => petCount,
-            "weather" => weatherId,
+            "weather" => weather,
             "mod" => isMod ? 1 : 0,
             "simulate" => isSimulate ? 1 : 0,
             "escape" => isEscapeOK ? 1 : 0,

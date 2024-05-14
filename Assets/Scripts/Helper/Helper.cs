@@ -138,8 +138,9 @@ namespace System {
         /// We expect input to be "rrr,ggg,bbb,aaa"
         /// </summary>
         public static Color ToColor(this string color, Color defaultValue = default(Color)) {
-            var list = color.ToFloatList();
-            return ((list == null) || (list.Count != 4)) ? defaultValue : new Color(list[0], list[1], list[2], list[3]);
+            var list = color.ToIntList().Select(x => (byte)x).ToList();
+            Color color32 = new Color32(list[0], list[1], list[2], list[3]);
+            return ((list == null) || (list.Count != 4)) ? defaultValue : color32;
         }
 
         /// <summary>

@@ -50,7 +50,7 @@ public class Battle
         var roomSettings = new BattleSettings() {
             mode = BattleMode.PVP,
             petCount = (int)roomHash["count"],
-            weather = Weather.无,
+            weather = 0,
             isSimulate = true,
             isEscapeOK = true,
             isItemOK = false,

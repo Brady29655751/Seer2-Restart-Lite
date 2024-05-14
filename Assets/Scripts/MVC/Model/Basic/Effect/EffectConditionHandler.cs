@@ -35,7 +35,7 @@ public static class EffectConditionHandler
         if (!int.TryParse(weather, out int value))
             return false;
 
-        return state.weather == (Weather)value;
+        return state.weather == value;
     }
 
     //! Note that whos_attack must be applied when phase is OnAttack/OnAfterAttack

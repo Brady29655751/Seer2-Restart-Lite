@@ -75,7 +75,17 @@ public class WorkshopPetAdvanceModel : Module
         learnSkillInfoList.RemoveAt(learnSkillInfoList.Count - 1);
     }
 
-    public bool VerifyDIYPetAdvance(int id, out string error) {
+    public void OnSelectFeature(BuffInfo info) {
+        featureInputField.SetInputString(info.name);
+        featureDescriptionInputField.SetInputString(info.description);
+    }
+
+    public void OnSelectEmblem(BuffInfo info) {
+        emblemInputField.SetInputString(info.name);
+        emblemDescriptionInputField.SetInputString(info.description);
+    }
+
+    public bool VerifyDIYPetAdvance(int id, bool useDefaultFeature, out string error) {
         error = string.Empty;
 
         if (!VerifyBaseId(id, out error))
@@ -87,7 +97,7 @@ public class WorkshopPetAdvanceModel : Module
         if (!VerifySkillInfo(out error))
             return false;
 
-        if ((id == baseId) && (!VerifyFeatureInfo(out error)))
+        if ((!useDefaultFeature) && (id == baseId) && (!VerifyFeatureInfo(out error)))
             return false;
 
         return true;

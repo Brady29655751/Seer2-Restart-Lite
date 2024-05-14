@@ -80,6 +80,7 @@ public class WorkshopBuffController : Module
             overwriteHintbox.SetContent("检测到已有相同序号印记，是否确定编辑覆盖？", 16, FontOption.Arial);
             overwriteHintbox.SetOptionNum(2);
             overwriteHintbox.SetOptionCallback(OnConfirmGameDataSaved);
+            return;
         }
 
         OnConfirmGameDataSaved();
