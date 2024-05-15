@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -43,5 +44,13 @@ public class PlayerView : Module
 
     public PlayerInfoPanel OpenPlayerInfoPanel() {
         return Panel.OpenPanel<PlayerInfoPanel>();
+    }
+    
+    public void SetPlayerSprite(Sprite sprite) {
+        if (sprite != null) {
+            playerButton.SetSprite(sprite); 
+            // 使用 LINQ 优化赋值操作，将相同的 Sprite 赋值给数组中的每个元素
+            playerDirectionSprite = Enumerable.Repeat(sprite, 4).ToArray();
+        }
     }
 }

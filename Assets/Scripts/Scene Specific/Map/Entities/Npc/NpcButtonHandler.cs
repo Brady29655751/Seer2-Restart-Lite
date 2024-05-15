@@ -41,6 +41,7 @@ public static class NpcActionDatabase {
         { "setMission", NpcAction.SetMission },
         { "setActivity", NpcAction.SetActivity },
         { "battle", NpcAction.Battle },
+        { "player", NpcAction.Player },
     };
 
     public static ButtonEventType ToButtonEventType(this string type) {
@@ -74,4 +75,5 @@ public enum NpcAction {
     SetMission,
     SetActivity,
     Battle,
+    Player
 }

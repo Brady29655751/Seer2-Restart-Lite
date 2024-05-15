@@ -20,6 +20,7 @@ public class AudioSystem : Singleton<AudioSystem>
         return volume / 10f;
     }
 
+    // BGM
     public void PlayMusic(AudioClip clip, AudioVolumeType volumeType = AudioVolumeType.BGM) {
         if (clip == null) {
             musicSource.Stop();
@@ -41,6 +42,7 @@ public class AudioSystem : Singleton<AudioSystem>
         musicSource.Stop();
     }
 
+    // 一次性音效
     public void PlaySound(AudioClip clip, AudioVolumeType volumeType = AudioVolumeType.UI) {
         if (clip == null)
             return;
@@ -50,6 +52,7 @@ public class AudioSystem : Singleton<AudioSystem>
         soundSource.PlayOneShot(clip);
     }
 
+    // 环境音效等特别音效
     public void PlayEffect(AudioClip clip, AudioVolumeType volumeType = AudioVolumeType.BGM) {
         if (clip == null) {
             StopEffect();

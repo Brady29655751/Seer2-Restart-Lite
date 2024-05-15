@@ -1,0 +1,296 @@
+<map name="深幽沼泽" category="2" id="50016" resId="133" weather="0">
+    <!-- <resource>10013</resource> -->
+    <fightMap>100002</fightMap>
+    <initialPoint>480,90</initialPoint>
+    <music category="2">
+        <bgm>BGM_130</bgm>
+        <fx>FX_114</fx>
+    </music>
+    <entities>
+
+
+        <npc id="13301" resId="Pets/pet/200.png" name="" size="540,100" pos="0,60" namePos="0,0" color="0,0,0,0">
+            <dialog>
+                <branch id="default" name="" icon="11003" size="111,106" pos="10,45">
+                </branch>
+
+                <branch id="mission_5_save_1" name="我" icon="7004" size="136,125" pos="0,35">
+                    <content>
+                        <![CDATA[这里的气氛有点怪啊！坏蛋肯定就在附近！]]></content>
+                    <replyHandler>
+                        <reply type="click">
+                            <description><![CDATA[我要镇定.....]]></description>
+                            <action>openDialog</action>
+                            <param>mission_5_save_2</param>
+                        </reply>
+                    </replyHandler>
+                </branch>
+
+                <branch id="mission_5_save_2" name="" icon="5001601" size="670,338" pos="-0.6,-169">
+                    <content>
+                        <![CDATA[story=我是S，傲人的身姿，完美的曲线，还有谁能与我媲美。]]></content>
+                    <replyHandler>
+                        <reply type="click">
+                            <description><![CDATA[▼]]></description>
+                            <action>openDialog</action>
+                            <param>mission_5_save_3</param>
+                        </reply>
+                    </replyHandler>
+                </branch>
+                <branch id="mission_5_save_3" name="" icon="5001602" size="670,338" pos="-0.6,-169">
+                    <content>
+                        <![CDATA[story=嘭]]></content>
+                    <replyHandler>
+                        <reply type="click">
+                            <description><![CDATA[▼]]></description>
+                            <action>openDialog</action>
+                            <param>mission_5_save_4</param>
+                        </reply>
+                    </replyHandler>
+                </branch>
+
+                <branch id="mission_5_save_4" name="" icon="5001603" size="670,338" pos="-0.6,-169">
+                    <content>
+                        <![CDATA[story=又是一个特鲁伊哈哈！！这次我能在萨伦殿下面前邀功咯！]]></content>
+                    <replyHandler>
+                        <reply type="click">
+                            <description><![CDATA[▼]]></description>
+                            <action>openDialog</action>
+                            <param>mission_5_save_5</param>
+                        </reply>
+
+
+                     
+                        
+                    </replyHandler>
+                </branch>
+
+                <branch id="mission_5_save_5" name="" icon="5001604" size="670,338" pos="-0.6,-169">
+                    <content>
+                        <![CDATA[story=呜呼]]></content>
+                    <replyHandler>
+                        <reply type="click">
+                            <description><![CDATA[▼]]></description>
+                            <action>openDialog</action>
+                            <param>mission_5_save_6</param>
+                        </reply>
+                    </replyHandler>
+                </branch>
+
+                <branch id="mission_5_save_6" name="" icon="5001605" size="670,338" pos="-0.6,-169">
+                    <content>
+                        <![CDATA[story=咦......精灵球过期了？]]></content>
+                    <replyHandler>
+                        <reply type="click">
+                            <description><![CDATA[▼]]></description>
+                            <action>openDialog</action>
+                            <param>mission_5_save_7</param>
+                        </reply>
+                    </replyHandler>
+                </branch>
+
+                <branch id="mission_5_save_7" name="" icon="5001606" size="670,338" pos="-0.6,-169">
+                    <content>
+                        <![CDATA[story=]]></content>
+                    <replyHandler>
+                        <reply type="click">
+                            <description><![CDATA[▼]]></description>
+                            <action>openDialog</action>
+                            <param>mission_5_save_8</param>
+                        </reply>
+                    </replyHandler>
+                </branch>
+
+                <branch id="mission_5_save_8" name="" icon="5001607" size="670,338" pos="-0.6,-169">
+                    <content>
+                        <![CDATA[story=把特鲁伊还给酋长！]]></content>
+                    <replyHandler>
+                        <reply type="click">
+                            <description><![CDATA[▼]]></description>
+                            <action>openDialog</action>
+                            <param>mission_5_save_9</param>
+                        </reply>
+                    </replyHandler>
+                </branch>
+
+                <branch id="mission_5_save_9" name="" icon="5001608" size="670,338" pos="-0.6,-169">
+                    <content>
+                        <![CDATA[story=有本事你拿去，黑暗特鲁伊出现吧！]]></content>
+                    <replyHandler>
+                        <reply type="click">
+                            <description><![CDATA[▼]]></description>
+                            <action>openDialog</action>
+                            <param>mission_5_save_10</param>
+                        </reply>
+                    </replyHandler>
+                </branch>
+
+                <branch id="mission_5_save_10" name="" icon="5001609" size="670,338" pos="-0.6,-169">
+                    <content>
+                        <![CDATA[story=]]></content>
+                    <replyHandler>
+                        <reply type="click">
+                            <description><![CDATA[▼]]></description>
+                            <action>openDialog</action>
+                            <param>mission_5_save_11</param>
+                        </reply>
+                    </replyHandler>
+                </branch>
+
+                <branch id="mission_5_save_11" name="" icon="5001610" size="670,338" pos="-0.6,-169">
+                    <content>
+                        <![CDATA[story=]]></content>
+                    <replyHandler>
+                        <reply type="click">
+                            <description><![CDATA[▼]]></description>
+                            <action>openDialog</action>
+                            <param>mission_5_save_12</param>
+                        </reply>
+                    </replyHandler>
+                </branch>
+                <branch id="mission_5_save_12" name="" icon="5001611" size="670,338" pos="-0.6,-169">
+                    <content>
+                        <![CDATA[story=]]></content>
+                    <replyHandler>
+                        <reply type="click">
+                            <description><![CDATA[▼]]></description>
+                            <action>openDialog</action>
+                            <param>mission_5_save_13</param>
+                        </reply>
+                    </replyHandler>
+                </branch>
+                <branch id="mission_5_save_13" name="" icon="5001612" size="670,338" pos="-0.6,-169">
+                    <content>
+                        <![CDATA[story=]]></content>
+                    <replyHandler>
+                        <reply type="click">
+                            <description><![CDATA[▼]]></description>
+                            <action>openDialog</action>
+                            <param>mission_5_save_14</param>
+                        </reply>
+                    </replyHandler>
+                </branch>
+                <branch id="mission_5_save_14" name="" icon="5001613" size="670,338" pos="-0.6,-169">
+                    <content>
+                        <![CDATA[story=]]></content>
+                    <replyHandler>
+                        <reply type="click">
+                            <description><![CDATA[▼]]></description>
+                            <action>openDialog</action>
+                            <param>mission_5_save_15</param>
+                        </reply>
+                    </replyHandler>
+                </branch>
+                <branch id="mission_5_save_15" name="" icon="5001614" size="670,338" pos="-0.6,-169">
+                    <content>
+                        <![CDATA[story=]]></content>
+                    <replyHandler>
+                        <reply type="click">
+                            <description><![CDATA[▼]]></description>
+                            <action>openDialog</action>
+                            <param>mission_5_save_16</param>
+                        </reply>
+                    </replyHandler>
+                </branch>
+                <branch id="mission_5_save_16" name="" icon="5001615" size="670,338" pos="-0.6,-169">
+                    <content>
+                        <![CDATA[story=]]></content>
+                    <replyHandler>
+                        <reply type="click">
+                            <description><![CDATA[▼]]></description>
+                            <action>openDialog</action>
+                            <param>mission_5_save_17</param>
+                        </reply>
+                    </replyHandler>
+                </branch>
+                <branch id="mission_5_save_17" name="" icon="5001616" size="670,338" pos="-0.6,-169">
+                    <content>
+                        <![CDATA[story=]]></content>
+                    <replyHandler>
+                        <reply type="click">
+                            <description><![CDATA[▼]]></description>
+                            <action>openDialog</action>
+                            <param>mission_5_save_18</param>
+                        </reply>
+                    </replyHandler>
+                </branch>
+                <branch id="mission_5_save_18" name="" icon="5001617" size="670,338" pos="-0.6,-169">
+                    <content>
+                        <![CDATA[story=]]></content>
+                    <replyHandler>
+                        <reply type="click">
+                            <description><![CDATA[▼]]></description>
+                            <action>openDialog</action>
+                            <param>mission_5_save_19</param>
+                        </reply>
+                    </replyHandler>
+                </branch>
+                <branch id="mission_5_save_19" name="" icon="5001618" size="670,338" pos="-0.6,-169">
+                    <content>
+                        <![CDATA[story=什么......什么......我好像还有点事......]]></content>
+                    <replyHandler>
+                        <reply type="click">
+                            <description><![CDATA[▼]]></description>
+                            <action>openDialog</action>
+                            <param>mission_5_save_20</param>
+                        </reply>
+                    </replyHandler>
+                </branch>
+                <branch id="mission_5_save_20" name="" icon="5001619" size="670,338" pos="-0.6,-169">
+                    <content>
+                        <![CDATA[story=你们慢慢叙旧......我想我先走了......]]></content>
+                    <replyHandler>
+                        <reply type="click">
+                            <description><![CDATA[▼]]></description>
+                            <action>openDialog</action>
+                            <param>mission_5_save_21</param>
+                        </reply>
+                    </replyHandler>
+                </branch>
+                <branch id="mission_5_save_21" name="" icon="5001620" size="670,338" pos="-0.6,-169">
+                    <content>
+                        <![CDATA[story=]]></content>
+                    <replyHandler>
+                        <reply type="click">
+                            <description><![CDATA[▼]]></description>
+                            <action>teleport</action>
+                            <param>50017</param>
+                        </reply>
+                        <reply type="branch">
+                            <action>setMission</action>
+                            <param>5</param>
+                            <param>checkpoint</param>
+                            <param>reward</param>
+                        </reply>
+                    </replyHandler>
+                </branch>
+
+            </dialog>
+            <eventHandler>
+                <!--这个enter可以实现一进入就打开对话-->
+                <button type="enter">
+                    <action>openDialog</action>
+                    <param>mission_5_save_1</param>
+                    <condition>mission[5].checkpoint=save</condition>
+                </button>
+                <button type="enter">
+                    <action>openDialog</action>
+                    <param>default</param>
+                    <condition>mission[5].checkpointNOTsave</condition>
+                </button>
+                <button type="enter">
+                    <action>player</action>
+                    <param>sprite=11003</param>
+                </button>
+                <button type="enter">
+                    <action>setNpcParam</action>
+                    <param>13301</param>
+                    <param>bgm=1/MU_004</param>
+                </button>
+            </eventHandler>
+        </npc>
+
+
+        <teleport id="1" name="荆棘小徑" pos="550,60" targetMapId="132"/>
+    </entities>
+</map>

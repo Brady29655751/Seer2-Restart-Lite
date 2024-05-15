@@ -64,6 +64,7 @@ public static class NpcHandler
             NpcAction.SetMission    => () => NpcActionHandler.SetMission(handler),
             NpcAction.SetActivity   => () => NpcActionHandler.SetActivity(handler),
             NpcAction.Battle        => () => NpcActionHandler.StartBattle(npcInfo, handler),
+            NpcAction.Player        => () => NpcActionHandler.SetPlayer(handler),
             _ => () => {}
         };
     }

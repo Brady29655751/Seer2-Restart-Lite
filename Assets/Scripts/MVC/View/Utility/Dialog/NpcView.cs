@@ -58,6 +58,10 @@ public class NpcView : Module
         button.SetSprite(  NpcInfo.GetIcon(resId));
     }
 
+    public void SetBGM(AudioClip bgm) {
+        button.SetBGM(bgm);
+    }
+
     public void SetAction(NpcController npc, Dictionary<int, NpcController> npcList, InfoPrompt infoPrompt) {
         NpcInfo info = npc.GetInfo();
         if (info.description != null) {

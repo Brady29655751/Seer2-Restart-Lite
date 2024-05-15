@@ -25,6 +25,26 @@ public static class NpcActionHandler
                 case "color":
                     npcList.Get(id, npc).SetColor(option[1].ToColor(Color.white));
                     break;
+                case "bgm":
+                    npcList.Get(id, npc).SetBGM(option[1]);
+                    break;
+            }
+        }
+    }
+    
+    
+    public static void SetPlayer(NpcButtonHandler handler) {
+        if (handler.param == null)
+            return;
+        
+        for (int i = 0; i < handler.param.Count; i++) {
+            var option = handler.param[i].Split('=');
+            switch (option[0]) {
+                default:
+                    break;
+                case "sprite":
+                    PlayerController.instance.SetPlayerSprite(option[1]);
+                    break;
             }
         }
     }
@@ -74,7 +94,14 @@ public static class NpcActionHandler
         }
         DialogInfo dialogInfo = npcInfo.dialogHandler.Find(x => x.id == handler.param[0]);
         DialogManager.instance.SetCurrentNpc(npcInfo);
-        DialogManager.instance.OpenDialog(dialogInfo);
+      
+        if (dialogInfo.content.StartsWith("story=")) {
+            dialogInfo.content = dialogInfo.content.Substring("story=".Length);
+            DialogManager.instance.OpenStoryDialog(dialogInfo); 
+        } else {
+            DialogManager.instance.OpenDialog(dialogInfo);
+        }
+        
     }
 
     public static void Teleport(NpcButtonHandler handler) {

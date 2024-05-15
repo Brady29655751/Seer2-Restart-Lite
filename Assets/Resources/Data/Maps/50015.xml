@@ -1,0 +1,70 @@
+<map name="草目氏族主城" category="2" id="50015" resId="90" weather="0">
+    <!-- <resource>10009</resource> -->
+    <fightMap>100002</fightMap>
+    <initialPoint>380,150</initialPoint>
+    <music category="2">
+        <bgm>BGM_100</bgm>
+        <fx>FX_103</fx>
+    </music>
+    <entities>
+        <npc id="9002" resId="9002" name="" size="614,137" pos="0,0" target="false"/>
+        <npc id="9003" resId="9003" name="" size="71,55" pos="215,415" target="false"/>
+        <npc id="9004" resId="9004" name="" size="192,224" pos="440,80" target="false"/>
+
+        <npc id="11003" resId="11003" name="" size="628,206" pos="70,97" namePos="0,-5" color="0,0,0,0">>
+            <dialog>
+                <branch id="default" name="特鲁伊" icon="11003" size="111,106" pos="10,45">
+                    <content><![CDATA[我将永远守护巴特！直至我死亡！]]></content>
+                    <replyHandler>
+                        <reply type="click">
+                            <description><![CDATA[]]></description>
+                            <action>openDialog</action>
+                            <param>null</param>
+                        </reply>
+                    </replyHandler>
+                </branch>
+                 <branch id="mission_5_find_1" name="我" icon="7004" size="136,125" pos="0,35">
+                     <content>
+                         <![CDATA[特鲁伊是在 <color=#FFD700>深幽沼泽</color> 被抓的！我去那里看看！]]></content>
+                     <replyHandler>
+                        <reply type="click">
+                            <description><![CDATA[前往深幽沼泽......]]></description>
+                            <action>teleport</action>
+                            <param>50016</param>
+                        </reply>
+                         <reply type="branch">
+                             <action>setMission</action>
+                             <param>5</param>
+                             <param>checkpoint</param>
+                             <param>save</param>
+                         </reply>
+                    </replyHandler>
+                </branch>
+      
+            </dialog>
+            <eventHandler>
+              
+                <button type="enter">
+                    <action>openDialog</action>
+                    <param>mission_5_find_1</param>
+                    <condition>mission[5].checkpoint=find</condition>
+                </button>
+                <button type="enter">
+                    <action>openDialog</action>
+                    <param>default</param>
+                    <condition>mission[5].checkpointNOTfind</condition>
+                </button>
+                <button type="enter">
+                    <action>player</action>
+                    <param>sprite=11003</param>
+                </button>
+            </eventHandler>
+        </npc>
+        
+        <teleport id="1" name="荆棘林" pos="490,380" targetMapId="131"/>
+        <teleport id="2" name="权力之帐" pos="500,130" targetMapId="110"/>
+        <teleport id="3" name="异蘑世界" pos="600,50" targetMapId="121"/>
+        <teleport id="4" name="信奉广场" pos="30,140" targetMapId="100"/>
+        <teleport id="5" name="七味小厨" pos="250,240" targetMapId="125"/>
+    </entities>
+</map>

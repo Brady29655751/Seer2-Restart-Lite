@@ -50,5 +50,19 @@ public class PlayerController : Manager<PlayerController>
     public void OpenPlayerInfoPanel() {
         playerView.OpenPlayerInfoPanel();
     }
+    
+   
+    public void SetPlayerSprite(string spriteName)
+    {
+        // 直接透過 NpcInfo.GetIcon 自動加載對應 Npc 資源
+        Sprite sprite = NpcInfo.GetIcon(spriteName);
+
+        if (sprite != null) {
+            // 如果成功加载到 Sprite，将其传递给 playerView.SetPlayerSprite 方法
+            playerView.SetPlayerSprite(sprite);
+        } else{
+            Debug.LogError("Failed to load Sprite: " + spriteName);
+        }
+    }
 
 }

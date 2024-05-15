@@ -177,4 +177,7 @@ public class IButton : IMonoBehaviour, IPointerEnterHandler, IPointerExitHandler
             image.sprite = sprite;
         }
     }
+    public virtual void SetBGM(AudioClip bgm) {
+        AudioSystem.instance.PlayMusic(bgm);
+    }
 }

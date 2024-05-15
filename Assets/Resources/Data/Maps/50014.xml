@@ -1,0 +1,158 @@
+<map name="权力之帐" category="2" id="50014" resId="110" weather="0">
+    <!-- <resource>10011</resource> -->
+    <fightMap>100002</fightMap>
+    <initialPoint>320,80</initialPoint>
+    <music category="2">
+        <bgm>BGM_100</bgm>
+        <fx>FX_108</fx>
+    </music>
+    <entities>
+        <npc id="11001" resId="11001" name="草目酋长巴特" size="105,92" pos="350,140">
+            <description><![CDATA[确定、一定以及肯定]]></description>
+            <dialog>
+                <branch id="default" name="草目酋长" icon="11001" size="105,92" pos="0,55">
+                    <content><![CDATA[吼吼吼，欢迎来到草目氏族！我的客人，你可以到处去走走，我相信你会喜欢这里！]]></content>
+                    <replyHandler>
+                        <reply type="click">
+                            <description><![CDATA[草目氏族！我来咯！]]></description>
+                            <action>openDialog</action>
+                            <param>null</param>
+                        </reply>
+                    </replyHandler>
+                </branch>
+
+                <branch id="mission_5_default_1" name="草目酋长" icon="11001" size="105,92" pos="0,55">
+                    <content><![CDATA[吼吼吼，欢迎来到草目氏族！我的客人，你可以到处去走走，我相信你会喜欢这里！]]></content>
+                    <replyHandler>
+                        <reply type="click">
+                            <description><![CDATA[草目氏族！我来咯！]]></description>
+                            <action>openDialog</action>
+                            <param>null</param>
+                        </reply>
+                        <reply type="click">
+                            <description><![CDATA[【主线任务】特鲁伊的劫难]]></description>
+                            <action>openDialog</action>
+                            <param>mission_5_default_2</param>
+                        </reply>
+                    </replyHandler>
+                </branch>
+                <branch id="mission_5_default_2" name="草目酋长" icon="11001" size="105,92" pos="0,55">
+                    <content>
+                        <![CDATA[孩子，你和特鲁伊找到需要的东西了吗？]]></content>
+                    <replyHandler>
+                        <reply type="click">
+                            <description><![CDATA[酋长，都是我不好，特鲁伊被抓走了！]]></description>
+                            <action>openDialog</action>
+                            <param>mission_5_default_3</param>
+                        </reply>
+                    </replyHandler>
+                </branch>
+                <branch id="mission_5_default_3" name="草目酋长" icon="11001" size="105,92" pos="0,55">
+                    <content>
+                        <![CDATA[我一定要去救他.....咳咳....救他!族人和特鲁伊的生命比我自己更重要！]]></content>
+                    <replyHandler>
+                        <reply type="click">
+                            <description><![CDATA[▼]]></description>
+                            <action>openDialog</action>
+                            <param>mission_5_default_4</param>
+                        </reply>
+                    </replyHandler>
+                </branch>
+
+                <branch id="mission_5_default_4" name="草目酋长" icon="11001" size="105,92" pos="0,55">
+                    <content>
+                        <![CDATA[他们的目标是精灵！那我把自己变成特鲁伊的样子去引诱他们出来吧！]]></content>
+                    <replyHandler>
+                        <reply type="click">
+                            <description><![CDATA[▼]]></description>
+                            <action>openDialog</action>
+                            <param>mission_5_default_5</param>
+                        </reply>
+                    </replyHandler>
+                </branch>
+                <branch id="mission_5_default_5" name="我" icon="7004" size="136,125" pos="0,35">
+                    <content>
+                        <![CDATA[额......变身？酋长！是我没有完成任务，请让我担当责任吧！我去引诱他们......]]></content>
+                    <replyHandler>
+                        <reply type="click">
+                            <description><![CDATA[▼]]></description>
+                            <action>openDialog</action>
+                            <param>mission_5_default_6</param>
+                        </reply>
+                    </replyHandler>
+                </branch>
+
+                <branch id="mission_5_default_6" name="草目酋长" icon="11001" size="105,92" pos="0,55">
+                    <content>
+                        <![CDATA[也只好如此了。我现在就帮你变身，你一定要加被小心啊！]]></content>
+                    <replyHandler>
+                        <reply type="click">
+                            <description><![CDATA[放心吧，我不会有事的。]]></description>
+                            <action>openDialog</action>
+                            <param>mission_5_default_7</param>
+                        </reply>
+                    </replyHandler>
+                </branch>
+
+                <branch id="mission_5_default_7" name="草目酋长" icon="11001" size="105,92" pos="0,55">
+                    <content>
+                        <![CDATA[（玩家变成特鲁伊的样子）]]></content>
+                    <replyHandler>
+                        <reply type="click">
+                            <description><![CDATA[▼]]></description>
+                            <action>openDialog</action>
+                            <param>null</param>
+                        </reply>
+                        <reply type="branch">
+                            <action>setMission</action>
+                            <param>5</param>
+                            <param>checkpoint</param>
+                            <param>find</param>
+                        </reply>
+
+                        <reply type="branch">
+                            <action>player</action>
+                            <param>sprite=11003</param>
+                        </reply>
+                    </replyHandler>
+                </branch>
+
+            
+            </dialog>
+            <eventHandler>
+                <button type="click">
+                    <action>openDialog</action>
+                    <param>mission_5_default_1</param>
+                    <condition>mission[5].checkpoint=default</condition>
+                </button>
+                <button type="click">
+                    <action>openDialog</action>
+                    <param>default</param>
+                    <condition>mission[5].checkpointNOTdefault</condition>
+                </button>
+               
+            </eventHandler>
+        </npc>
+        <npc id="11002" resId="11002" name="目灵兽雕像" size="266,288" pos="660,112">
+            <dialog>
+                <branch id="default" name="目灵兽雕像" icon="11002" size="133,144" pos="0,25">
+                    <content><![CDATA[（似乎散发着强大的力量）]]></content>
+                    <replyHandler>
+                        <reply type="click">
+                            <description><![CDATA[（似乎散发着强大的力量）]]></description>
+                            <action>openDialog</action>
+                            <param>null</param>
+                        </reply>
+                    </replyHandler>
+                </branch>
+            </dialog>
+            <eventHandler>
+                <button type="click">
+                    <action>openDialog</action>
+                    <param>default</param>
+                </button>
+            </eventHandler>
+        </npc>
+         <teleport id="1" name="草目氏族主城" pos="100,60" targetMapId="50015"/> 
+    </entities>
+</map>
