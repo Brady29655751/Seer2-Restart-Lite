@@ -133,7 +133,7 @@ public class Skill
             (isSecondSuper ? ("second_super=true&") : string.Empty) +
             (ignoreShield ? ("ignore_shield=" + ignoreShield + "&") : string.Empty) + 
             (ignorePowerup ? ("ignore_powerup=" + ignorePowerup + "&") : string.Empty) + 
-            (List.IsNullOrEmpty(referBuffList) ? string.Empty : referBuffList.ConcatToString("/"));
+            (List.IsNullOrEmpty(referBuffList) ? string.Empty : ("ref_buff=" + referBuffList.ConcatToString("/")));
 
         rawOptionString = string.IsNullOrEmpty(rawOptionString) ? "none" : rawOptionString;
 
@@ -318,6 +318,9 @@ public class Skill
             case "element":
                 elementId = (int)value;
                 element = (Element)elementId;
+                return;
+            case "type":
+                type = (SkillType)value;
                 return;
             case "power":
                 power = (int)value;

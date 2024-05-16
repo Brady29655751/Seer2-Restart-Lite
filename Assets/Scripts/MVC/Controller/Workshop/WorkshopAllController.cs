@@ -91,6 +91,10 @@ public class WorkshopAllController : Module
         allModel.OnExportMod();
     }
 
+    public void OnUpdateMod() {
+        allModel.OnUpdateMod();
+    }
+
     public void OnDeleteMod() {
         allModel.OnDeleteMod();
     }

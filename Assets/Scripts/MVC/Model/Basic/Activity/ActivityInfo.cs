@@ -22,6 +22,8 @@ public class ActivityInfo
     public DateTime releaseDate;
     public Dictionary<string, string> options = new Dictionary<string, string>();
 
+    public bool hide = false;
+
     public Sprite activityBackground => GetBackground();
 
     public ActivityInfo(string[] _data, int startIndex = 0) {
@@ -41,6 +43,8 @@ public class ActivityInfo
         releaseDate = DateTime.Parse(_slicedData[7]);
         options.ParseOptions(_slicedData[8]);
         description = _slicedData[9];
+
+        hide = bool.Parse(options.Get("hide", "false"));
     }
 
     public static bool IsMod(string id) => id.StartsWith("Mod_") || id.StartsWith("mod_");

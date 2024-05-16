@@ -166,21 +166,6 @@ public static class SaveSystem
         try {
             var modPath = Application.persistentDataPath + "/Mod";
             FileBrowserHelpers.CopyDirectory(importPath, modPath);   
-
-            // Remove all mod pet in all game data.
-            for (int id = 0; id < MAX_SAVE_COUNT; id++) {
-                var data = LoadData(id);
-
-                data.petStorage.RemoveAll(x => PetInfo.IsMod(x?.id ?? 0));
-                data.petBag = data.petBag.Where(x => !PetInfo.IsMod(x?.id ?? 0)).ToArray();
-                Array.Resize(ref data.petBag, 6);
-                data.pvpPetTeam.RemoveAll(x => x.value.Any(y => PetInfo.IsMod(y?.id ?? 0)));
-
-                data.activityStorage.RemoveAll(x => ActivityInfo.IsMod(x.id));
-                data.itemStorage.RemoveAll(x => ItemInfo.IsMod(x.id));
-
-                SaveData(data, id);
-            }
         } catch (Exception) {
             return false;
         }

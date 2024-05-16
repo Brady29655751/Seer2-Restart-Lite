@@ -114,7 +114,7 @@ public class TitleManager : Manager<TitleManager>
     }
 
     private void OnImportSuccess(string[] paths) {
-        var isSuccessImporting = SaveSystem.TryImportMod(paths[0]);
+        var isSuccessImporting = SaveSystem.TryDeleteMod() && SaveSystem.TryImportMod(paths[0]);
         var message = isSuccessImporting ? "导入成功，请重新启动游戏" : "导入失败";
         var hintbox = Hintbox.OpenHintboxWithContent(message, 16);
 
@@ -133,6 +133,24 @@ public class TitleManager : Manager<TitleManager>
     private void OnExportModSuccess(string[] paths) {
         var message = SaveSystem.TryExportMod(paths[0]) ? "导出成功" : "导出失败";
         Hintbox.OpenHintboxWithContent(message, 16);
+    }
+
+    public void OnUpdateMod() {
+        var hintbox = Hintbox.OpenHintbox();
+        hintbox.SetContent("更新mod不会删除当前存档內容。若新旧内容冲突会造成问题，确定要继续更新吗？", 16, FontOption.Arial);
+        hintbox.SetOptionNum(2);
+        hintbox.SetOptionCallback(() => {
+            FileBrowser.ShowLoadDialog(OnUpdateSuccess, OnCancel, FileBrowser.PickMode.Folders, title: "选择要导入的mod（手机端请先点击左边的Browse才能浏览）");
+        });
+    }
+
+    private void OnUpdateSuccess(string[] paths) {
+        var isSuccessImporting = SaveSystem.TryImportMod(paths[0]);
+        var message = isSuccessImporting ? "更新成功，请重新启动游戏" : "更新失败";
+        var hintbox = Hintbox.OpenHintboxWithContent(message, 16);
+
+        if (isSuccessImporting)
+            hintbox.SetOptionCallback(Application.Quit);
     }
 
     public void OnDeleteMod() {

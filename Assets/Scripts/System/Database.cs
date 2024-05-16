@@ -31,7 +31,7 @@ public class Database : Singleton<Database>
         });
         RM.LoadActivityInfo((x) => { 
             activityInfoDict = x; 
-            activityInfos = activityInfoDict.Select(entry => entry.Value).OrderByDescending(x => x.releaseDate).ToList();
+            activityInfos = activityInfoDict.Select(entry => entry.Value).OrderByDescending(x => ActivityInfo.IsMod(x.id) ? 1 : 0).ThenByDescending(x => x.releaseDate).ToList();
         });
     }
 

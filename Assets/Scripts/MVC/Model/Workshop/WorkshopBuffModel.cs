@@ -36,7 +36,7 @@ public class WorkshopBuffModel : Module
 
     public BuffInfo GetBuffInfo() {
         var buffInfo = new BuffInfo(id, buffName, type, copyHandleType, turn, optionsAll, description);
-        buffInfo.SetEffects(effectList);
+        buffInfo.SetEffects(effectList.Select(x => new Effect(x)).ToList());
         return buffInfo;
     }
 

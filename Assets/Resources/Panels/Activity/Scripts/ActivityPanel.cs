@@ -13,7 +13,7 @@ public class ActivityPanel : Panel
     }
 
     public override void Init() {
-        SetStorage(Activity.GetActivityInfoList());
+        SetStorage(Activity.GetActivityInfoList().FindAll(x => !x.hide));
     }
 
     private void InitSubscriptions() {

@@ -32,7 +32,7 @@ public class WorkshopSkillModel : Module
 
     public Skill GetSkill() {
         var skill = new Skill(id, skillName, element, type, power, anger, accuracy, optionsAll, description);
-        skill.SetEffects(effectList);
+        skill.SetEffects(effectList.Select(x => new Effect(x)).ToList());
         return skill;
     }
 
