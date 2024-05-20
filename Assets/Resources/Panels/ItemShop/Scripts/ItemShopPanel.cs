@@ -30,6 +30,7 @@ public class ItemShopPanel : Panel
         } },
         { ItemShopType.Honor, new List<int>() { 
             8001,   8002,   8003,   8004,   8005,
+            300048,
         } },
     };
 
@@ -51,6 +52,10 @@ public class ItemShopPanel : Panel
             default:
                 base.SetPanelIdentifier(id, param);
                 break;
+            case "title":
+                shopNameDict.Set(ItemShopType.Others, param);
+                SetTitle();
+                break;
             case "mode":
                 var mode = param switch {
                     "buy" => ItemShopMode.Buy,
@@ -64,6 +69,7 @@ public class ItemShopPanel : Panel
                     "pet_potion" => ItemShopType.PetPotion,
                     "mine" => ItemShopType.Mine,
                     "honor" => ItemShopType.Honor,
+                    "others" => ItemShopType.Others,
                     _ => ItemShopType.None,
                 };
                 SetShopType(type);
@@ -71,6 +77,11 @@ public class ItemShopPanel : Panel
             case "currency":
                 var currency = param.ToIntList('/');
                 SetCurrencyType(currency[0], currency[1]);
+                break;
+            case "item":
+                var itemList = param.ToIntList('/');
+                shopItemIdDict.Set(ItemShopType.Others, itemList);
+                SetShopType(ItemShopType.Others);
                 break;
         }
     }
@@ -116,8 +127,9 @@ public enum ItemShopMode {
 }
 
 public enum ItemShopType {
-    None,
-    PetPotion,
-    Mine,
-    Honor,
+    Others = -1,
+    None = 0,
+    PetPotion = 1,
+    Mine = 2,
+    Honor = 3,
 }

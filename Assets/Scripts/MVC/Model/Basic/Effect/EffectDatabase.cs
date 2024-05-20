@@ -66,6 +66,7 @@ public static class EffectDatabase {
         {"set_skill", EffectAbility.SetSkill},
         {"set_pet", EffectAbility.SetPet},
         {"set_weather", EffectAbility.SetWeather},
+        {"set_player", EffectAbility.SetPlayer},
     };
 
     public static EffectTiming ToEffectTiming(this string timing) {
@@ -150,4 +151,5 @@ public enum EffectAbility {
     SetSkill,
     SetPet,
     SetWeather,
+    SetPlayer,
 }

@@ -7,14 +7,15 @@ using UnityEngine;
 public class BattlePetBuffView : BattleBaseView
 {
     [SerializeField] private bool anchoredAtLeft;
+    [SerializeField] private int numInOneRow = 7;
+    [SerializeField] private int buffBlockSize = 32;
     [SerializeField] private GameObject buffPanel;
     [SerializeField] private GameObject buffButtonPrefab;
 
-    private int numInOneRow => 7;
     private List<Buff> buffList = new List<Buff>();
     private List<BattlePetBuffBlockView> buffButtonList = new List<BattlePetBuffBlockView>();
 
-    public void SetBuff(List<Buff> buffs) {
+    public void SetBuff(List<Buff> buffs, Action<Buff> onPointerClick = null) {
         List<Buff> newBuffList = buffs.Where(x => !x.info.hide).OrderBy(x => x.info.sortPriority).ToList();
         int diffLength = newBuffList.Count - buffList.Count;
         if (diffLength > 0) {
@@ -23,12 +24,12 @@ public class BattlePetBuffView : BattleBaseView
             RemoveBuffBlocks(diffLength);
         }
         buffList = newBuffList;
-        SetBuffBlocks();
+        SetBuffBlocks(onPointerClick);
     }
 
     private void AddBuffBlocks(int num) {
-        int deltaX = (anchoredAtLeft ? 1 : -1) * 32;
-        int deltaY = -32;
+        int deltaX = (anchoredAtLeft ? 1 : -1) * buffBlockSize;
+        int deltaY = -buffBlockSize;
         for (int i = 0; i < num; i++) {
             int col = (buffList.Count + i) / numInOneRow;
             int row = (buffList.Count + i) % numInOneRow;
@@ -38,6 +39,7 @@ public class BattlePetBuffView : BattleBaseView
             rect.SetAsLastSibling();
             rect.anchorMin = rect.anchorMax = rect.pivot = anchoredAtLeft ? Vector2.up : Vector2.one; 
             rect.anchoredPosition = new Vector2(0 + deltaX * row, 0 + deltaY * col);
+            rect.localScale = (buffBlockSize / 32f) * Vector3.one;
             buffButtonList.Add(blockView);
         }
     }
@@ -50,11 +52,12 @@ public class BattlePetBuffView : BattleBaseView
         buffButtonList.RemoveRange(buffList.Count - num, num);
     }
 
-    private void SetBuffBlocks() {
+    private void SetBuffBlocks(Action<Buff> OnPointerClick) {
         for (int i = 0; i < buffList.Count; i++) {
             int copy = i;
             Action onPointerOver = () => OnPointerOver(copy);
-            buffButtonList[i].SetBuff(buffList[i], onPointerEnter, OnPointerExit, onPointerOver.Invoke);
+            Action onPointerClick = () => OnPointerClick?.Invoke(buffList[copy]);
+            buffButtonList[i].SetBuff(buffList[i], onPointerEnter, OnPointerExit, onPointerOver.Invoke, onPointerClick.Invoke);
         }
     }
 

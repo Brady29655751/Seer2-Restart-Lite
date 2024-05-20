@@ -43,7 +43,7 @@ public class MapSceneView : UIModule
 
     public void SetBackground(MapResources resources) {
         background.sprite = resources.bg;
-        background.color = map.dream ? Color.gray : Color.white;
+        background.color = map.dream ? Color.gray : map.backgroundColor;
     }
 
     public void SetPathMask(MapResources resources) {

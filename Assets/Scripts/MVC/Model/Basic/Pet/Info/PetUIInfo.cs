@@ -13,6 +13,8 @@ public class PetUIInfo
     public Dictionary<string, string> options = new Dictionary<string, string>();
     public int defaultSkinId;
     public int defaultFeatureId;
+    public List<int> defaultBuffIds = new List<int>();
+    public List<Buff> defaultBuffs => defaultBuffIds.Select(x => new Buff(x)).ToList();
 
     public Sprite icon => PetUISystem.GetPetIcon(defaultSkinId);
     public Sprite emblemIcon => PetUISystem.GetEmblemIcon(baseId);
@@ -36,6 +38,7 @@ public class PetUIInfo
 
         defaultSkinId = int.Parse(options.Get("default_skin", id.ToString()));
         defaultFeatureId = int.Parse(options.Get("default_feature", baseId.ToString()));
+        defaultBuffIds = options.Get("default_buff", "none").ToIntList('/');
     }
 
     public string[] GetRawInfoStringArray() {

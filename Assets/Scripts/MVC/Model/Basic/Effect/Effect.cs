@@ -177,6 +177,7 @@ public class Effect {
                 EffectAbility.SetSkill => this.SetSkill(state),
                 EffectAbility.SetPet => this.SetPet(state),
                 EffectAbility.SetWeather => this.SetWeather(state),
+                EffectAbility.SetPlayer => this.SetPlayer(state),
                 _ => true
             });
         }

@@ -36,6 +36,7 @@ public class Pet
     public int elementId => info.basic.elementId;
     public Element element => info.basic.element;  // 屬性
     public bool hasEmblem => feature.hasEmblem;   // 是否佩戴紋章
+    [XmlIgnore] public List<Buff> initBuffs => info.ui.defaultBuffs.Concat(feature.afterwardBuffs).ToList();
 
     /* Exp and Level */
     public int level => exp.level;  // 等級
@@ -181,6 +182,12 @@ public class Pet
             (trimSkill.TryTrimParentheses(out var skillIdExpr)) &&
             (int.TryParse(skillIdExpr, out var skillId))) {
             return skills.ownSkillId.Contains(skillId) ? 1 : 0;
+        }
+
+        if ((id.TryTrimStart("buff", out var trimBuff)) && 
+            (trimBuff.TryTrimParentheses(out var buffIdExpr)) &&
+            (int.TryParse(buffIdExpr, out var buffId))) {
+            return initBuffs.Exists(x => x.id == buffId) ? 1 : 0;
         }
 
         return id switch {

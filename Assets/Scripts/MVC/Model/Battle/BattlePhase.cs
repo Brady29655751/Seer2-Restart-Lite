@@ -40,12 +40,17 @@ public class BattlePhase
 
         if (invokeUnit == null)
             return GetEffectHandler(state.masterUnit).Concat(GetEffectHandler(state.clientUnit));
-        
+    
         var buffEffects = invokeUnit.pet.buffs.Select(x => x.effects);
         var handler = new EffectHandler();
         
-        if (state != null)
+        if (state != null) {
             handler.AddEffects(invokeUnit, state.weatherBuff.effects);
+
+            var stateEffects = state.stateBuffs.Select(x => x.Value.effects);
+            foreach (var e in stateEffects)
+                handler.AddEffects(invokeUnit, e);
+        }
 
         if (invokeUnit.skill != null) 
             handler.AddEffects(invokeUnit, invokeUnit.skill.effects);

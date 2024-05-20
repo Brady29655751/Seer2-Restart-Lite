@@ -12,6 +12,8 @@ public class Map
     [XmlAttribute("resId")] public int resId = 0;
     [XmlAttribute("name")] public string name;
     [XmlAttribute("weather")] public int weather = 0;
+    [XmlAttribute("color")] public string backgroundColorId = "255,255,255,255";
+    public Color backgroundColor => backgroundColorId.ToColor(Color.white);
     
     [XmlAttribute("category")] public int categoryId;
     public MapCategory category => (MapCategory)categoryId;

@@ -26,7 +26,14 @@ public class Panel : UIModule
 
     public static Panel OpenPanel(string panelName) {
         bool isModPanel = panelName.TryTrimStart("[Mod]", out var trimPanelName);
-        panelName = isModPanel ? "Mod" : panelName.TrimEnd("Panel");
+        panelName = isModPanel ? "Mod" : panelName.Replace("Panel", string.Empty);
+
+        int optionIndex = panelName.IndexOf('[');
+        string options = string.Empty;
+        if (optionIndex >= 0) {
+            options = panelName.Substring(optionIndex);
+            panelName = panelName.Substring(0, optionIndex);
+        }
 
         GameObject canvas = GameObject.Find("Canvas");
         GameObject prefab = ResourceManager.instance.GetPanel(panelName);
@@ -41,6 +48,14 @@ public class Panel : UIModule
         if (isModPanel) {
             bool isSuccessLoading = SaveSystem.TryLoadPanelMod(trimPanelName, out var panelData);
             ((ModPanel)panel).SetPanelData(isSuccessLoading ? panelData : null);
+            return panel;
+        }
+        
+        while (!string.IsNullOrEmpty(options)) {
+            var action = options.TrimParentheses();
+            var param = action.Split('=');
+            panel.SetPanelIdentifier(param[0], param[1]);
+            options = options.TrimStart("[" + action + "]");
         }
 
         return panel;
@@ -56,7 +71,7 @@ public class Panel : UIModule
             Panel.OpenPanel(linkId);
     }
 
-    public void ClosePanel() {
+    public virtual void ClosePanel() {
         onCloseEvent?.Invoke();
         
         if (background != null) {

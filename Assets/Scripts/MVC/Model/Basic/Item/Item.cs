@@ -87,6 +87,7 @@ public class Item
 
     public static void Buy(int id, int num, Action onAfterBuy = null) {
         ItemInfo info = GetItemInfo(id);
+        ItemInfo currencyInfo = GetItemInfo(info.currencyType);
         int total = info.price * num;
 
         Hintbox hintbox = Hintbox.OpenHintbox();
@@ -94,7 +95,7 @@ public class Item
 
         Item currency = Item.Find(info.currencyType);
         if ((currency == null) || (currency.num < total)) {
-            hintbox.SetContent(currency.name + "不足无法购买", 14, FontOption.Arial);
+            hintbox.SetContent(currencyInfo.name + "不足无法购买", 14, FontOption.Arial);
             hintbox.SetOptionNum(1);
             return;
         }
@@ -176,6 +177,8 @@ public class Item
     public int GetMaxUseCount(object invokeUnit, BattleState state) {
         return info.type switch {
             ItemType.HpPotion => this.HpPotionMaxUseCount(invokeUnit, state),
+            ItemType.Evolve => 1,
+            ItemType.Emblem => 1,
             ItemType.EXP => this.ExpMaxUseCount(invokeUnit, state),
             ItemType.EV => this.EvMaxUseCount(invokeUnit, state),
             ItemType.IV => 1,

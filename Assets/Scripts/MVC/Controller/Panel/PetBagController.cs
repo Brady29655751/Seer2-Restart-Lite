@@ -7,11 +7,15 @@ using UnityEngine;
 public class PetBagController : Module
 {
     private Pet[] petBag => GetPetBag();
+    private bool isDemoMode = true;
+
     [SerializeField] private PetBagMode mode = PetBagMode.Normal;
     [SerializeField] private PetBagModel buttonModel;
     [SerializeField] private PetBagView buttonView;
     [SerializeField] private PetSelectController selectController;
     [SerializeField] private PetPersonalityController personalityController;
+    [SerializeField] private PetDemoController demoController;
+    [SerializeField] private PetFeatureController featureController;
 
     protected override void Awake()
     {
@@ -54,8 +58,9 @@ public class PetBagController : Module
     }
 
     public void SetPetTrain() {
-        personalityController.onSelectPersonalityEvent += ToBestPet;
-        personalityController.SetActive(true);
+        isDemoMode = !isDemoMode;
+        demoController.gameObject.SetActive(isDemoMode);
+        featureController.gameObject.SetActive(!isDemoMode);
     }
 
     public void ToBestPet(Personality personality) {

@@ -227,6 +227,41 @@
 				</button>
 			</eventHandler>
 		</npc>
+		<npc id="19302" resId="Maps/mine/green.png" name="绿碧矿脉" size="100,72" pos="140,280">
+			<description>绿碧矿脉</description>
+			<eventHandler>
+				<button type="click">
+					<action>openHintbox</action>
+					<param>type=Item</param>
+					<param>title=提示</param>
+					<param>content=矿脉需要合理开发，明天再来吧！</param>
+					<param>item_icon=item[1003]</param>
+					<param>option_num=1</param>
+					<condition>activity[mine].done[193]=[bool]true[default]false</condition>
+				</button>
+				<button type="click">
+					<action>setItem</action>
+					<param>add</param>
+					<param>1003,7</param>
+					<condition>activity[mine].done[193]=[bool]false[default]false</condition>
+				</button>
+				<button type="click">
+					<action>openHintbox</action>
+					<param>type=Item</param>
+					<param>title=提示</param>
+					<param>content=7个绿碧石已经放入背包</param>
+					<param>item_icon=item[1003]</param>
+					<param>option_num=1</param>
+					<condition>activity[mine].done[193]=[bool]false[default]false</condition>
+				</button>
+				<button type="click">
+					<action>setActivity</action>
+					<param>mine</param>
+					<param>done[193]=true</param>
+					<condition>activity[mine].done[193]=[bool]false[default]false</condition>
+				</button>
+			</eventHandler>
+		</npc>
         <teleport id="1" name="残骸通道" pos="230,80" targetMapId="192"/>
 	</entities>
 </map>

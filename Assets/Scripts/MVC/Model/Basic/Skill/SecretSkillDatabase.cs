@@ -47,6 +47,7 @@ public class LearnSkillInfo {
             SecretType.UseSkill => this.UseSkill(),
             SecretType.GreaterThanDamage => this.GreaterThanDamage(),
             SecretType.SpecialPet => this.SpecialPet(),
+            SecretType.Others => this.Others(),
             _ => this.GreaterThanLevel(),
         };
     }

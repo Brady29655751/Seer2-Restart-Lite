@@ -60,6 +60,7 @@ id,name,type,copyType,turn,options,description
 56,星辉解封,mark,replace,-1,res=55,使特攻伤害不低于150
 57,禁疗,mark,replace,-1,none,无法恢复体力
 58,镇静,mark,replace,-1,res=57,无法恢复怒气（攻击命中与回合结束回复的怒气除外）
+97,暴怒,mark,replace,-1,hide=true,锁定100怒气
 98,环境锁定,mark,replace,-1,none,锁定环境效果
 99,王者体质,mark,replace,-1,none,免疫秒杀效果
 101,魅惑,abnormal,replace,2,none,受到魅惑，无法行动
@@ -68,8 +69,10 @@ id,name,type,copyType,turn,options,description
 104,麻痹,abnormal,replace,5,none,攻击时40%几率被迫中断
 105,昏迷,abnormal,replace,2,none,昏迷中，无法行动
 106,睡眠,abnormal,replace,2,none,无法行动，被攻击会苏醒
+107,石化,abnormal,replace,2,none,无法行动，受到暴击几率提升10%，被暴击会解除
 109,冰冻,abnormal,replace,2,none,受到冰冻，无法行动[ENDL]受到暴击伤害提升20%，且受到暴击会解冻
 113,混乱,abnormal,replace,-1,none,下次造成的攻击伤害将转为作用于自身
+114,沉默,abnormal,replace,2,none,属性技能命中率下降100%
 1000,溺水,unhealthy,replace,3,none,每回合损失1/8体力，且命中率降低10%（对水系无效）
 1001,烧伤,unhealthy,replace,3,none,每回合损失1/8体力，且造成的物理攻击伤害降低25%（对火系无效）
 1002,冻伤,unhealthy,replace,3,none,每回合损失1/8体力，且造成的特殊攻击伤害降低25%（对冰系无效）
@@ -147,6 +150,10 @@ id,name,type,copyType,turn,options,description
 3063,水盾,turn,replace,5,res=47,反射物理攻击的一半伤害，最高不超过自身最大体力的一半
 3064,眩晕,turn,replace,5,none,速度值减少50点
 3065,水龙缠绕,chance,replace,-1,none,下一次攻击无法连击
+3066,充电,chance,replace,-1,res=3050,下一次使用电系技能伤害翻倍
+3067,雷神觉醒,turn,replace,3,none,每回合回复35点怒气
+3068,星之辉,mark,stack,-1,none,特定技能效果触发率提升[value]%
+3069,后空翻,turn,replace,1,res=18,躲避物理攻击，但自身受到特殊攻击伤害翻倍
 3143,焦点腐蚀,mark,replace,-1,none,特定攻击技能造成伤害的1/4将恢复自身体力
 3279,蜂纹,mark,stack,-1,auto_remove=true&max_val=3,每一层使中毒造成的伤害增加30，最多叠加3层。[ENDL]当前为[value]层
 3280,青蜂之舞,turn,replace,3,res=18,闪避率增加50%
@@ -161,8 +168,10 @@ id,name,type,copyType,turn,options,description
 100022,毒药,feature,replace,-1,none,对手具有慢性毒药时自身伤害增加10%
 100028,锋利,feature,replace,-1,none,普通系技能的伤害增加25%
 100030,潮湿,feature,replace,-1,none,雨天时水纹屏障吸收量增加50%
+100048,偏斜,feature,replace,-1,none,受到物理伤害减少30%，受到特殊伤害增加15%
 100055,连攻,feature,replace,-1,none,替换上场时造成的伤害增加10%
 100061,有爱,feature,replace,-1,none,以爱的名义伤害增加10%
+100090,雷神,feature,replace,-1,none,战斗开始时使环境转变为雷暴天
 100146,腐蚀,feature,replace,-1,none,自身具有焦点腐蚀时，技能威力增加10
 100149,连击,feature,replace,-1,none,使连击2次以上的技能连击次数增加1次
 100151,青蜂,feature,replace,-1,none,攻击技能命中处于中毒状态的对手会重置中毒状态为3回合
@@ -176,6 +185,7 @@ id,name,type,copyType,turn,options,description
 100963,臂星,feature,replace,-1,none,星移环境下攻击前有15%几率使对手冻伤3回合
 100964,足星,feature,replace,-1,none,星移环境下所有技能先制+2
 100965,背星,feature,replace,-1,none,星移环境下攻击造成的伤害不低于100
+100966,心星,feature,replace,-1,none,星移环境下每回合增加5点怒气
 200001,追击,emblem,replace,-1,none,命中率和闪避率提高10%
 200004,怒火,emblem,replace,-1,none,怒气回复率提高20%（攻击命中与回合结束回复的怒气除外）
 200007,治愈,emblem,replace,-1,none,体力回复率提高20%
@@ -187,8 +197,10 @@ id,name,type,copyType,turn,options,description
 200022,慢性,emblem,replace,-1,none,免疫慢性毒药状态
 200028,星之,emblem,replace,-1,none,使星之力提升自身速度1级
 200030,震击,emblem,replace,-1,none,水纹震击提升的致命几率再增加15%
+200048,辉之,emblem,replace,-1,none,出场自带星之辉状态
 200055,针灸,emblem,replace,-1,none,增加2回合针灸的持续时间
 200061,爱的,emblem,replace,-1,none,出场时自带爱的名义
+200090,雷祭,emblem,replace,-1,none,命中麻痹的对手会回复自身5点怒气
 200146,吸取,emblem,replace,-1,none,攻击技能未命中时吸取对手10怒气
 200149,麻痹,emblem,replace,-1,none,使技能所附带的麻痹几率提高10%
 200151,蜂纹,emblem,replace,-1,none,对手具有蜂纹时，自身攻击技能造成伤害的1/10会恢复自身的体力
@@ -202,6 +214,7 @@ id,name,type,copyType,turn,options,description
 200963,臂骈,emblem,replace,-1,none,使星刃解封提升自身速度1级
 200964,足躏,emblem,replace,-1,none,战斗开始时获得10点怒气
 200965,背逆,emblem,rpelace,-1,none,使星辰回转先制+1
+200966,心惘,emblem,replace,-1,none,使星辰变幻解除自身弱化
 900001,骇浪,feature,replace,-1,none,雨天环境下使用攻击技能恢复自身5怒气
 900004,魔焰,feature,replace,-1,none,炎热环境下暴击率增加15%
 900007,飞叶,feature,replace,-1,none,晴天环境下受到的暴击伤害减少25%
@@ -230,3 +243,4 @@ id,name,type,copyType,turn,options,description
 -3004,圣光惩戒,mark,replace,-1,hide=true,对手强化超过2级时消强化
 -3005,麦麦迪挑战2,mark,replace,-1,hide=true,没有不屈状态时获得0伤盾
 -3006,星之躯影,mark,replace,-1,hide=true,储存超过400伤害时使用星尘裁决
+-3007,充电身躯,mark,replace,-1,hide=true,受到攻击使对手[ffbb33]【麻痹】[-]

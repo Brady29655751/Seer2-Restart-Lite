@@ -6,10 +6,6 @@ public class PetBagView : Module
 {
     [SerializeField] private IButton firstButton, trainButton;
 
-    public override void Init() {
-        trainButton?.SetInteractable(trainButton.button.interactable && GameManager.instance.heliosMode);
-    }
-
     public void OnSelect(int index) {
         firstButton.SetInteractable(index != 0);
     }

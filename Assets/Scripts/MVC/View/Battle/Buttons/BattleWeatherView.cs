@@ -36,7 +36,7 @@ public class BattleWeatherView : BattleBaseView
     }
 
     public void SetWeather(int weather) {
-        this.weather= weather;
+        this.weather = weather;
         isWeatherNull = (weather == 0);
         weatherIcon.SetSprite(Buff.GetWeatherBuff(weather).icon);
         SetMode(!isWeatherNull);

@@ -28,6 +28,7 @@ public static class EffectConditionHandler
         if (state == null)
             return true;
 
+        string weatherOp = condOptions.Get("weather_op", "=");
         string weather = condOptions.Get("weather", "all");
         if (weather == "all")
             return true;
@@ -35,7 +36,7 @@ public static class EffectConditionHandler
         if (!int.TryParse(weather, out int value))
             return false;
 
-        return state.weather == value;
+        return Operator.Condition(weatherOp, state.weather, value);
     }
 
     //! Note that whos_attack must be applied when phase is OnAttack/OnAfterAttack
@@ -73,21 +74,36 @@ public static class EffectConditionHandler
         string op = condOptions.Get("random_op", "LTE");
         string cmpValue = condOptions.Get("random_cmp", "100");
 
-        float random = Random.Range(0f, 100f);
+        float random = Player.instance.random;
         float value;
 
+        Unit lhsUnit = null, rhsUnit = null;
+
         if (state == null) {
-            if (!float.TryParse(cmpValue, out value))
-                return false;
+            if (type == "rng")
+                Player.instance.random = Random.Range(0, 100);
         } else {
             var invokeUnitId = ((Unit)effect.invokeUnit).id;
-            Unit lhsUnit = (who == "me") ? state.GetUnitById(invokeUnitId) : state.GetRhsUnitById(invokeUnitId);
-            Unit rhsUnit = state.GetRhsUnitById(lhsUnit.id);
+            lhsUnit = (who == "me") ? state.GetUnitById(invokeUnitId) : state.GetRhsUnitById(invokeUnitId);
+            rhsUnit = state.GetRhsUnitById(lhsUnit.id);
             
             random = (type == "rng") ? Random.Range(0, 100) : lhsUnit.random;
-            value = Parser.ParseEffectOperation(cmpValue, effect, lhsUnit, rhsUnit);
         }
-        
+
+        if (op == "IN") {
+            int middleIndex = cmpValue.IndexOf('~');
+            if (middleIndex == -1)
+                return false;
+
+            string startExpr = cmpValue.Substring(0, middleIndex);
+            string endExpr = cmpValue.Substring(middleIndex + 1);
+            int startRange = int.Parse(startExpr);
+            int endRange = int.Parse(endExpr);
+
+            return random.IsWithin(startRange, endRange);
+        } 
+            
+        value = (state == null) ? float.Parse(cmpValue) : Parser.ParseEffectOperation(cmpValue, effect, lhsUnit, rhsUnit);
         return Operator.Condition(op, random, value);
     }
 
@@ -182,6 +198,7 @@ public static class EffectConditionHandler
     }
 
     public static bool BuffCondition(this Effect effect, BattleState state, Dictionary<string, string> condOptions) {
+        string key = condOptions.Get("key", string.Empty);
         string who = condOptions.Get("who", "me");
         string id = condOptions.Get("id", "0");
         string own = condOptions.Get("own", "true");
@@ -195,7 +212,7 @@ public static class EffectConditionHandler
         var invokeUnitId = ((Unit)effect.invokeUnit).id;
         Unit buffUnit = (who == "me") ? state.GetUnitById(invokeUnitId) : state.GetRhsUnitById(invokeUnitId);
         var pet = buffUnit.pet;
-        var buff = pet.buffController.GetBuff(buffId);
+        var buff = string.IsNullOrEmpty(key) ? pet.buffController.GetBuff(buffId) : state.stateBuffs.Find(x => x.Key == key).Value;
         bool isOwnCorrect = (ownBuff == (buff != null));
 
         if ((!ownBuff) || (!isOwnCorrect) || (type == "none"))

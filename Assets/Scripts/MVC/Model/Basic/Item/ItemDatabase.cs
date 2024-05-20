@@ -9,6 +9,8 @@ public static class ItemDatabase
         {"currency", ItemType.Currency},
         {"hp_potion", ItemType.HpPotion},
         {"capture", ItemType.Capture},
+        {"evolve", ItemType.Evolve},
+        {"emblem", ItemType.Emblem},
         {"exp", ItemType.EXP},
         {"ev", ItemType.EV},
         {"iv", ItemType.IV},
@@ -20,7 +22,7 @@ public static class ItemDatabase
 
     public static Dictionary<ItemCategory, List<ItemType>> categoryDict = new Dictionary<ItemCategory, List<ItemType>>() {
         { ItemCategory.Currency, new List<ItemType>() { ItemType.Currency } },
-        { ItemCategory.Pet, new List<ItemType>() { ItemType.HpPotion, ItemType.EXP, ItemType.EV, ItemType.IV, ItemType.Personality, ItemType.Skill } },
+        { ItemCategory.Pet, new List<ItemType>() { ItemType.HpPotion, ItemType.Evolve, ItemType.Emblem, ItemType.EXP, ItemType.EV, ItemType.IV, ItemType.Personality, ItemType.Skill } },
         { ItemCategory.Battle, new List<ItemType>() { ItemType.HpPotion } },
         { ItemCategory.Capture, new List<ItemType>() { ItemType.Capture } },
         { ItemCategory.Stuff, new List<ItemType>() { ItemType.Mine, ItemType.Stuff }},
@@ -45,6 +47,8 @@ public enum ItemType {
     Currency,
     HpPotion,
     Capture,
+    Evolve,
+    Emblem,
     EXP,
     EV,
     IV,

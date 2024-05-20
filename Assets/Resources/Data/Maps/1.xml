@@ -312,7 +312,7 @@
 							<status>
 								<atk>500</atk>
 								<mat>500</mat>
-								<hp>25000</hp>
+								<hp>30000</hp>
 							</status>
 							<initBuff>13,14,17,20,98,99</initBuff>
 							<loopSkill>10396,10397,10398</loopSkill>
@@ -338,6 +338,73 @@
 							<param>20003</param>
 							<param>done[5]=true</param>
 							<condition>activity[20003].done[5]=[bool]false[default]false</condition>
+						</button>
+					</winHandler>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>openDialog</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<npc id="106" resId="Pets/pet/966.png" name="Lv 105 星之心影" size="100,120" pos="130,325" namePos="0,-10">
+			<description><![CDATA[星之心影]]></description>
+			<dialog>
+				<branch id="default" name="星之心影" icon="Pets/pet/966.png" size="100,120" pos="10,55">
+					<content><![CDATA[万物起于星空，终于星空。大地为万物之末，星空为大地之末。星之心影，象征着终末。]]></content>
+					<functionHandler>
+						<func type="click">
+							<description><![CDATA[普通挑战]]></description>
+							<action>battle</action>
+							<param>default</param>
+						</func>
+					</functionHandler>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[好神秘阿]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+					</replyHandler>
+				</branch>
+			</dialog>
+			<battle>
+				<branch id="default">
+					<settings count="6">
+						<mode>4</mode>
+						<weather>12</weather>
+					</settings>
+					<enemy>
+						<pet id="966" level="105">
+							<status>
+								<hp>35000</hp>
+							</status>
+							<initBuff>13,14,17,20,25,26,98,99</initBuff>
+							<loopSkill>10433,10434,10434,10434,10434</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>getPet</action>
+							<param>966,100</param>
+							<condition>activity[20003].done[6]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=【星之心影】已经放入精灵仓库</param>
+							<param>item_icon=pet[966]</param>
+							<param>option_num=1</param>
+							<condition>activity[20003].done[6]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>20003</param>
+							<param>done[6]=true</param>
+							<condition>activity[20003].done[6]=[bool]false[default]false</condition>
 						</button>
 					</winHandler>
 				</branch>

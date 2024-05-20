@@ -173,9 +173,10 @@ public class IButton : IMonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     }
 
     public virtual void SetSprite(Sprite sprite) {
-        if (image != null) {
-            image.sprite = sprite;
-        }
+        if (image == null)
+            image = gameObject.GetComponent<Image>();
+
+        image.sprite = sprite;
     }
     public virtual void SetBGM(AudioClip bgm) {
         AudioSystem.instance.PlayMusic(bgm);

@@ -44,12 +44,12 @@ public class BattlePet : Pet
             return;
 
         statusController = new PetBattleStatusController(normalStatus, currentStatus.hp);
-        buffController = new PetBattleBuffController(element, null);
+        buffController = new PetBattleBuffController(element, _pet.initBuffs);
         skillController = new PetBattleSkillController(normalSkill.ToList(), superSkill);
     }
 
     public BattlePet(BossInfo info) : base(info.petId, info.level) {
-        List<Buff> initBuffs = info.initBuffs;
+        feature.afterwardBuffIds = info.initBuffs;
         Status basicStatus = (info.status == null) ? normalStatus : info.status.GetBasicStatus().Select((x, i) => (x == 0) ? normalStatus[i] : x);
         Status hiddenStatus = (info.status == null) ? new Status(0, 0, 0, 0, 100, 100) : info.status.GetHiddenStatus();
         BattleStatus status = new BattleStatus(basicStatus, hiddenStatus);

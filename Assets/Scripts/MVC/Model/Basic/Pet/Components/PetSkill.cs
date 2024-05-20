@@ -47,7 +47,7 @@ public class PetSkill
 
     /* Pet secret skills */
     public int[] secretSkillId => secretSkill.Select(x => x.id).ToArray();
-    public Skill[] secretSkill => info.learnInfoList.Where(x => (x.secretType > SecretType.GreaterThanLevel) && (x.secretType <= SecretType.SpecialPet)).Select(x => x.skill).ToArray();
+    public Skill[] secretSkill => info.learnInfoList.Where(x => (x.secretType != SecretType.GreaterThanLevel) && (x.secretType <= SecretType.SpecialPet)).Select(x => x.skill).ToArray();
     public LearnSkillInfo[] secretSkillInfo => GetLearnSkillInfos(secretSkillId);
 
 
@@ -111,6 +111,11 @@ public class PetSkill
             return false;
 
         ownSkillId = ownSkillId.Concat(new int[1]{ skill.id }).ToArray();
+        superSkill = superSkill ?? ownSkill.FirstOrDefault(x => x.type == SkillType.必杀);
+        if (!normalSkill.Contains(null))
+            return true;
+
+        normalSkill = ownSkill.ToArray();
         return true;
     }
 

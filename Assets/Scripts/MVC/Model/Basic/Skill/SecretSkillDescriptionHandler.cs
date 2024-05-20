@@ -52,4 +52,8 @@ public static class SecretSkillDescriptionHandler
         };
         return "背包中携带" + pet + "并获得胜利";
     }
+
+    public static string Others(this LearnSkillInfo secretSkillInfo) {
+        return "透过特别的方式习得";
+    }
 }

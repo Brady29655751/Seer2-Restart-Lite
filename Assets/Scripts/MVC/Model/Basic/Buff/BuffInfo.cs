@@ -12,6 +12,7 @@ public class BuffInfo
     /* Basic Data */
     public int id { get; private set; }
     public int resId { get; private set; }
+    public int itemId { get; private set; }
     public string name { get; private set; }
     public BuffType type { get; private set; }
     public CopyHandleType copyHandleType { get; private set; }
@@ -60,6 +61,7 @@ public class BuffInfo
 
     private void InitOptionsProperty() {
         resId = int.Parse(options.Get("res", id.ToString()));
+        itemId = int.Parse(options.Get("item", "0"));
         keep = GetKeepInfo();
         inherit = ((type == BuffType.Feature) || (type == BuffType.Emblem)) ? false : bool.Parse(options.Get("inherit", "false"));
         hide = ((type == BuffType.Feature) || (type == BuffType.Emblem)) ? false : bool.Parse(options.Get("hide", "false"));

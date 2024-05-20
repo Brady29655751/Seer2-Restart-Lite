@@ -86,9 +86,10 @@ public class GameManager : Singleton<GameManager>
         Player.instance.gameData.lastLoginDate = DateTime.Now;
 
         if (debugMode) {
-            Player.instance.gameData.coin = int.MaxValue;
-            Player.instance.gameData.diamond = int.MaxValue;
             Player.instance.gameData.petStorage = Database.instance.petInfoDict.Select(entry => Pet.GetExamplePet(entry.Key)).ToList();
+            Player.instance.gameData.itemStorage = Database.instance.itemInfoDict.Select(entry => new Item(entry.Key, 99999)).ToList();
+            Player.instance.gameData.coin = (int)2e7;
+            Player.instance.gameData.diamond = (int)2e7;
         }
 
         SaveSystem.SaveData();

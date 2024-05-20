@@ -20,11 +20,13 @@ public class Player : Singleton<Player>
     public int currentNpcId = 0;
     public int currentMissionId = 0;
 
+    public int random = -1;
     public Battle currentBattle = null;
     private static Dictionary<string, object> sceneData = new Dictionary<string, object>();
 
     private void Start() {
         gameDataId = -1;
+        random = Random.Range(0, 100);
     }
 
     protected override void OnApplicationQuit() {

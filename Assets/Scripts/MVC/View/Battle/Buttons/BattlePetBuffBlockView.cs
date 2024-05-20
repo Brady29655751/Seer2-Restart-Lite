@@ -11,13 +11,13 @@ public class BattlePetBuffBlockView : Module
     [SerializeField] private IButton button;
     [SerializeField] private Text valueText;
     
-    public void SetBuff(Buff _buff, UnityAction onPointerEnter = null, UnityAction onPointerExit = null, UnityAction onPointerOver = null) {
+    public void SetBuff(Buff _buff, UnityAction onPointerEnter = null, UnityAction onPointerExit = null, UnityAction onPointerOver = null, UnityAction onPointerClick = null) {
         buff = _buff;
         button?.SetInteractable(buff != null);
 
         SetSprite();
         SetValue();
-        SetActions(onPointerEnter, onPointerExit, onPointerOver);
+        SetActions(onPointerEnter, onPointerExit, onPointerOver, onPointerClick);
     }
 
     public void SetSprite() {
@@ -30,9 +30,10 @@ public class BattlePetBuffBlockView : Module
         valueText.text = value.ToString();
     }
 
-    private void SetActions(UnityAction onPointerEnter, UnityAction onPointerExit, UnityAction onPointerOver) {
+    private void SetActions(UnityAction onPointerEnter, UnityAction onPointerExit, UnityAction onPointerOver, UnityAction onPointerClick) {
         button.onPointerEnterEvent.SetListener(onPointerEnter);
         button.onPointerOverEvent.SetListener(onPointerOver);
         button.onPointerExitEvent.SetListener(onPointerExit);
+        button.onPointerClickEvent.SetListener(onPointerClick);
     }   
 }

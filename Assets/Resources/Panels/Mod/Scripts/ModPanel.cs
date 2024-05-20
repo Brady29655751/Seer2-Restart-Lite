@@ -10,6 +10,12 @@ public class ModPanel : Panel
 
     protected Dictionary<int, NpcController> npcDict = new Dictionary<int, NpcController>();
 
+    public override void ClosePanel() {
+        ResourceManager.instance.UnloadModResources();
+        base.ClosePanel(); 
+        Resources.UnloadUnusedAssets();
+    }
+
     public void SetPanelData(PanelData panelData) {
         if (panelData == null) {
             loadingText.SetText("加载自制面板失败");

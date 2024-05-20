@@ -13,6 +13,7 @@ public class PetBagPanel : Panel
     [SerializeField] private PetBagMode mode = PetBagMode.Normal;
     [SerializeField] private PetSelectController selectController;
     [SerializeField] private PetDemoController demoController;
+    [SerializeField] private PetFeatureController featureController;
     [SerializeField] private PetStatusController statusController;
     [SerializeField] private PetSwapSkillController skillController;
     [SerializeField] private PetItemController itemController;
@@ -46,6 +47,10 @@ public class PetBagPanel : Panel
 
     private void InitSelectSubscriptions() {
         selectController.onSelectPetEvent += demoController.SetPet;
+        
+        if (featureController != null)
+            selectController.onSelectPetEvent += featureController.SetPet;
+
         selectController.onSelectPetEvent += statusController.SetPet;
         selectController.onSelectPetEvent += skillController.SetPet;
         selectController.onSelectPetEvent += itemController.SetPet;

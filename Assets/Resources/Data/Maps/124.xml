@@ -1,0 +1,47 @@
+<map name="异蘑谷" category="2" id="124">
+	<fightMap>100002</fightMap>
+	<initialPoint>465,100</initialPoint>
+	<music category="2">
+		<bgm>BGM_120</bgm>
+		<fx>FX_111</fx>
+	</music>
+	<entities>
+		<npc id="12401" resId="Maps/mine/yellow.png" name="黄铁矿脉" size="50,77" pos="420,270">
+			<description>黄铁矿脉</description>
+			<eventHandler>
+				<button type="click">
+					<action>openHintbox</action>
+					<param>type=Item</param>
+					<param>title=提示</param>
+					<param>content=矿脉需要合理开发，明天再来吧！</param>
+					<param>item_icon=item[1003]</param>
+					<param>option_num=1</param>
+					<condition>activity[mine].done[124]=[bool]true[default]false</condition>
+				</button>
+				<button type="click">
+					<action>setItem</action>
+					<param>add</param>
+					<param>1001,20</param>
+					<condition>activity[mine].done[124]=[bool]false[default]false</condition>
+				</button>
+				<button type="click">
+					<action>openHintbox</action>
+					<param>type=Item</param>
+					<param>title=提示</param>
+					<param>content=20个黄铁矿已经放入背包</param>
+					<param>item_icon=item[1001]</param>
+					<param>option_num=1</param>
+					<condition>activity[mine].done[124]=[bool]false[default]false</condition>
+				</button>
+				<button type="click">
+					<action>setActivity</action>
+					<param>mine</param>
+					<param>done[124]=true</param>
+					<condition>activity[mine].done[124]=[bool]false[default]false</condition>
+				</button>
+			</eventHandler>
+		</npc>
+		<teleport id="1" name="异蘑小径" pos="80,100" targetMapId="123"/>
+		<!-- <teleport id="2" name="目灵祭台" pos="550,350" targetMapId="126"/> -->
+	</entities>
+</map>

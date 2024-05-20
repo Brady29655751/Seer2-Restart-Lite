@@ -14,6 +14,8 @@ public class BattleState
     public EffectTiming phase;
     public int weather;
     public Buff weatherBuff => Buff.GetWeatherBuff(weather);
+    public List<KeyValuePair<string, Buff>> stateBuffs = new List<KeyValuePair<string, Buff>>();
+
     public Unit masterUnit, clientUnit;
     public List<int> actionOrder = new List<int>();
 
@@ -34,6 +36,8 @@ public class BattleState
         this.whosTurn = 0;
         this.phase = EffectTiming.OnBattleStart;
         this.weather = settings.weather;
+        this.stateBuffs = new List<KeyValuePair<string, Buff>>();
+
         this.masterUnit = new Unit(masterTurn);
         this.clientUnit = new Unit(clientTurn);
         this.actionOrder = new List<int>();
@@ -49,6 +53,8 @@ public class BattleState
         whosTurn = rhs.whosTurn;
         phase = rhs.phase;
         weather = rhs.weather;
+        stateBuffs = rhs.stateBuffs.Select(x => new KeyValuePair<string, Buff>(x.Key, new Buff(x.Value))).ToList();
+
         masterUnit = new Unit(rhs.masterUnit);
         clientUnit = new Unit(rhs.clientUnit);
         actionOrder = rhs.actionOrder.ToList();
@@ -89,6 +95,12 @@ public class BattleState
         turn++;
         whosTurn = 0;
         actionOrder.Clear();
+        for (int i = 0; i < stateBuffs.Count; i++) {
+            if (stateBuffs[i].Value.turn > 0)
+                stateBuffs[i].Value.turn--;
+        }
+        stateBuffs.RemoveAll(x => x.Value.turn == 0);
+
         masterUnit.OnTurnStart(this);
         clientUnit.OnTurnStart(this);
     }

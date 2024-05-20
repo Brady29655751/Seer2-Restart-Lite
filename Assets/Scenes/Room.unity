@@ -4718,6 +4718,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 171323fa259e4c54eb65754e96bed948, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  infoPrompt: {fileID: 0}
+  descriptionBox: {fileID: 0}
   background: {fileID: 106333680}
   ESCButton: {fileID: 1108524949}
 --- !u!1001 &323731998
@@ -26520,11 +26522,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6c860c14c9d73ff4fad4d488da56d2c0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  infoPrompt: {fileID: 0}
+  descriptionBox: {fileID: 0}
   background: {fileID: 5924458068882109485}
   ESCButton: {fileID: 5535348081552659079}
   mode: 1
   selectController: {fileID: 6502563925905585107}
   demoController: {fileID: 2556012279288592732}
+  featureController: {fileID: 0}
   statusController: {fileID: 1859881647044260143}
   skillController: {fileID: 1186970300197963043}
   itemController: {fileID: 371958611289007823}
@@ -37701,6 +37706,8 @@ MonoBehaviour:
   buttonView: {fileID: 7602832091537138089}
   selectController: {fileID: 6502563925905585107}
   personalityController: {fileID: 843880625}
+  demoController: {fileID: 0}
+  featureController: {fileID: 0}
 --- !u!224 &5535348082474920604
 RectTransform:
   m_ObjectHideFlags: 0
@@ -41326,7 +41333,19 @@ MonoBehaviour:
   sound: {fileID: 8300000, guid: 5d77784f479467c489bf7b7849776b18, type: 3}
   onPointerClickEvent:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 5535348082474920580}
+        m_TargetAssemblyTypeName: PetBagController, Assembly-CSharp
+        m_MethodName: SetPetTrain
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   onPointerOverEvent:
     m_PersistentCalls:
       m_Calls: []

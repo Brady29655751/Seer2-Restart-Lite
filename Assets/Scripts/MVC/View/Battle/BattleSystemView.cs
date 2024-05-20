@@ -11,6 +11,7 @@ public class BattleSystemView : BattleBaseView
     [SerializeField] private BattleResourceView resourceView;
     [SerializeField] private BattleOptionView optionView;
     [SerializeField] private BattleWeatherView weatherView;
+    [SerializeField] private BattlePetBuffView stateBuffView;
     [SerializeField] private BattleAudioView audioView;
     [SerializeField] private BattleResultView resultView;
 
@@ -86,6 +87,7 @@ public class BattleSystemView : BattleBaseView
 
         optionView.SetState(lastState, currentState);
         weatherView.SetState(lastState, currentState);
+        stateBuffView.SetBuff(currentState.stateBuffs.Select(x => x.Value).ToList());
     }
 
 }

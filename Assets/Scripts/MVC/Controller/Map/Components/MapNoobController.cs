@@ -6,7 +6,10 @@ using UnityEngine.UI;
 
 public class MapNoobController : UIModule
 {
+    [SerializeField] private RectTransform rectTransform;
     [SerializeField] private IButton sevenDayLoginIcon;
+
+    private bool isExtended = true;
 
     public override void Init()
     {
@@ -31,5 +34,11 @@ public class MapNoobController : UIModule
 
     public void GoToMap(int mapId) {
         TeleportHandler.Teleport(mapId);
+    }
+
+    public void Extend() {
+        var x = isExtended ? -1000 : 0;
+        rectTransform.anchoredPosition = new Vector2(x, rectTransform.anchoredPosition.y);
+        isExtended = !isExtended;
     }
 }

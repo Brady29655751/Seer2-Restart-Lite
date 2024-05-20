@@ -95,7 +95,7 @@ public static class NpcActionHandler
         DialogInfo dialogInfo = npcInfo.dialogHandler.Find(x => x.id == handler.param[0]);
         DialogManager.instance.SetCurrentNpc(npcInfo);
       
-        if (dialogInfo.content.StartsWith("story=")) {
+        if (dialogInfo?.content.StartsWith("story=") ?? false) {
             dialogInfo.content = dialogInfo.content.Substring("story=".Length);
             DialogManager.instance.OpenStoryDialog(dialogInfo); 
         } else {
@@ -123,11 +123,11 @@ public static class NpcActionHandler
         Action<Item> itemFunc = handler.param[0] switch {
             "add" => Item.Add,
             "remove" => (x) => Item.Remove(x.id, x.num),
-            _ => Item.Add
+            _ => null
         };
         for (int i = 1; i < handler.param.Count; i++) {
             var itemInfo = handler.param[i].ToIntList();
-            itemFunc.Invoke(new Item(itemInfo[0], itemInfo[1]));
+            itemFunc?.Invoke(new Item(itemInfo[0], itemInfo[1]));
         }
     }
 

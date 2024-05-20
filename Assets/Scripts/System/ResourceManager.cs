@@ -63,6 +63,16 @@ public class ResourceManager : Singleton<ResourceManager>
         InitAll<Sprite>(spritePath + "Game/Skills", spritePath + "Skills");
     }
 
+    public void UnloadModResources() {
+        var resKeys = resDict.Keys.ToList();
+        foreach (var key in resKeys) {
+            if (!key.StartsWith("Mod/"))
+                continue;
+
+            resDict.Set(key, null);
+        }
+    }
+
     public void Set<T>(string resPath, T item) where T : Object {
         resDict.Set(resPath, item);
     }
