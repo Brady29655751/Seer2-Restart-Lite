@@ -118,6 +118,7 @@ public class Skill
         combo = rhs.combo;
         priority = rhs.priority;
         ignoreShield = rhs.ignoreShield;
+        ignorePowerup = rhs.ignorePowerup;
     }
 
     protected Skill(SkillType specialType) {

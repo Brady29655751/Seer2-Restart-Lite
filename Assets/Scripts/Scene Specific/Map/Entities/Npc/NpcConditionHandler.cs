@@ -44,6 +44,16 @@ public static class NpcConditionHandler
     }
 
     public static bool GetRandom(string op, string key, string value) {
+        bool result = Operator.Condition(op, Player.instance.random, float.Parse(value));
+
+        if (key == "[old]")
+            return result;
+
+        if (key == "[new]") {
+            Player.instance.random = Random.Range(0, 100);
+            return result;
+        }
+
         var range = key.TrimParentheses().ToIntList('~');
         int rng = Random.Range(range[0], range[1]);
         return Operator.Condition(op, rng, float.Parse(value));

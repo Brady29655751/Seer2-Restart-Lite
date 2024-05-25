@@ -316,7 +316,7 @@ public static class EffectAbilityHandler
         Unit rhsUnit = state.GetRhsUnitById(lhsUnit.id);
         
         int buffId = (int)Parser.ParseEffectOperation(id, effect, lhsUnit, rhsUnit);
-        if (Buff.GetBuffInfo(buffId) == null)
+        if (string.IsNullOrEmpty(key) && (Buff.GetBuffInfo(buffId) == null))
             return false;
 
         var buffController = lhsUnit.pet.buffController;
@@ -326,7 +326,9 @@ public static class EffectAbilityHandler
 
         if (!string.IsNullOrEmpty(key)) {
             state.stateBuffs.RemoveAll(x => x.Key == key);
-            state.stateBuffs.Add(new KeyValuePair<string, Buff>(key, newBuff));
+            if (newBuff != null)
+                state.stateBuffs.Add(new KeyValuePair<string, Buff>(key, newBuff));
+            
             return true;
         }
 
@@ -693,6 +695,8 @@ public static class EffectAbilityHandler
             List<Buff> buffs = new List<Buff>();
             buffs.Add(Buff.GetFeatureBuff(lhsUnit.pet.info));
             buffs.Add(Buff.GetEmblemBuff(lhsUnit.pet.info));
+            buffs.AddRange(lhsUnit.pet.initBuffs);
+
             lhsUnit.pet.buffController.AddRangeBuff(buffs, lhsUnit, state);
 
             return true;

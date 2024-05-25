@@ -5,7 +5,7 @@
 	</music>
 	<initialPoint>240,155</initialPoint>
 	<entities>
-		<npc id="87001" resId="Pets/pet/90" name="Lv 70 雷伊" size="80,142" pos="320,280" namePos="0,-10">
+		<npc id="87001" resId="Pets/pet/90" name="Lv 70 雷伊" size="80,142" pos="300,280" namePos="0,-10">
 			<description>雷伊</description>
 			<dialog>
 				<branch id="default" name="雷伊" icon="Pets/pet/90" size="80,142" pos="0,35">
@@ -26,8 +26,8 @@
 							<action>openPanel</action>
 							<param>ItemShop</param>
 							<param>mode=buy</param>
-							<param>currency=400001/0</param>
-							<param>item=300090</param>
+							<param>currency=400001/400002</param>
+							<param>item=300090/300234</param>
 							<param>title=兑换纹章</param>
 						</func>
 					</functionHandler>
@@ -145,9 +145,175 @@
 								<hp>2000</hp>
 								<cri>15</cri>
 							</status>
-							<initBuff>13,14,17,20,41,42,-3007</initBuff>
+							<initBuff>13,14,17,20,41,42</initBuff>
 							<loopSkill>10442,10445,10448,10453</loopSkill>
 							<superSkill>10450</superSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>openDialog</action>
+							<param>reward</param>
+							<condition>random[0~100]LTE20</condition>
+						</button>
+					</winHandler>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>openDialog</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<npc id="87002" resId="Pets/pet/234" name="Lv 70 凯萨" size="100,120" pos="380,320" namePos="0,-10">
+			<description>凯萨</description>
+			<dialog>
+				<branch id="default" name="凯萨" icon="Pets/pet/234" size="100,120" pos="0,55">
+					<content><![CDATA[邪恶的气息正在逼近......]]></content>
+					<functionHandler>
+						<func type="click">
+							<description><![CDATA[挑战凯萨]]></description>
+							<action>openDialog</action>
+							<param>pet</param>
+						</func>
+						<func type="click">
+							<description><![CDATA[获取纹章碎片]]></description>
+							<action>openDialog</action>
+							<param>emblem</param>
+						</func>
+						<func type="click">
+							<description><![CDATA[兑换纹章]]></description>
+							<action>openPanel</action>
+							<param>ItemShop</param>
+							<param>mode=buy</param>
+							<param>currency=400001/400002</param>
+							<param>item=300090/300234</param>
+							<param>title=兑换纹章</param>
+						</func>
+					</functionHandler>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[好可怕啊]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+					</replyHandler>
+				</branch>
+				<branch id="pet" name="凯萨" icon="Pets/pet/234" size="100,120" pos="0,55">
+					<content><![CDATA[拿出你全部的实力挑战我吧！（挑战胜利获得凯萨）]]></content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[我还没准备好]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+						<reply type="click">
+							<description><![CDATA[我准备好了]]></description>
+							<action>battle</action>
+							<param>default</param>
+						</reply>
+					</replyHandler>
+				</branch>
+				<branch id="emblem" name="凯萨" icon="Pets/pet/234" size="100,120" pos="0,55">
+					<content><![CDATA[战胜我有20%概率掉落纹章碎片，集齐6个就能兑换纹章。你准备好了吗？]]></content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[我还没准备好]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+						<reply type="click">
+							<description><![CDATA[我准备好了]]></description>
+							<action>battle</action>
+							<param>emblem</param>
+						</reply>
+					</replyHandler>
+				</branch>
+				<branch id="reward" name="凯萨" icon="Pets/pet/90" size="80,142" pos="0,55">
+					<content><![CDATA[你的英勇赢得了1枚纹章碎片]]></content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[太好了]]></description>
+							<action>setItem</action>
+							<param>add</param>
+							<param>400002,1</param>
+						</reply>
+						<reply type="branch">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=1枚凯萨纹章碎片已经放入背包</param>
+							<param>option_num=1</param>
+							<param>item_icon=item[400002]</param>
+						</reply>
+						<reply type="branch">
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+					</replyHandler>
+				</branch>
+			</dialog>
+			<battle>
+				<branch id="default">
+					<settings count="6">
+						<mode>3</mode>
+					</settings>
+					<enemy>
+						<pet id="234" level="70">
+							<status>
+								<atk>600</atk>
+								<mat>600</mat>
+								<def>400</def>
+								<mdf>400</mdf>
+								<hp>2000</hp>
+							</status>
+							<initBuff>13,14,17,20,45,99</initBuff>
+							<headerSkill>10482</headerSkill>
+							<loopSkill>10474,10480,10480</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>getPet</action>
+							<param>234,10,0</param>
+							<condition>activity[20004].done[kaiser][default]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=【凯萨】已经放入精灵仓库</param>
+							<param>item_icon=pet[234]</param>
+							<param>option_num=1</param>
+							<condition>activity[20004].done[kaiser][default]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>20004</param>
+							<param>done[kaiser][default]=true</param>
+							<condition>activity[20004].done[kaiser][default]=[bool]false[default]false</condition>
+						</button>
+					</winHandler>
+				</branch>
+				<branch id="emblem">
+					<settings count="6">
+						<mode>3</mode>
+					</settings>
+					<enemy>
+						<pet id="234" level="70">
+							<status>
+								<atk>600</atk>
+								<mat>600</mat>
+								<def>400</def>
+								<mdf>400</mdf>
+								<hp>2000</hp>
+								<cri>15</cri>
+							</status>
+							<initBuff>13,14,17,20,41,42</initBuff>
+							<headerSkill>10482</headerSkill>
+							<loopSkill>10474,10479,10478,10483</loopSkill>
+							<superSkill>10481</superSkill>
 						</pet>
 					</enemy>
 					<winHandler>

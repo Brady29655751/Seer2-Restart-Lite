@@ -33,6 +33,8 @@ public class NormalLoadingScreen : LoadingScreen
             yield return null;
         }
 
+        GameManager.instance.ChangeState(GameState.Play);
+
         if (loadMapSuccess == 1)
             finishedCallback?.Invoke();
     }

@@ -205,13 +205,24 @@ public static class EffectConditionHandler
         string type = condOptions.Get("type", "none");
         string[] typeList = type.Split('/');
 
-        int buffId; bool ownBuff;
-        if (!int.TryParse(id, out buffId) || !bool.TryParse(own, out ownBuff))
+        int buffId; bool ownBuff; BuffType buffType;
+        if (!bool.TryParse(own, out ownBuff))
             return false;
 
         var invokeUnitId = ((Unit)effect.invokeUnit).id;
         Unit buffUnit = (who == "me") ? state.GetUnitById(invokeUnitId) : state.GetRhsUnitById(invokeUnitId);
         var pet = buffUnit.pet;
+
+        if (!int.TryParse(id, out buffId)) {
+            buffType = id.ToBuffType();
+            if (buffType == BuffType.None)
+                return false;
+
+            return ownBuff != List.IsNullOrEmpty((buffType == BuffType.TurnBased) ? 
+                pet.buffController.GetRangeBuff(x => x.turn > 0) :
+                pet.buffController.GetRangeBuff(x => x.info.type == buffType));
+        }
+
         var buff = string.IsNullOrEmpty(key) ? pet.buffController.GetBuff(buffId) : state.stateBuffs.Find(x => x.Key == key).Value;
         bool isOwnCorrect = (ownBuff == (buff != null));
 

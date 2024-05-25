@@ -164,10 +164,13 @@ public class Item
     }
 
     public int Use(object invokeUnit, BattleState state, int useCount = 1) {
-        int count = info.type switch {
-            ItemType.EXP => this.UseExp(invokeUnit, state, useCount),
-            _ => this.UseDefault(invokeUnit, state, useCount)
-        };
+        int count = useCount;
+
+        if ((info.type == ItemType.EXP) && (!effects.Exists(x => x.abilityOptionDict.ContainsKey("max_use"))))
+            count = this.UseExp(invokeUnit, state, useCount);
+        else
+            count = this.UseDefault(invokeUnit, state, useCount);
+
         if (info.removable) {
             Item.Remove(id, count);
         }
@@ -175,6 +178,9 @@ public class Item
     }
 
     public int GetMaxUseCount(object invokeUnit, BattleState state) {
+        if (effects.Exists(x => x.abilityOptionDict.ContainsKey("max_use")))
+            return this.StuffMaxUseCount(invokeUnit, state);
+
         return info.type switch {
             ItemType.HpPotion => this.HpPotionMaxUseCount(invokeUnit, state),
             ItemType.Evolve => 1,

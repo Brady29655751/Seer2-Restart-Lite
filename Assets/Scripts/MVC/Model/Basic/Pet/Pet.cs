@@ -190,6 +190,12 @@ public class Pet
             return initBuffs.Exists(x => x.id == buffId) ? 1 : 0;
         }
 
+        if ((id.TryTrimStart("record", out var trimRecord)) && 
+            (trimRecord.TryTrimParentheses(out var trimRecordKey)) && 
+            (record.TryGetRecord(trimRecord, out var trimRecordValueExpr)) &&
+            float.TryParse(trimRecordValueExpr, out var trimRecordValue))
+            return trimRecordValue;
+
         return id switch {
             "id" => this.id,
             "baseId" => basic.baseId,
@@ -213,6 +219,12 @@ public class Pet
     }
 
     public virtual void SetPetIdentifier(string id, float num) {
+        if ((id.TryTrimStart("record", out var trimRecord)) && 
+            (trimRecord.TryTrimParentheses(out var trimRecordKey))) {
+            record.SetRecord(trimRecordKey, num);
+            return;
+        }        
+
         switch (id) {
             default:
                 return;

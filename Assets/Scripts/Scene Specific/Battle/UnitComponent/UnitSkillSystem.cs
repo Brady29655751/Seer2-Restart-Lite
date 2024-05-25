@@ -60,7 +60,8 @@ public class UnitSkillSystem
 
     public bool CalculateAccuracy(BattlePet atkPet, BattlePet defPet) {
         int _random = Random.Range(0, 100);
-        isHit = (skill.accuracy + atkPet.battleStatus.hit - defPet.battleStatus.eva) > _random;
+        int fixAccuracy = skill.accuracy.IsInRange(95, 99) ? 98 : skill.accuracy;
+        isHit = (fixAccuracy + atkPet.battleStatus.hit - defPet.battleStatus.eva) > _random;
         return isHit;
     }
 

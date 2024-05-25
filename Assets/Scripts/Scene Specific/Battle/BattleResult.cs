@@ -111,7 +111,26 @@ public class BattleResult
         gainEVStoragePerPet = endState.opUnit.petSystem.petNum;
 
         DoWork(endState, (state, battlePet, pet) => { 
-            pet.talent.AddEVStorage(gainEVStoragePerPet); 
+            int battleEvMult = 1;
+
+            if (battlePet.record.TryGetRecord("battleEvMult", out var battleEvMultExpr) &&
+                battlePet.record.TryGetRecord("battleEvChance", out var battleEvChanceExpr) &&
+                battlePet.record.TryGetRecord("battleEvBuff", out var battleEvBuffExpr)) {
+                
+                battleEvMult = int.Parse(battleEvMultExpr);
+
+                int battleEvChance = int.Parse(battleEvChanceExpr) - 1;
+                int battleEvBuffId = int.Parse(battleEvBuffExpr);
+
+                if (battleEvChance <= 0) {
+                    pet.feature.afterwardBuffIds.Remove(battleEvBuffId);
+                    pet.record.SetRecord("battleEvChance", null);
+                    pet.record.SetRecord("battleEvBuff", null);
+                } else
+                    pet.record.SetRecord("battleEvChance", battleEvChance);
+            }
+
+            pet.talent.AddEVStorage(gainEVStoragePerPet * battleEvMult); 
         });
     }
 
@@ -120,7 +139,28 @@ public class BattleResult
         uint totalExp = (uint)opUnitPet.petBag.Where(x => x != null).Select(x => (x.exp.info.beatExpParam / 255f) * PetExpSystem.GetLevelExp(x.level, x.exp.expType)).Sum();
         gainExpPerPet = totalExp / (uint)(fightPetCursors.Count);
 
-        DoWork(endState, (state, battlePet, pet) => { pet.GainExp(gainExpPerPet); });
+        DoWork(endState, (state, battlePet, pet) => { 
+            uint battleExpMult = 1;
+
+            if (battlePet.record.TryGetRecord("battleExpMult", out var battleExpMultExpr) &&
+                battlePet.record.TryGetRecord("battleExpChance", out var battleExpChanceExpr) &&
+                battlePet.record.TryGetRecord("battleExpBuff", out var battleExpBuffExpr)) {
+
+                battleExpMult = uint.Parse(battleExpMultExpr);
+
+                int battleExpChance = int.Parse(battleExpChanceExpr) - 1;
+                int battleExpBuffId = int.Parse(battleExpBuffExpr);
+
+                if (battleExpChance <= 0) {
+                    pet.feature.afterwardBuffIds.Remove(battleExpBuffId);
+                    pet.record.SetRecord("battleExpChance", null);
+                    pet.record.SetRecord("battleExpBuff", null);
+                } else
+                    pet.record.SetRecord("battleExpChance", battleExpChance);
+            }
+
+            pet.GainExp(gainExpPerPet * battleExpMult); 
+        });
     }
 
     private void SetSkill(BattleState endState) {

@@ -22,6 +22,8 @@ id,timing,priority,target,condition,cond_option,effect,effect_option
 10014,resident\on_before_attack,-1\-1,pet\pet,status\status,status_type=hp&op=<&cmp_value=1/1\status_type=hp&op=<&cmp_value=1/1,heal\heal,type=item&add=200\type=item&add=200
 10015,resident\on_before_attack,-1\-1,pet\pet,status\status,status_type=hp&op=<&cmp_value=1/1\status_type=hp&op=<&cmp_value=1/1,heal\heal,type=item&add=300\type=item&add=300
 10016,resident\on_before_attack,-1\-1,pet\pet,status\status,status_type=hp&op=<&cmp_value=1/1\status_type=hp&op=<&cmp_value=1/1,heal\heal,type=item&add=350\type=item&add=350
+10101,resident\resident\resident\resident,-1\-1\-1\-1,pet\pet\pet\pet,pet\pet\pet\pet,type=buff[400001]&buff[400001]_cmp=0\type=buff[400001]&buff[400001]_cmp=0\type=buff[400001]&buff[400001]_cmp=0\type=buff[400001]&buff[400001]_cmp=0,set_pet\set_pet\set_pet\set_pet,max_use=1&type=buff&op=+&value=400001\max_use=1&type=record[battleExpMult]&op=SET&value=3\max_use=1&type=record[battleExpChance]&op=SET&value=30\max_use=1&type=record[battleExpBuff]&op=SET&value=400001
+10111,resident\resident\resident\resident,-1\-1\-1\-1,pet\pet\pet\pet,pet\pet\pet\pet,type=buff[400002]&buff[400002]_cmp=0\type=buff[400002]&buff[400002]_cmp=0\type=buff[400002]&buff[400002]_cmp=0\type=buff[400002]&buff[400002]_cmp=0,set_pet\set_pet\set_pet\set_pet,max_use=1&type=buff&op=+&value=400002\max_use=1&type=record[battleEvMult]&op=SET&value=3\max_use=1&type=record[battleEvChance]&op=SET&value=30\max_use=1&type=record[battleEvBuff]&op=SET&value=400002
 10201,resident,-1,pet,pet,type=level&level_op=<&level_cmp=100,set_pet,type=exp&op=+&value=1000
 10202,resident,-1,pet,pet,type=level&level_op=<&level_cmp=100,set_pet,type=exp&op=+&value=2000
 10203,resident,-1,pet,pet,type=level&level_op=<&level_cmp=100,set_pet,type=exp&op=+&value=5000
@@ -44,5 +46,6 @@ id,timing,priority,target,condition,cond_option,effect,effect_option
 110050,resident,-1,pet,pet,type=skill[10050]&skill[10050]_cmp=0,set_pet,type=skill&op=+&value=10050
 300048,resident,-1,pet,pet,type=baseId/emblem&baseId_cmp=48&emblem_cmp=0,set_pet,type=emblem&op=SET&value=1
 300090,resident,-1,pet,pet,type=baseId/emblem&baseId_cmp=90&emblem_cmp=0,set_pet,type=emblem&op=SET&value=1
+300234,resident,-1,pet,pet,type=baseId/emblem&baseId_cmp=234&emblem_cmp=0,set_pet,type=emblem&op=SET&value=1
 400001,none,-1,none,none,none,none,none
 400002,none,-1,none,none,none,none,none

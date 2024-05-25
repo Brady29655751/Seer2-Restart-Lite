@@ -16,6 +16,8 @@ public class BattlePetStatusView : BattleBaseView
     protected bool isHpDone = true;
     protected bool isAngerDone = true;
 
+    public static float animSpeed => Player.instance.gameData.settingsData.battleAnimSpeed;
+
     public void SetHp(int hp, int maxHp) {
         SetHpText(hp, maxHp);
         SetHpBar(hp, maxHp);
@@ -31,7 +33,7 @@ public class BattlePetStatusView : BattleBaseView
 
         float currentHp = lastHp;
         float percent = Mathf.Abs((hp - lastHp) * 100f / maxHp);
-        float speed = 0.005f + 0.01f * Mathf.Max(0, (percent - 30) / 70);
+        float speed = 0.005f + 0.01f * Mathf.Max(0, (percent - 30) / 70) * animSpeed;
         float diff = (hp == lastHp) ? 0 : (hp - currentHp) / (hp - lastHp);
         while (diff > 0.02f) {
             currentHp += ((speed * maxHp) * Mathf.Sign(hp - lastHp));
@@ -74,7 +76,7 @@ public class BattlePetStatusView : BattleBaseView
 
         float currentAnger = lastAnger;
         float percent = Mathf.Abs((anger - lastAnger) * 100f / maxAnger);
-        float speed = 0.01f + 0.005f * Mathf.Max(0, (percent - 30) / 70);
+        float speed = 0.01f + 0.005f * Mathf.Max(0, (percent - 30) / 70) * animSpeed;
         float diff = (anger == lastAnger) ? 0 : (anger - currentAnger) / (anger - lastAnger);
         while (diff > 0.02f) {
             currentAnger += ((speed * maxAnger) * Mathf.Sign(anger - lastAnger));

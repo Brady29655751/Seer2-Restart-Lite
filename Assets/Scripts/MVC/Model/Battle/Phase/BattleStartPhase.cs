@@ -37,6 +37,7 @@ public class BattleStartPhase : BattlePhase
             List<Buff> buffs = new List<Buff>(pet.buffController.buffs);
             buffs.Add(Buff.GetFeatureBuff(pet.info));
             buffs.Add(pet.hasEmblem ? Buff.GetEmblemBuff(pet.info) : null);
+            buffs.AddRange(pet.initBuffs);
 
             pet.buffController.RemoveRangeBuff(x => true, null, null);
             pet.buffController.AddRangeBuff(buffs, thisUnit, state);

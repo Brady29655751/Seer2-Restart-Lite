@@ -15,5 +15,10 @@ public class IKeyValuePair<TKey, TValue>
         key = k;
         value = v;
     }
+
+    public IKeyValuePair(IKeyValuePair<TKey, TValue> rhs) {
+        key = rhs.key;
+        value = rhs.value;
+    }
 }
 
