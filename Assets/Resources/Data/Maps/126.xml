@@ -1,0 +1,73 @@
+<map name="目灵祭台" category="2" id="126">
+	<fightMap>100002</fightMap>
+	<initialPoint>340,80</initialPoint>
+	<music category="2">
+		<bgm>BGM_126</bgm>
+	</music>
+	<entities>
+		<npc id="12601" resId="Pets/pet/981" name="Lv 105 目灵兽" size="180,220" pos="370,180" namePos="0,0">
+			<description><![CDATA[目灵兽]]></description>
+			<dialog>
+				<branch id="default" name="目灵兽" icon="Pets/pet/981" size="90,110" pos="0,55">
+					<content><![CDATA[我是精灵王之双目，草目氏族不朽的守护者]]></content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[目灵兽居然隐藏在雕像之中]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+						<reply type="click">
+							<description><![CDATA[挑战目灵兽]]></description>
+							<action>battle</action>
+							<param>default</param>
+						</reply>
+					</replyHandler>
+				</branch>
+			</dialog>
+			<battle>
+				<branch id="default">
+					<settings count="6"/>
+					<enemy>
+						<pet id="981" level="105">
+							<status>
+								<hp>30000</hp>
+							</status>
+							<initBuff>14,17,20,-3008</initBuff>
+							<loopSkill>10493,10490,10495,10491,10500</loopSkill>
+							<superSkill>10498</superSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>getPet</action>
+							<param>981,100</param>
+							<condition>activity[soul].done[north][1]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=【目灵兽】已经放入精灵仓库</param>
+							<param>item_icon=pet[981]</param>
+							<param>option_num=1</param>
+							<condition>activity[soul].done[north][1]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>soul</param>
+							<param>done[north][1]=true</param>
+							<condition>activity[soul].done[north][1]=[bool]false[default]false</condition>
+						</button>
+					</winHandler>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>openDialog</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<teleport id="1" name="权力之帐" pos="85,140" targetMapId="110"/>
+	</entities>
+</map>

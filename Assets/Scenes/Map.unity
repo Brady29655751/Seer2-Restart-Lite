@@ -3334,7 +3334,7 @@ GameObject:
   - component: {fileID: 760919867}
   - component: {fileID: 760919866}
   m_Layer: 5
-  m_Name: Lei
+  m_Name: Sign June
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3380,14 +3380,14 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 990813977}
         m_TargetAssemblyTypeName: MapNoobController, Assembly-CSharp
-        m_MethodName: GoToMap
-        m_Mode: 3
+        m_MethodName: OpenPanel
+        m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 870
           m_FloatArgument: 0
-          m_StringArgument: NoobReward
+          m_StringArgument: SignReward[activity=2406]
           m_BoolArgument: 0
         m_CallState: 2
   onPointerOverEvent:
@@ -3402,7 +3402,7 @@ MonoBehaviour:
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: "\u96F7\u4F0A"
+          m_StringArgument: "\u516D\u6708\u7B7E\u5230"
           m_BoolArgument: 0
         m_CallState: 2
   onPointerEnterEvent:
@@ -3687,7 +3687,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
   m_AnchoredPosition: {x: 330, y: 0}
-  m_SizeDelta: {x: 30, y: 30}
+  m_SizeDelta: {x: 40, y: 30}
   m_Pivot: {x: 0, y: 0.5}
 --- !u!114 &869071406
 MonoBehaviour:
@@ -3706,7 +3706,19 @@ MonoBehaviour:
   sound: {fileID: 0}
   onPointerClickEvent:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 638562344}
+        m_TargetAssemblyTypeName: MapMenuController, Assembly-CSharp
+        m_MethodName: OpenPanel
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: SoulPet
+          m_BoolArgument: 0
+        m_CallState: 2
   onPointerOverEvent:
     m_PersistentCalls:
       m_Calls:
@@ -3819,7 +3831,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 8475a502b1559a742a6fdaff636e8c0f, type: 3}
+  m_Sprite: {fileID: 5332452227008022861, guid: 0b4747e7edf58184391c28fed286dd18, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -4264,7 +4276,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 2a0eb0fdfa812ca4ca09b8e8f3974a9b, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 8013f2c9306aa1f4fb5d3f0b448d7c1e, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -5580,7 +5592,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: d662d819769b6844e9c18cb969e4e7f8, type: 3}
+  m_Sprite: {fileID: 21300000, guid: e1b14bbfd95941c4783d2dcac2663d96, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -5613,7 +5625,7 @@ GameObject:
   - component: {fileID: 1315593260}
   - component: {fileID: 1315593259}
   m_Layer: 5
-  m_Name: Runy
+  m_Name: Eye Soul Pet
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5664,7 +5676,7 @@ MonoBehaviour:
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 83
+          m_IntArgument: 110
           m_FloatArgument: 0
           m_StringArgument: NoobReward
           m_BoolArgument: 0
@@ -5681,7 +5693,7 @@ MonoBehaviour:
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: "\u8BD5\u70BC\u4E4B\u95E8"
+          m_StringArgument: "\u76EE\u7075\u517D"
           m_BoolArgument: 0
         m_CallState: 2
   onPointerEnterEvent:

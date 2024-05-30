@@ -29,6 +29,8 @@
 			</eventHandler>
 		</npc>
 		<npc id="11002" resId="11002" name="目灵兽雕像" size="266,288" pos="660,112">
+			<description><![CDATA[（似乎散发着强大的力量）]]></description>
+			<!--
 			<dialog>
 				<branch id="default" name="目灵兽雕像" icon="11002" size="133,144" pos="0,25">
 					<content><![CDATA[（似乎散发着强大的力量）]]></content>
@@ -41,10 +43,11 @@
 					</replyHandler>
 				</branch>
 			</dialog>
+			-->
 			<eventHandler>
 				<button type="click">
-					<action>openDialog</action>
-					<param>default</param>
+					<action>teleport</action>
+					<param>126</param>
 				</button>
 			</eventHandler>
 		</npc>

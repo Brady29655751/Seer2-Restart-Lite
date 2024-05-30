@@ -133,6 +133,7 @@ public class Buff
 
     public float GetBuffIdentifier(string id) {
         return id switch {
+            "id" => this.id,
             "type" => (float)info.type,
             "value" => value,
             "turn" => turn,

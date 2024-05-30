@@ -51,8 +51,7 @@ public class Panel : UIModule
             return panel;
         }
         
-        while (!string.IsNullOrEmpty(options)) {
-            var action = options.TrimParentheses();
+        while (options.TryTrimParentheses(out var action)) {
             var param = action.Split('=');
             panel.SetPanelIdentifier(param[0], param[1]);
             options = options.TrimStart("[" + action + "]");

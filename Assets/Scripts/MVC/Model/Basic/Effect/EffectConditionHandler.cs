@@ -211,6 +211,7 @@ public static class EffectConditionHandler
 
         var invokeUnitId = ((Unit)effect.invokeUnit).id;
         Unit buffUnit = (who == "me") ? state.GetUnitById(invokeUnitId) : state.GetRhsUnitById(invokeUnitId);
+        Unit rhsUnit = state.GetRhsUnitById(buffUnit.id);
         var pet = buffUnit.pet;
 
         if (!int.TryParse(id, out buffId)) {
@@ -232,9 +233,7 @@ public static class EffectConditionHandler
         for (int i = 0; i < typeList.Length; i++) {
             string op = condOptions.Get(typeList[i] + "_op", "=");
             string cmpValue = condOptions.Get(typeList[i] + "_cmp", "0");
-            float value;
-            if (!float.TryParse(cmpValue, out value))
-                return false;
+            float value = Parser.ParseEffectOperation(cmpValue, effect, buffUnit, rhsUnit);
 
             if (!Operator.Condition(op, buff.GetBuffIdentifier(typeList[i]), value))
                 return false;

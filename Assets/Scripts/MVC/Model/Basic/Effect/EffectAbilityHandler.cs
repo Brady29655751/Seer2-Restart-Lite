@@ -78,11 +78,15 @@ public static class EffectAbilityHandler
         if (state == null)
             return false;
 
+        string who = effect.abilityOptionDict.Get("who", "me");
         string target = effect.abilityOptionDict.Get("target_index", "-1");
-        int targetIndex = int.Parse(target);
 
         Unit invokeUnit = (Unit)effect.invokeUnit;
-        Unit petChangeUnit = state.GetUnitById(invokeUnit.id);
+        Unit petChangeUnit = (who == "me") ? state.GetUnitById(invokeUnit.id) : state.GetRhsUnitById(invokeUnit.id);
+
+        int targetIndex = (target == "random") ? petChangeUnit.petSystem.petBag.FindIndex(x => (x != petChangeUnit.pet) && (!x.isDead)) : int.Parse(target);
+        if (targetIndex < 0)
+            return false;
 
         bool isDead = petChangeUnit.pet.isDead;
         float anger = petChangeUnit.pet.anger;

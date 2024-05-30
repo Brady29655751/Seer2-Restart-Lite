@@ -33,6 +33,9 @@ public static class Identifier {
 
     public static float GetIdentifier(string id, Effect effect, Unit lhsUnit, Unit rhsUnit) {
         float num = 0;
+
+        id = id.Replace("－", "-");
+        
         return effect.source switch {
             Buff buff => buff.TryGetBuffIdentifier(id, out num) ? num : GetGlobalIdentifier(id, lhsUnit, rhsUnit),
             Skill skill => skill.TryGetSkillIdentifier(id, out num) ? num : GetGlobalIdentifier(id, lhsUnit, rhsUnit),

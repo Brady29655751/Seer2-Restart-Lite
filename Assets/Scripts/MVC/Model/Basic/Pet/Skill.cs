@@ -303,6 +303,7 @@ public class Skill
             "combo" => combo,
             "ignoreShield" => ignoreShield ? 1 : 0,
             "ignorePowerup" => ignorePowerup ? 1 : 0,
+            "effect" => effects.Count,
             _ => float.MinValue,
         };
     }
@@ -343,6 +344,12 @@ public class Skill
                 return;
             case "ignoreShield":
                 ignoreShield = (value != 0);
+                return;
+            case "ignorePowerup":
+                ignorePowerup = (value != 0);
+                return;
+            case "effect":
+                SetEffects((value == 0) ? new List<Effect>() : (Skill.GetSkill(this.id)?.effects.Select(x => new Effect(x)).ToList() ?? new List<Effect>()));
                 return;
         }
     }   
