@@ -1,0 +1,66 @@
+<map name="灰烬之地" category="4" id="301">
+	<fightMap>100004</fightMap>
+	<music category="4">
+		<bgm>BGM_300</bgm>
+		<fx>FX_124</fx>
+	</music>
+	<initialPoint>420,170</initialPoint>
+	<entities>
+		<npc id="30101" resId="Pets/pet/35.png" name="Lv33 大角岩浮" size="58,63" pos="650,170" namePos="0,0">
+			<battle>
+				<branch id="default">
+					<settings count="6" capture="true" />
+					<enemy>
+						<pet id="35" level="33">
+							<loopSkill>10536,10537,10538,10537,10538</loopSkill>
+						</pet>
+					</enemy>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>battle</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<npc id="30102" resId="Pets/pet/35.png" name="Lv34 大角岩浮" size="58,63" pos="490,230" namePos="0,0">
+			<battle>
+				<branch id="default">
+					<settings count="6" capture="true" />
+					<enemy>
+						<pet id="35" level="34">
+							<loopSkill>10536,10537,10538,10537,10538</loopSkill>
+						</pet>
+					</enemy>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>battle</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<npc id="30103" resId="Pets/pet/35.png" name="Lv35 大角岩浮" size="58,63" pos="320,170" namePos="0,0">
+			<battle>
+				<branch id="default">
+					<settings count="6" capture="true" />
+					<enemy>
+						<pet id="35" level="35">
+							<loopSkill>10536,10537,10538,10537,10538</loopSkill>
+						</pet>
+					</enemy>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>battle</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+        <teleport id="1" name="火幻氏族主城" pos="700,90" targetMapId="230"/>
+		<teleport id="2" name="灰烬岔口" pos="100,240" targetMapId="302"/>
+	</entities>
+</map>

@@ -161,6 +161,14 @@ id,name,type,copyType,turn,options,description
 3074,生命复苏,chance,replace,-1,keep=false&inherit=true,主动换场时下一个出场精灵恢复1/4体力
 3075,复苏领域,mark,replace,-1,inherit=true,回合结束时若自身体力低于1/2会回复1/12体力
 3076,光之盾,shield,replace,-1,res=32,使对手的技能失效
+3077,物理伤害增加,chance,replace,-1,none,使下一次物理技能伤害增加[value]%
+3078,特殊伤害增加,chance,replace,-1,none,使下一次特殊技能伤害增加[value]%
+3079,星的指引,mark,replace,-1,none,自身使用属性技能的当回合，对手换场会失效（死亡换场除外）
+3080,弱化状态,turn,replace,5,res=3046,使自身技能威力-50
+3081,回归之约,mark,max,-1,none,纪录当前体力值
+3082,星坠预言,turn,block,-1,res=3002&keep=false,爆炸时损失300点体力
+3083,摄动,turn,replace,5,none,特质系技能转变为暗影系
+3084,命中低下,turn,replace,1,res=21,必中-2
 3143,焦点腐蚀,mark,replace,-1,none,特定攻击技能造成伤害的1/4将恢复自身体力
 3279,蜂纹,mark,stack,-1,auto_remove=true&max_val=3,每一层使中毒造成的伤害增加30，最多叠加3层。[ENDL]当前为[value]层
 3280,青蜂之舞,turn,replace,3,res=18,闪避率增加50%
@@ -175,7 +183,10 @@ id,name,type,copyType,turn,options,description
 100022,毒药,feature,replace,-1,none,对手具有慢性毒药时自身伤害增加10%
 100028,锋利,feature,replace,-1,none,普通系技能的伤害增加25%
 100030,潮湿,feature,replace,-1,none,雨天时水纹屏障吸收量增加50%
-100048,偏斜,feature,replace,-1,none,受到物理伤害减少30%，受到特殊伤害增加15%
+100032,燃烧,feature,replace,-1,none,对手烧伤时自身伤害增加15%
+100034,眩晕,feature,replace,-1,none,对手眩晕时增加自身伤害15%
+100037,阳炎,feature,replace,-1,none,炎热环境时命中率增加10%
+100046,偏斜,feature,replace,-1,none,受到物理伤害减少30%，受到特殊伤害增加15%
 100055,连攻,feature,replace,-1,none,替换上场时造成的伤害增加10%
 100061,有爱,feature,replace,-1,none,以爱的名义伤害增加10%
 100090,雷神,feature,replace,-1,none,战斗开始时使环境转变为雷暴天
@@ -189,6 +200,7 @@ id,name,type,copyType,turn,options,description
 100234,炎帝,feature,replace,-1,none,怒气永不低于25，且回合开始时怒气高于50会免疫异常1回合
 100301,森林,feature,replace,-1,none,自身具有森林祝福时受到的伤害减少10%
 100302,红球,feature,replace,-1,none,当仅有红色水球时，水系技能伤害增加20%
+100388,指引,feature,replace,-1,none,以星的指引伤害增加10%
 100961,首星,feature,replace,-1,none,星移环境下命中率增加50%
 100962,躯星,feature,replace,-1,none,星移环境下受到的伤害减少10%
 100963,臂星,feature,replace,-1,none,星移环境下攻击前有15%几率使对手冻伤3回合
@@ -207,7 +219,10 @@ id,name,type,copyType,turn,options,description
 200022,慢性,emblem,replace,-1,none,免疫慢性毒药状态
 200028,星之,emblem,replace,-1,none,使星之力提升自身速度1级
 200030,震击,emblem,replace,-1,none,水纹震击提升的致命几率再增加15%
-200048,辉之,emblem,replace,-1,none,出场自带星之辉状态
+200032,易燃,emblem,replace,-1,none,受到攻击时15%使对手烧伤3回合
+200034,眩晕,emblem,replace,-1,none,受到攻击时15%使对手眩晕5回合
+200037,威严,emblem,replace,-1,none,免疫害怕状态
+200046,辉之,emblem,replace,-1,none,出场自带星之辉状态
 200055,针灸,emblem,replace,-1,none,增加2回合针灸的持续时间
 200061,爱的,emblem,replace,-1,none,出场时自带爱的名义
 200090,雷祭,emblem,replace,-1,none,命中麻痹的对手会回复自身5点怒气
@@ -221,6 +236,7 @@ id,name,type,copyType,turn,options,description
 200234,阳炎,emblem,replace,-1,none,在炎热环境下所有技能必中
 200301,祝福,emblem,replace,-1,none,使森林祝福提升的体力回复率提高5%
 200302,蓝球,emblem,replace,-1,none,每消耗1个蓝色水球时增加自身10点怒气
+200388,星的,emblem,repalce,-1,none,出场时自带星的指引
 200961,首魅,emblem,replace,-1,none,使幻魅之眼的魅惑效果延长1回合
 200962,躯徽,emblem,replace,-1,none,使星尘幻盾回复自身120点体力
 200963,臂骈,emblem,replace,-1,none,使星刃解封提升自身速度1级
@@ -244,11 +260,11 @@ id,name,type,copyType,turn,options,description
 500005,沙尘暴,weather,replace,-1,none,沙漠系技能伤害+35%
 500006,地震,weather,replace,-1,none,地面系技能伤害+35%
 500007,雷暴天,weather,replace,-1,none,电系技能伤害+35%
-500008,飓风, weather,replace,-1,none,飞行系和风系技能伤害+35%
-500009,夜幕, weather,replace,-1,none,暗影系技能伤害+35%
+500008,飓风,weather,replace,-1,none,飞行系和风系技能伤害+35%
+500009,夜幕,weather,replace,-1,none,暗影系和特质系技能伤害+35%
 500010,异空間,weather,replace,-1,none,超能系和神秘系技能伤害+35%
 500011,古战场,weather,replace,-1,none,战斗系和龙系技能伤害+35%
-500012,星移,weather,replace,-1,none,特质系技能伤害+35%
+500012,星移,weather,replace,-1,none,特质系和圣灵系技能伤害+35%
 500013,虫群,weather,replace,-1,none,虫系技能伤害+35%
 400001,三倍加速器,item,replace,-1,none,战斗胜利时使精灵获得三倍经验
 400002,三倍学习机,item,replace,-1,none,战斗胜利时使精灵获得三倍学习力

@@ -1,0 +1,249 @@
+<map name="魅罗门" category="4" id="270" weather="3">
+	<fightMap>100004</fightMap>
+	<music category="4">
+		<bgm>BGM_270</bgm>
+		<fx>FX_124</fx>
+	</music>
+	<initialPoint>360,170</initialPoint>
+	<entities>
+		<npc id="27001" resId="27001" name="Lv 40 霍克努尔" size="175,160" pos="550,180" namePos="0,-10">
+			<description>SPT</description>
+			<dialog>
+				<branch id="default" name="霍克努尔" icon="Pets/pet/38.png" size="108,104" pos="10,55">
+					<content><![CDATA[哼！谁敢挑战我！]]></content>
+					<functionHandler>
+						<func type="click">
+							<description><![CDATA[普通挑战]]></description>
+							<action>battle</action>
+							<param>default</param>
+						</func>
+						<func type="click">
+							<description><![CDATA[挑战1]]></description>
+							<action>battle</action>
+							<param>challenge_1</param>
+							<condition>firstPet.baseId=37</condition>
+						</func>
+						<func type="branch">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=把霍克努尔设为首发之后再来挑战吧</param>
+							<param>option_num=1</param>
+							<param>item_icon=pet[38]</param>
+							<condition>firstPet.baseIdNOT37</condition>
+						</func>
+						<func type="click">
+							<description><![CDATA[挑战2]]></description>
+							<action>battle</action>
+							<param>challenge_2</param>
+						</func>
+						<func type="click">
+							<description><![CDATA[超进化挑战]]></description>
+							<action>battle</action>
+							<param>evolve</param>
+							<condition>firstPet.id=38</condition>
+						</func>
+						<func type="branch">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=把霍克努尔设为首发之后再来挑战吧</param>
+							<param>option_num=1</param>
+							<param>item_icon=pet[38]</param>
+							<condition>firstPet.idNOT38</condition>
+						</func>
+					</functionHandler>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[好可怕啊]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+					</replyHandler>
+				</branch>
+			</dialog>
+			<battle>
+				<branch id="default">
+					<settings count="6" simulate="true">
+						<mode>3</mode>
+						<weather>3</weather>
+					</settings>
+					<player>
+						<pet id="33" level="40">
+							<status>
+								<hp>400</hp>
+							</status>
+							<normalSkill>10520,10521,10524,10418</normalSkill>
+						</pet>
+						<pet id="36" level="40">
+							<status>
+								<hp>400</hp>
+							</status>
+							<normalSkill>10536,10540,10535,10402</normalSkill>
+						</pet>
+					</player>
+					<enemy>
+						<pet id="38" level="40">
+							<status>
+								<atk>400</atk>
+								<mat>400</mat>
+								<spd>400</spd>
+								<hp>600</hp>
+							</status>
+							<initBuff>17</initBuff>
+							<loopSkill>10551,10552,10553</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>getPet</action>
+							<param>37,10,0</param>
+							<condition>activity[spt].done[north][3][default]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=【霍克】已经放入精灵仓库</param>
+							<param>item_icon=pet[37]</param>
+							<param>option_num=1</param>
+							<condition>activity[spt].done[north][3][default]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>spt</param>
+							<param>done[north][3][default]=true</param>
+							<condition>activity[spt].done[north][3][default]=[bool]false[default]false</condition>
+						</button>
+					</winHandler>
+				</branch>
+				<branch id="challenge_1">
+					<settings count="1">
+						<mode>3</mode>
+						<weather>3</weather>
+					</settings>
+					<enemy>
+						<pet id="38" level="100">
+							<status>
+								<hp>1000</hp>
+							</status>
+							<emblem>false</emblem>
+							<initBuff>20,45</initBuff>
+							<loopSkill>10554,10555,10561</loopSkill>
+							<superSkill>10557</superSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setPet</action>
+							<param>emblem=1</param>
+							<condition>activity[spt].done[north][3][challenge_1]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=【霍克努尔】获得了【威严】纹章</param>
+							<param>item_icon=emblem[37]</param>
+							<param>option_num=1</param>
+							<condition>activity[spt].done[north][3][challenge_1]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>spt</param>
+							<param>done[north][3][challenge_1]=true</param>
+							<condition>activity[spt].done[north][3][challenge_1]=[bool]false[default]false</condition>
+						</button>
+					</winHandler>
+				</branch>
+				<branch id="challenge_2">
+					<settings count="6">
+						<mode>3</mode>
+						<weather>3</weather>
+					</settings>
+					<enemy>
+						<pet id="38" level="100">
+							<status>
+								<atk>700</atk>
+								<mat>700</mat>
+								<hp>6000</hp>
+							</status>
+							<initBuff>13,14,17,20,45</initBuff>
+							<loopSkill>10554,10555,10561</loopSkill>
+							<superSkill>10557</superSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setItem</action>
+							<param>add</param>
+							<param>2,50</param>
+							<condition>activity[spt].done[north][3][challenge_2]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=50 星钻已经放入背包</param>
+							<param>item_icon=item[2]</param>
+							<param>option_num=1</param>
+							<condition>activity[spt].done[north][3][challenge_2]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>spt</param>
+							<param>done[north][3][challenge_2]=true</param>
+							<condition>activity[spt].done[north][3][challenge_2]=[bool]false[default]false</condition>
+						</button>
+					</winHandler>
+				</branch>
+				<branch id="evolve">
+					<settings count="1">
+						<mode>3</mode>
+						<weather>3</weather>
+					</settings>
+					<enemy>
+						<pet id="693" level="105">
+							<status>
+								<hp>2000</hp>
+							</status>
+							<initBuff>13,14,17,20</initBuff>
+							<headerSkill>10561</headerSkill>
+							<loopSkill>10562,10566</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>evolvePet</action>
+							<param>693</param>
+							<condition>activity[spt].done[north][3][evolve]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=霍克努尔已成功超进化</param>
+							<param>item_icon=pet[693]</param>
+							<param>option_num=1</param>
+							<condition>activity[spt].done[north][3][evolve]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>spt</param>
+							<param>done[north][3][evolve]=true</param>
+							<condition>activity[spt].done[north][3][evolve]=[bool]false[default]false</condition>
+						</button>
+					</winHandler>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>openDialog</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+        <!-- <teleport id="1" name="幻空通道" pos="280,190" targetMapId="291"/> -->
+		<!-- <teleport id="2" name="灰烬之地" pos="100,60" targetMapId="301"/> -->
+	</entities>
+</map>

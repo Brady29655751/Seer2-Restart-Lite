@@ -84,9 +84,9 @@ public class BattleResultView : BattleBaseView
             rect.anchoredPosition = pos;
 
             expResultBlockView.SetPet(pet);
-            expResultBlockView.SetGainExpText(result.gainExpPerPet * uint.Parse(pet.record.GetRecord("battleExpMult", "1")));
+            expResultBlockView.SetGainExpText(result.gainExpPerPet * (pet.record.TryGetRecord("battleExpMult", out var expMult) ? uint.Parse(expMult) : 1));
             expResultBlockView.SetLevelUpExpText((pet.level >= 100) ? 0 : pet.levelUpExp);
-            expResultBlockView.SetGainEVText(result.gainEVStoragePerPet * int.Parse(pet.record.GetRecord("battleEvMult", "1")));
+            expResultBlockView.SetGainEVText(result.gainEVStoragePerPet * (pet.record.TryGetRecord("battleEvMult", out var evMult) ? int.Parse(evMult) : 1));
         }
     }
 

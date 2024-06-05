@@ -1,0 +1,47 @@
+<map name="灰烬岔口" category="4" id="302">
+	<fightMap>100004</fightMap>
+	<music category="4">
+		<bgm>BGM_230</bgm>
+		<fx>FX_124</fx>
+	</music>
+	<initialPoint>430,120</initialPoint>
+	<entities>
+		<npc id="30201" resId="Maps/mine/yellow.png" name="黄铁矿脉" size="50,77" pos="320,190">
+			<description>黄铁矿脉</description>
+			<eventHandler>
+				<button type="click">
+					<action>openHintbox</action>
+					<param>type=Item</param>
+					<param>title=提示</param>
+					<param>content=矿脉需要合理开发，明天再来吧！</param>
+					<param>item_icon=item[1001]</param>
+					<param>option_num=1</param>
+					<condition>activity[mine].done[302]=[bool]true[default]false</condition>
+				</button>
+				<button type="click">
+					<action>setItem</action>
+					<param>add</param>
+					<param>1001,20</param>
+					<condition>activity[mine].done[302]=[bool]false[default]false</condition>
+				</button>
+				<button type="click">
+					<action>openHintbox</action>
+					<param>type=Item</param>
+					<param>title=提示</param>
+					<param>content=20个黄铁矿已经放入背包</param>
+					<param>item_icon=item[1001]</param>
+					<param>option_num=1</param>
+					<condition>activity[mine].done[302]=[bool]false[default]false</condition>
+				</button>
+				<button type="click">
+					<action>setActivity</action>
+					<param>mine</param>
+					<param>done[302]=true</param>
+					<condition>activity[mine].done[302]=[bool]false[default]false</condition>
+				</button>
+			</eventHandler>
+		</npc>
+        <teleport id="1" name="灰烬之地" pos="70,380" targetMapId="301"/>
+		<teleport id="2" name="幻影崖" pos="850,230" targetMapId="141"/>
+	</entities>
+</map>

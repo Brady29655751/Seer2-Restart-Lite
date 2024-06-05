@@ -14,7 +14,7 @@ id,timing,priority,target,condition,cond_option,effect,effect_option
 10001,on_before_attack,-1,pet,pet,who=op&type=level&level_op=LTE&level_cmp=30,capture,prob=25
 10002,on_before_attack,-1,pet,pet,who=op&type=level&level_op=LTE&level_cmp=60,capture,prob=25
 10003,on_before_attack,-1,pet,none,none,capture,prob=35
-10004,on_before_attack,-1,pet,none,none,capture,prob=50
+10004,on_before_attack,-1,pet,none,none,capture,prob=49
 10005,on_before_attack,-1,pet,none,none,capture,prob=100
 10011,resident\on_before_attack,-1\-1,pet\pet,status\status,status_type=hp&op=<&cmp_value=1/1\status_type=hp&op=<&cmp_value=1/1,heal\heal,type=item&add=20\type=item&add=20
 10012,resident\on_before_attack,-1\-1,pet\pet,status\status,status_type=hp&op=<&cmp_value=1/1\status_type=hp&op=<&cmp_value=1/1,heal\heal,type=item&add=50\type=item&add=50
@@ -44,7 +44,7 @@ id,timing,priority,target,condition,cond_option,effect,effect_option
 10238,resident,-1,pet,none,none,set_pet,type=personality&op=SET&value=random[0~24]
 10239,resident,-1,pet,none,none,set_pet,type=personality&op=SET&value=-1
 110050,resident,-1,pet,pet,type=skill[10050]&skill[10050]_cmp=0,set_pet,type=skill&op=+&value=10050
-300048,resident,-1,pet,pet,type=baseId/emblem&baseId_cmp=48&emblem_cmp=0,set_pet,type=emblem&op=SET&value=1
+300048,resident,-1,pet,pet,type=baseId/emblem&baseId_cmp=46&emblem_cmp=0,set_pet,type=emblem&op=SET&value=1
 300090,resident,-1,pet,pet,type=baseId/emblem&baseId_cmp=90&emblem_cmp=0,set_pet,type=emblem&op=SET&value=1
 300234,resident,-1,pet,pet,type=baseId/emblem&baseId_cmp=234&emblem_cmp=0,set_pet,type=emblem&op=SET&value=1
 400001,none,-1,none,none,none,none,none

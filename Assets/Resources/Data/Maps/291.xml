@@ -1,0 +1,82 @@
+<map name="幻空通道" category="4" id="291">
+	<fightMap>100004</fightMap>
+	<music category="4">
+		<bgm>BGM_230</bgm>
+		<fx>FX_119</fx>
+	</music>
+	<initialPoint>390,135</initialPoint>
+	<entities>
+		<npc id="29101" resId="Pets/pet/33.png" name="Lv31 乔尼" size="58,78" pos="600,140" namePos="0,0">
+			<battle>
+				<branch id="default">
+					<settings count="6" capture="true" />
+					<enemy>
+						<pet id="33" level="31">
+							<loopSkill>10523,10522</loopSkill>
+						</pet>
+					</enemy>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>battle</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<npc id="29102" resId="Pets/pet/33.png" name="Lv32 乔尼" size="58,78" pos="320,225" namePos="0,0">
+			<battle>
+				<branch id="default">
+					<settings count="6" capture="true" />
+					<enemy>
+						<pet id="33" level="32">
+							<loopSkill>10523,10522</loopSkill>
+						</pet>
+					</enemy>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>battle</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<npc id="29103" resId="Maps/mine/red.png" name="赤晶矿脉" size="109,71" pos="690,120">
+			<description>赤晶矿脉</description>
+			<eventHandler>
+				<button type="click">
+					<action>openHintbox</action>
+					<param>type=Item</param>
+					<param>title=提示</param>
+					<param>content=矿脉需要合理开发，明天再来吧！</param>
+					<param>item_icon=item[1002]</param>
+					<param>option_num=1</param>
+					<condition>activity[mine].done[291]=[bool]true[default]false</condition>
+				</button>
+				<button type="click">
+					<action>setItem</action>
+					<param>add</param>
+					<param>1002,10</param>
+					<condition>activity[mine].done[291]=[bool]false[default]false</condition>
+				</button>
+				<button type="click">
+					<action>openHintbox</action>
+					<param>type=Item</param>
+					<param>title=提示</param>
+					<param>content=10个赤晶矿已经放入背包</param>
+					<param>item_icon=item[1002]</param>
+					<param>option_num=1</param>
+					<condition>activity[mine].done[291]=[bool]false[default]false</condition>
+				</button>
+				<button type="click">
+					<action>setActivity</action>
+					<param>mine</param>
+					<param>done[291]=true</param>
+					<condition>activity[mine].done[291]=[bool]false[default]false</condition>
+				</button>
+			</eventHandler>
+		</npc>
+        <teleport id="1" name="火幻氏族主城" pos="480,60" targetMapId="230"/>
+	</entities>
+</map>

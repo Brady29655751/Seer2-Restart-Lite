@@ -325,7 +325,7 @@ public class Skill
                 type = (SkillType)value;
                 return;
             case "power":
-                power = (int)value;
+                power = Mathf.Max((int)value, 0);
                 return;
             case "anger":
                 anger = (int)value;

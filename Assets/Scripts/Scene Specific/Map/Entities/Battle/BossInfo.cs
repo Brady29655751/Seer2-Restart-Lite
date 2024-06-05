@@ -10,6 +10,7 @@ public class BossInfo
     [XmlAttribute("id")] public int petId;
     [XmlAttribute("level")] public int level;
     public BattleStatus status = null;
+    [XmlElement("emblem")] public bool hasEmblem = true;
 
     [XmlElement("initBuff")] public string initBuffIds;
     [XmlIgnore] public List<Buff> initBuffs => initBuffIds.ToIntList().Select(x => new Buff(x)).ToList();

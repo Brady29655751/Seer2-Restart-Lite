@@ -14,7 +14,7 @@
 					<param>type=Item</param>
 					<param>title=提示</param>
 					<param>content=矿脉需要合理开发，明天再来吧！</param>
-					<param>item_icon=item[1003]</param>
+					<param>item_icon=item[1001]</param>
 					<param>option_num=1</param>
 					<condition>activity[mine].done[124]=[bool]true[default]false</condition>
 				</button>
@@ -38,6 +38,69 @@
 					<param>mine</param>
 					<param>done[124]=true</param>
 					<condition>activity[mine].done[124]=[bool]false[default]false</condition>
+				</button>
+			</eventHandler>
+		</npc>
+		<npc id="12402" resId="Pets/pet/388.png" name="Lv100 星辰兔" size="85,72" pos="545,360" namePos="0,0">
+			<description>神秘的倒影</description>
+			<dialog>
+				<branch id="default" name="星辰兔" icon="Pets/pet/388.png" size="105,90" pos="0,55">
+					<content><![CDATA[星空倒映着她们的影子，见证了两位的爱情]]></content>
+					<functionHandler>
+						<func type="click">
+							<description><![CDATA[普通挑战]]></description>
+							<action>battle</action>
+							<param>default</param>
+						</func>
+					</functionHandler>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[好浪漫啊]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+					</replyHandler>
+				</branch>
+			</dialog>
+			<battle>
+				<branch id="default">
+					<settings count="1"/>
+					<enemy>
+						<pet id="388" level="100">
+							<status>
+								<hp>2000</hp>
+							</status>
+							<loopSkill>10573,10572,10571,10574,10573</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>getPet</action>
+							<param>388,10</param>
+							<condition>activity[20005].done=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=【星辰兔】已经放入精灵仓库</param>
+							<param>item_icon=pet[388]</param>
+							<param>option_num=1</param>
+							<condition>activity[20005].done=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>20005</param>
+							<param>done=true</param>
+							<condition>activity[20005].done=[bool]false[default]false</condition>
+						</button>
+					</winHandler>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>openDialog</action>
+					<param>default</param>
 				</button>
 			</eventHandler>
 		</npc>
