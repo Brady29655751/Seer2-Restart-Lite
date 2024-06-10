@@ -36,10 +36,9 @@ public class PetBattleSkillController
         if ((superSkill != null) && (superSkill.anger <= anger))
             return superSkill;
 
-        if ((loopSkills == null) || (loopSkills.Count == 0)) {
-            var availableSkills = normalSkills.Where(x => x.anger <= anger).ToList();
-            return (availableSkills.Count == 0) ? Skill.GetNoOpSkill() : availableSkills.First();
-        }
+        if ((loopSkills == null) || (loopSkills.Count == 0))
+            return GetAvailableSkills(anger, false).First();
+        
         if ((headerSkills != null) && (headerSkills.Count > 0)) {
             defaultSkill = headerSkills[cursor++];
             if (cursor >= headerSkills.Count) {
@@ -48,8 +47,22 @@ public class PetBattleSkillController
             }
             return defaultSkill;
         }
+        
         defaultSkill = loopSkills[cursor++];
         cursor %= loopSkills.Count;
         return defaultSkill;
+    }
+
+    public List<Skill> GetAvailableSkills(int anger, bool withSuper = true) {
+        var availableSkills = (((loopSkills == null) || (loopSkills.Count == 0)) ?
+            normalSkills.Where(x => x.anger <= anger) : loopSkills).ToList();
+
+        if (withSuper && (superSkill != null) && (superSkill.anger <= anger))
+            availableSkills.Add(superSkill);
+
+        if (availableSkills.Count == 0)
+            availableSkills.Add(Skill.GetNoOpSkill());
+
+        return availableSkills;
     }
 }

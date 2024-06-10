@@ -71,6 +71,7 @@ id,name,type,copyType,turn,options,description
 106,睡眠,abnormal,replace,2,none,无法行动，被攻击会苏醒
 107,石化,abnormal,replace,2,none,无法行动，受到暴击几率提升10%，被暴击会解除
 109,冰冻,abnormal,replace,2,none,受到冰冻，无法行动[ENDL]受到暴击伤害提升20%，且受到暴击会解冻
+110,恐惧,abnormal,replace,2,none,随机在可用技能中出招，受到超过100点伤害会清醒
 113,混乱,abnormal,replace,-1,none,下次造成的攻击伤害将转为作用于自身
 114,沉默,abnormal,replace,2,none,属性技能命中率下降100%
 1000,溺水,unhealthy,replace,3,none,每回合损失1/8体力，且命中率降低10%（对水系无效）
@@ -169,6 +170,8 @@ id,name,type,copyType,turn,options,description
 3082,星坠预言,turn,block,-1,res=3002&keep=false,爆炸时损失300点体力
 3083,摄动,turn,replace,5,none,特质系技能转变为暗影系
 3084,命中低下,turn,replace,1,res=21,必中-2
+3085,影钩,mark,stack,-1,auto_remove=true&max_val=16,攻击时每枚影钩有5%概率使对手恐惧，最多叠加16枚[ENDL]当前为[value]枚
+3086,幻视领域,mark,replace,-1,inherit=true,回合结束时若自身体力低于1/2会使对方随机1项能力下降1级
 3143,焦点腐蚀,mark,replace,-1,none,特定攻击技能造成伤害的1/4将恢复自身体力
 3279,蜂纹,mark,stack,-1,auto_remove=true&max_val=3,每一层使中毒造成的伤害增加30，最多叠加3层。[ENDL]当前为[value]层
 3280,青蜂之舞,turn,replace,3,res=18,闪避率增加50%
@@ -208,6 +211,8 @@ id,name,type,copyType,turn,options,description
 100965,背星,feature,replace,-1,none,星移环境下攻击造成的伤害不低于100
 100966,心星,feature,replace,-1,none,星移环境下每回合增加5点怒气
 100981,灵目,feature,replace,-1,none,免疫不良状态，回合结束时体力低于1/8时会自动恢复1/8体力
+100988,灵影,feature,replace,-1,none,免疫不良状态，被对手技能命中时生成1枚影钩
+100989,最强,feature,replace,-1,none,全能力值提升100点
 200001,追击,emblem,replace,-1,none,命中率和闪避率提高10%
 200004,怒火,emblem,replace,-1,none,怒气回复率提高20%（攻击命中与回合结束回复的怒气除外）
 200007,治愈,emblem,replace,-1,none,体力回复率提高20%
@@ -244,6 +249,8 @@ id,name,type,copyType,turn,options,description
 200965,背逆,emblem,rpelace,-1,none,使星辰回转先制+1
 200966,心惘,emblem,replace,-1,none,使星辰变幻解除自身弱化
 200981,复苏,emblem,replace,-1,none,出场时附带复苏领域
+200988,幻视,emblem,replace,-1,none,出场时附带幻视领域
+200989,王者,emblem,replace,-1,none,出场自带王者体质
 900001,骇浪,feature,replace,-1,none,雨天环境下使用攻击技能恢复自身5怒气
 900004,魔焰,feature,replace,-1,none,炎热环境下暴击率增加15%
 900007,飞叶,feature,replace,-1,none,晴天环境下受到的暴击伤害减少25%
@@ -268,6 +275,7 @@ id,name,type,copyType,turn,options,description
 500013,虫群,weather,replace,-1,none,虫系技能伤害+35%
 400001,三倍加速器,item,replace,-1,none,战斗胜利时使精灵获得三倍经验
 400002,三倍学习机,item,replace,-1,none,战斗胜利时使精灵获得三倍学习力
+600008,影触,mark,replace,-1,none,每回合随机弱化双方1项能力1级
 -3001,超重,mark,replace,-1,res=3041,增重80000kg
 -3002,巨石托尔,mark,replace,-1,hide=true,没有增重状态时使用体重暴涨
 -3003,星之首影,mark,replace,-1,hide=true,对手免疫异常时使用星徽之怒
@@ -276,3 +284,6 @@ id,name,type,copyType,turn,options,description
 -3006,星之躯影,mark,replace,-1,hide=true,储存超过400伤害时使用星尘裁决
 -3007,充电身躯,mark,replace,-1,hide=true,受到攻击使对手[ffbb33]【麻痹】[-]
 -3008,剥夺,mark,replace,-1,hide=true,对方不处于无力状态时使用剥夺
+-3009,雷神之力,mark,replace,-1,none,物攻伤害100倍，必杀技伤害10倍
+-3010,凯萨之力,mark,replace,-1,none,特攻伤害100倍，必杀技伤害10倍
+-3011,影灵之力,mark,replace,-1,hide=true,上场时使场地变为影触

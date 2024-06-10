@@ -17,6 +17,7 @@ public static class ItemDatabase
         {"personality", ItemType.Personality},
         {"skill", ItemType.Skill},
         {"mine", ItemType.Mine},
+        {"recipe", ItemType.Recipe},
         {"stuff", ItemType.Stuff},
     };
 
@@ -55,6 +56,7 @@ public enum ItemType {
     Personality,
     Skill,
     Mine,
+    Recipe,
     Stuff,
 }
 

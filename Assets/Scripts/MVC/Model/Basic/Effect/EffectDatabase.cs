@@ -32,6 +32,7 @@ public static class EffectDatabase {
         {"none", EffectTarget.None},
         {"state", EffectTarget.CurrentState},
         {"pet", EffectTarget.CurrentPet},
+        {"pet_bag", EffectTarget.CurrentPetBag},
         {"skill", EffectTarget.CurrentSkill},
         {"item", EffectTarget.CurrentItem},
         {"buff",EffectTarget.CurrentBuff},
@@ -120,6 +121,7 @@ public enum EffectTarget {
     CurrentSkill,
     CurrentBuff,
     CurrentPet,
+    CurrentPetBag,
 }
 
 public enum EffectCondition {

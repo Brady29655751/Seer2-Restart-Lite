@@ -26,11 +26,13 @@ public class BattleAnimView : BattleBaseView
         var currentPetId = currentUnit?.pet?.id ?? 0;
         if (lastPetId != currentPetId) {
             petView.SetPet(currentUnit.pet);
+            petView.SetField(currentUnit.pet);
             return;
         }
-        if (currentUnit.hudSystem.applyPetAnim) {
+        if (currentUnit.hudSystem.applyPetAnim)
             petView.SetPetAnim(currentUnit.skillSystem.skill, currentUnit.hudSystem.petAnimType);
-        }
+        
+        petView.SetField(currentUnit.pet);
     }
 
     private void SetSkillBubble(Unit lastUnit, Unit currentUnit) {

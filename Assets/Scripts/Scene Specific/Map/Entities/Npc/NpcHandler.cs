@@ -59,6 +59,7 @@ public static class NpcHandler
             NpcAction.Teleport      => () => NpcActionHandler.Teleport(handler),
             NpcAction.SetItem       => () => NpcActionHandler.SetItem(handler),
             NpcAction.GetPet        => () => NpcActionHandler.GetPet(handler),
+            NpcAction.RemovePet     => () => NpcActionHandler.RemovePet(handler),
             NpcAction.SetPet        => () => NpcActionHandler.SetPet(handler),
             NpcAction.EvolvePet     => () => NpcActionHandler.EvolvePet(handler),
             NpcAction.SetMission    => () => NpcActionHandler.SetMission(handler),

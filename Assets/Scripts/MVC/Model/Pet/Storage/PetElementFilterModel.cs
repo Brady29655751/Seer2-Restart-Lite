@@ -38,7 +38,7 @@ public class PetElementFilterModel : Module
         if (element == Element.全部)
             return (x) => true;
 
-        return (x) => (x.element == element);
+        return (x) => ((x.element == element) || ((x.subElement == element) && (x.subElement != Element.普通)));
     }
 
 }

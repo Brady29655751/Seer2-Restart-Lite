@@ -9,6 +9,7 @@ public class PetDemoModel : Module
     public string petName => currentPet.name;
 
     public Element element => currentPet.element;
+    public Element subElement => currentPet.subElement;
     public Feature feature => currentPet.info.feature.feature;
     public Emblem emblem => currentPet.info.feature.emblem;
     public int iv => currentPet.talent.iv;

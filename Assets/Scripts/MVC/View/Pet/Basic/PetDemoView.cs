@@ -15,7 +15,7 @@ public class PetDemoView : Module
     [SerializeField] private IButton featureButton;
     [SerializeField] private Text featureText;
 
-    [SerializeField] private IButton elementButton;
+    [SerializeField] private IButton elementButton, subElementButton;
 
     [SerializeField] private Image genderImage;
     [SerializeField] private Image specialGenderImage;
@@ -30,7 +30,7 @@ public class PetDemoView : Module
             return;
         
         SetName(pet.name);
-        SetElement(pet.element);
+        SetElement(pet.element, pet.subElement);
         SetFeature(pet.info.feature.feature);
         SetGender(pet.info.basic.gender);
         SetEmblem(pet.hasEmblem, pet.info.feature.emblem);
@@ -46,8 +46,10 @@ public class PetDemoView : Module
         nameText.text = name;
     }
 
-    public void SetElement(Element element) {
+    public void SetElement(Element element, Element subElement) {
         elementButton?.image?.SetElementSprite(element);
+        subElementButton?.image?.SetElementSprite(subElement);
+        subElementButton?.gameObject.SetActive(subElement != Element.普通);
     }
 
     public void SetElementInfoPromptContent(Element element) {

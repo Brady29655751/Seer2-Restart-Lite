@@ -69,10 +69,7 @@ public static class Identifier {
     public static float GetUnitIdentifier(string id, Unit unit) {
         string trimId = id;
         if (id.TryTrimStart("pet.", out trimId))
-            return trimId switch {
-                "cursor" => unit.petSystem.cursor,
-                _ => GetPetIdentifier(trimId, unit.pet),
-            };
+            return GetPetIdentifier(trimId, unit.petSystem);
 
         if (id.TryTrimStart("skill.", out trimId))
             return GetSkillIdentifier(trimId, unit.skillSystem);
@@ -80,8 +77,13 @@ public static class Identifier {
         return GetNumIdentifier(id);
     }
 
-    public static float GetPetIdentifier(string id, BattlePet pet) {
+    public static float GetPetIdentifier(string id, UnitPetSystem petSystem) {
         string trimId = id;
+
+        if (petSystem.TryGetPetSystemIdentifier(id, out var num))
+            return num;
+
+        var pet = petSystem.pet;
 
         if (id == "movable")
             return pet.isMovable ? 1 : 0;
@@ -95,7 +97,6 @@ public static class Identifier {
         if (id.TryTrimStart("buff", out trimId))
             return GetBuffIdentifier(trimId, pet.buffController);
 
-        float num = 0;
         return pet.TryGetPetIdentifier(id, out num) ? num : GetNumIdentifier(id);
     }
 

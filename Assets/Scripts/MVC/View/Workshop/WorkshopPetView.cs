@@ -59,6 +59,7 @@ public class WorkshopPetView : Module
     public void OpenHelpPanel(string type) {
         string help = type switch {
             "id" => "精灵的序号只能输入-13以下的数字",
+            "subElement" => "精灵的副属性。单属性精灵请填写普通",
             "height" => "精灵的身高体重会有5点浮动值",
             "weight" => "精灵的身高体重会有5点浮动值",
             "baseStatus" => "介于0到255之间。能力值计算方式为\n" +

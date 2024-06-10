@@ -126,41 +126,67 @@ public static class EffectAbilityHandler
         Unit invokeUnit = (Unit)effect.invokeUnit;
         Unit lhsUnit = (who == "me") ? state.GetUnitById(invokeUnit.id) : state.GetRhsUnitById(invokeUnit.id);
         Unit rhsUnit = state.GetRhsUnitById(lhsUnit.id);
+
+        List<BattlePet> targetList = new List<BattlePet>();
+
+        switch (effect.target) {
+            default:
+                targetList.Add(lhsUnit.pet);
+                break;
+            case EffectTarget.CurrentPetBag:
+                var targetType = effect.abilityOptionDict.Get("target_type", string.Empty).Split('_');
+                var targetNum = (int)Parser.ParseEffectOperation(effect.abilityOptionDict.Get("target_num", "-1"), effect, lhsUnit, rhsUnit);
+
+                targetList = lhsUnit.petSystem.petBag.ToList();
+                if (targetType.Contains("other"))
+                    targetList.Remove(lhsUnit.pet);
+
+                if (targetType.Contains("random"))
+                    targetList = targetList.Random(targetNum, false);
+                else if (targetNum >= 0)
+                    targetList = targetList.Take(targetNum).ToList();
+
+                break;
+        };
         
         heal = Parser.ParseEffectOperation(add, effect, lhsUnit, rhsUnit);
-        int healAdd = (int)(heal * ((heal > 0) ? (lhsUnit.pet.battleStatus.rec / 100f) : 1));
+        var setHp = (set == "none") ? 0 : (int)Parser.ParseEffectOperation(set, effect, lhsUnit, rhsUnit);
+        var maxHp = (max == "none") ? 0 : (int)Parser.ParseEffectOperation(max, effect, lhsUnit, rhsUnit);
 
-        if (set != "none") {
-            var setHp = (int)Parser.ParseEffectOperation(set, effect, lhsUnit, rhsUnit);
-            if ((setHp < 0) && (lhsUnit.pet.buffController.GetBuff(99) != null))
-                return false;
-            
-            lhsUnit.pet.hp = setHp;
-            return true;
+        for (int i = 0; i < targetList.Count; i++) {
+            int healAdd = (int)(heal * ((heal > 0) ? (targetList[i].battleStatus.rec / 100f) : 1));
+            if (set != "none") {
+                if ((setHp < 0) && (targetList[i].buffController.GetBuff(99) != null))
+                    continue;
+
+                targetList[i].hp = setHp;
+                continue;
+            }
+
+            if (max != "none") {
+                if ((maxHp < 0) && (targetList[i].buffController.GetBuff(99) != null))
+                    continue;
+
+                targetList[i].maxHp = maxHp;
+                continue;
+            }
+
+            // If already dead, no heal.
+            if (targetList[i].isDead)
+                continue;
+
+            if ((type == "item") && (who == "me")) {
+                lhsUnit.skillSystem.itemHeal += healAdd;
+            } else if ((type == "skill") && (who == "me")) {
+                lhsUnit.skillSystem.skillHeal += healAdd;;
+            } else if (type == "buff") {
+                lhsUnit.skillSystem.buffHeal += healAdd;
+                healAdd = 0;
+            }
+
+            targetList[i].hp += healAdd;
         }
 
-        if (max != "none") {
-            var maxHp = (int)Parser.ParseEffectOperation(max, effect, lhsUnit, rhsUnit);
-            if ((maxHp < 0) && (lhsUnit.pet.buffController.GetBuff(99) != null))
-                return false;
-
-            lhsUnit.pet.maxHp = maxHp;
-            return true;
-        }
-
-        // If already dead, no heal.
-        if (lhsUnit.pet.isDead)
-            return false;
-        
-        if ((type == "item") && (who == "me")) {
-            lhsUnit.skillSystem.itemHeal += healAdd;
-        } else if ((type == "skill") && (who == "me")) {
-            lhsUnit.skillSystem.skillHeal += healAdd;;
-        } else if (type == "buff") {
-            lhsUnit.skillSystem.buffHeal += healAdd;
-            healAdd = 0;
-        }
-        lhsUnit.pet.hp += healAdd;
         return true;
     }
 
@@ -202,59 +228,85 @@ public static class EffectAbilityHandler
             string add = effect.abilityOptionDict.Get(typeNames[type], "0");
             if (!int.TryParse(add, out powerup))
                 return false;
+
             status[type] = powerup;
         }
 
         Unit invokeUnit = (Unit)effect.invokeUnit;
         Unit lhsUnit = (who == "me") ? state.GetUnitById(invokeUnit.id) : state.GetRhsUnitById(invokeUnit.id);
         Unit rhsUnit = state.GetRhsUnitById(lhsUnit.id);
-        BattlePet pet = lhsUnit.pet;
-        var statusController = pet.statusController;
-        var buffController = pet.buffController;
 
-        if (isRandom) {
-            string pdf = effect.abilityOptionDict.Get("random_pdf", "none");
-            int count = status.Count(x => x != 0);
+        List<BattlePet> targetList = new List<BattlePet>();
 
-            if (pdf == "none") {
-                // pass.
-            } else if (pdf == "uniform") {
-                int type = Random.Range(0, count);
-                for (int i = 0, index = 0; i < typeNames.Length - 1; i++) {
-                    if (status[i] == 0)
-                        continue;
-                    
-                    status[i] = (index == type) ? status[i] : 0;
-                    index++;
-                }
-            } else {
-                var probList = pdf.ToFloatList('/');
-                var sum = probList.Sum();
-                float rng = Random.Range(0f, sum);
-                int type = 0;
-                for (type = 0; type < probList.Count; type++) {
-                    if (probList[type] >= rng)
-                        break;
+        switch (effect.target) {
+            default:
+                targetList.Add(lhsUnit.pet);
+                break;
+            case EffectTarget.CurrentPetBag:
+                var targetType = effect.abilityOptionDict.Get("target_type", string.Empty).Split('_');
+                var targetNum = (int)Parser.ParseEffectOperation(effect.abilityOptionDict.Get("target_num", "-1"), effect, lhsUnit, rhsUnit);
 
-                    rng -= probList[type];
-                }
-                for (int i = 0, index = 0; i < 5; i++) {
-                    if (status[i] == 0)
-                        continue;
+                targetList = lhsUnit.petSystem.petBag.ToList();
+                if (targetType.Contains("other"))
+                    targetList.Remove(lhsUnit.pet);
 
-                    status[i] = (index == type) ? status[i] : 0;
-                    index++;
+                if (targetType.Contains("random"))
+                    targetList = targetList.Random(targetNum, false);
+                else if (targetNum >= 0)
+                    targetList = targetList.Take(targetNum).ToList();
+
+                break;
+        };
+
+        for (int j = 0; j < targetList.Count; j++) {
+            var pet = targetList[j];
+            var statusController = pet.statusController;
+            var buffController = pet.buffController;
+
+            if (isRandom) {
+                string pdf = effect.abilityOptionDict.Get("random_pdf", "none");
+                int count = status.Count(x => x != 0);
+
+                if (pdf == "none") {
+                    // pass.
+                } else if (pdf == "uniform") {
+                    int type = Random.Range(0, count);
+                    for (int i = 0, index = 0; i < typeNames.Length - 1; i++) {
+                        if (status[i] == 0)
+                            continue;
+
+                        status[i] = (index == type) ? status[i] : 0;
+                        index++;
+                    }
+                } else {
+                    var probList = pdf.ToFloatList('/');
+                    var sum = probList.Sum();
+                    float rng = Random.Range(0f, sum);
+                    int type = 0;
+                    for (type = 0; type < probList.Count; type++) {
+                        if (probList[type] >= rng)
+                            break;
+
+                        rng -= probList[type];
+                    }
+                    for (int i = 0, index = 0; i < 5; i++) {
+                        if (status[i] == 0)
+                            continue;
+
+                        status[i] = (index == type) ? status[i] : 0;
+                        index++;
+                    }
                 }
             }
+
+            if (buffController.GetBuff(45) != null)
+                status = status.Select(x => x * (x > 0 ? 2 : 1));
+
+            if (buffController.GetBuff(46) != null)
+                status = status.Select(x => x * (x < 0 ? 2 : 1));
+
+            pet.PowerUp(status, lhsUnit, state);
         }
-
-        if (buffController.GetBuff(45) != null)
-            status = status.Select(x => x * (x > 0 ? 2 : 1));
-
-        if (buffController.GetBuff(46) != null)
-            status = status.Select(x => x * (x < 0 ? 2 : 1));
-
-        pet.PowerUp(status, lhsUnit, state);
 
         return true;
     }
@@ -267,19 +319,23 @@ public static class EffectAbilityHandler
         string mult = effect.abilityOptionDict.Get("mult", "0/1");
         string add = effect.abilityOptionDict.Get("add", "0");
 
-        int statusType;
-        if (!int.TryParse(type, out statusType))
+        var typeList = type.ToIntList('/');
+        if (List.IsNullOrEmpty(typeList))
             return false;
 
-        Unit invokeUnit = (Unit)effect.invokeUnit;
-        Unit lhsUnit = (who == "me") ? state.GetUnitById(invokeUnit.id) : state.GetRhsUnitById(invokeUnit.id);
-        Unit rhsUnit = state.GetRhsUnitById(lhsUnit.id);
-        var pet = lhsUnit.pet;
-        float statusMult = Parser.ParseEffectOperation(mult, effect, lhsUnit, rhsUnit);
-        int statusAdd = (int)Parser.ParseEffectOperation(add, effect, lhsUnit, rhsUnit);
+        for (int i = 0; i < typeList.Count; i++) {
+            int statusType = typeList[i];
 
-        statusAdd += Mathf.FloorToInt(pet.initStatus[statusType] * statusMult);
-        pet.statusController.AddBattleStatus(statusType, statusAdd);
+            Unit invokeUnit = (Unit)effect.invokeUnit;
+            Unit lhsUnit = (who == "me") ? state.GetUnitById(invokeUnit.id) : state.GetRhsUnitById(invokeUnit.id);
+            Unit rhsUnit = state.GetRhsUnitById(lhsUnit.id);
+            var pet = lhsUnit.pet;
+            float statusMult = Parser.ParseEffectOperation(mult, effect, lhsUnit, rhsUnit);
+            int statusAdd = (int)Parser.ParseEffectOperation(add, effect, lhsUnit, rhsUnit);
+
+            statusAdd += Mathf.FloorToInt(pet.initStatus[statusType] * statusMult);
+            pet.statusController.AddBattleStatus(statusType, statusAdd);
+        }
 
         return true;
     }
@@ -536,6 +592,7 @@ public static class EffectAbilityHandler
                 "-1" => Skill.GetNoOpSkill(),
                 "-4" => Skill.GetEscapeSkill(),
                 "random" => Skill.GetRandomSkill(),
+                "random[available]" => lhsUnit.pet.skillController.GetAvailableSkills(lhsUnit.pet.anger).Random(),
                 _ => Skill.GetSkill(int.Parse(value)),
             });
 
@@ -657,7 +714,7 @@ public static class EffectAbilityHandler
 
             for (int i = 0; i < killList.Count; i++) {
                 var index = petSystem.petBag.FindIndex(x => (x?.id ?? 0) == killList[i]);
-                petSystem.petBag[index] = null;
+                petSystem.petBag[index].hp = 0;
             }
 
             // Prepare skill param.
@@ -687,8 +744,7 @@ public static class EffectAbilityHandler
             }
 
             // Switch Pet.
-            Pet switchPet = Pet.GetExamplePet((int)newValue);
-            switchPet.basic.personality = Personality.实干;
+            Pet switchPet = new Pet((int)newValue, battlePet);
             switchPet.normalSkill = normalSkills;
             switchPet.superSkill = superSkill;
 
@@ -763,7 +819,7 @@ public static class EffectAbilityHandler
         // float oldValue, newValue;
 
         // 對玩家的進行的效果，PVP不生效
-        if (state.settings.mode == BattleMode.PVP)
+        if ((state != null) && (state.settings.mode == BattleMode.PVP))
             return false;
 
         // Set item.

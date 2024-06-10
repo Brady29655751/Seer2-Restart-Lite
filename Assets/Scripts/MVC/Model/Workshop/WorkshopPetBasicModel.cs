@@ -6,7 +6,7 @@ using UnityEngine;
 public class WorkshopPetBasicModel : Module
 {
     [SerializeField] private IInputField idInputField, nameInputField;
-    [SerializeField] private IDropdown elementDropdown, genderDropdown;
+    [SerializeField] private IDropdown elementDropdown, subElementDropdown, genderDropdown;
     [SerializeField] private IInputField heightInputField, weightInputField;
     [SerializeField] private List<IInputField> baseStatusInputFieldList;
     [SerializeField] private IInputField descriptionInputField;
@@ -14,6 +14,7 @@ public class WorkshopPetBasicModel : Module
     public int id => int.Parse(idInputField.inputString);
     public string petName => nameInputField.inputString;
     public Element element => (Element)(elementDropdown.value);
+    public Element subElement => (Element)(subElementDropdown.value);
     public int gender => genderDropdown.value - 1;
     public int height => int.Parse(heightInputField.inputString);
     public int weight => int.Parse(weightInputField.inputString);
@@ -22,7 +23,7 @@ public class WorkshopPetBasicModel : Module
     public string description => descriptionInputField.inputString;
 
     public PetBasicInfo GetPetBasicInfo(int baseId) {
-        return new PetBasicInfo(id, baseId, petName, element, baseStatus,
+        return new PetBasicInfo(id, baseId, petName, element, subElement, baseStatus,
             gender, height, weight, description, "创意工坊", "Workshop");
     }
 
@@ -31,6 +32,7 @@ public class WorkshopPetBasicModel : Module
         nameInputField.SetInputString(basicInfo.name);
 
         elementDropdown.value = (int)basicInfo.element;
+        subElementDropdown.value = (int)basicInfo.subElement;
         genderDropdown.value = basicInfo.gender + 1;
 
         heightInputField.SetInputString(basicInfo.baseHeight.ToString());

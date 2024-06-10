@@ -12,6 +12,14 @@
 			<dialog>
 				<branch id="default" name="舒尔" icon="12501" size="75,100" pos="0,55">
 					<content><![CDATA[来来来！这里的料理最新鲜！这里的料理最特别！尝一尝来看一看！看到是缘分，吃到是运气哟！]]></content>
+					<functionHandler>
+						<func type="click">
+							<description><![CDATA[烹调料理]]></description>
+							<action>openPanel</action>
+							<param>Cook</param>
+							<param>recipe=200001</param>
+						</func>
+					</functionHandler>
 					<replyHandler>
 						<reply type="click">
 							<description><![CDATA[好囧的台词……]]></description>
@@ -29,7 +37,14 @@
 			</eventHandler>
 		</npc>
 		<npc id="12502" resId="12502" name="烹饪料理" size="206,238" pos="448,183" namePos="0,-80">
-			<description><![CDATA[烹饪料理（暂未开放）]]></description>
+			<description><![CDATA[烹饪料理]]></description>
+			<eventHandler>
+				<button type="click">
+					<action>openPanel</action>
+					<param>Cook</param>
+					<param>recipe=200001</param>
+				</button>
+			</eventHandler>
 		</npc>
 		<teleport id="1" name="草目氏族主城" pos="750,100" targetMapId="90"/>
 	</entities>

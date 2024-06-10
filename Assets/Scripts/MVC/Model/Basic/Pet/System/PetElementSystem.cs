@@ -46,7 +46,8 @@ public static class PetElementSystem {
 
     public static float GetElementRelation(Skill lhs, BattlePet rhs) {
         var defenseRelation = elementDefenseRelation.Get(rhs.battleElement);
-        return defenseRelation[lhs.elementId];
+        var subDefenseRelation = elementDefenseRelation.Get(rhs.subBattleElement);
+        return defenseRelation[lhs.elementId] * subDefenseRelation[lhs.elementId];
     }
 
     public static List<Element> GetAttackRelation(Element element, float relation) {

@@ -35,6 +35,9 @@ public static class List {
 
     public static List<T> Random<T>(this List<T> values, int count, bool repeat = true) {
         List<T> result = new List<T>();
+        if ((!repeat) && (count >= values.Count))
+            return values.ToList();
+
         while (result.Count != count) {
             T rng = values.Random();
             if (!repeat && result.Contains(rng))

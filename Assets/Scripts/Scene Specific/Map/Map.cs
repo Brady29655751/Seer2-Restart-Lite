@@ -22,7 +22,7 @@ public class Map
 
     [XmlElement("fightMap")] public int fightMapId;
     [XmlElement("fightMapColor")] public string fightMapColorId = "255,255,255,255";
-    public Color fightMapColor => fightMapColorId.ToColor(Color.white);
+    public Color fightMapColor => IsMod(id) ? fightMapColorId.ToColor(Color.white) : new Color(0.5f, 0.5f, 0.5f, 1);
     [XmlElement("initialPoint")] public string initialPoint;
     public Vector2 initPoint => initialPoint.ToVector2();
     

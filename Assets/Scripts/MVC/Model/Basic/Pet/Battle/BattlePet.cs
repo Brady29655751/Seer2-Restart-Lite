@@ -14,6 +14,10 @@ public class BattlePet : Pet
     /* Properties */
     public int battleElementId => (int)battleElement;
     public Element battleElement => buffController.element;
+
+    public int subBattleElementId => (int)subBattleElement;
+    public Element subBattleElement => buffController.subElement;
+
     public bool isDead => (battleStatus.hp <= 0);
     public bool isMovable => buffController.isMovable;
 
@@ -44,7 +48,7 @@ public class BattlePet : Pet
             return;
 
         statusController = new PetBattleStatusController(normalStatus, currentStatus.hp);
-        buffController = new PetBattleBuffController(element, null);
+        buffController = new PetBattleBuffController(element, subElement, null);
         skillController = new PetBattleSkillController(normalSkill.ToList(), superSkill);
     }
 
@@ -54,7 +58,7 @@ public class BattlePet : Pet
         BattleStatus status = new BattleStatus(basicStatus, hiddenStatus);
 
         statusController = new PetBattleStatusController(status);
-        buffController = new PetBattleBuffController(element, info.initBuffs);
+        buffController = new PetBattleBuffController(element, subElement, info.initBuffs);
         skillController = new PetBattleSkillController(info.loopSkills, info.headerSkills, info.superSkill);
 
         normalSkill = info.normalSkills;
@@ -141,6 +145,7 @@ public class BattlePet : Pet
     public override float GetPetIdentifier(string id) {
         return id switch {
             "element" => (int)buffController.element,
+            "subElement" => (int)buffController.subElement,
             _ => base.GetPetIdentifier(id),
         };
     }
@@ -157,6 +162,9 @@ public class BattlePet : Pet
                 return;
             case "element":
                 buffController.SetElement((Element)value);
+                return;
+            case "subElement":
+                buffController.SetSubElement((Element)value);
                 return;
         }
     }

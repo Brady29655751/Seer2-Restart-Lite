@@ -7,19 +7,22 @@ using UnityEngine;
 public class PetBattleBuffController
 {
     public Element element { get; private set; }
+    public Element subElement { get; private set; }
     private List<int> blockBuffIds = new List<int>();
     private List<BuffType> blockBuffTypes = new List<BuffType>();
 
     public List<Buff> buffs = new List<Buff>();
     public bool isMovable => !IsUnmovableEffected();
 
-    public PetBattleBuffController(Element element, List<Buff> buffs = null) {
+    public PetBattleBuffController(Element element, Element subElement = Element.普通, List<Buff> buffs = null) {
         SetElement(element);
+        SetSubElement(subElement);
         AddRangeBuff(buffs, null, null);
     }
 
     public PetBattleBuffController(PetBattleBuffController rhs) {
         element = rhs.element;
+        subElement = rhs.subElement;
         blockBuffIds = new List<int>(rhs.blockBuffIds);
         blockBuffTypes = new List<BuffType>(rhs.blockBuffTypes);
         buffs = rhs.buffs.Select(x => new Buff(x)).ToList();
@@ -41,6 +44,10 @@ public class PetBattleBuffController
         blockBuffIds.Add(GetElementBlockId(newElement));
 
         this.element = newElement;
+    }
+
+    public void SetSubElement(Element newElement) {
+        this.subElement = newElement;
     }
 
     public bool IsUnmovableEffected() {

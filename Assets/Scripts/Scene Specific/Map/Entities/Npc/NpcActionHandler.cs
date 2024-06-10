@@ -147,6 +147,11 @@ public static class NpcActionHandler
         SaveSystem.SaveData();
     }
 
+    public static void RemovePet(NpcButtonHandler handler) {
+        Player.instance.petBag = Player.instance.petBag.Skip(1).Concat(new List<Pet>() { null }).ToArray();
+        SaveSystem.SaveData();
+    }
+
     public static void SetPet(NpcButtonHandler handler) {
         if ((handler.param == null) || (handler.param.Count == 0))
             return;

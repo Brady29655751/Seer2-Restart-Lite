@@ -160,7 +160,7 @@ public static class EffectConditionHandler
             string cmpValue = condOptions.Get(typeList[i] + "_cmp", "0");
             float value = Parser.ParseEffectOperation(cmpValue, effect, lhsUnit, rhsUnit);
 
-            if (!Operator.Condition(op, Identifier.GetPetIdentifier(typeList[i], battlePet), value))
+            if (!Operator.Condition(op, Identifier.GetPetIdentifier(typeList[i], lhsUnit.petSystem), value))
                 return false;
         }
         return true;

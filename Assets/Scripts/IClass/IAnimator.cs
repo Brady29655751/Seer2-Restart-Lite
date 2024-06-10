@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,6 +11,7 @@ public class IAnimator : IMonoBehaviour
 {
     public RectTransform rect { get; protected set; }
     public Animator anim { get; protected set; }
+    public RuntimeAnimatorController animController => anim?.runtimeAnimatorController;
 
     public UnityEvent onAnimStartEvent = new UnityEvent();
     public UnityEvent onAnimEndEvent = new UnityEvent();
@@ -37,6 +39,20 @@ public class IAnimator : IMonoBehaviour
         onAnimStartEvent.RemoveAllListeners();
         onAnimEndEvent.RemoveAllListeners();
         onAnimHitEvent.RemoveAllListeners();
+    }
+
+    public void SetAnimClip(AnimationClip clip) {
+        if (clip == null)
+            return;
+
+        AnimatorOverrideController aoc = new AnimatorOverrideController(animController);
+        var anims = new List<KeyValuePair<AnimationClip, AnimationClip>>();
+
+        foreach (var a in aoc.animationClips)
+            anims.Add(new KeyValuePair<AnimationClip, AnimationClip>(a, clip));
+
+        aoc.ApplyOverrides(anims);
+        anim.runtimeAnimatorController = aoc;
     }
 
 }

@@ -28,4 +28,18 @@ public class UnitPetSystem
         pet.OnTurnStart(thisUnit, state);
     }
 
+    public float GetPetSystemIdentifier(string id) {
+        return id switch {
+            "cursor" => cursor,
+            "aliveNum" => alivePetNum,
+            "deadNum" => deadPetNum,
+            _ => float.MinValue,
+        };
+    }
+
+    public bool TryGetPetSystemIdentifier(string id, out float num) {
+        num = GetPetSystemIdentifier(id);
+        return num != float.MinValue;
+    }
+
 }

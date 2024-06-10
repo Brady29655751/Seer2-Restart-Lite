@@ -35,6 +35,8 @@ public class Pet
     /* Feature */
     public int elementId => info.basic.elementId;
     public Element element => info.basic.element;  // 屬性
+    public int subElementId => info.basic.subElementId;
+    public Element subElement => info.basic.subElement; // 副屬性
     public bool hasEmblem => feature.hasEmblem;   // 是否佩戴紋章
     [XmlIgnore] public List<Buff> initBuffs => info.ui.defaultBuffs.Concat(feature.afterwardBuffs).ToList();
 
@@ -200,6 +202,7 @@ public class Pet
             "id" => this.id,
             "baseId" => basic.baseId,
             "element" => elementId,
+            "subElement" => subElementId,
             "personality" => (float)basic.personality,
             "height" => basic.height,
             "weight" => basic.weight,

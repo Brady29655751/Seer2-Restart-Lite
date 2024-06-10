@@ -20,6 +20,10 @@ public class PetDemoController : Module
         demoView.SetElementInfoPromptContent(demoModel.element);
     }
 
+    public void SetSubElementInfoPromptContent() {
+        demoView.SetElementInfoPromptContent(demoModel.subElement);
+    }
+
     public void SetFeatureInfoPromptContent() {
         demoView.SetFeatureInfoPromptContent(demoModel.feature);
     }

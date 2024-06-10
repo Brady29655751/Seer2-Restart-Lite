@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 public class BattlePetAnimView : BattleBaseView
 {
-    [SerializeField] private IAnimator captureAnim;
+    [SerializeField] private IAnimator fieldAnim, captureAnim;
     [SerializeField] private Image battlePetImage;
 
     public bool isDone => isPetDone && isCaptureDone;
@@ -26,8 +26,15 @@ public class BattlePetAnimView : BattleBaseView
         SettingsData settingsData = Player.instance.gameData.settingsData;
         float animSpeed = (battle.settings.mode == BattleMode.PVP) ? 1f : settingsData.battleAnimSpeed;
         
-        battlePetImage.SetSprite(  pet.ui.battleImage);
+        battlePetImage.SetSprite(pet.ui.battleImage);
         captureAnim.anim.SetFloat("speed", animSpeed);
+
+        var animController = ResourceManager.instance.GetLocalAddressables<RuntimeAnimatorController>("Pets/field/" + pet.basic.baseId + "/" + pet.basic.baseId);
+        fieldAnim.gameObject.SetActive(animController != null);
+    }
+
+    public void SetField(BattlePet pet) {
+        fieldAnim.anim.SetFloat("hpRatio", pet.hp * 1f / pet.maxHp);
     }
 
     public void SetPetAnim(Skill skill, PetAnimationType type) {

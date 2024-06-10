@@ -10,6 +10,7 @@ public class ItemDetailView : Module
     [SerializeField] private Text priceText;
     [SerializeField] private Text totalText;
     [SerializeField] private Text descriptionText;
+    [SerializeField] private Text otherInfoText;
 
     public void SetItem(Item item) {
         nameText?.SetText(item.name);
@@ -23,6 +24,10 @@ public class ItemDetailView : Module
 
     public void SetTotal(uint total, string currencyType) {
         totalText?.SetText(total + " " + currencyType);
+    }
+
+    public void SetOtherInfo(string info) {
+        otherInfoText?.SetText(info);
     }
 
 }

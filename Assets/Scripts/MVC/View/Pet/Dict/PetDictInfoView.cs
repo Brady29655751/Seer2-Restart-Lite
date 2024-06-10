@@ -58,7 +58,7 @@ public class PetDictInfoView : Module
     }
 
     public void SetHabitat(string habitat, string linkId) {
-        bool isLinkAvailable = !string.IsNullOrEmpty(linkId) && (linkId != "none");
+        bool isLinkAvailable = (!string.IsNullOrEmpty(linkId)) && (linkId.TrimEnd() != "none");
         linkButton?.gameObject.SetActive(isLinkAvailable);
         habitatText?.gameObject.SetActive(!isLinkAvailable);
         habitatText?.SetText(habitat);
