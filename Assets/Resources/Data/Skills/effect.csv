@@ -634,3 +634,17 @@ id,timing,priority,target,condition,cond_option,effect,effect_option
 10630,on_before_attack,-1,pet,buff,who=op&id=110&own=true,set_skill,type=power&op=+&value=40
 10631,on_after_attack,-1,pet,none,none,add_buff,who=op&id=3080&turn=5
 10632,on_final_dmg_cal,100,skill,none,none,set_damage,op=[MAX]&value=200
+10633,on_after_attack,-1,pet,none,random_cmp=25,powerup,who=op&def=-1
+10634,on_after_attack,-1,pet,none,random_cmp=25,powerup,who=op&mdf=-1
+10635,on_after_attack,-1,pet,none,none,add_buff,id=3087&turn=2
+10636,on_after_dmg_cal,-1,skill,pet,who=op&type=powerup.negCount&powerup.negCount_op=>&powerup.negCount_cmp=0,set_damage,op=*&value=1.5
+10637,on_after_attack,-1,pet,none,none,powerup,who=op&mdf=-1
+10638,on_after_dmg_cal,-1,skill,pet,who=op&type=powerup.negCount&powerup.negCount_op=>&powerup.negCount_cmp=0,set_damage,op=*&value=1.5
+10639,none,-1,none,none,none,none,none
+10640,on_after_attack,-1,pet,none,random_cmp=25,powerup,who=op&mat=-1
+10641,on_after_attack,-1,pet,none,random_cmp=25,powerup,who=op&atk=-1
+10642,on_after_attack,-1,pet,none,weather=2,add_buff,who=op&id=1000
+10643,on_before_attack\on_after_attack,-1\-1,skill\pet,none\none,weather=2\random_cmp=40,set_skill\powerup,type=accuracy&op=+&value=1000\who=op&atk=-1
+10644,on_before_attack\on_after_attack,-1\-1,skill\pet,none\none,weather=2\random_cmp=40,set_skill\powerup,type=accuracy&op=+&value=1000\who=op&mat=-1
+10645,on_after_attack,-1,pet,none,none,powerup,who=op&def=-1&mdf=-1
+10646,on_after_attack,-1,pet,none,none,add_buff,id=14&turn=5

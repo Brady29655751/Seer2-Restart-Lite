@@ -1,0 +1,48 @@
+<map name="银脉山脊" category="3" id="180" weather="0">
+    <fightMap>100003</fightMap>
+    <initialPoint>325,80</initialPoint>
+    <music category="3">
+    	<bgm>BGM_180</bgm>
+    	<fx>FX_119</fx>
+    </music>
+	<entities>
+		<npc id="18001" resId="Pets/pet/41.png" name="Lv23 水墨点点" size="20,34" pos="500,80" namePos="0,0">
+			<battle>
+				<branch id="default">
+					<settings count="6" capture="true"/>
+					<enemy>
+						<pet id="41" level="23">
+							<loopSkill>10633,10634</loopSkill>
+						</pet>
+					</enemy>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>battle</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<npc id="18002" resId="Pets/pet/41.png" name="Lv24 水墨点点" size="20,34" pos="720,140" namePos="0,0">
+			<battle>
+				<branch id="default">
+					<settings count="6" capture="true"/>
+					<enemy>
+						<pet id="41" level="24">
+							<loopSkill>10633,10634</loopSkill>
+						</pet>
+					</enemy>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>battle</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<teleport id="1" name="水脉氏族主城" pos="825,200" targetMapId="160"/>
+		<teleport id="2" name="残骸入口" pos="115,160" targetMapId="191"/>
+	</entities>
+</map>

@@ -1,0 +1,32 @@
+<map name="守林人木屋" category="9" id="1000">
+	<fightMap>100011</fightMap>
+	<music category="9">
+		<bgm>BGM_1000</bgm>
+	</music>
+	<initialPoint>280,110</initialPoint>
+	<entities>
+		<npc id="100000" resId="100001" name="多茨莫博士" size="133,168" pos="430,240" namePos="0,-10">
+			<description>多茨莫博士</description>
+			<dialog>
+				<branch id="default" name="多茨莫博士" icon="100001" size="100,120" pos="0,55">
+					<content><![CDATA[普兰特山麓有很多值得研究的珍惜植被。]]></content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[还是不打扰教授的研究了]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+					</replyHandler>
+				</branch>
+			</dialog>
+			<eventHandler>
+				<button type="click">
+					<action>openDialog</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<teleport id="1" name="普兰特山脚" pos="120,70" targetMapId="990"/>
+		<!-- <teleport id="2" name="微光湖畔" pos="290,270" targetMapId="790"/> -->
+	</entities>
+</map>

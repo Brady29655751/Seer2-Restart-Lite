@@ -20,7 +20,15 @@
 	</entities>
 	-->
 	<entities>
-		<npc id="5000001" resId="5000001" name="" size="256,115" pos="280,357.5"/>
+		<npc id="5000001" resId="5000001" name="" size="256,115" pos="280,357.5">
+			<description>种植园</description>
+			<eventHandler>
+				<button type="click">
+					<action>teleport</action>
+					<param>990</param>
+				</button>
+			</eventHandler>
+		</npc>
 		<npc id="5000002" resId="5000002" name="" size="77,59" pos="730,270"/>
 		<npc id="5000003" resId="5000003" name="" size="56,58" pos="758,330" color="255,255,255,0">
 			<description>精灵仓库</description>

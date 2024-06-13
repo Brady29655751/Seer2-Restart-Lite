@@ -1,0 +1,33 @@
+<map name="普兰特山脚" category="9" id="990">
+	<fightMap>100002</fightMap>
+	<music category="9">
+		<bgm>BGM_990</bgm>
+	</music>
+	<initialPoint>515,125</initialPoint>
+	<entities>
+		<npc id="99000" resId="99001" name="" size="64,88" pos="110,300">
+			<description>铲除植物（暂未开放）</description>
+			<eventHandler>
+				<button type="click">
+					<action>openDialog</action>
+					<param>null</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<npc id="99001" resId="99002" name="" size="99,42" pos="175,225"/>
+		<npc id="99002" resId="99002" name="" size="99,42" pos="240,205"/>
+		<npc id="99003" resId="99002" name="" size="99,42" pos="305,185"/>
+		<npc id="99004" resId="99002" name="" size="99,42" pos="370,165"/>
+		<npc id="99005" resId="99002" name="" size="99,42" pos="110,195"/>
+		<npc id="99006" resId="99002" name="" size="99,42" pos="175,175"/>
+		<npc id="99007" resId="99002" name="" size="99,42" pos="240,155"/>
+		<npc id="99008" resId="99002" name="" size="99,42" pos="305,135"/>
+		<npc id="99009" resId="99002" name="" size="99,42" pos="45,165"/>
+		<npc id="99010" resId="99002" name="" size="99,42" pos="110,145"/>
+		<npc id="99011" resId="99002" name="" size="99,42" pos="175,125"/>
+		<npc id="99012" resId="99002" name="" size="99,42" pos="240,105"/>
+		<teleport id="1" name="基地" pos="440,55" targetMapId="50000"/>
+		<teleport id="2" name="守林人木屋" pos="615,195" targetMapId="1000"/>
+		<!-- <teleport id="2" name="微光湖畔" pos="290,270" targetMapId="790"/> -->
+	</entities>
+</map>
