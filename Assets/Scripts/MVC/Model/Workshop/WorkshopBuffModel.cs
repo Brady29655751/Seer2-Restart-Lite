@@ -207,10 +207,12 @@ public class WorkshopBuffModel : Module
             return false;
         }
 
+        /*
         if (((type == BuffType.Feature) || (type == BuffType.Emblem)) && (buffName.Length != 2)) {
             error = "特性、纹章类印记名称只能填写两个字";
             return false;
         }
+        */
 
         return true;
     }

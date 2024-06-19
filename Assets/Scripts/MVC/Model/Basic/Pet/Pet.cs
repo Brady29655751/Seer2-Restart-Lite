@@ -163,7 +163,7 @@ public class Pet
         id = evolvePetId;
 
         basic = new PetBasic(evolvePetId, (int)originalPet.basic.personality);
-        feature = new PetFeature(evolvePetId, originalPet.feature.hasEmblem);
+        feature = new PetFeature(evolvePetId, originalPet.feature.hasEmblem, originalPet.feature.featureId, originalPet.feature.emblemId);
         exp = new PetExp(evolvePetId, originalPet.level, originalPet.totalExp);
         talent = new PetTalent(evolvePetId, originalPet.talent);
         skills = new PetSkill(evolvePetId, originalPet.level, originalPet.skills);
@@ -212,6 +212,10 @@ public class Pet
             "iv" => talent.iv, 
             "evStorage" => talent.evStorage,
             "emblem" => hasEmblem ? 1 : 0,
+            "featureId" => feature.feature.baseId,
+            "featureType" => info.ui.defaultFeatureList.IndexOf(feature.feature.baseId),
+            "emblemId" => feature.emblem.baseId,
+            "emblemType" => info.ui.defaultFeatureList.IndexOf(feature.emblem.baseId),
             _ => float.MinValue
         };
     }
@@ -246,14 +250,30 @@ public class Pet
             case "evStorage":
                 talent.SetEVStorage((int)num);
                 return;
-            case "emblem":
-                feature.hasEmblem = (num > 0);
-                return;
             case "height":
                 basic.height = ((int)num);
                 return;
             case "weight":
                 basic.weight = ((int)num);
+                return;
+            case "emblem":
+                feature.hasEmblem = (num > 0);
+                return;
+            case "featureId":
+                feature.featureId = (int)num;
+                return;
+            case "featureType":
+                int featureType = (int)num;
+                if (featureType.IsInRange(0, info.ui.defaultFeatureList.Count))
+                    feature.featureId = info.ui.defaultFeatureList[featureType];
+                return;
+            case "emblemId":
+                feature.emblemId = (int)num;
+                return;
+            case "emblemType":
+                int emblemType = (int)num;
+                if (emblemType.IsInRange(0, info.ui.defaultFeatureList.Count))
+                    feature.emblemId = info.ui.defaultFeatureList[emblemType];
                 return;
         }
     }

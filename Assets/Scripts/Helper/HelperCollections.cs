@@ -28,6 +28,16 @@ public static class List {
         return (list == null) || (!list.Any());
     }
 
+    public static T Get<T>(this IList<T> list, int index, T defaultValue = default(T)) {
+        if (List.IsNullOrEmpty(list))
+            return defaultValue;
+
+        if (!index.IsInRange(0, list.Count))
+            return defaultValue;
+
+        return list[index];
+    }
+
     public static T Random<T>(this List<T> values) {
         int index = UnityEngine.Random.Range(0, values.Count);
         return values[index];

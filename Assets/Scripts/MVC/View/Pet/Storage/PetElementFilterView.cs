@@ -7,6 +7,17 @@ public class PetElementFilterView : Module
     [SerializeField] private InfoPrompt infoPrompt;
     [SerializeField] private IButton controlButton;
     [SerializeField] private RectTransform background;
+    [SerializeField] private List<PetElementButton> elementButtonList;
+
+    public override void Init() {
+        for (int i = 0; i < elementButtonList.Count; i++) {
+            elementButtonList[i].gameObject.SetActive(i < PetElementSystem.elementNum);
+            if ((!PetElementSystem.IsMod()) || (i >= PetElementSystem.elementNum))
+                continue;
+
+            elementButtonList[i].SetElement((Element)i);
+        }
+    }
 
     public void OnControlButtonClick() {
         SetActive(!background.gameObject.activeSelf);
@@ -21,7 +32,7 @@ public class PetElementFilterView : Module
     }
 
     public void SetElementInfo(Element element) {
-        string text = element.ToString();
+        string text = element.GetElementName();
         infoPrompt.SetInfoPromptWithAutoSize(text, TextAnchor.MiddleCenter);
     }
 

@@ -7,17 +7,31 @@ public class PetElementView : Module
 {
     [SerializeField] private PetElementButton titleElement;
     [SerializeField] private IText titleElementText;
+    [SerializeField] private List<PetElementButton> selectArea;
     [SerializeField] private List<PetElementButton> weakArea;
     [SerializeField] private List<PetElementButton> resistArea;
     [SerializeField] private List<PetElementButton> zeroArea;
 
+    public override void Init() {
+        if (!PetElementSystem.IsMod())
+            return;
+
+        for (int i = 0; i < selectArea.Count; i++) {
+            selectArea[i].gameObject.SetActive(i < PetElementSystem.elementNum);
+            if (i >= PetElementSystem.elementNum)
+                continue;
+
+            selectArea[i].SetElement((Element)i);
+        }
+    }
+
     public void SetElement(Element element) {
         titleElement?.SetElement(element);
-        titleElementText?.SetText(element.ToString());
+        titleElementText?.SetText(element.GetElementName());
 
-        var weakElements = PetElementSystem.GetAttackRelation(element, PetElementSystem.W);
-        var resistElements = PetElementSystem.GetAttackRelation(element, PetElementSystem.R);
-        var zeroElements = PetElementSystem.GetAttackRelation(element, PetElementSystem.O);
+        var weakElements = PetElementSystem.GetAttackRelation(element, x => x > 1);
+        var resistElements = PetElementSystem.GetAttackRelation(element, x => (x > 0) && (x < 1));
+        var zeroElements = PetElementSystem.GetAttackRelation(element, x => x == 0);
         SetElementRelation(weakArea, weakElements);
         SetElementRelation(resistArea, resistElements);
         SetElementRelation(zeroArea, zeroElements);

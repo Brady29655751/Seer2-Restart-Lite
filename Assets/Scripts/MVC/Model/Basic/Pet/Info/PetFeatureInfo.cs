@@ -22,7 +22,7 @@ public class PetFeatureInfo
 
         baseId = int.Parse(_slicedData[0]);
         feature = new Feature() { baseId = baseId, name = _slicedData[1], description = _slicedData[2] };
-        emblem = new Emblem() { baseId = baseId, name = _slicedData[3], description = _slicedData[4] };
+        emblem = (_slicedData[3] == "none") ? null : new Emblem() { baseId = baseId, name = _slicedData[3], description = _slicedData[4] };
     }
 
     public PetFeatureInfo(int baseId, Feature feature, Emblem emblem) {
@@ -51,7 +51,7 @@ public class Emblem {
     public string description;
 
     public static Sprite GetNullEmblemSprite() {
-        return ResourceManager.instance.GetSprite("Emblems/0");
+        return GetSprite(0);
     }
 
     public static Sprite GetSprite(int baseId) {

@@ -21,8 +21,12 @@ public class FightLoadingScreen : LoadingScreen
         AudioSystem.instance.StopEffect();
 
         SetLoadingProgressNumber(0);
-        playerView.SetPet(battle.currentState.myUnit.pet);
-        enemyView.SetPet(battle.currentState.opUnit.pet);
+
+        var myPet = battle.currentState.myUnit.pet;
+        var opPet = battle.currentState.opUnit.pet;
+        
+        playerView.SetPet(myPet);
+        enemyView.SetPet((opPet.buffController.GetBuff(3090) == null) ? opPet : new BattlePet(new Pet(myPet.id, opPet)));
         AudioSystem.instance.PlaySound(startLoadingSound, AudioVolumeType.BattleSE);
         StartCoroutine(WaitSecondsCoroutine(1.5f, callback));
     }

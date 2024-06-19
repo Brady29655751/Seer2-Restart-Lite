@@ -10,6 +10,6 @@ public class NewsView : Module
     public void SetContent(string content) {
         contentText?.SetText(content);
         contentText?.text.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, contentText.size.y);
-        scrollRect?.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, contentText.size.y);
+        scrollRect?.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, contentText.size.y + 40);
     }
 }

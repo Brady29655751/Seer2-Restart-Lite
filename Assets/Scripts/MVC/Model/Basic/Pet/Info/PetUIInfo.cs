@@ -9,12 +9,17 @@ public class PetUIInfo
 {
     public const int DATA_COL = 4;
     public int id, baseId;
-    public List<int> specialSkinList = new List<int>();
-    public Dictionary<string, string> options = new Dictionary<string, string>();
+
     public int defaultSkinId;
-    public int defaultFeatureId;
+    public List<int> specialSkinList = new List<int>();
+    
+    public int defaultFeatureId => defaultFeatureList.FirstOrDefault();
+    public List<int> defaultFeatureList = new List<int>();
+
     public List<int> defaultBuffIds = new List<int>();
     public List<Buff> defaultBuffs => defaultBuffIds.Select(x => new Buff(x)).ToList();
+
+    public Dictionary<string, string> options = new Dictionary<string, string>();
 
     public Sprite icon => PetUISystem.GetPetIcon(defaultSkinId);
     public Sprite emblemIcon => PetUISystem.GetEmblemIcon(baseId);
@@ -24,7 +29,7 @@ public class PetUIInfo
         id = petId;
         baseId = petBaseId;
         defaultSkinId = petId;
-        defaultFeatureId = petBaseId;
+        defaultFeatureList = new List<int>(){ petBaseId };
     }
 
     public PetUIInfo(string[] _data, int startIndex = 0) {
@@ -37,7 +42,7 @@ public class PetUIInfo
         options.ParseOptions(_slicedData[3]);
 
         defaultSkinId = int.Parse(options.Get("default_skin", id.ToString()));
-        defaultFeatureId = int.Parse(options.Get("default_feature", baseId.ToString()));
+        defaultFeatureList = options.Get("default_feature", baseId.ToString()).ToIntList('/');
         defaultBuffIds = options.Get("default_buff", "none").ToIntList('/');
     }
 

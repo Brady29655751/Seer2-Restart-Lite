@@ -22,6 +22,14 @@ public class WorkshopPetBasicModel : Module
 
     public string description => descriptionInputField.inputString;
 
+    public override void Init() {
+        if (!PetElementSystem.IsMod())
+            return;
+
+        elementDropdown.SetDropdownOptions(PetElementSystem.elementNameList);
+        subElementDropdown.SetDropdownOptions(PetElementSystem.elementNameList);
+    }
+
     public PetBasicInfo GetPetBasicInfo(int baseId) {
         return new PetBasicInfo(id, baseId, petName, element, subElement, baseStatus,
             gender, height, weight, description, "创意工坊", "Workshop");

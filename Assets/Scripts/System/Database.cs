@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
-using System.Net.Http.Headers;
 using System.Threading.Tasks;
 
 public class Database : Singleton<Database>
@@ -11,6 +10,7 @@ public class Database : Singleton<Database>
     private ResourceManager RM => ResourceManager.instance;
 
     public Dictionary<int, Skill> skillDict = new Dictionary<int, Skill>();
+    public Dictionary<int, PetFeatureInfo> featureInfoDict = new Dictionary<int, PetFeatureInfo>();
     public Dictionary<int, PetInfo> petInfoDict = new Dictionary<int, PetInfo>();
     public Dictionary<int, ItemInfo> itemInfoDict = new Dictionary<int, ItemInfo>();
     public Dictionary<int, BuffInfo> buffInfoDict = new Dictionary<int, BuffInfo>();
@@ -21,7 +21,7 @@ public class Database : Singleton<Database>
     public List<ActivityInfo> activityInfos = new List<ActivityInfo>();
 
     public void Init() {
-        RM.LoadPetInfo((x) => petInfoDict = x);
+        RM.LoadPetInfo((x) => petInfoDict = x, (y) => featureInfoDict = y);
         RM.LoadSkill((x) => skillDict = x);
         RM.LoadBuffInfo((x) => buffInfoDict = x);
         RM.LoadItemInfo((x) => itemInfoDict = x);
@@ -56,6 +56,10 @@ public class Database : Singleton<Database>
             error = "获取技能档案失败";
             return false;
         }
+        if (featureInfoDict.Count == 0) {
+            error = "获取特性档案失败";
+            return false;
+        }
         if (petInfoDict.Count == 0) {
             error = "获取精灵档案失败";
             return false;
@@ -70,6 +74,10 @@ public class Database : Singleton<Database>
 
     public Skill GetSkill(int id) {
         return (id == 0) ? null : skillDict.Get(id);
+    }
+
+    public PetFeatureInfo GetFeatureInfo(int id) {
+        return (id == 0) ? null : featureInfoDict.Get(id);
     }
 
     public PetInfo GetPetInfo(int id) {

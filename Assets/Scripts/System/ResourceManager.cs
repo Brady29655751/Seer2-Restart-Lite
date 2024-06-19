@@ -43,6 +43,7 @@ public class ResourceManager : Singleton<ResourceManager>
     private void Init() {
         InitUIResources();
         InitGameResources();
+        SaveSystem.TryLoadElementMod();
     }
 
     private void InitUIResources() {
@@ -298,11 +299,11 @@ public class ResourceManager : Singleton<ResourceManager>
         }, onFail);
     }
 
-    public void LoadPetInfo(Action<Dictionary<int, PetInfo>> onSuccess = null) {
-        StartCoroutine(GetPetInfo(onSuccess));
+    public void LoadPetInfo(Action<Dictionary<int, PetInfo>> onSuccess = null, Action<Dictionary<int, PetFeatureInfo>> onFeatureSuccess = null) {
+        StartCoroutine(GetPetInfo(onSuccess, onFeatureSuccess));
     }
 
-    private IEnumerator GetPetInfo(Action<Dictionary<int, PetInfo>> onSuccess) {
+    private IEnumerator GetPetInfo(Action<Dictionary<int, PetInfo>> onSuccess, Action<Dictionary<int, PetFeatureInfo>> onFeatureSuccess) {
         List<PetBasicInfo> basicInfo = null;
         Dictionary<int, PetFeatureInfo> featureInfo = null;
         Dictionary<int, PetExpInfo> expInfo = null;
@@ -333,13 +334,18 @@ public class ResourceManager : Singleton<ResourceManager>
                 petInfos.Set(info.id, info);
             }
 
-            if (SaveSystem.TryLoadPetMod(out var modDict)) {
+            if (SaveSystem.TryLoadPetMod(out var modDict, out var featureDict)) {
                 foreach (var entry in modDict)
                     petInfos.Set(entry.Key, entry.Value);
+
+                foreach (var entry in featureDict)
+                    featureInfo.Set(entry.Key, entry.Value);
             }
             onSuccess?.Invoke(petInfos);
+            onFeatureSuccess?.Invoke(featureInfo);
         } catch (Exception) {
             onSuccess?.Invoke(new Dictionary<int, PetInfo>());
+            onFeatureSuccess?.Invoke(new Dictionary<int, PetFeatureInfo>());
         }
     }
 
@@ -487,6 +493,24 @@ public class ResourceManager : Singleton<ResourceManager>
             }
             onSuccess?.Invoke(originalDict);
         });
+    }
+
+    public bool GetElementInfo(string[] data) {
+        int dataCol = (int)Mathf.Sqrt(data.Length);
+        int dataRow = data.Length / dataCol;
+
+        PetElementSystem.elementList = PetElementSystem.elementList.Take(dataCol - 1).ToList();
+        PetElementSystem.elementNameList = data.Skip(1).Take(dataCol - 1).ToList();
+        PetElementSystem.elementDefenseRelation.Clear();
+
+        for (int i = 1; i < dataRow; i++) {
+            int cur = dataCol * i;
+            PetElementSystem.elementDefenseRelation.Add((Element)(i - 1), data.GetRange(cur + 1, cur + dataCol).Select(float.Parse).ToList());
+        }
+
+        PetElementSystem.isMod = true;
+
+        return PetElementSystem.IsMod();
     }
 
     public void LoadMissionInfo(Action<Dictionary<int, MissionInfo>> onSuccess = null) {

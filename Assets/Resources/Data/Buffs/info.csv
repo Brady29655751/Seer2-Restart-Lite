@@ -60,6 +60,8 @@ id,name,type,copyType,turn,options,description
 56,星辉解封,mark,replace,-1,res=55,使特攻伤害不低于150
 57,禁疗,mark,replace,-1,none,无法恢复体力
 58,镇静,mark,replace,-1,res=57,无法恢复怒气（攻击命中与回合结束回复的怒气除外）
+59,连击数降低,mark,replace,-1,none,所有技能连击数-2（连击数为2以下的技能不会造成伤害）
+60,连击数提升,mark,replace,-1,none,所有技能连击数+2
 97,暴怒,mark,replace,-1,hide=true,锁定100怒气
 98,环境锁定,mark,replace,-1,none,锁定环境效果
 99,王者体质,mark,replace,-1,none,免疫秒杀效果
@@ -70,10 +72,13 @@ id,name,type,copyType,turn,options,description
 105,昏迷,abnormal,replace,2,none,昏迷中，无法行动
 106,睡眠,abnormal,replace,2,none,无法行动，被攻击会苏醒
 107,石化,abnormal,replace,2,none,无法行动，受到暴击几率提升10%，被暴击会解除
+108,窒息,abnormal,replace,2,none,窒息中，无法行动
 109,冰冻,abnormal,replace,2,none,受到冰冻，无法行动[ENDL]受到暴击伤害提升20%，且受到暴击会解冻
 110,恐惧,abnormal,replace,2,none,随机在可用技能中出招，受到超过100点伤害会清醒
 113,混乱,abnormal,replace,-1,none,下次造成的攻击伤害将转为作用于自身
 114,沉默,abnormal,replace,2,none,属性技能命中率下降100%
+115,禁锢,abnormal,replace,2,none,物攻技能命中率下降100%
+116,术牢,abnormal,replace,2,none,特攻技能命中率下降100%
 1000,溺水,unhealthy,replace,3,none,每回合损失1/8体力，且命中率降低10%（对水系无效）
 1001,烧伤,unhealthy,replace,3,none,每回合损失1/8体力，且造成的物理攻击伤害降低25%（对火系无效）
 1002,冻伤,unhealthy,replace,3,none,每回合损失1/8体力，且造成的特殊攻击伤害降低25%（对冰系无效）
@@ -150,7 +155,7 @@ id,name,type,copyType,turn,options,description
 3062,水纹屏障,chance,replace,-1,none,失去护盾时使自身下一次造成的伤害增加50%
 3063,水盾,turn,replace,5,res=47,反射物理攻击的一半伤害，最高不超过自身最大体力的一半
 3064,眩晕,turn,replace,5,none,速度值减少50点
-3065,水龙缠绕,chance,replace,-1,none,下一次攻击无法连击
+3065,水龙缠绕,chance,replace,-1,none,下一次攻击连击数改为1
 3066,充电,chance,replace,-1,res=3050,下一次使用电系技能伤害翻倍
 3067,雷神觉醒,turn,replace,3,none,每回合回复35点怒气
 3068,星之辉,mark,stack,-1,none,特定技能效果触发率提升[value]%
@@ -165,7 +170,7 @@ id,name,type,copyType,turn,options,description
 3077,物理伤害增加,chance,replace,-1,none,使下一次物理技能伤害增加[value]%
 3078,特殊伤害增加,chance,replace,-1,none,使下一次特殊技能伤害增加[value]%
 3079,星的指引,mark,replace,-1,none,自身使用属性技能的当回合，对手换场会失效（死亡换场除外）
-3080,弱化状态,turn,replace,5,res=3046,使自身技能威力-50
+3080,弱化状态,turn,replace,5,none,使自身技能威力-50
 3081,回归之约,mark,max,-1,none,纪录当前体力值
 3082,星坠预言,turn,block,-1,res=3002&keep=false,爆炸时损失300点体力
 3083,摄动,turn,replace,5,none,特质系技能转变为暗影系
@@ -173,6 +178,11 @@ id,name,type,copyType,turn,options,description
 3085,影钩,mark,stack,-1,auto_remove=true&max_val=16,攻击时每枚影钩有5%概率使对手恐惧，最多叠加16枚[ENDL]当前为[value]枚
 3086,幻视领域,mark,replace,-1,inherit=true,回合结束时若自身体力低于1/2会使对方随机1项能力下降1级
 3087,光滑,turn,replace,2,res=18&keep=false,闪避率提高75%，但受到的伤害翻倍
+3088,影子,mark,stack,-1,max_val=6&auto_remove=true,搜集到的影子，最多6个[ENDL]当前为[value]个
+3089,无影,turn,replace,5,none,使速度下降50点
+3090,影子模仿,mark,block,-1,none,战斗开始时变身为对方的样子
+3091,空气储量,mark,replace,-1,auto_remove=true,剩余空气储量
+3092,羽突式,mark,stack,-1,max_val=3,使物攻增加35点，最高叠加3层[ENDL]当前为[value]层
 3143,焦点腐蚀,mark,replace,-1,none,特定攻击技能造成伤害的1/4将恢复自身体力
 3279,蜂纹,mark,stack,-1,auto_remove=true&max_val=3,每一层使中毒造成的伤害增加30，最多叠加3层。[ENDL]当前为[value]层
 3280,青蜂之舞,turn,replace,3,res=18,闪避率增加50%
@@ -185,6 +195,7 @@ id,name,type,copyType,turn,options,description
 100018,坚强,feature,replace,-1,none,体力低于1/4时，受到物理伤害减少30%
 100020,流水,feature,replace,-1,none,体力低于1/4时，水系技能伤害增加25%
 100022,毒药,feature,replace,-1,none,对手具有慢性毒药时自身伤害增加10%
+100025,空气,feature,replace,-1,none,水系技能命中率提高5%，具有空气值时伤害提升10%
 100028,锋利,feature,replace,-1,none,普通系技能的伤害增加25%
 100030,潮湿,feature,replace,-1,none,雨天时水纹屏障吸收量增加50%
 100032,燃烧,feature,replace,-1,none,对手烧伤时自身伤害增加15%
@@ -203,8 +214,10 @@ id,name,type,copyType,turn,options,description
 100200,毒粉,feature,replace,-1,none,自身具有花粉弥漫时，每回合使对手失去25点体力
 100214,神光,feature,replace,-1,none,出手前体力高于1/2时免疫不良，低于1/2时光系技能必中
 100234,炎帝,feature,replace,-1,none,怒气永不低于25，且回合开始时怒气高于50会免疫异常1回合
+100235,羽刃,feature,replace,-1,max_val=32,攻击时已累积三十二式会增加30固伤[ENDL]当前累积[value]式
 100301,森林,feature,replace,-1,none,自身具有森林祝福时受到的伤害减少10%
 100302,红球,feature,replace,-1,none,当仅有红色水球时，水系技能伤害增加20%
+100320,影魔,feature,replace,-1,none,回合结束时每1个影子都能为自身恢复10点体力
 100388,指引,feature,replace,-1,none,以星的指引伤害增加10%
 100961,首星,feature,replace,-1,none,星移环境下命中率增加50%
 100962,躯星,feature,replace,-1,none,星移环境下受到的伤害减少10%
@@ -224,6 +237,7 @@ id,name,type,copyType,turn,options,description
 200018,树皮,emblem,replace,-1,none,免疫流血状态
 200020,失明,emblem,replace,-1,none,免疫失明状态
 200022,慢性,emblem,replace,-1,none,免疫慢性毒药状态
+200025,窒息,emblem,replace,-1,none,免疫窒息状态
 200028,星之,emblem,replace,-1,none,使星之力提升自身速度1级
 200030,震击,emblem,replace,-1,none,水纹震击提升的致命几率再增加15%
 200032,易燃,emblem,replace,-1,none,受到攻击时15%使对手烧伤3回合
@@ -242,8 +256,10 @@ id,name,type,copyType,turn,options,description
 200200,荧光,emblem,replace,-1,none,对手具有荧光花粉时，每回合恢复自身25点体力
 200214,光武,emblem,replace,-1,none,使用光系技能恢复5点怒气
 200234,阳炎,emblem,replace,-1,none,在炎热环境下所有技能必中
+200235,羽刃,emblem,replace,-1,none,对手的物攻技能命中时会使其损失50点体力
 200301,祝福,emblem,replace,-1,none,使森林祝福提升的体力回复率提高5%
 200302,蓝球,emblem,replace,-1,none,每消耗1个蓝色水球时增加自身10点怒气
+200320,影子,emblem,replace,-1,none,出场时获得1个影子
 200388,星的,emblem,repalce,-1,none,出场时自带星的指引
 200961,首魅,emblem,replace,-1,none,使幻魅之眼的魅惑效果延长1回合
 200962,躯徽,emblem,replace,-1,none,使星尘幻盾回复自身120点体力
@@ -290,3 +306,4 @@ id,name,type,copyType,turn,options,description
 -3009,雷神之力,mark,replace,-1,none,物攻伤害100倍，必杀技伤害10倍
 -3010,凯萨之力,mark,replace,-1,none,特攻伤害100倍，必杀技伤害10倍
 -3011,影灵之力,mark,replace,-1,hide=true,上场时使场地变为影触
+-3012,对手连击降低,mark,replace,-1,hide=true,对手所有技能连击数降低

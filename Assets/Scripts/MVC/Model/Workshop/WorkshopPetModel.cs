@@ -26,7 +26,7 @@ public class WorkshopPetModel : SelectModel<GameObject>
 
     public void SetPetInfo(PetInfo petInfo) {
         petBasicModel.SetPetBasicInfo(petInfo.basic);
-        petAdvanceModel.SetPetFeatureInfo(petInfo.feature);
+        petAdvanceModel.SetPetFeatureInfo(petInfo.baseId, PetFeature.GetFeatureInfo(petInfo.id) ?? petInfo.feature);
         petAdvanceModel.SetPetExpInfo(petInfo.exp);
         petAdvanceModel.SetPetSkillInfo(petInfo.skills);
         petSkinModel.SetPetUIInfo(petInfo.ui);
@@ -62,12 +62,17 @@ public class WorkshopPetModel : SelectModel<GameObject>
 
     public bool CreateDIYPet() {
         var originalPetInfo = Pet.GetPetInfo(petInfo.id);
+        var originalFeatureInfo = PetFeature.GetFeatureInfo(petInfo.id);
+
         Database.instance.petInfoDict.Set(petInfo.id, petInfo);
+        Database.instance.featureInfoDict.Set(petInfo.id, petInfo.feature);
+
         if (SaveSystem.TrySavePetMod(petInfo, petSkinModel.bytesDict, petSkinModel.spriteDict))
             return true;
 
         // rollback
         Database.instance.petInfoDict.Set(petInfo.id, originalPetInfo);
+        Database.instance.featureInfoDict.Set(petInfo.id, originalFeatureInfo);
         return false;
     }
 

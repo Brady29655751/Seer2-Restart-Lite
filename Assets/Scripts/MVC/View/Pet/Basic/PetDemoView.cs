@@ -31,9 +31,9 @@ public class PetDemoView : Module
         
         SetName(pet.name);
         SetElement(pet.element, pet.subElement);
-        SetFeature(pet.info.feature.feature);
+        SetFeature(pet.feature.feature);
         SetGender(pet.info.basic.gender);
-        SetEmblem(pet.hasEmblem, pet.info.feature.emblem);
+        SetEmblem(pet.hasEmblem, pet.feature.emblem);
         SetIVRank(pet.talent.IVRank);
         SetAnimation(  pet.ui.battleImage);
     }
@@ -53,7 +53,7 @@ public class PetDemoView : Module
     }
 
     public void SetElementInfoPromptContent(Element element) {
-        string text = element.ToString();
+        string text = element.GetElementName();
         Vector2 size = new Vector2(30 + 10 * text.Length, 30);
         infoPrompt.SetInfoPromptWithAutoSize(text, TextAnchor.MiddleCenter);
     }
@@ -78,7 +78,8 @@ public class PetDemoView : Module
 
     public void SetEmblem(bool hasEmblem, Emblem emblem) {
         Sprite nullEmblem = Emblem.GetNullEmblemSprite();
-        emblemButton.SetSprite(hasEmblem ?   emblem.GetSprite() : nullEmblem);
+        emblemButton.gameObject.SetActive(emblem != null);
+        emblemButton.SetSprite(hasEmblem ? emblem.GetSprite() : nullEmblem);
     }
 
     public void SetEmblemInfoPromptContent(Emblem emblem, int index = 0) {

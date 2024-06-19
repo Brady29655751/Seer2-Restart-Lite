@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
@@ -54,8 +55,8 @@ public class PetBattleSkillController
     }
 
     public List<Skill> GetAvailableSkills(int anger, bool withSuper = true) {
-        var availableSkills = (((loopSkills == null) || (loopSkills.Count == 0)) ?
-            normalSkills.Where(x => x.anger <= anger) : loopSkills).ToList();
+        var availableSkills = (((normalSkills?.Count ?? 0) > 0) ?
+            normalSkills.Where(x => (x != null) && (x.anger <= anger)) : loopSkills).ToList();
 
         if (withSuper && (superSkill != null) && (superSkill.anger <= anger))
             availableSkills.Add(superSkill);

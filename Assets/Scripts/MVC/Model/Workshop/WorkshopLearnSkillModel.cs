@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
@@ -30,8 +31,11 @@ public class WorkshopLearnSkillModel : Module
 
         // Try search skills with same name.
         var skillDict = Database.instance.skillDict;
-        skillList = skillDict.Where(x => x.Value.name == searchInputField.inputString)
-            .OrderBy(x => x.Key).Select(x => x.Value).Take(MAX_SEARCH_COUNT).ToList();
+        Func<KeyValuePair<int, Skill>, bool> predicate = int.TryParse(searchInputField.inputString, out var skillId) ?
+            new Func<KeyValuePair<int, Skill>, bool>(x => x.Key == skillId) : 
+            new Func<KeyValuePair<int, Skill>, bool>(x => x.Value.name == searchInputField.inputString);
+
+        skillList = skillDict.Where(predicate).OrderBy(x => x.Key).Select(x => x.Value).Take(MAX_SEARCH_COUNT).ToList();
 
         if (skillList.Count > 0)
             return;

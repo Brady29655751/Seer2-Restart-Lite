@@ -13,6 +13,9 @@ public static class PetUISystem
     }
 
     public static Sprite GetEmblemIcon(int petId) {
+        if (petId == 0)
+            return ResourceManager.instance.GetSprite("Emblems/0");
+            
         return ResourceManager.instance.GetLocalAddressables<Sprite>("Emblems/" + petId, PetInfo.IsMod(petId));
     }
 

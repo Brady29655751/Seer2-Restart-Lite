@@ -171,9 +171,11 @@ public class Item
         else
             count = this.UseDefault(invokeUnit, state, useCount);
 
-        if (info.removable) {
+        if (info.removable)
             Item.Remove(id, count);
-        }
+        else
+            SaveSystem.SaveData();
+        
         return count;
     }
 

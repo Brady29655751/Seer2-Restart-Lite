@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
@@ -21,15 +22,19 @@ public class WorkshopLearnBuffModel : Module
 
         idInputField.SetInputString(string.Empty);
 
-        // Try search skills with same name.
+        // Try search buffs with same name.
         var buffInfoDict = Database.instance.buffInfoDict;
-        buffInfoList = buffInfoDict.Where(x => x.Value.name == searchInputField.inputString)
+        Func<KeyValuePair<int, BuffInfo>, bool> predicate = int.TryParse(searchInputField.inputString, out var buffId) ?
+            new Func<KeyValuePair<int, BuffInfo>, bool>(x => x.Key == buffId) : 
+            new Func<KeyValuePair<int, BuffInfo>, bool>(x => x.Value.name == searchInputField.inputString);
+
+        buffInfoList = buffInfoDict.Where(predicate)
             .OrderBy(x => x.Key).Select(x => x.Value).Take(MAX_SEARCH_COUNT).ToList();
 
         if (buffInfoList.Count > 0)
             return;
 
-        // No skills with same name. Search similar result.
+        // No buffs with same name. Search similar result.
         buffInfoList = buffInfoDict.Where(x => x.Value.name.Contains(searchInputField.inputString))
             .OrderBy(x => x.Key).Select(x => x.Value).Take(MAX_SEARCH_COUNT).ToList();
     }

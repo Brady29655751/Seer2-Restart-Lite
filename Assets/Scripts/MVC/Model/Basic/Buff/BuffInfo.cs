@@ -64,7 +64,7 @@ public class BuffInfo
         itemId = int.Parse(options.Get("item", "0"));
         keep = GetKeepInfo();
         inherit = ((type == BuffType.Feature) || (type == BuffType.Emblem)) ? false : bool.Parse(options.Get("inherit", "false"));
-        hide = ((type == BuffType.Feature) || (type == BuffType.Emblem)) ? false : bool.Parse(options.Get("hide", "false"));
+        hide = bool.Parse(options.Get("hide", "false"));
         autoRemove = bool.Parse(options.Get("auto_remove", "false"));
         minValue = int.Parse(options.Get("min_val", int.MinValue.ToString()));
         maxValue = int.Parse(options.Get("max_val", int.MaxValue.ToString()));

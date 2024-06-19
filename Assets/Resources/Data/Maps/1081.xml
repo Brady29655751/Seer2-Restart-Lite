@@ -1,0 +1,171 @@
+<map name="欲望回廊" category="10" id="1081">
+	<music category="10">
+		<bgm>BGM_1081</bgm>
+	</music>
+	<initialPoint>650,310</initialPoint>
+	<entities>
+		<npc id="108101" resId="Pets/pet/322" name="莫利亚" size="108,125" pos="320,175">
+			<description>炼狱第一层</description>
+			<dialog>
+				<branch id="default" name="莫利亚" icon="Pets/pet/322" size="108,125" pos="0,45">
+					<content><![CDATA[欲望无穷无尽]]></content>
+					<functionHandler>
+						<func type="click">
+							<description><![CDATA[剧情模式]]></description>
+							<action>battle</action>
+							<param>story</param>
+						</func>
+						<func type="click">
+							<description><![CDATA[挑战模式]]></description>
+							<action>openDialog</action>
+							<param>challenge</param>
+						</func>
+						<func type="click">
+							<description><![CDATA[炼狱模式（暂未开放）]]></description>
+							<action>battle</action>
+							<param>hell</param>
+						</func>
+					</functionHandler>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[我无欲无求]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+					</replyHandler>
+				</branch>
+				<branch id="challenge" name="S思念体" icon="108001" size="69,111" pos="10,45">
+					<content><![CDATA[莫利亚的欲望无穷无尽，必须将她魅惑之后击败才能彻底让她清醒！]]></content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[我知道了，开始战斗吧！]]></description>
+							<action>battle</action>
+							<param>challenge</param>
+						</reply>
+					</replyHandler>
+				</branch>
+				<branch id="no_charm" name="S思念体" icon="108001" size="69,111" pos="10,45">
+					<content><![CDATA[莫利亚的欲望无穷无尽，必须将她魅惑之后击败才能彻底让她清醒！]]></content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[让我准备一下]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+						<reply type="click">
+							<description><![CDATA[再次战斗]]></description>
+							<action>battle</action>
+							<param>challenge</param>
+						</reply>
+					</replyHandler>
+				</branch>
+			</dialog>
+			<battle>
+				<branch id="story">
+					<settings count="1" simulate="true">
+						<mode>3</mode>
+					</settings>
+					<player>
+						<pet id="322" level="100">
+							<status>
+								<atk>800</atk>
+								<mat>800</mat>
+								<spd>600</spd>
+								<hp>500</hp>
+							</status>
+							<initBuff>17</initBuff>
+							<normalSkill>10659,10661,10653,10652</normalSkill>
+							<superSkill>10658</superSkill>
+						</pet>
+					</player>
+					<enemy>
+						<pet id="322" level="100">
+							<status>
+								<spd>500</spd>
+								<hp>5000</hp>
+							</status>
+							<loopSkill>10659,10661,10650,10657</loopSkill>
+							<superSkill>10658</superSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>getPet</action>
+							<param>320,10,0</param>
+							<condition>activity[hell].done[1][story]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=【莫莫】已经放入精灵仓库</param>
+							<param>item_icon=pet[320]</param>
+							<param>option_num=1</param>
+							<condition>activity[hell].done[1][story]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>hell</param>
+							<param>done[1][story]=true</param>
+							<condition>activity[hell].done[1][story]=[bool]false[default]false</condition>
+						</button>
+					</winHandler>
+				</branch>
+				<branch id="challenge">
+					<settings count="6">
+						<mode>3</mode>
+					</settings>
+					<enemy>
+						<pet id="322" level="100">
+							<status>
+								<hp>10000</hp>
+							</status>
+							<initBuff>13,17,20</initBuff>
+							<loopSkill>10659,10661,10662,10657,10660</loopSkill>
+							<superSkill>10658</superSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setItem</action>
+							<param>add</param>
+							<param>300320,1</param>
+							<condition>activity[hell].done[1][challenge]=[bool]false[default]false</condition>
+							<condition>battle.op.pet.buff[101].count&gt;0</condition>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=影子纹章已经放入精灵背包</param>
+							<param>item_icon=item[300320]</param>
+							<param>option_num=1</param>
+							<condition>activity[hell].done[1][challenge]=[bool]false[default]false</condition>
+							<condition>battle.op.pet.buff[101].count&gt;0</condition>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>hell</param>
+							<param>done[1][challenge]=true</param>
+							<condition>activity[hell].done[1][challenge]=[bool]false[default]false</condition>
+							<condition>battle.op.pet.buff[101].count&gt;0</condition>
+						</button>
+						<button type="auto">
+							<action>openDialog</action>
+							<param>no_charm</param>
+							<condition>battle.op.pet.buff[101].countLTE0</condition>
+						</button>
+					</winHandler>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>openDialog</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<teleport id="1" name="炼狱入口" pos="750,380" targetMapId="1080"/>
+		<!-- <teleport id="2" name="微光湖畔" pos="290,270" targetMapId="790"/> -->
+	</entities>
+</map>

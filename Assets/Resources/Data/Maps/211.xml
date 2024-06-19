@@ -1,0 +1,48 @@
+<map name="漩涡谷地" category="3" id="211" weather="0">
+    <fightMap>100003</fightMap>
+    <initialPoint>350,140</initialPoint>
+    <music category="3">
+    	<bgm>BGM_210</bgm>
+    	<fx>FX_120</fx>
+    </music>
+	<entities>
+		<npc id="21101" resId="Pets/pet/26.png" name="Lv25 安亚" size="36,57" pos="300,120" namePos="0,0">
+			<battle>
+				<branch id="default">
+					<settings count="6" capture="true"/>
+					<enemy>
+						<pet id="26" level="25">
+							<loopSkill>10665,10667,10667,10667,10666,10667,10667,10667</loopSkill>
+						</pet>
+					</enemy>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>battle</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<npc id="21202" resId="Pets/pet/26.png" name="Lv26 安亚" size="36,57" pos="620,80" namePos="0,0">
+			<battle>
+				<branch id="default">
+					<settings count="6" capture="true"/>
+					<enemy>
+						<pet id="26" level="26">
+							<loopSkill>10665,10667,10667,10667,10666,10667,10667,10667</loopSkill>
+						</pet>
+					</enemy>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>battle</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<teleport id="1" name="水脉氏族主城" pos="240,55" targetMapId="160"/>
+		<teleport id="2" name="漩涡峡谷" pos="795,160" targetMapId="212"/>
+	</entities>
+</map>

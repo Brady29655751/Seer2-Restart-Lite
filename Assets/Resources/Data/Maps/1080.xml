@@ -1,0 +1,31 @@
+<map name="炼狱入口" category="10" id="1080">
+	<music category="10">
+		<bgm>BGM_1080</bgm>
+	</music>
+	<initialPoint>690,85</initialPoint>
+	<entities>
+		<npc id="108001" resId="108001" name="S思念体" size="46,74" pos="380,140">
+			<description>冥王撒旦就在七宗炼狱的底层！</description>
+			<dialog>
+				<branch id="default" name="S思念体" icon="108001" size="69,111" pos="10,45">
+					<content><![CDATA[这里是炼狱大门，里面关押着不可饶恕之人。只有强者和恶魔能够生存至今，但是这有什么不同吗……]]></content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[路过…路过而已…]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+					</replyHandler>
+				</branch>
+			</dialog>
+			<eventHandler>
+				<button type="click">
+					<action>openDialog</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<teleport id="1" name="欲望回廊" pos="440,125" targetMapId="1081"/>
+		<!-- <teleport id="2" name="微光湖畔" pos="290,270" targetMapId="790"/> -->
+	</entities>
+</map>

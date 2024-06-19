@@ -32,6 +32,11 @@ public class DialogManager : Manager<DialogManager>
             return;
         }
 
+        if (dialogStoryLayer.gameObject.activeSelf)
+        {
+            SetStoryDialogLayerActive(false);
+        }
+
         SetDialogLayerActive(true);
         dialogController.OpenDialog(info);
     }
@@ -41,12 +46,16 @@ public class DialogManager : Manager<DialogManager>
             CloseDialog();
             return;
         }
+        if (dialogLayer.gameObject.activeSelf)
+        {
+            SetDialogLayerActive(false);
+        }
 
         SetStoryDialogLayerActive(true);
         dialogStoryController.OpenDialog(info);
     }
 
-
+  
     public void CloseDialog() {
         SetDialogLayerActive(false);
         SetStoryDialogLayerActive(false);

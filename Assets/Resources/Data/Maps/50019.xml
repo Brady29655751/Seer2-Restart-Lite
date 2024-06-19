@@ -1,0 +1,285 @@
+<map name="草目氏族主城" category="2" id="50019" resId="90" weather="0">
+    <!-- <resource>10009</resource> -->
+    <fightMap>100002</fightMap>
+    <initialPoint>380,150</initialPoint>
+    <music category="2">
+        <bgm>BGM_100</bgm>
+        <fx>FX_103</fx>
+    </music>
+    <entities>
+        <npc id="9002" resId="9002" name="" size="614,137" pos="0,0" target="false"/>
+        <npc id="9003" resId="9003" name="" size="71,55" pos="215,415" target="false"/>
+        <npc id="9004" resId="9004" name="" size="192,224" pos="440,80" target="false"/>
+
+
+        <npc id="7003" resId="7003" name="巴蒂" size="53,71" pos="334,217">
+
+        </npc>
+
+
+        <npc id="7002" resId="7002" name="多罗" size="53,71" pos="387,222">
+
+            <dialog>
+                <branch id="mission_6_dream_1" name="多罗" icon="7002" size="80,100" pos="10,55">
+                    <content><![CDATA[队....队长!我做了一个很奇怪的梦!]]></content>
+                    <replyHandler>
+                        <reply type="click">
+                            <description><![CDATA[额？梦？]]></description>
+                            <action>openDialog</action>
+                            <param>mission_6_dream_2</param>
+                        </reply>
+                    </replyHandler>
+                </branch>
+                <branch id="mission_6_dream_2" name="巴蒂" icon="7003" size="80,100" pos="10,55">
+                    <content>
+                        <![CDATA[一个梦就大惊小怪....没见过世面!不过......我似乎也做了一个奇怪的梦.......]]></content>
+                    <replyHandler>
+                        <reply type="click">
+                            <description><![CDATA[其实我也有梦到啊]]></description>
+                            <action>openDialog</action>
+                            <param>mission_6_dream_3</param>
+                        </reply>
+                    </replyHandler>
+                </branch>
+
+                <branch id="mission_6_dream_3" name="" icon="5001901" size="670,338" pos="-0.6,-169">
+                    <content>
+                        <![CDATA[story=我记得那个梦]]></content>
+                    <replyHandler>
+                        <reply type="click">
+                            <description><![CDATA[▼]]></description>
+                            <action>openDialog</action>
+                            <param>mission_6_dream_4</param>
+                        </reply>
+                    </replyHandler>
+                </branch>
+                <branch id="mission_6_dream_4" name="" icon="5001902" size="670,338" pos="-0.6,-169">
+                    <content>
+                        <![CDATA[story=我似乎来到了草目氏族的某个地方]]></content>
+                    <replyHandler>
+                        <reply type="click">
+                            <description><![CDATA[▼]]></description>
+                            <action>openDialog</action>
+                            <param>mission_6_dream_5</param>
+                        </reply>
+                    </replyHandler>
+                </branch>
+
+                <branch id="mission_6_dream_5" name="" icon="5001903" size="670,338" pos="-0.6,-169">
+                    <content>
+                        <![CDATA[story=]]></content>
+                    <replyHandler>
+                        <reply type="click">
+                            <description><![CDATA[▼]]></description>
+                            <action>openDialog</action>
+                            <param>mission_6_dream_6</param>
+                        </reply>
+                    </replyHandler>
+                </branch>
+                <branch id="mission_6_dream_6" name="" icon="5001904" size="670,338" pos="-0.6,-169">
+                    <content>
+                        <![CDATA[story=绿色的精灵一闪而过]]></content>
+                    <replyHandler>
+                        <reply type="click">
+                            <description><![CDATA[▼]]></description>
+                            <action>openDialog</action>
+                            <param>mission_6_dream_7</param>
+                        </reply>
+                    </replyHandler>
+                </branch>
+                <branch id="mission_6_dream_7" name="" icon="5001905" size="670,338" pos="-0.6,-169">
+                    <content>
+                        <![CDATA[story=他似乎在暗示着什么]]></content>
+                    <replyHandler>
+                        <reply type="click">
+                            <description><![CDATA[▼]]></description>
+                            <action>openDialog</action>
+                            <param>mission_6_dream_8</param>
+                        </reply>
+                    </replyHandler>
+                </branch>
+                <branch id="mission_6_dream_8" name="" icon="5001906" size="670,338" pos="-0.6,-169">
+                    <content>
+                        <![CDATA[story=小心 还是什么]]></content>
+                    <replyHandler>
+                        <reply type="click">
+                            <description><![CDATA[▼]]></description>
+                            <action>openDialog</action>
+                            <param>mission_6_dream_9</param>
+                        </reply>
+                    </replyHandler>
+                </branch>
+
+
+                <branch id="mission_6_dream_9" name="多罗" icon="7002" size="80,100" pos="10,55">
+                    <content><![CDATA[啊.....啊.....啊 不是这么巧吧!!!! 我梦到的就是这样.....我怕.....]]></content>
+                    <replyHandler>
+                        <reply type="click">
+                            <description><![CDATA[肯定有蹊跷]]></description>
+                            <action>openDialog</action>
+                            <param>mission_6_dream_10</param>
+                        </reply>
+                    </replyHandler>
+                </branch>
+
+                <branch id="mission_6_dream_10" name="巴蒂" icon="7003" size="80,100" pos="10,55">
+                    <content><![CDATA[队长.....这一定不是巧合!我也做了同样的梦!]]></content>
+                    <replyHandler>
+                        <reply type="click">
+                            <description><![CDATA[谁？ 是谁？]]></description>
+                            <action>openDialog</action>
+                            <param>mission_6_dream_11</param>
+                        </reply>
+                        <reply type="branch">
+                            <action>setNpcParam</action>
+                            <param>5001907</param>
+                            <param>active=true</param>
+                        </reply>
+
+                    </replyHandler>
+                </branch>
+            </dialog>
+
+
+            <eventHandler>
+
+                <button type="click">
+                    <action>openDialog</action>
+                    <param>mission_6_dream_1</param>
+                    <condition>mission[6].checkpoint=dream</condition>
+                </button>
+                <button type="click">
+                    <action>openDialog</action>
+                    <param>default</param>
+                    <condition>mission[6].checkpointNOTdream</condition>
+                </button>
+
+            </eventHandler>
+        </npc>
+
+
+        <npc id="5001907" resId="5001907" name="" size="90,110" pos="172,183" active="false">
+
+            <dialog>
+                <branch id="mission_6_dream_11" name="某某某神兽" icon="5001907" size="136,125" pos="0,35">
+                    <content><![CDATA[嗨.....我可是神兽来着!]]></content>
+                    <replyHandler>
+                        <reply type="click">
+                            <description><![CDATA[▼]]></description>
+                            <action>openDialog</action>
+                            <param>mission_6_dream_12</param>
+                        </reply>
+                    </replyHandler>
+                </branch>
+                <branch id="mission_6_dream_12" name="某某某神兽" icon="5001907" size="136,125" pos="0,35">
+                    <content>
+                        <![CDATA[story=<color=#36dbef>身高：不告诉你
+体重：不告诉你
+分布：你管我啊！
+特性：狂扁你
+简介：我很牛！我很牛！我真的很牛！！</color>]]></content>
+                    <replyHandler>
+                        <reply type="click">
+                            <description><![CDATA[▼]]></description>
+                            <action>openDialog</action>
+                            <param>mission_6_dream_13</param>
+                        </reply>
+                    </replyHandler>
+                </branch>
+
+                <branch id="mission_6_dream_13" name="某某某神兽" icon="5001907" size="136,125" pos="0,35">
+                    <content>
+                        <![CDATA[神兽是需要你来追的哦! 来嘛]]></content>
+                    <replyHandler>
+                        <reply type="click">
+                            <description><![CDATA[▼]]></description>
+                            <action>openDialog</action>
+                            <param>mission_6_dream_14</param>
+                        </reply>
+                    </replyHandler>
+                </branch>
+                <branch id="mission_6_dream_14" name="多罗" icon="7002" size="80,100" pos="10,55">
+                    <content>
+                        <![CDATA[神兽......不要走......]]></content>
+                    <replyHandler>
+                        <reply type="click">
+                            <description><![CDATA[▼]]></description>
+                            <action>openDialog</action>
+                            <param>mission_6_dream_15</param>
+                        </reply>
+                        <reply type="branch">
+                            <action>setNpcParam</action>
+                            <param>7002</param>
+                            <param>active=false</param>
+                        </reply>
+                        <reply type="branch">
+                            <action>setNpcParam</action>
+                            <param>5001907</param>
+                            <param>active=false</param>
+                        </reply>
+
+
+                    </replyHandler>
+                </branch>
+
+                <branch id="mission_6_dream_15" name="巴蒂" icon="7003" size="80,100" pos="10,55">
+                    <content>
+                        <![CDATA[笨蛋！你慢点啊！]]></content>
+                    <replyHandler>
+                        <reply type="click">
+                            <description><![CDATA[▼]]></description>
+                            <action>openDialog</action>
+                            <param>mission_6_dream_16</param>
+                        </reply>
+                        <reply type="branch">
+                            <action>setNpcParam</action>
+                            <param>7003</param>
+                            <param>active=false</param>
+                        </reply>
+                    </replyHandler>
+                </branch>
+
+                <branch id="mission_6_dream_16" name="我" icon="7004" size="136,125" pos="0,35">
+                    <content>
+                        <![CDATA[这不是通往<color=#FFD700>异蘑世界</color>的入口嘛!.....等等!]]></content>
+                    <replyHandler>
+                        <reply type="click">
+                            <description><![CDATA[(巴蒂和多罗已经走远)]]></description>
+                            <action>teleport</action>
+                            <param>50020</param>
+                        </reply>
+                        <reply type="branch">
+                            <action>setMission</action>
+                            <param>6</param>
+                            <param>checkpoint</param>
+                            <param>find</param>
+                        </reply>
+                    </replyHandler>
+                </branch>
+
+            </dialog>
+
+            <eventHandler>
+
+                <button type="click">
+                    <action>openDialog</action>
+                    <param>mission_6_dream_11</param>
+                    <condition>mission[6].checkpoint=dream</condition>
+
+                </button>
+                <button type="click">
+                    <action>openDialog</action>
+                    <param>null</param>
+                    <condition>mission[6].checkpointNOTdream</condition>
+                </button>
+
+
+            </eventHandler>
+        </npc>
+        <teleport id="1" name="荆棘林" pos="490,380" targetMapId="131"/>
+        <teleport id="2" name="权力之帐" pos="500,130" targetMapId="110"/>
+        <teleport id="3" name="异蘑世界" pos="600,50" targetMapId="121"/>
+        <teleport id="4" name="信奉广场" pos="30,140" targetMapId="100"/>
+        <teleport id="5" name="七味小厨" pos="250,240" targetMapId="125"/>
+    </entities>
+</map>

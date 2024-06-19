@@ -25,16 +25,16 @@ public class WorkshopPetAdvanceModel : Module
 
     public PetFeatureInfo GetPetFeatureInfo(int id) {
         Feature petFeature = new Feature() {
-            baseId = baseId,
+            baseId = id,
             name = feature,
             description = featureDescription,
         };
         Emblem petEmblem = new Emblem() {
-            baseId = baseId,
+            baseId = id,
             name = emblem,
             description = emblemDescription,
         };
-        return new PetFeatureInfo(baseId, petFeature, petEmblem);
+        return new PetFeatureInfo(id, petFeature, petEmblem);
     }
 
     public PetExpInfo GetPetExpInfo(int id) {
@@ -45,8 +45,8 @@ public class WorkshopPetAdvanceModel : Module
         return new PetSkillInfo(id, learnSkillInfoList);
     }
 
-    public void SetPetFeatureInfo(PetFeatureInfo featureInfo) {
-        baseIdInputField.SetInputString(featureInfo.baseId.ToString());
+    public void SetPetFeatureInfo(int baseId, PetFeatureInfo featureInfo) {
+        baseIdInputField.SetInputString(baseId.ToString());
         featureInputField.SetInputString(featureInfo.feature.name);
         featureDescriptionInputField.SetInputString(featureInfo.feature.description);
         emblemInputField.SetInputString(featureInfo.emblem.name);
@@ -185,12 +185,12 @@ public class WorkshopPetAdvanceModel : Module
         var featureBuffInfo = Buff.GetBuffInfo(90_0000 + Mathf.Abs(baseId));
         var emblemBuffInfo = Buff.GetBuffInfo(80_0000 + Mathf.Abs(baseId));
 
-        if ((featureBuffInfo == null) || (emblemBuffInfo == null)) {
+        if ((featureBuffInfo == null) || ((emblem != "none") && (emblemBuffInfo == null))) {
             error = "请先制作对应的特性和纹章印记！";
             return false;
         }
 
-        if ((featureBuffInfo.name != feature) || (emblemBuffInfo.name != emblem)) {
+        if ((featureBuffInfo.name != feature) || ((emblem != "none") && (emblemBuffInfo.name != emblem))) {
             error = "特性、纹章的名称和对应之印记名称不符";
             return false;
         }

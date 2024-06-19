@@ -99,13 +99,16 @@ public class Buff
         return new Buff(id);
     }
 
-    public static Buff GetFeatureBuff(PetInfo info) {
-        Buff featureBuff = new Buff((info.id > 0 ? 10_0000 : 90_0000) + Mathf.Abs(info.feature.baseId));
+    public static Buff GetFeatureBuff(Pet pet) {
+        var featureId = pet.feature.feature.baseId;
+        Buff featureBuff = new Buff((featureId > 0 ? 10_0000 : 90_0000) + Mathf.Abs(featureId));
         return featureBuff;
     }
 
-    public static Buff GetEmblemBuff(PetInfo info) {
-        int id = (info.id > 0 ? 20_0000 : 80_0000) + Mathf.Abs(info.feature.baseId);
+    public static Buff GetEmblemBuff(Pet pet) {
+        var emblemId = pet.feature.emblem?.baseId ?? 0;
+        int id = (emblemId >= 0 ? 20_0000 : 80_0000) + Mathf.Abs(emblemId);
+
         if (GetBuffInfo(id) == null)
             return null;
 

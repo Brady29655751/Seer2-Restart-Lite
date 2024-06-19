@@ -1,0 +1,55 @@
+<map name="朽木桥" category="2" id="50021" resId="122" weather="1">
+    <fightMap>100002</fightMap>
+    <initialPoint>450,150</initialPoint>
+    <music category="2">
+        <bgm>BGM_120</bgm>
+        <fx>FX_110</fx>
+    </music>
+    <entities>
+
+
+        <npc id="5001907" resId="5001907" name="" size="100,100" pos="266,257">
+            <dialog>
+                <branch id="mission_6_goon_1" name="某某某神兽" icon="5001907" size="136,125" pos="0,35">
+                    <content><![CDATA[想围观我?来啊!]]></content>
+                    <replyHandler>
+                        <reply type="click">
+                            <description><![CDATA[（前往异蘑小径）]]></description>
+                            <action>teleport</action>
+                            <param>50022</param>
+                        </reply>
+                        <reply type="branch">
+                            <action>setMission</action>
+                            <param>6</param>
+                            <param>checkpoint</param>
+                            <param>goonsearch</param>
+                        </reply>
+                      
+                    </replyHandler>
+                </branch>
+            </dialog>
+            
+            <eventHandler>
+                <button type="click">
+                    <action>openDialog</action>
+                    <param>mission_6_goon_1</param>
+                    <condition>mission[6].checkpoint=goon</condition>
+                </button>
+                <button type="click">
+                    <action>openDialog</action>
+                    <param>default</param>
+                    <condition>mission[6].checkpointNOTgoon</condition>
+                </button>
+
+            </eventHandler>
+        </npc>
+
+        <npc id="7003" resId="7003" name="巴蒂" size="53,71" pos="366,184">
+        </npc>
+        <npc id="7002" resId="7002" name="多罗" size="53,71" pos="408,162">
+        </npc>
+
+        <teleport id="1" name="异蘑世界" pos="800,70" targetMapId="121"/>
+        <teleport id="2" name="异蘑小径" pos="160,360" targetMapId="123"/>
+    </entities>
+</map>

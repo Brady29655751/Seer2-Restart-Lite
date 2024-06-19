@@ -10,8 +10,8 @@ public class PetDemoModel : Module
 
     public Element element => currentPet.element;
     public Element subElement => currentPet.subElement;
-    public Feature feature => currentPet.info.feature.feature;
-    public Emblem emblem => currentPet.info.feature.emblem;
+    public Feature feature => currentPet.feature.feature;
+    public Emblem emblem => currentPet.feature.emblem;
     public int iv => currentPet.talent.iv;
     public IVRanking ivRank => currentPet.talent.IVRank;
 

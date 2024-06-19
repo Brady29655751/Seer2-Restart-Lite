@@ -724,9 +724,14 @@ public static class EffectAbilityHandler
             Skill[] normalSkills = null;
             Skill superSkill = null;
 
-            // If normal_skill/super_skill is shift[COUNT], shift current skill ids with COUNT.
+            // If normal_skill/super_skill is op, take op's skill.
+            // Else if they are shift[COUNT], shift current skill ids with COUNT.
             // Else take it as an int list and get skill ids.
-            if (normalSkillExpr.TryTrimStart("shift", out var normalTrim) &&
+            if (normalSkillExpr == "op") {
+                var opSkillController = rhsUnit.pet.skillController;
+                normalSkills = (List.IsNullOrEmpty(opSkillController.normalSkills) ? opSkillController.loopSkills : opSkillController.normalSkills).Take(4).ToArray();
+                Array.Resize(ref normalSkills, 4);
+            } else if (normalSkillExpr.TryTrimStart("shift", out var normalTrim) &&
                 normalTrim.TryTrimParentheses(out var normalShift) &&
                 int.TryParse(normalShift, out var normalShiftCount)) {
                 normalSkills = battlePet.normalSkill.Where(x => x != null).Select(x => Skill.GetSkill(x.id + normalShiftCount, false)).ToArray();
@@ -734,7 +739,9 @@ public static class EffectAbilityHandler
                 normalSkills = normalSkillExpr.ToIntList('/').Take(4).Select(id => Skill.GetSkill(id, false)).ToArray();
             }
 
-            if (superSkillExpr.TryTrimStart("shift", out var superTrim) &&
+            if (superSkillExpr == "op") {
+                superSkill = rhsUnit.pet.skillController.superSkill;
+            } else if (superSkillExpr.TryTrimStart("shift", out var superTrim) &&
                 superTrim.TryTrimParentheses(out var superShift) &&
                 int.TryParse(superShift, out var superShiftCount)) {
                 superSkill = (battlePet.superSkill == null) ? null : (Skill.GetSkill(battlePet.superSkill.id + superShiftCount, false));
@@ -753,8 +760,8 @@ public static class EffectAbilityHandler
 
             // Add feature and emblem buffs
             List<Buff> buffs = new List<Buff>();
-            buffs.Add(Buff.GetFeatureBuff(lhsUnit.pet.info));
-            buffs.Add(Buff.GetEmblemBuff(lhsUnit.pet.info));
+            buffs.Add(Buff.GetFeatureBuff(lhsUnit.pet));
+            buffs.Add(Buff.GetEmblemBuff(lhsUnit.pet));
             buffs.AddRange(lhsUnit.pet.initBuffs);
 
             lhsUnit.pet.buffController.AddRangeBuff(buffs, lhsUnit, state);

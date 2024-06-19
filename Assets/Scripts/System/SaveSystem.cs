@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Xml.Serialization;
 using UnityEngine;
+using UnityEngine.UI;
 using SimpleFileBrowser;
 
 public static class SaveSystem
@@ -343,11 +344,6 @@ public static class SaveSystem
                     continue;
 
                 FileBrowserHelpers.AppendTextToFile(basicPath, entry.Value.basic.GetRawInfoStringArray().ConcatToString(",") + "\n");
-
-                // Only write feature when this is a base pet.
-                if (entry.Key == entry.Value.baseId)
-                    FileBrowserHelpers.AppendTextToFile(featurePath, entry.Value.feature.GetRawInfoStringArray().ConcatToString(",") + "\n");
-
                 FileBrowserHelpers.AppendTextToFile(expPath, entry.Value.exp.GetRawInfoStringArray().ConcatToString(",") + "\n");
                 FileBrowserHelpers.AppendTextToFile(skillPath, entry.Value.skills.GetRawInfoStringArray().ConcatToString(",") + "\n");
 
@@ -355,6 +351,13 @@ public static class SaveSystem
                 var uiRawString = entry.Value.ui.GetRawInfoStringArray();
                 if (uiRawString != null)
                     FileBrowserHelpers.AppendTextToFile(uiPath, uiRawString.ConcatToString(",") + "\n");
+            }
+
+            foreach (var entry in Database.instance.featureInfoDict) {
+                if ((!PetInfo.IsMod(entry.Key)) || (entry.Value == null))
+                    continue;
+
+                FileBrowserHelpers.AppendTextToFile(featurePath, entry.Value.GetRawInfoStringArray().ConcatToString(",") + "\n");
             }
 
             // Write image bytes.
@@ -391,8 +394,9 @@ public static class SaveSystem
         return true;
     }
 
-    public static bool TryLoadPetMod(out Dictionary<int, PetInfo> petDict) {
+    public static bool TryLoadPetMod(out Dictionary<int, PetInfo> petDict, out Dictionary<int, PetFeatureInfo> featureDict) {
         petDict = new Dictionary<int, PetInfo>();
+        featureDict = new Dictionary<int, PetFeatureInfo>();
 
         try {
             // Init path.
@@ -430,7 +434,9 @@ public static class SaveSystem
                 var ui = uiInfo.Get(basic.id, new PetUIInfo(basic.id, basic.baseId));
                 PetInfo info = new PetInfo(basic, featureInfo.Get(ui.defaultFeatureId), expInfo.Get(basic.id), new PetTalentInfo(), skillInfo.Get(basic.id), ui);
                 petDict.Set(info.id, info);
-            }            
+            }
+
+            featureDict = featureInfo;            
 
         } catch (Exception) {
             return false;
@@ -544,6 +550,36 @@ public static class SaveSystem
                 return false;
 
             panelData = ResourceManager.GetXML<PanelData>(FileBrowserHelpers.ReadTextFromFile(panelPath));
+        } catch (Exception) {
+            return false;
+        }
+
+        return true;
+    }
+
+    public static bool TryLoadElementMod() {
+        var elementPath = Application.persistentDataPath + "/Mod/Elements/";
+        var spritePath = ResourceManager.instance.spritePath + "Elements/";
+
+        try {
+            string infoPath = elementPath + "info.csv";
+            
+            if (!FileBrowserHelpers.FileExists(infoPath))
+                return false;
+
+            var data = ResourceManager.GetCSV(FileBrowserHelpers.ReadTextFromFile(infoPath));
+
+            ResourceManager.instance.GetElementInfo(data);
+
+            for (int i = 0; i < PetElementSystem.elementNum; i++) {
+                if (!SaveSystem.TryLoadAllBytes(elementPath + i + ".png", out var bytes))
+                    continue;
+
+                if (!SpriteSet.TryCreateSpriteFromBytes(bytes, out var sprite))
+                    continue;
+
+                ResourceManager.instance.Set<Sprite>(spritePath + i, sprite);
+            }
         } catch (Exception) {
             return false;
         }
