@@ -117,8 +117,9 @@ public class BattlePet : Pet
         battleStatus.spd = (battleStatus.atk + battleStatus.mat) / 2;
         battleStatus.hp = (battleStatus.def + battleStatus.mdf) / 2;
 
+        Status ignorePowerupStatus = rhs.statusController.GetCurrentStatus(true);
         Status initStatus = new Status(lhs.battleStatus.atk, lhs.battleStatus.mat,
-            rhs.initStatus.def, rhs.initStatus.mdf, 0, 0);
+            ignorePowerupStatus.def, ignorePowerupStatus.mdf, 0, 0);
         initStatus.spd = (initStatus.atk + initStatus.mat) / 2;
         initStatus.hp = (initStatus.def + initStatus.mdf) / 2;
 

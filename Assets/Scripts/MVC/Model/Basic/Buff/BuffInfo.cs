@@ -114,12 +114,15 @@ public class BuffInfo
         int _type = id / 10_0000;
         int _pet = id % 10_0000;
 
+        var sprite = ResourceManager.instance.GetLocalAddressables<Sprite>("Buffs/" + resId, IsMod(resId));
+        
         if (type == BuffType.Feature)
-            return   PetUISystem.GetPetIcon(_pet * (_type < 5 ? 1 : -1));
-        if (type == BuffType.Emblem)
-            return   PetUISystem.GetEmblemIcon(_pet * (_type < 5 ? 1 : -1));
+            return sprite ?? PetUISystem.GetPetIcon(_pet * (_type < 5 ? 1 : -1));
 
-        return ResourceManager.instance.GetLocalAddressables<Sprite>("Buffs/" + resId, IsMod(resId));
+        if (type == BuffType.Emblem)
+            return sprite ?? PetUISystem.GetEmblemIcon(_pet * (_type < 5 ? 1 : -1));
+
+        return sprite;
     }
 
 }

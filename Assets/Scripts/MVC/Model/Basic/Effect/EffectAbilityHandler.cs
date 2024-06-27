@@ -729,7 +729,9 @@ public static class EffectAbilityHandler
             // Else take it as an int list and get skill ids.
             if (normalSkillExpr == "op") {
                 var opSkillController = rhsUnit.pet.skillController;
-                normalSkills = (List.IsNullOrEmpty(opSkillController.normalSkills) ? opSkillController.loopSkills : opSkillController.normalSkills).Take(4).ToArray();
+                normalSkills = (List.IsNullOrEmpty(opSkillController.normalSkills) ? opSkillController.loopSkills : opSkillController.normalSkills)
+                    .GroupBy(x => x?.id ?? 0).Select(x => x.First()).Take(4).ToArray();
+
                 Array.Resize(ref normalSkills, 4);
             } else if (normalSkillExpr.TryTrimStart("shift", out var normalTrim) &&
                 normalTrim.TryTrimParentheses(out var normalShift) &&

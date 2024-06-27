@@ -291,6 +291,10 @@ public class Skill
     }
 
     public float GetSkillIdentifier(string id) {
+        if (id.TryTrimStart("option", out var trimId))
+            return Identifier.GetNumIdentifier(options.Get(trimId.TrimParentheses(), "0"));
+        
+
         return id switch {
             "id" => this.id,
             "element" => elementId,
@@ -314,6 +318,11 @@ public class Skill
     }
 
     public void SetSkillIdentifier(string id, float value) {
+        if (id.TryTrimStart("option", out var trimId) && trimId.TryTrimParentheses(out var optionKey)) {
+            options.Set(optionKey, value.ToString());
+            return;
+        }
+
         switch (id) {
             default:
                 return;

@@ -95,10 +95,12 @@ public class WorkshopPetSkinModel : Module
             return false;
         }
 
+        /* Since can create pet with no emblem, no need to check
         if ((id == baseId) && (bytesDict.Get("emblem", null) == null)) {
             error = "请上传纹章图片！";
             return false;
         }
+        */
 
         return true;
     }
@@ -119,8 +121,8 @@ public class WorkshopPetSkinModel : Module
             return false;
         }
 
-        if (!int.TryParse(dict.Get("default_feature", "0"), out var defaultFeatureId)) {
-            error = "【其他】自定义选项的【默认特性】序号需为整数";
+        if (dict.Get("default_feature", "0").ToIntList('/') == null) {
+            error = "【其他】自定义选项的【默认特性】序号需为整数序列";
             return false;
         }
 

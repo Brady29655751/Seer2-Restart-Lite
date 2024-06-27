@@ -64,15 +64,19 @@ public class WorkshopPetModel : SelectModel<GameObject>
         var originalPetInfo = Pet.GetPetInfo(petInfo.id);
         var originalFeatureInfo = PetFeature.GetFeatureInfo(petInfo.id);
 
-        Database.instance.petInfoDict.Set(petInfo.id, petInfo);
         Database.instance.featureInfoDict.Set(petInfo.id, petInfo.feature);
+
+        var petFeatureInfo = PetFeature.GetFeatureInfo(petInfo.ui.defaultFeatureId);
+        var newPetInfo = new PetInfo(petInfo.basic, petFeatureInfo, petInfo.exp, petInfo.talent, petInfo.skills, petInfo.ui);
+
+        Database.instance.petInfoDict.Set(petInfo.id, newPetInfo);
 
         if (SaveSystem.TrySavePetMod(petInfo, petSkinModel.bytesDict, petSkinModel.spriteDict))
             return true;
 
         // rollback
-        Database.instance.petInfoDict.Set(petInfo.id, originalPetInfo);
         Database.instance.featureInfoDict.Set(petInfo.id, originalFeatureInfo);
+        Database.instance.petInfoDict.Set(petInfo.id, originalPetInfo);
         return false;
     }
 

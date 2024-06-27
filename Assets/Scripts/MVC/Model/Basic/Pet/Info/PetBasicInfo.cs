@@ -42,7 +42,7 @@ public class PetBasicInfo
         baseWeight = _slicedData[6].ToIntList('/')[1];
         description = _slicedData[7];
         habitat = _slicedData[8];
-        linkId = _slicedData[9];
+        linkId = _slicedData[9].TrimEnd();
     }
 
     public PetBasicInfo(int id, int baseId, string name, Element element, Element subElement, Status baseStatus,

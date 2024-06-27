@@ -97,16 +97,16 @@ public class Status
     }
 
     public virtual float Get(string type) {
-        int idx = typeNames.IndexOf(type);
-        return (idx == -1) ? 0 : status[typeNames.IndexOf(type)];
+        int idx = typeNames.IndexOf(type.ToLower());
+        return (idx == -1) ? 0 : status[idx];
     }
 
     public virtual void Set(string type, float value) {
-        int idx = typeNames.IndexOf(type);
+        int idx = typeNames.IndexOf(type.ToLower());
         if (idx == -1)
             return;
 
-        status[typeNames.IndexOf(type)] = value;
+        status[idx] = value;
     }
 
     public Status Select(Func<float, float> selector) {
@@ -278,7 +278,7 @@ public class BattleStatus : Status {
     }
 
     public override float Get(string type) {
-        int idx = battleTypeNames.IndexOf(type);
+        int idx = battleTypeNames.IndexOf(type.ToLower());
         if (idx == -1)
             return 0;
 
@@ -286,7 +286,7 @@ public class BattleStatus : Status {
     }
 
     public override void Set(string type, float value) {
-        int idx = battleTypeNames.IndexOf(type);
+        int idx = battleTypeNames.IndexOf(type.ToLower());
         if (idx == -1)
             return;
 

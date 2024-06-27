@@ -73,7 +73,7 @@ public class Pet
         return petInfoDict.Select(entry => entry.Value).ToList().Random();
     }
 
-    public static Pet GetExamplePet(int id) {
+    public static Pet GetExamplePet(int id, int level = 100) {
         PetInfo info = GetPetInfo(id);
         if (info == null)
             return null;
@@ -84,8 +84,8 @@ public class Pet
         pet.basic.weight = info.basic.baseWeight + 5;
         pet.basic.ToBestPersonality();
 
-        pet.exp.level = 100;
-        pet.exp.totalExp = pet.maxExp;
+        pet.exp.level = level;
+        pet.exp.totalExp = PetExpSystem.GetTotalExp(level, pet.exp.expType);
 
         pet.feature.hasEmblem = true;
 

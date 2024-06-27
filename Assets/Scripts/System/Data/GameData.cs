@@ -48,6 +48,7 @@ public class GameData
     public List<Activity> activityStorage = new List<Activity>();
 
     public SettingsData settingsData;
+    public YiTeRogueData yiteRogueData;
 
     public GameData() {
         InitGameData();
@@ -69,6 +70,7 @@ public class GameData
         activityStorage = new List<Activity>();
 
         settingsData = new SettingsData();
+        yiteRogueData = new YiTeRogueData();
     }
 
     public static GameData GetDefaultData(int initCoin, int initDiamond) {

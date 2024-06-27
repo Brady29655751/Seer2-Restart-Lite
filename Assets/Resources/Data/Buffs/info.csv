@@ -183,6 +183,10 @@ id,name,type,copyType,turn,options,description
 3090,影子模仿,mark,block,-1,none,战斗开始时变身为对方的样子
 3091,空气储量,mark,replace,-1,auto_remove=true,剩余空气储量
 3092,羽突式,mark,stack,-1,max_val=3,使物攻增加35点，最高叠加3层[ENDL]当前为[value]层
+3093,棒骨,mark,replace,-1,none,反弹10%受到的伤害，最高不超过自身最大体力的10%[ENDL]回合结束时有30%概率变成巫骨
+3094,巫骨,turn,replace,2,none,自身攻击技能威力减半且回合结束时恢复受到伤害2倍的体力
+3095,骨甲,mark,stack,-1,max_val=3,使物防增加35点，最高叠加3层[ENDL]当前为[value]层
+3096,肉钩,mark,stack,-1,keep=false&hide=true&max_val=3,肉钩连续命中[value]次
 3143,焦点腐蚀,mark,replace,-1,none,特定攻击技能造成伤害的1/4将恢复自身体力
 3279,蜂纹,mark,stack,-1,auto_remove=true&max_val=3,每一层使中毒造成的伤害增加30，最多叠加3层。[ENDL]当前为[value]层
 3280,青蜂之舞,turn,replace,3,res=18,闪避率增加50%
@@ -218,7 +222,9 @@ id,name,type,copyType,turn,options,description
 100301,森林,feature,replace,-1,none,自身具有森林祝福时受到的伤害减少10%
 100302,红球,feature,replace,-1,none,当仅有红色水球时，水系技能伤害增加20%
 100320,影魔,feature,replace,-1,none,回合结束时每1个影子都能为自身恢复10点体力
+100323,暴食,feature,replace,-1,none,攻击造成的伤害若低于100则恢复自身1/12体力
 100388,指引,feature,replace,-1,none,以星的指引伤害增加10%
+100436,甲骨,feature,replace,-1,none,出场时获得不屈状态
 100961,首星,feature,replace,-1,none,星移环境下命中率增加50%
 100962,躯星,feature,replace,-1,none,星移环境下受到的伤害减少10%
 100963,臂星,feature,replace,-1,none,星移环境下攻击前有15%几率使对手冻伤3回合
@@ -260,7 +266,9 @@ id,name,type,copyType,turn,options,description
 200301,祝福,emblem,replace,-1,none,使森林祝福提升的体力回复率提高5%
 200302,蓝球,emblem,replace,-1,none,每消耗1个蓝色水球时增加自身10点怒气
 200320,影子,emblem,replace,-1,none,出场时获得1个影子
+200323,贪食,emblem,replace,-1,none,食类技能命中后能解除自身不良
 200388,星的,emblem,repalce,-1,none,出场时自带星的指引
+200436,棒骨,emblem,replace,-1,none,棒骨的反弹效果和反弹上限增加10%
 200961,首魅,emblem,replace,-1,none,使幻魅之眼的魅惑效果延长1回合
 200962,躯徽,emblem,replace,-1,none,使星尘幻盾回复自身120点体力
 200963,臂骈,emblem,replace,-1,none,使星刃解封提升自身速度1级
@@ -295,6 +303,14 @@ id,name,type,copyType,turn,options,description
 400001,三倍加速器,item,replace,-1,none,战斗胜利时使精灵获得三倍经验
 400002,三倍学习机,item,replace,-1,none,战斗胜利时使精灵获得三倍学习力
 600008,影触,mark,replace,-1,none,每回合随机弱化双方1项能力1级
+-11,商店,mark,blcok,-1,none,可以购买各式道具和加成
+-12,Boss,mark,block,-1,none,本层最终Boss
+-13,起始点,mark,block,-1,none,选择你的伊特吧！
+-14,回复,mark,block,-1,none,使背包中的精灵全部回满体力
+-15,战斗（简单）,mark,block,-1,none,简单难度的战斗
+-16,战斗（困难）,mark,block,-1,none,困难难度的战斗
+-17,奖励,mark,block,-1,none,意外之喜！
+-18,随机事件,mark,block,-1,none,根据你的选择决定命运
 -3001,超重,mark,replace,-1,res=3041,增重80000kg
 -3002,巨石托尔,mark,replace,-1,hide=true,没有增重状态时使用体重暴涨
 -3003,星之首影,mark,replace,-1,hide=true,对手免疫异常时使用星徽之怒
@@ -307,3 +323,4 @@ id,name,type,copyType,turn,options,description
 -3010,凯萨之力,mark,replace,-1,none,特攻伤害100倍，必杀技伤害10倍
 -3011,影灵之力,mark,replace,-1,hide=true,上场时使场地变为影触
 -3012,对手连击降低,mark,replace,-1,hide=true,对手所有技能连击数降低
+-3013,布里米亚,mark,replace,-1,res=3017,受到致死攻击时，保留1/12体力

@@ -40,6 +40,8 @@ public class PetBagPanel : Panel
                 break;
             case PetBagMode.PVP:
                 break;
+            case PetBagMode.YiTeRogue:
+                break;
             default:
                 break;
         }
@@ -120,4 +122,5 @@ public class PetBagPanel : Panel
 public enum PetBagMode {
     Normal = 0,
     PVP = 1,
+    YiTeRogue = 2,
 }
