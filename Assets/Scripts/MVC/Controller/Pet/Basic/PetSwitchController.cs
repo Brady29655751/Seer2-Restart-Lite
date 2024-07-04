@@ -16,7 +16,7 @@ public class PetSwitchController : Module
         base.Init();
         selectController.onSelectPetEvent += switchModel.SetPet;
         selectController.onSelectPetEvent += switchView.SetPet;
-        SetStorage(GameManager.versionData.petData.petDictionary);
+        SetStorage(GameManager.versionData.petData.petAllWithMod);
     }
 
     public void SetStorage(List<Pet> storage) {

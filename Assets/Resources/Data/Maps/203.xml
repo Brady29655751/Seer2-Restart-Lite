@@ -1,0 +1,47 @@
+<map name="幻彩珊瑚" category="3" id="203" switch="1">
+    <fightMap>100003</fightMap>
+    <initialPoint>520,160</initialPoint>
+    <music category="3">
+    	<bgm>BGM_200</bgm>
+    	<fx>FX_120</fx>
+    </music>
+	<entities>
+		<npc id="20301" resId="Pets/pet/72.png" name="Lv27 乌达" size="46,58" pos="400,310" namePos="0,0">
+			<battle>
+				<branch id="default">
+					<settings count="6" capture="true"/>
+					<enemy>
+						<pet id="72" level="27">
+							<loopSkill>10735,10736,10737</loopSkill>
+						</pet>
+					</enemy>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>battle</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<npc id="20302" resId="Pets/pet/72.png" name="Lv28 乌达" size="46,58" pos="520,250" namePos="0,0">
+			<battle>
+				<branch id="default">
+					<settings count="6" capture="true"/>
+					<enemy>
+						<pet id="72" level="28">
+							<loopSkill>10735,10736,10737</loopSkill>
+						</pet>
+					</enemy>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>battle</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<teleport id="1" name="珊瑚路" pos="305,400" targetMapId="202"/>
+	</entities>
+</map>

@@ -21,6 +21,7 @@ public class BuffInfo
     public bool inherit { get; private set; }   // 換場繼承
     public bool hide { get; private set; }  // 不予顯示
     public bool autoRemove { get; private set; }    // value為0以下時自動移除
+    public bool movable { get; private set; }    // 可否行動 (異常類判斷)
     public string description { get; private set; }
     public Dictionary<string, string> options { get; private set; } = new Dictionary<string, string>();
     
@@ -68,6 +69,7 @@ public class BuffInfo
         autoRemove = bool.Parse(options.Get("auto_remove", "false"));
         minValue = int.Parse(options.Get("min_val", int.MinValue.ToString()));
         maxValue = int.Parse(options.Get("max_val", int.MaxValue.ToString()));
+        movable = (type != BuffType.Abnormal) || (bool.Parse(options.Get("movable", "false")));
     }
 
     private bool GetKeepInfo() {

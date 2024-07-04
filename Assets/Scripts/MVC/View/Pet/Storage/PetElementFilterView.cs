@@ -12,7 +12,7 @@ public class PetElementFilterView : Module
     public override void Init() {
         for (int i = 0; i < elementButtonList.Count; i++) {
             elementButtonList[i].gameObject.SetActive(i < PetElementSystem.elementNum);
-            if ((!PetElementSystem.IsMod()) || (i >= PetElementSystem.elementNum))
+            if (i >= PetElementSystem.elementNum)
                 continue;
 
             elementButtonList[i].SetElement((Element)i);

@@ -1,0 +1,44 @@
+<map name="幻彩珊瑚梦境" category="3" id="-209" resId="-203" dream="true">
+    <fightMap>100003</fightMap>
+    <initialPoint>520,160</initialPoint>
+    <music category="3">
+    	<bgm>BGM_200</bgm>
+    	<fx>FX_120</fx>
+    </music>
+	<entities>
+		<npc id="-20901" resId="Pets/pet/242.png" name="Lv 30 梦米拉" size="100,70" pos="460,280" namePos="0,0">
+			<battle>
+				<branch id="default">
+					<settings count="6" capture="true" />
+					<enemy>
+						<pet id="242" level="30">
+							<initBuff>-2</initBuff>
+							<headerSkill>10726</headerSkill>
+							<loopSkill>10723,10724</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setNpcParam</action>
+							<param>-20901</param>
+							<param>active=false</param>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>dream</param>
+							<param>done[-209]=true</param>
+							<condition>activity[dream].done[-209]=[bool]false[default]false</condition>
+						</button>
+					</winHandler>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>battle</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<teleport id="1" name="幻彩珊瑚" pos="305,400" targetMapId="-203"/>
+	</entities>
+</map>

@@ -60,7 +60,7 @@
 						<button type="auto">
 							<action>getPet</action>
 							<param>235,10,0</param>
-							<condition>activity[20006].done[7][default]=[bool]false[default]false</condition>
+							<condition>activity[20006].done[7]=[bool]false[default]false</condition>
 						</button>
 						<button type="auto">
 							<action>openHintbox</action>
@@ -69,13 +69,13 @@
 							<param>content=【萨兰】已经放入精灵仓库</param>
 							<param>item_icon=pet[235]</param>
 							<param>option_num=1</param>
-							<condition>activity[20006].done[7][default]=[bool]false[default]false</condition>
+							<condition>activity[20006].done[7]=[bool]false[default]false</condition>
 						</button>
 						<button type="auto">
 							<action>setActivity</action>
 							<param>20006</param>
 							<param>done[7]=true</param>
-							<condition>activity[20006].done[7][default]=[bool]false[default]false</condition>
+							<condition>activity[20006].done[7]=[bool]false[default]false</condition>
 						</button>
 					</winHandler>
 				</branch>

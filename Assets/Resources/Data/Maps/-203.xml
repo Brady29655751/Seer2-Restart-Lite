@@ -1,0 +1,69 @@
+<map name="幻彩珊瑚" category="3" id="-203" switch="-1">
+    <fightMap>100003</fightMap>
+    <initialPoint>520,160</initialPoint>
+    <music category="3">
+    	<bgm>BGM_200</bgm>
+    	<fx>FX_120</fx>
+    </music>
+	<entities>
+		<npc id="-20301" resId="Pets/pet/72.png" name="乌达梦境" size="46,58" pos="400,310" namePos="0,0">
+			<eventHandler>
+				<button type="click">
+					<action>teleport</action>
+					<param>-209</param>
+					<condition>activity[dream].done[-209]=[bool]false[default]false</condition>
+					<condition>firstPet.featureId=10</condition>
+				</button>
+				<button type="click">				
+					<action>openHintbox</action>
+					<param>type=Item</param>
+					<param>title=提示</param>
+					<param>content=乌达今天已经很累了，不要打扰她</param>
+					<param>item_icon=pet[72]</param>
+					<param>option_num=1</param>
+					<condition>activity[dream].done[-209]=[bool]true[default]false</condition>
+					<condition>firstPet.featureId=10</condition>
+				</button>
+				<button type="click">
+					<action>openHintbox</action>
+					<param>type=Item</param>
+					<param>title=提示</param>
+					<param>content=将入梦特性的精灵设为首发才能进入梦境哦！</param>
+					<param>item_icon=pet[10]</param>
+					<param>option_num=1</param>
+					<condition>firstPet.featureIdNOT10</condition>
+				</button>
+			</eventHandler>
+		</npc>
+		<npc id="-20302" resId="Pets/pet/72.png" name="乌达梦境" size="46,58" pos="520,250" namePos="0,0">
+			<eventHandler>
+				<button type="click">
+					<action>teleport</action>
+					<param>-209</param>
+					<condition>activity[dream].done[-209]=[bool]false[default]false</condition>
+					<condition>firstPet.featureId=10</condition>
+				</button>
+				<button type="click">				
+					<action>openHintbox</action>
+					<param>type=Item</param>
+					<param>title=提示</param>
+					<param>content=乌达今天已经很累了，不要打扰她</param>
+					<param>item_icon=pet[72]</param>
+					<param>option_num=1</param>
+					<condition>activity[dream].done[-209]=[bool]true[default]false</condition>
+					<condition>firstPet.featureId=10</condition>
+				</button>
+				<button type="click">
+					<action>openHintbox</action>
+					<param>type=Item</param>
+					<param>title=提示</param>
+					<param>content=将入梦特性的精灵设为首发才能进入梦境哦！</param>
+					<param>item_icon=pet[10]</param>
+					<param>option_num=1</param>
+					<condition>firstPet.featureIdNOT10</condition>
+				</button>
+			</eventHandler>
+		</npc>
+		<teleport id="1" name="珊瑚路" pos="305,400" targetMapId="202"/>
+	</entities>
+</map>

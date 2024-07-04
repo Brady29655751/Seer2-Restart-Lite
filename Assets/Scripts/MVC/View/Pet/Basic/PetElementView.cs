@@ -13,9 +13,6 @@ public class PetElementView : Module
     [SerializeField] private List<PetElementButton> zeroArea;
 
     public override void Init() {
-        if (!PetElementSystem.IsMod())
-            return;
-
         for (int i = 0; i < selectArea.Count; i++) {
             selectArea[i].gameObject.SetActive(i < PetElementSystem.elementNum);
             if (i >= PetElementSystem.elementNum)

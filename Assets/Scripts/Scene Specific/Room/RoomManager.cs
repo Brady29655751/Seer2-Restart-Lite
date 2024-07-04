@@ -41,14 +41,14 @@ public class RoomManager : Manager<RoomManager>
         var room = PhotonNetwork.CurrentRoom.CustomProperties;
         var player = PhotonNetwork.LocalPlayer.CustomProperties;
         int seed = Random.Range(int.MinValue, int.MaxValue);
-        int petCount = (int)room["count"];
+        int petCount = (int)(room["count"]);
 
         if (PhotonNetwork.IsMasterClient) {
             room["seed"] = seed;
             PhotonNetwork.CurrentRoom?.SetCustomProperties(room);
         }
 
-        var myPets = Enumerable.Repeat(3, petCount).Select(x => Pet.GetExamplePet(x));
+        var myPets = Player.instance.petBag.Take(petCount).Select(x => (x == null) ? null : Pet.ToBestPet(new Pet(x)));
         petBagPanel.SetPetBag(myPets.ToArray());
         roomSettingsView.SetPet(myPets.ToList(), true);
     }

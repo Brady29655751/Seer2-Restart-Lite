@@ -74,10 +74,7 @@ public class Buff
         if (id == 104)
             return value < 40;
 
-        if (id.IsWithin(110, 116))
-            return false;
-
-        return IsAbnormal();
+        return !info.movable;
     }
 
     public static BuffInfo GetBuffInfo(int id) {

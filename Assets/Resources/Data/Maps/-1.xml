@@ -1,0 +1,193 @@
+<map name="观星台" category="1" id="-1" weather="12" resId="1">
+	<fightMap>100011</fightMap>
+	<initialPoint>800,130</initialPoint>
+	<music category="100">
+		<bgm>MU_083</bgm>
+	</music>
+	<entities>
+		<npc id="-101" resId="Pets/pet/970.png" name="Lv 105 观星者" size="316,303" pos="240,200" namePos="0,-30">
+			<description><![CDATA[观星者]]></description>
+			<dialog>
+				<branch id="default" name="观星者" icon="Pets/pet/970.png" size="158,152" pos="10,35">
+					<content><![CDATA[吾乃浩瀚星空之主宰！]]></content>
+					<functionHandler>
+						<func type="click">
+							<description><![CDATA[六位星影挑战]]></description>
+							<action>openDialog</action>
+							<param>shadow</param>
+						</func>
+						<func type="click">
+							<description><![CDATA[真身挑战]]></description>
+							<action>openDialog</action>
+							<param>star</param>
+						</func>
+					</functionHandler>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[好神秘阿]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+					</replyHandler>
+				</branch>
+				<branch id="shadow" name="观星者" icon="Pets/pet/970.png" size="158,152" pos="10,35">
+					<content><![CDATA[挑战六位星影可以获得奇异星尘来更换观星者的特性，你准备好了吗？]]></content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[让我准备一下]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+						<reply type="click">
+							<description><![CDATA[准备好了]]></description>
+							<action>battle</action>
+							<param>shadow</param>
+						</reply>
+					</replyHandler>
+				</branch>
+				<branch id="star" name="观星者" icon="Pets/pet/970.png" size="158,152" pos="10,35">
+					<content><![CDATA[挑战真身可以获得观星者，你准备好了吗？]]></content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[让我准备一下]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+						<reply type="click">
+							<description><![CDATA[准备好了]]></description>
+							<action>battle</action>
+							<param>default</param>
+						</reply>
+					</replyHandler>
+				</branch>
+			</dialog>
+			<battle>
+				<branch id="shadow">
+					<settings count="6">
+						<mode>4</mode>
+						<weather>12</weather>
+					</settings>
+					<enemy>
+						<pet id="961" level="105">
+							<status>
+								<atk>500</atk>
+								<mat>500</mat>
+								<hp>10000</hp>
+							</status>
+							<initBuff>12,13,14,17,20,23,99,-3003,-3004</initBuff>
+							<loopSkill>10312,10315,10315</loopSkill>
+						</pet>
+						<pet id="962" level="105">
+							<status>
+								<hp>15000</hp>
+							</status>
+							<initBuff>12,13,14,17,20,23,99,-3006</initBuff>
+							<headerSkill>10345</headerSkill>
+							<loopSkill>10347</loopSkill>
+						</pet>
+						<pet id="963" level="105">
+							<status>
+								<hp>20000</hp>
+							</status>
+							<initBuff>12,13,14,17,20,99</initBuff>
+							<headerSkill>10365</headerSkill>
+							<loopSkill>10366</loopSkill>
+						</pet>
+						<pet id="964" level="105">
+							<status>
+								<atk>600</atk>
+								<mat>600</mat>
+								<hp>25000</hp>
+							</status>
+							<initBuff>13,14,17,20,99</initBuff>
+							<loopSkill>10370,10372</loopSkill>
+						</pet>
+						<pet id="965" level="105">
+							<status>
+								<atk>500</atk>
+								<mat>500</mat>
+								<hp>30000</hp>
+							</status>
+							<initBuff>13,14,17,20,98,99</initBuff>
+							<loopSkill>10396,10397,10398</loopSkill>
+						</pet>
+						<pet id="966" level="105">
+							<status>
+								<hp>35000</hp>
+							</status>
+							<initBuff>13,14,17,20,25,26,98,99</initBuff>
+							<loopSkill>10433,10434,10434,10434,10434</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setItem</action>
+							<param>add</param>
+							<param>310970,1</param>
+							<condition>activity[star].done[shadow]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=1 个【奇異星尘】已经放入背包</param>
+							<param>item_icon=item[310970]</param>
+							<param>option_num=1</param>
+							<condition>activity[star].done[shadow]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>star</param>
+							<param>done[shadow]=true</param>
+							<condition>activity[star].done[shadow]=[bool]false[default]false</condition>
+						</button>
+					</winHandler>
+				</branch>
+				<branch id="default">
+					<settings count="6">
+						<mode>4</mode>
+						<weather>12</weather>
+					</settings>
+					<enemy>
+						<pet id="970" level="105">
+							<status>
+								<hp>135000</hp>
+							</status>
+							<initBuff>13,14,20,55,56,98,99,-3014,-3015</initBuff>
+							<loopSkill>10397,10398,10314,10397,10313,10348</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>getPet</action>
+							<param>970,105</param>
+							<condition>activity[star].done[default]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=【观星者】已经放入精灵仓库</param>
+							<param>item_icon=pet[970]</param>
+							<param>option_num=1</param>
+							<condition>activity[star].done[default]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>star</param>
+							<param>done[default]=true</param>
+							<condition>activity[star].done[default]=[bool]false[default]false</condition>
+						</button>
+					</winHandler>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>openDialog</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<teleport id="1" name="传送室" pos="720,60" targetMapId="70"/>
+	</entities>
+</map>

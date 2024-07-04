@@ -30,8 +30,8 @@ public class RoomSettingsView : Module
         roomNumText?.SetText(PhotonNetwork.CurrentRoom.Name);
         SetName(PhotonNetwork.LocalPlayer.NickName, true);
         SetName((otherPlayers.Length == 0) ? null : otherPlayers[0].NickName, false);
-        SetPet(Enumerable.Repeat(Pet.GetExamplePet(3), (int)hash["count"]).ToList(), true);
         SetBGM(ResourceManager.instance.GetLocalAddressables<AudioClip>("BGM/1/MU_011"));
+        // SetPet(Enumerable.Repeat(Pet.GetExamplePet(3), (int)hash["count"]).ToList(), true);
     }
 
     public void SetBGM(AudioClip bgm) {
