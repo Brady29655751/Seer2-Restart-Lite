@@ -37,17 +37,19 @@ public class ItemInfo
         type = _slicedData[2].ToItemType();
         SetCurrencyTypeAndPrice(_slicedData[3]);
         options.ParseOptions(_slicedData[4]);
-        itemDescription = (_slicedData[5] == "none") ? string.Empty : _slicedData[5].Replace("[ENDL]", "\n")
-            .Replace("[-]", "</color>").Replace("[", "<color=#").Replace("]", ">");
+        InitOptionProperty();
+        itemDescription = GetItemDescription((_slicedData[5] == "none") ? string.Empty : _slicedData[5]);
         effectDescription = _slicedData[6].Trim().Replace("[ENDL]", "\n");
-
-        resId = options.Get("resId", id.ToString());
-        getId = int.Parse(options.Get("getId", id.ToString()));
-        removable = bool.Parse(options.Get("removable", "true"));
     }
 
     public void SetEffects(List<Effect> _effects) {
         effects = _effects;
+    }
+
+    public void InitOptionProperty() {
+        resId = options.Get("resId", id.ToString());
+        getId = int.Parse(options.Get("getId", id.ToString()));
+        removable = bool.Parse(options.Get("removable", "true"));
     }
 
     public void SetCurrencyTypeAndPrice(string priceTag) {
@@ -64,6 +66,13 @@ public class ItemInfo
 
         currencyType = (currency == ("D")) ? Item.DIAMOND_ID : int.Parse(currency);
         price = int.Parse(value);
+    }
+
+    public string GetItemDescription(string itemDesc) {
+        if (!removable)
+            itemDesc = "[ffbb33]【无限再生】[-][ENDL]" + itemDesc;
+
+        return itemDesc.Replace("[ENDL]", "\n").Replace("[-]", "</color>").Replace("[", "<color=#").Replace("]", ">");
     }
 
     public static Sprite GetIcon(string resId) {

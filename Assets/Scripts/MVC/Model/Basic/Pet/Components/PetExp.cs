@@ -55,4 +55,13 @@ public class PetExp
         return (level >= evolveLevel) && (info.evolvePetId != 0) && (info.evolveLevel != 0);
     }
 
+    public void LevelDown(int toWhichLevel) {
+        if (!toWhichLevel.IsInRange(1, level))
+            return;
+
+        totalExp = PetExpSystem.GetTotalExp(toWhichLevel, expType);
+        level = toWhichLevel;
+        return;
+    }
+
 }

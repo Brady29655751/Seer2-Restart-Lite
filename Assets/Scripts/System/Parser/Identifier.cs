@@ -46,8 +46,26 @@ public static class Identifier {
     public static float GetGlobalIdentifier(string id, Unit lhsUnit, Unit rhsUnit) {
         string trimId = id;
             
-        if (id.TryTrimStart("state.", out trimId))
-            return Player.instance.currentBattle.GetBattleIdentifier(trimId);
+        if (id.TryTrimStart("state.", out trimId)) {
+            var battle = Player.instance.currentBattle;
+            var actionOrder = battle.currentState.actionOrder;
+
+            if (trimId.TryTrimStart("me.", out trimId)) {
+                return trimId switch {
+                    "order" => (List.IsNullOrEmpty(actionOrder)) ? 0 : (actionOrder.FirstOrDefault() == lhsUnit.id) ? 1 : 2,
+                    _ => GetUnitIdentifier(trimId, lhsUnit)
+                };
+            }
+
+            if (trimId.TryTrimStart("op.", out trimId)) {
+                return trimId switch {
+                    "order" => (List.IsNullOrEmpty(actionOrder)) ? 0 : (actionOrder.FirstOrDefault() == rhsUnit.id) ? 1 : 2,
+                    _ => GetUnitIdentifier(trimId, rhsUnit)
+                };
+            }
+
+            return battle.GetBattleIdentifier(trimId);
+        }
             
         if (id.TryTrimStart("me.", out trimId))
             return GetUnitIdentifier(trimId, lhsUnit);

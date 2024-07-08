@@ -1,0 +1,123 @@
+<map name="王者遗迹" category="1" id="2">
+	<fightMapColor>64,64,64,255</fightMapColor>
+	<initialPoint>400,80</initialPoint>
+	<music category="100">
+		<bgm>BGM_2</bgm>
+	</music>
+	<entities>
+		<npc id="201" resId="Pets/pet/990.png" name="【希望之光】约瑟" size="217,296" pos="355,150" namePos="30,-20">
+			<description><![CDATA[北半球的精灵王]]></description>
+			<dialog>
+				<branch id="default" name="【希望之光】约瑟" icon="Pets/pet/990.png" size="108,148" pos="10,35">
+					<content><![CDATA[虽然我只是一道希望之光，但五千年前的那场大战，至今记忆犹新]]></content>
+					<functionHandler>
+						<func type="click">
+							<description><![CDATA[精灵王之战（剧情）]]></description>
+							<action>battle</action>
+							<param>default</param>
+						</func>
+						<func type="click">
+							<description><![CDATA[自我挑战（测试）]]></description>
+							<action>battle</action>
+							<param>test</param>
+						</func>
+					</functionHandler>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[好强大阿]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+					</replyHandler>
+				</branch>
+				<branch id="miracle" name="【希望之光】约瑟" icon="Pets/pet/990.png" size="108,148" pos="10,35">
+					<content><![CDATA[当年的大战要是发生如此奇迹，阿卡迪亚如今会是怎样的面貌？]]></content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[历史没有如果]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+					</replyHandler>
+				</branch>
+				<branch id="king" name="【希望之光】约瑟" icon="Pets/pet/990.png" size="108,148" pos="10,35">
+					<content><![CDATA[历史的轨迹或许往往都是固定的]]></content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[我一定能缔造奇迹]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+					</replyHandler>
+				</branch>
+			</dialog>
+			<battle>
+				<branch id="default">
+					<settings count="6" simulate="true">
+						<mode>4</mode>
+					</settings>
+					<player>
+						<pet id="990" level="105">
+							<status>
+								<atk>10000</atk>
+								<mat>10000</mat>
+								<spd>600</spd>
+								<hp>135000</hp>
+							</status>
+							<normalSkill>-1003,-1004,-1005</normalSkill>
+							<superSkill>-1002</superSkill>
+						</pet>
+					</player>
+					<enemy>
+						<pet id="1990" level="105">
+							<status>
+								<atk>10000</atk>
+								<mat>10000</mat>
+								<spd>500</spd>
+								<hp>135000</hp>
+							</status>
+							<loopSkill>-1006,-1007,-1008,-1006,-1007,-1008,-1002</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>openDialog</action>
+							<param>miracle</param>
+						</button>
+					</winHandler>
+					<loseHandler>
+						<button type="auto">
+							<action>openDialog</action>
+							<param>king</param>
+						</button>
+					</loseHandler>
+				</branch>
+				<branch id="test">
+					<settings count="6">
+						<mode>4</mode>
+					</settings>
+					<enemy>
+						<pet id="990" level="105">
+							<status>
+								<atk>200</atk>
+								<mat>200</mat>
+								<def>400</def>
+								<mdf>400</mdf>
+								<spd>400</spd>
+								<hp>135000</hp>
+							</status>
+							<loopSkill>-1003</loopSkill>
+						</pet>
+					</enemy>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>openDialog</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<!-- <teleport id="1" name="传送室" pos="720,60" targetMapId="70"/> -->
+	</entities>
+</map>

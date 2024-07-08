@@ -1,0 +1,123 @@
+<map name="王者遗迹" category="1" id="-2" resId="2">
+	<fightMapColor>64,64,64,255</fightMapColor>
+	<initialPoint>400,80</initialPoint>
+	<music category="100">
+		<bgm>BGM_2</bgm>
+	</music>
+	<entities>
+		<npc id="-201" resId="Pets/pet/1990.png" name="【绝望之影】奎尔斯" size="312,221" pos="305,150" namePos="30,0">
+			<description><![CDATA[南半球的精灵王]]></description>
+			<dialog>
+				<branch id="default" name="【绝望之影】奎尔斯" icon="Pets/pet/1990.png" size="156,110" pos="10,35">
+					<content><![CDATA[（蓄势待发的表情）]]></content>
+					<functionHandler>
+						<func type="click">
+							<description><![CDATA[精灵王之战（剧情）]]></description>
+							<action>battle</action>
+							<param>default</param>
+						</func>
+						<func type="click">
+							<description><![CDATA[自我挑战（测试）]]></description>
+							<action>battle</action>
+							<param>test</param>
+						</func>
+					</functionHandler>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[好强大阿]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+					</replyHandler>
+				</branch>
+				<branch id="miracle" name="【绝望之影】奎尔斯" icon="Pets/pet/1990.png" size="156,110" pos="10,35">
+					<content><![CDATA[（认可你的表情）]]></content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[（（微笑））]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+					</replyHandler>
+				</branch>
+				<branch id="king" name="【绝望之影】奎尔斯" icon="Pets/pet/1990.png" size="156,110" pos="10,35">
+					<content><![CDATA[（失望的表情）]]></content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[（汗）]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+					</replyHandler>
+				</branch>
+			</dialog>
+			<battle>
+				<branch id="default">
+					<settings count="6" simulate="true">
+						<mode>4</mode>
+					</settings>
+					<player>
+						<pet id="1990" level="105">
+							<status>
+								<atk>10000</atk>
+								<mat>10000</mat>
+								<spd>600</spd>
+								<hp>135000</hp>
+							</status>
+							<normalSkill>-1006,-1007,-1008</normalSkill>
+							<superSkill>-1002</superSkill>
+						</pet>
+					</player>
+					<enemy>
+						<pet id="990" level="105">
+							<status>
+								<atk>10000</atk>
+								<mat>10000</mat>
+								<spd>500</spd>
+								<hp>135000</hp>
+							</status>
+							<loopSkill>-1005,-1004,-1003,-1005,-1004,-1003,-1002</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>openDialog</action>
+							<param>miracle</param>
+						</button>
+					</winHandler>
+					<loseHandler>
+						<button type="auto">
+							<action>openDialog</action>
+							<param>king</param>
+						</button>
+					</loseHandler>
+				</branch>
+				<branch id="test">
+					<settings count="6">
+						<mode>4</mode>
+					</settings>
+					<enemy>
+						<pet id="1990" level="105">
+							<status>
+								<atk>200</atk>
+								<mat>200</mat>
+								<def>400</def>
+								<mdf>400</mdf>
+								<spd>400</spd>
+								<hp>135000</hp>
+							</status>
+							<loopSkill>-1006</loopSkill>
+						</pet>
+					</enemy>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>openDialog</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<!-- <teleport id="1" name="传送室" pos="720,60" targetMapId="70"/> -->
+	</entities>
+</map>

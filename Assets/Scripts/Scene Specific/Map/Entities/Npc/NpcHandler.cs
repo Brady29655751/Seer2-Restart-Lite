@@ -50,7 +50,7 @@ public static class NpcHandler
     }
 
     public static Action GetNpcAction(NpcController npc, NpcButtonHandler handler, Dictionary<int, NpcController> npcList) {
-        NpcInfo npcInfo = npc.GetInfo();
+        NpcInfo npcInfo = npc?.GetInfo();
         return handler.action switch {
             NpcAction.SetNpcParam   => () => NpcActionHandler.SetNpcParam(npc, handler, npcList),
             NpcAction.OpenHintbox   => () => NpcActionHandler.OpenHintbox(handler),
@@ -71,7 +71,7 @@ public static class NpcHandler
     }
     
     public static Action GetNpcEntity(NpcController npc, NpcButtonHandler handler, Dictionary<int, NpcController> npcList) {
-        NpcInfo npcInfo = npc.GetInfo();
+        NpcInfo npcInfo = npc?.GetInfo();
         Func<bool> condition = GetNpcCondition(npc, handler, npcList);
         Action action = GetNpcAction(npc, handler, npcList); 
         return () => {  

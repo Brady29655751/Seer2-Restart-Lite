@@ -32,4 +32,7 @@ public class SettingsPanel : Panel
         Panel.OpenPanel<WorkshopPanel>();
     }
     
+    public void QuitGame() {
+        Application.Quit();
+    }
 }

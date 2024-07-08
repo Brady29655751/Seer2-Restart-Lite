@@ -29,6 +29,7 @@ id,timing,priority,target,condition,cond_option,effect,effect_option
 10203,resident,-1,pet,pet,type=level&level_op=<&level_cmp=100,set_pet,type=exp&op=+&value=5000
 10204,resident,-1,pet,pet,type=level&level_op=<&level_cmp=100,set_pet,type=exp&op=+&value=15000
 10205,resident,-1,pet,pet,type=level&level_op=<&level_cmp=100,set_pet,type=exp&op=+&value=50000
+10211,resident,-1,pet,pet,type=level&level_op=>&level_cmp=1,set_pet,max_use=1&type=level&op=SET&value=1
 10221,resident,-1,pet,none,none,set_pet,type=iv&op=SET&value=random[0~31]
 10222,resident,-1,pet,none,none,set_pet,type=iv&op=SET&value=random[11~31]
 10223,resident,-1,pet,none,none,set_pet,type=iv&op=SET&value=random[21~31]
@@ -44,6 +45,7 @@ id,timing,priority,target,condition,cond_option,effect,effect_option
 10237,resident,-1,pet,none,none,set_pet,type=evReset&op=SET&value=0
 10238,resident,-1,pet,none,none,set_pet,type=personality&op=SET&value=random[0~24]
 10239,resident,-1,pet,none,none,set_pet,type=personality&op=SET&value=-1
+20001,resident,-1,pet,pet,type=buff[400003]&buff[400003]_cmp=0,set_pet,type=buff&op=+&value=400003
 110050,resident,-1,pet,pet,type=skill[10050]&skill[10050]_cmp=0,set_pet,type=skill&op=+&value=10050
 110454,resident,-1,pet,pet,type=baseId/skill[10454]&baseId_cmp=90&skill[10454]_cmp=0,set_pet,type=skill&op=+&value=10454
 110485,resident,-1,pet,pet,type=baseId/skill[10485]&baseId_cmp=234&skill[10485]_cmp=0,set_pet,type=skill&op=+&value=10485

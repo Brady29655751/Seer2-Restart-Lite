@@ -21,7 +21,11 @@ public class BattlePetSkillView : BattleBaseView
     }
 
     public void SetInteractable(bool interactable) {
-        int anger = (interactable && !pet.isDead) ? pet.anger : -1;
+        var anger = -1;
+
+        if (interactable && (!pet.isDead))
+            anger = (pet.buffController.GetBuff(61) != null) ? int.MaxValue : pet.anger;
+
         SetNormalSkillInteractable(anger);
         SetSuperSkillInteractable(anger);
         SetNoOpSkillInteractable((anger == -1) ? int.MaxValue : anger);

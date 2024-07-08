@@ -239,6 +239,13 @@ public class Pet
                 basic.personality = (Personality)num;
                 currentStatus = new Status(normalStatus){ hp = currentStatus.hp };
                 return;
+            case "level":
+                int toLevel = (int)num;
+                if (toLevel < level)
+                    LevelDown(toLevel);
+                else
+                    GainExp(exp.totalExp - PetExpSystem.GetTotalExp(Mathf.Min(toLevel, 100), exp.expType));
+                return;
             case "exp":
                 uint gainExp = (uint)num - totalExp;
                 GainExp(gainExp);
@@ -294,6 +301,15 @@ public class Pet
         }
         SaveSystem.SaveData();
         return this;
+    }
+
+    public void LevelDown(int toWhichLevel) {
+        if (level <= 1)
+            return;
+
+        exp.LevelDown(toWhichLevel);
+        currentStatus = normalStatus;
+        SaveSystem.SaveData();
     }
 
     public Pet Evolve() {

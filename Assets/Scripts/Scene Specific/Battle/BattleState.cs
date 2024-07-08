@@ -74,20 +74,6 @@ public class BattleState
         if (id.TryTrimStart("result.", out trimId))
             return result.GetResultIdentifier(trimId);
 
-        if (id.TryTrimStart("me.", out trimId)) {
-            return trimId switch {
-                "order" => (List.IsNullOrEmpty(actionOrder)) ? 0 : (actionOrder.FirstOrDefault() == myUnit.id) ? 1 : 2,
-                _ => Identifier.GetUnitIdentifier(trimId, myUnit)
-            };
-        }
-
-        if (id.TryTrimStart("op.", out trimId)) {
-            return trimId switch {
-                "order" => (List.IsNullOrEmpty(actionOrder)) ? 0 : (actionOrder.FirstOrDefault() == opUnit.id) ? 1 : 2,
-                _ => Identifier.GetUnitIdentifier(trimId, opUnit)
-            };
-        }
-
         return trimId switch {
             "turn" => turn,
             "phase" => (float)phase,

@@ -23,7 +23,7 @@ public class ItemShopPanel : Panel
         { ItemShopType.None, new List<int>() },
         { ItemShopType.PetPotion, new List<int>() { 
             10001, 10002, 10003, 10004, 10005, 10238, 10239,
-            10101, 10111, 
+            10101, 10111, 10211, 20001,
             10011, 10012, 10013, 10014, 10015, 10016, 110050
         } },
         { ItemShopType.Mine, new List<int>() { 

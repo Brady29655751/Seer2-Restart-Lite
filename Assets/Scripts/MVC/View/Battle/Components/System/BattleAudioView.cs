@@ -35,12 +35,13 @@ public class BattleAudioView : BattleBaseView
 
     private int GetBattleBGMId(BattleMode mode) {
         return mode switch {
+            BattleMode.Normal => 0,
             BattleMode.SPT => 1,
             BattleMode.SelfSimulation => 2,
             BattleMode.PVP => 2,
             BattleMode.Special => 3,
             BattleMode.Surprise => 4,
-            _ => 0,
+            _ => (int)mode,
         };
     }
 }

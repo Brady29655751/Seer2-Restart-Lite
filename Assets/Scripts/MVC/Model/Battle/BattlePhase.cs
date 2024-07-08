@@ -100,7 +100,7 @@ public class BattlePhase
             return false;
         }
 
-        if ((atkUnit.pet.isDead) || (!atkUnit.pet.isMovable) || (atkUnit.skill.anger > atkUnit.pet.anger)) {
+        if ((atkUnit.pet.isDead) || (!atkUnit.pet.isMovable) || ((atkUnit.skill.anger > atkUnit.pet.anger) && (atkUnit.pet.buffController.GetBuff(61) == null))) {
             atkUnit.SetSkill(Skill.GetNoOpSkill());
             atkUnit.isDone = true;
             SetUIState(null);

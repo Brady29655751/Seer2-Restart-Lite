@@ -106,8 +106,8 @@ public class BattlePet : Pet
         var normalSkill = (int[][])hash["skill"];
         var superSkill = (int[])hash["super"];
 
-        return Enumerable.Range(0, petCount).Select(i => BattlePet.GetBattlePet(
-            id[i], personality[i], ev[i], normalSkill[i], superSkill[i]
+        return Enumerable.Range(0, petCount).Select(i => (i >= id.Length) ? null :
+            BattlePet.GetBattlePet(id[i], personality[i], ev[i], normalSkill[i], superSkill[i]
         )).ToArray();
     }
 

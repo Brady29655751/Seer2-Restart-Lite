@@ -28,8 +28,8 @@ public class PlayerInfoView : Module
     }
 
     public void SetCurrencyType(int coinType, int diamondType) {
-        coinImage?.gameObject.SetActive(coinType > 0);
-        diamondImage?.gameObject.SetActive(diamondType > 0);
+        coinImage?.gameObject.SetActive(coinType != 0);
+        diamondImage?.gameObject.SetActive(diamondType != 0);
 
         coinImage?.SetSprite(Item.GetItemInfo(coinType)?.icon);
         diamondImage?.SetSprite(Item.GetItemInfo(diamondType)?.icon);

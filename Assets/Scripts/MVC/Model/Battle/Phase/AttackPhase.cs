@@ -34,6 +34,13 @@ public class AttackPhase : BattlePhase
         var lastState = new BattleState(battle.currentState);
         var atkUnit = state.atkUnit;
         var defUnit = state.defUnit;
+        var hpToAngerBuff = atkUnit.pet.buffController.GetBuff(61);
+        var angerDiff = atkUnit.skill.anger - atkUnit.pet.anger;
+
+        if ((hpToAngerBuff != null) && (angerDiff > 0)) {
+            atkUnit.pet.hp -= hpToAngerBuff.value * angerDiff;
+            atkUnit.pet.anger += angerDiff;
+        }
 
         atkUnit.pet.anger -= atkUnit.skill.anger;
         atkUnit.hudSystem.OnAttack(atkUnit, true);

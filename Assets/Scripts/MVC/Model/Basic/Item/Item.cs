@@ -192,6 +192,7 @@ public class Item
             ItemType.IV => 1,
             ItemType.Personality => 1,
             ItemType.Skill => 1,
+            ItemType.Buff => 1,
             ItemType.Capture => 1,
             ItemType.Stuff => this.StuffMaxUseCount(invokeUnit, state),
             _ => int.MaxValue

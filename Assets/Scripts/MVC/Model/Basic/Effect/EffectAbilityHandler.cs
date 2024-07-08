@@ -156,7 +156,7 @@ public static class EffectAbilityHandler
         for (int i = 0; i < targetList.Count; i++) {
             int healAdd = (int)(heal * ((heal > 0) ? (targetList[i].battleStatus.rec / 100f) : 1));
             if (set != "none") {
-                if ((setHp < 0) && (targetList[i].buffController.GetBuff(99) != null))
+                if ((setHp <= 0) && (targetList[i].buffController.GetBuff(99) != null))
                     continue;
 
                 targetList[i].hp = setHp;
@@ -164,7 +164,7 @@ public static class EffectAbilityHandler
             }
 
             if (max != "none") {
-                if ((maxHp < 0) && (targetList[i].buffController.GetBuff(99) != null))
+                if ((maxHp <= 0) && (targetList[i].buffController.GetBuff(99) != null))
                     continue;
 
                 targetList[i].maxHp = maxHp;
