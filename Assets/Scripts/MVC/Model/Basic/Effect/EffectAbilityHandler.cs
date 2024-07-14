@@ -375,7 +375,11 @@ public static class EffectAbilityHandler
         Unit lhsUnit = (who == "me") ? state.GetUnitById(invokeUnit.id) : state.GetRhsUnitById(invokeUnit.id);
         Unit rhsUnit = state.GetRhsUnitById(lhsUnit.id);
         
-        int buffId = (int)Parser.ParseEffectOperation(id, effect, lhsUnit, rhsUnit);
+        int buffId = id switch {
+            "random[unhealthy]" => Database.instance.buffInfoDict.Where(entry => entry.Value.type == BuffType.Unhealthy).Select(entry => entry.Key).ToList().Random(), 
+            "random[abnormal]"  => Database.instance.buffInfoDict.Where(entry => entry.Value.type == BuffType.Abnormal).Select(entry => entry.Key).ToList().Random(),
+            _ => (int)Parser.ParseEffectOperation(id, effect, lhsUnit, rhsUnit),
+        };
         if (string.IsNullOrEmpty(key) && (Buff.GetBuffInfo(buffId) == null))
             return false;
 
@@ -593,7 +597,7 @@ public static class EffectAbilityHandler
                 "-4" => Skill.GetEscapeSkill(),
                 "random" => Skill.GetRandomSkill(),
                 "random[available]" => lhsUnit.pet.skillController.GetAvailableSkills(lhsUnit.pet.anger).Random(),
-                _ => Skill.GetSkill(int.Parse(value)),
+                _ => Skill.GetSkill((int)Parser.ParseEffectOperation(value, effect, lhsUnit, rhsUnit)),
             });
 
             if (!isSetAnger)

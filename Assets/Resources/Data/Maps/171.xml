@@ -319,6 +319,73 @@
 				</button>
 			</eventHandler>
 		</npc>
+		<npc id="17104" resId="Pets/pet/982" name="Lv 105 脉灵兽" size="300,200" pos="310,300" namePos="60,-50" color="0,0,0,0">
+			<description><![CDATA[脉灵兽]]></description>
+			<dialog>
+				<branch id="default" name="脉灵兽" icon="Pets/pet/982" size="132,90" pos="0,55">
+					<content><![CDATA[我是精灵王之血脉，水脉氏族不朽的守护者]]></content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[脉灵兽居然被封印在此]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+						<reply type="click">
+							<description><![CDATA[挑战脉灵兽]]></description>
+							<action>battle</action>
+							<param>default</param>
+						</reply>
+					</replyHandler>
+				</branch>
+			</dialog>
+			<battle>
+				<branch id="default">
+					<settings count="6">
+						<weather>2</weather>
+					</settings>
+					<enemy>
+						<pet id="982" level="105">
+							<status>
+								<spd>1000</spd>
+								<hp>25000</hp>
+							</status>
+							<initBuff>12,14,17,20,-3016,-3017</initBuff>
+							<headerSkill>10750</headerSkill>
+							<loopSkill>10753,10754,10749,10761,10756</loopSkill>
+							<superSkill>10759</superSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>getPet</action>
+							<param>982,100</param>
+							<condition>activity[soul].done[north][2]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=【脉灵兽】已经放入精灵仓库</param>
+							<param>item_icon=pet[982]</param>
+							<param>option_num=1</param>
+							<condition>activity[soul].done[north][2]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>soul</param>
+							<param>done[north][2]=true</param>
+							<condition>activity[soul].done[north][2]=[bool]false[default]false</condition>
+						</button>
+					</winHandler>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>openDialog</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
 		<teleport id="1" name="深水之城" pos="320,70" targetMapId="170"/>
 	</entities>
 </map>

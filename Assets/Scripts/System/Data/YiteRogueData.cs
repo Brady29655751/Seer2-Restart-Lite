@@ -101,9 +101,17 @@ public class YiTeRogueEvent
         return nextEventList;
     }
 
-    public void Trigger() {
+    public void Trigger(Action<string, string, List<YiTeRogueChoice>> openChoicePanelCallback, Action closeChoicePanelCallback) {
+        var title = data.Find(x => x.key == "title").value;
+        var content = data.Find(x => x.key == "content").value;
 
+        // openChoicePanelCallback?.Invoke()
     }
+}
+
+public class YiTeRogueChoice 
+{
+
 }
 
 public enum YiTeRogueEventType {

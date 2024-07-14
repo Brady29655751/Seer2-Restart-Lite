@@ -31,19 +31,27 @@ public static class NpcHandler
         
         Func<bool> condition = () => true;
         for (int i = 0; i < handler.condition.Count; i++) {
-            int opIndex = -1;
-            string op = "=";
-            foreach (var key in Operator.condDict.Keys) {
-                opIndex = handler.condition[i].IndexOf(key);
-                if (opIndex != -1) {
-                    op = key;
-                    break;
+            var conditionOr = handler.condition[i].Split('|');
+
+            Func<bool> oldCondition = new Func<bool>(condition);
+            Func<bool> newCondition = () => false;
+
+            for (int j = 0;  j < conditionOr.Length; j++) {
+                Func<bool> orCondition = new Func<bool>(newCondition);
+                int opIndex = -1;
+                string op = "=";
+                foreach (var key in Operator.condDict.Keys) {
+                    opIndex = conditionOr[j].IndexOf(key);
+                    if (opIndex != -1) {
+                        op = key;
+                        break;
+                    }
                 }
+                string type = conditionOr[j].Substring(0, opIndex);
+                string value = conditionOr[j].Substring(opIndex + op.Length);
+
+                newCondition = () => orCondition.Invoke() || (NpcConditionHandler.GetNpcCondition(op, type, value).Invoke());
             }
-            string type = handler.condition[i].Substring(0, opIndex);
-            string value = handler.condition[i].Substring(opIndex + op.Length);
-            var newCondition = NpcConditionHandler.GetNpcCondition(op, type, value);
-            var oldCondition = new Func<bool>(condition);
             condition = () => oldCondition.Invoke() && newCondition.Invoke();
         }
         return condition;

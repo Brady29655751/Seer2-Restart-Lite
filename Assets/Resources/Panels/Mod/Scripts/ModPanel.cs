@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -34,6 +35,12 @@ public class ModPanel : Panel
             GameObject obj = Instantiate(prefab, rectTransform);
             NpcController npc = obj.GetComponent<NpcController>();
             NpcHandler.CreateNpc(npc, npcInfo, npcDict, infoPrompt);
+        }
+
+        foreach (var npcInfo in panelData.npcs) {
+            var autoActionList = npcInfo.eventHandler.Where(x => x.type == ButtonEventType.Auto)
+                .Select(x => NpcHandler.GetNpcEntity(npcDict.Get(npcInfo.id), x, npcDict)).ToList();
+            autoActionList.ForEach(x => x?.Invoke());
         }
 
         ESCButton.transform.SetParent(rectTransform);

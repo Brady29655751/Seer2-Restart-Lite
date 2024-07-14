@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 public class BattlePetAnimView : BattleBaseView
 {
-    [SerializeField] private IAnimator fieldAnim, captureAnim;
+    [SerializeField] private IAnimator skillAnim, captureAnim;
     [SerializeField] private Image battlePetImage;
 
     public bool isDone => isPetDone && isCaptureDone;
@@ -20,6 +20,8 @@ public class BattlePetAnimView : BattleBaseView
     {
         base.Init();
         captureAnim.anim.runtimeAnimatorController = (RuntimeAnimatorController)Player.GetSceneData("captureAnim");
+        skillAnim.onAnimHitEvent.SetListener(OnPetHit);
+        skillAnim.onAnimEndEvent.SetListener(OnPetEnd);
     }
 
     public void SetPet(BattlePet pet) {
@@ -28,13 +30,8 @@ public class BattlePetAnimView : BattleBaseView
         
         battlePetImage.SetSprite(pet.ui.battleImage);
         captureAnim.anim.SetFloat("speed", animSpeed);
-
-        var animController = ResourceManager.instance.GetLocalAddressables<RuntimeAnimatorController>("Pets/field/" + pet.basic.baseId + "/" + pet.basic.baseId);
-        fieldAnim.gameObject.SetActive(animController != null);
-    }
-
-    public void SetField(BattlePet pet) {
-        fieldAnim.anim.SetFloat("hpRatio", pet.hp * 1f / pet.maxHp);
+        skillAnim.anim.SetFloat("speed", animSpeed);
+        defalutSuperTrigger = defalutSecondSuperTrigger = ((pet.battleStatus.atk >= pet.battleStatus.mat) ? "physic" : "special");
     }
 
     public void SetPetAnim(Skill skill, PetAnimationType type) {
@@ -63,7 +60,8 @@ public class BattlePetAnimView : BattleBaseView
         }
 
         isPetDone = false;
-        StartCoroutine(PreventAnimStuckCoroutine(1));
+        skillAnim.anim.SetTrigger(trigger);
+        StartCoroutine(PreventAnimStuckCoroutine(5));
     }
 
     /*

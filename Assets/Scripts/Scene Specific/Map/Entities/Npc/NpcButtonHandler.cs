@@ -22,6 +22,7 @@ public class NpcButtonHandler
 public static class NpcActionDatabase {
 
     private static Dictionary<string, ButtonEventType> buttonEventTypeDict = new Dictionary<string, ButtonEventType>() {
+        { "auto", ButtonEventType.Auto },
         { "click", ButtonEventType.OnPointerClick },
         { "enter", ButtonEventType.OnPointerEnter },
         { "exit", ButtonEventType.OnPointerExit },
@@ -56,6 +57,7 @@ public static class NpcActionDatabase {
 
 public enum ButtonEventType {
     None,
+    Auto,
     OnPointerClick,
     OnPointerEnter,
     OnPointerExit,

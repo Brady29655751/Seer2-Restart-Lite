@@ -67,6 +67,12 @@ public class MapSceneView : UIModule
             NpcHandler.CreateNpc(npc, npcInfo, npcDict, infoPrompt);
         }
         Player.SetSceneData("mapNpcList", npcDict);
+
+        foreach (var npcInfo in infos) {
+            var autoActionList = npcInfo.eventHandler.Where(x => x.type == ButtonEventType.Auto)
+                .Select(x => NpcHandler.GetNpcEntity(npcDict.Get(npcInfo.id), x, npcDict)).ToList();
+            autoActionList.ForEach(x => x?.Invoke());
+        }
     }
 
     public void SetTeleport(List<TeleportInfo> infos) {

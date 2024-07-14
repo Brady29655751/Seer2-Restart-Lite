@@ -26,7 +26,7 @@ public class MapBlockView : Module
 
     public void OpenModMapPanel() {
         if (!SaveSystem.TryLoadPanelMod("WorldMap", out _)) {
-            Hintbox.OpenHintboxWithContent("加载 Mod 地图失败", 16);
+            Hintbox.OpenHintboxWithContent("加载Mod地图失败，可能为未加载Mod或该Mod未制作世界地图", 16);
             return;
         }
             

@@ -196,6 +196,7 @@ id,name,type,copyType,turn,options,description
 3101,水量饱和,mark,replace,-1,none,当前水量饱和
 3102,血衣,shield,max,-1,auto_remove=true,受到攻击时吸收伤害、扣除等量血衣值并回复所有体力[ENDL]血衣值归零时移除血衣状态并使体力转变为1点[ENDL]当前血衣值为[value]
 3103,潮汐领域,mark,replace,-1,inherit=true,攻击时若自身体力低于1/2会附带50点伤害
+3104,魔鬼契约,mark,replace,-1,none,特攻值增加75点
 3143,焦点腐蚀,mark,replace,-1,none,特定攻击技能造成伤害的1/4将恢复自身体力
 3279,蜂纹,mark,stack,-1,auto_remove=true&max_val=3,每一层使中毒造成的伤害增加30，最多叠加3层。[ENDL]当前为[value]层
 3280,青蜂之舞,turn,replace,3,res=18,闪避率增加50%
@@ -234,6 +235,7 @@ id,name,type,copyType,turn,options,description
 100302,红球,feature,replace,-1,none,当仅有红色水球时，水系技能伤害增加20%
 100320,影魔,feature,replace,-1,none,回合结束时每1个影子都能为自身恢复10点体力
 100323,暴食,feature,replace,-1,none,攻击造成的伤害若低于100则恢复自身1/12体力
+100326,虚无,feature,replace,-1,none,普通系技能对自身的命中率减少35%
 100388,指引,feature,replace,-1,none,以星的指引伤害增加10%
 100436,甲骨,feature,replace,-1,none,出场时获得不屈状态
 100961,首星,feature,replace,-1,none,星移环境下命中率增加50%
@@ -284,6 +286,7 @@ id,name,type,copyType,turn,options,description
 200302,蓝球,emblem,replace,-1,none,每消耗1个蓝色水球时增加自身10点怒气
 200320,影子,emblem,replace,-1,none,出场时获得1个影子
 200323,贪食,emblem,replace,-1,none,食类技能命中后能解除自身不良
+200326,契约,emblem,replace,-1,none,魔鬼契约可额外提升自身50点特防值
 200388,星的,emblem,repalce,-1,none,出场时自带星的指引
 200436,棒骨,emblem,replace,-1,none,棒骨的反弹效果和反弹上限增加10%
 200961,首魅,emblem,replace,-1,none,使幻魅之眼的魅惑效果延长1回合
@@ -349,3 +352,6 @@ id,name,type,copyType,turn,options,description
 -3013,布里米亚,mark,replace,-1,res=3017,受到致死攻击时，保留1/12体力
 -3014,星辰回转,mark,replace,-1,hide=true,体力低于100000星辰回转
 -3015,星尘幻盾,mark,replace,-1,hide=true,体力低于40000星尘幻盾
+-3016,脉灵之力,mark,replace,-1,hide=true,上场时使场地变为深海
+-3017,血脉喷张,mark,replace,-1,hide=true,体力为1时使用血脉喷张
+-3018,吸取强化,mark,replace,-1,res=45,每回合吸取强化
