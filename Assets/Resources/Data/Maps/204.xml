@@ -1,0 +1,47 @@
+<map name="幽静珊瑚穴" category="3" id="204">
+    <fightMap>100003</fightMap>
+    <initialPoint>560,160</initialPoint>
+    <music category="3">
+    	<bgm>BGM_200</bgm>
+    	<fx>FX_120</fx>
+    </music>
+	<entities>
+		<npc id="20401" resId="Pets/pet/141.png" name="Lv29 希捷特" size="54,48" pos="340,260" namePos="0,0">
+			<battle>
+				<branch id="default">
+					<settings count="6" capture="true"/>
+					<enemy>
+						<pet id="141" level="29">
+							<loopSkill>10796</loopSkill>
+						</pet>
+					</enemy>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>battle</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<npc id="20402" resId="Pets/pet/141.png" name="Lv30 希捷特" size="54,48" pos="265,140" namePos="0,0">
+			<battle>
+				<branch id="default">
+					<settings count="6" capture="true"/>
+					<enemy>
+						<pet id="141" level="30">
+							<loopSkill>10796</loopSkill>
+						</pet>
+					</enemy>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>battle</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<teleport id="1" name="彩虹珊瑚湾" pos="795,65" targetMapId="201"/>
+	</entities>
+</map>

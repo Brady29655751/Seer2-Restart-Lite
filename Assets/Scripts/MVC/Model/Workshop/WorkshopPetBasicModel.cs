@@ -23,8 +23,8 @@ public class WorkshopPetBasicModel : Module
     public string description => descriptionInputField.inputString;
 
     public override void Init() {
-        if (!PetElementSystem.IsMod())
-            return;
+        // if (!PetElementSystem.IsMod())
+        //     return;
 
         elementDropdown.SetDropdownOptions(PetElementSystem.elementNameList);
         subElementDropdown.SetDropdownOptions(PetElementSystem.elementNameList);
@@ -157,8 +157,8 @@ public class WorkshopPetBasicModel : Module
             return false;
         }
 
-        if (baseStatus.Count(x => !x.IsWithin(0, 255)) > 0) {
-            error = "种族值必须介于0到255之间";
+        if (baseStatus.Count(x => x < 0) > 0) {
+            error = "种族值不能为负数";
             return false;
         }
 

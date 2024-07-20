@@ -186,10 +186,16 @@ public class Pet
             return skills.ownSkillId.Contains(skillId) ? 1 : 0;
         }
 
-        if ((id.TryTrimStart("buff", out var trimBuff)) && 
-            (trimBuff.TryTrimParentheses(out var buffIdExpr)) &&
-            (int.TryParse(buffIdExpr, out var buffId))) {
-            return initBuffs.Exists(x => x.id == buffId) ? 1 : 0;
+        if ((id.TryTrimStart("buff", out var trimBuff))) {
+            bool correctExpr = trimBuff.TryTrimParentheses(out var buffIdExpr);
+            if (!correctExpr)
+                return float.MinValue;
+
+            if (int.TryParse(buffIdExpr, out var buffId))
+                return initBuffs.Exists(x => x.id == buffId) ? 1 : 0;
+
+            var buffOptionExpr = buffIdExpr.Split(':');
+            return initBuffs.Count(x => x.options.Get(buffOptionExpr[0], x.info.options.Get(buffOptionExpr[0])).ToLower() == buffOptionExpr[1].ToLower());
         }
 
         if ((id.TryTrimStart("record", out var trimRecord)) && 
@@ -308,13 +314,17 @@ public class Pet
             return;
 
         exp.LevelDown(toWhichLevel);
+        skills.ownSkill = null;
+        skills.normalSkill = null;
+        skills.superSkill = null;
+        skills.CheckNewSkill(toWhichLevel);
+
         currentStatus = normalStatus;
         SaveSystem.SaveData();
     }
 
     public Pet Evolve() {
-        int cursor = Player.instance.petBag.AllIndexOf(this).FirstOrDefault();
-
+        int cursor = Player.instance.petBag.IndexOf(this);
         var evolveInfo = info;
         int evolveLevel = info.exp.evolveLevel;
         while ((evolveInfo.exp.evolvePetId != 0) && (evolveLevel != 0) && (level >= evolveLevel)) {
@@ -322,7 +332,8 @@ public class Pet
             evolveLevel = evolveInfo.exp.evolveLevel;
         }
         Pet evolvePet = new Pet(evolveInfo.id, this);
-        Player.instance.petBag[cursor] = evolvePet;
+        if (cursor.IsInRange(0, Player.instance.petBag.Length))
+            Player.instance.petBag[cursor] = evolvePet;
         return evolvePet;
     }
 

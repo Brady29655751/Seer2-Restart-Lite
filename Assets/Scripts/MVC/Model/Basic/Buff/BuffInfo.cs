@@ -109,7 +109,7 @@ public class BuffInfo
         if (type == BuffType.Emblem) {
             return (-1 * mod) + (_pet - mod);
         }
-        return id;
+        return ((id < 0) ? 10 : 0) * mod + id;
     }
 
     public Sprite GetIcon() {

@@ -137,7 +137,7 @@ public static class EffectAbilityHandler
                 var targetType = effect.abilityOptionDict.Get("target_type", string.Empty).Split('_');
                 var targetNum = (int)Parser.ParseEffectOperation(effect.abilityOptionDict.Get("target_num", "-1"), effect, lhsUnit, rhsUnit);
 
-                targetList = lhsUnit.petSystem.petBag.ToList();
+                targetList = lhsUnit.petSystem.petBag.Where(x => x != null).ToList();
                 if (targetType.Contains("other"))
                     targetList.Remove(lhsUnit.pet);
 
@@ -246,7 +246,7 @@ public static class EffectAbilityHandler
                 var targetType = effect.abilityOptionDict.Get("target_type", string.Empty).Split('_');
                 var targetNum = (int)Parser.ParseEffectOperation(effect.abilityOptionDict.Get("target_num", "-1"), effect, lhsUnit, rhsUnit);
 
-                targetList = lhsUnit.petSystem.petBag.ToList();
+                targetList = lhsUnit.petSystem.petBag.Where(x => x != null).ToList();
                 if (targetType.Contains("other"))
                     targetList.Remove(lhsUnit.pet);
 
@@ -825,16 +825,29 @@ public static class EffectAbilityHandler
     }
 
     public static bool SetPlayer(this Effect effect, BattleState state) {
-        // string who = effect.abilityOptionDict.Get("who", "me");
-        string type = effect.abilityOptionDict.Get("type", "none");
-        string op = effect.abilityOptionDict.Get("op", "+");
-        string value = effect.abilityOptionDict.Get("value", "0");
-        // float oldValue, newValue;
+        string action = effect.abilityOptionDict.Get("action", "none");
+        string value = effect.abilityOptionDict.Get("param_count", "0");
+
+        if (!int.TryParse(value, out var count))
+            return false;
 
         // 對玩家的進行的效果，PVP不生效
         if ((state != null) && (state.settings.mode == BattleMode.PVP))
             return false;
 
+        List<string> paramList = new List<string>();
+        for (int i = 0; i < count; i++)
+            paramList.Add(effect.abilityOptionDict.Get("param[" + i + "]")
+                .Replace("，", ",").Replace("＝", "=").Replace("＆", "&").Replace("｜", "|"));
+        
+        var handler = new NpcButtonHandler() {
+            actionType = action,
+            param = paramList,
+        };
+
+        NpcHandler.GetNpcAction(null, handler, null)?.Invoke();
+
+        /*
         // Set item.
         if (type == "item") {
             var itemInfo = value.Split('/').Select(x => (int)Identifier.GetNumIdentifier(x)).ToList();
@@ -859,6 +872,7 @@ public static class EffectAbilityHandler
             }
             return true;
         }
+        */
         return true;
     }
 }

@@ -30,8 +30,8 @@ public class WorkshopSkillModel : Module
     public List<Effect> effectList = new List<Effect>();
 
     public override void Init() {
-        if (!PetElementSystem.IsMod())
-            return;
+        // if (!PetElementSystem.IsMod())
+        //     return;
 
         elementDropdown.SetDropdownOptions(PetElementSystem.elementNameList);
     }

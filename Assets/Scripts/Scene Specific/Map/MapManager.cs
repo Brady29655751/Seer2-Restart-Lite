@@ -38,7 +38,7 @@ public class MapManager : Manager<MapManager>
 
     private void PetTest() {
         //Item.Add(new Item(10205, 1000));
-        //Player.instance.gameData.petStorage.Add(new Pet(90,1));
+        //Player.instance.gameData.petStorage.Add(new Pet(1,1));
         //Panel.OpenPanel("YiTeRogue");
         //Player.instance.gameData.petStorage.Add(new Pet(301,100));
     }

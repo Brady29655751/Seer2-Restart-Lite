@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
@@ -20,7 +21,7 @@ public class Buff
     }
     public int turn;
     public List<Effect> effects = new List<Effect>();
-    public Dictionary<string, object> options = new Dictionary<string, object>();
+    public Dictionary<string, string> options = new Dictionary<string, string>();
 
 
     public Buff(int _id, int _turn = -1, int _value = 0) {
@@ -39,7 +40,7 @@ public class Buff
         turn = rhs.turn;
         value = rhs.value;
         effects = rhs.effects.Select(x => new Effect(x)).ToList();
-        options = new Dictionary<string, object>(rhs.options);
+        options = new Dictionary<string, string>(rhs.options);
         
         foreach (var e in effects) {
             e.source = this;
@@ -132,6 +133,11 @@ public class Buff
     }
 
     public float GetBuffIdentifier(string id) {
+        if (id.TryTrimStart("option", out var trimId)) {
+            trimId = trimId.TrimParentheses();
+            return Identifier.GetNumIdentifier(options.Get(trimId, info.options.Get(trimId, "0")));
+        }
+
         return id switch {
             "id" => this.id,
             "type" => (float)info.type,

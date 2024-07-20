@@ -20,8 +20,6 @@ public class BattlePetAnimView : BattleBaseView
     {
         base.Init();
         captureAnim.anim.runtimeAnimatorController = (RuntimeAnimatorController)Player.GetSceneData("captureAnim");
-        skillAnim.onAnimHitEvent.SetListener(OnPetHit);
-        skillAnim.onAnimEndEvent.SetListener(OnPetEnd);
     }
 
     public void SetPet(BattlePet pet) {
@@ -54,14 +52,17 @@ public class BattlePetAnimView : BattleBaseView
         if (isCaptureSuccess || isCaptureFail) {
             isCaptureDone = false;
             captureAnim.onAnimHitEvent.SetListener(() => OnPetCapture(isCaptureSuccess));
-            captureAnim.onAnimEndEvent.AddListener(OnPetEnd);
+            captureAnim.onAnimEndEvent.SetListener(OnPetEnd);
             captureAnim.anim.SetTrigger(trigger);
             return;
         }
 
         isPetDone = false;
+        skillAnim.transform.SetAsLastSibling();
+        skillAnim.onAnimHitEvent.SetListener(OnPetHit);
+        skillAnim.onAnimEndEvent.SetListener(OnPetEnd);
         skillAnim.anim.SetTrigger(trigger);
-        StartCoroutine(PreventAnimStuckCoroutine(5));
+        StartCoroutine(PreventAnimStuckCoroutine(10));
     }
 
     /*
@@ -93,7 +94,7 @@ public class BattlePetAnimView : BattleBaseView
     }
 
     protected void OnPetHit() {
-        UI.ProcessQuery(true);   
+        UI.ProcessQuery(true);
     }
 
     protected void OnPetEnd() {

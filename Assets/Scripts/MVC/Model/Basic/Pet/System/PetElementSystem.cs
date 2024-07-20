@@ -62,10 +62,14 @@ public static class PetElementSystem {
         return (id < 0) ? "全部" : elementNameList.Get(id, "未知");
     }
 
-    public static float GetElementRelation(Skill lhs, BattlePet rhs) {
-        var defenseRelation = elementDefenseRelation.Get(rhs.battleElement)?.Get(lhs.elementId, 1) ?? 1;
-        var subDefenseRelation = elementDefenseRelation.Get(rhs.subBattleElement)?.Get(lhs.elementId, 1) ?? 1;
+    public static float GetElementRelation(int elementId, BattlePet rhs) {
+        var defenseRelation = elementDefenseRelation.Get(rhs.battleElement)?.Get(elementId, 1) ?? 1;
+        var subDefenseRelation = elementDefenseRelation.Get(rhs.subBattleElement)?.Get(elementId, 1) ?? 1;
         return defenseRelation * ((rhs.subBattleElement == Element.普通) ? 1 : subDefenseRelation);
+    }
+
+    public static float GetElementRelation(Skill lhs, BattlePet rhs) {
+        return GetElementRelation((int)(lhs.elementId), rhs);
     }
 
     public static List<Element> GetAttackRelation(Element element, Func<float, bool> func) {

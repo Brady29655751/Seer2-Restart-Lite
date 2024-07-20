@@ -28,6 +28,7 @@ public static class Identifier {
 
             return Random.Range(startRange, endRange + 1);
         }
+
         return float.TryParse(id, out num) ? num : 0;
     }
 
@@ -108,6 +109,12 @@ public static class Identifier {
 
         if (id == "dead")
             return pet.isDead ? 1 : 0;
+
+        if (id.TryTrimStart("defElementRelation", out trimId) &&
+            trimId.TryTrimParentheses(out trimId) &&
+            int.TryParse(trimId, out var elementId)) {
+            return PetElementSystem.GetElementRelation(elementId, pet);
+        }
 
         if (id.StartsWith("status") || id.StartsWith("powerup"))
             return GetPetStatusIdentifier(id, pet.statusController);
