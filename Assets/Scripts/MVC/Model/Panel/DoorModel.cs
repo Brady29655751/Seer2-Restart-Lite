@@ -25,6 +25,7 @@ public class DoorModel : Module
     public int GetPetNum() {
         return door switch {
             "challenge" => 1,
+            "brave" => 3,
             _ => 6
         };
     }

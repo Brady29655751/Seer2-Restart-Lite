@@ -228,9 +228,10 @@ public class ResourceManager : Singleton<ResourceManager>
 
     private void LoadMapResources(Map map, Action<Map> onSuccess = null) {
         int resId = (map.resId == 0) ? map.id : map.resId;
+        int pathId = (map.pathId == 0) ? Mathf.Abs(resId) : map.pathId;
 
         Sprite bg = GetLocalAddressables<Sprite>(mapPath + "bg/" + resId);
-        Sprite pathSprite = GetLocalAddressables<Sprite>(mapPath + "path/" + Mathf.Abs(resId));
+        Sprite pathSprite = GetLocalAddressables<Sprite>(mapPath + "path/" + pathId);
         AudioClip bgm = GetLocalAddressables<AudioClip>(BGMPath + map.music.category + "/" + map.music.bgm);
         AudioClip fx = string.IsNullOrEmpty(map.music.fx) ? null : GetLocalAddressables<AudioClip>(BGMPath + "fx/" + map.music.fx);
         MapResources mapResources = new MapResources(bg, pathSprite, bgm, fx);

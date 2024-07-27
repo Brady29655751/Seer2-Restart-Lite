@@ -1,0 +1,1802 @@
+<map name="勇士之门" category="100" id="84" pathId="83">
+	<fightMap>100011</fightMap>
+	<music category="100">
+		<bgm>BGM_113</bgm>
+	</music>
+	<initialPoint>650,110</initialPoint>
+	<entities>
+		<npc id="8401" resId="8401" name="勇士高手" size="91,108" pos="250,240" namePos="0,0">
+			<description>勇士之门简单模式</description>
+			<dialog>
+				<branch id="default" name="勇士高手" icon="8401" size="91,108" pos="0,55">
+					<content><![CDATA[这里是勇士之门简单模式，去迎接各种挑战吧！]]></content>
+					<functionHandler>
+						<func type="click">
+							<description><![CDATA[勇士之门(简单)]]></description>
+							<action>openPanel</action>
+							<param>Door</param>
+							<param>door=brave</param>
+							<param>mode=easy</param>
+						</func>
+						<func type="click">
+							<description><![CDATA[荣誉兑换]]></description>
+							<action>openPanel</action>
+							<param>ItemShop</param>
+							<param>type=honor</param>
+							<param>currency=3/0</param>
+						</func>
+					</functionHandler>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[好的]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+					</replyHandler>
+				</branch>
+			</dialog>
+			<battle>
+			    <branch id="1">
+			    	<settings count="3">
+						<mode>1</mode>
+					</settings>
+			    	<enemy>
+			            <pet id="3" level="100">
+			            	<loopSkill>10016,10011</loopSkill>
+							<superSkill>10013</superSkill>
+			            </pet>
+						<pet id="6" level="100">
+							<loopSkill>10026,10025,10026</loopSkill>
+							<superSkill>10030</superSkill>
+						</pet>
+						<pet id="9" level="100">
+							<loopSkill>10037,10038</loopSkill>
+							<superSkill>10046</superSkill>
+						</pet>
+			    	</enemy>
+			    	<winHandler>
+			    		<button type="auto">
+			    			<action>setItem</action>
+			    			<param>add</param>
+			    			<param>1,500</param>
+			    		</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=500 赛尔豆已经放入背包</param>
+							<param>option_num=1</param>
+							<param>item_icon=item[1]</param>
+						</button>
+			    		<button type="auto">
+			    			<action>setActivity</action>
+			    			<param>door</param>
+			    			<param>brave[easy][floor]=2</param>
+			    		</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>door</param>
+							<param>brave[easy][max]=1</param>
+							<condition>activity[door].brave[easy][max]=[int]0[default]0</condition>
+						</button>
+			    	</winHandler>
+			    </branch>
+				<branch id="2">
+					<settings count="3">
+						<mode>1</mode>
+					</settings>
+					<enemy>
+				        <pet id="-3" level="100">
+				        	<loopSkill>10108,10104</loopSkill>
+							<superSkill>10107</superSkill>
+				        </pet>
+						<pet id="-6" level="100">
+							<loopSkill>10119,10119,10126</loopSkill>
+						</pet>
+						<pet id="-9" level="100">
+							<loopSkill>10137,10139</loopSkill>
+							<superSkill>10138</superSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setItem</action>
+							<param>add</param>
+							<param>1,500</param>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=500 赛尔豆已经放入背包</param>
+							<param>option_num=1</param>
+							<param>item_icon=item[1]</param>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>door</param>
+							<param>brave[easy][floor]=3</param>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>door</param>
+							<param>brave[easy][max]=2</param>
+							<condition>activity[door].brave[easy][max]=[int]1[default]0</condition>
+						</button>
+					</winHandler>
+				</branch>
+				<branch id="3">
+					<settings count="3">
+						<mode>1</mode>
+					</settings>
+					<enemy>
+				        <pet id="29" level="100">
+							<headerSkill>10402</headerSkill>
+				        	<loopSkill>10407,10408</loopSkill>
+				        </pet>
+						<pet id="27" level="100">
+							<loopSkill>10674,10673</loopSkill>
+						</pet>
+						<pet id="42" level="100">
+							<loopSkill>10635,10640</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setItem</action>
+							<param>add</param>
+							<param>1,500</param>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=500 赛尔豆已经放入背包</param>
+							<param>option_num=1</param>
+							<param>item_icon=item[1]</param>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>door</param>
+							<param>brave[easy][floor]=4</param>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>door</param>
+							<param>brave[easy][max]=3</param>
+							<condition>activity[door].brave[easy][max]=[int]2[default]0</condition>
+						</button>
+					</winHandler>
+				</branch>
+				<branch id="4">
+					<settings count="3">
+						<mode>1</mode>
+					</settings>
+					<enemy>
+				        <pet id="242" level="100">
+							<headerSkill>10726</headerSkill>
+				        	<loopSkill>10733,10727</loopSkill>
+							<superSkill>10731</superSkill>
+				        </pet>
+						<pet id="73" level="100">
+							<loopSkill>10740,10743,10744</loopSkill>
+							<superSkill>10742</superSkill>
+						</pet>
+						<pet id="141" level="100">
+							<loopSkill>10807</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setItem</action>
+							<param>add</param>
+							<param>1,500</param>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=500 赛尔豆已经放入背包</param>
+							<param>option_num=1</param>
+							<param>item_icon=item[1]</param>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>door</param>
+							<param>brave[easy][floor]=5</param>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>door</param>
+							<param>brave[easy][max]=4</param>
+							<condition>activity[door].brave[easy][max]=[int]3[default]0</condition>
+						</button>
+					</winHandler>
+				</branch>
+				<branch id="5">
+					<settings count="3">
+						<mode>1</mode>
+					</settings>
+					<enemy>
+						<pet id="31" level="100">
+							<loopSkill>10424,10426,10422,10426,10422</loopSkill>
+						</pet>
+						<pet id="38" level="100">
+							<loopSkill>10553,10554,10553,10555</loopSkill>
+						</pet>
+						<pet id="57" level="100">
+							<headerSkill>10288</headerSkill>
+							<loopSkill>10282</loopSkill>
+							<superSkill>10287</superSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setItem</action>
+							<param>add</param>
+							<param>1,500</param>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=500 赛尔豆已经放入背包</param>
+							<param>option_num=1</param>
+							<param>item_icon=item[1]</param>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>door</param>
+							<param>brave[easy][floor]=6</param>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>door</param>
+							<param>brave[easy][max]=5</param>
+							<condition>activity[door].brave[easy][max]=[int]4[default]0</condition>
+						</button>
+					</winHandler>
+				</branch>
+				<branch id="6">
+					<settings count="3">
+						<mode>1</mode>
+					</settings>
+					<enemy>
+						<pet id="178" level="100">
+							<loopSkill>10506</loopSkill>
+							<superSkill>10514</superSkill>
+						</pet>
+						<pet id="437" level="100">
+							<loopSkill>10702</loopSkill>
+						</pet>
+						<pet id="388" level="100">
+							<loopSkill>10578</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setItem</action>
+							<param>add</param>
+							<param>1,500</param>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=500 赛尔豆已经放入背包</param>
+							<param>option_num=1</param>
+							<param>item_icon=item[1]</param>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>door</param>
+							<param>brave[easy][floor]=7</param>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>door</param>
+							<param>brave[easy][max]=6</param>
+							<condition>activity[door].brave[easy][max]=[int]5[default]0</condition>
+						</button>
+					</winHandler>
+				</branch>
+				<branch id="7">
+					<settings count="3">
+						<mode>1</mode>
+					</settings>
+					<enemy>
+						<pet id="495" level="100">
+							<loopSkill>10822,10819,10823,10819</loopSkill>
+						</pet>
+						<pet id="90" level="100">
+							<loopSkill>10451,10448,10453</loopSkill>
+							<superSkill>10450</superSkill>
+						</pet>
+						<pet id="234" level="100">
+							<loopSkill>10479</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setItem</action>
+							<param>add</param>
+							<param>2,50</param>
+							<condition>activity[door].brave[easy][max]=[int]6[default]0</condition>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=50 星钻已经放入背包</param>
+							<param>option_num=1</param>
+							<param>item_icon=item[2]</param>
+							<condition>activity[door].brave[easy][max]=[int]6[default]0</condition>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>door</param>
+							<param>brave[easy][floor]=8</param>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>door</param>
+							<param>brave[easy][max]=7</param>
+							<condition>activity[door].brave[easy][max]=[int]6[default]0</condition>
+						</button>
+					</winHandler>
+				</branch>
+				<!--
+				<branch id="8">
+					<settings count="3">
+						<mode>1</mode>
+					</settings>
+					<enemy>
+				        <pet id="15" level="55">
+							<headerSkill>10156</headerSkill>
+				        	<loopSkill>10163</loopSkill>
+				        </pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setItem</action>
+							<param>add</param>
+							<param>3,10</param>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=10 荣誉点已经放入背包</param>
+							<param>option_num=1</param>
+							<param>item_icon=item[3]</param>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>door</param>
+							<param>brave[easy][floor]=9</param>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>door</param>
+							<param>brave[easy][max]=8</param>
+							<condition>activity[door].brave[easy][max]=[int]7[default]0</condition>
+						</button>
+					</winHandler>
+				</branch>
+				<branch id="9">
+					<settings count="3">
+						<mode>1</mode>
+					</settings>
+					<enemy>
+				        <pet id="17" level="60">
+							<headerSkill>10243</headerSkill>
+				        	<loopSkill>10251</loopSkill>
+				        </pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setItem</action>
+							<param>add</param>
+							<param>3,10</param>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=10 荣誉点已经放入背包</param>
+							<param>option_num=1</param>
+							<param>item_icon=item[3]</param>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>door</param>
+							<param>brave[easy][floor]=10</param>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>door</param>
+							<param>brave[easy][max]=9</param>
+							<condition>activity[door].brave[easy][max]=[int]8[default]0</condition>
+						</button>
+					</winHandler>
+				</branch>
+				<branch id="10">
+					<settings count="3">
+						<mode>1</mode>
+					</settings>
+					<enemy>
+				        <pet id="19" level="65">
+				        	<loopSkill>10277</loopSkill>
+				        </pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setItem</action>
+							<param>add</param>
+							<param>3,10</param>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=10 荣誉点已经放入背包</param>
+							<param>option_num=1</param>
+							<param>item_icon=item[3]</param>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>door</param>
+							<param>brave[easy][floor]=11</param>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>door</param>
+							<param>brave[easy][max]=10</param>
+							<condition>activity[door].brave[easy][max]=[int]9[default]0</condition>
+						</button>
+					</winHandler>
+				</branch>
+				<branch id="11">
+					<settings count="3">
+						<mode>1</mode>
+					</settings>
+					<enemy>
+				        <pet id="21" level="70">
+							<headerSkill>10240</headerSkill>
+				        	<loopSkill>10230</loopSkill>
+				        </pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setItem</action>
+							<param>add</param>
+							<param>3,10</param>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=10 荣誉点已经放入背包</param>
+							<param>option_num=1</param>
+							<param>item_icon=item[3]</param>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>door</param>
+							<param>brave[easy][floor]=12</param>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>door</param>
+							<param>brave[easy][max]=11</param>
+							<condition>activity[door].brave[easy][max]=[int]10[default]0</condition>
+						</button>
+					</winHandler>
+				</branch>
+				<branch id="12">
+					<settings count="3">
+						<mode>1</mode>
+					</settings>
+					<enemy>
+				        <pet id="148" level="75">
+				        	<loopSkill>10080</loopSkill>
+				        </pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setItem</action>
+							<param>add</param>
+							<param>3,10</param>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=10 荣誉点已经放入背包</param>
+							<param>option_num=1</param>
+							<param>item_icon=item[3]</param>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>door</param>
+							<param>brave[easy][floor]=13</param>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>door</param>
+							<param>brave[easy][max]=12</param>
+							<condition>activity[door].brave[easy][max]=[int]11[default]0</condition>
+						</button>
+					</winHandler>
+				</branch>
+				<branch id="13">
+					<settings count="3">
+						<mode>1</mode>
+					</settings>
+					<enemy>
+				        <pet id="153" level="80">
+				        	<loopSkill>10084,10094,10088</loopSkill>
+				        </pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setItem</action>
+							<param>add</param>
+							<param>3,10</param>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=10 荣誉点已经放入背包</param>
+							<param>option_num=1</param>
+							<param>item_icon=item[3]</param>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>door</param>
+							<param>brave[easy][floor]=14</param>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>door</param>
+							<param>brave[easy][max]=13</param>
+							<condition>activity[door].brave[easy][max]=[int]12[default]0</condition>
+						</button>
+					</winHandler>
+				</branch>
+				<branch id="14">
+					<settings count="3">
+						<mode>1</mode>
+					</settings>
+					<enemy>
+				        <pet id="62" level="85">
+				        	<loopSkill>10178,10181,10181,10181,10174</loopSkill>
+				        </pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setItem</action>
+							<param>add</param>
+							<param>3,20</param>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=20 荣誉点已经放入背包</param>
+							<param>option_num=1</param>
+							<param>item_icon=item[3]</param>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>door</param>
+							<param>brave[easy][floor]=15</param>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>door</param>
+							<param>brave[easy][max]=14</param>
+							<condition>activity[door].brave[easy][max]=[int]13[default]0</condition>
+						</button>
+					</winHandler>
+				</branch>
+				<branch id="15">
+					<settings count="3">
+						<mode>1</mode>
+					</settings>
+					<enemy>
+				        <pet id="24" level="90">
+				        	<loopSkill>10301,10303,10303</loopSkill>
+							<superSkill>10307</superSkill>
+				        </pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setItem</action>
+							<param>add</param>
+							<param>3,10</param>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=10 荣誉点已经放入背包</param>
+							<param>option_num=1</param>
+							<param>item_icon=item[3]</param>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>door</param>
+							<param>brave[easy][floor]=16</param>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>door</param>
+							<param>brave[easy][max]=15</param>
+							<condition>activity[door].brave[easy][max]=[int]14[default]0</condition>
+						</button>
+					</winHandler>
+				</branch>
+				<branch id="16">
+					<settings count="3">
+						<mode>1</mode>
+					</settings>
+					<enemy>
+				        <pet id="201" level="95">
+				        	<loopSkill>10199</loopSkill>
+				        </pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setItem</action>
+							<param>add</param>
+							<param>3,10</param>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=10 荣誉点已经放入背包</param>
+							<param>option_num=1</param>
+							<param>item_icon=item[3]</param>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>door</param>
+							<param>brave[easy][floor]=17</param>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>door</param>
+							<param>brave[easy][max]=16</param>
+							<condition>activity[door].brave[easy][max]=[int]15[default]0</condition>
+						</button>
+					</winHandler>
+				</branch>
+				<branch id="17">
+					<settings count="3">
+						<mode>1</mode>
+					</settings>
+					<enemy>
+				        <pet id="57" level="100">
+				        	<loopSkill>10279,10280,10279,10289</loopSkill>
+							<superSkill>10287</superSkill>
+				        </pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setItem</action>
+							<param>add</param>
+							<param>3,10</param>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=10 荣誉点已经放入背包</param>
+							<param>option_num=1</param>
+							<param>item_icon=item[3]</param>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>door</param>
+							<param>brave[easy][floor]=18</param>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>door</param>
+							<param>brave[easy][max]=17</param>
+							<condition>activity[door].brave[easy][max]=[int]16[default]0</condition>
+						</button>
+					</winHandler>
+				</branch>
+				<branch id="18">
+					<settings count="3">
+						<mode>1</mode>
+					</settings>
+					<enemy>
+				        <pet id="301" level="100">
+							<headerSkill>10221</headerSkill>
+				        	<loopSkill>10224</loopSkill>
+							<superSkill>10220</superSkill>
+				        </pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setItem</action>
+							<param>add</param>
+							<param>3,10</param>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=10 荣誉点已经放入背包</param>
+							<param>option_num=1</param>
+							<param>item_icon=item[3]</param>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>door</param>
+							<param>brave[easy][floor]=19</param>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>door</param>
+							<param>brave[easy][max]=18</param>
+							<condition>activity[door].brave[easy][max]=[int]17[default]0</condition>
+						</button>
+					</winHandler>
+				</branch>
+				<branch id="19">
+					<settings count="3">
+						<mode>1</mode>
+					</settings>
+					<enemy>
+				        <pet id="215" level="100">
+				        	<loopSkill>10377,10387,10377,10378</loopSkill>
+							<superSkill>10386</superSkill>
+				        </pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setItem</action>
+							<param>add</param>
+							<param>3,10</param>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=10 荣誉点已经放入背包</param>
+							<param>option_num=1</param>
+							<param>item_icon=item[3]</param>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>door</param>
+							<param>brave[easy][floor]=20</param>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>door</param>
+							<param>brave[easy][max]=19</param>
+							<condition>activity[door].brave[easy][max]=[int]18[default]0</condition>
+						</button>
+					</winHandler>
+				</branch>
+				<branch id="20">
+					<settings count="3">
+						<mode>1</mode>
+					</settings>
+					<enemy>
+				        <pet id="-12" level="100">
+				        	<loopSkill>10143,10150,10145,10153</loopSkill>
+							<superSkill>10151</superSkill>
+				        </pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setItem</action>
+							<param>add</param>
+							<param>3,10</param>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=10 荣誉点已经放入背包</param>
+							<param>option_num=1</param>
+							<param>item_icon=item[3]</param>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>door</param>
+							<param>brave[easy][floor]=21</param>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>door</param>
+							<param>brave[easy][max]=20</param>
+							<condition>activity[door].brave[easy][max]=[int]19[default]0</condition>
+						</button>
+					</winHandler>
+				</branch>
+				<branch id="21">
+					<settings count="3">
+						<mode>1</mode>
+					</settings>
+					<enemy>
+				        <pet id="48" level="100">
+							<headerSkill>10468</headerSkill>
+				        	<loopSkill>10462,10467,10458,10466</loopSkill>
+							<superSkill>10464</superSkill>
+				        </pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>getPet</action>
+							<param>48,60,0</param>
+							<condition>activity[door].brave[easy][max]=[int]20[default]0</condition>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=【鲁尼】已经放入精灵仓库</param>
+							<param>option_num=1</param>
+							<param>item_icon=pet[48]</param>
+							<condition>activity[door].brave[easy][max]=[int]20[default]0</condition>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>door</param>
+							<param>brave[easy][floor]=22</param>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>door</param>
+							<param>brave[easy][max]=21</param>
+							<condition>activity[door].brave[easy][max]=[int]20[default]0</condition>
+						</button>
+					</winHandler>
+				</branch>
+				-->
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>openDialog</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<npc id="8402" resId="8101" name="上尉门罗" size="125,100" pos="620,250" namePos="0,0">
+			<description>勇士之门困难模式</description>
+			<dialog>
+				<branch id="default" name="上尉门罗" icon="8101" size="119,91" pos="0,55">
+					<content><![CDATA[这里是勇士之门困难模式，去迎接各种挑战吧！]]></content>
+					<functionHandler>
+						<func type="click">
+							<description><![CDATA[勇士之门(困难)]]></description>
+							<action>openPanel</action>
+							<param>Door</param>
+							<param>door=brave</param>
+							<param>mode=hard</param>
+						</func>
+						<func type="click">
+							<description><![CDATA[荣誉兑换]]></description>
+							<action>openPanel</action>
+							<param>ItemShop</param>
+							<param>type=honor</param>
+							<param>currency=3/0</param>
+						</func>
+					</functionHandler>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[好的]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+					</replyHandler>
+				</branch>
+			</dialog>
+			<battle>
+			    <branch id="1">
+			    	<settings count="3">
+						<mode>1</mode>
+					</settings>
+			    	<enemy>
+						<pet id="3" level="100">
+							<initBuff>17,20</initBuff>
+							<loopSkill>10015,10014,10014</loopSkill>
+							<superSkill>10013</superSkill>
+						</pet>
+						<pet id="6" level="100">
+							<initBuff>17,20</initBuff>	
+							<loopSkill>10026,10027,10027</loopSkill>
+							<superSkill>10030</superSkill>
+						</pet>
+						<pet id="9" level="100">
+							<initBuff>17,20</initBuff>
+							<loopSkill>10044,10048,10041,10044</loopSkill>
+							<superSkill>10046</superSkill>
+						</pet>
+			    	</enemy>
+			    	<winHandler>
+			    		<button type="auto">
+			    			<action>setItem</action>
+			    			<param>add</param>
+			    			<param>3,10</param>
+			    		</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=10 荣誉点已经放入背包</param>
+							<param>option_num=1</param>
+							<param>item_icon=item[3]</param>
+						</button>
+			    		<button type="auto">
+			    			<action>setActivity</action>
+			    			<param>door</param>
+			    			<param>brave[hard][floor]=2</param>
+			    		</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>door</param>
+							<param>brave[hard][max]=1</param>
+							<condition>activity[door].brave[hard][max]=[int]0[default]0</condition>
+						</button>
+			    	</winHandler>
+			    </branch>
+				<branch id="2">
+					<settings count="3">
+						<mode>1</mode>
+					</settings>
+					<enemy>
+						<pet id="-3" level="100">
+							<initBuff>17,20</initBuff>
+							<loopSkill>10111,10110</loopSkill>
+						</pet>
+						<pet id="-6" level="100">
+							<initBuff>17,20</initBuff>
+							<headerSkill>10124</headerSkill>
+							<loopSkill>10119,10126</loopSkill>
+							<superSkill>10123</superSkill>
+						</pet>
+						<pet id="-9" level="100">
+							<status>
+								<mat>3000</mat>
+								<spd>3000</spd>
+							</status>
+							<initBuff>17,20</initBuff>
+							<loopSkill>10139</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setItem</action>
+							<param>add</param>
+							<param>3,10</param>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=10 荣誉点已经放入背包</param>
+							<param>option_num=1</param>
+							<param>item_icon=item[3]</param>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>door</param>
+							<param>brave[hard][floor]=3</param>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>door</param>
+							<param>brave[hard][max]=2</param>
+							<condition>activity[door].brave[hard][max]=[int]1[default]0</condition>
+						</button>
+					</winHandler>
+				</branch>
+				<branch id="3">
+					<settings count="3">
+						<mode>1</mode>
+					</settings>
+					<enemy>
+						<pet id="29" level="100">
+							<initBuff>17,20,97</initBuff>
+							<loopSkill>10407,10408</loopSkill>
+						</pet>
+						<pet id="27" level="100">
+							<initBuff>17,20,97</initBuff>
+							<loopSkill>10674,10673</loopSkill>
+						</pet>
+						<pet id="42" level="100">
+							<initBuff>17,20,97</initBuff>
+							<loopSkill>10635,10640</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setItem</action>
+							<param>add</param>
+							<param>3,10</param>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=10 荣誉点已经放入背包</param>
+							<param>option_num=1</param>
+							<param>item_icon=item[3]</param>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>door</param>
+							<param>brave[hard][floor]=4</param>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>door</param>
+							<param>brave[hard][max]=3</param>
+							<condition>activity[door].brave[hard][max]=[int]2[default]0</condition>
+						</button>
+					</winHandler>
+				</branch>
+				<branch id="4">
+					<settings count="3">
+						<mode>1</mode>
+					</settings>
+					<enemy>
+						<pet id="242" level="100">
+							<initBuff>17,20,36,43,55,56</initBuff>
+							<headerSkill>10726</headerSkill>
+							<loopSkill>10733,10727</loopSkill>
+							<superSkill>10731</superSkill>
+						</pet>
+						<pet id="73" level="100">
+							<initBuff>17,20,36,43,55,56</initBuff>
+							<loopSkill>10740,10743,10744</loopSkill>
+							<superSkill>10742</superSkill>
+						</pet>
+						<pet id="141" level="100">
+							<initBuff>17,20,36,43,55,56</initBuff>
+							<loopSkill>10807</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setItem</action>
+							<param>add</param>
+							<param>3,10</param>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=10 荣誉点已经放入背包</param>
+							<param>option_num=1</param>
+							<param>item_icon=item[3]</param>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>door</param>
+							<param>brave[hard][floor]=5</param>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>door</param>
+							<param>brave[hard][max]=4</param>
+							<condition>activity[door].brave[hard][max]=[int]3[default]0</condition>
+						</button>
+					</winHandler>
+				</branch>
+				<branch id="5">
+					<settings count="3">
+						<mode>1</mode>
+					</settings>
+					<enemy>
+						<pet id="31" level="100">
+							<initBuff>17,20,48</initBuff>
+							<loopSkill>10424,10426,10422,10426,10422</loopSkill>
+						</pet>
+						<pet id="38" level="100">
+							<initBuff>17,20,48</initBuff>
+							<loopSkill>10553,10554,10553,10555</loopSkill>
+						</pet>
+						<pet id="57" level="100">
+							<initBuff>17,20,48</initBuff>
+							<headerSkill>10288</headerSkill>
+							<loopSkill>10282</loopSkill>
+							<superSkill>10287</superSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setItem</action>
+							<param>add</param>
+							<param>3,10</param>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=10 荣誉点已经放入背包</param>
+							<param>option_num=1</param>
+							<param>item_icon=item[3]</param>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>door</param>
+							<param>brave[hard][floor]=6</param>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>door</param>
+							<param>brave[hard][max]=5</param>
+							<condition>activity[door].brave[hard][max]=[int]4[default]0</condition>
+						</button>
+					</winHandler>
+				</branch>
+				<branch id="6">
+					<settings count="3">
+						<mode>1</mode>
+					</settings>
+					<enemy>
+						<pet id="178" level="100">
+							<status>
+								<atk>100</atk>
+							</status>
+							<initBuff>14,17,20</initBuff>
+							<loopSkill>10511</loopSkill>
+							<superSkill>10514</superSkill>
+						</pet>
+						<pet id="437" level="100">
+							<status>
+								<def>1500</def>
+								<mdf>1500</mdf>
+							</status>
+							<initBuff>14,17,20</initBuff>
+							<loopSkill>10702</loopSkill>
+						</pet>
+						<pet id="388" level="100">
+							<status>
+								<spd>5000</spd>
+							</status>
+							<initBuff>14,17,20</initBuff>
+							<loopSkill>10578</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setItem</action>
+							<param>add</param>
+							<param>3,10</param>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=10 荣誉点已经放入背包</param>
+							<param>option_num=1</param>
+							<param>item_icon=item[3]</param>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>door</param>
+							<param>brave[hard][floor]=7</param>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>door</param>
+							<param>brave[hard][max]=6</param>
+							<condition>activity[door].brave[hard][max]=[int]5[default]0</condition>
+						</button>
+					</winHandler>
+				</branch>
+				<branch id="7">
+					<settings count="3">
+						<mode>1</mode>
+					</settings>
+					<enemy>
+						<pet id="495" level="100">
+							<initBuff>12,13,14,17,20,60</initBuff>
+							<loopSkill>10823,10819,10819</loopSkill>
+						</pet>
+						<pet id="90" level="100">
+							<initBuff>12,13,14,17,20,61</initBuff>
+							<loopSkill>10451,10448,10585</loopSkill>
+							<superSkill>10454</superSkill>
+						</pet>
+						<pet id="234" level="100">
+							<initBuff>12,13,14,17,20,60</initBuff>
+							<loopSkill>10479</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setItem</action>
+							<param>add</param>
+							<param>3,40</param>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=40 荣誉点已经放入背包</param>
+							<param>option_num=1</param>
+							<param>item_icon=item[3]</param>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>door</param>
+							<param>brave[hard][floor]=8</param>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>door</param>
+							<param>brave[hard][max]=7</param>
+							<condition>activity[door].brave[hard][max]=[int]6[default]0</condition>
+						</button>
+					</winHandler>
+				</branch>
+				<!--
+				<branch id="8">
+					<settings count="3">
+						<mode>1</mode>
+					</settings>
+					<enemy>
+				        <pet id="15" level="100">
+							<initBuff>17,20</initBuff>
+							<headerSkill>10156</headerSkill>
+				        	<loopSkill>10163</loopSkill>
+				        </pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setItem</action>
+							<param>add</param>
+							<param>3,10</param>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=10 荣誉点已经放入背包</param>
+							<param>option_num=1</param>
+							<param>item_icon=item[3]</param>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>door</param>
+							<param>brave[hard][floor]=9</param>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>door</param>
+							<param>brave[hard][max]=8</param>
+							<condition>activity[door].brave[hard][max]=[int]7[default]0</condition>
+						</button>
+					</winHandler>
+				</branch>
+				<branch id="9">
+					<settings count="3">
+						<mode>1</mode>
+					</settings>
+					<enemy>
+				        <pet id="17" level="100">
+							<initBuff>17,20</initBuff>	
+							<headerSkill>10243</headerSkill>
+				        	<loopSkill>10251</loopSkill>
+				        </pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setItem</action>
+							<param>add</param>
+							<param>3,10</param>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=10 荣誉点已经放入背包</param>
+							<param>option_num=1</param>
+							<param>item_icon=item[3]</param>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>door</param>
+							<param>brave[hard][floor]=10</param>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>door</param>
+							<param>brave[hard][max]=9</param>
+							<condition>activity[door].brave[hard][max]=[int]8[default]0</condition>
+						</button>
+					</winHandler>
+				</branch>
+				<branch id="10">
+					<settings count="3">
+						<mode>1</mode>
+					</settings>
+					<enemy>
+				        <pet id="19" level="100">
+							<initBuff>17,20</initBuff>
+				        	<loopSkill>10277</loopSkill>
+				        </pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setItem</action>
+							<param>add</param>
+							<param>3,10</param>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=10 荣誉点已经放入背包</param>
+							<param>option_num=1</param>
+							<param>item_icon=item[3]</param>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>door</param>
+							<param>brave[hard][floor]=11</param>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>door</param>
+							<param>brave[hard][max]=10</param>
+							<condition>activity[door].brave[hard][max]=[int]9[default]0</condition>
+						</button>
+					</winHandler>
+				</branch>
+				<branch id="11">
+					<settings count="3">
+						<mode>1</mode>
+					</settings>
+					<enemy>
+				        <pet id="21" level="100">
+							<initBuff>17,20</initBuff>
+							<headerSkill>10240</headerSkill>
+				        	<loopSkill>10230</loopSkill>
+				        </pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setItem</action>
+							<param>add</param>
+							<param>3,10</param>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=10 荣誉点已经放入背包</param>
+							<param>option_num=1</param>
+							<param>item_icon=item[3]</param>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>door</param>
+							<param>brave[hard][floor]=12</param>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>door</param>
+							<param>brave[hard][max]=11</param>
+							<condition>activity[door].brave[hard][max]=[int]10[default]0</condition>
+						</button>
+					</winHandler>
+				</branch>
+				<branch id="12">
+					<settings count="3">
+						<mode>1</mode>
+					</settings>
+					<enemy>
+				        <pet id="148" level="100">
+							<initBuff>17,20</initBuff>
+				        	<loopSkill>10080</loopSkill>
+				        </pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setItem</action>
+							<param>add</param>
+							<param>3,10</param>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=10 荣誉点已经放入背包</param>
+							<param>option_num=1</param>
+							<param>item_icon=item[3]</param>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>door</param>
+							<param>brave[hard][floor]=13</param>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>door</param>
+							<param>brave[hard][max]=12</param>
+							<condition>activity[door].brave[hard][max]=[int]11[default]0</condition>
+						</button>
+					</winHandler>
+				</branch>
+				<branch id="13">
+					<settings count="3">
+						<mode>1</mode>
+					</settings>
+					<enemy>
+				        <pet id="153" level="100">
+							<initBuff>17,20,43</initBuff>
+				        	<loopSkill>10084,10086,10085</loopSkill>
+				        </pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setItem</action>
+							<param>add</param>
+							<param>3,10</param>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=10 荣誉点已经放入背包</param>
+							<param>option_num=1</param>
+							<param>item_icon=item[3]</param>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>door</param>
+							<param>brave[hard][floor]=14</param>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>door</param>
+							<param>brave[hard][max]=13</param>
+							<condition>activity[door].brave[hard][max]=[int]12[default]0</condition>
+						</button>
+					</winHandler>
+				</branch>
+				<branch id="14">
+					<settings count="3">
+						<mode>1</mode>
+					</settings>
+					<enemy>
+				        <pet id="62" level="100">
+							<initBuff>17,20,25,26,45</initBuff>
+							<headerSkill>10174,10174</headerSkill>
+				        	<loopSkill>10181</loopSkill>
+				        </pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setItem</action>
+							<param>add</param>
+							<param>3,40</param>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=40 荣誉点已经放入背包</param>
+							<param>option_num=1</param>
+							<param>item_icon=item[3]</param>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>door</param>
+							<param>brave[hard][floor]=15</param>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>door</param>
+							<param>brave[hard][max]=14</param>
+							<condition>activity[door].brave[hard][max]=[int]13[default]0</condition>
+						</button>
+					</winHandler>
+				</branch>
+				<branch id="15">
+					<settings count="3">
+						<mode>1</mode>
+					</settings>
+					<enemy>
+				        <pet id="24" level="100">
+							<initBuff>17,20</initBuff>
+				        	<loopSkill>10301,10303,10303</loopSkill>
+							<superSkill>10307</superSkill>
+				        </pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setItem</action>
+							<param>add</param>
+							<param>3,10</param>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=10 荣誉点已经放入背包</param>
+							<param>option_num=1</param>
+							<param>item_icon=item[3]</param>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>door</param>
+							<param>brave[hard][floor]=16</param>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>door</param>
+							<param>brave[hard][max]=15</param>
+							<condition>activity[door].brave[hard][max]=[int]14[default]0</condition>
+						</button>
+					</winHandler>
+				</branch>
+				<branch id="16">
+					<settings count="3">
+						<mode>1</mode>
+					</settings>
+					<enemy>
+				        <pet id="201" level="100">
+							<initBuff>17,20</initBuff>
+				        	<loopSkill>10194</loopSkill>
+				        </pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setItem</action>
+							<param>add</param>
+							<param>3,10</param>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=10 荣誉点已经放入背包</param>
+							<param>option_num=1</param>
+							<param>item_icon=item[3]</param>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>door</param>
+							<param>brave[hard][floor]=17</param>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>door</param>
+							<param>brave[hard][max]=16</param>
+							<condition>activity[door].brave[hard][max]=[int]15[default]0</condition>
+						</button>
+					</winHandler>
+				</branch>
+				<branch id="17">
+					<settings count="3">
+						<mode>1</mode>
+					</settings>
+					<enemy>
+				        <pet id="57" level="100">
+							<initBuff>17,20</initBuff>
+				        	<loopSkill>10279,10280,10279,10289</loopSkill>
+							<superSkill>10287</superSkill>
+				        </pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setItem</action>
+							<param>add</param>
+							<param>3,10</param>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=10 荣誉点已经放入背包</param>
+							<param>option_num=1</param>
+							<param>item_icon=item[3]</param>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>door</param>
+							<param>brave[hard][floor]=18</param>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>door</param>
+							<param>brave[hard][max]=17</param>
+							<condition>activity[door].brave[hard][max]=[int]16[default]0</condition>
+						</button>
+					</winHandler>
+				</branch>
+				<branch id="18">
+					<settings count="3">
+						<mode>1</mode>
+					</settings>
+					<enemy>
+				        <pet id="301" level="100">
+							<initBuff>17,20</initBuff>
+							<headerSkill>10221</headerSkill>
+				        	<loopSkill>10224</loopSkill>
+							<superSkill>10220</superSkill>
+				        </pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setItem</action>
+							<param>add</param>
+							<param>3,10</param>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=10 荣誉点已经放入背包</param>
+							<param>option_num=1</param>
+							<param>item_icon=item[3]</param>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>door</param>
+							<param>brave[hard][floor]=19</param>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>door</param>
+							<param>brave[hard][max]=18</param>
+							<condition>activity[door].brave[hard][max]=[int]17[default]0</condition>
+						</button>
+					</winHandler>
+				</branch>
+				<branch id="19">
+					<settings count="3">
+						<mode>1</mode>
+					</settings>
+					<enemy>
+				        <pet id="215" level="100">
+							<initBuff>17,20</initBuff>
+				        	<loopSkill>10377,10387,10377,10378</loopSkill>
+							<superSkill>10386</superSkill>
+				        </pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setItem</action>
+							<param>add</param>
+							<param>3,10</param>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=10 荣誉点已经放入背包</param>
+							<param>option_num=1</param>
+							<param>item_icon=item[3]</param>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>door</param>
+							<param>brave[hard][floor]=20</param>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>door</param>
+							<param>brave[hard][max]=19</param>
+							<condition>activity[door].brave[hard][max]=[int]18[default]0</condition>
+						</button>
+					</winHandler>
+				</branch>
+				<branch id="20">
+					<settings count="3">
+						<mode>1</mode>
+					</settings>
+					<enemy>
+				        <pet id="-12" level="100">
+							<initBuff>17,20,45,55</initBuff>
+				        	<loopSkill>10143,10150,10145,10153</loopSkill>
+							<superSkill>10151</superSkill>
+				        </pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setItem</action>
+							<param>add</param>
+							<param>3,10</param>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=10 荣誉点已经放入背包</param>
+							<param>option_num=1</param>
+							<param>item_icon=item[3]</param>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>door</param>
+							<param>brave[hard][floor]=21</param>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>door</param>
+							<param>brave[hard][max]=20</param>
+							<condition>activity[door].brave[hard][max]=[int]19[default]0</condition>
+						</button>
+					</winHandler>
+				</branch>
+				<branch id="21">
+					<settings count="3">
+						<mode>1</mode>
+					</settings>
+					<enemy>
+				        <pet id="48" level="105">
+							<status>
+								<def>600</def>
+								<mdf>600</mdf>
+								<hp>600</hp>
+							</status>
+							<initBuff>14,17,20,3022</initBuff>
+				        	<loopSkill>10462,10467,10462,10466</loopSkill>
+							<superSkill>10464</superSkill>
+				        </pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setItem</action>
+							<param>add</param>
+							<param>3,40</param>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=40 荣誉点已经放入背包</param>
+							<param>option_num=1</param>
+							<param>item_icon=item[3]</param>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>door</param>
+							<param>brave[hard][floor]=22</param>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>door</param>
+							<param>brave[hard][max]=21</param>
+							<condition>activity[door].brave[hard][max]=[int]20[default]0</condition>
+						</button>
+					</winHandler>
+				</branch>
+				-->
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>openDialog</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<npc id="8400" resId="8102" name="" size="107,59" pos="426,148" color="255,255,255,255">
+			<description>要塞通道</description>
+			<transport>426,148</transport>
+			<eventHandler>
+				<button type="click">
+					<action>openPanel</action>
+					<param>MiniMap100</param>
+				</button>
+			</eventHandler>
+		</npc>
+        <!-- <teleport id="1" name="英格瓦要塞" pos="250,75" targetMapId="81"/> -->
+	</entities>
+</map>

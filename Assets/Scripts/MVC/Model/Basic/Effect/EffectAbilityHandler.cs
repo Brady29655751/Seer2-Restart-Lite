@@ -740,7 +740,8 @@ public static class EffectAbilityHandler
             } else if (normalSkillExpr.TryTrimStart("shift", out var normalTrim) &&
                 normalTrim.TryTrimParentheses(out var normalShift) &&
                 int.TryParse(normalShift, out var normalShiftCount)) {
-                normalSkills = battlePet.normalSkill.Where(x => x != null).Select(x => Skill.GetSkill(x.id + normalShiftCount, false)).ToArray();
+                normalSkills = (List.IsNullOrEmpty(battlePet.skillController.normalSkills) ? battlePet.skillController.loopSkills : battlePet.skillController.normalSkills)
+                    .Where(x => x != null).Select(x => Skill.GetSkill(x.id + normalShiftCount, false)).Take(4).ToArray();
             } else {
                 normalSkills = normalSkillExpr.ToIntList('/').Take(4).Select(id => Skill.GetSkill(id, false)).ToArray();
             }
@@ -763,12 +764,21 @@ public static class EffectAbilityHandler
 
             var cursor = lhsUnit.petSystem.cursor;
             lhsUnit.petSystem.petBag[cursor] = BattlePet.GetBattlePet(switchPet);
+            lhsUnit.petSystem.petBag[cursor].skillController.loopSkills = lhsUnit.pet.skillController.normalSkills.Where(x => x != null).ToList();
+            lhsUnit.petSystem.petBag[cursor].PowerUp(battlePet.statusController.powerup, lhsUnit, state);
 
             // Add feature and emblem buffs
             List<Buff> buffs = new List<Buff>();
             buffs.Add(Buff.GetFeatureBuff(lhsUnit.pet));
             buffs.Add(Buff.GetEmblemBuff(lhsUnit.pet));
             buffs.AddRange(lhsUnit.pet.initBuffs);
+            buffs.AddRange(battlePet.buffController.GetRangeBuff(x => (x != null) && (!x.IsPower()) &&
+                (x.id != Buff.GetFeatureBuff(battlePet).id) &&
+                (x.id != Buff.GetEmblemBuff(battlePet).id) &&
+                (x.info.type != BuffType.Unhealthy) &&
+                (x.info.type != BuffType.Abnormal) &&
+                (!battlePet.info.ui.defaultBuffIds.Exists(y => x.id == y))
+            ));
 
             lhsUnit.pet.buffController.AddRangeBuff(buffs, lhsUnit, state);
 

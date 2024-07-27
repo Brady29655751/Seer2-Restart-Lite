@@ -10,6 +10,7 @@ public class Map
 {
     [XmlAttribute("id")] public int id;
     [XmlAttribute("resId")] public int resId = 0;
+    [XmlAttribute("pathId")] public int pathId = 0;
     [XmlAttribute("name")] public string name;
     [XmlAttribute("weather")] public int weather = 0;
     [XmlAttribute("color")] public string backgroundColorId = "255,255,255,255";

@@ -171,7 +171,8 @@ public class BattlePet : Pet
     }
 
     public virtual Skill GetDefaultSkill() {
-        return skillController.GetDefaultSkill(anger);
+        var petAnger = (buffController.GetBuff(61) == null) ? anger : int.MaxValue;
+        return skillController.GetDefaultSkill(petAnger);
     }
 
     public virtual void PowerUp(Status status, Unit lhsUnit, BattleState state) {

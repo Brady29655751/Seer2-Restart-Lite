@@ -1,0 +1,226 @@
+<map name="蛮神战场" category="4" id="240">
+	<fightMap>100004</fightMap>
+	<music category="4">
+		<bgm>BGM_230</bgm>
+		<fx>FX_124</fx>
+	</music>
+	<initialPoint>390,135</initialPoint>
+	<entities> 
+		<npc id="24001" resId="Pets/pet/495" name="Lv 70 盖亚" size="102,175" pos="620,240" namePos="0,0">
+			<description>盖亚</description>
+			<dialog>
+				<branch id="default" name="盖亚" icon="Pets/pet/495" size="102,175" pos="10,35">
+					<content><![CDATA[我的目标是成为精灵战斗大师，我对战斗有着独特的见解，只有力量与智慧都达到一定境界的对手才会得到我的认同。 ]]></content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[▼ 下一页]]></description>
+							<action>openDialog</action>
+							<param>challenge</param>
+						</reply>
+					</replyHandler>
+				</branch>
+				<branch id="challenge" name="盖亚" icon="Pets/pet/495" size="102,175" pos="10,35">
+					<content><![CDATA[如果你能以1对1的形式在三个规则下都战胜我，我就做你的伙伴。]]></content>
+					<functionHandler>
+						<func type="click">
+							<description><![CDATA[致命一击战胜]]></description>
+							<action>battle</action>
+							<param>critical</param>
+						</func>
+						<func type="click">
+							<description><![CDATA[十回合后战胜]]></description>
+							<action>battle</action>
+							<param>slow</param>
+						</func>
+						<func type="click">
+							<description><![CDATA[五回合内战胜]]></description>
+							<action>battle</action>
+							<param>fast</param>
+						</func>
+					</functionHandler>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[等我把精灵训练的更强后再来找你挑战]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+					</replyHandler>
+				</branch>
+				<branch id="reward" name="盖亚" icon="Pets/pet/495" size="102,175" pos="10,35">
+					<content><![CDATA[你果然是文武双全、机智英勇的好对手。 我履行承诺，做你的伙伴吧！]]></content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[我们一起加油，成为最强吧！]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+						<reply type="branch">
+							<action>getPet</action>
+							<param>495,1</param>
+							<condition>activity[11003].done[reward]=[bool]false[default]false</condition>
+						</reply>
+						<reply type="branch">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=【盖亚】已经放入精灵仓库</param>
+							<param>item_icon=pet[495]</param>
+							<param>option_num=1</param>
+							<condition>activity[11003].done[reward]=[bool]false[default]false</condition>	
+						</reply>
+						<reply type="branch">
+							<action>setActivity</action>
+							<param>11003</param>
+							<param>done[reward]=true</param>
+							<condition>activity[11003].done[reward]=[bool]false[default]false</condition>
+						</reply>
+					</replyHandler>
+				</branch>
+			</dialog>
+			<battle>
+				<branch id="critical">
+					<settings count="1" >
+						<mode>3</mode>
+					</settings>
+					<enemy>
+						<pet id="495" level="70">
+							<status>
+								<atk>600</atk>
+								<mat>600</mat>
+								<def>400</def>
+								<mdf>400</mdf>
+								<hp>2000</hp>
+								<cdf>15</cdf>
+							</status>
+							<initBuff>13,14,20,57,-3000</initBuff>
+							<loopSkill>10822,10823,10824,10815</loopSkill>
+							<superSkill>10821</superSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=成功通过致命一击挑战</param>
+							<param>item_icon=pet[495]</param>
+							<param>option_num=1</param>
+							<condition>battle.me.skill.criticalResult=1</condition>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>11003</param>
+							<param>done[critical]=true</param>
+							<condition>activity[11003].done[critical]=[bool]false[default]false</condition>
+							<condition>battle.me.skill.criticalResult=1</condition>
+						</button>
+						<button type="auto">
+							<action>openDialog</action>
+							<param>reward</param>
+							<condition>activity[11003].done[reward]=[bool]false[default]false</condition>
+							<condition>activity[11003].done[fast]=[bool]true[default]false</condition>
+							<condition>activity[11003].done[slow]=[bool]true[default]false</condition>
+							<condition>battle.me.skill.criticalResult=1</condition>
+						</button>
+					</winHandler>
+				</branch>
+				<branch id="slow">
+					<settings count="1" >
+						<mode>3</mode>
+					</settings>
+					<enemy>
+						<pet id="495" level="70">
+							<status>
+								<atk>2000</atk>
+								<mat>2000</mat>
+								<def>400</def>
+								<mdf>400</mdf>
+								<hp>2000</hp>
+							</status>
+							<initBuff>12,13,14,57,97,-3000</initBuff>
+							<loopSkill>10822,10821,10824</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=成功通过十回合挑战</param>
+							<param>item_icon=pet[495]</param>
+							<param>option_num=1</param>
+							<condition>battle.turnGTE11</condition>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>11003</param>
+							<param>done[slow]=true</param>
+							<condition>activity[11003].done[slow]=[bool]false[default]false</condition>
+							<condition>battle.turnGTE11</condition>
+						</button>
+						<button type="auto">
+							<action>openDialog</action>
+							<param>reward</param>
+							<condition>activity[11003].done[reward]=[bool]false[default]false</condition>
+							<condition>activity[11003].done[fast]=[bool]true[default]false</condition>
+							<condition>activity[11003].done[critical]=[bool]true[default]false</condition>
+							<condition>battle.turnGTE11</condition>
+						</button>
+					</winHandler>
+				</branch>
+				<branch id="fast">
+					<settings count="1" >
+						<mode>3</mode>
+					</settings>
+					<enemy>
+						<pet id="495" level="70">
+							<status>
+								<atk>600</atk>
+								<mat>600</mat>
+								<def>400</def>
+								<mdf>400</mdf>
+								<hp>1</hp>
+							</status>
+							<initBuff>13,14,20,57,-4,-3000</initBuff>
+							<loopSkill>10822,10823,10824,10815,10814</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=成功通过五回合挑战</param>
+							<param>item_icon=pet[495]</param>
+							<param>option_num=1</param>
+							<condition>battle.turnLTE5</condition>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>11003</param>
+							<param>done[fast]=true</param>
+							<condition>activity[11003].done[fast]=[bool]false[default]false</condition>
+							<condition>battle.turnLTE5</condition>
+						</button>
+						<button type="auto">
+							<action>openDialog</action>
+							<param>reward</param>
+							<condition>activity[11003].done[reward]=[bool]false[default]false</condition>
+							<condition>activity[11003].done[slow]=[bool]true[default]false</condition>
+							<condition>activity[11003].done[critical]=[bool]true[default]false</condition>
+							<condition>battle.turnLTE5</condition>
+						</button>
+					</winHandler>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>openDialog</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+        <teleport id="1" name="火幻氏族主城" pos="100,100" targetMapId="230"/>
+		<!-- <teleport id="2" name="灰烬之地" pos="100,60" targetMapId="301"/> -->
+	</entities>
+</map>

@@ -204,6 +204,8 @@ id,name,type,copyType,turn,options,description
 3109,霜魂旋律,turn,replace,2,keep=false&inherit=true,主动换场时下一个出场精灵清空怒气
 3110,虚空感应,mark,replace,-1,none,虚空感应可以加强自身某些技能
 3111,虚空体质,turn,replace,1,none,受到伤害减少75%
+3112,末日宣告,turn,replace,3,none,攻击附带35点固定伤害
+3113,渗透劲,turn,replace,1,none,使用技能会强迫转变为渗透劲
 3143,焦点腐蚀,mark,replace,-1,none,特定攻击技能造成伤害的1/4将恢复自身体力
 3279,蜂纹,mark,stack,-1,auto_remove=true&max_val=3,每一层使中毒造成的伤害增加30，最多叠加3层。[ENDL]当前为[value]层
 3280,青蜂之舞,turn,replace,3,res=18,闪避率增加50%
@@ -245,8 +247,10 @@ id,name,type,copyType,turn,options,description
 100320,影魔,feature,replace,-1,none,回合结束时每1个影子都能为自身恢复10点体力
 100323,暴食,feature,replace,-1,none,攻击造成的伤害若低于100则恢复自身1/12体力
 100326,虚无,feature,replace,-1,none,普通系技能对自身的命中率减少35%
+100329,堕落,feature,replace,-1,none,对手具有弱化时，自身每次攻击能恢复30体力
 100388,指引,feature,replace,-1,none,以星的指引伤害增加10%
 100436,甲骨,feature,replace,-1,none,出场时获得不屈状态
+100495,战神,feature,replace,-1,none,古战场时每回合回复1/16体力
 100961,首星,feature,replace,-1,none,星移环境下命中率增加50%
 100962,躯星,feature,replace,-1,none,星移环境下受到的伤害减少10%
 100963,臂星,feature,replace,-1,none,星移环境下攻击前有15%几率使对手冻伤3回合
@@ -298,8 +302,10 @@ id,name,type,copyType,turn,options,description
 200320,影子,emblem,replace,-1,none,出场时获得1个影子
 200323,贪食,emblem,replace,-1,none,食类技能命中后能解除自身不良
 200326,契约,emblem,replace,-1,none,魔鬼契约可额外提升自身50点特防值
+200329,刻死,emblem,replace,-1,none,自身战败时会随机弱化对手能力1级
 200388,星的,emblem,repalce,-1,none,出场时自带星的指引
 200436,棒骨,emblem,replace,-1,none,棒骨的反弹效果和反弹上限增加10%
+200495,怒战,emblem,replace,-1,none,古战场时攻击附带35点伤害
 200961,首魅,emblem,replace,-1,none,使幻魅之眼的魅惑效果延长1回合
 200962,躯徽,emblem,replace,-1,none,使星尘幻盾回复自身120点体力
 200963,臂骈,emblem,replace,-1,none,使星刃解封提升自身速度1级
@@ -348,6 +354,7 @@ id,name,type,copyType,turn,options,description
 -16,战斗（困难）,mark,block,-1,none,困难难度的战斗
 -17,奖励,mark,block,-1,none,意外之喜！
 -18,随机事件,mark,block,-1,none,根据你的选择决定命运
+-3000,物攻强化,mark,replace,-1,hide=true,初始物攻强化2级
 -3001,超重,mark,replace,-1,res=3041,增重80000kg
 -3002,巨石托尔,mark,replace,-1,hide=true,没有增重状态时使用体重暴涨
 -3003,星之首影,mark,replace,-1,hide=true,对手免疫异常时使用星徽之怒
@@ -368,3 +375,4 @@ id,name,type,copyType,turn,options,description
 -3018,吸取强化,mark,replace,-1,res=45,每回合吸取强化
 -3019,湍流不息,mark,replace,-1,hide=true,水系克制系数高于冰系时使用湍流不息
 -3020,永久千年冰壁,mark,replace,-1,hide=true,战斗开始时获得永久千年冰壁
+-3021,虚弱大厅,mark,replace,-1,hide=true,受到攻击时使对手能力值下降100点
