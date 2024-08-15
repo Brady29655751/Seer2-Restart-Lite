@@ -24,12 +24,12 @@ public class PetFeature
     public PetFeature() {
         afterwardBuffIds = new List<int>();
     }
-    public PetFeature(int _id, bool _emblem = true, int _featureId = 0, int _emblemId = 0) {
+    public PetFeature(int _id, bool _emblem = true, int _featureId = 0, int _emblemId = 0, List<int> _afterwardBuffIds = null) {
         id = _id;
         hasEmblem = _emblem;
         featureId = _featureId;
         emblemId = _emblemId;
-        afterwardBuffIds = new List<int>();
+        afterwardBuffIds = _afterwardBuffIds ?? new List<int>();
     }
 
     public PetFeature(PetFeature rhs) {

@@ -163,7 +163,8 @@ public class Pet
         id = evolvePetId;
 
         basic = new PetBasic(evolvePetId, (int)originalPet.basic.personality);
-        feature = new PetFeature(evolvePetId, originalPet.feature.hasEmblem, originalPet.feature.featureId, originalPet.feature.emblemId);
+        feature = new PetFeature(evolvePetId, originalPet.feature.hasEmblem, 
+            originalPet.feature.featureId, originalPet.feature.emblemId, originalPet.feature.afterwardBuffIds);
         exp = new PetExp(evolvePetId, originalPet.level, originalPet.totalExp);
         talent = new PetTalent(evolvePetId, originalPet.talent);
         skills = new PetSkill(evolvePetId, originalPet.level, originalPet.skills);
@@ -310,7 +311,7 @@ public class Pet
     }
 
     public void LevelDown(int toWhichLevel) {
-        if (level <= 1)
+        if (level < 1)
             return;
 
         exp.LevelDown(toWhichLevel);
@@ -337,13 +338,18 @@ public class Pet
         return evolvePet;
     }
 
-    public Pet MegaEvolve(int evolveId) {
+    public Pet MegaEvolve(int evolveId, bool keepSkill = true) {
         int cursor = Player.instance.petBag.AllIndexOf(this).FirstOrDefault();
         if (evolveId == 0)
             return null;
 
         Pet evolvePet = new Pet(evolveId, this);
-        Player.instance.petBag[cursor] = evolvePet;
+        if (!keepSkill)
+            evolvePet.LevelDown(evolvePet.level);
+
+        if (cursor.IsInRange(0, Player.instance.petBag.Length))
+            Player.instance.petBag[cursor] = evolvePet;
+            
         return evolvePet;
     }
 

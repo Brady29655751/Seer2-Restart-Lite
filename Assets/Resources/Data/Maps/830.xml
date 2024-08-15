@@ -1,0 +1,122 @@
+<map name="纠结之藤" category="9" id="830">
+	<fightMap>100006</fightMap>
+	<music category="9">
+		<bgm>BGM_830</bgm>
+	</music>
+	<initialPoint>650,140</initialPoint>
+	<entities>
+		<npc id="84001" resId="Pets/pet/221" name="Lv 90 埃鲁达克" size="120,88" pos="505,210" namePos="0,0">
+			<description>埃鲁达克</description>
+			<dialog>
+				<branch id="default" name="埃鲁达克" icon="Pets/pet/221" size="120,88" pos="0,55">
+					<content><![CDATA[就算这战斗要陷入永恒，老夫也会奉陪到底。]]></content>
+					<functionHandler>
+						<func type="click">
+							<description><![CDATA[挑战埃鲁达克]]></description>
+							<action>battle</action>
+							<param>default</param>
+						</func>
+						<func type="click">
+							<description><![CDATA[获取金刚石]]></description>
+							<action>battle</action>
+							<param>stone</param>
+						</func>
+						<func type="click">
+							<description><![CDATA[兑换道具]]></description>
+							<action>openPanel</action>
+							<param>ItemShop</param>
+							<param>mode=buy</param>
+							<param>currency=400006/2</param>
+							<param>item=300221/400006</param>
+							<param>title=兑换道具</param>
+						</func>
+					</functionHandler>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[奋战到底！]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+					</replyHandler>
+				</branch>
+			</dialog>
+			<battle>
+				<branch id="default">
+					<settings count="1">
+						<mode>3</mode>
+					</settings>
+					<enemy>
+						<pet id="221" level="90">
+							<status>
+								<def>2000</def>
+								<hp>2000</hp>
+							</status>
+							<initBuff>13,14,17</initBuff>
+							<loopSkill>10843</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>getPet</action>
+							<param>220,10,0</param>
+							<condition>activity[20006].done[5]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=【埃鲁】已经放入精灵仓库</param>
+							<param>item_icon=pet[220]</param>
+							<param>option_num=1</param>
+							<condition>activity[20006].done[5]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>20006</param>
+							<param>done[5]=true</param>
+							<condition>activity[20006].done[5]=[bool]false[default]false</condition>
+						</button>
+					</winHandler>
+				</branch>
+				<branch id="stone">
+					<settings count="1">
+						<mode>3</mode>
+					</settings>
+					<enemy>
+						<pet id="221" level="90">
+							<status>
+								<hp>2000</hp>
+							</status>
+							<initBuff>13,14,17,20,-3022</initBuff>
+							<loopSkill>10850,10843,10852,10846</loopSkill>
+							<superSkill>10851</superSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setItem</action>
+							<param>add</param>
+							<param>400006,1</param>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=1 个金刚石已经放入背包</param>
+							<param>item_icon=item[400006]</param>
+							<param>option_num=1</param>
+						</button>
+					</winHandler>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>openDialog</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+        <teleport id="1" name="微光湖畔" pos="795,150" targetMapId="790"/>
+		<teleport id="2" name="冰晶魔域" pos="80,180" targetMapId="840"/>
+	</entities>
+</map>

@@ -20,11 +20,13 @@ public static class ItemDatabase
         {"mine", ItemType.Mine},
         {"recipe", ItemType.Recipe},
         {"stuff", ItemType.Stuff},
+        {"package", ItemType.Package},
     };
 
     public static Dictionary<ItemCategory, List<ItemType>> categoryDict = new Dictionary<ItemCategory, List<ItemType>>() {
         { ItemCategory.Currency, new List<ItemType>() { ItemType.Currency } },
-        { ItemCategory.Pet, new List<ItemType>() { ItemType.HpPotion, ItemType.Evolve, ItemType.Emblem, ItemType.EXP, ItemType.EV, ItemType.IV, ItemType.Personality, ItemType.Skill, ItemType.Buff } },
+        { ItemCategory.Pet, new List<ItemType>() { ItemType.HpPotion, ItemType.Evolve, ItemType.Emblem, ItemType.EXP, ItemType.EV,
+            ItemType.IV, ItemType.Personality, ItemType.Skill, ItemType.Buff, ItemType.Package } },
         { ItemCategory.Battle, new List<ItemType>() { ItemType.HpPotion } },
         { ItemCategory.Capture, new List<ItemType>() { ItemType.Capture } },
         { ItemCategory.Stuff, new List<ItemType>() { ItemType.Mine, ItemType.Stuff }},
@@ -60,6 +62,7 @@ public enum ItemType {
     Mine,
     Recipe,
     Stuff,
+    Package,
 }
 
 public enum ItemCategory {

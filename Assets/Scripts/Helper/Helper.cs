@@ -99,7 +99,9 @@ namespace System {
                 if (float.TryParse(split[i], out tmp)) {
                     list.Add(tmp);
                     continue;
-                } else if (Identifier.GetNumIdentifier(split[i]) != 0) {
+                } 
+                tmp = Identifier.GetNumIdentifier(split[i]);
+                if (tmp != 0) {
                     list.Add(tmp);
                     continue;
                 }

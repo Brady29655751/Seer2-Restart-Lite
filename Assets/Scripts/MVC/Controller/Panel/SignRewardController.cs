@@ -30,4 +30,8 @@ public class SignRewardController : Module
         signRewardModel.Sign();
         RefreshView();
     }
+
+    public void OpenPanel(string panelName) {
+        Panel.OpenPanel(panelName);
+    }
 }

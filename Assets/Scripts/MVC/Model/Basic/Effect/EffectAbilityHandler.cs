@@ -218,26 +218,19 @@ public static class EffectAbilityHandler
 
         string who = effect.abilityOptionDict.Get("who", "me");
         string random = effect.abilityOptionDict.Get("random", "false");
+        string min = effect.abilityOptionDict.Get("min", "none");
+        string max = effect.abilityOptionDict.Get("max", "none");
 
         bool isRandom;
-        if (!bool.TryParse(random, out isRandom))
+        if ((!bool.TryParse(random, out isRandom)))
             return false;
-
-        for (int type = 0; type < typeNames.Length - 1; type++) {
-            int powerup = 0;
-            string add = effect.abilityOptionDict.Get(typeNames[type], "0");
-            if (!int.TryParse(add, out powerup))
-                return false;
-
-            status[type] = powerup;
-        }
 
         Unit invokeUnit = (Unit)effect.invokeUnit;
         Unit lhsUnit = (who == "me") ? state.GetUnitById(invokeUnit.id) : state.GetRhsUnitById(invokeUnit.id);
         Unit rhsUnit = state.GetRhsUnitById(lhsUnit.id);
-
         List<BattlePet> targetList = new List<BattlePet>();
 
+        // Prepare Target List
         switch (effect.target) {
             default:
                 targetList.Add(lhsUnit.pet);
@@ -257,6 +250,16 @@ public static class EffectAbilityHandler
 
                 break;
         };
+
+        // Prepare Powerup Status
+        for (int type = 0; type < typeNames.Length - 1; type++) {
+            int powerup = 0;
+            string add = effect.abilityOptionDict.Get(typeNames[type], "0");
+            if (!int.TryParse(add, out powerup))
+                return false;
+
+            status[type] = powerup;
+        }
 
         for (int j = 0; j < targetList.Count; j++) {
             var pet = targetList[j];
@@ -299,13 +302,25 @@ public static class EffectAbilityHandler
                 }
             }
 
+            // Handle min and max powerup.
+            if (min != "none") {
+                var minPowerup = (int)Parser.ParseEffectOperation(min, effect, lhsUnit, rhsUnit);
+                pet.statusController.SetMinPowerUp(minPowerup * Status.one);
+            } 
+            
+            if (max != "none") {
+                var maxPowerup = (int)Parser.ParseEffectOperation(max, effect, lhsUnit, rhsUnit);
+                pet.statusController.SetMaxPowerUp(maxPowerup * Status.one);
+            }
+
+            // Powerup.
             if (buffController.GetBuff(45) != null)
                 status = status.Select(x => x * (x > 0 ? 2 : 1));
 
             if (buffController.GetBuff(46) != null)
                 status = status.Select(x => x * (x < 0 ? 2 : 1));
 
-            pet.PowerUp(status, lhsUnit, state);
+            pet.PowerUp(status, lhsUnit, state);    
         }
 
         return true;
@@ -466,6 +481,7 @@ public static class EffectAbilityHandler
         string[] typeRange = typeList.Split('/');
         bool isId = (idList != "0") && (idRange.Count != 0);
         bool isType = (typeList != "none");
+
         if (!isId && !isType)
             return false;
 
@@ -637,7 +653,11 @@ public static class EffectAbilityHandler
                 if (Pet.GetPetInfo(evolveId) == null)
                     return false;
 
-                pet.MegaEvolve(evolveId);
+                string keepSkillExpr = effect.abilityOptionDict.Get("keep_skill", "true");
+                if (!bool.TryParse(keepSkillExpr, out var keepSkill))
+                    return false;
+                    
+                pet.MegaEvolve(evolveId, keepSkill);
                 return true;
             }
 

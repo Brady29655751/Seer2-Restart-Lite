@@ -17,6 +17,7 @@ public class ItemShopPanel : Panel
         { ItemShopType.PetPotion, "精灵道具商店" },
         { ItemShopType.Mine, "矿石回收商店" },
         { ItemShopType.Honor, "荣誉商店" },
+        { ItemShopType.Sign, "签到商店" },
     };
 
     protected Dictionary<ItemShopType, List<int>> shopItemIdDict = new Dictionary<ItemShopType, List<int>>() {
@@ -32,6 +33,9 @@ public class ItemShopPanel : Panel
         { ItemShopType.Honor, new List<int>() { 
             8001,   8002,   8003,   8004,   8005,
             300048,
+        } },
+        { ItemShopType.Sign, new List<int>() {
+            500178, 500436, 500959
         } },
     };
 
@@ -70,6 +74,7 @@ public class ItemShopPanel : Panel
                     "pet_potion" => ItemShopType.PetPotion,
                     "mine" => ItemShopType.Mine,
                     "honor" => ItemShopType.Honor,
+                    "sign"  => ItemShopType.Sign,
                     "others" => ItemShopType.Others,
                     _ => ItemShopType.None,
                 };
@@ -133,4 +138,5 @@ public enum ItemShopType {
     PetPotion = 1,
     Mine = 2,
     Honor = 3,
+    Sign = 4,
 }

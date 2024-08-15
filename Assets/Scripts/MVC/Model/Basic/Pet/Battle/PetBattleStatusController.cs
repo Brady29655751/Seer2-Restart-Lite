@@ -125,9 +125,20 @@ public class PetBattleStatusController
     public void SetMinPowerUp(int type, int min) {
         _minPowerUp[type] = min;
     }
+    public void SetMinPowerUp(Status minPowerup) {
+        for (int i = 0; i < Status.typeNames.Length; i++) {
+            SetMinPowerUp(i, (int)minPowerup[i]);
+        }
+    }
 
     public void SetMaxPowerUp(int type, int max) {
         _maxPowerUp[type] = max;
+    }
+
+    public void SetMaxPowerUp(Status maxPowerup) {
+        for (int i = 0; i < Status.typeNames.Length; i++) {
+            SetMaxPowerUp(i, (int)maxPowerup[i]);
+        }
     }
 
     public void AddPowerUp(int type, int addAmount) {
