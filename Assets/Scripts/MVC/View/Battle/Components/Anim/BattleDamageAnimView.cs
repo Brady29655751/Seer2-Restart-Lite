@@ -9,13 +9,10 @@ public class BattleDamageAnimView : Module
     [SerializeField] private Vector2 damageAnchoredPos;
     [SerializeField] private RectTransform damageAnchoredRect;
     [SerializeField] private GameObject damageBackgroundPrefab;
-    [SerializeField] private GameObject damageNumberPrefab;
     [SerializeField] private GameObject healAnchoredObject;
     [SerializeField] private GameObject healNumberPrefab;
     [SerializeField] private Color32 healPositiveColor;
     [SerializeField] private Color32 healNegativeColor;
-
-    private List<RectTransform> damageNumRectList = new List<RectTransform>();
 
     public void SetUnit(Unit lastUnit, Unit currentUnit) {
         if (currentUnit == null)
@@ -64,16 +61,15 @@ public class BattleDamageAnimView : Module
         string absorb = isDamage ? string.Empty : "Absorb";
 
         GameObject obj = Instantiate(damageBackgroundPrefab, damageAnchoredRect);
-        RectTransform rect = obj.GetComponent<RectTransform>();
-        Image img = obj.GetComponent<Image>();
-        IAnimator anim = obj.GetComponent<IAnimator>();
-
-        rect.Find("Critical").gameObject.SetActive(isDamage && isCritical);
-        rect.anchoredPosition = damageAnchoredPos;
-        rect.SetAsLastSibling();
+        BattleDamageBackgroundView script = obj.GetComponent<BattleDamageBackgroundView>();
+        Image img = script.Background;
+        IAnimator anim = script.Anim;
+        script.Critical.SetActive(isDamage && isCritical);
+        script.Rect.anchoredPosition = damageAnchoredPos;
+        script.Rect.SetAsLastSibling();
 
         if (isDamage) {
-            InstantiateDamageNum(rect, damage, isCritical);
+            script.InstantiateDamageNum(damage, isCritical);
         }
 
         img.SetDamageBackgroundSprite(elementRelation, isHit, (damage == 0));
@@ -90,25 +86,7 @@ public class BattleDamageAnimView : Module
     }
 
     private void OnDamageAnimEnd(IAnimator anim) {
-        damageNumRectList.Clear();
         Destroy(anim.gameObject);
-    }
-
-    private void InstantiateDamageNum(RectTransform backgroundRect, int damage, bool isCritical) {
-        string numString = "%" + damage.ToString();
-        int len = numString.Length;
-        bool isLenOdd = (len % 2 == 1);
-
-        for (int i = 0; i < len; i++) {
-            GameObject num = Instantiate(damageNumberPrefab, backgroundRect);
-            RectTransform rect = num.GetComponent<RectTransform>();
-            Image img = num.GetComponent<Image>();
-            int deltaX = 45 * (i - len / 2);
-            rect.anchoredPosition = isLenOdd ? new Vector2(deltaX, 0) : new Vector2(deltaX + 22.5f, 0);
-            rect.localScale = 1.5f * Vector3.one;
-            damageNumRectList.Add(rect);
-            img.sprite = ResourceManager.instance.GetSprite("Numbers/Damage/" + numString[i]);
-        }
     }
 
 }
