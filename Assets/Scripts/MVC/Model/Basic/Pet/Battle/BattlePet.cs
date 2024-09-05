@@ -7,6 +7,7 @@ using System;
 
 public class BattlePet : Pet
 {
+    public int stayTurn = 0;
     public PetBattleStatusController statusController;
     public PetBattleBuffController buffController;
     public PetBattleSkillController skillController;
@@ -47,6 +48,7 @@ public class BattlePet : Pet
         if (_pet == null)
             return;
 
+        stayTurn = 0;
         statusController = new PetBattleStatusController(normalStatus, currentStatus.hp);
         buffController = new PetBattleBuffController(element, subElement, null);
         skillController = new PetBattleSkillController(normalSkill.ToList(), superSkill);
@@ -56,6 +58,8 @@ public class BattlePet : Pet
         Status basicStatus = (info.status == null) ? normalStatus : info.status.GetBasicStatus().Select((x, i) => (x == 0) ? normalStatus[i] : x);
         Status hiddenStatus = (info.status == null) ? new Status(0, 0, 0, 0, 100, 100) : info.status.GetHiddenStatus();
         BattleStatus status = new BattleStatus(basicStatus, hiddenStatus);
+
+        stayTurn = 0;
 
         statusController = new PetBattleStatusController(status);
         buffController = new PetBattleBuffController(element, subElement, info.initBuffs);
@@ -69,6 +73,8 @@ public class BattlePet : Pet
         if (rhs == null)
             return;
         
+        stayTurn = rhs.stayTurn;
+
         statusController = new PetBattleStatusController(rhs.statusController);
         buffController = new PetBattleBuffController(rhs.buffController);
         skillController = new PetBattleSkillController(rhs.skillController);
@@ -145,6 +151,7 @@ public class BattlePet : Pet
 
     public override float GetPetIdentifier(string id) {
         return id switch {
+            "stayTurn" => stayTurn,
             "element" => (int)buffController.element,
             "subElement" => (int)buffController.subElement,
             _ => base.GetPetIdentifier(id),

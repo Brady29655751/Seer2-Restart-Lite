@@ -46,16 +46,17 @@ public class WorkshopEffectModel : Module
     }
 
     public EffectTiming GetEffectTiming() {
-        if (timingDropdown.value.IsWithin(3, 6))
+        if (timingDropdown.value.IsWithin(4, 7))
             return (EffectTiming)(timingDropdown.value - 1);
 
-        if (timingDropdown.value.IsWithin(7, 14))
+        if (timingDropdown.value.IsWithin(8, 15))
             return (EffectTiming)(timingDropdown.value);
 
         return timingDropdown.value switch {
             1   => EffectTiming.OnAddBuff,
             2   => EffectTiming.OnRemoveBuff,
-            15  => EffectTiming.OnBattleEnd,
+            3   => EffectTiming.Resident,
+            16  => EffectTiming.OnBattleEnd,
             _ => EffectTiming.None,
         };
     }

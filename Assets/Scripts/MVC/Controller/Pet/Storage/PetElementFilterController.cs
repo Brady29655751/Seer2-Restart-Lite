@@ -3,10 +3,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+// This component is in 3 places: Pet Dictionary, Pet Storage, and PVP Room.
 public class PetElementFilterController : Module
 {
     [SerializeField] private PetElementFilterModel filterModel;
     [SerializeField] private PetElementFilterView filterView;
+    [SerializeField] private PageView pageView;
 
     public Action<Func<Pet, bool>> onFilterEvent;
 
@@ -14,6 +16,7 @@ public class PetElementFilterController : Module
     {
         base.Init();
         SetActive(true);
+        OnSetPage();
     }
 
     public void SetActive(bool active) {
@@ -39,15 +42,30 @@ public class PetElementFilterController : Module
         onFilterEvent?.Invoke(filterModel.filter);
     }
 
+    public void OnSetPage() {
+        filterView.SetPage(filterModel.page);
+        pageView?.SetPage(filterModel.page, filterModel.lastPage);
+    }
+
+    public void PrevPage() {
+        filterModel.PrevPage();
+        OnSetPage();
+    }
+
+    public void NextPage() {
+        filterModel.NextPage();
+        OnSetPage();
+    }
+
     public void SetInfoPromptActive(bool active) {
         filterView.SetInfoPromptActive(active);
     }
 
     public void SetElementInfo(int index) {
-        var elementList = PetElementSystem.elementList;
-        if (!index.IsInRange(0, elementList.Count))
+        var elementId = filterModel.GetElementId(index);
+        if (!elementId.IsInRange(0, PetElementSystem.elementNum))
             return;
 
-        filterView.SetElementInfo(elementList[index]);
+        filterView.SetElementInfo((Element)elementId);
     }
 }

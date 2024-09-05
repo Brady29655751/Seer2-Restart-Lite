@@ -42,6 +42,9 @@ public class NpcInfo
     [XmlArray("eventHandler"), XmlArrayItem(typeof(NpcButtonHandler), ElementName = "button")] 
     public List<NpcButtonHandler> eventHandler;
 
+    [XmlArray("callbackHandler"), XmlArrayItem(typeof(NpcButtonHandler), ElementName = "button")]
+    public List<NpcButtonHandler> callbackHandler;
+
     public static bool IsMod(string resId) {
         if (int.TryParse(resId, out var modId))
             return modId <= -50001_00;

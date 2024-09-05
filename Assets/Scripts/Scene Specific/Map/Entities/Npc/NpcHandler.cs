@@ -61,7 +61,7 @@ public static class NpcHandler
         NpcInfo npcInfo = npc?.GetInfo();
         return handler.action switch {
             NpcAction.SetNpcParam   => () => NpcActionHandler.SetNpcParam(npc, handler, npcList),
-            NpcAction.OpenHintbox   => () => NpcActionHandler.OpenHintbox(handler),
+            NpcAction.OpenHintbox   => () => NpcActionHandler.OpenHintbox(npc, handler, npcList),
             NpcAction.OpenPanel     => () => NpcActionHandler.OpenPanel(handler),
             NpcAction.OpenDialog    => () => NpcActionHandler.OpenDialog(npcInfo, handler),
             NpcAction.Teleport      => () => NpcActionHandler.Teleport(handler),

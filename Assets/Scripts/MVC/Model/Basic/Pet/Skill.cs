@@ -129,17 +129,21 @@ public class Skill
     }
 
     public string[] GetRawInfoStringArray() {
-        var rawOptionString = ((critical == 5) ? string.Empty : ("critical=" + critical + "&")) +
+        string[] defaultOptionKeys = new string[] { "critical", "priority", "second_super",
+            "ignore_shield", "ignore_powerup", "ref_buff" };
+
+        string rawOptionString = ((critical == 5) ? string.Empty : ("critical=" + critical + "&")) +
             ((priority == 0) ? string.Empty : ("priority=" + priority + "&")) + 
             (isSecondSuper ? ("second_super=true&") : string.Empty) +
             (ignoreShield ? ("ignore_shield=" + ignoreShield + "&") : string.Empty) + 
             (ignorePowerup ? ("ignore_powerup=" + ignorePowerup + "&") : string.Empty) + 
             (List.IsNullOrEmpty(referBuffList) ? string.Empty : ("ref_buff=" + referBuffList.ConcatToString("/")));
-
-        rawOptionString = string.IsNullOrEmpty(rawOptionString) ? "none" : rawOptionString;
+        
+        string otherOptionString = options.Where(entry => !defaultOptionKeys.Contains(entry.Key)).Select(entry => entry.Key + "=" + entry.Value).ConcatToString("&");
+        string allOptionString = string.IsNullOrEmpty(rawOptionString + otherOptionString) ? "none" : (rawOptionString + "&" + otherOptionString); 
 
         return new string[] { id.ToString(), name, elementId.ToString(), ((int)type).ToString(),
-            power.ToString(), anger.ToString(), accuracy.ToString(), rawOptionString.TrimEnd("&"), rawDescription  };
+            power.ToString(), anger.ToString(), accuracy.ToString(), allOptionString.Trim('&'), rawDescription  };
     }
 
     public static Skill GetSkill(int id, bool avoidNull = true) {

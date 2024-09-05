@@ -21,8 +21,8 @@ public class PetFeatureInfo
         Array.Copy(_data, startIndex, _slicedData, 0, _slicedData.Length);
 
         baseId = int.Parse(_slicedData[0]);
-        feature = new Feature() { baseId = baseId, name = _slicedData[1], description = _slicedData[2] };
-        emblem = (_slicedData[3] == "none") ? null : new Emblem() { baseId = baseId, name = _slicedData[3], description = _slicedData[4] };
+        feature = new Feature() { baseId = baseId, name = _slicedData[1], rawDescription = _slicedData[2] };
+        emblem = (_slicedData[3] == "none") ? null : new Emblem() { baseId = baseId, name = _slicedData[3], rawDescription = _slicedData[4] };
     }
 
     public PetFeatureInfo(int baseId, Feature feature, Emblem emblem) {
@@ -41,14 +41,16 @@ public class PetFeatureInfo
 public class Feature {
     public int baseId;
     public string name;
-    public string description;
+    public string rawDescription;
+    public string description => rawDescription.Replace("[ENDL]", "\n");
 }
 
 [XmlRoot("emblem")]
 public class Emblem {
     public int baseId;
     public string name;
-    public string description;
+    public string rawDescription;
+    public string description => rawDescription.Replace("[ENDL]", "\n");
 
     public static Sprite GetNullEmblemSprite() {
         return GetSprite(0);

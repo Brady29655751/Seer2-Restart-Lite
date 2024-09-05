@@ -8,9 +8,11 @@ public class WorkshopAllModel : Module
 {
     [SerializeField] private WorkshopLearnSkillModel learnSkillModel;
     [SerializeField] private WorkshopLearnBuffModel learnBuffModel;
+    [SerializeField] private WorkshopLearnItemModel learnItemModel;
 
     public Skill currentSkill => learnSkillModel.currentSkill;
     public BuffInfo currentBuffInfo => learnBuffModel.currentBuffInfo;
+    public ItemInfo currentItemInfo => learnItemModel.currentItemInfo;
     
     public void OnImportMod() {
         var hintbox = Hintbox.OpenHintbox();

@@ -70,6 +70,20 @@ public class PetSelectController : Module
         }
     }
 
+    public void SetPageByInputField(bool defaultSelect = true) {
+        if (pageView == null)
+            return;
+
+        int page = pageView.GetJumpPage();
+        if (page < 0)
+            return;
+
+        selectModel.SetPage(page);
+        if ((defaultSelect) && (selectModel.cursor.Length <= 0)) {
+            Select(0);
+        }
+    }
+
     public void Sort(Func<Pet, object> sorter) {
         selectModel.Sort(sorter);
         Select(0);

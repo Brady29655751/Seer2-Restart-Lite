@@ -48,7 +48,29 @@ public class RoomManager : Manager<RoomManager>
             PhotonNetwork.CurrentRoom?.SetCustomProperties(room);
         }
 
-        var myPets = Player.instance.petBag.Take(petCount).Select(x => (x == null) ? null : Pet.ToBestPet(new Pet(x)));
+        var myPets = Player.instance.petBag.Take(petCount).Select(x => (x == null) ? null : Pet.ToBestPet(new Pet(x))).Select(x => {
+            if (x == null)
+                return x;
+            
+            if (x.level > 100) {
+                var normalSkillId = x.skills.normalSkillId;
+                var superSkillId = x.skills.superSkillId;
+
+                x.LevelDown(100);
+                x.skills.normalSkillId = normalSkillId.Where(x.skills.ownSkillId.Contains).ToArray();
+                x.skills.normalSkillId = x.skills.normalSkillId.Concat(x.skills.backupNormalSkill.Take(4 - x.skills.normalSkillId.Length).Select(x => x.id)).ToArray();
+                if (x.skills.ownSkillId.Contains(superSkillId))
+                    x.skills.superSkillId = superSkillId;
+            }
+            
+            x.feature.afterwardBuffIds.Clear();
+            x.record = new PetRecord();
+            if (x.talent.ev.sum > 510) {
+                x.talent.SetEV(Status.zero);
+                x.talent.SetEVStorage(510);
+            }
+            return x;
+        });
         petBagPanel.SetPetBag(myPets.ToArray());
         roomSettingsView.SetPet(myPets.ToList(), true);
     }

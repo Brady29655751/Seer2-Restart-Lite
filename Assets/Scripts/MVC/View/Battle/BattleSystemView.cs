@@ -24,7 +24,7 @@ public class BattleSystemView : BattleBaseView
     }
 
     public void StartTimer() {
-        timer.SetTimer(10);
+        timer.SetTimer(battle.settings.time);
     }
 
     public void DoneTimer() {

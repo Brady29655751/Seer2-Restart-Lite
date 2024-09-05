@@ -104,13 +104,6 @@ public class MapSceneView : UIModule
         VersionPetData petData = GameManager.versionData.petData;
         List<Action> actionList = new List<Action>();
 
-        /* Unlock mod restriction
-        // Use mod pet to battle does not count. Unless mod battle
-        if ((!petBag.Any(x => PetInfo.IsMod(x?.id ?? 0))) || (battleInfo.settings.isMod)) {
-
-        }
-        */
-
         if (result.isMyWin) { 
             actionList = battleInfo.winHandler.Select(x => NpcHandler.GetNpcEntity(npc, x, npcDict)).ToList();
         } else if (result.isOpWin) {

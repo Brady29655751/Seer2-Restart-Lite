@@ -31,6 +31,10 @@ public class PetStatusBlockView : Module
         statusText.text = status.ToString();
     }
 
+    public void SetStatusColor(Color color) {
+        statusText.color = color;
+    }
+
     public void SetEV(float ev) {
         if (evText == null)
             return;

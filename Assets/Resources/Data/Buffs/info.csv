@@ -95,7 +95,7 @@ id,name,type,copyType,turn,options,description
 1008,慢性毒药,unhealthy,stack,-1,max_val=10,每回合每层慢性毒药损失10点体力，最多叠加10层。[ENDL]当前为[value]层
 1011,烫伤,unhealthy,replace,3,none,受到特殊攻击时，使自身损失1/8体力
 1013,燃烧,unhealthy,replace,-1,none,每回合损失30点体力
-3000,弱点记号,mark,stack,-1,inherit=true&max_val=2,每1个记号使速度下降25点，最多叠加2个。[ENDL]当前为[value]个
+3000,弱点记号,mark,stack,-1,inherit=true&legacy=true&max_val=2,每1个记号使速度下降25点，最多叠加2个。[ENDL]当前为[value]个
 3001,易伤,mark,replace,-1,none,受到的伤害增加50%
 3002,寄生炸弹,turn,replace,3,keep=false,爆炸时损失300点体力
 3003,迷惑,chance,replace,-1,none,使对手下一次造成的伤害减半并且另一半由对手承担
@@ -269,7 +269,7 @@ id,name,type,copyType,turn,options,description
 100964,足星,feature,replace,-1,none,星移环境下所有技能先制+2
 100965,背星,feature,replace,-1,none,星移环境下攻击造成的伤害不低于100
 100966,心星,feature,replace,-1,none,星移环境下每回合增加5点怒气
-100970,星移,feature,replace,-1,none,战斗开始和主动替换上场时使环境转变为星移
+100970,星移,feature,replace,-1,none,上场后首次决定技能时使环境转变为星移
 100981,灵目,feature,replace,-1,none,免疫不良状态，回合结束时体力低于1/8时会自动恢复1/8体力
 100982,灵脉,feature,replace,-1,none,免疫不良状态，回合结束时体力为1会怒气回满，血衣状态下对手暴击-1
 100988,灵影,feature,replace,-1,none,免疫不良状态，被对手技能命中时生成1枚影钩

@@ -14,6 +14,14 @@ public static class Identifier {
             if (trimId == string.Empty)
                 return Random.Range(0, 100);
 
+            if (trimId == "[old]")
+                return Player.instance.random;
+
+            if (trimId == "[new]") {
+                Player.instance.random = Random.Range(0, 100);
+                return Player.instance.random;
+            }
+
             int startIndex = trimId.IndexOf('[');
             int middleIndex = trimId.IndexOf('~');
             int endIndex = trimId.IndexOf(']');
@@ -32,19 +40,59 @@ public static class Identifier {
         return float.TryParse(id, out num) ? num : 0;
     }
 
+    public static float GetIdentifier(string id) {
+        string trimId = id;
+
+        if (id.TryTrimStart("firstPet.", out trimId))
+            return Player.instance.petBag[0].GetPetIdentifier(trimId);
+
+        if (id.TryTrimStart("activity", out trimId)) {
+            string activityId = trimId.TrimParentheses();
+            
+            trimId = trimId.Substring(trimId.IndexOf('.') + 1);
+            
+            if (!trimId.Contains("[default]"))
+                trimId += "[default]0";
+
+            string dataId = trimId.Substring(0, trimId.IndexOf("[default]"));
+            string defaultVal = trimId.Substring(trimId.IndexOf("[default]") + 9);
+            
+            var activity = Activity.Find(activityId);
+            var dataVal = activity.GetData(dataId, defaultVal);
+            return float.TryParse(dataVal, out var num) ? num : 0;
+        }
+
+        if (id.TryTrimStart("battle.", out trimId)) {
+            var battle = Player.instance.currentBattle;
+            return GetBattleIdentifier("state." + trimId, battle?.currentState?.myUnit, battle?.currentState?.opUnit);
+        }
+
+        if (id.TryTrimStart("item", out trimId)) {
+            int itemId = int.Parse(trimId.TrimParentheses());
+            string dataId = trimId.Substring(trimId.IndexOf('.') + 1);
+            Item item = Item.Find(itemId);
+
+            return dataId switch {
+                _ => item?.num ?? 0,
+            };
+        }
+
+        return GetNumIdentifier(id);
+    }
+
     public static float GetIdentifier(string id, Effect effect, Unit lhsUnit, Unit rhsUnit) {
         float num = 0;
 
         id = id.Replace("－", "-");
         
         return effect.source switch {
-            Buff buff => buff.TryGetBuffIdentifier(id, out num) ? num : GetGlobalIdentifier(id, lhsUnit, rhsUnit),
-            Skill skill => skill.TryGetSkillIdentifier(id, out num) ? num : GetGlobalIdentifier(id, lhsUnit, rhsUnit),
-            _ => GetGlobalIdentifier(id, lhsUnit, rhsUnit),
+            Buff buff => buff.TryGetBuffIdentifier(id, out num) ? num : GetBattleIdentifier(id, lhsUnit, rhsUnit),
+            Skill skill => skill.TryGetSkillIdentifier(id, out num) ? num : GetBattleIdentifier(id, lhsUnit, rhsUnit),
+            _ => GetBattleIdentifier(id, lhsUnit, rhsUnit),
         };
     }
 
-    public static float GetGlobalIdentifier(string id, Unit lhsUnit, Unit rhsUnit) {
+    public static float GetBattleIdentifier(string id, Unit lhsUnit, Unit rhsUnit) {
         string trimId = id;
             
         if (id.TryTrimStart("state.", out trimId)) {

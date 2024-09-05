@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+// Pet Bag Panel are in 3 places: Prefab, PVP Room, Pet Dictionary Example
+// Every revise with pet bag should check all these places.
 public class PetBagPanel : Panel
 {
     private Pet[] playerPetBag => Player.instance.petBag;
@@ -68,6 +70,9 @@ public class PetBagPanel : Panel
         itemController.onItemUsedEvent += OnItemUsed;
         skinController.onSetSkinSuccessEvent += OnSetSkinSuccess;
 
+        if (featureController != null)
+            featureController.onRemoveBuffEvent += OnRemoveBuffSuccess;
+
         if (teamController != null)
             teamController.onSelectTeamSuccessEvent += RefreshPetBag;
 
@@ -90,6 +95,10 @@ public class PetBagPanel : Panel
     private void OnSetSkinSuccess() {
         // Only change skin when petBag is player's true petBag.
         RefreshPetBag(playerPetBag);
+    }
+
+    private void OnRemoveBuffSuccess(Buff buff) {
+        RefreshPetBag(petBag);
     }
 
     private void OnSwitchPetSuccess(Pet pet) {

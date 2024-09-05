@@ -1,3 +1,4 @@
+using System;
 using System.Xml.Serialization;
 using System.Linq;
 using System.Collections;
@@ -57,6 +58,11 @@ public class Activity
     }
 
     public void SetData(string key, string value) {
+        // Handle Value.
+        // For example, [expr]200+activity[10001].damage[default]123
+        if (value.TryTrimStart("[expr]", out var expr))
+            value = Parser.ParseOperation(expr).ToString();
+
         var entry = data.Find(x => x.key == key);
         if (entry == null)
             data.Add(new IKeyValuePair<string, string>(key, value));

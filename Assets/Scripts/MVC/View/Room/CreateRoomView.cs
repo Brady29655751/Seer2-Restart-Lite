@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Photon.Realtime;
@@ -7,11 +8,17 @@ using UnityEngine.UI;
 public class CreateRoomView : Module
 {
     [SerializeField] private Hintbox hintbox;
-    [SerializeField] private Image optionBackground;
+    [SerializeField] private Image petCountBackground, turnTimeBackground;
 
     public void SetPetCount(int count) {
         int posX = 200 + ((count == 1) ? 0 : 1) * 105;
-        optionBackground.rectTransform.anchoredPosition = new Vector2(posX, 0);
+        petCountBackground.rectTransform.anchoredPosition = new Vector2(posX, 0);
+    }
+
+    public void SetTurnTime(int time) {
+        int[] timeList = new int[] { 10, 30, 60 };
+        int posX = 200 + timeList.IndexOf(time) * 70;
+        turnTimeBackground.rectTransform.anchoredPosition = new Vector2(posX, 0);   
     }
 
     public void CreateRoom() {

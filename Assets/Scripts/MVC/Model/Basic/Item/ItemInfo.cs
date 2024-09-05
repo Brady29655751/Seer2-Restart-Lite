@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Xml.Serialization;
 using System.Collections;
 using System.Collections.Generic;
@@ -38,8 +39,21 @@ public class ItemInfo
         SetCurrencyTypeAndPrice(_slicedData[3]);
         options.ParseOptions(_slicedData[4]);
         InitOptionProperty();
-        itemDescription = GetItemDescription((_slicedData[5] == "none") ? string.Empty : _slicedData[5]);
-        effectDescription = _slicedData[6].Trim().Replace("[ENDL]", "\n");
+        itemDescription = (_slicedData[5] == "none") ? string.Empty : _slicedData[5];
+        effectDescription = _slicedData[6].Trim();
+    }
+
+    public ItemInfo(int id, string itemName, ItemType type, int price, int currencyType, 
+        string options, string itemDescription, string effectDescription) {
+        this.id = id;
+        this.name = itemName;
+        this.type = type;
+        this.currencyType = currencyType;
+        this.price = price;
+        this.options.ParseOptions(options);
+        InitOptionProperty();
+        this.itemDescription = (itemDescription == "none") ? string.Empty : itemDescription;
+        this.effectDescription = effectDescription.Trim();
     }
 
     public void SetEffects(List<Effect> _effects) {
@@ -68,11 +82,23 @@ public class ItemInfo
         price = int.Parse(value);
     }
 
-    public string GetItemDescription(string itemDesc) {
+    public string GetItemDescription() {
+        var itemDesc = itemDescription;
         if (!removable)
             itemDesc = "[ffbb33]【无限再生】[-][ENDL]" + itemDesc;
 
-        return itemDesc.Replace("[ENDL]", "\n").Replace("[-]", "</color>").Replace("[", "<color=#").Replace("]", ">");
+        return itemDesc.ReplaceColorAndNewline();
+    }
+
+    public string GetEffectDescription() => effectDescription.ReplaceColorAndNewline();
+
+    public string[] GetRawInfoStringArray() {
+        var itemDesc = string.IsNullOrEmpty(itemDescription) ? "none" : itemDescription;
+        var optionsAll = options.Select(entry => entry.Key + "=" + entry.Value).ConcatToString("&");
+        optionsAll = string.IsNullOrEmpty(optionsAll) ? "none" : optionsAll;
+
+        return new string[] { id.ToString(), name, type.ToRawString(), price + "[" + currencyType + "]",
+           optionsAll, itemDesc, effectDescription };
     }
 
     public static Sprite GetIcon(string resId) {

@@ -5,7 +5,7 @@ using UnityEngine;
 public class WorkshopAllView : Module
 {
     [SerializeField] private List<GameObject> createModObjectList, checkModObjectList;
-    [SerializeField] private Panel allSkillPanel, allBuffPanel;
+    [SerializeField] private Panel allSkillPanel, allBuffPanel, allItemPanel;
 
     public void NeverCreateMod() {
         createModObjectList.ForEach(x => x.SetActive(true));
@@ -23,6 +23,10 @@ public class WorkshopAllView : Module
     
     public void OpenAllBuffPanel() {
         allBuffPanel.SetActive(true);
+    }
+
+    public void OpenAllItemPanel() {
+        allItemPanel.SetActive(true);
     }
     
     

@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -34,6 +35,10 @@ public static class ItemDatabase
 
     public static ItemType ToItemType(this string type) {
         return typeConvDict.Get(type, ItemType.None);
+    }
+
+    public static string ToRawString(this ItemType type) {
+        return typeConvDict.ContainsValue(type) ? typeConvDict.First(x => x.Value == type).Key : "none";
     }
 
     public static bool IsInCategory(this ItemType type, ItemCategory category) {

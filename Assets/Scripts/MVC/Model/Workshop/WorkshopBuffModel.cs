@@ -11,7 +11,7 @@ public class WorkshopBuffModel : Module
     [SerializeField] private IInputField idInputField, nameInputField;
     [SerializeField] private IDropdown typeDropdown, copyDropdown;
     [SerializeField] private IInputField turnInputField;
-    [SerializeField] private Toggle keepToggle, inheritToggle, autoRemoveToggle;
+    [SerializeField] private Toggle keepToggle, inheritToggle, legacyToggle, autoRemoveToggle;
     [SerializeField] private IInputField descriptionInputField, optionInputField;
 
     public BuffInfo buffInfo => GetBuffInfo();
@@ -22,6 +22,7 @@ public class WorkshopBuffModel : Module
     public int turn => Mathf.Max(int.Parse(turnInputField.inputString), -1);
     public bool keep => keepToggle.isOn;
     public bool inherit => inheritToggle.isOn;
+    public bool legacy => legacyToggle.isOn;
     public bool autoRemove => autoRemoveToggle.isOn;
 
     private byte[] iconBytes = null;
@@ -29,7 +30,7 @@ public class WorkshopBuffModel : Module
     public string description => descriptionInputField.inputString?.Replace("\n", "[ENDL]") ?? string.Empty;
     public string descriptionPreview => Buff.GetBuffDescriptionPreview(description);
     public string options => optionInputField.inputString;
-    public string optionsAll => ("keep=" + keep) + ("&inherit=" + inherit) + ("&auto_remove=" + autoRemove) + (string.IsNullOrEmpty(options) ? string.Empty : ("&" + options));
+    public string optionsAll => ("keep=" + keep) + ("&inherit=" + inherit) + ("&auto_remove=" + autoRemove) + ("&legacy=" + legacy) + (string.IsNullOrEmpty(options) ? string.Empty : ("&" + options));
 
     public List<Effect> effectList = new List<Effect>();
     public event Action<Sprite> onUploadIconEvent;
@@ -51,6 +52,7 @@ public class WorkshopBuffModel : Module
 
         keepToggle.isOn = buffInfo.keep;
         inheritToggle.isOn = buffInfo.inherit;
+        legacyToggle.isOn = buffInfo.legacy;
         autoRemoveToggle.isOn = buffInfo.autoRemove;
 
         descriptionInputField.SetInputString(buffInfo.description);
@@ -58,6 +60,7 @@ public class WorkshopBuffModel : Module
         var rawOptions = new Dictionary<string, string>(buffInfo.options);
         rawOptions.Remove("keep");
         rawOptions.Remove("inherit");
+        rawOptions.Remove("legacy");
         rawOptions.Remove("auto_remove");
         optionInputField.SetInputString(rawOptions.Select(entry => entry.Key + "=" + entry.Value).ConcatToString("&"));
 
@@ -121,6 +124,28 @@ public class WorkshopBuffModel : Module
         
         // rollback
         Database.instance.buffInfoDict.Set(buffInfo.id, originalBuffInfo);
+        return false;
+    }
+
+    public bool DeleteDIYBuff(out string message) {
+        if (!VerifyId(out message))
+            return false;
+
+        var originalBuffInfo = Buff.GetBuffInfo(id);
+        if ((originalBuffInfo == null) || (!BuffInfo.IsMod(id))) {
+            message = "未检测到此序号的Mod印记";
+            return false;
+        }
+        
+        Database.instance.buffInfoDict.Remove(id);
+        if (SaveSystem.TrySaveBuffMod(originalBuffInfo, null, null, id)) {
+            message = "印记删除成功";
+            return true;
+        }
+
+        // rollback
+        Database.instance.buffInfoDict.Set(id, originalBuffInfo);
+        message = "印记删除失败（档案写入问题）";
         return false;
     }
 

@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 public class WorkshopEffectView : Module
 {
-    [SerializeField] private Panel effectPanel, refSkillPanel, refBuffPanel, multiEffectPanel, helpPanel;
+    [SerializeField] private Panel effectPanel, refSkillPanel, refBuffPanel, refItemPanel, multiEffectPanel, helpPanel;
     [SerializeField] private Text helpText;
     [SerializeField] private RectTransform multiEffectContentRect;
     [SerializeField] private GameObject multiEffectButtonPrefab;
@@ -24,6 +24,10 @@ public class WorkshopEffectView : Module
 
     public void SetRefBuffPanelActive(bool active) {
         refBuffPanel.SetActive(active);
+    }
+
+    public void SetRefItemPanelActive(bool active) {
+        refItemPanel.SetActive(active);
     }
 
     public void SetMultiEffectPanelActive(bool active) {

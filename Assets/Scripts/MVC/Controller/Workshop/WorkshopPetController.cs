@@ -119,6 +119,17 @@ public class WorkshopPetController : Module
 
         OnConfirmGameDataSaved();
     }
+    
+    public void OnDeletePet() {
+        var hintbox = Hintbox.OpenHintbox();
+        hintbox.SetTitle("提示");
+        hintbox.SetContent("确定要删除此精灵吗？\n记得先保存存档！", 16, FontOption.Arial);
+        hintbox.SetOptionNum(2);
+        hintbox.SetOptionCallback(() => {
+            petModel.DeleteDIYPet(out string message);
+            Hintbox.OpenHintboxWithContent(message, 16);
+        });
+    }   
 
     private bool VerifyDIYPet(out string error) {
         return petModel.VerifyDIYPet(out error);
