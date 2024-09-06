@@ -20,7 +20,8 @@ public class BattleManager : Manager<BattleManager>
     protected override void Awake()
     {
         base.Awake();
-        if (PhotonNetwork.IsConnected) {
+        if (PhotonNetwork.IsConnected)
+        {
             var photonView = PhotonNetwork.IsMasterClient ? masterView : clientView;
             photonView.RequestOwnership();
 
@@ -29,38 +30,47 @@ public class BattleManager : Manager<BattleManager>
         }
     }
 
-    private void Start() {
+    private void Start()
+    {
         battle.OnBattleStart();
     }
 
-    public void StartTimer() {
+    public void StartTimer()
+    {
         systemView.StartTimer();
     }
 
-    public void DoneTimer() {
+    public void DoneTimer()
+    {
         systemView.DoneTimer();
     }
 
-    public void StopTimer() {
+    public void StopTimer()
+    {
         systemView.StopTimer();
     }
 
-    public void ProcessResult(BattleResult result) {
+    public void ProcessResult(BattleResult result)
+    {
         systemView.ProcessResult(result);
     }
 
-    public void OnConfirmBattleResult() {
-        if (battle.settings.mode == BattleMode.PVP) {
+    public void OnConfirmBattleResult()
+    {
+        if (battle.settings.mode == BattleMode.PVP)
+        {
             NetworkData data = new NetworkData() { networkAction = NetworkAction.Leave };
             NetworkManager.instance.StartNetworkAction(data);
         }
+
         SceneLoader.instance.ChangeScene(SceneId.Map);
     }
 
-    public void SetState(BattleState lastState, BattleState currentState) {
+    public void SetState(BattleState lastState, BattleState currentState)
+    {
         if (lastState == null)
             queue.Enqueue(null);
-        
+
         queue.Enqueue(currentState);
     }
 
@@ -68,62 +78,80 @@ public class BattleManager : Manager<BattleManager>
     /// Start processing UI Query. <br/>
     /// If processOne = true, then no checking for done or any UI conficts.
     /// </summary>
-    public void ProcessQuery(bool processOne = false) {
-        if (queue.Count <= 0) {
+    public void ProcessQuery(bool processOne = false)
+    {
+        if (queue.Count <= 0)
+        {
             SetBottomBarInteractable(true);
             SelectOption(currentUIState.myUnit.pet.isDead ? 1 : 0);
             SetOptionActive(2, currentUIState.settings.isCaptureOK);
-            if ((!currentUIState.settings.isItemOK) || (currentUIState.myUnit.pet.isDead)) {
+            if ((!currentUIState.settings.isItemOK) || (currentUIState.myUnit.pet.isDead))
+            {
                 SetOptionActive(2, false);
                 SetOptionActive(3, false);
             }
+
             return;
         }
+
         var newState = queue.Dequeue();
-        if (newState == null) {
+        if (newState == null)
+        {
             currentUIState = null;
             newState = queue.Dequeue();
-            if (newState.result.isBattleEnd) {
+            if (newState.result.isBattleEnd)
+            {
+                playerView.SetState(currentUIState, newState);
+                enemyView.SetState(currentUIState, newState);
                 ProcessResult(newState.result);
                 return;
             }
         }
+
         systemView.SetState(currentUIState, newState);
         playerView.SetState(currentUIState, newState);
         enemyView.SetState(currentUIState, newState);
-        
+
         currentUIState = newState;
 
         if (processOne)
             return;
-        
+
         StartCoroutine(CheckQueryDone(newState));
     }
 
-    protected IEnumerator CheckQueryDone(BattleState newState) {
-        while (!isDone) {
+    protected IEnumerator CheckQueryDone(BattleState newState)
+    {
+        while (!isDone)
+        {
             yield return new WaitForSeconds(0.2f);
         }
+
         ProcessQuery();
     }
 
-    public void SelectOption(int index) {
+    public void SelectOption(int index)
+    {
         systemView.SelectOption(index);
     }
 
-    public void SetOptionActive(int index, bool active) {
+    public void SetOptionActive(int index, bool active)
+    {
         systemView.SetOptionActive(index, active);
     }
 
-    public void SetBottomBarInteractable(bool interactable) {
+    public void SetBottomBarInteractable(bool interactable)
+    {
         systemView.SetBottomBarInteractable(interactable);
     }
 
-    public void SetBattleEscape() {
+    public void SetBattleEscape()
+    {
         battle.SetSkill(Skill.GetEscapeSkill(), true);
     }
 
-    protected void OpenDisconnectHintbox(string message) {
+    protected void OpenDisconnectHintbox(string message)
+    {
         Hintbox hintbox = Hintbox.OpenHintbox();
         hintbox.SetTitle("提示");
         hintbox.SetContent(message, 16, FontOption.Arial);
@@ -131,7 +159,8 @@ public class BattleManager : Manager<BattleManager>
         hintbox.SetOptionCallback(OnConfirmBattleResult);
     }
 
-    public void OnLocalPlayerDisconnect(DisconnectCause disconnectCause, string failedMessage) {
+    public void OnLocalPlayerDisconnect(DisconnectCause disconnectCause, string failedMessage)
+    {
         if (battle.result.isBattleEnd)
             return;
 
@@ -139,15 +168,17 @@ public class BattleManager : Manager<BattleManager>
         NetworkManager.instance.onDisconnectEvent -= OnLocalPlayerDisconnect;
     }
 
-    public void OnOtherPlayerDisconnect(Photon.Realtime.Player player) {
+    public void OnOtherPlayerDisconnect(Photon.Realtime.Player player)
+    {
         if (battle.result.isBattleEnd)
             return;
-            
+
         OpenDisconnectHintbox("对手连线已中断");
         NetworkManager.instance.onOtherPlayerLeftRoomEvent -= OnOtherPlayerDisconnect;
     }
 
-    public void PVPSetSkillToOthers(Skill skill) {
+    public void PVPSetSkillToOthers(Skill skill)
+    {
         if (battle.settings.mode != BattleMode.PVP)
             return;
 

@@ -8,52 +8,80 @@ public class BattleAnimView : BattleBaseView
     [SerializeField] private BattlePetAnimView petView;
     [SerializeField] private BattleSkillBubbleAnimView skillBubbleView;
     [SerializeField] private BattleDamageAnimView damageView;
+    [SerializeField] private BattlePetAnimView otherSidePetView;
 
     public bool isDone => petView.isDone;
 
-    public void SetUnit(Unit lastUnit, Unit currentUnit) {
+    public void SetUnit(Unit lastUnit, Unit currentUnit)
+    {
         if (currentUnit == null)
             return;
-
         SetPet(lastUnit, currentUnit);
-        SetSkillBubble(lastUnit, currentUnit);
-        SetDamage(lastUnit, currentUnit);
+        SetDamage(currentUnit);
+        SetOtherSidePet(currentUnit);
+        SetCapture(currentUnit);
+        SetHeal(currentUnit);
     }
 
-    private void SetPet(Unit lastUnit, Unit currentUnit) {
+    private int lastPetId = 0; //上一个单位的宠物id.专门用来判断是否需要刷新宠物
+
+    private void SetPet(Unit lastUnit, Unit currentUnit)
+    {
         // int lastCursor = (lastUnit == null) ? -1 : lastUnit.petSystem.cursor;
-        var lastPetId = lastUnit?.pet?.id ?? 0;
-        var currentPetId = currentUnit?.pet?.id ?? 0;
-        if (lastPetId != currentPetId) {
+        int currentPetId = currentUnit?.pet?.basic.uid ?? 0;
+        if (lastPetId != currentPetId)
+        {
             petView.SetPet(currentUnit.pet);
-            // petView.SetField(currentUnit.pet);
+            this.lastPetId = currentPetId;
             return;
         }
-        if (currentUnit.hudSystem.applyPetAnim)
-            petView.SetPetAnim(currentUnit.skillSystem.skill, currentUnit.hudSystem.petAnimType);
-        
+
+        if (currentUnit.hudSystem.petAnimType is PetAnimationType.Dying or PetAnimationType.Lose
+            or PetAnimationType.Win)
+        {
+            petView.SetPetStateAnim(currentUnit.hudSystem.petAnimType);
+            return;
+        }
+
+        if (currentUnit.hudSystem.petAnimType is PetAnimationType.Physic or PetAnimationType.Special
+            or PetAnimationType.Property or PetAnimationType.Super or PetAnimationType.SecondSuper
+            or PetAnimationType.JointSuper)
+        {
+            skillBubbleView.SetSkill(currentUnit.skill);
+            petView.SetPetSkillAnim(currentUnit.hudSystem.petAnimType);
+        }
         // petView.SetField(currentUnit.pet);
     }
 
-    private void SetSkillBubble(Unit lastUnit, Unit currentUnit) {
-        bool currentBubble = currentUnit.hudSystem.applySkillBubbleAnim;
-        bool lastBubble = (lastUnit == null) ? (!currentBubble) : lastUnit.hudSystem.applySkillBubbleAnim;
-
-        if (lastBubble == currentBubble)
-            return;
-
-        if (!currentUnit.hudSystem.applySkillBubbleAnim) {
-            skillBubbleView.SetActive(false);
-            return;
+    private void SetCapture(Unit currentUnit)
+    {
+        if (currentUnit.hudSystem.CurCaptureInfo != null)
+        {
+            petView.SetCaptureAnim(currentUnit.hudSystem.CurCaptureInfo.CaptureAnimType);
         }
-        skillBubbleView.SetSkill(currentUnit.skill);
-        skillBubbleView.SetActive(true);
     }
 
-    private void SetDamage(Unit lastUnit, Unit currentUnit) {
-        if (!currentUnit.hudSystem.applyDamageSystemAnim)
-            return;
+    private void SetDamage(Unit currentUnit)
+    {
+        if (currentUnit.hudSystem.CurDamageInfo != null)
+        {
+            damageView.SetDamageObject(currentUnit.hudSystem.CurDamageInfo);
+        }
+    }
 
-        damageView.SetUnit(lastUnit, currentUnit);
+    private void SetHeal(Unit currentUnit)
+    {
+        if (currentUnit.hudSystem.CurHealInfo != null)
+        {
+            damageView.SetHealObject(currentUnit.hudSystem.CurHealInfo);
+        }
+    }
+
+    private void SetOtherSidePet(Unit currentUnit)
+    {
+        if (currentUnit.hudSystem.CurOtherSidePetReactionInfo != null)
+        {
+            otherSidePetView.SetPetReactionAnim(currentUnit.hudSystem.CurOtherSidePetReactionInfo.ReactionAnimType);
+        }
     }
 }
