@@ -12,6 +12,11 @@ public class CreateRoomController : Module
         createView.SetPetCount(count);
     }
 
+    public void SetTurnTime(int time) {
+        createModel.SetTurnTime(time);
+        createView.SetTurnTime(time);
+    }
+
     public void CreateRoom() {
         createView.CreateRoom();
         createModel.CreateRoom();

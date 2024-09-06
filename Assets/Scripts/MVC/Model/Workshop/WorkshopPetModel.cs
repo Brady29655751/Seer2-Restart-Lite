@@ -80,6 +80,39 @@ public class WorkshopPetModel : SelectModel<GameObject>
         return false;
     }
 
+    public bool DeleteDIYPet(out string message) {
+        if (!petBasicModel.VerifyDIYPetBasic(petAdvanceModel.baseId, out message))
+            return false;
+
+        var originalPetInfo = Pet.GetPetInfo(petBasicModel.id);
+        var originalFeatureInfo = PetFeature.GetFeatureInfo(petBasicModel.id);
+
+        if ((originalPetInfo == null) || (!PetInfo.IsMod(petBasicModel.id))) {
+            message = "未检测到此序号的Mod精灵";
+            return false;
+        }
+
+        /*
+        if ((originalFeatureInfo == null) || (!PetInfo.IsMod(petBasicModel.id))) {
+            message = "未检测到此序号的Mod特性";
+            return false;
+        }
+        */
+
+        Database.instance.petInfoDict.Remove(petBasicModel.id);
+        Database.instance.featureInfoDict.Remove(petBasicModel.id);
+        if (SaveSystem.TrySavePetMod(originalPetInfo, null, null, petBasicModel.id)) {
+            message = "精灵删除成功";
+            return true;
+        }
+
+        // rollback
+        Database.instance.featureInfoDict.Set(petInfo.id, originalFeatureInfo);
+        Database.instance.petInfoDict.Set(petInfo.id, originalPetInfo);
+        message = "精灵删除失败（档案写入问题）";
+        return false;
+    }
+
     public bool VerifyDIYPet(out string error) {
         error = string.Empty;
 

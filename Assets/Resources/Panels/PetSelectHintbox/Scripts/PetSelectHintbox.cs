@@ -14,6 +14,31 @@ public class PetSelectHintbox : Hintbox
         base.Init();
     }
 
+    public override void SetPanelIdentifier(string id, string param) {
+        switch (id) {
+            default:
+                base.SetPanelIdentifier(id, param);
+                break;
+            case "storage":
+                SetStorage(param.Split('/').Select(p => {
+                    var petInfo = p.ToIntList();
+                    if (List.IsNullOrEmpty(petInfo))
+                        return null;
+
+                    if (petInfo.Count == 1)
+                        return new Pet(petInfo[0], 1);
+
+                    if (petInfo[1] < 0)
+                        return Pet.GetExamplePet(petInfo[0], -petInfo[1]);
+
+                    return new Pet(petInfo[0], petInfo[1]);
+                }).ToList());
+                break;
+        }
+    }
+
+    public int[] GetCursor() => selectController?.GetCursor();
+
     public void SetStorage(List<Pet> storage) {
         selectController.SetStorage(storage);
         selectController.Select(0);

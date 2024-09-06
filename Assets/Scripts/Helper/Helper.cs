@@ -52,6 +52,10 @@ namespace System {
             return trim != str;
         }
 
+        public static string ReplaceColorAndNewline(this string str) {
+            return str.Replace("[ENDL]", "\n").Replace("[-]", "</color>").Replace("[", "<color=#").Replace("]", ">");
+        }
+
         public static string GetDescription(this string str) {
             var description = string.Empty;
             var lines = str.Trim().Split('\n');

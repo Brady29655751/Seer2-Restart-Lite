@@ -9,11 +9,16 @@ public class PetStatusView : Module
     [SerializeField] private IButton maxEVButton;
     [SerializeField] private PetStatusBlockView[] statusBlockViews = new PetStatusBlockView[6];
 
+    private Status extraStatus = Status.zero;
+
     public void SetPet(Pet pet) {
         gameObject.SetActive(pet != null);
         if (pet == null) {
+            SetExtraStatus(Status.zero);
             return;
         }
+
+        SetExtraStatus(pet.extraStatus);
         SetStatus(pet.normalStatus);
         SetEV(pet.talent.ev);
         SetEVButtonsActive(false);
@@ -38,7 +43,16 @@ public class PetStatusView : Module
 
     private void SetStatus(Status status) {
         for (int i = 0; i < 6; i++) {
-            statusBlockViews[i].SetStatus(status[i], i);
+            statusBlockViews[i].SetStatus(status[i] + extraStatus[i], i);
+        }
+    }
+
+    private void SetExtraStatus(Status extraStatus) {
+        this.extraStatus = new Status(extraStatus);
+
+        for (int i = 0; i < 6; i++) {
+            var statusColor = (extraStatus[i] == 0) ? ColorHelper.normalSkill : ColorHelper.gold;
+            statusBlockViews[i].SetStatusColor(statusColor);
         }
     }
 

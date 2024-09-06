@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -19,6 +20,7 @@ public class BuffInfo
     public int turn { get; private set; }
     public bool keep { get; private set; }  // 換場保留
     public bool inherit { get; private set; }   // 換場繼承
+    public bool legacy { get; private set; }   // 死亡繼承
     public bool hide { get; private set; }  // 不予顯示
     public bool autoRemove { get; private set; }    // value為0以下時自動移除
     public bool movable { get; private set; }    // 可否行動 (異常類判斷)
@@ -65,6 +67,7 @@ public class BuffInfo
         itemId = int.Parse(options.Get("item", "0"));
         keep = GetKeepInfo();
         inherit = ((type == BuffType.Feature) || (type == BuffType.Emblem)) ? false : bool.Parse(options.Get("inherit", "false"));
+        legacy = bool.Parse(options.Get("legacy", "false"));
         hide = bool.Parse(options.Get("hide", "false"));
         autoRemove = bool.Parse(options.Get("auto_remove", "false"));
         minValue = int.Parse(options.Get("min_val", int.MinValue.ToString()));
@@ -87,16 +90,23 @@ public class BuffInfo
     }
 
     public string[] GetRawInfoStringArray() {
+        string[] defaultOptionKeys = new string[] { "res", "hide", "keep", "inherit", "legacy",
+            "auto_remove", "min_val", "max_val" };
+
         string resRawString = (id == resId) ? string.Empty : ("res=" + resId + "&");
         string hideString = hide ? ("hide=true&") : string.Empty;
+        string legacyString = legacy ? ("legacy=true&") : string.Empty;
+        string autoRemoveString = autoRemove ? ("auto_remove=true&") : string.Empty;
         string minValueString = (minValue == int.MinValue) ? string.Empty : ("min_val=" + minValue + "&");
         string maxValueString = (maxValue == int.MaxValue) ? string.Empty : ("max_val=" + maxValue + "&");
 
-        string rawOptionString = resRawString + minValueString + maxValueString + hideString +
-            "keep=" + keep + "&inherit=" + inherit + "&auto_remove=" + autoRemove;
+        string rawOptionString = resRawString + minValueString + maxValueString + hideString + legacyString +
+            "keep=" + keep + "&inherit=" + inherit + "&";
+        string otherOptionString = options.Where(entry => !defaultOptionKeys.Contains(entry.Key)).Select(entry => entry.Key + "=" + entry.Value).ConcatToString("&");
+        string allOptionString = rawOptionString + otherOptionString; 
 
         return new string[] { id.ToString(), name, type.ToRawString(), copyHandleType.ToRawString(),
-            turn.ToString(), rawOptionString.TrimEnd("&"), description };
+            turn.ToString(), allOptionString.TrimEnd("&"), description };
     }
 
     public int GetSortPriority() {

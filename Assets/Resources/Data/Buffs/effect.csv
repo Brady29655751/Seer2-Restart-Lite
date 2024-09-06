@@ -269,7 +269,7 @@ id,timing,priority,target,condition,cond_option,effect,effect_option
 100964,on_decide_pri,-1,skill,none,weather=12,set_skill,type=priority&op=+&value=2
 100965,on_final_dmg_cal,100,skill,none,weather=12,set_damage,op=[MAX]&value=100
 100966,on_turn_end,-1,pet,none,weather=12,rage,add=5
-100970,on_battle_start\on_after_attack,-1\-1,state\state,none\skill,none\type=type&type_cmp=-3,set_weather\set_weather,weather=12\weather=12
+100970,on_turn_ready,-1,state,pet,type=stayTurn&stayTurn_cmp=1,set_weather,weather=12
 100981,on_add_buff\on_remove_buff\on_turn_end,-1\-1\-1,pet\pet\pet,none\none\status,none\none\status_type=hp&op=<&cmp_value=1/8,block_buff\block_buff\heal,op=+&type_list=unhealthy\op=-&type_list=unhealthy\type=buff&add=me.pet.status.maxHp*1/8
 100982,on_add_buff\on_remove_buff\on_turn_end\on_before_attack,-1\-1\-1\-1,pet\pet\pet\skill,none\none\status\buff,none\none\status_type=hp&op=<&cmp_value=1/8\id=3102&own=true,block_buff\block_buff\rage\set_skill,op=+&type_list=unhealthy\op=-&type_list=unhealthy\type=buff&add=100-me.pet.status.anger\type=critical&op=-&value=1000
 100988,on_add_buff\on_remove_buff\on_after_attack,-1\-1\-1,pet\pet\pet,none\none\none,none\none\whos_turn=op&whos_attack=op&who=op,block_buff\block_buff\add_buff,op=+&type_list=unhealthy\op=-&type_list=unhealthy\id=3085&value=1

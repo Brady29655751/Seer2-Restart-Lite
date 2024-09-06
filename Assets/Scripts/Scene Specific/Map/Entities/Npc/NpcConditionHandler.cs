@@ -67,9 +67,7 @@ public static class NpcConditionHandler
         if (mission == null)
             return op != "=";
 
-
-        bool result = key switch
-        {
+        bool result = key switch {
             "done" => mission.isDone == bool.Parse(value),
             _ => mission.checkPointId == value,
         };
@@ -83,8 +81,8 @@ public static class NpcConditionHandler
             value = value.Substring(type.Length + 2);
         }
         string conditionVal = value.Substring(0, value.IndexOf("["));
-        string defalutVal = value.Substring(value.IndexOf("]") + 1);
-        string activityVal = activity.GetData(key, defalutVal);
+        string defaultVal = value.Substring(value.IndexOf("]") + 1);
+        string activityVal = activity.GetData(key, defaultVal);
         switch (type) {
             default:
                 return (op == "=") ? (activityVal == conditionVal) : (activityVal != conditionVal);
@@ -102,7 +100,7 @@ public static class NpcConditionHandler
         if (battle == null)
             return op != "=";
 
-        return Operator.Condition(op, Identifier.GetGlobalIdentifier("state." + key, battle.currentState.myUnit, battle.currentState.opUnit), float.Parse(value));
+        return Operator.Condition(op, Identifier.GetBattleIdentifier("state." + key, battle.currentState.myUnit, battle.currentState.opUnit), float.Parse(value));
     }
 
     public static bool GetItem(Item item, string op, string key, string value) {

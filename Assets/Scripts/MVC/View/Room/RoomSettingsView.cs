@@ -10,8 +10,8 @@ using Random = UnityEngine.Random;
 
 public class RoomSettingsView : Module
 {
-    [SerializeField] private Timer timer;
     [SerializeField] private IText roomNumText;
+    [SerializeField] private Text turnTimeText;
     [SerializeField] private IButton startButton, petBagButton;
     [SerializeField] private Text myNameText, opNameText;
     [SerializeField] private List<PetSelectBlockView> myPets, opPets;
@@ -28,6 +28,7 @@ public class RoomSettingsView : Module
         var hash = PhotonNetwork.CurrentRoom.CustomProperties;
         var otherPlayers = PhotonNetwork.PlayerListOthers;
         roomNumText?.SetText(PhotonNetwork.CurrentRoom.Name);
+        turnTimeText?.SetText("【" + hash["time"] + " 秒】");
         SetName(PhotonNetwork.LocalPlayer.NickName, true);
         SetName((otherPlayers.Length == 0) ? null : otherPlayers[0].NickName, false);
         SetBGM(ResourceManager.instance.GetLocalAddressables<AudioClip>("BGM/1/MU_011"));

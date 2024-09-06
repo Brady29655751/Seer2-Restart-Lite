@@ -15,6 +15,7 @@ public class BattleSettings
 
 
     [XmlAttribute("count")] public int petCount = 6;
+    [XmlAttribute("time")] public int time = 10;
     [XmlElement("mode")] public int modeId = 0;
     [XmlIgnore] public BattleMode mode {
         get => (BattleMode)modeId;
@@ -46,12 +47,14 @@ public class BattleSettings
         mode = rhs.mode;
         weather = rhs.weather;
         petCount = rhs.petCount;
+        time = rhs.time;
     }
 
     public float GetSettingsIdentifier(string id) {
         return id switch {
             "mode" => modeId,
             "petCount" => petCount,
+            "time" => time,
             "weather" => weather,
             "mod" => isMod ? 1 : 0,
             "simulate" => isSimulate ? 1 : 0,

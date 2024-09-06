@@ -20,7 +20,7 @@ public class PetSkill
 
     /* Pet learned skills */
     [XmlIgnore] public List<Skill> ownSkill {
-        get => ownSkillId.Select(x => Skill.GetSkill(x, false)).ToList();
+        get => ownSkillId.Distinct().Select(x => Skill.GetSkill(x, false)).ToList();
         set => ownSkillId = (value == null) ? new int[1] : value.Select(x => x.id).ToArray();
     }
     [XmlIgnore] public List<Skill> ownSuperSkill => ownSkill.Where(x => (x?.type ?? SkillType.属性) == SkillType.必杀).ToList();
@@ -40,7 +40,7 @@ public class PetSkill
 
     /* Pet backup skills */
     public Skill[] backupNormalSkill => ownSkill.Where(x => (x != null) && (x.type != SkillType.必杀) && 
-        normalSkill.All(y => (y != null) && (x.id != y.id))).ToArray();
+        normalSkill.All(y => (x.id != (y?.id ?? 0)))).ToArray();
     
     public Skill backupSuperSkill => GetBackupSuperSkill();
 
@@ -127,7 +127,7 @@ public class PetSkill
     }
 
     public Skill[] GetNormalSkill() {
-        Skill[] ret = normalSkillId.Select(x => Skill.GetSkill(x, false)).Where(x => (x?.type ?? SkillType.属性) != SkillType.必杀).ToArray(); 
+        Skill[] ret = normalSkillId.Distinct().Select(x => Skill.GetSkill(x, false)).Where(x => (x?.type ?? SkillType.属性) != SkillType.必杀).ToArray(); 
         Array.Resize(ref ret, 4);
         return ret;
     }

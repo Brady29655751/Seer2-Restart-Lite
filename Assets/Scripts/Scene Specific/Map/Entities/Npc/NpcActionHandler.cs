@@ -49,7 +49,7 @@ public static class NpcActionHandler
         }
     }
 
-    public static void OpenHintbox(NpcButtonHandler handler) {
+    public static void OpenHintbox(NpcController npc, NpcButtonHandler handler, Dictionary<int, NpcController> npcList) {
         if ((handler.param == null) || (handler.param.Count == 0))
             return;
         
@@ -57,15 +57,32 @@ public static class NpcActionHandler
 
         Hintbox hintbox = type[1] switch {
             "Item" => Hintbox.OpenHintbox<ItemHintbox>(),
+            "PetSelect" => Hintbox.OpenHintbox<PetSelectHintbox>(),
             _ => Hintbox.OpenHintbox()
         };
+
+        if (type[1] == "PetSelect")
+            ((PetSelectHintbox)hintbox).SetStorage(Player.instance.petBag.ToList());
 
         if (handler.param.Count <= 1)
             return;
         
         for (int i = 1; i < handler.param.Count; i++) {
             var option = handler.param[i].Split('=');
-            hintbox.SetPanelIdentifier(option[0], option[1]);
+            if (option[0] == "callback") {
+                Action callback = () => {
+                    npc?.GetInfo()?.callbackHandler?.FindAll(x => x.typeId == option[1])?.ForEach(x => {
+                        var callbackHandler = x;
+                        if ((type[1] == "PetSelect") && (x.action.IsPetAction())) {
+                            callbackHandler = new NpcButtonHandler(x);
+                            callbackHandler.param.Insert(0, "index=" + (((PetSelectHintbox)hintbox).GetCursor()[0]));
+                        }
+                        NpcHandler.GetNpcEntity(npc, callbackHandler, npcList)?.Invoke();
+                    });
+                };
+                hintbox.SetOptionCallback(callback);
+            } else 
+                hintbox.SetPanelIdentifier(option[0], option[1]);
         }
     }
 
@@ -148,7 +165,17 @@ public static class NpcActionHandler
     }
 
     public static void RemovePet(NpcButtonHandler handler) {
-        Player.instance.petBag = Player.instance.petBag.Skip(1).Concat(new List<Pet>() { null }).ToArray();
+        int index = 0;
+        if ((handler.param != null) && (handler.param.Count > 0)) {
+            var petInfo = handler.param[0].Split('=');
+            if ((petInfo.Length >= 2) && (petInfo[0]?.ToLower() == "index"))
+                index = (int)Parser.ParseOperation(petInfo[1].TrimStart("[expr]"));
+        }
+
+        var newPetBag = Player.instance.petBag.ToList();
+        newPetBag.RemoveAt(index);
+        newPetBag.Add(null);
+        Player.instance.petBag = newPetBag.ToArray();
         SaveSystem.SaveData();
     }
 
@@ -156,12 +183,18 @@ public static class NpcActionHandler
         if ((handler.param == null) || (handler.param.Count == 0))
             return;
 
+        int index = 0;
         for (int i = 0; i < handler.param.Count; i++) {
             var petInfo = handler.param[i].Split('=');
             if (petInfo.Length < 2)
                 continue;
+            
+            if (petInfo[0].ToLower() == "index") {
+                index = (int)Parser.ParseOperation(petInfo[1].TrimStart("[expr]"));
+                continue;
+            }
 
-            Player.instance.gameData.petBag[0].SetPetIdentifier(petInfo[0], float.Parse(petInfo[1]));
+            Player.instance.gameData.petBag[index].SetPetIdentifier(petInfo[0], float.Parse(petInfo[1]));
         }
         SaveSystem.SaveData();
     }
@@ -170,10 +203,15 @@ public static class NpcActionHandler
         if ((handler.param == null) || (handler.param.Count == 0))
             return;
 
-        for (int i = 0; i < handler.param.Count; i++) {
-            var petInfo = handler.param[i].ToIntList();
-            Player.instance.gameData.petBag[0].MegaEvolve(petInfo[0]);
+        int index = 0, paramOffset = 0;
+        var petInfo = handler.param[0].Split('=');
+        if ((petInfo.Length >= 2) && (petInfo[0].ToLower() == "index")) {
+            index = (int)Parser.ParseOperation(petInfo[1].TrimStart("[expr]"));
+            paramOffset = 1;
         }
+
+        int evolveId = (int)Identifier.GetNumIdentifier(handler.param[paramOffset]);
+        Player.instance.gameData.petBag[index].MegaEvolve(evolveId);
         SaveSystem.SaveData();
     }
 

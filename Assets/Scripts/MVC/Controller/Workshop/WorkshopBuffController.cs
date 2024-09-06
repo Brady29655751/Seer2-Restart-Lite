@@ -84,6 +84,17 @@ public class WorkshopBuffController : Module
         }
 
         OnConfirmGameDataSaved();
+    }
+
+    public void OnDeleteBuff() {
+        var hintbox = Hintbox.OpenHintbox();
+        hintbox.SetTitle("提示");
+        hintbox.SetContent("确定要删除此印记吗？\n记得先保存存档！", 16, FontOption.Arial);
+        hintbox.SetOptionNum(2);
+        hintbox.SetOptionCallback(() => {
+            buffModel.DeleteDIYBuff(out string message);
+            Hintbox.OpenHintboxWithContent(message, 16);
+        });
     }   
 
     private bool VerifyDIYBuff(out string error) {

@@ -66,6 +66,17 @@ public class WorkshopSkillController : Module
         }
 
         OnConfirmGameDataSaved();
+    }
+
+    public void OnDeleteSkill() {
+        var hintbox = Hintbox.OpenHintbox();
+        hintbox.SetTitle("提示");
+        hintbox.SetContent("确定要删除此技能吗？\n记得先保存存档！", 16, FontOption.Arial);
+        hintbox.SetOptionNum(2);
+        hintbox.SetOptionCallback(() => {
+            skillModel.DeleteDIYSkill(out string message);
+            Hintbox.OpenHintboxWithContent(message, 16);
+        });
     }   
 
     private bool VerifyDIYSkill(out string error) {

@@ -32,16 +32,7 @@ public static class TeleportHandler
     }
 
     public static void Teleport(TeleportInfo info) {
-        if (info.targetMapId == 0) {
-            Hintbox hintbox = Hintbox.OpenHintbox();
-            hintbox.SetTitle("提示");
-            hintbox.SetContent("地图暂未开放", 16, FontOption.Arial);
-            hintbox.SetOptionNum(1);
-            return;
-        }
-        // Player.SetSceneData("mapInitPos", info.targetPos);
-        Player.instance.currentMapId = info.targetMapId;
-        SceneLoader.instance.ChangeScene(SceneId.Map);
+        Teleport(info.targetMapId);
     }
 
     public static void Teleport(int mapId, Vector2 targetPos = default(Vector2)) {
@@ -53,9 +44,15 @@ public static class TeleportHandler
             return;
         }
 
-        if (targetPos != default(Vector2)) {
-            Player.SetSceneData("mapInitPos", targetPos);
+        if (mapId == 50000) {
+            var mapIdData = Activity.Find("mod_home").GetData("map_id", "50000");
+            if (!int.TryParse(mapIdData, out mapId))
+                mapId = 50000;
         }
+
+        if (targetPos != default(Vector2))
+            Player.SetSceneData("mapInitPos", targetPos);
+        
         Player.instance.currentMapId = mapId;
         SceneLoader.instance.ChangeScene(SceneId.Map);
     }

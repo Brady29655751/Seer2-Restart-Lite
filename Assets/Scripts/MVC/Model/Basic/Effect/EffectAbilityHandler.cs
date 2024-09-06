@@ -84,22 +84,28 @@ public static class EffectAbilityHandler
         Unit invokeUnit = (Unit)effect.invokeUnit;
         Unit petChangeUnit = (who == "me") ? state.GetUnitById(invokeUnit.id) : state.GetRhsUnitById(invokeUnit.id);
 
+        // Check pet bag index.
         int targetIndex = (target == "random") ? petChangeUnit.petSystem.petBag.FindIndex(x => (x != petChangeUnit.pet) && (!x.isDead)) : int.Parse(target);
         if (targetIndex < 0)
             return false;
 
+        // Inherit Buffs: 主動換場繼承
+        // Legacy Buffs: 死亡繼承
         bool isDead = petChangeUnit.pet.isDead;
         float anger = petChangeUnit.pet.anger;
         var inheritBuffs = petChangeUnit.pet.buffs.FindAll(x => x.info.inherit);
+        var legacyBuffs = petChangeUnit.pet.buffs.FindAll(x => x.info.legacy);
 
-        // petChangeUnit.pet.buffController.RemoveRangeBuff(inheritBuffs, petChangeUnit, state);
+        // Remove buffs that dont keep when change pet. Refresh stayTurn of all pet to 0.
         petChangeUnit.pet.buffController.RemoveRangeBuff(x => !x.info.keep, petChangeUnit, state);
         petChangeUnit.petSystem.cursor = targetIndex;
+        petChangeUnit.petSystem.RefreshStayTurn();
+
+        // Set anger to 80% original anger. Inherit buffs according to dead or not.
         petChangeUnit.pet.anger = Mathf.FloorToInt(anger * 0.8f);
+        petChangeUnit.pet.buffController.AddRangeBuff((isDead ? legacyBuffs : inheritBuffs), petChangeUnit, state);
 
-        if (!isDead)
-            petChangeUnit.pet.buffController.AddRangeBuff(inheritBuffs, petChangeUnit, state);
-
+        // Record that this pet has participated in fight.
         if (petChangeUnit.id == state.myUnit.id)
             state.result.AddFightPetCursor(targetIndex);
         
@@ -218,11 +224,12 @@ public static class EffectAbilityHandler
 
         string who = effect.abilityOptionDict.Get("who", "me");
         string random = effect.abilityOptionDict.Get("random", "false");
+        string opCopy = effect.abilityOptionDict.Get("copy", "false");
         string min = effect.abilityOptionDict.Get("min", "none");
         string max = effect.abilityOptionDict.Get("max", "none");
 
-        bool isRandom;
-        if ((!bool.TryParse(random, out isRandom)))
+        bool isRandom = false, isOpCopy = false;
+        if ((!bool.TryParse(random, out isRandom)) || ((opCopy != "reverse") && (!bool.TryParse(opCopy, out isOpCopy))))
             return false;
 
         Unit invokeUnit = (Unit)effect.invokeUnit;
@@ -268,20 +275,24 @@ public static class EffectAbilityHandler
 
             if (isRandom) {
                 string pdf = effect.abilityOptionDict.Get("random_pdf", "none");
+                string randomTypeCountExpr = effect.abilityOptionDict.Get("random_count", "1");
                 int count = status.Count(x => x != 0);
+                int randomTypeCount = (int)Parser.ParseEffectOperation(randomTypeCountExpr, effect, lhsUnit, rhsUnit);
 
                 if (pdf == "none") {
                     // pass.
                 } else if (pdf == "uniform") {
-                    int type = Random.Range(0, count);
+                    // Uniformly random can have 2 or more different types powerup.
+                    var typeList = Enumerable.Range(0, count).ToList().Random(randomTypeCount, false);
                     for (int i = 0, index = 0; i < typeNames.Length - 1; i++) {
                         if (status[i] == 0)
                             continue;
 
-                        status[i] = (index == type) ? status[i] : 0;
+                        status[i] = typeList.Contains(index) ? status[i] : 0;
                         index++;
                     }
                 } else {
+                    // Custom pdf cannot have 2 or more different types powerup.
                     var probList = pdf.ToFloatList('/');
                     var sum = probList.Sum();
                     float rng = Random.Range(0f, sum);
@@ -321,6 +332,16 @@ public static class EffectAbilityHandler
                 status = status.Select(x => x * (x < 0 ? 2 : 1));
 
             pet.PowerUp(status, lhsUnit, state);    
+        }
+
+        if (opCopy == "reverse") {
+            rhsUnit.pet.PowerUp(-1 * status, rhsUnit, state);
+            return true;
+        } 
+
+        if (isOpCopy) {
+            rhsUnit.pet.PowerUp(status, rhsUnit, state);
+            return true;
         }
 
         return true;
@@ -778,12 +799,18 @@ public static class EffectAbilityHandler
             }
 
             // Switch Pet.
+            var inheritList = effect.abilityOptionDict.Get("inherit", "buff").Split('/');
+
             Pet switchPet = new Pet((int)newValue, battlePet);
             switchPet.normalSkill = normalSkills;
             switchPet.superSkill = superSkill;
 
+            // Check if inherit hp.
             var cursor = lhsUnit.petSystem.cursor;
             lhsUnit.petSystem.petBag[cursor] = BattlePet.GetBattlePet(switchPet);
+            if (inheritList.Contains("hp"))
+                lhsUnit.petSystem.petBag[cursor].hp = battlePet.hp;
+
             lhsUnit.petSystem.petBag[cursor].skillController.loopSkills = lhsUnit.pet.skillController.normalSkills.Where(x => x != null).ToList();
             lhsUnit.petSystem.petBag[cursor].PowerUp(battlePet.statusController.powerup, lhsUnit, state);
 
@@ -792,13 +819,17 @@ public static class EffectAbilityHandler
             buffs.Add(Buff.GetFeatureBuff(lhsUnit.pet));
             buffs.Add(Buff.GetEmblemBuff(lhsUnit.pet));
             buffs.AddRange(lhsUnit.pet.initBuffs);
-            buffs.AddRange(battlePet.buffController.GetRangeBuff(x => (x != null) && (!x.IsPower()) &&
-                (x.id != Buff.GetFeatureBuff(battlePet).id) &&
-                (x.id != Buff.GetEmblemBuff(battlePet).id) &&
-                (x.info.type != BuffType.Unhealthy) &&
-                (x.info.type != BuffType.Abnormal) &&
-                (!battlePet.info.ui.defaultBuffIds.Exists(y => x.id == y))
-            ));
+
+            // Check if inherit buff.
+            if (inheritList.Contains("buff")) {
+                buffs.AddRange(battlePet.buffController.GetRangeBuff(x => (x != null) && (!x.IsPower()) &&
+                    (x.id != Buff.GetFeatureBuff(battlePet).id) &&
+                    (x.id != Buff.GetEmblemBuff(battlePet).id) &&
+                    (x.info.type != BuffType.Unhealthy) &&
+                    (x.info.type != BuffType.Abnormal) &&
+                    (!battlePet.info.ui.defaultBuffIds.Exists(y => x.id == y))
+                ));
+            }
 
             lhsUnit.pet.buffController.AddRangeBuff(buffs, lhsUnit, state);
 

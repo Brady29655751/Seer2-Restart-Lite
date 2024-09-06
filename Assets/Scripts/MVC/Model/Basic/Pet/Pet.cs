@@ -24,7 +24,7 @@ public class Pet
     public Status currentStatus = new Status();   // 當前能力值
     public Status normalStatus => Status.GetPetNormalStatus(  // 正常狀態下的能力值
         level, info.basic.baseStatus, talent.iv, talent.ev, basic.personality);
-
+    public Status extraStatus => feature.afterwardStatus;   // 後天加成等額外的能力值
 
 
     #region properties
@@ -196,7 +196,7 @@ public class Pet
                 return initBuffs.Exists(x => x.id == buffId) ? 1 : 0;
 
             var buffOptionExpr = buffIdExpr.Split(':');
-            return initBuffs.Count(x => x.options.Get(buffOptionExpr[0], x.info.options.Get(buffOptionExpr[0])).ToLower() == buffOptionExpr[1].ToLower());
+            return initBuffs.Count(x => x.options.Get(buffOptionExpr[0], x.info.options.Get(buffOptionExpr[0]))?.ToLower() == buffOptionExpr[1]?.ToLower());
         }
 
         if ((id.TryTrimStart("record", out var trimRecord)) && 

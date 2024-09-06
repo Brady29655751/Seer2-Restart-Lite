@@ -27,12 +27,12 @@ public class WorkshopPetAdvanceModel : Module
         Feature petFeature = new Feature() {
             baseId = id,
             name = feature,
-            description = featureDescription,
+            rawDescription = featureDescription,
         };
         Emblem petEmblem = new Emblem() {
             baseId = id,
             name = emblem,
-            description = emblemDescription,
+            rawDescription = emblemDescription,
         };
         return new PetFeatureInfo(id, petFeature, petEmblem);
     }
@@ -94,10 +94,10 @@ public class WorkshopPetAdvanceModel : Module
         if (!VerifyExpInfo(id, out error))
             return false;
 
-        if (!VerifySkillInfo(out error))
+        if (!VerifySkillInfo(id, out error))
             return false;
 
-        if ((!useDefaultFeature) && (id == baseId) && (!VerifyFeatureInfo(out error)))
+        if ((!useDefaultFeature) && (!VerifyFeatureInfo(id, out error)))
             return false;
 
         return true;
@@ -159,8 +159,11 @@ public class WorkshopPetAdvanceModel : Module
         return false;
     }
 
-    private bool VerifyFeatureInfo(out string error) {
+    private bool VerifyFeatureInfo(int id, out string error) {
         error = string.Empty;
+
+        if (id != baseId)
+            return true;
 
         if (string.IsNullOrEmpty(feature) || string.IsNullOrEmpty(featureDescription)) {
             error = "特性名称及描述不能为空！";
@@ -198,16 +201,18 @@ public class WorkshopPetAdvanceModel : Module
         return true;
     }
 
-    private bool VerifySkillInfo(out string error) {
+    private bool VerifySkillInfo(int id, out string error) {
         error = string.Empty;
 
+        /*
         if (List.IsNullOrEmpty(learnSkillInfoList)) {
             error = "技能不能为空！";
             return false;
         }
+        */
 
-        if (!learnSkillInfoList.Any(x => x.skill.type != SkillType.必杀)) {
-            error = "至少需要一个非必杀技能";
+        if ((id == baseId) && (!learnSkillInfoList.Any(x => x.skill.type != SkillType.必杀))) {
+            error = "基础型态至少需要一个非必杀技能";
             return false;
         }
 

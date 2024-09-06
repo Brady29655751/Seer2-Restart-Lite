@@ -9,6 +9,7 @@ public class WorkshopEffectController : Module
     [SerializeField] private WorkshopEffectView effectView;
     [SerializeField] private WorkshopLearnSkillController learnSkillController;
     [SerializeField] private WorkshopLearnBuffController learnBuffController;
+    [SerializeField] private WorkshopLearnItemController learnItemController;
 
     private Action<Effect> onDIYSuccessCallback;
 
@@ -51,6 +52,23 @@ public class WorkshopEffectController : Module
 
     private void OnReferBuffSuccess(BuffInfo buffInfo) {
         multiEffectList = buffInfo.effects;
+
+        if (multiEffectList.Count > 1) {
+            effectView.SetMultiEffectPanelActive(true);
+            effectView.SetMultiEffectList(multiEffectList, OnSelectReferredEffect);
+            return;
+        }
+
+        OnSelectReferredEffect(0);
+    }
+
+    public void OnReferItem() {
+        learnItemController.SetDIYSuccessCallback(OnReferItemSuccess);
+        effectView.SetRefItemPanelActive(true);
+    }
+
+    private void OnReferItemSuccess(ItemInfo itemInfo) {
+        multiEffectList = itemInfo.effects;
 
         if (multiEffectList.Count > 1) {
             effectView.SetMultiEffectPanelActive(true);

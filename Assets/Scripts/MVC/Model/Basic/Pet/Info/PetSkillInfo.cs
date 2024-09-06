@@ -28,8 +28,8 @@ public class PetSkillInfo
 
     public PetSkillInfo(int id, List<LearnSkillInfo> skillInfoList) {
         this.id = id;
-        this.skillIdList = skillInfoList.Select(x => x.skill?.id ?? 0).ToList();
-        this.learnLevelList = skillInfoList.Select(x => ((int)x.secretType) * 10000 + x.value).ToList();
+        this.skillIdList = skillInfoList.Select(x => x.skill?.id ?? 0).DefaultIfEmpty(0).ToList();
+        this.learnLevelList = skillInfoList.Select(x => ((int)x.secretType) * 10000 + x.value).DefaultIfEmpty(0).ToList();
     }
 
     public string[] GetRawInfoStringArray() {
@@ -44,7 +44,7 @@ public class PetSkillInfo
 
         while (id != baseId) {
             info = Pet.GetPetInfo(baseId);
-            skills.AddRange(info.skills.skillIdList.Select(id => Skill.GetSkill(id)));
+            skills.AddRange(info.skills.skillIdList.Where(id => id != 0).Select(id => Skill.GetSkill(id)));
             baseId = info.exp.evolvePetId;
         }
 
@@ -59,7 +59,7 @@ public class PetSkillInfo
 
         while (id != baseId) {
             info = Pet.GetPetInfo(baseId);
-            levels.AddRange(info.skills.learnLevelList);
+            levels.AddRange(info.skills.learnLevelList.Where(level => level != 0));
             baseId = info.exp.evolvePetId;
         }
         levels.AddRange(learnLevelList);

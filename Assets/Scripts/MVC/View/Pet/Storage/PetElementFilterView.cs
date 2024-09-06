@@ -10,13 +10,7 @@ public class PetElementFilterView : Module
     [SerializeField] private List<PetElementButton> elementButtonList;
 
     public override void Init() {
-        for (int i = 0; i < elementButtonList.Count; i++) {
-            elementButtonList[i].gameObject.SetActive(i < PetElementSystem.elementNum);
-            if (i >= PetElementSystem.elementNum)
-                continue;
-
-            elementButtonList[i].SetElement((Element)i);
-        }
+        // SetPage(0);
     }
 
     public void OnControlButtonClick() {
@@ -34,6 +28,18 @@ public class PetElementFilterView : Module
     public void SetElementInfo(Element element) {
         string text = element.GetElementName();
         infoPrompt.SetInfoPromptWithAutoSize(text, TextAnchor.MiddleCenter);
+    }
+
+    public void SetPage(int page) {
+        var offset = page * elementButtonList.Count;
+        for (int i = 0; i < elementButtonList.Count; i++) {
+            var elementId = offset + i;
+            elementButtonList[i].gameObject.SetActive(elementId < PetElementSystem.elementNum);
+            if (elementId >= PetElementSystem.elementNum)
+                continue;
+
+            elementButtonList[i].SetElement((Element)elementId);
+        }
     }
 
 }

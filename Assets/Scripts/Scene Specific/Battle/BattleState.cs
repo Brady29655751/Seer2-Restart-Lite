@@ -74,6 +74,16 @@ public class BattleState
         if (id.TryTrimStart("result.", out trimId))
             return result.GetResultIdentifier(trimId);
 
+        if (id.TryTrimStart("buff", out trimId) &&
+            trimId.TryTrimParentheses(out var buffKey)) {
+            var buff = stateBuffs.Find(x => x.Key == buffKey).Value;
+            if (buff == null)
+                return float.MinValue;
+
+            var buffExpr = trimId.TrimStart("[" + buffKey + "].");
+            return buff.TryGetBuffIdentifier(buffExpr, out float num) ? num : Identifier.GetNumIdentifier(buffExpr);
+        }
+
         return trimId switch {
             "turn" => turn,
             "phase" => (float)phase,

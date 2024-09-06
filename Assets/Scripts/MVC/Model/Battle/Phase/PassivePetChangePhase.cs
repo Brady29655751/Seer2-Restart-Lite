@@ -62,6 +62,7 @@ public class PassivePetChangePhase : BattlePhase
         if (skill.type == SkillType.換场)
         {
             GetEffectHandler(changeUnit).CheckAndApply(state);
+            changeUnit.petSystem.pet.stayTurn = 1;
 
             if (isMe)
             {

@@ -25,7 +25,13 @@ public class UnitPetSystem
     }
 
     public void OnTurnStart(Unit thisUnit, BattleState state) {
+        pet.stayTurn += 1;
         pet.OnTurnStart(thisUnit, state);
+    }
+
+    public void RefreshStayTurn() {
+        foreach (var p in petBag)
+            p.stayTurn = 0;
     }
 
     public float GetPetSystemIdentifier(string id) {

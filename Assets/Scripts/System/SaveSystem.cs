@@ -192,7 +192,7 @@ public static class SaveSystem
 
             FileBrowserHelpers.DeleteDirectory(modPath);
             
-            // Remove all mod pet in all game data.
+            // Remove all mod stuff in all game data.
             for (int id = 0; id < MAX_SAVE_COUNT; id++) {
                 var data = LoadData(id);
 
@@ -212,7 +212,7 @@ public static class SaveSystem
         return true;
     }
 
-    public static bool TrySaveBuffMod(BuffInfo info, byte[] iconBytes, Sprite iconSprite) {
+    public static bool TrySaveBuffMod(BuffInfo info, byte[] iconBytes, Sprite iconSprite, int deleteBuffId = 0) {
         var buffPath = Application.persistentDataPath + "/Mod/Buffs/";
         try {
             if (!TryCreateFile(buffPath, "info.csv", out var infoPath))
@@ -232,7 +232,10 @@ public static class SaveSystem
                 FileBrowserHelpers.AppendTextToFile(effectPath, Effect.GetRawEffectListStringArray(entry.Key, entry.Value.effects).ConcatToString(",") + "\n");
             }
 
-            if (iconBytes != null) {
+            if (deleteBuffId != 0) {
+                FileBrowserHelpers.DeleteFile(buffPath + deleteBuffId + ".png");
+                ResourceManager.instance.Set<Sprite>("Mod/Buffs/" + info.id, null);
+            } else if (iconBytes != null) {
                 FileBrowserHelpers.WriteBytesToFile(buffPath + info.id + ".png", iconBytes);
                 ResourceManager.instance.Set<Sprite>("Mod/Buffs/" + info.id, iconSprite);
             }
@@ -264,7 +267,7 @@ public static class SaveSystem
         return true;
     }
 
-    public static bool TrySaveSkillMod(Skill info) {
+    public static bool TrySaveSkillMod(Skill info, int deleteSkillId = 0) {
         var skillPath = Application.persistentDataPath + "/Mod/Skills/";
         try {
             if (!TryCreateFile(skillPath, "info.csv", out var infoPath))
@@ -310,12 +313,12 @@ public static class SaveSystem
         return true;
     }
 
-    public static bool TrySavePetMod(PetInfo info, Dictionary<string, byte[]> bytesDict, Dictionary<string, Sprite> spriteDict) {
+    public static bool TrySavePetMod(PetInfo info, Dictionary<string, byte[]> bytesDict, Dictionary<string, Sprite> spriteDict, int deletePetId = 0) {
         var petPath = Application.persistentDataPath + "/Mod/Pets/";
         var emblemPath = Application.persistentDataPath + "/Mod/Emblems/";
-        var iconBytes = bytesDict.Get("icon", null);
-        var battleBytes = bytesDict.Get("battle", null);
-        var emblemBytes = bytesDict.Get("emblem", null);
+        var iconBytes = bytesDict?.Get("icon", null);
+        var battleBytes = bytesDict?.Get("battle", null);
+        var emblemBytes = bytesDict?.Get("emblem", null);
 
         try {
             if (!TryCreateFile(petPath, "basic.csv", out var basicPath))
@@ -361,20 +364,33 @@ public static class SaveSystem
             }
 
             // Write image bytes.
-            if (iconBytes != null) {
-                FileBrowserHelpers.WriteBytesToFile(petPath + "/icon/" + info.id + ".png", iconBytes);
-                ResourceManager.instance.Set<Sprite>("Mod/Pets/icon/" + info.id, spriteDict.Get("icon"));
+            if (deletePetId != 0) {
+                FileBrowserHelpers.DeleteFile(petPath + "/icon/" + deletePetId + ".png");
+                FileBrowserHelpers.DeleteFile(petPath + "/battle/" + deletePetId + ".png");
+                ResourceManager.instance.Set<Sprite>("Mod/Pets/icon/" + deletePetId, null);
+                ResourceManager.instance.Set<Sprite>("Mod/Pets/battle/" + deletePetId, null);
+                if (deletePetId == info.baseId) {
+                    FileBrowserHelpers.DeleteFile(emblemPath + deletePetId + ".png");
+                    ResourceManager.instance.Set<Sprite>("Mod/Emblems/" + deletePetId, null);
+                }
+            } else {
+                if (iconBytes != null) {
+                    FileBrowserHelpers.WriteBytesToFile(petPath + "/icon/" + info.id + ".png", iconBytes);
+                    ResourceManager.instance.Set<Sprite>("Mod/Pets/icon/" + info.id, spriteDict.Get("icon"));
+                }
+
+                if (battleBytes != null) {
+                    FileBrowserHelpers.WriteBytesToFile(petPath + "/battle/" + info.id + ".png", battleBytes);
+                    ResourceManager.instance.Set<Sprite>("Mod/Pets/battle/" + info.id, spriteDict.Get("battle"));
+                }
+
+                if ((info.id == info.baseId) && (emblemBytes != null)) {
+                    FileBrowserHelpers.WriteBytesToFile(emblemPath + info.id + ".png", emblemBytes);
+                    ResourceManager.instance.Set<Sprite>("Mod/Emblems/" + info.id, spriteDict.Get("emblem"));
+                }
             }
 
-            if (battleBytes != null) {
-                FileBrowserHelpers.WriteBytesToFile(petPath + "/battle/" + info.id + ".png", battleBytes);
-                ResourceManager.instance.Set<Sprite>("Mod/Pets/battle/" + info.id, spriteDict.Get("battle"));
-            }
-
-            if ((info.id == info.baseId) && (emblemBytes != null)) {
-                FileBrowserHelpers.WriteBytesToFile(emblemPath + info.id + ".png", emblemBytes);
-                ResourceManager.instance.Set<Sprite>("Mod/Emblems/" + info.id, spriteDict.Get("emblem"));
-            }
+            SaveData();
 
             // Remove all pet with same id in game data.
             for (int id = 0; id < MAX_SAVE_COUNT; id++) {
@@ -385,6 +401,9 @@ public static class SaveSystem
                 Array.Resize(ref data.petBag, 6);
                 data.pvpPetTeam.RemoveAll(x => x.value.Any(y => (y?.id ?? 0) == info.id));
                 SaveData(data, id);
+
+                if (id == Player.instance.gameDataId)
+                    Player.instance.gameData = data;
             }
 
         } catch (Exception) {
@@ -518,6 +537,41 @@ public static class SaveSystem
         } catch (Exception) {
             return false;
         }
+        return true;
+    }
+
+    public static bool TrySaveItemMod(ItemInfo info, byte[] iconBytes, Sprite iconSprite, int deleteItemId = 0) {
+        var itemPath = Application.persistentDataPath + "/Mod/Items/";
+        try {
+            if (!TryCreateFile(itemPath, "info.csv", out var infoPath))
+                return false;
+
+            if (!TryCreateFile(itemPath, "effect.csv", out var effectPath))
+                return false;
+
+            FileBrowserHelpers.WriteTextToFile(infoPath, "id,name,type,price,option,description,effect\n"); 
+            FileBrowserHelpers.WriteTextToFile(effectPath, "id,timing,priority,target,condition,cond_option,effect,effect_option\n"); 
+
+            foreach (var entry in Database.instance.itemInfoDict) {
+                if (!ItemInfo.IsMod(entry.Key))
+                    continue;
+
+                FileBrowserHelpers.AppendTextToFile(infoPath, entry.Value.GetRawInfoStringArray().ConcatToString(",") + "\n");
+                FileBrowserHelpers.AppendTextToFile(effectPath, Effect.GetRawEffectListStringArray(entry.Key, entry.Value.effects).ConcatToString(",") + "\n");
+            }
+
+            if (deleteItemId != 0) {
+                FileBrowserHelpers.DeleteFile(itemPath + deleteItemId + ".png");
+                ResourceManager.instance.Set<Sprite>("Mod/Items/" + info.id, null);
+            } else if (iconBytes != null) {
+                FileBrowserHelpers.WriteBytesToFile(itemPath + info.id + ".png", iconBytes);
+                ResourceManager.instance.Set<Sprite>("Mod/Items/" + info.id, iconSprite);
+            }
+
+        } catch (Exception) {
+            return false;
+        }
+
         return true;
     }
 

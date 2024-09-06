@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Xml.Serialization;
 using System.Collections;
 using System.Collections.Generic;
@@ -16,6 +17,16 @@ public class NpcButtonHandler
 
     [XmlElement("condition")] public List<string> condition;
     [XmlElement("param")] public List<string> param;
+
+    public NpcButtonHandler() {}
+
+    public NpcButtonHandler(NpcButtonHandler rhs) {
+        description = rhs.description;
+        typeId = rhs.typeId;
+        actionType = rhs.actionType;
+        condition = rhs.condition.ToList();
+        param = rhs.param.ToList();
+    }
 
 }
 
@@ -46,12 +57,20 @@ public static class NpcActionDatabase {
         { "player", NpcAction.Player },
     };
 
+    private static List<NpcAction> petActionList = new List<NpcAction>() {
+        NpcAction.RemovePet, NpcAction.SetPet, NpcAction.EvolvePet,
+    };
+
     public static ButtonEventType ToButtonEventType(this string type) {
         return buttonEventTypeDict.Get(type, ButtonEventType.None);
     }
 
     public static NpcAction ToNpcAction(this string type) {
         return npcActionDict.Get(type, NpcAction.None);
+    }
+
+    public static bool IsPetAction(this NpcAction action) {
+        return petActionList.Contains(action);
     }
 }
 

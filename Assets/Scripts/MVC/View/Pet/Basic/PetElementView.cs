@@ -13,12 +13,18 @@ public class PetElementView : Module
     [SerializeField] private List<PetElementButton> zeroArea;
 
     public override void Init() {
+        // SetPage(0);
+    }
+
+    public void SetPage(int page) {
+        var offset = page * selectArea.Count;
         for (int i = 0; i < selectArea.Count; i++) {
-            selectArea[i].gameObject.SetActive(i < PetElementSystem.elementNum);
-            if (i >= PetElementSystem.elementNum)
+            var elementId = offset + i;
+            selectArea[i].gameObject.SetActive(elementId < PetElementSystem.elementNum);
+            if (elementId >= PetElementSystem.elementNum)
                 continue;
 
-            selectArea[i].SetElement((Element)i);
+            selectArea[i].SetElement((Element)elementId);
         }
     }
 

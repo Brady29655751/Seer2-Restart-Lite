@@ -88,7 +88,9 @@ public class InfoPrompt : IMonoBehaviour
 
     public void SetItem(Item item, bool showAtRight = true) {
         string header = "<size=18><color=#52e5f9>" + item.name + "</color></size><size=4>\n\n</size>";
-        string text = ((item.info.itemDescription == string.Empty) ? string.Empty : (item.info.itemDescription + "\n\n")) + item.info.effectDescription;
+        string itemDesc = item.info.GetItemDescription();
+        string effectDesc = item.info.GetEffectDescription();
+        string text = ((itemDesc == string.Empty) ? string.Empty : (itemDesc + "\n\n")) + effectDesc;
         Vector2 size = text.GetPreferredSize(15, 14, 21, 21 + 40);
         Vector2 fixPos = new Vector2(-size.x - 2, -size.y / 2 - 2);
 

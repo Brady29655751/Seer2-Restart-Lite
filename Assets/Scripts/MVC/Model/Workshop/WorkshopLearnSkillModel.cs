@@ -70,8 +70,8 @@ public class WorkshopLearnSkillModel : Module
             return false;
         }
 
-        if ((!int.TryParse(learnLevelInputField.inputString, out _)) || (!learnLevel.IsWithin(1, 100))) {
-            error = "学习等级必须介于1到100之间";
+        if ((!int.TryParse(learnLevelInputField.inputString, out var level)) || (level == 0)) {
+            error = "学习等级必须为整数且不能为0";
             return false;
         }
 

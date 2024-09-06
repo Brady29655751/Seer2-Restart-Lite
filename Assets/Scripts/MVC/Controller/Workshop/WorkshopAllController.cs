@@ -11,6 +11,7 @@ public class WorkshopAllController : Module
     [SerializeField] private WorkshopPetController petController;
     [SerializeField] private WorkshopSkillController skillController;
     [SerializeField] private WorkshopBuffController buffController;
+    [SerializeField] private WorkshopItemController itemController;
 
     private PetDictionaryPanel petDictionaryPanel = null;
 
@@ -57,6 +58,10 @@ public class WorkshopAllController : Module
         allView.OpenAllBuffPanel();
     }
 
+    public void OpenAllItemPanel() {
+        allView.OpenAllItemPanel();
+    }
+
     public void OnEditPet(PetInfo petInfo) {
         optionSelectController.Select(1);
         petController.SetPetInfo(petInfo);
@@ -81,6 +86,14 @@ public class WorkshopAllController : Module
 
         optionSelectController.Select(3);
         buffController.SetBuffInfo(allModel.currentBuffInfo);
+    }
+
+    public void OnEditItem() {
+        if (allModel.currentItemInfo == null)
+            return;
+
+        optionSelectController.Select(4);
+        itemController.SetItemInfo(allModel.currentItemInfo);
     }
     
     public void OnImportMod() {
