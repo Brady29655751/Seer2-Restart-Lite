@@ -15,7 +15,9 @@ public class Unit
     public UnitHudSystem hudSystem;
 
     public BattlePet pet => petSystem.pet;
-    public Skill skill {
+
+    public Skill skill
+    {
         get => skillSystem.skill;
         set => SetSkill(value);
     }
@@ -24,7 +26,8 @@ public class Unit
     public bool isReady => IsReady();
     public bool isDone = false;
 
-    public Unit(BattlePet[] petBag, int idNum) {
+    public Unit(BattlePet[] petBag, int idNum)
+    {
         id = idNum;
         random = Random.Range(0, 100);
         petSystem = new UnitPetSystem(petBag);
@@ -32,7 +35,8 @@ public class Unit
         hudSystem = new UnitHudSystem();
     }
 
-    public Unit(Unit rhs) {
+    public Unit(Unit rhs)
+    {
         id = rhs.id;
         random = rhs.random;
         isDone = rhs.isDone;
@@ -41,44 +45,52 @@ public class Unit
         hudSystem = new UnitHudSystem(rhs.hudSystem);
     }
 
-    public virtual void OnTurnStart(BattleState state) {
+    public virtual void OnTurnStart(BattleState state)
+    {
         isDone = false;
         random = Random.Range(0, 100);
         petSystem.OnTurnStart(this, state);
         skillSystem.OnTurnStart();
-        hudSystem.OnTurnStart();
+        hudSystem.OnTurnStart(this.pet);
     }
 
-    public bool IsReady() {
+    public bool IsReady()
+    {
         return (skill != null);
     }
 
-    public bool IsMasterUnit() {
+    public bool IsMasterUnit()
+    {
         return id == 1;
     }
 
-    public bool IsMyUnit() {
+    public bool IsMyUnit()
+    {
         return PhotonNetwork.IsConnected ? (PhotonNetwork.IsMasterClient == IsMasterUnit()) : IsMasterUnit();
     }
 
-    public float RNG() {
+    public float RNG()
+    {
         return random = Random.Range(0, 100);
     }
 
-    public void SetSkill(Skill _skill) {
+    public void SetSkill(Skill _skill)
+    {
         skillSystem.skill = (_skill == null) ? null : new Skill(_skill);
     }
 
-    public bool CalculateAccuracy(Unit rhs) {
+    public bool CalculateAccuracy(Unit rhs)
+    {
         return skillSystem.CalculateAccuracy(pet, rhs.pet);
     }
 
-    public void PrepareDamageParam(Unit rhs) {
+    public void PrepareDamageParam(Unit rhs)
+    {
         skillSystem.PrepareDamageParam(pet, rhs.pet);
     }
 
-    public int CalculateDamage(Unit rhs) {
+    public int CalculateDamage(Unit rhs)
+    {
         return skillSystem.CalculateDamage(pet, rhs.pet);
     }
-
 }

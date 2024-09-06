@@ -1,6 +1,5 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,71 +8,77 @@ public class BattleDamageAnimView : Module
     [SerializeField] private Vector2 damageAnchoredPos;
     [SerializeField] private RectTransform damageAnchoredRect;
     [SerializeField] private GameObject damageBackgroundPrefab;
-    [SerializeField] private GameObject damageNumberPrefab;
     [SerializeField] private GameObject healAnchoredObject;
     [SerializeField] private GameObject healNumberPrefab;
     [SerializeField] private Color32 healPositiveColor;
     [SerializeField] private Color32 healNegativeColor;
+    [SerializeField] private FightCamaraController camara;
 
-    private List<RectTransform> damageNumRectList = new List<RectTransform>();
-
-    public void SetUnit(Unit lastUnit, Unit currentUnit) {
-        if (currentUnit == null)
+    public void SetHealObject(UnitHudSystem.HealInfo info)
+    {
+        if ((info.Heal == 0) && (!info.IsForceShowHeal))
             return;
-
-        UnitSkillSystem skillSystem = currentUnit.skillSystem;
-
-        if (currentUnit.hudSystem.applyDamageAnim) {
-            SetDamageObject(currentUnit.IsMyUnit(), currentUnit.hudSystem.damage, skillSystem.elementRelation, skillSystem.isHit, skillSystem.isCritical);
-        }
-
-        if (currentUnit.hudSystem.applyBuffDamageAnim) {
-            SetDamageObject(currentUnit.IsMyUnit(), currentUnit.hudSystem.buffDamage, 1, true, false);
-        }
-        
-        if (currentUnit.hudSystem.applyHealAnim) {
-            SetHealObject(currentUnit.IsMyUnit(), currentUnit.hudSystem.heal, currentUnit.skill.type == SkillType.道具);
-        }
-    }
-
-    private void SetHealObject(bool isMe, int heal, bool forceShowHeal = false) {
-        if ((heal == 0) && (!forceShowHeal))
-            return;
-
         GameObject obj = Instantiate(healNumberPrefab, healAnchoredObject.transform);
         Text num = obj.GetComponent<Text>();
-        num.text = ((heal >= 0) ? "+" : string.Empty) + heal.ToString();
-        num.color = heal > 0 ? healPositiveColor : healNegativeColor;
+        num.text = ((info.Heal >= 0) ? "+" : string.Empty) + info.Heal.ToString();
+        num.color = info.Heal > 0 ? healPositiveColor : healNegativeColor;
         StartCoroutine(SetHealAnim(num.rectTransform));
     }
 
-    private IEnumerator SetHealAnim(RectTransform healRect) {
+    private IEnumerator SetHealAnim(RectTransform healRect)
+    {
         float speed = -0.5f;
-        while (healRect.anchoredPosition.y > -50) {
+        while (healRect.anchoredPosition.y > -50)
+        {
             healRect.anchoredPosition = new Vector2(healRect.anchoredPosition.x, healRect.anchoredPosition.y + speed);
             yield return null;
         }
+
         yield return new WaitForSeconds(0.8f);
         Destroy(healRect.gameObject);
     }
 
-
-    private void SetDamageObject(bool isMe, int damage, float elementRelation = 1f, bool isHit = true, bool isCritical = false) {
+    public void SetDamageObject(UnitHudSystem.DamageInfo info)
+    {
+        //拆包开始
+        bool type = info.DamageType;
+        bool isHit = info.IsHit;
+        bool isCritical = info.IsCritical;
+        bool isMe = info.IsMe;
+        int damage = info.Damage;
+        float elementRelation = info.ElementRelation;
+        //拆包结束
         bool isDamage = (isHit && (damage != 0));
         string who = isMe ? "me" : "op";
         string absorb = isDamage ? string.Empty : "Absorb";
 
         GameObject obj = Instantiate(damageBackgroundPrefab, damageAnchoredRect);
-        RectTransform rect = obj.GetComponent<RectTransform>();
-        Image img = obj.GetComponent<Image>();
-        IAnimator anim = obj.GetComponent<IAnimator>();
+        BattleDamageBackgroundView script = obj.GetComponent<BattleDamageBackgroundView>();
+        Image img = script.Background; //设置伤害背景颜色
+        IAnimator anim = script.Anim;
+        script.Critical.SetActive(isDamage && isCritical);
+        damageAnchoredRect.transform.localScale =
+            (isDamage && (isCritical || damage > 500)) ? new Vector3(1.2f, 1.2f, 1.2f) : Vector3.one; //暴击或伤害大的时候放大
+        if (isDamage)
+        {
+            if (isCritical || damage > 400)
+            {
+                camara.ScreenShake(); //暴击或伤害较大时屏幕大幅震动
+            }
 
-        rect.Find("Critical").gameObject.SetActive(isDamage && isCritical);
-        rect.anchoredPosition = damageAnchoredPos;
-        rect.SetAsLastSibling();
+            if (damage > 500) //伤害过大时屏幕闪烁
+            {
+                camara.ScreenFlash();
+            }
+        }
 
-        if (isDamage) {
-            InstantiateDamageNum(rect, damage, isCritical);
+
+        script.Rect.anchoredPosition = damageAnchoredPos;
+        script.Rect.SetAsLastSibling();
+
+        if (isDamage)
+        {
+            script.InstantiateDamageNum(damage, isCritical);
         }
 
         img.SetDamageBackgroundSprite(elementRelation, isHit, (damage == 0));
@@ -82,33 +87,17 @@ public class BattleDamageAnimView : Module
         SetDamageAnim(anim, who + absorb);
     }
 
-    private void SetDamageAnim(IAnimator iAnim, string trigger) {
+    private void SetDamageAnim(IAnimator iAnim, string trigger)
+    {
         Action onAnimEnd = () => { OnDamageAnimEnd(iAnim); };
         iAnim.onAnimEndEvent.SetListener(onAnimEnd.Invoke);
         iAnim.anim.ResetAllTriggers();
         iAnim.anim.SetTrigger(trigger);
     }
 
-    private void OnDamageAnimEnd(IAnimator anim) {
-        damageNumRectList.Clear();
+    private void OnDamageAnimEnd(IAnimator anim)
+    {
+        damageAnchoredRect.transform.localScale = Vector3.one;
         Destroy(anim.gameObject);
     }
-
-    private void InstantiateDamageNum(RectTransform backgroundRect, int damage, bool isCritical) {
-        string numString = "%" + damage.ToString();
-        int len = numString.Length;
-        bool isLenOdd = (len % 2 == 1);
-
-        for (int i = 0; i < len; i++) {
-            GameObject num = Instantiate(damageNumberPrefab, backgroundRect);
-            RectTransform rect = num.GetComponent<RectTransform>();
-            Image img = num.GetComponent<Image>();
-            int deltaX = 45 * (i - len / 2);
-            rect.anchoredPosition = isLenOdd ? new Vector2(deltaX, 0) : new Vector2(deltaX + 22.5f, 0);
-            rect.localScale = 1.5f * Vector3.one;
-            damageNumRectList.Add(rect);
-            img.sprite = ResourceManager.instance.GetSprite("Numbers/Damage/" + numString[i]);
-        }
-    }
-
 }
