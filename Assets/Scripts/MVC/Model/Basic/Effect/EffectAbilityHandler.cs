@@ -103,7 +103,7 @@ public static class EffectAbilityHandler
 
         // Set anger to 80% original anger. Inherit buffs according to dead or not.
         petChangeUnit.pet.anger = Mathf.FloorToInt(anger * 0.8f);
-        petChangeUnit.pet.buffController.AddRangeBuff((isDead ? inheritBuffs : legacyBuffs), petChangeUnit, state);
+        petChangeUnit.pet.buffController.AddRangeBuff((isDead ? legacyBuffs : inheritBuffs), petChangeUnit, state);
 
         // Record that this pet has participated in fight.
         if (petChangeUnit.id == state.myUnit.id)
