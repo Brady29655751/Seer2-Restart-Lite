@@ -312,6 +312,11 @@ namespace FTEditor.Postprocessors {
 			} else {
 				var asset_path      = AssetDatabase.GetAssetPath(asset);
 				var clip_asset_path = Path.ChangeExtension(asset_path, symbol.Name + ".asset");
+				if (clip_asset_path.Contains(".fla."))
+				{
+					string newPath = clip_asset_path.Replace(".fla.", "-");
+					clip_asset_path = newPath;
+				}
 				SwfEditorUtils.LoadOrCreateAsset<SwfClipAsset>(clip_asset_path, (new_clip_asset, created) => {
 					ConfigureClipAsset(new_clip_asset, asset, data, symbol);
 					return true;
