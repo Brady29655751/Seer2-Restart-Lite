@@ -49,7 +49,6 @@ public class PetHitInfo
             PetAnimationType.Special => special,
             PetAnimationType.Super => critical,
             PetAnimationType.SecondSuper => fit,
-            PetAnimationType.JointSuper => fit,
             _ => 0
         };
     }

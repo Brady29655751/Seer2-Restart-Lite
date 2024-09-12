@@ -44,8 +44,7 @@ public class BattleAnimView : BattleBaseView
         }
 
         if (currentUnit.hudSystem.petAnimType is PetAnimationType.Physic or PetAnimationType.Special
-            or PetAnimationType.Property or PetAnimationType.Super or PetAnimationType.SecondSuper
-            or PetAnimationType.JointSuper)
+            or PetAnimationType.Property or PetAnimationType.Super or PetAnimationType.SecondSuper)
         {
             skillBubbleView.SetSkill(currentUnit.skill);
             petView.SetPetSkillAnim(currentUnit.hudSystem.petAnimType);

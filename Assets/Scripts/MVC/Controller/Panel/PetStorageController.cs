@@ -9,6 +9,7 @@ public class PetStorageController : Module
     [SerializeField] private PetStorageModel buttonModel;
     [SerializeField] private PetStorageView buttonView;
     [SerializeField] private PetSelectController selectController;
+    [SerializeField] private PetDemoController demoController;
 
     protected override void Awake()
     {
@@ -30,6 +31,7 @@ public class PetStorageController : Module
     }
 
     public void OnPetTake() {
+        demoController?.SetPetAnimationActive(false);
         if (buttonModel.OnPetTake()) {
             OnAfterPetTake();
             return;
@@ -38,7 +40,7 @@ public class PetStorageController : Module
             buttonModel.SetPetTake(pet);
             OnAfterPetTake();
         };
-        buttonView.OnPetExchange(callback);
+        buttonView.OnPetExchange(callback, () => demoController?.SetPetAnimationActive(true));
     }
 
     private void OnAfterPetTake() {

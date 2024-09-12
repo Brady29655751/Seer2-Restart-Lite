@@ -101,14 +101,17 @@ public class WorkshopItemModel : Module
         effectList[index] = effect;
     }
 
-    public bool CreateDIYItem() {
+    public bool CreateDIYItem(out string message) {
         var originalItemInfo = Item.GetItemInfo(itemInfo.id);
         Database.instance.itemInfoDict.Set(itemInfo.id, itemInfo);
-        if (SaveSystem.TrySaveItemMod(itemInfo, iconBytes, iconSprite))    
+        if (SaveSystem.TrySaveItemMod(itemInfo, iconBytes, iconSprite, out var error)) {
+            message = "DIY写入成功";
             return true;
+        }
 
         // rollback
         Database.instance.itemInfoDict.Set(itemInfo.id, originalItemInfo);
+        message = "DIY写入失败\n" + error;
         return false;
     }
 
@@ -123,14 +126,14 @@ public class WorkshopItemModel : Module
         }
 
         Database.instance.itemInfoDict.Remove(id);
-        if (SaveSystem.TrySaveItemMod(originalItemInfo, null, null, id)) {
+        if (SaveSystem.TrySaveItemMod(originalItemInfo, null, null, out var error, id)) {
             message = "道具删除成功";
             return true;
         }
 
         // rollback
         Database.instance.itemInfoDict.Set(id, originalItemInfo);
-        message = "道具删除失败（档案写入问题）";
+        message = "道具删除失败\n" + error;
         return false;
     }
 

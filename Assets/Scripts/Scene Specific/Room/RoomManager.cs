@@ -48,7 +48,7 @@ public class RoomManager : Manager<RoomManager>
             PhotonNetwork.CurrentRoom?.SetCustomProperties(room);
         }
 
-        var myPets = Player.instance.petBag.Take(petCount).Select(x => (x == null) ? null : Pet.ToBestPet(new Pet(x))).Select(x => {
+        var myPets = Player.instance.petBag.Take(petCount).Select(x => {
             if (x == null)
                 return x;
             
@@ -70,7 +70,8 @@ public class RoomManager : Manager<RoomManager>
                 x.talent.SetEVStorage(510);
             }
             return x;
-        });
+        }).Select(x => (x == null) ? null : Pet.ToBestPet(new Pet(x)));
+        
         petBagPanel.SetPetBag(myPets.ToArray());
         roomSettingsView.SetPet(myPets.ToList(), true);
     }

@@ -9,7 +9,16 @@ public class PetDemoController : Module
 
     public void SetPet(Pet pet) {
         demoModel.SetPet(pet);
-        demoView.SetPet(pet);
+        demoView.SetPet(pet, demoModel.animMode);
+    }
+
+    public void SetPetAnimationActive(bool active) {
+        demoView.SetAnimation(active ? demoModel.currentPet : null, demoModel.animMode);
+    }
+
+    public void TogglePetAnimationMode() {
+        demoModel.SetAnimMode(!demoModel.animMode);
+        SetPetAnimationActive(true);
     }
 
     public void SetInfoPromptActive(bool active) {

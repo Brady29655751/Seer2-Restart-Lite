@@ -55,6 +55,7 @@ public static class NpcActionDatabase {
         { "setActivity", NpcAction.SetActivity },
         { "battle", NpcAction.Battle },
         { "player", NpcAction.Player },
+        { "mail", NpcAction.SetMail },
     };
 
     private static List<NpcAction> petActionList = new List<NpcAction>() {
@@ -67,10 +68,6 @@ public static class NpcActionDatabase {
 
     public static NpcAction ToNpcAction(this string type) {
         return npcActionDict.Get(type, NpcAction.None);
-    }
-
-    public static bool IsPetAction(this NpcAction action) {
-        return petActionList.Contains(action);
     }
 }
 
@@ -98,5 +95,6 @@ public enum NpcAction {
     SetMission,
     SetActivity,
     Battle,
-    Player
+    Player,
+    SetMail,
 }

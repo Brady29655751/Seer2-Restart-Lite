@@ -24,6 +24,12 @@ public class WorkshopAllModel : Module
     }
 
     private void OnImportSuccess(string[] paths) {
+        if ((paths[0] == Application.persistentDataPath) || 
+            FileBrowserHelpers.IsPathDescendantOfAnother(paths[0], Application.persistentDataPath)) {
+            Hintbox.OpenHintboxWithContent("需选择外部Mod文件，而非默认存档位置的文件", 16);
+            return;
+        }
+
         var isSuccessImporting = SaveSystem.TryDeleteMod() && SaveSystem.TryImportMod(paths[0]);
         var message = isSuccessImporting ? "导入成功，请重新启动游戏" : "导入失败";
         var hintbox = Hintbox.OpenHintboxWithContent(message, 16);
@@ -41,6 +47,12 @@ public class WorkshopAllModel : Module
     }
 
     private void OnExportSuccess(string[] paths) {
+        if ((paths[0] == Application.persistentDataPath) || 
+            FileBrowserHelpers.IsPathDescendantOfAnother(paths[0], Application.persistentDataPath)) {
+            Hintbox.OpenHintboxWithContent("需选择外部位置，而非默认存档位置", 16);
+            return;
+        }
+
         var message = SaveSystem.TryExportMod(paths[0]) ? "导出成功" : "导出失败";
         Hintbox.OpenHintboxWithContent(message, 16);
     }
@@ -55,6 +67,12 @@ public class WorkshopAllModel : Module
     }
 
     private void OnUpdateSuccess(string[] paths) {
+        if ((paths[0] == Application.persistentDataPath) || 
+            FileBrowserHelpers.IsPathDescendantOfAnother(paths[0], Application.persistentDataPath)) {
+            Hintbox.OpenHintboxWithContent("需选择外部Mod文件，而非默认存档位置的文件", 16);
+            return;
+        }
+
         var isSuccessImporting = SaveSystem.TryImportMod(paths[0]);
         var message = isSuccessImporting ? "更新成功，请重新启动游戏" : "更新失败";
         var hintbox = Hintbox.OpenHintboxWithContent(message, 16);

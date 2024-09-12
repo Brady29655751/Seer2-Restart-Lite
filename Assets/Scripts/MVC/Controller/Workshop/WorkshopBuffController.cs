@@ -110,7 +110,7 @@ public class WorkshopBuffController : Module
     }
 
     private void OnConfirmDIYBuff() {
-        var message = "DIY写入" + (buffModel.CreateDIYBuff() ? "成功" : "失败");
+        buffModel.CreateDIYBuff(out var message);
         Hintbox.OpenHintboxWithContent(message, 16);
     }
 }

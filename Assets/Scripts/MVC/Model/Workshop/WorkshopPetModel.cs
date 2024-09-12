@@ -60,7 +60,7 @@ public class WorkshopPetModel : SelectModel<GameObject>
         petAdvanceModel.OnSelectEmblem(info);
     }
 
-    public bool CreateDIYPet() {
+    public bool CreateDIYPet(out string message) {
         var originalPetInfo = Pet.GetPetInfo(petInfo.id);
         var originalFeatureInfo = PetFeature.GetFeatureInfo(petInfo.id);
 
@@ -71,12 +71,15 @@ public class WorkshopPetModel : SelectModel<GameObject>
 
         Database.instance.petInfoDict.Set(petInfo.id, newPetInfo);
 
-        if (SaveSystem.TrySavePetMod(petInfo, petSkinModel.bytesDict, petSkinModel.spriteDict))
+        if (SaveSystem.TrySavePetMod(petInfo, petSkinModel.bytesDict, petSkinModel.spriteDict, out var error)) {
+            message = "DIY写入成功";
             return true;
+        }
 
         // rollback
         Database.instance.featureInfoDict.Set(petInfo.id, originalFeatureInfo);
         Database.instance.petInfoDict.Set(petInfo.id, originalPetInfo);
+        message = "DIY写入失败\n" + error;
         return false;
     }
 
@@ -101,7 +104,7 @@ public class WorkshopPetModel : SelectModel<GameObject>
 
         Database.instance.petInfoDict.Remove(petBasicModel.id);
         Database.instance.featureInfoDict.Remove(petBasicModel.id);
-        if (SaveSystem.TrySavePetMod(originalPetInfo, null, null, petBasicModel.id)) {
+        if (SaveSystem.TrySavePetMod(originalPetInfo, null, null, out var error, petBasicModel.id)) {
             message = "精灵删除成功";
             return true;
         }
@@ -109,7 +112,7 @@ public class WorkshopPetModel : SelectModel<GameObject>
         // rollback
         Database.instance.featureInfoDict.Set(petInfo.id, originalFeatureInfo);
         Database.instance.petInfoDict.Set(petInfo.id, originalPetInfo);
-        message = "精灵删除失败（档案写入问题）";
+        message = "精灵删除失败\n" + error;
         return false;
     }
 

@@ -181,6 +181,20 @@ public class Pet
     }
 
     public virtual float GetPetIdentifier(string id) {
+        if (id.TryTrimStart("status.", out var trimStatus)) {
+            trimStatus = trimStatus.ToLower();
+            if (trimStatus.TryTrimStart("init", out var trimInitStatus))
+                return normalStatus[trimInitStatus];
+
+            if (trimStatus.TryTrimStart("extra", out var trimExtraStatus))
+                return extraStatus[trimExtraStatus];
+
+            if (trimStatus.TryTrimStart("battle", out var trimBattleStatus))
+                return (normalStatus + extraStatus)[trimBattleStatus];
+
+            return currentStatus[trimStatus];
+        }
+
         if ((id.TryTrimStart("skill", out var trimSkill)) && 
             (trimSkill.TryTrimParentheses(out var skillIdExpr)) &&
             (int.TryParse(skillIdExpr, out var skillId))) {
@@ -206,7 +220,7 @@ public class Pet
             return trimRecordValue;
 
         return id switch {
-            "id" => this.id,
+            "id" => ui.info.defaultId,
             "baseId" => basic.baseId,
             "element" => elementId,
             "subElement" => subElementId,
@@ -248,7 +262,7 @@ public class Pet
                 return;
             case "level":
                 int toLevel = (int)num;
-                if (toLevel < level)
+                if (toLevel <= level)
                     LevelDown(toLevel);
                 else
                     GainExp(exp.totalExp - PetExpSystem.GetTotalExp(Mathf.Min(toLevel, 100), exp.expType));
@@ -278,16 +292,16 @@ public class Pet
                 return;
             case "featureType":
                 int featureType = (int)num;
-                if (featureType.IsInRange(0, info.ui.defaultFeatureList.Count))
-                    feature.featureId = info.ui.defaultFeatureList[featureType];
+                var featureList = info.ui.defaultFeatureList;
+                feature.featureId = featureList[featureType % featureList.Count];
                 return;
             case "emblemId":
                 feature.emblemId = (int)num;
                 return;
             case "emblemType":
                 int emblemType = (int)num;
-                if (emblemType.IsInRange(0, info.ui.defaultFeatureList.Count))
-                    feature.emblemId = info.ui.defaultFeatureList[emblemType];
+                var emblemList = info.ui.defaultFeatureList;
+                feature.emblemId = info.ui.defaultFeatureList[emblemType % emblemList.Count];
                 return;
         }
     }
@@ -299,8 +313,10 @@ public class Pet
             
         if (exp.GainExp(gainExp)) {
             Pet pet = Evolve();
-            SaveSystem.SaveData();
-            return pet;
+            if (pet != this) {
+                SaveSystem.SaveData();
+                return pet;
+            }
         }
         if (isLevelUp) {
             currentStatus = new Status(normalStatus);
@@ -328,6 +344,11 @@ public class Pet
         int cursor = Player.instance.petBag.IndexOf(this);
         var evolveInfo = info;
         int evolveLevel = info.exp.evolveLevel;
+
+        if (record.TryGetRecord("evolveBan", out var evolveBanExpr) && 
+            int.TryParse(evolveBanExpr, out var evolveBan) && (evolveBan == 1))
+            return this;
+
         while ((evolveInfo.exp.evolvePetId != 0) && (evolveLevel != 0) && (level >= evolveLevel)) {
             evolveInfo = GetPetInfo(evolveInfo.exp.evolvePetId);
             evolveLevel = evolveInfo.exp.evolveLevel;

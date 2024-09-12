@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
@@ -12,8 +13,8 @@ public class WorkshopPetAdvanceModel : Module
     
 
     public int baseId => string.IsNullOrEmpty(baseIdInputField.inputString) ? 0 : (int.TryParse(baseIdInputField.inputString, out var resultId) ? resultId : 0);
-    public int evolveId => int.Parse(evolveIdInputField.inputString);
-    public int evolveLevel => int.Parse(evolveLevelInputField.inputString);
+    public List<int> evolveId => evolveIdInputField.inputString.ToIntList('/');
+    public List<int> evolveLevel => evolveLevelInputField.inputString.ToIntList('/');
     public int expType => expTypeDropdown.value;
     public string feature => featureInputField.inputString;
     public string featureDescription => featureDescriptionInputField.inputString;
@@ -54,8 +55,8 @@ public class WorkshopPetAdvanceModel : Module
     }    
 
     public void SetPetExpInfo(PetExpInfo expInfo) {
-        evolveIdInputField.SetInputString(expInfo.evolvePetId.ToString());
-        evolveLevelInputField.SetInputString(expInfo.evolveLevel.ToString());
+        evolveIdInputField.SetInputString(expInfo.evolvePetIds.Select(x => x.ToString()).ConcatToString("/"));
+        evolveLevelInputField.SetInputString(expInfo.evolveLevels.Select(x => x.ToString()).ConcatToString("/"));
         expTypeDropdown.value = expInfo.expType;
     }
 
@@ -127,36 +128,39 @@ public class WorkshopPetAdvanceModel : Module
             return false;
         }
 
-        if (!int.TryParse(evolveIdInputField.inputString, out _)) {
-            error = "进化型态序号需为整数！";
+        var evolveIdList = evolveIdInputField.inputString.Split('/');
+        var evolveLevelList = evolveLevelInputField.inputString.Split('/');
+
+        if (evolveIdList.Length != evolveLevelList.Length) {
+            error = "进化型态数量和进化等级数量不一致";
             return false;
         }
 
-        if ((id == evolveId) || IsEvolveLoop(id)) {
+        for (int i = 0; i < evolveIdList.Length; i++) {
+            if (!int.TryParse(evolveIdList[i], out _)) {
+                error = "进化型态序号需为整数！";
+                return false;
+            }
+        }
+
+        for (int i = 0; i < evolveLevelList.Length; i++) {
+            if (!int.TryParse(evolveLevelList[i], out var elv)) {
+                error = "进化等级需为整数！";
+                return false;
+            }
+
+            if (elv < 0) {
+                error = "进化等级不能为负数！";
+                return false;
+            }
+        }
+
+        if (evolveId.Contains(id)) {
             error = "进化型态序号产生回圈！";
             return false;
         }
 
-        if (evolveLevel < 0) {
-            error = "进化等级不能为负数！";
-            return false;
-        }
-
         return true;
-    }
-
-    private bool IsEvolveLoop(int id) {
-        if (Pet.GetPetInfo(evolveId) == null)
-            return false;
-
-        var petInfo = Pet.GetPetInfo(evolveId);
-        while (petInfo != null) {
-            if (petInfo.exp.evolvePetId == id)
-                return true;
-
-            petInfo = Pet.GetPetInfo(petInfo.exp.evolvePetId);
-        }
-        return false;
     }
 
     private bool VerifyFeatureInfo(int id, out string error) {

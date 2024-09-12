@@ -116,14 +116,17 @@ public class WorkshopBuffModel : Module
         effectList[index] = effect;
     }
 
-    public bool CreateDIYBuff() {
+    public bool CreateDIYBuff(out string message) {
         var originalBuffInfo = Buff.GetBuffInfo(buffInfo.id);
         Database.instance.buffInfoDict.Set(buffInfo.id, buffInfo);
-        if (SaveSystem.TrySaveBuffMod(buffInfo, iconBytes, iconSprite))    
+        if (SaveSystem.TrySaveBuffMod(buffInfo, iconBytes, iconSprite, out var error)) {
+            message = "DIY写入成功";
             return true;
+        }
         
         // rollback
         Database.instance.buffInfoDict.Set(buffInfo.id, originalBuffInfo);
+        message = "DIY写入失败\n" + error;
         return false;
     }
 
@@ -138,14 +141,14 @@ public class WorkshopBuffModel : Module
         }
         
         Database.instance.buffInfoDict.Remove(id);
-        if (SaveSystem.TrySaveBuffMod(originalBuffInfo, null, null, id)) {
+        if (SaveSystem.TrySaveBuffMod(originalBuffInfo, null, null, out var error, id)) {
             message = "印记删除成功";
             return true;
         }
 
         // rollback
         Database.instance.buffInfoDict.Set(id, originalBuffInfo);
-        message = "印记删除失败（档案写入问题）";
+        message = "印记删除失败\n" + error;
         return false;
     }
 

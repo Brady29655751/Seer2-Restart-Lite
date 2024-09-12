@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -59,4 +60,30 @@ public static class PetExpSystem
 
     #endregion
 
+    #region evolve-system
+
+    public static List<int> GetEvolveChain(int baseId, int id) {
+        List<int> chain = new List<int>(){ baseId };
+
+        if (baseId == id)
+            return chain;
+
+        var info = Pet.GetPetInfo(baseId);
+        var evolveIds = info.exp.evolvePetIds;
+
+        if (List.IsNullOrEmpty(evolveIds) || (evolveIds.All(x => x == 0)))
+            return null;
+
+        for (int i = 0; i < evolveIds.Count; i++) {
+            var nextChain = GetEvolveChain(evolveIds[i], id);
+            if (nextChain != null) {
+                chain.AddRange(nextChain);
+                return chain;
+            }
+        }
+
+        return null;
+    }
+
+    #endregion
 }

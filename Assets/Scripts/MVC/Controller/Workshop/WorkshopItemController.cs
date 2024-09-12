@@ -106,7 +106,7 @@ public class WorkshopItemController : Module
     }
 
     private void OnConfirmDIYItem() {
-        var message = "DIY写入" + (itemModel.CreateDIYItem() ? "成功" : "失败");
+        itemModel.CreateDIYItem(out var message);
         Hintbox.OpenHintboxWithContent(message, 16);
     }
 }

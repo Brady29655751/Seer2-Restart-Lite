@@ -7,6 +7,7 @@ public class PetCurrentSkillController : Module
 {
     [SerializeField] private PetCurrentSkillModel currentSkillModel;
     [SerializeField] private PetCurrentSkillView currentSkillView;
+    [SerializeField] private PetDemoController demoController;
 
     public event Action<Skill> onSelectNormalSkillEvent;
     public event Action<Skill> onSelectSuperSkillEvent;
@@ -31,8 +32,10 @@ public class PetCurrentSkillController : Module
             hintbox.SetOptionNum(1);
             return;
         }
+        demoController?.SetPetAnimationActive(false);
         SecretSkillPanel secretSkillPanel = Panel.OpenPanel<SecretSkillPanel>();
         secretSkillPanel.SetPet(currentSkillModel.currentPet);
+        secretSkillPanel.onCloseEvent += () => demoController?.SetPetAnimationActive(true);
     }
 
     public void SelectNormalSkill(int index) {

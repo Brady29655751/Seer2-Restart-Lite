@@ -3,10 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using FTRuntime;
 
 public class PetDemoView : Module
 {
     [SerializeField] private bool featurePromptLeft = false;
+    [SerializeField] private float petAnimLocalScale = 1f;
+    [SerializeField] private Vector2 petAnimCoefficientX, petAnimCoefficientY;
 
     [SerializeField] private InfoPrompt infoPrompt;
     [SerializeField] private Image demoImage;
@@ -24,10 +27,16 @@ public class PetDemoView : Module
     
     [SerializeField] private IButton IVButton;
 
-    public void SetPet(Pet pet) {
+    private GameObject currentPetAnim;
+    private Pet currentPet;
+
+    public void SetPet(Pet pet, bool animMode = true) {
         gameObject.SetActive(pet != null);
-        if (pet == null)
+        if (pet == null) {
+            SetAnimation(pet, animMode);
+            currentPet = pet;
             return;
+        }
         
         SetName(pet.name);
         SetElement(pet.element, pet.subElement);
@@ -35,7 +44,9 @@ public class PetDemoView : Module
         SetGender(pet.info.basic.gender);
         SetEmblem(pet.hasEmblem, pet.feature.emblem);
         SetIVRank(pet.talent.IVRank);
-        SetAnimation(  pet.ui.battleImage);
+        SetAnimation(pet, animMode);
+
+        currentPet = pet;
     }
 
     public void SetInfoPromptActive(bool active) {
@@ -100,7 +111,38 @@ public class PetDemoView : Module
         infoPrompt.SetInfoPromptWithAutoSize(text, TextAnchor.MiddleCenter);
     }
 
-    public void SetAnimation(Sprite animSprite) {
-        demoImage.SetSprite(animSprite);
+    public void SetAnimation(Pet pet, bool isAnimMode = true) {
+        if (this.currentPetAnim != null)
+            DestroyImmediate(this.currentPetAnim);
+
+        if (pet == null) {
+            this.currentPetAnim = null;
+            demoImage.gameObject.SetActive(false);
+            return;
+        }
+
+        //检测是否有动画
+        if (isAnimMode && ((this.currentPetAnim = pet.ui.GetBattleAnim(PetAnimationType.Idle)) != null))
+        {
+            this.currentPetAnim.SetActive(true);
+            demoImage.gameObject.SetActive(false);
+
+            this.currentPetAnim.transform.SetParent(transform);
+            this.currentPetAnim.transform.SetAsFirstSibling();
+            this.currentPetAnim.transform.localScale *= petAnimLocalScale;
+            SwfClipController controller = this.currentPetAnim.GetComponent<SwfClipController>();
+            controller.clip.sortingOrder = 1;
+            this.currentPetAnim.transform.position = new Vector3(this.currentPetAnim.transform.position.x * petAnimCoefficientX.x + petAnimCoefficientX.y,
+                this.currentPetAnim.transform.position.y * petAnimCoefficientY.x + petAnimCoefficientY.y, 0);
+            return;
+        }
+
+        // 沒有則使用預設的精靈圖片
+        if (isAnimMode)
+            this.currentPetAnim?.SetActive(false);
+
+        demoImage.gameObject.SetActive(true);
+        demoImage.SetSprite(pet.ui.battleImage);
     }
+
 }

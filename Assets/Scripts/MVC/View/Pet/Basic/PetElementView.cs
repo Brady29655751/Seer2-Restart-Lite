@@ -5,12 +5,12 @@ using UnityEngine.UI;
 
 public class PetElementView : Module
 {
-    [SerializeField] private PetElementButton titleElement;
+    [SerializeField] private PetElementFilterButton titleElement;
     [SerializeField] private IText titleElementText;
-    [SerializeField] private List<PetElementButton> selectArea;
-    [SerializeField] private List<PetElementButton> weakArea;
-    [SerializeField] private List<PetElementButton> resistArea;
-    [SerializeField] private List<PetElementButton> zeroArea;
+    [SerializeField] private List<PetElementFilterButton> selectArea;
+    [SerializeField] private List<PetElementFilterButton> weakArea;
+    [SerializeField] private List<PetElementFilterButton> resistArea;
+    [SerializeField] private List<PetElementFilterButton> zeroArea;
 
     public override void Init() {
         // SetPage(0);
@@ -40,13 +40,13 @@ public class PetElementView : Module
         SetElementRelation(zeroArea, zeroElements);
     }
 
-    private void SetElementRelation(List<PetElementButton> area, List<Element> result) {
+    private void SetElementRelation(List<PetElementFilterButton> area, List<Element> result) {
         for (int i = 0; i < area.Count; i++) {
             if (i >= result.Count) {
-                area[i].SetActive(false);
+                area[i].gameObject.SetActive(false);
                 continue;
             }
-            area[i].SetActive(true);
+            area[i].gameObject.SetActive(true);
             area[i].SetElement(result[i]);
         }
     }

@@ -40,7 +40,7 @@ public static class NpcConditionHandler
             return () => GetItem(item, op, dataKey, value);
         }
 
-        return () => true;
+        return () => Operator.Condition(op, Parser.ParseOperation(key), Parser.ParseOperation(value));
     }
 
     public static bool GetRandom(string op, string key, string value) {

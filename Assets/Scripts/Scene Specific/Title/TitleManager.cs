@@ -12,6 +12,7 @@ public class TitleManager : Manager<TitleManager>
     [SerializeField] private List<GameObject> backgroundGadgetObjectList;
     [SerializeField] private IButton startButton;
     [SerializeField] private IText versionDateText, versionStringText;
+    [SerializeField] private GameObject toolBarObject, modOperateObject;
 
     private void Start() {
         StartCoroutine(CheckVersionData());
@@ -62,8 +63,16 @@ public class TitleManager : Manager<TitleManager>
             RequestManager.instance.GetDownloadSize(GameManager.gameDownloadUrl, OpenUpdateBuildHintbox);
             return;
         }
+        if (!SaveSystem.IsResourcesExists()) {
+            RequestManager.OnRequestFail("获取资源档案失败。请先点击右下方「导入资源包」按钮，导入游戏资源档案。");
+            return;
+        }
         SceneLoader.instance.ChangeScene(SceneId.Login);
     }
+
+    private void OnCancel() {}
+
+    #region update
 
     private void OpenUpdateBuildHintbox(long size) {
         startButton?.SetInteractable(true, false);
@@ -100,10 +109,35 @@ public class TitleManager : Manager<TitleManager>
         );
     }
 
-    private void OnCancel() {}
+    #endregion
 
+    #region resource
+
+    public void OnImportResources() {
+        FileBrowser.ShowLoadDialog(OnResourceSuccess, OnCancel, FileBrowser.PickMode.Folders, title: "选择要导入的资源（手机端请先点击左边的Browse才能浏览）");
+    }
+
+    private void OnResourceSuccess(string[] paths) {
+        if ((paths[0] == Application.persistentDataPath) || 
+            FileBrowserHelpers.IsPathDescendantOfAnother(paths[0], Application.persistentDataPath)) {
+            Hintbox.OpenHintboxWithContent("需选择外部文件，而非默认存档位置文件", 16);
+            return;
+        }
+
+        var isSuccessImporting = SaveSystem.TryImportResources(paths[0], out var error);
+        var message = isSuccessImporting ? "导入成功" : ("导入失败\n" + error);
+        var hintbox = Hintbox.OpenHintboxWithContent(message, 16);
+    }
+
+    #endregion
 
     # region mod
+
+    public void OnOperateMod() {
+        toolBarObject?.SetActive(false);
+        modOperateObject?.SetActive(true);
+    }
+
     public void OnImportMod() {
         var hintbox = Hintbox.OpenHintbox();
         hintbox.SetContent("导入其他mod会覆盖当前mod资料\n也会失去目前所有获得的mod精灵\n请先确定当前mod已经导出保存\n若已保存请点击【确认】继续导入mod", 16, FontOption.Arial);
@@ -114,6 +148,12 @@ public class TitleManager : Manager<TitleManager>
     }
 
     private void OnImportSuccess(string[] paths) {
+        if ((paths[0] == Application.persistentDataPath) || 
+            FileBrowserHelpers.IsPathDescendantOfAnother(paths[0], Application.persistentDataPath)) {
+            Hintbox.OpenHintboxWithContent("需选择外部Mod文件，而非默认存档位置的文件", 16);
+            return;
+        }
+
         var isSuccessImporting = SaveSystem.TryDeleteMod() && SaveSystem.TryImportMod(paths[0]);
         var message = isSuccessImporting ? "导入成功，请重新启动游戏" : "导入失败";
         var hintbox = Hintbox.OpenHintboxWithContent(message, 16);
@@ -131,6 +171,12 @@ public class TitleManager : Manager<TitleManager>
     }
 
     private void OnExportModSuccess(string[] paths) {
+        if ((paths[0] == Application.persistentDataPath) || 
+            FileBrowserHelpers.IsPathDescendantOfAnother(paths[0], Application.persistentDataPath)) {
+            Hintbox.OpenHintboxWithContent("需选择外部位置，而非默认存档位置", 16);
+            return;
+        }
+
         var message = SaveSystem.TryExportMod(paths[0]) ? "导出成功" : "导出失败";
         Hintbox.OpenHintboxWithContent(message, 16);
     }
@@ -145,6 +191,12 @@ public class TitleManager : Manager<TitleManager>
     }
 
     private void OnUpdateSuccess(string[] paths) {
+        if ((paths[0] == Application.persistentDataPath) || 
+            FileBrowserHelpers.IsPathDescendantOfAnother(paths[0], Application.persistentDataPath)) {
+            Hintbox.OpenHintboxWithContent("需选择外部Mod文件，而非默认存档位置的文件", 16);
+            return;
+        }
+
         var isSuccessImporting = SaveSystem.TryImportMod(paths[0]);
         var message = isSuccessImporting ? "更新成功，请重新启动游戏" : "更新失败";
         var hintbox = Hintbox.OpenHintboxWithContent(message, 16);

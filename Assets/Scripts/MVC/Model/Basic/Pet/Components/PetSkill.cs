@@ -20,15 +20,15 @@ public class PetSkill
 
     /* Pet learned skills */
     [XmlIgnore] public List<Skill> ownSkill {
-        get => ownSkillId.Distinct().Select(x => Skill.GetSkill(x, false)).ToList();
-        set => ownSkillId = (value == null) ? new int[1] : value.Select(x => x.id).ToArray();
+        get => ownSkillId.Distinct().Select(x => Skill.GetSkill(x, false)).Where(x => (x != null) && (!x.isAction)).ToList();
+        set => ownSkillId = (value == null) ? new int[1] : value.Where(x => (x != null) && (!x.isAction)).Select(x => x.id).ToArray();
     }
-    [XmlIgnore] public List<Skill> ownSuperSkill => ownSkill.Where(x => (x?.type ?? SkillType.属性) == SkillType.必杀).ToList();
+    [XmlIgnore] public List<Skill> ownSuperSkill => ownSkill.Where(x => (x != null) && (x.type == SkillType.必杀)).ToList();
     
     /* Pet current skills */
     [XmlIgnore] public Skill[] normalSkill { 
         get => GetNormalSkill(); 
-        set => normalSkillId = (value == null) ? new int[4] : value.Where(x => (x?.type ?? SkillType.必杀) != SkillType.必杀).Take(4).Select(x => (x == null) ? 0 : x.id).ToArray();
+        set => normalSkillId = (value == null) ? new int[4] : value.Where(x => (x != null) && (!x.isAction) && (x.type != SkillType.必杀)).Take(4).Select(x => (x == null) ? 0 : x.id).ToArray();
     }
     public LearnSkillInfo[] normalSkillInfo => GetLearnSkillInfos(normalSkillId);
 
@@ -39,7 +39,7 @@ public class PetSkill
     public LearnSkillInfo superSkillInfo => GetLearnSkillInfos(superSkillId);
 
     /* Pet backup skills */
-    public Skill[] backupNormalSkill => ownSkill.Where(x => (x != null) && (x.type != SkillType.必杀) && 
+    public Skill[] backupNormalSkill => ownSkill.Where(x => (x != null) && (!x.isAction) && (x.type != SkillType.必杀) && 
         normalSkill.All(y => (x.id != (y?.id ?? 0)))).ToArray();
     
     public Skill backupSuperSkill => GetBackupSuperSkill();
@@ -107,6 +107,9 @@ public class PetSkill
     }
 
     public bool LearnNewSkill(Skill skill) {
+        if (skill == null)
+            return false;
+
         if (ownSkillId.Contains(skill.id))
             return false;
 
@@ -127,7 +130,8 @@ public class PetSkill
     }
 
     public Skill[] GetNormalSkill() {
-        Skill[] ret = normalSkillId.Distinct().Select(x => Skill.GetSkill(x, false)).Where(x => (x?.type ?? SkillType.属性) != SkillType.必杀).ToArray(); 
+        Skill[] ret = normalSkillId.Distinct().Select(x => Skill.GetSkill(x, false)).Where(x => x != null)
+            .Where(x => (x.type >= SkillType.属性) && (x.type != SkillType.必杀)).ToArray(); 
         Array.Resize(ref ret, 4);
         return ret;
     }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -88,7 +89,8 @@ public class PetDictInfoView : Module
         infoPrompt.SetInfoPromptWithAutoSize(habitat, TextAnchor.MiddleLeft);
     } 
 
-    public void OpenExamplePetBagPanel(int id) {
+    public void OpenExamplePetBagPanel(int id, Action onBeforeOpenPanel = null) {
+        onBeforeOpenPanel?.Invoke();
         examplePetBagPanel?.SetActive(true);
         examplePetBagPanel?.SetPetBag(new Pet[] { Pet.GetExamplePet(id) });
     }

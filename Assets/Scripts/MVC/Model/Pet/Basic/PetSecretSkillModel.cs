@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PetSecretSkillModel : Module
 {
-    private Pet currentPet;
+    public Pet currentPet { get; private set; }
     public LearnSkillInfo[] secretSkillInfos => currentPet.skills.secretSkillInfo;
     public void SetPet(Pet pet) {
         currentPet = pet;

@@ -8,6 +8,8 @@ public class MapNoobController : UIModule
 {
     [SerializeField] private RectTransform rectTransform;
     [SerializeField] private IButton sevenDayLoginIcon;
+    [SerializeField] private List<IButton> activityButtons;
+    [SerializeField] private List<string> activityIconPaths;
 
     private bool isExtended = true;
 
@@ -15,12 +17,24 @@ public class MapNoobController : UIModule
     {
         base.Init();
         InitSevenDayLoginActivity();
+        InitActivityButtons();
     }
 
     private void InitSevenDayLoginActivity() {
         Activity activity = Activity.Find("noob_reward");
         int signedDays = int.Parse(activity.GetData("signedDays", "0"));
         sevenDayLoginIcon?.gameObject.SetActive(signedDays < 7);
+    }
+
+    private void InitActivityButtons() {
+        for (int i = 0; i < activityButtons.Count; i++) {
+            activityButtons[i].gameObject.SetActive(i < activityIconPaths.Count);
+            if (i >= activityIconPaths.Count)
+                continue;
+            
+            var icon = NpcInfo.GetIcon(activityIconPaths[i]);
+            activityButtons[i].transform.GetChild(0).GetComponent<Image>().SetSprite(icon);
+        }
     }
 
     public void SetInfoPromptText(string content) {

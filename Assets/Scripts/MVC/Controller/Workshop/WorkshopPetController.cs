@@ -144,7 +144,7 @@ public class WorkshopPetController : Module
     }
 
     private void OnConfirmDIYPet() {
-        var message = "DIY写入" + (petModel.CreateDIYPet() ? "成功" : "失败");
+        petModel.CreateDIYPet(out string message);
         Hintbox.OpenHintboxWithContent(message, 16);
     }
     

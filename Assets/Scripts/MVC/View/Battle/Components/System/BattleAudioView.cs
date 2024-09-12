@@ -19,18 +19,14 @@ public class BattleAudioView : BattleBaseView
 
         AudioClip bgm = null;
 
-        if (!battle.settings.isMod)
+        if (!battle.settings.isMod) {
             bgm = battleBGM[GetBattleBGMId(battle.settings.mode)];
-        else {
-            bool isRequestDone = false;
-            RequestManager.instance.DownloadAudioClip("file://" + Application.persistentDataPath + "/Mod/BGM/fight/BGM_" + GetBattleBGMId(battle.settings.mode) + ".mp3",
-                (clip) => { bgm = clip; isRequestDone = true; }, (error) => isRequestDone = true);
-
-            while (!isRequestDone)
-                yield return null;
+            AudioSystem.instance.PlayMusic(bgm, AudioVolumeType.BattleBGM);
+            yield break;
         }
 
-        AudioSystem.instance.PlayMusic(bgm, AudioVolumeType.BattleBGM);
+        ResourceManager.instance.GetLocalAddressables<AudioClip>("BGM/fight/BGM_" + GetBattleBGMId(battle.settings.mode) + ".mp3", true,
+            (bgm) => AudioSystem.instance.PlayMusic(bgm, AudioVolumeType.BattleBGM));
     }
 
     private int GetBattleBGMId(BattleMode mode) {

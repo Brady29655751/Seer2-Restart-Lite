@@ -30,6 +30,7 @@ public class PetUI
     [XmlIgnore] public Sprite icon => PetUISystem.GetPetIcon(skinId);
     [XmlIgnore] public Sprite emblemIcon => PetUISystem.GetEmblemIcon(skinBaseId);
     [XmlIgnore] public Sprite battleImage => PetUISystem.GetPetBattleImage(skinId);
+    [XmlIgnore] public Sprite idleImage => PetUISystem.GetPetIdleImage(skinId);
 
 
     public GameObject GetBattleAnim(PetAnimationType type)

@@ -10,6 +10,8 @@ public class PetUIInfo
     public const int DATA_COL = 4;
     public int id, baseId;
 
+    public int defaultId;
+
     public int defaultSkinId;
     public List<int> specialSkinList = new List<int>();
     
@@ -24,10 +26,17 @@ public class PetUIInfo
     public Sprite icon => PetUISystem.GetPetIcon(defaultSkinId);
     public Sprite emblemIcon => PetUISystem.GetEmblemIcon(baseId);
     public Sprite battleImage => PetUISystem.GetPetBattleImage(defaultSkinId);
+    public Sprite idleImage => PetUISystem.GetPetIdleImage(defaultSkinId);
+
+    public GameObject GetBattleAnim(PetAnimationType type)
+    {
+        return PetUISystem.GetPetAnimInstance(defaultSkinId, type);
+    }
 
     public PetUIInfo(int petId, int petBaseId) {
         id = petId;
         baseId = petBaseId;
+        defaultId = petId;
         defaultSkinId = petId;
         defaultFeatureList = new List<int>(){ petBaseId };
     }
@@ -41,6 +50,7 @@ public class PetUIInfo
         specialSkinList = _slicedData[2].ToIntList('/');
         options.ParseOptions(_slicedData[3]);
 
+        defaultId = int.Parse(options.Get("default_id", id.ToString()));
         defaultSkinId = int.Parse(options.Get("default_skin", id.ToString()));
         defaultFeatureList = options.Get("default_feature", baseId.ToString()).ToIntList('/');
         defaultBuffIds = options.Get("default_buff", "none").ToIntList('/');

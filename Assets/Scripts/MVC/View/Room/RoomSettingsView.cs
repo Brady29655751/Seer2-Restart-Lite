@@ -31,12 +31,14 @@ public class RoomSettingsView : Module
         turnTimeText?.SetText("【" + hash["time"] + " 秒】");
         SetName(PhotonNetwork.LocalPlayer.NickName, true);
         SetName((otherPlayers.Length == 0) ? null : otherPlayers[0].NickName, false);
-        SetBGM(ResourceManager.instance.GetLocalAddressables<AudioClip>("BGM/1/MU_011"));
+        SetBGM();
         // SetPet(Enumerable.Repeat(Pet.GetExamplePet(3), (int)hash["count"]).ToList(), true);
     }
 
-    public void SetBGM(AudioClip bgm) {
-        AudioSystem.instance.PlayMusic(bgm, AudioVolumeType.BGM);
+    public void SetBGM() {
+        ResourceManager.instance.GetLocalAddressables<AudioClip>("BGM/1/MU_011", onSuccess: (bgm) => {
+            AudioSystem.instance.PlayMusic(bgm, AudioVolumeType.BGM);
+        });
     }
 
     public void SetName(string name, bool isMe) {

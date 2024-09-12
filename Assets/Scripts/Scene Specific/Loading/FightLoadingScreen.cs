@@ -37,6 +37,7 @@ public class FightLoadingScreen : LoadingScreen
         var fightMapId = (currentMap.fightMapId == 0) ? resId : currentMap.fightMapId;
         var fightMapPath = (currentMap.fightMapId == 0) ? ("Maps/bg/" + resId) : ("Maps/fightBg/" + currentMap.fightMapId);
         
+        Player.SetSceneData("fightBgIsMod", Map.IsMod(fightMapId));
         Player.SetSceneData("fightBg", ResourceManager.instance.GetLocalAddressables<Sprite>(fightMapPath, Map.IsMod(fightMapId)));
         Player.SetSceneData("captureAnim", ResourceManager.instance.GetLocalAddressables<RuntimeAnimatorController>("Pets/capture/capture"));
 

@@ -30,8 +30,10 @@ public class UnitPetSystem
     }
 
     public void RefreshStayTurn() {
-        foreach (var p in petBag)
-            p.stayTurn = 0;
+        foreach (var p in petBag) {
+            if (p != null)
+                p.stayTurn = 0;
+        }
     }
 
     public float GetPetSystemIdentifier(string id) {

@@ -513,7 +513,7 @@ id,timing,priority,target,condition,cond_option,effect,effect_option
 10502,on_final_dmg_cal,100,skill,none,none,set_damage,op=[MAX]&value=200
 10503,none,-1,none,none,none,none,none
 10504,on_after_attack,-1,pet,none,none,powerup,spd=1
-10505,on_after_attack,-1,pet,skill,type=damage&damage_op=<&damage_cmp=100,rage,add=20
+10505,on_after_attack,-1,pet,skill,is_hit=false|type=damage&damage_op=<&damage_cmp=100,rage,add=20
 10506,on_final_dmg_cal,100,skill,none,none,set_damage,op=[MAX]&value=100
 10507,none,-1,none,none,none,none,none
 10508,on_after_attack,-1,pet,none,none,add_buff,who=op&id=3001
@@ -524,7 +524,7 @@ id,timing,priority,target,condition,cond_option,effect,effect_option
 10513,none,-1,none,none,none,none,none
 10514,on_after_attack,-1,pet,none,none,add_buff,who=op&id=1006
 10515,on_after_attack\on_after_attack,-1\-1,pet\pet,none\none,none\none,add_buff\add_buff,id=33&turn=1\id=3076&turn=1
-10516,on_after_attack,-1,pet,skill,type=damage&damage_op=<&damage_cmp=100,heal,add=me.pet.status.maxHp*1/4
+10516,on_after_attack,-1,pet,skill,is_hit=false|type=damage&damage_op=<&damage_cmp=100,heal,add=me.pet.status.maxHp*1/4
 10517,on_before_attack\on_before_attack,-1\-1,skill\skill,none\last_skill,none\default=false&type=id/damage&id_cmp=10517&damage_op=<&damage_cmp=100,set_skill\set_skill,type=combo&op=SET&value=2\type=power&op=*&value=2
 10518,on_after_attack,-1,pet,none,none,powerup,def=1&mdf=1
 10519,none,-1,none,none,none,none,none
@@ -751,10 +751,10 @@ id,timing,priority,target,condition,cond_option,effect,effect_option
 10740,on_after_attack,-1,pet,buff,random_cmp=10*me.pet.buff[200072].value+50|key=field&type=id&id_cmp=600002,add_buff,who=op&id=1000
 10741,none,-1,none,none,none,none,none
 10742,on_after_attack,-1,pet,buff,key=field&type=id&id_cmp=600002,powerup,who=op&mdf=-1
-10743,on_after_attack\on_after_attack,-1\-1,pet\pet,none\none,none\none,add_buff\rage,id=3101\add=25
+10743,on_after_attack\on_after_attack\on_after_attack,-1\-1\-1,pet\pet\pet,none\none\none,none\none\none,add_buff\add_buff\rage,id=3100\id=3101\add=25
 10744,on_before_attack\on_after_attack,-1\0,skill\pet,buff\none,id=3101&own=true\none,set_skill\remove_buff,type=power&op=*&value=2\id=3101
 10745,none,-1,none,none,none,none,none
-10746,on_after_attack\on_after_attack\on_after_attack,-1\-1\0,pet\pet\pet,none\buff\none,none\id=3101&own=true\none,powerup\powerup\remove_buff,mat=1\mat=1\id=3101
+10746,on_after_attack\on_after_attack\on_after_attack,-1\-1\0,pet\pet\pet,none\buff\none,none\id=3100&own=true\none,powerup\powerup\remove_buff,mat=1\mat=1\id=3100
 10747,none,-1,none,none,none,none,none
 10748,none,-1,none,none,none,none,none
 10749,on_after_attack\on_after_attack,-1\-1,pet\pet,none\buff,none\who=op&id=1000&own=true,powerup\powerup,mat=1\mat=1

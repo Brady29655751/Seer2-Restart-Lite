@@ -74,6 +74,7 @@ public static class NpcHandler
             NpcAction.SetActivity   => () => NpcActionHandler.SetActivity(handler),
             NpcAction.Battle        => () => NpcActionHandler.StartBattle(npcInfo, handler),
             NpcAction.Player        => () => NpcActionHandler.SetPlayer(handler),
+            NpcAction.SetMail          => () => NpcActionHandler.SetMail(handler),
             _ => () => {}
         };
     }

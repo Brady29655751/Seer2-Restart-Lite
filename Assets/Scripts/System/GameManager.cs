@@ -7,7 +7,7 @@ using UnityEngine;
 public class GameManager : Singleton<GameManager>
 {
     [SerializeField] public bool debugMode = true;
-    [SerializeField] public bool heliosMode = true;
+    [SerializeField] public bool localMode = true;
     public static string serverUrl => "Data/";
     public static string versionDataUrl => serverUrl + "System/version.xml";
     public static string gameDownloadUrl => serverUrl + "Release/Seer2_Restart_Lite.zip";
@@ -61,7 +61,7 @@ public class GameManager : Singleton<GameManager>
             versionData = new VersionData();
             RequestManager.OnRequestFail("获取版本档案失败，请重新启动游戏");
         } 
-        
+
         Utility.InitScreenSizeWithRatio(16, 9);
         ResourceManager.LoadXML<VersionData>(versionDataUrl, OnRequestSuccess, OnRequestFail);
     }

@@ -21,9 +21,15 @@ public static class PetUISystem
         return ResourceManager.instance.GetLocalAddressables<Sprite>("Pets/battle/" + petId, PetInfo.IsMod(petId));
     }
 
+    public static Sprite GetPetIdleImage(int petId)
+    {
+        return ResourceManager.instance.GetLocalAddressables<Sprite>("Pets/pet/" + petId, PetInfo.IsMod(petId));
+    }
+
     public static GameObject GetPetAnimInstance(int petId, PetAnimationType type)
     {
-        string animName = type switch
+        string animName = type.ToString();
+        /*
         {
             PetAnimationType.Idle => $"待机",
             PetAnimationType.Dying => $"濒死",
@@ -42,6 +48,7 @@ public static class PetUISystem
             PetAnimationType.Present => ($"个性出场"),
             _ => throw new Exception("阿娘你个嗲列,没有这个动画的!!" + type)
         };
+        */
         return ResourceManager.instance.GetPetAnimInstance(petId, $"{petId}-" + animName);
     }
 
@@ -74,8 +81,7 @@ public enum PetAnimationType
     Property = 11,
     Super = 12,
     SecondSuper = 13,
-    JointSuper = 14,
-    BeCriticalStruck = 15,
-    Morph = 16,
-    Present = 17,
+    BeCriticalStruck = 14,
+    Morph = 15,
+    Present = 16,
 }

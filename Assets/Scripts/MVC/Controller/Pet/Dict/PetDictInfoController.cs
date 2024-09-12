@@ -7,6 +7,7 @@ public class PetDictInfoController : Module
 {
     [SerializeField] private PetDictInfoModel infoModel;
     [SerializeField] private PetDictInfoView infoView;
+    [SerializeField] private PetDemoController demoController;
 
     private Action<PetInfo> onEditPetCallback;
 
@@ -43,7 +44,9 @@ public class PetDictInfoController : Module
     }
 
     public void OpenExamplePetBagPanel() {
-        infoView.OpenExamplePetBagPanel(infoModel.petInfo.id);
+        infoView.OpenExamplePetBagPanel(infoModel.petInfo.id, () => {
+            demoController?.SetPetAnimationActive(false);
+        });
     }
 
     public void OnEditPet() {

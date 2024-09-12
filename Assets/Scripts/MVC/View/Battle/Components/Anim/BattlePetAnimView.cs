@@ -43,10 +43,13 @@ public class BattlePetAnimView : BattleBaseView
 
     public void SetPet(BattlePet pet)
     {
+        GameObject tmp;
+
         this.defalutSuperTrigger = (pet.battleStatus.atk >= pet.battleStatus.mat) ? "physic" : "special";
-        if ((this.currentPetAnim = pet.ui.GetBattleAnim(PetAnimationType.Physic)) !=
+        if ((tmp = pet.ui.GetBattleAnim(PetAnimationType.Physic)) !=
             null) //检测是否有物攻动画,如果有,说明这个精灵有动画,但是需要立刻关闭,否则直接出现在舞台上
         {
+            this.currentPetAnim = tmp;
             this.currentPetAnim.transform.SetParent(this.battlePetAnimContainer);
             this.currentPetAnim.SetActive(false);
             battlePetSprite.gameObject.SetActive(false);
@@ -55,17 +58,19 @@ public class BattlePetAnimView : BattleBaseView
         }
         else
         {
+            this.currentPetAnim?.SetActive(false);  
+
             this.currentPetUI = null; //当前精灵没有动画,但是上一只换场过来的精灵有动画,所以要把这个设为null,并且把动画关闭
-            if (this.currentPetAnim != null)
-            {
-                this.currentPetAnim.SetActive(false);
-                this.currentPetAnim = null;
-            }
+            this.currentPetAnim = null;
 
             battlePetSprite.sprite = pet.ui.battleImage;
             battlePetSprite.gameObject.transform.localScale = new Vector3(1920 / pet.ui.battleImage.rect.width,
                 1080 / pet.ui.battleImage.rect.height, 1);
             battlePetSprite.gameObject.SetActive(true);
+
+            // 修正位置
+            battlePetSprite.transform.position = new Vector3((isMyView ? -1 : 1) * 9.6f, -5.8f, 
+                battlePetSprite.transform.position.z);    
         }
     }
 
@@ -106,7 +111,7 @@ public class BattlePetAnimView : BattleBaseView
             controller.loopMode = SwfClipController.LoopModes.Once;
             controller.OnStopPlayingEvent += SetPetIdle; //注册一个事件监听,当动画播放完毕后,回到idle状态
             this.ApplyAnimation();
-            if (type is PetAnimationType.Super or PetAnimationType.SecondSuper or PetAnimationType.JointSuper)
+            if (type is PetAnimationType.Super or PetAnimationType.SecondSuper)
             {
                 this.camara.ScreenShake(0.4f);
                 if (this.isMyView)

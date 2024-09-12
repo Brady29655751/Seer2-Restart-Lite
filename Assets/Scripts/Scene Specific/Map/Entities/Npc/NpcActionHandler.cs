@@ -11,22 +11,30 @@ public static class NpcActionHandler
             return;
 
         int id = int.Parse(handler.param[0]);
+        var toNpc = npcList.Get(id, npc);
+        
         for (int i = 1; i < handler.param.Count; i++) {
             var option = handler.param[i].Split('=');
+            var expr = string.Empty;
             switch (option[0]) {
                 default:
                     break;
                 case "active":
-                    npcList.Get(id, npc).SetActive(bool.Parse(option[1]));
+                    toNpc.SetActive(bool.Parse(option[1]));
+                    break;
+                case "name":
+                    toNpc.SetName(option[1].TryTrimStart("[expr]", out expr) ? Parser.ParseOperation(expr).ToString() : option[1]);
                     break;
                 case "sprite":
-                    npcList.Get(id, npc).SetIcon(option[1]);
+                    var path = option[1].TrimEnd(".png").Split('/').Select(x => x.TryTrimStart("[expr]", out expr) ?
+                        Parser.ParseOperation(expr).ToString() : x).ConcatToString("/");
+                    toNpc.SetIcon(path);
                     break;
                 case "color":
-                    npcList.Get(id, npc).SetColor(option[1].ToColor(Color.white));
+                    toNpc.SetColor(option[1].ToColor(Color.white));
                     break;
                 case "bgm":
-                    npcList.Get(id, npc).SetBGM(option[1]);
+                    toNpc.SetBGM(option[1]);
                     break;
             }
         }
@@ -72,12 +80,7 @@ public static class NpcActionHandler
             if (option[0] == "callback") {
                 Action callback = () => {
                     npc?.GetInfo()?.callbackHandler?.FindAll(x => x.typeId == option[1])?.ForEach(x => {
-                        var callbackHandler = x;
-                        if ((type[1] == "PetSelect") && (x.action.IsPetAction())) {
-                            callbackHandler = new NpcButtonHandler(x);
-                            callbackHandler.param.Insert(0, "index=" + (((PetSelectHintbox)hintbox).GetCursor()[0]));
-                        }
-                        NpcHandler.GetNpcEntity(npc, callbackHandler, npcList)?.Invoke();
+                        NpcHandler.GetNpcEntity(npc, x, npcList)?.Invoke();
                     });
                 };
                 hintbox.SetOptionCallback(callback);
@@ -168,8 +171,11 @@ public static class NpcActionHandler
         int index = 0;
         if ((handler.param != null) && (handler.param.Count > 0)) {
             var petInfo = handler.param[0].Split('=');
-            if ((petInfo.Length >= 2) && (petInfo[0]?.ToLower() == "index"))
-                index = (int)Parser.ParseOperation(petInfo[1].TrimStart("[expr]"));
+            if ((petInfo.Length >= 2) && (petInfo[0]?.ToLower() == "index")) {
+                index = (int)Parser.ParseOperation(petInfo[1]);
+                if (!index.IsInRange(0, Player.instance.petBag.Length))
+                    return;
+            }
         }
 
         var newPetBag = Player.instance.petBag.ToList();
@@ -190,7 +196,10 @@ public static class NpcActionHandler
                 continue;
             
             if (petInfo[0].ToLower() == "index") {
-                index = (int)Parser.ParseOperation(petInfo[1].TrimStart("[expr]"));
+                index = (int)Parser.ParseOperation(petInfo[1]);
+                if (!index.IsInRange(0, Player.instance.petBag.Length))
+                    return;
+
                 continue;
             }
 
@@ -206,8 +215,10 @@ public static class NpcActionHandler
         int index = 0, paramOffset = 0;
         var petInfo = handler.param[0].Split('=');
         if ((petInfo.Length >= 2) && (petInfo[0].ToLower() == "index")) {
-            index = (int)Parser.ParseOperation(petInfo[1].TrimStart("[expr]"));
             paramOffset = 1;
+            index = (int)Parser.ParseOperation(petInfo[1]);
+            if (!index.IsInRange(0, Player.instance.petBag.Length))
+                return;
         }
 
         int evolveId = (int)Identifier.GetNumIdentifier(handler.param[paramOffset]);
@@ -276,5 +287,39 @@ public static class NpcActionHandler
         }
         Battle battle = new Battle(battleInfo);
         SceneLoader.instance.ChangeScene(SceneId.Battle);
+    }
+
+    public static void SetMail(NpcButtonHandler handler) {
+        if ((handler.param == null) || (handler.param.Count == 0))
+            return;
+
+        if (handler.param.Count < 1)
+            return;
+
+        var mail = new Mail() { date = DateTime.Now };
+
+        for (int i = 0; i < handler.param.Count; i++) {
+            var option = handler.param[i].Split('=');
+            switch (option[0]) {
+                default:
+                    break;
+                case "from":
+                    mail.sender = option[1];
+                    break;
+                case "title":
+                    mail.title = option[1];
+                    break;
+                case "content":
+                    mail.content = option[1];
+                    break;
+                case "item":
+                    mail.items = option[1].Split('/').Select(x => {
+                        var itemInfo = x.ToIntList();
+                        return new Item(itemInfo[0], itemInfo[1]);
+                    }).ToList();
+                    break;
+            }
+        }
+        Mail.Add(mail);
     }
 }

@@ -107,6 +107,27 @@ public static class SaveSystem
         return true;
     }
 
+    public static bool IsResourcesExists() {
+        return FileBrowserHelpers.DirectoryExists(Application.persistentDataPath + "/Resources");
+    }
+
+    public static bool TryImportResources(string importPath, out string error) {
+        try {
+            var dirName = FileBrowserHelpers.GetFilename(importPath);
+            var resourcePath = FileBrowserHelpers.CreateFolderInDirectory(Application.persistentDataPath, dirName);  
+            FileBrowserHelpers.CopyDirectory(importPath, resourcePath);
+            error = string.Empty;
+        } catch (Exception e) {
+            error = e.ToString();
+            return false;
+        }
+        return true;
+    }
+
+    public static bool IsModExists() {
+        return FileBrowserHelpers.DirectoryExists(Application.persistentDataPath + "/Mod");
+    }
+
     public static bool TryCreateMod(out string error) {
         error = string.Empty;
 
@@ -144,10 +165,6 @@ public static class SaveSystem
             return false;
         }
         return true;
-    }
-
-    public static bool IsModExists() {
-        return FileBrowserHelpers.DirectoryExists(Application.persistentDataPath + "/Mod");
     }
 
     private static bool TryCreateFile(string dirPath, string fileName, out string filePath) {
@@ -212,14 +229,18 @@ public static class SaveSystem
         return true;
     }
 
-    public static bool TrySaveBuffMod(BuffInfo info, byte[] iconBytes, Sprite iconSprite, int deleteBuffId = 0) {
+    public static bool TrySaveBuffMod(BuffInfo info, byte[] iconBytes, Sprite iconSprite, out string error, int deleteBuffId = 0) {
         var buffPath = Application.persistentDataPath + "/Mod/Buffs/";
         try {
-            if (!TryCreateFile(buffPath, "info.csv", out var infoPath))
+            if (!TryCreateFile(buffPath, "info.csv", out var infoPath)) {
+                error = "info档案创建失败";
                 return false;
+            }
 
-            if (!TryCreateFile(buffPath, "effect.csv", out var effectPath))
+            if (!TryCreateFile(buffPath, "effect.csv", out var effectPath)) {
+                error = "effect档案创建失败";
                 return false;
+            }
 
             FileBrowserHelpers.WriteTextToFile(infoPath, "id,name,type,copyType,turn,options,description\n"); 
             FileBrowserHelpers.WriteTextToFile(effectPath, "id,timing,priority,target,condition,cond_option,effect,effect_option\n"); 
@@ -239,8 +260,9 @@ public static class SaveSystem
                 FileBrowserHelpers.WriteBytesToFile(buffPath + info.id + ".png", iconBytes);
                 ResourceManager.instance.Set<Sprite>("Mod/Buffs/" + info.id, iconSprite);
             }
-
-        } catch (Exception) {
+            error = string.Empty;
+        } catch (Exception e) {
+            error = e.ToString();
             return false;
         }
 
@@ -267,14 +289,18 @@ public static class SaveSystem
         return true;
     }
 
-    public static bool TrySaveSkillMod(Skill info, int deleteSkillId = 0) {
+    public static bool TrySaveSkillMod(Skill info, out string error, int deleteSkillId = 0) {
         var skillPath = Application.persistentDataPath + "/Mod/Skills/";
         try {
-            if (!TryCreateFile(skillPath, "info.csv", out var infoPath))
+            if (!TryCreateFile(skillPath, "info.csv", out var infoPath)) {
+                error = "info档案创建失败";
                 return false;
+            }
 
-            if (!TryCreateFile(skillPath, "effect.csv", out var effectPath))
+            if (!TryCreateFile(skillPath, "effect.csv", out var effectPath)) {
+                error = "effect档案创建失败";
                 return false;
+            }
 
             FileBrowserHelpers.WriteTextToFile(infoPath, "id,name,element,type,power,anger,accuracy,option,description\n"); 
             FileBrowserHelpers.WriteTextToFile(effectPath, "id,timing,priority,target,condition,cond_option,effect,effect_option\n"); 
@@ -286,7 +312,9 @@ public static class SaveSystem
                 FileBrowserHelpers.AppendTextToFile(infoPath, entry.Value.GetRawInfoStringArray().ConcatToString(",") + "\n");
                 FileBrowserHelpers.AppendTextToFile(effectPath, Effect.GetRawEffectListStringArray(entry.Key, entry.Value.effects).ConcatToString(",") + "\n");
             }
-        } catch (Exception) {
+            error = string.Empty;
+        } catch (Exception e) {
+            error = e.ToString();
             return false;
         }
 
@@ -313,7 +341,7 @@ public static class SaveSystem
         return true;
     }
 
-    public static bool TrySavePetMod(PetInfo info, Dictionary<string, byte[]> bytesDict, Dictionary<string, Sprite> spriteDict, int deletePetId = 0) {
+    public static bool TrySavePetMod(PetInfo info, Dictionary<string, byte[]> bytesDict, Dictionary<string, Sprite> spriteDict, out string error, int deletePetId = 0) {
         var petPath = Application.persistentDataPath + "/Mod/Pets/";
         var emblemPath = Application.persistentDataPath + "/Mod/Emblems/";
         var iconBytes = bytesDict?.Get("icon", null);
@@ -321,20 +349,30 @@ public static class SaveSystem
         var emblemBytes = bytesDict?.Get("emblem", null);
 
         try {
-            if (!TryCreateFile(petPath, "basic.csv", out var basicPath))
+            if (!TryCreateFile(petPath, "basic.csv", out var basicPath)) {
+                error = "basic档案创建失败";
                 return false;
+            }
 
-            if (!TryCreateFile(petPath, "feature.csv", out var featurePath))
+            if (!TryCreateFile(petPath, "feature.csv", out var featurePath)) {
+                error = "feature档案创建失败";
                 return false;
+            }
 
-            if (!TryCreateFile(petPath, "exp.csv", out var expPath))
+            if (!TryCreateFile(petPath, "exp.csv", out var expPath)) {
+                error = "exp档案创建失败";
                 return false;
+            }
 
-            if (!TryCreateFile(petPath, "skill.csv", out var skillPath))
+            if (!TryCreateFile(petPath, "skill.csv", out var skillPath)) {
+                error = "skill档案创建失败";
                 return false;
+            }
 
-            if (!TryCreateFile(petPath, "ui.csv", out var uiPath))
+            if (!TryCreateFile(petPath, "ui.csv", out var uiPath)) {
+                error = "ui档案创建失败";
                 return false;
+            }
 
             FileBrowserHelpers.WriteTextToFile(basicPath, "id,baseId,name,element,baseStatus,gender,baseHeight/baseWeight,description,habitat,linkId\n"); 
             FileBrowserHelpers.WriteTextToFile(featurePath, "baseId,featureName,featureDescription,emblemName,emblemDescription\n"); 
@@ -405,8 +443,9 @@ public static class SaveSystem
                 if (id == Player.instance.gameDataId)
                     Player.instance.gameData = data;
             }
-
-        } catch (Exception) {
+            error = string.Empty;
+        } catch (Exception e) {
+            error = e.ToString();
             return false;
         }
 
@@ -474,52 +513,13 @@ public static class SaveSystem
 
             Map map = ResourceManager.GetXML<Map>(FileBrowserHelpers.ReadTextFromFile(mapPath));
             
-            ResourceManager.instance.StartCoroutine(TryLoadMapResourcesMod(map, onSuccess, onFail));
+            ResourceManager.instance.LoadMapResources(map, onSuccess, onFail);
         } catch (Exception) {
             onFail?.Invoke("加载地图资料发生错误");
             return false;
         }
 
         return true;
-    }
-
-    private static IEnumerator TryLoadMapResourcesMod(Map map, Action<Map> onSuccess = null, Action<string> onFail = null) {
-        int resId = (map.resId == 0) ? map.id : map.resId;
-        bool isMod = Map.IsMod(resId);
-        int pathResId = isMod ? resId : Mathf.Abs(resId);
-
-        var modPath = Application.persistentDataPath + "/Mod/";
-        int doneRequestCount = 0;
-
-        AudioClip bgm = null, fx = null;
-        string error = string.Empty;
-
-        // Audio only accepts mp3
-        RequestManager.instance.DownloadAudioClip("file://" + modPath + "BGM/" + map.music.category + "/" + map.music.bgm + ".mp3", 
-            (clip) => { bgm = clip; doneRequestCount++; }, (message) => { error = message; doneRequestCount++; });
-
-        if (string.IsNullOrEmpty(map.music.fx))
-            doneRequestCount++;
-        else {
-            RequestManager.instance.DownloadAudioClip("file://" + modPath + "BGM/fx/" + map.music.fx + ".mp3", 
-            (clip) => { fx = clip; doneRequestCount++; }, (message) => { error = message; doneRequestCount++; });
-        }
-
-        Sprite bg = ResourceManager.instance.GetLocalAddressables<Sprite>("Maps/bg/" + resId, isMod);
-        Sprite pathSprite = ResourceManager.instance.GetLocalAddressables<Sprite>("Maps/path/" + pathResId, isMod);
-
-        while (doneRequestCount < 2)
-            yield return null;
-
-        if (!string.IsNullOrEmpty(error)) {
-            onFail?.Invoke(error);
-            yield break;
-        }
-
-        MapResources mapResources = new MapResources(bg, pathSprite, bgm, fx);
-        map.SetResources(mapResources);
-
-        onSuccess?.Invoke(map);
     }
 
     public static bool TryLoadActivityMod(out Dictionary<string, ActivityInfo> activityDict) {
@@ -540,14 +540,18 @@ public static class SaveSystem
         return true;
     }
 
-    public static bool TrySaveItemMod(ItemInfo info, byte[] iconBytes, Sprite iconSprite, int deleteItemId = 0) {
+    public static bool TrySaveItemMod(ItemInfo info, byte[] iconBytes, Sprite iconSprite, out string error, int deleteItemId = 0) {
         var itemPath = Application.persistentDataPath + "/Mod/Items/";
         try {
-            if (!TryCreateFile(itemPath, "info.csv", out var infoPath))
+            if (!TryCreateFile(itemPath, "info.csv", out var infoPath)) {
+                error = "info档案创建失败";
                 return false;
+            }
 
-            if (!TryCreateFile(itemPath, "effect.csv", out var effectPath))
+            if (!TryCreateFile(itemPath, "effect.csv", out var effectPath)) {
+                error = "effect档案创建失败";
                 return false;
+            }
 
             FileBrowserHelpers.WriteTextToFile(infoPath, "id,name,type,price,option,description,effect\n"); 
             FileBrowserHelpers.WriteTextToFile(effectPath, "id,timing,priority,target,condition,cond_option,effect,effect_option\n"); 
@@ -567,8 +571,9 @@ public static class SaveSystem
                 FileBrowserHelpers.WriteBytesToFile(itemPath + info.id + ".png", iconBytes);
                 ResourceManager.instance.Set<Sprite>("Mod/Items/" + info.id, iconSprite);
             }
-
-        } catch (Exception) {
+            error = string.Empty;
+        } catch (Exception e) {
+            error = e.ToString();
             return false;
         }
 

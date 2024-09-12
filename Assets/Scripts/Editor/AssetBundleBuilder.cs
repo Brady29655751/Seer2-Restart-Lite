@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 
 namespace U_Editor
 {
@@ -8,6 +9,12 @@ namespace U_Editor
 
     public class AssetBundleBuilder//打包精灵动画专用
     {
+        [MenuItem("Tools/Check Active Build Target")]
+        public static void CheckActiveBuildTarget() 
+        {
+            Debug.Log(EditorUserBuildSettings.activeBuildTarget);
+        }
+
         [MenuItem("Tools/Build PetAnim AssetBundles")]
         public static void BuildAllAssetBundles()
         {
@@ -29,13 +36,13 @@ namespace U_Editor
                 foreach (var file in files)
                 {
                     string assetPath = file.FullName.Substring(file.FullName.IndexOf("Assets", StringComparison.Ordinal)).Replace("\\", "/");
-                    Debug.Log(Application.dataPath);
-                    Debug.Log(assetPath);
+                    // Debug.Log(Application.dataPath);
+                    // Debug.Log(assetPath);
                     AssetImporter.GetAtPath(assetPath).assetBundleName = bundleName;
                 }
             }
 
-            BuildPipeline.BuildAssetBundles(assetBundleDirectory, BuildAssetBundleOptions.None, BuildTarget.StandaloneWindows);
+            BuildPipeline.BuildAssetBundles(assetBundleDirectory, BuildAssetBundleOptions.None, EditorUserBuildSettings.activeBuildTarget);
         }
     }
 }

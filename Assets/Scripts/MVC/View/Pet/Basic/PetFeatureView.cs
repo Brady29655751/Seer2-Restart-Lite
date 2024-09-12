@@ -12,7 +12,7 @@ public class PetFeatureView : Module
     
     public void SetPet(Pet pet) {
         currentPet = pet;
-        SetDefaultBuffs(pet.info.ui.defaultBuffs);
+        SetDefaultBuffs((new List<Buff>(){ Buff.GetFeatureBuff(pet), Buff.GetEmblemBuff(pet) }).Concat(pet.info.ui.defaultBuffs).ToList());
         SetAfterwardBuffs(pet.feature.afterwardBuffs);
     }
 
@@ -38,8 +38,15 @@ public class PetFeatureView : Module
             return;
         }
 
+        var item = new Item(buff.info.itemId, 1);
+        var handler = new EffectHandler();
+        
+        handler.AddEffects(currentPet, item.effects.Where(x => x.timing == EffectTiming.OnRemoveBuff).ToList());
+        handler.CheckAndApply(null, false);
+
         currentPet.feature.afterwardBuffIds.Remove(buff.id);
-        Item.Add(new Item(buff.info.itemId, 1));
+        Item.Add(item);
+
         SaveSystem.SaveData();
 
         Hintbox.OpenHintboxWithContent("已移除后天加成【" + buff.name + "】\n获得了1个【" + itemInfo.name + "】", 16);

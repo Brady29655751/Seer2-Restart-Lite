@@ -23,9 +23,11 @@ public class ItemShopPanel : Panel
     protected Dictionary<ItemShopType, List<int>> shopItemIdDict = new Dictionary<ItemShopType, List<int>>() {
         { ItemShopType.None, new List<int>() },
         { ItemShopType.PetPotion, new List<int>() { 
-            10001, 10002, 10003, 10004, 10005, 10238, 10239,
-            10101, 10111, 10211, 20001,
-            10011, 10012, 10013, 10014, 10015, 10016, 110050
+            21010, 20001, 20002, 
+            10238, 10239, 10101, 10111, 10211,
+            110050,
+            10011, 10012, 10013, 10014, 10015, 10016, 
+            10001, 10002, 10003, 10004, 10005, 
         } },
         { ItemShopType.Mine, new List<int>() { 
             1001,   1002,   1003,   1004,
@@ -50,6 +52,7 @@ public class ItemShopPanel : Panel
         base.Init();
         SetShopMode(shopMode);
         SetShopType(shopType);
+        SetCurrencyType(1, 2);
     }
 
     public override void SetPanelIdentifier(string id, string param) {

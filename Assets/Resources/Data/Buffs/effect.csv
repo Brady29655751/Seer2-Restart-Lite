@@ -358,6 +358,8 @@ id,timing,priority,target,condition,cond_option,effect,effect_option
 400001,none,-1,none,none,none,none,none
 400002,none,-1,none,none,none,none,none
 400003,on_dmg_cal\on_dmg_cal\on_after_dmg_cal,1000\1001\-1,pet\skill\skill,none\none\none,none\none\none,set_buff\set_skill\set_damage,id=400003&type=value&op=SET&value=me.pet.status.cri+me.skill.critical[MAX]0\type=critical&op=SET&value=-9999\op=*&value=value/100+1[MIN]2
+400004,none,-1,none,none,none,none,none
+410010,on_turn_start,-1,pet,none,none,rage,add=15
 600002,on_after_attack,-1,pet,skill,random_cmp=15&who=op&whos_turn=op&whos_attack=op&type=type&type_op=>&type_cmp=0,add_buff,id=1000
 600008,on_turn_end,-1,pet,none,none,powerup,random=true&atk=-1&mat=-1&def=-1&mdf=-1&spd=-1&random_pdf=uniform
 -11,none,-1,none,none,none,none,none

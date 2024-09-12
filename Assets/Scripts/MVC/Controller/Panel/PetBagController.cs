@@ -16,6 +16,7 @@ public class PetBagController : Module
     [SerializeField] private PetPersonalityController personalityController;
     [SerializeField] private PetDemoController demoController;
     [SerializeField] private PetFeatureController featureController;
+    [SerializeField] private PetSkinController skinController;
 
     protected override void Awake()
     {
@@ -57,6 +58,10 @@ public class PetBagController : Module
         selectController.RefreshView();
     }
 
+    public void SetPetAnim() {
+        demoController?.TogglePetAnimationMode();
+    }
+
     public void SetPetTrain() {
         isDemoMode = !isDemoMode;
         demoController.gameObject.SetActive(isDemoMode);
@@ -93,6 +98,7 @@ public class PetBagController : Module
     }
 
     public void OpenPetStoragePanel() {
+        demoController?.SetPetAnimationActive(false);
         PetStoragePanel storagePanel = Panel.OpenPanel<PetStoragePanel>();
         storagePanel.onCloseEvent += RefreshPetBag;
     }

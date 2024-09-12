@@ -7,7 +7,7 @@ public class PetElementFilterView : Module
     [SerializeField] private InfoPrompt infoPrompt;
     [SerializeField] private IButton controlButton;
     [SerializeField] private RectTransform background;
-    [SerializeField] private List<PetElementButton> elementButtonList;
+    [SerializeField] private List<PetElementFilterButton> elementButtonList;
 
     public override void Init() {
         // SetPage(0);

@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class PetDemoModel : Module
 {
-    private Pet currentPet;
+    public Pet currentPet { get; private set; }
+    public bool animMode { get; private set; } = true;
 
     public string petName => currentPet.name;
 
@@ -19,6 +20,9 @@ public class PetDemoModel : Module
         currentPet = pet;
     }
 
+    public void SetAnimMode(bool newMode) {
+        animMode = newMode;
+    }
 
     
 }

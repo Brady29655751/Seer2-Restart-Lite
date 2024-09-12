@@ -71,8 +71,9 @@ public class WorkshopPetView : Module
                 "例：波克尔的最低型态为皮皮",
             "evolveId" => "该精灵进化型态的序号\n" +
                 "无进化型态请填0\n" +
-                "若有分支进化请填写默认进化型态\n\n" +
-                "例如：拉奥(ID:7)的进化型态是拉奥苗(ID:8)，因此拉奥(ID:7)的【进化序号】需要填写8",
+                "若有分支进化请用/隔开，例如：20/24\n\n" +
+                "拉奥(ID:7)的进化型态是拉奥苗(ID:8)\n" + 
+                "因此拉奥(ID:7)的【进化序号】需要填写8",
             "evolveLevel" => "该精灵的进化等级\n" +
                 "不是透过等级自然进化的请填0",
             "expType" => "升级到100级所需的经验总和",
@@ -103,8 +104,10 @@ public class WorkshopPetView : Module
                 "注意：档案越大或者DIY越多会导致图片加载时间变久",
             "skin" => "此功能暂不开放\n",
             "option" => "特殊自定义选项，选项如下请自行填写，多个选项请以 & 连接\n\n" +
+                "更改默认序号：default_id=默认序号\n" +
                 "更改默认皮肤：default_skin=精灵序号\n" +
-                "更改默认特性：default_feature=基础序号",
+                "更改默认特性：default_feature=基础序号\n" +
+                "更改先天加成：default_buff=印记序号",
 
             _ => string.Empty,
         };

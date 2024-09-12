@@ -124,6 +124,7 @@ namespace UnityEngine.UI
 
     public static class SpriteSet
     {
+        public static Sprite Empty => RM.instance.Get<Sprite>("Sprites/Empty");
         public static Sprite GetDefaultIconSprite(bool bold = false) =>
             RM.instance.Get<Sprite>("Panels/PetBag/Sprites/" + (bold ? 87 : 85));
 
@@ -135,9 +136,13 @@ namespace UnityEngine.UI
             if (!texture2D.LoadImage(bytes))
                 return false;
 
-            sprite = Sprite.Create(texture2D, new Rect(0, 0, texture2D.width, texture2D.height), new Vector2(0, 0),
-                100f, 0, SpriteMeshType.Tight);
+            sprite = texture2D.ToSprite();
             return true;
+        }
+
+        public static Sprite ToSprite(this Texture2D texture2D) {
+            return Sprite.Create(texture2D, new Rect(0, 0, texture2D.width, texture2D.height), new Vector2(0, 0),
+                100f, 0, SpriteMeshType.Tight);
         }
 
         public static void SetSprite(this Image image, Sprite sprite)

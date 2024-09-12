@@ -92,7 +92,7 @@ public class WorkshopSkillController : Module
     }
 
     private void OnConfirmDIYSkill() {
-        var message = "DIY写入" + (skillModel.CreateDIYSkill() ? "成功" : "失败");
+        skillModel.CreateDIYSkill(out var message);
         Hintbox.OpenHintboxWithContent(message, 16);
     }
 

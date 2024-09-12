@@ -41,10 +41,27 @@ public static class Identifier {
     }
 
     public static float GetIdentifier(string id) {
+        id = id.Replace("－", "-");
+
         string trimId = id;
 
+        if (id.TryTrimStart("data.", out trimId)) {
+            var dotIndex = trimId.IndexOf('.');
+            var key = (dotIndex < 0) ? trimId : trimId.Substring(0, dotIndex);
+            var data = Player.GetSceneData(key, 0);
+            return data switch {
+                Pet pet => pet.GetPetIdentifier(trimId.Substring(dotIndex + 1)),
+                _ => GetNumIdentifier(data.ToString()),
+            };
+        }   
+        
         if (id.TryTrimStart("firstPet.", out trimId))
-            return Player.instance.petBag[0].GetPetIdentifier(trimId);
+            return GetIdentifier("petBag[0]." + trimId);
+
+        if (id.TryTrimStart("petBag", out trimId) && trimId.TryTrimParentheses(out var indexExpr)) {
+            var index = (int)GetIdentifier(indexExpr);
+            return Player.instance.petBag[index].GetPetIdentifier(trimId.TrimStart("[" + indexExpr + "]."));
+        }
 
         if (id.TryTrimStart("activity", out trimId)) {
             string activityId = trimId.TrimParentheses();
@@ -97,7 +114,15 @@ public static class Identifier {
             
         if (id.TryTrimStart("state.", out trimId)) {
             var battle = Player.instance.currentBattle;
-            var actionOrder = battle.currentState.actionOrder;
+            var state = battle.currentState;
+
+            if (trimId.StartsWith("last.")) {
+                state = state.lastTurnState;
+                if (state == null)
+                    return 0;
+            }
+
+            var actionOrder = state.actionOrder;
 
             if (trimId.TryTrimStart("me.", out trimId)) {
                 return trimId switch {

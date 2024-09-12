@@ -30,12 +30,13 @@ public class PetStorageView : Module
         hintbox.SetContent("携带成功", 16, FontOption.Arial);
     }
 
-    public void OnPetExchange(Action<Pet> onExchangeCallback = null) {
+    public void OnPetExchange(Action<Pet> onExchangeCallback = null, Action onFailCallback = null) {
         PetSelectHintbox hintbox = Hintbox.OpenHintbox<PetSelectHintbox>();
         hintbox.SetStorage(petBag.ToList());
         hintbox.SetOptionNum(2);
         hintbox.SetTitle("请选择要交换的精灵");
         hintbox.SetConfirmSelectCallback(onExchangeCallback);
+        hintbox.SetOptionCallback(onFailCallback, false);
     }
 
     public void OnPetRelease(Action confirmCallback = null) {

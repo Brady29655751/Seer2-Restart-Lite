@@ -28,21 +28,19 @@ public class NpcController : Module
         npcView.SetColor(color);
     }
 
+    public void SetName(string name) {
+        npcView.SetName(name);
+    }
+
     public void SetAction(Dictionary<int, NpcController> npcList, InfoPrompt infoPrompt) {
         npcView.SetAction(this, npcList, infoPrompt);
     }
 
     public void SetBGM(string bgm)
     {
-         
-        AudioClip audioClip = ResourceManager.instance.GetLocalAddressables<AudioClip>("BGM/" + bgm);
-
-        if (audioClip != null) {
-            // 如果成功加载到 AudioClip，将其传递给 npcView.SetBGM 方法
-            // 這裡不用先停止音樂，AudioSystem 會自動處理
-            npcView.SetBGM(audioClip);
-        } else {
-            Debug.LogError("Failed to load AudioClip: " + bgm);
-        }
+        ResourceManager.instance.GetLocalAddressables<AudioClip>("BGM/" + bgm, onSuccess: (audioClip) => {
+            if (audioClip != null)
+                npcView.SetBGM(audioClip);
+        });
     }
 }

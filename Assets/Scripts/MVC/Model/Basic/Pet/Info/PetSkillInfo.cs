@@ -38,31 +38,27 @@ public class PetSkillInfo
     }
 
     private List<Skill> GetSkillList() {
-        var info = Pet.GetPetInfo(id);
-        int baseId = info.basic.baseId;
+        PetInfo info = Pet.GetPetInfo(id);
+        List<int> chain = PetExpSystem.GetEvolveChain(info.basic.baseId, id);
         List<Skill> skills = new List<Skill>();
 
-        while (id != baseId) {
-            info = Pet.GetPetInfo(baseId);
-            skills.AddRange(info.skills.skillIdList.Where(id => id != 0).Select(id => Skill.GetSkill(id)));
-            baseId = info.exp.evolvePetId;
+        for (int i = 0; i < chain.Count; i++) {
+            info = Pet.GetPetInfo(chain[i]);
+            skills.AddRange(info.skills.skillIdList.Select(id => Skill.GetSkill(id)));
         }
 
-        skills.AddRange(skillIdList.Select(id => Skill.GetSkill(id)));
         return skills;
     }
 
     private List<LearnSkillInfo> GetLearnInfoList() {
-        var info = Pet.GetPetInfo(id);
-        int baseId = info.basic.baseId;
+        PetInfo info = Pet.GetPetInfo(id);
+        List<int> chain = PetExpSystem.GetEvolveChain(info.basic.baseId, id);
         List<int> levels = new List<int>();
 
-        while (id != baseId) {
-            info = Pet.GetPetInfo(baseId);
-            levels.AddRange(info.skills.learnLevelList.Where(level => level != 0));
-            baseId = info.exp.evolvePetId;
+        for (int i = 0; i < chain.Count; i++) {
+            info = Pet.GetPetInfo(chain[i]);
+            levels.AddRange(info.skills.learnLevelList);
         }
-        levels.AddRange(learnLevelList);
 
         return skillList.Zip(levels, (s, l) => new LearnSkillInfo(s, l)).ToList();
     }

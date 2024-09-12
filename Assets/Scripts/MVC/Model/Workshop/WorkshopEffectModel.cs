@@ -20,7 +20,7 @@ public class WorkshopEffectModel : Module
     public EffectTarget target => (EffectTarget)(targetDropdown.value);
     public EffectCondition condition => (EffectCondition)(conditionDropdown.value);
     public string conditionOptions => string.IsNullOrEmpty(condOptionInputField.inputString) ? "none" : condOptionInputField.inputString;
-    public EffectAbility ability => (EffectAbility)(abilityDropdown.value + ((abilityDropdown.value < 3) ? 0 : 1));
+    public EffectAbility ability => (EffectAbility)(abilityDropdown.value);
     // public int abilityDetail => abilityDetailDropdown.value;
     public string abilityOptions => abilityOptionInputField.inputString;
 
@@ -41,16 +41,16 @@ public class WorkshopEffectModel : Module
         targetDropdown.value = (int)effect.target;
         conditionDropdown.value = (int)effect.condition;
         condOptionInputField.SetInputString(effect.GetRawCondtionOptionString());
-        abilityDropdown.value = ((int)effect.ability) - ((((int)effect.ability) < 3) ? 0 : 1);
+        abilityDropdown.value = ((int)effect.ability);
         abilityOptionInputField.SetInputString(effect.GetRawAbilityOptionString(new List<string>() { "name" }));
     }
 
     public EffectTiming GetEffectTiming() {
         if (timingDropdown.value.IsWithin(4, 7))
-            return (EffectTiming)(timingDropdown.value - 1);
+            return (EffectTiming)(timingDropdown.value - 2);
 
         if (timingDropdown.value.IsWithin(8, 15))
-            return (EffectTiming)(timingDropdown.value);
+            return (EffectTiming)(timingDropdown.value - 1);
 
         return timingDropdown.value switch {
             1   => EffectTiming.OnAddBuff,
@@ -66,26 +66,6 @@ public class WorkshopEffectModel : Module
             if (effect.timing == GetEffectTiming())
                 break;
         }
-    }
-
-    public void OnAbilityChanged() {
-        List<string> abilityDetailOptions = ability switch {
-            EffectAbility.Heal      => new List<string>() { "恢复体力", "修改体力", "秒杀" },
-            EffectAbility.Rage      => new List<string>() { "恢复怒气", "不低于", "不高于" },
-            EffectAbility.Powerup   => new List<string>() { "普通", "随机" },
-            EffectAbility.AddStatus => new List<string>() { "增加能力值" },
-            EffectAbility.BlockBuff => new List<string>() { "序号", "种类" },
-            EffectAbility.AddBuff   => new List<string>() { "添加印记" },
-            EffectAbility.RemoveBuff=> new List<string>() { "序号", "种类" },
-            EffectAbility.CopyBuff  => new List<string>() { "序号", "种类" },
-            EffectAbility.SetBuff   => new List<string>() { "回合", "数值" },
-            EffectAbility.SetDamage => new List<string>() { "伤害乘算", "附带伤害", "固定伤害", "伤害不低于", "伤害不高于", "回合结束伤害" },
-            EffectAbility.SetSkill  => new List<string>() { "修改技能数值", "改变使用技能" },
-            EffectAbility.SetPet    => new List<string>() { "修改精灵数值" },
-            EffectAbility.SetWeather=> new List<string>() { "修改天气" },
-            _ => new List<string>() { "无" },
-        };
-        // abilityDetailDropdown.SetDropdownOptions(abilityDetailOptions);
     }
 
     public bool VerifyDIYEffect(out string error) {

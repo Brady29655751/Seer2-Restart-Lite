@@ -101,37 +101,58 @@ public class ResourceManager : Singleton<ResourceManager>
         return Load<T>(item);
     }
 
-    public T GetLocalAddressables<T>(string item, bool isMod = false) where T : Object
+    /// <summary>
+    /// If T is Sprite, you can get the returned T immediately. <br/>
+    /// If T is AudioClip, you should use "onSuccess" and "onFail". The immediate returned T will be null.
+    /// </summary>
+    public T GetLocalAddressables<T>(string item, bool isMod = false, Action<T> onSuccess = null, Action<string> onFail = null) where T : Object
     {
-        if (isMod)
+        var pathType = isMod ? "Mod/" : "Resources/";
+
+        // Get cached resources first to prevent memory overhead.
+        T cachedRes = Get<T>(pathType + item.TrimEnd(".png"), false);
+        if (cachedRes != null) {
+            onSuccess?.Invoke(cachedRes);
+            return cachedRes;
+        }
+
+        var loadPath = Application.persistentDataPath + "/" + pathType + item;
+
+        // sprite only accepts png.
+        if (typeof(T) == typeof(Sprite))
         {
-            // Get cached resources first to prevent memory overhead.
-            T cachedRes = Get<T>("Mod/" + item.TrimEnd(".png"), false);
-            if (cachedRes != null)
-                return cachedRes;
-
-            var modPath = Application.persistentDataPath + "/Mod/" + item;
-
-            // sprite only accepts png.
-            if (typeof(T) == typeof(Sprite))
-            {
-                modPath += (item.EndsWith(".png") ? string.Empty : ".png");
-                if (!SaveSystem.TryLoadAllBytes(modPath, out var bytes))
-                    return default(T);
-
-                if (!SpriteSet.TryCreateSpriteFromBytes(bytes, out var sprite))
-                    return default(T);
-
-                Set<Sprite>("Mod/" + item.TrimEnd(".png"), sprite);
-                return sprite as T;
+            loadPath += (item.EndsWith(".png") ? string.Empty : ".png");
+            if (!SaveSystem.TryLoadAllBytes(loadPath, out var bytes)) {
+                onFail?.Invoke("读取图片失败");
+                return default(T);
             }
+
+            if (!SpriteSet.TryCreateSpriteFromBytes(bytes, out var sprite)) {
+                onFail?.Invoke("加载图片失败");
+                return default(T);
+            }
+
+            Set<Sprite>(pathType + item.TrimEnd(".png"), sprite);
+
+            cachedRes = sprite as T;
+            onSuccess?.Invoke(cachedRes);
+            return cachedRes;
+        }
+
+        if (typeof(T) == typeof(AudioClip)) 
+        {
+            loadPath += (item.EndsWith(".mp3") ? string.Empty : ".mp3");
+            RequestManager.instance.DownloadAudioClip("file://" + loadPath, (clip) => onSuccess?.Invoke(clip as T), onFail);
+            return default(T);
         }
 
         var dotIndex = item.IndexOf('.');
         if (dotIndex >= 0)
             item = item.Substring(0, dotIndex);
 
-        return Get<T>("Addressables/" + item);
+        cachedRes = Get<T>(pathType + item);
+        onSuccess?.Invoke(cachedRes);
+        return cachedRes;
     }
 
     public Sprite GetSprite(string item)
@@ -198,7 +219,7 @@ public class ResourceManager : Singleton<ResourceManager>
             }
             else
             {
-                assetBundle = AssetBundle.LoadFromFile(Application.persistentDataPath + "/PetFightAnim/pfa_" + petID);
+                assetBundle = AssetBundle.LoadFromFile(Application.persistentDataPath + "/PetAnimation/pfa_" + petID);
                 if (assetBundle == null) //说明精灵的所有动画都没有
                 {
                     return null;
@@ -333,24 +354,48 @@ public class ResourceManager : Singleton<ResourceManager>
 
     public void LoadMap(int id, Action<Map> onSuccess = null, Action<string> onFail = null)
     {
-        void OnRequestSuccess(Map map) => LoadMapResources(map, onSuccess);
         if (id >= -50000)
-            LoadXML<Map>(mapUrl + id + ".xml", OnRequestSuccess, error => onFail?.Invoke("地图加载失败，请重新启动游戏"));
+            LoadXML<Map>(mapUrl + id + ".xml", (map) => LoadMapResources(map, onSuccess, onFail), error => onFail?.Invoke("地图加载失败，请重新启动游戏"));
         else
             SaveSystem.TryLoadMapMod(id, onSuccess, onFail);
     }
 
-    private void LoadMapResources(Map map, Action<Map> onSuccess = null)
-    {
-        int resId = (map.resId == 0) ? map.id : map.resId;
-        int pathId = (map.pathId == 0) ? Mathf.Abs(resId) : map.pathId;
+    public void LoadMapResources(Map map, Action<Map> onSuccess = null, Action<string> onFail = null) {
+        StartCoroutine(GetMapResources(map, onSuccess, onFail));
+    }
 
-        Sprite bg = GetLocalAddressables<Sprite>(mapPath + "bg/" + resId);
-        Sprite pathSprite = GetLocalAddressables<Sprite>(mapPath + "path/" + pathId);
-        AudioClip bgm = GetLocalAddressables<AudioClip>(BGMPath + map.music.category + "/" + map.music.bgm);
-        AudioClip fx = string.IsNullOrEmpty(map.music.fx)
-            ? null
-            : GetLocalAddressables<AudioClip>(BGMPath + "fx/" + map.music.fx);
+    private IEnumerator GetMapResources(Map map, Action<Map> onSuccess = null, Action<string> onFail = null) {
+        int resId = (map.resId == 0) ? map.id : map.resId;
+        bool isMod = Map.IsMod(resId);
+        int pathResId = isMod ? resId : ((map.pathId == 0) ? Mathf.Abs(resId) : map.pathId);
+
+        int doneRequestCount = 0;
+
+        AudioClip bgm = null, fx = null;
+        string error = string.Empty;
+
+        // Audio only accepts mp3
+        GetLocalAddressables<AudioClip>("BGM/" + map.music.category + "/" + map.music.bgm + ".mp3", isMod,
+            (clip) => { bgm = clip; doneRequestCount++; }, (message) => { error = message; doneRequestCount++; });
+
+        if (string.IsNullOrEmpty(map.music.fx))
+            doneRequestCount++;
+        else {
+            GetLocalAddressables<AudioClip>("BGM/fx/" + map.music.fx + ".mp3", isMod,
+            (clip) => { fx = clip; doneRequestCount++; }, (message) => { error = message; doneRequestCount++; });
+        }
+
+        Sprite bg = GetLocalAddressables<Sprite>("Maps/bg/" + resId, isMod);
+        Sprite pathSprite = GetLocalAddressables<Sprite>("Maps/path/" + pathResId, isMod);
+
+        while (doneRequestCount < 2)
+            yield return null;
+
+        if (!string.IsNullOrEmpty(error)) {
+            onFail?.Invoke(error);
+            yield break;
+        }
+
         MapResources mapResources = new MapResources(bg, pathSprite, bgm, fx);
         map.SetResources(mapResources);
         onSuccess?.Invoke(map);

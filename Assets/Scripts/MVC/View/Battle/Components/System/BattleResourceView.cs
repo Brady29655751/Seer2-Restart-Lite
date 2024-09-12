@@ -23,13 +23,16 @@ public class BattleResourceView : BattleBaseView
     private void LoadBackground()
     {
         Sprite fightMap = (Sprite)Player.GetSceneData("fightBg");
+        bool fightMapIsMod = (bool)Player.GetSceneData("fightBgIsMod");
         if (fightMap == null)
             return;
 
         background.sprite = fightMap;
         background.gameObject.transform.localScale = new Vector3(1920 / background.sprite.rect.width,
             1080 / background.sprite.rect.height, 1);
-        ;
+        // 修正位置
+        background.gameObject.transform.position = new Vector3(-9.6f, -5.4f,
+            background.transform.position.z);
         background.color = Player.instance.currentMap.fightMapColor;
     }
 

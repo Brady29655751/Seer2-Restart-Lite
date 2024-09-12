@@ -81,14 +81,17 @@ public class WorkshopSkillModel : Module
         effectList[index] = effect;
     }
 
-    public bool CreateDIYSkill() {
+    public bool CreateDIYSkill(out string message) {
         var originalSkill = Skill.GetSkill(skill.id, false);
         Database.instance.skillDict.Set(skill.id, skill);
-        if (SaveSystem.TrySaveSkillMod(skill))
+        if (SaveSystem.TrySaveSkillMod(skill, out var error)) {
+            message = "DIY写入成功";
             return true;
+        }
 
         // rollback
         Database.instance.skillDict.Set(skill.id, originalSkill);
+        message = "DIY写入失败\n" + error;
         return false;
     }
 
@@ -103,14 +106,14 @@ public class WorkshopSkillModel : Module
         }
 
         Database.instance.skillDict.Remove(id);
-        if (SaveSystem.TrySaveSkillMod(originalSkill, id)) {
+        if (SaveSystem.TrySaveSkillMod(originalSkill, out var error, id)) {
             message = "技能删除成功";
             return true;
         }
 
         // rollback
         Database.instance.skillDict.Set(id, originalSkill);
-        message = "技能删除失败（档案写入问题）";
+        message = "技能删除失败\n" + error;
         return false;
     }
 
