@@ -7,6 +7,10 @@ public class PlayerInfoController : Module
     [SerializeField] private PlayerInfoModel infoModel;
     [SerializeField] private PlayerInfoView infoView;
 
+    public override void Init() {
+        SetCurrencyType(infoModel.coinType, infoModel.diamondType);
+    }
+
     public void SetCurrencyType(int coinType, int diamondType) {
         infoModel.SetCurrencyType(coinType, diamondType);
         infoView.SetCurrencyType(infoModel.coinType, infoModel.diamondType);

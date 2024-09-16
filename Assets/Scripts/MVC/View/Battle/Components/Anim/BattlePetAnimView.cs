@@ -97,8 +97,16 @@ public class BattlePetAnimView : BattleBaseView
 
     public void SetPetSkillAnim(PetAnimationType type)
     {
-        //使用技能动画,或者是通用技能动画
+        // isPetDone表示UI有沒有播放完畢
         isPetDone = false;
+
+        // 若為必殺技則立刻播放技能音效
+        var sound = this.currentPetUI.soundInfo.GetSoundByType(type);
+        bool isSuperSkill = (type is PetAnimationType.Super or PetAnimationType.SecondSuper);
+        if (isSuperSkill)
+            PlaySkillSound(sound);
+
+        //使用技能动画,或者是通用技能动画
         if (this.currentPetUI != null && (this.currentPetAnim = this.currentPetUI.GetBattleAnim(type)) != null)
         {
             //如果两个都不为null,说明这个精灵有动画,执行这个
@@ -124,8 +132,13 @@ public class BattlePetAnimView : BattleBaseView
                 }
             }
 
-            _ = SetOnHit((int)(this.currentPetUI.hitInfo.GetFrameByType(type) * 1000 / (24 * animSpeed)),
-                this.OnPetHit);
+            _ = SetOnHit((int)(this.currentPetUI.hitInfo.GetFrameByType(type) * 1000 / (24 * animSpeed)), () => {  
+                // 若不為必殺技則擊中才有音效
+                if (!isSuperSkill)
+                    PlaySkillSound(sound); 
+
+                OnPetHit(); 
+            });
             controller.GotoAndPlay(0);
         }
         else //为null,说明这个精灵没有动画,执行通用技能动画
@@ -140,7 +153,12 @@ public class BattlePetAnimView : BattleBaseView
                 _ => string.Empty
             };
             skillAnim.transform.SetAsLastSibling();
-            skillAnim.onAnimHitEvent.SetListener(OnPetHit);
+            skillAnim.onAnimHitEvent.SetListener(() => {
+                if (!isSuperSkill)
+                    PlaySkillSound(sound);
+
+                OnPetHit();
+            });
             skillAnim.onAnimEndEvent.SetListener(OnPetEnd);
             skillAnim.anim.SetTrigger(trigger);
         }
@@ -243,15 +261,15 @@ public class BattlePetAnimView : BattleBaseView
             }
         }
     }
-    /*
-    protected void PlaySkillSound(Skill skill) {
-        string type = (skill.type == SkillType.必杀) ? "Super" : "Normal";
-        string soundId = skill.soundId;
-        AudioClip sound = ResourceManager.instance.GetSE("Skill/" + type + "/" + soundId);
-        AudioSystem.instance.PlaySound(sound, AudioVolumeType.BattleSE);
-        petAnim.onAnimStartEvent.RemoveAllListeners();
+
+    private void PlaySkillSound(string soundId) {
+        if (string.IsNullOrEmpty(soundId) || (soundId == "0") || (soundId == "none"))
+            return;
+        
+        ResourceManager.instance.GetLocalAddressables<AudioClip>("BGM/skill/" + soundId, false, (sound) => {
+            AudioSystem.instance.PlaySound(sound, AudioVolumeType.BattleSE);
+        });
     }
-    */
 
     protected IEnumerator PreventAnimStuckCoroutine(float timeout)
     {
@@ -288,7 +306,10 @@ public class BattlePetAnimView : BattleBaseView
 
     protected void OnPetCapture(bool isSuccess)
     {
-        battlePetSprite.gameObject.SetActive(!isSuccess);
+        if (isSuccess) {
+            battlePetSprite.gameObject.SetActive(false);
+            return;
+        }
     }
 
     protected void OnPetHit()

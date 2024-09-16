@@ -14,21 +14,7 @@ public class ItemHintbox : Hintbox
                 base.SetPanelIdentifier(id, param);
                 break;
             case "item_icon":
-                Sprite icon = null;
-                var splitIndex = param.IndexOf('[');
-                if (splitIndex != -1) {
-                    var category = param.Substring(0, splitIndex).ToLower();
-                    if (int.TryParse(param.TrimParentheses(), out int iconId)) {
-                        icon = category switch {
-                            "pet" =>   Pet.GetPetInfo(iconId)?.ui.icon,
-                            "item" =>   Item.GetItemInfo(iconId)?.icon,
-                            "emblem" =>   Pet.GetPetInfo(iconId)?.ui.emblemIcon,
-                            _ =>   NpcInfo.GetIcon(param),
-                        };
-                    }
-                }
-                icon ??= NpcInfo.GetIcon(param);
-                SetIcon(icon);
+                SetIcon(SpriteSet.GetIconSprite(param));
                 break;
         }
     }

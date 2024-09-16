@@ -71,15 +71,13 @@ public class ResourceManager : Singleton<ResourceManager>
         InitAll<Sprite>(spritePath + "Game/Skills", spritePath + "Skills");
     }
 
-    public void UnloadModResources()
+    public void UnloadResources()
     {
         var resKeys = resDict.Keys.ToList();
         foreach (var key in resKeys)
         {
-            if (!key.StartsWith("Mod/"))
-                continue;
-
-            resDict.Set(key, null);
+            if (key.StartsWith("Mod/") || (key.StartsWith("Resources/Pets/") || key.StartsWith("Resources/Maps/")))
+                resDict.Set(key, null);
         }
     }
 
@@ -150,7 +148,7 @@ public class ResourceManager : Singleton<ResourceManager>
         if (dotIndex >= 0)
             item = item.Substring(0, dotIndex);
 
-        cachedRes = Get<T>(pathType + item);
+        cachedRes = Get<T>(item);
         onSuccess?.Invoke(cachedRes);
         return cachedRes;
     }
@@ -441,7 +439,7 @@ public class ResourceManager : Singleton<ResourceManager>
         return GetEffectLists(LoadCSV(path));
     }
 
-    public Dictionary<int, Skill> GetSkill(string[] info, string[] effects)
+    public Dictionary<int, Skill> GetSkill(string[] info, string[] effects, string[] sounds = null)
     {
         Dictionary<int, Skill> skillDict = new Dictionary<int, Skill>();
 
@@ -468,29 +466,29 @@ public class ResourceManager : Singleton<ResourceManager>
     private void LoadSkillEffect(string[] info, Action<Dictionary<int, Skill>> onSuccess = null,
         Action<string> onFail = null)
     {
-        LoadCSV(skillUrl + "effect.csv", (data) =>
-        {
+        LoadCSV(skillUrl + "effect.csv", (data) => {
             var originalDict = GetSkill(info, data);
             if (SaveSystem.TryLoadSkillMod(out var modDict))
             {
                 foreach (var entry in modDict)
                     originalDict.Set(entry.Key, entry.Value);
             }
-
             onSuccess?.Invoke(originalDict);
         }, onFail);
     }
 
     public void LoadPetInfo(Action<Dictionary<int, PetInfo>> onSuccess = null,
         Action<Dictionary<int, PetFeatureInfo>> onFeatureSuccess = null,
-        Action<Dictionary<int, PetHitInfo>> onHitSuccess = null)
+        Action<Dictionary<int, PetHitInfo>> onHitSuccess = null,
+        Action<Dictionary<int, PetSoundInfo>> onSoundSuccess = null)
     {
-        StartCoroutine(GetPetInfo(onSuccess, onFeatureSuccess, onHitSuccess));
+        StartCoroutine(GetPetInfo(onSuccess, onFeatureSuccess, onHitSuccess, onSoundSuccess));
     }
 
     private IEnumerator GetPetInfo(Action<Dictionary<int, PetInfo>> onSuccess,
         Action<Dictionary<int, PetFeatureInfo>> onFeatureSuccess,
-        Action<Dictionary<int, PetHitInfo>> onHitSuccess = null)
+        Action<Dictionary<int, PetHitInfo>> onHitSuccess = null,
+        Action<Dictionary<int, PetSoundInfo>> onSoundSuccess = null)
     {
         List<PetBasicInfo> basicInfo = null;
         Dictionary<int, PetFeatureInfo> featureInfo = null;
@@ -498,6 +496,7 @@ public class ResourceManager : Singleton<ResourceManager>
         Dictionary<int, PetSkillInfo> skillInfo = null;
         Dictionary<int, PetUIInfo> uiInfo = null;
         Dictionary<int, PetHitInfo> hitInfo = null;
+        Dictionary<int, PetSoundInfo> soundInfo = null;
         Dictionary<int, PetInfo> petInfos = new Dictionary<int, PetInfo>();
 
         bool isFailed = false;
@@ -507,9 +506,10 @@ public class ResourceManager : Singleton<ResourceManager>
         LoadCSV(petUrl + "skill.csv", (data) => skillInfo = GetPetSkillInfo(data), (error) => isFailed = true);
         LoadCSV(petUrl + "ui.csv", (data) => uiInfo = GetPetUIInfo(data), (error) => isFailed = true);
         LoadCSV(petUrl + "hit.csv", (data) => hitInfo = GetPetHitInfo(data), (error) => isFailed = true);
+        LoadCSV(petUrl + "sound.csv", (data) => soundInfo = GetPetSoundInfo(data), (error) => isFailed = true);
 
         while ((basicInfo == null) || (featureInfo == null) || (expInfo == null) || (skillInfo == null) ||
-               (uiInfo == null) || (hitInfo == null))
+               (uiInfo == null) || (hitInfo == null) || (soundInfo == null))
         {
             if (isFailed)
             {
@@ -543,12 +543,14 @@ public class ResourceManager : Singleton<ResourceManager>
             onSuccess?.Invoke(petInfos);
             onFeatureSuccess?.Invoke(featureInfo);
             onHitSuccess?.Invoke(hitInfo);
+            onSoundSuccess?.Invoke(soundInfo);
         }
         catch (Exception)
         {
             onSuccess?.Invoke(new Dictionary<int, PetInfo>());
             onFeatureSuccess?.Invoke(new Dictionary<int, PetFeatureInfo>());
             onHitSuccess?.Invoke(new Dictionary<int, PetHitInfo>());
+            onSoundSuccess?.Invoke(new Dictionary<int, PetSoundInfo>());
         }
     }
 
@@ -646,6 +648,22 @@ public class ResourceManager : Singleton<ResourceManager>
         }
 
         return petHitInfos;
+    }
+
+    public Dictionary<int, PetSoundInfo> GetPetSoundInfo(string[] data)
+    {
+        Dictionary<int, PetSoundInfo> petSoundInfos = new Dictionary<int, PetSoundInfo>();
+
+        int dataCol = PetSoundInfo.DATA_COL;
+        int dataRow = data.Length / dataCol;
+        for (int i = 1; i < dataRow; i++)
+        {
+            int cur = dataCol * i;
+            PetSoundInfo info = new PetSoundInfo(data, cur);
+            petSoundInfos.Set(info.skinId, info);
+        }
+
+        return petSoundInfos;
     }
 
     public Dictionary<int, BuffInfo> GetBuffInfo(string[] data, string[] effects)

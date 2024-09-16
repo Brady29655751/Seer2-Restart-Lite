@@ -22,7 +22,7 @@ public class WorkshopPetBasicModel : Module
 
     public string description => descriptionInputField.inputString;
 
-    public override void Init() {
+    protected override void Awake() {
         // if (!PetElementSystem.IsMod())
         //     return;
 

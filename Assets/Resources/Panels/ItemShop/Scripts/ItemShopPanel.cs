@@ -52,7 +52,6 @@ public class ItemShopPanel : Panel
         base.Init();
         SetShopMode(shopMode);
         SetShopType(shopType);
-        SetCurrencyType(1, 2);
     }
 
     public override void SetPanelIdentifier(string id, string param) {

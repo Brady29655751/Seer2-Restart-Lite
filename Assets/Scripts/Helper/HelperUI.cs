@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -151,6 +152,38 @@ namespace UnityEngine.UI
                 return;
 
             image.sprite = sprite;
+        }
+
+        /// <summary>
+        /// Get icon according to the special pattern. <br/>
+        /// Eg. pet[60] returns the icon of the pet with id 60. <br/>
+        /// Eg. item[10001] returns the icon of the item with id 10001. <br/>
+        /// Eg. buff[10] returns the icon of the buff with id 10.
+        /// </summary>
+        /// <param name="param">The pattern. Basically, type[id]</param>
+        /// <returns>The icon sprite.</returns>
+        public static Sprite GetIconSprite(string param) 
+        {
+            if (string.IsNullOrEmpty(param))
+                return null;
+
+            Sprite icon = null;
+            var splitIndex = param.IndexOf('[');
+            if (splitIndex != -1) {
+                var category = param.Substring(0, splitIndex).ToLower();
+                if (int.TryParse(param.TrimParentheses(), out int iconId)) {
+                    icon = category switch {
+                        "pet" =>    Pet.GetPetInfo(iconId)?.ui.icon,
+                        "emblem" => Pet.GetPetInfo(iconId)?.ui.emblemIcon,
+                        "item" =>   Item.GetItemInfo(iconId)?.icon,
+                        "buff" =>   Buff.GetBuffInfo(iconId)?.icon,
+                        "npc"  =>   NpcInfo.GetIcon(iconId.ToString()),
+                        _ =>   NpcInfo.GetIcon(param),
+                    };
+                }
+            }
+            icon ??= NpcInfo.GetIcon(param);
+            return icon;
         }
 
         public static void SetElementSprite(this Image image, Element element)

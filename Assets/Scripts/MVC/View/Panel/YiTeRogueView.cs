@@ -17,45 +17,92 @@ public class YiTeRogueView : UIModule
     [SerializeField] private Text titleText, contentText;
     [SerializeField] private List<YiTeRogueChoiceView> choiceList;
 
-    public void SetMap(List<YiTeRogueEvent> eventMap, List<int> trace) {
+    public void Clear() {
+        arrowList.ForEach(x => Destroy(x.gameObject));
+        eventButtonList.ForEach(x => Destroy(x.gameObject));
+
+        arrowList.Clear();
+        eventButtonList.Clear();
+    }
+
+    public void SetMap() {
+        Clear();
+
+        var eventMap = YiTeRogueData.instance.eventMap;
+        var trace = YiTeRogueData.instance.trace;
+        YiTeRogueEvent rogueEvent = eventMap[0];
+
         rogueContentRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 120 + 120 * eventMap[eventMap.Count - 1].step);
 
-        for (int i = 0; i < eventMap.Count; i++) {
-            var rogueEvent = eventMap[i];
+        // Instantiate first block.
+        InstantiateEventBlock(rogueEvent, trace);
+        if (trace.Count == 0)
+            return;
 
-            // Instantiate event block
-            var buff = new Buff(rogueEvent.eventIconBuffId);
-            var buffBlock = Instantiate(buffButtonPrefab, rogueContentRect);
-            var blockView = buffBlock.GetComponent<BattlePetBuffBlockView>();
-            RectTransform rect = buffBlock.GetComponent<RectTransform>();
-            rect.anchorMin = rect.anchorMax = rect.pivot = Vector2.up; 
-            rect.anchoredPosition = new Vector2(35 + 120 * rogueEvent.step, -170 - 80 * rogueEvent.pos);
-            rect.localScale = eventBlockScale * Vector3.one;
-            blockView.SetBuff(buff, () => SetInfoPromptActive(true), () => SetInfoPromptActive(false), 
-                () => infoPrompt.SetBuff(buff), () => rogueEvent.Trigger(OpenChoicePanel, CloseChoicePanel));
-            eventButtonList.Add(blockView);
+        // Instantiate blocks in the middle.
+        for (int i = 0; i < trace.Count - 1; i++) {
+            int delta = trace[i + 1] - trace[i];
+            InstantiateEventArrows(rogueEvent, new List<int>(){ delta });
+            rogueEvent = eventMap.Find(x => (x.step == i + 1) && (x.pos == trace[i + 1]));
+            InstantiateEventBlock(rogueEvent, trace);
+        }
 
-            // Instantiate arrow.
-            if (rogueEvent.next != null) {
-                foreach (var delta in rogueEvent.next) {
-                    var arrowBlock = Instantiate(arrowPrefab, rogueContentRect);
-                    var arrowX = ((delta == -1) ? 125 : 145) + 120 * rogueEvent.step;
-                    var arrowY = ((delta == -1) ? -130 : ((delta == 0) ? -185 : -250)) - 80 * rogueEvent.pos;
-                    rect = arrowBlock.GetComponent<RectTransform>();
-                    rect.rotation = Quaternion.Euler(0, 0, -90 - 45 * delta);
-                    rect.anchoredPosition = new Vector2(arrowX, arrowY);
-                    arrowList.Add(arrowBlock);
-                }
-            }
+        if (rogueEvent?.next == null)
+            return;
+
+        // Instantiate last blocks for chosen.
+        InstantiateEventArrows(rogueEvent, rogueEvent.next);
+        var currentEventList = eventMap.FindAll(x => (x.step == rogueEvent.step + 1) && 
+            (rogueEvent.next.Exists(y => x.pos == rogueEvent.pos + y)));
+
+        foreach (var e in currentEventList)
+            InstantiateEventBlock(e, trace);
+    }
+
+    private void InstantiateEventBlock(YiTeRogueEvent rogueEvent, List<int> trace) {
+        if (rogueEvent == null)
+            return;
+
+        var buff = new Buff(rogueEvent.eventIconBuffId);
+        var buffBlock = Instantiate(buffButtonPrefab, rogueContentRect);
+        var blockView = buffBlock.GetComponent<BattlePetBuffBlockView>();
+        var rect = buffBlock.GetComponent<RectTransform>();
+        
+        rect.anchorMin = rect.anchorMax = rect.pivot = Vector2.up; 
+        rect.anchoredPosition = new Vector2(35 + 120 * rogueEvent.step, -170 - 80 * rogueEvent.pos);
+        rect.localScale = eventBlockScale * Vector3.one;
+        blockView.SetBuff(buff, () => SetInfoPromptActive(true), () => SetInfoPromptActive(false), 
+            () => infoPrompt.SetBuff(buff), () => {
+                if (trace.Count == rogueEvent.step)
+                    OpenChoicePanel(rogueEvent);
+                else
+                    Hintbox.OpenHintboxWithContent("此事件已完成！", 16);
+        });
+        eventButtonList.Add(blockView);
+    }
+
+    private void InstantiateEventArrows(YiTeRogueEvent rogueEvent, List<int> nextList) {
+        if ((rogueEvent == null) || (nextList == null))
+            return;
+
+        foreach (var delta in nextList) {
+            var arrowBlock = Instantiate(arrowPrefab, rogueContentRect);
+            var arrowX = ((delta == -1) ? 125 : 145) + 120 * rogueEvent.step;
+            var arrowY = ((delta == -1) ? -130 : ((delta == 0) ? -185 : -250)) - 80 * rogueEvent.pos;
+            var rect = arrowBlock.GetComponent<RectTransform>();
+            rect.rotation = Quaternion.Euler(0, 0, -90 - 45 * delta);
+            rect.anchoredPosition = new Vector2(arrowX, arrowY);
+            arrowList.Add(arrowBlock);
         }
     }
 
-    public void OpenChoicePanel(string title, string content, List<YiTeRogueChoice> choices) {
+    private void OpenChoicePanel(YiTeRogueEvent rogueEvent) {
         choicePanel.SetActive(true);
-        titleText?.SetText(title);
-        contentText?.SetText(content);
+        titleText?.SetText(rogueEvent.title);
+        contentText?.SetText(rogueEvent.content);
+        var choices = rogueEvent.choiceList;
         for (int i = 0; i < choiceList.Count; i++) {
-            choiceList[i].SetChoice((i < choices.Count) ? choices[i] : null);
+            choiceList[i].SetChoice((i < choices.Count) ? choices[i] : null, SetMap, rogueEvent.pos);
         }
     }
 

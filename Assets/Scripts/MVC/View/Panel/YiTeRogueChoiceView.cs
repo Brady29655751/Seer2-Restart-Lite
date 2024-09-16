@@ -10,14 +10,18 @@ public class YiTeRogueChoiceView : Module
     [SerializeField] private Text content;
     [SerializeField] private IButton button;
 
-    public void SetChoice(YiTeRogueChoice choice) {
+    public void SetChoice(YiTeRogueChoice choice, Action onAfterStepCallback, int eventPos) {
         gameObject.SetActive(choice != null);
         if (choice == null)
             return;
 
+        SetContent(choice.description);
+        SetCallback(choice.callback, onAfterStepCallback, eventPos);
+        SetIcon(choice.icon);
     }
 
     public void SetIcon(Sprite sprite) {
+        icon?.gameObject.SetActive(sprite != null);
         icon?.SetSprite(sprite);
     }
 
@@ -25,7 +29,11 @@ public class YiTeRogueChoiceView : Module
         content?.SetText(text);
     }
 
-    public void SetCallback(Action callback) {
-        button.onPointerClickEvent.SetListener(() => callback?.Invoke());
+    public void SetCallback(Action choiceCallback, Action onAfterStepCallback, int eventPos) {
+        button.onPointerClickEvent.SetListener(() => {
+            choiceCallback?.Invoke();
+            YiTeRogueData.instance.Step(eventPos);
+            onAfterStepCallback?.Invoke();
+        });
     }
 }

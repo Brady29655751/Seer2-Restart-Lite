@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-// Pet Bag Panel are in 3 places: Prefab, PVP Room, Pet Dictionary Example
+// Pet Bag Panel are in 4 places: Prefab, PVP Room, Pet Dictionary Example, YiTeRogue
 // Every revise with pet bag should check all these places.
 public class PetBagPanel : Panel
 {

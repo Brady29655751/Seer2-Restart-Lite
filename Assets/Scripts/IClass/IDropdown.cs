@@ -21,6 +21,9 @@ public class IDropdown : IMonoBehaviour
     }
 
     public void SetDropdownOptions(List<string> options) {
+        if (dropdown == null)
+            dropdown = gameObject.GetComponent<Dropdown>();
+            
         dropdown.ClearOptions();
         dropdown.AddOptions(options);
     }

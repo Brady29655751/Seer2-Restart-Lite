@@ -12,6 +12,7 @@ public class Database : Singleton<Database>
     public Dictionary<int, Skill> skillDict = new Dictionary<int, Skill>();
     public Dictionary<int, PetFeatureInfo> featureInfoDict = new Dictionary<int, PetFeatureInfo>();
     public Dictionary<int, PetHitInfo> hitInfoDict = new Dictionary<int, PetHitInfo>();
+    public Dictionary<int, PetSoundInfo> soundInfoDict = new Dictionary<int, PetSoundInfo>();
     public Dictionary<int, PetInfo> petInfoDict = new Dictionary<int, PetInfo>();
     public Dictionary<int, ItemInfo> itemInfoDict = new Dictionary<int, ItemInfo>();
     public Dictionary<int, BuffInfo> buffInfoDict = new Dictionary<int, BuffInfo>();
@@ -23,7 +24,8 @@ public class Database : Singleton<Database>
 
     public void Init()
     {
-        RM.LoadPetInfo((x) => petInfoDict = x, (y) => featureInfoDict = y, (z) => hitInfoDict = z);
+        RM.LoadPetInfo((x) => petInfoDict = x, (y) => featureInfoDict = y, (z) => hitInfoDict = z,
+            (w) => soundInfoDict = w);
         RM.LoadSkill((x) => skillDict = x);
         RM.LoadBuffInfo((x) => buffInfoDict = x);
         RM.LoadItemInfo((x) => itemInfoDict = x);
@@ -146,5 +148,10 @@ public class Database : Singleton<Database>
     public PetHitInfo GetPetHitInfo(int skinId)
     {
         return (skinId == 0) ? null : hitInfoDict.Get(skinId, null);
+    }
+
+    public PetSoundInfo GetPetSoundInfo(int skinId)
+    {
+        return (skinId == 0) ? null : soundInfoDict.Get(skinId, null);
     }
 }

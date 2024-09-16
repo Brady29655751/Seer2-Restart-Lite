@@ -12,7 +12,7 @@ public class ModPanel : Panel
     protected Dictionary<int, NpcController> npcDict = new Dictionary<int, NpcController>();
 
     public override void ClosePanel() {
-        ResourceManager.instance.UnloadModResources();
+        ResourceManager.instance.UnloadResources();
         base.ClosePanel(); 
         Resources.UnloadUnusedAssets();
     }

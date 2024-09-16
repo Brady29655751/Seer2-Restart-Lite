@@ -29,7 +29,7 @@ public class WorkshopSkillModel : Module
 
     public List<Effect> effectList = new List<Effect>();
 
-    public override void Init() {
+    protected override void Awake() {
         // if (!PetElementSystem.IsMod())
         //     return;
 

@@ -44,6 +44,7 @@ public class Skill
     public bool isAttack => IsAttack();
     public bool isCapture => IsCapture();
 
+    public string soundId => options.Get("sound", string.Empty);
     public PetAnimationType petAnimType => GetPetAnimationType();
     public PetAnimationType captureAnimType => GetCaptureAnimationType();
 

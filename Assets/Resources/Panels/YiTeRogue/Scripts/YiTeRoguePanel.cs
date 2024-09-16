@@ -6,19 +6,18 @@ using UnityEngine;
 
 public class YiTeRoguePanel : Panel
 {
-    [SerializeField] private YiTeRogueModel rogueModel;
     [SerializeField] private YiTeRogueView rogueView;
     [SerializeField] private PetBagPanel petBagPanel;
 
-    public YiTeRogueData rogueData => Player.instance.gameData.yiteRogueData;
+    public YiTeRogueData rogueData => YiTeRogueData.instance;
     
     
 
     public override void Init() {
         //if (List.IsNullOrEmpty(rogueData.eventMap))
-            rogueModel.CreateRogue();
+            rogueData.CreateRogue();
         
-        rogueView.SetMap(rogueData.eventMap, rogueData.trace);
+        rogueView.SetMap();
     }
 
     public void OpenPetBag() {

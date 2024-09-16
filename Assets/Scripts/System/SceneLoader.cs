@@ -40,7 +40,7 @@ public class SceneLoader : Singleton<SceneLoader>
     private void OnBeforeLoading() {
         ShowLoadingScreen(nextSceneId);
 
-        ResourceManager.instance.UnloadModResources();
+        ResourceManager.instance.UnloadResources();
         Resources.UnloadUnusedAssets();
 
         currentLoadingScreen.OnBeforeLoading(OnLoading);

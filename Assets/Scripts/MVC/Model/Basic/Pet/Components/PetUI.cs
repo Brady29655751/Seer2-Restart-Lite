@@ -9,6 +9,7 @@ public class PetUI
 {
     [XmlIgnore] public PetUIInfo info => Database.instance.GetPetInfo(id)?.ui;
     [XmlIgnore] public PetHitInfo hitInfo => Database.instance.GetPetHitInfo(skinId);
+    [XmlIgnore] public PetSoundInfo soundInfo => Database.instance.GetPetSoundInfo(skinId);
 
     [XmlAttribute] public int id;
     [XmlAttribute] public int baseId;
