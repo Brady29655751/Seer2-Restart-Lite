@@ -363,7 +363,7 @@ public class Skill
                 ignorePowerup = (value != 0);
                 return;
             case "effect":
-                SetEffects((value == 0) ? new List<Effect>() : (Skill.GetSkill(this.id)?.effects.Select(x => new Effect(x)).ToList() ?? new List<Effect>()));
+                SetEffects((value == 0) ? new List<Effect>() : (Skill.GetSkill((int)value, false)?.effects.Select(x => new Effect(x)).ToList() ?? new List<Effect>()));
                 return;
         }
     }   

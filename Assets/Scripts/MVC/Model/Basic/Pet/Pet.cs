@@ -220,7 +220,7 @@ public class Pet
             return trimRecordValue;
 
         return id switch {
-            "id" => ui.info.defaultId,
+            "id" => info.ui.defaultId,
             "baseId" => basic.baseId,
             "element" => elementId,
             "subElement" => subElementId,

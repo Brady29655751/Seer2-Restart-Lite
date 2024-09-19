@@ -76,7 +76,7 @@ public class ResourceManager : Singleton<ResourceManager>
         var resKeys = resDict.Keys.ToList();
         foreach (var key in resKeys)
         {
-            if (key.StartsWith("Mod/") || (key.StartsWith("Resources/Pets/") || key.StartsWith("Resources/Maps/")))
+            if (key.StartsWith("Mod/") || key.StartsWith("Resources/"))
                 resDict.Set(key, null);
         }
     }

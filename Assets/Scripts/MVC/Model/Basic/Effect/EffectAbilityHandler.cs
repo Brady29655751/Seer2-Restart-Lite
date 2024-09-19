@@ -464,7 +464,8 @@ public static class EffectAbilityHandler
             foreach (var type in typeRange) {
                 var buffType = type.ToBuffType();
                 if (buffType == BuffType.TurnBased)
-                    buffController.RemoveRangeBuff(x => (!x.id.IsWithin(-10_0000, 0)) && (x.turn > 0), lhsUnit, state);
+                    buffController.RemoveRangeBuff(x => (!x.id.IsWithin(-10_0000, 0)) && (x.turn > 0) && 
+                        (x.info.type != BuffType.Unhealthy) && (x.info.type != BuffType.Abnormal), lhsUnit, state);
                 else 
                     buffController.RemoveRangeBuff(x => (!x.id.IsWithin(-10_0000, 0)) && (x.info.type == buffType), lhsUnit, state);
             }
@@ -646,6 +647,22 @@ public static class EffectAbilityHandler
                 lhsUnit.skillSystem.PrepareDamageParam(state.atkUnit.pet, state.defUnit.pet);
 
             return true;
+        }
+
+        if (type == "effect") {
+            string randomTypeCountExpr = effect.abilityOptionDict.Get("random_count", "1");
+            int randomTypeCount = (int)Parser.ParseEffectOperation(randomTypeCountExpr, effect, lhsUnit, rhsUnit);
+
+            var skillIdList = value.Split('/').Select(x => (int)Parser.ParseEffectOperation(x, effect, lhsUnit, rhsUnit)).ToList();
+            skillIdList = skillIdList.Random(randomTypeCount, false);
+
+            if ((!List.IsNullOrEmpty(skillIdList)) && (skillIdList.Count > 1)) {
+                var effectList = new List<Effect>();
+                skillIdList.ForEach(skillId => effectList.AddRange(Skill.GetSkill(skillId, false)?.effects
+                    .Select(x => new Effect(x)) ?? new List<Effect>()));
+                lhsUnit.skillSystem.skill?.SetEffects(effectList);
+                return true;
+            }
         }
 
         var skill = lhsUnit.skillSystem;

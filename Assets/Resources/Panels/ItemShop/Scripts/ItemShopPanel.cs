@@ -37,7 +37,7 @@ public class ItemShopPanel : Panel
             300048,
         } },
         { ItemShopType.Sign, new List<int>() {
-            500178, 500436, 500959
+            500178, 500436, 500959, 500826
         } },
     };
 

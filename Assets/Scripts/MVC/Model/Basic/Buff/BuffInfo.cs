@@ -100,7 +100,8 @@ public class BuffInfo
         string minValueString = (minValue == int.MinValue) ? string.Empty : ("min_val=" + minValue + "&");
         string maxValueString = (maxValue == int.MaxValue) ? string.Empty : ("max_val=" + maxValue + "&");
 
-        string rawOptionString = resRawString + minValueString + maxValueString + hideString + legacyString +
+        string rawOptionString = resRawString + minValueString + maxValueString + 
+            hideString + legacyString + autoRemoveString +
             "keep=" + keep + "&inherit=" + inherit + "&";
         string otherOptionString = options.Where(entry => !defaultOptionKeys.Contains(entry.Key)).Select(entry => entry.Key + "=" + entry.Value).ConcatToString("&");
         string allOptionString = rawOptionString + otherOptionString; 

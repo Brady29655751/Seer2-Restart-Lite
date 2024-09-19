@@ -101,7 +101,7 @@ public class BattlePetAnimView : BattleBaseView
         isPetDone = false;
 
         // 若為必殺技則立刻播放技能音效
-        var sound = this.currentPetUI.soundInfo.GetSoundByType(type);
+        var sound = this.currentPetUI?.soundInfo?.GetSoundByType(type);
         bool isSuperSkill = (type is PetAnimationType.Super or PetAnimationType.SecondSuper);
         if (isSuperSkill)
             PlaySkillSound(sound);

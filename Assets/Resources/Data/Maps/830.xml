@@ -116,6 +116,129 @@
 				</button>
 			</eventHandler>
 		</npc>
+		<npc id="84002" resId="Pets/pet/846" name="Lv 90 达克埃鲁" size="111,95" pos="630,210" namePos="0,0">
+			<description>达克埃鲁</description>
+			<dialog>
+				<branch id="default" name="达克埃鲁" icon="Pets/pet/846" size="111,95" pos="0,55">
+					<content><![CDATA[就算这战斗要陷入永恒，老夫也会奉陪到底。]]></content>
+					<functionHandler>
+						<func type="click">
+							<description><![CDATA[挑战达克埃鲁]]></description>
+							<action>battle</action>
+							<param>default</param>
+						</func>
+						<func type="click">
+							<description><![CDATA[获取金刚石]]></description>
+							<action>battle</action>
+							<param>stone</param>
+						</func>
+						<func type="click">
+							<description><![CDATA[兑换道具]]></description>
+							<action>openPanel</action>
+							<param>ItemShop</param>
+							<param>mode=buy</param>
+							<param>currency=400006/2</param>
+							<param>item=300845/400006</param>
+							<param>title=兑换道具</param>
+						</func>
+					</functionHandler>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[奋战到底！]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+					</replyHandler>
+				</branch>
+			</dialog>
+			<battle>
+				<branch id="default">
+					<settings count="1">
+						<mode>3</mode>
+					</settings>
+					<enemy>
+						<pet id="846" level="90">
+							<status>
+								<atk>840</atk>
+								<def>300</def>
+								<mdf>300</mdf>
+								<hp>2000</hp>
+							</status>
+							<initBuff>13,14,17</initBuff>
+							<loopSkill>10874</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>getPet</action>
+							<param>845,10,0</param>
+							<condition>activity[20006].done[4]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=【达克】已经放入精灵仓库</param>
+							<param>item_icon=pet[845]</param>
+							<param>option_num=1</param>
+							<condition>activity[20006].done[4]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>20006</param>
+							<param>done[4]=true</param>
+							<condition>activity[20006].done[4]=[bool]false[default]false</condition>
+						</button>
+					</winHandler>
+				</branch>
+				<branch id="stone">
+					<settings count="1" simulate="true" item="false">
+						<mode>3</mode>
+					</settings>
+					<player>
+						<pet id="846" level="90">
+							<status>
+								<hp>2000</hp>
+							</status>
+							<initBuff>14,17,20</initBuff>
+							<normalSkill>10874,10876,10880,10884</normalSkill>
+							<superSkill>10881</superSkill>
+						</pet>
+					</player>
+					<enemy>
+						<pet id="221" level="90">
+							<status>
+								<hp>2000</hp>
+							</status>
+							<initBuff>14,17,20</initBuff>
+							<loopSkill>10850,10843,10852,10846</loopSkill>
+							<superSkill>10851</superSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setItem</action>
+							<param>add</param>
+							<param>400006,1</param>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=1 个金刚石已经放入背包</param>
+							<param>item_icon=item[400006]</param>
+							<param>option_num=1</param>
+						</button>
+					</winHandler>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>openDialog</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
         <teleport id="1" name="微光湖畔" pos="795,150" targetMapId="790"/>
 		<teleport id="2" name="冰晶魔域" pos="80,180" targetMapId="840"/>
 	</entities>
