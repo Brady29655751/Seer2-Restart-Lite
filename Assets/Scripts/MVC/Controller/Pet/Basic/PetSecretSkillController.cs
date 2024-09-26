@@ -27,14 +27,15 @@ public class PetSecretSkillController : Module
 
     public void OnBuySecretSkill() {
         var skills = secretSkillModel.currentPet.skills;
-        if (skills.secretSkillId.All(skills.ownSkillId.Contains)) {
-            Hintbox.OpenHintboxWithContent("该精灵已习得所有隐藏技能", 16);
+        if (skills.secretSkillInfo.Where(x => x.secretType != SecretType.Others)
+            .Select(x => x.skill.id).All(skills.ownSkillId.Contains)) {
+            Hintbox.OpenHintboxWithContent("该精灵已习得所有一般隐藏技能", 16);
             return;
         }
 
         var hintbox = Hintbox.OpenHintbox();
         hintbox.SetTitle("提示");
-        hintbox.SetContent("确定要花费<color=#ffbb33>50星钻</color>一键习得所有隐藏技能吗？", 14, FontOption.Arial);
+        hintbox.SetContent("确定要花费<color=#ffbb33>50星钻</color>一键习得所有一般隐藏技能吗？\n（特殊隐藏技能无法一键学习）", 14, FontOption.Arial);
         hintbox.SetOptionCallback(OnConfirmBuySecretSkill);
     }
 
@@ -44,7 +45,9 @@ public class PetSecretSkillController : Module
             Hintbox.OpenHintboxWithContent("星钻不足无法购买", 16);
             return;
         }
-        foreach (var skill in secretSkillModel.currentPet.skills.secretSkill)
+        var skills = secretSkillModel.currentPet.skills;
+        var secretSkill = skills.secretSkillInfo.Where(x => x.secretType != SecretType.Others).Select(x => x.skill);
+        foreach (var skill in secretSkill)
             secretSkillModel.currentPet.skills.LearnNewSkill(skill);
 
         Item.Remove(Item.DIAMOND_ID, 50);

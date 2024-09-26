@@ -119,13 +119,13 @@ public static class EffectAbilityHandler
         string set = effect.abilityOptionDict.Get("set","none");
         string max = effect.abilityOptionDict.Get("max","none");
         
-        float heal = 0;
         if (state == null) {
-            if (!float.TryParse(add, out heal))
-                return false;
-
             Pet healPet = (Pet)effect.invokeUnit;
-            healPet.currentStatus.hp = Mathf.Clamp(healPet.currentStatus.hp + heal, 0, healPet.normalStatus.hp);
+            var setHp = Parser.ParseEffectOperation((set == "none") ? add : set, effect, null, null, healPet);
+            if (set == "none")
+                setHp += healPet.currentStatus.hp;
+
+            healPet.currentStatus.hp = Mathf.Clamp((int)setHp, 0, healPet.normalStatus.hp);
             return true;
         }
 
@@ -142,25 +142,30 @@ public static class EffectAbilityHandler
             case EffectTarget.CurrentPetBag:
                 var targetType = effect.abilityOptionDict.Get("target_type", string.Empty).Split('_');
                 var targetNum = (int)Parser.ParseEffectOperation(effect.abilityOptionDict.Get("target_num", "-1"), effect, lhsUnit, rhsUnit);
+                var targetIndex = (int)Parser.ParseEffectOperation(effect.abilityOptionDict.Get("target_index", "-1"), effect, lhsUnit, rhsUnit);
 
-                targetList = lhsUnit.petSystem.petBag.Where(x => x != null).ToList();
+                var petBag = lhsUnit.petSystem.petBag;
+                targetList = petBag.Where(x => x != null).ToList();
                 if (targetType.Contains("other"))
                     targetList.Remove(lhsUnit.pet);
 
                 if (targetType.Contains("random"))
                     targetList = targetList.Random(targetNum, false);
+                else if (targetType.Contains("index") && (targetIndex.IsInRange(0, petBag.Length)))
+                    targetList = new List<BattlePet>(){ petBag[targetIndex] };
                 else if (targetNum >= 0)
                     targetList = targetList.Take(targetNum).ToList();
 
                 break;
         };
-        
-        heal = Parser.ParseEffectOperation(add, effect, lhsUnit, rhsUnit);
-        var setHp = (set == "none") ? 0 : (int)Parser.ParseEffectOperation(set, effect, lhsUnit, rhsUnit);
-        var maxHp = (max == "none") ? 0 : (int)Parser.ParseEffectOperation(max, effect, lhsUnit, rhsUnit);
 
         for (int i = 0; i < targetList.Count; i++) {
+            var heal = Parser.ParseEffectOperation(add, effect, lhsUnit, rhsUnit, targetList[i]);
             int healAdd = (int)(heal * ((heal > 0) ? (targetList[i].battleStatus.rec / 100f) : 1));
+
+            var setHp = (set == "none") ? 0 : (int)Parser.ParseEffectOperation(set, effect, lhsUnit, rhsUnit, targetList[i]);
+            var maxHp = (max == "none") ? 0 : (int)Parser.ParseEffectOperation(max, effect, lhsUnit, rhsUnit, targetList[i]);
+
             if (set != "none") {
                 if ((setHp <= 0) && (targetList[i].buffController.GetBuff(99) != null))
                     continue;
@@ -245,13 +250,17 @@ public static class EffectAbilityHandler
             case EffectTarget.CurrentPetBag:
                 var targetType = effect.abilityOptionDict.Get("target_type", string.Empty).Split('_');
                 var targetNum = (int)Parser.ParseEffectOperation(effect.abilityOptionDict.Get("target_num", "-1"), effect, lhsUnit, rhsUnit);
+                var targetIndex = (int)Parser.ParseEffectOperation(effect.abilityOptionDict.Get("target_index", "-1"), effect, lhsUnit, rhsUnit);
 
-                targetList = lhsUnit.petSystem.petBag.Where(x => x != null).ToList();
+                var petBag = lhsUnit.petSystem.petBag;
+                targetList = petBag.Where(x => x != null).ToList();
                 if (targetType.Contains("other"))
                     targetList.Remove(lhsUnit.pet);
 
                 if (targetType.Contains("random"))
                     targetList = targetList.Random(targetNum, false);
+                else if (targetType.Contains("index") && (targetIndex.IsInRange(0, petBag.Length)))
+                    targetList = new List<BattlePet>(){ petBag[targetIndex] };
                 else if (targetNum >= 0)
                     targetList = targetList.Take(targetNum).ToList();
 
@@ -277,7 +286,7 @@ public static class EffectAbilityHandler
                 string pdf = effect.abilityOptionDict.Get("random_pdf", "none");
                 string randomTypeCountExpr = effect.abilityOptionDict.Get("random_count", "1");
                 int count = status.Count(x => x != 0);
-                int randomTypeCount = (int)Parser.ParseEffectOperation(randomTypeCountExpr, effect, lhsUnit, rhsUnit);
+                int randomTypeCount = (int)Parser.ParseEffectOperation(randomTypeCountExpr, effect, lhsUnit, rhsUnit, targetList[j]);
 
                 if (pdf == "none") {
                     // pass.
@@ -315,12 +324,12 @@ public static class EffectAbilityHandler
 
             // Handle min and max powerup.
             if (min != "none") {
-                var minPowerup = (int)Parser.ParseEffectOperation(min, effect, lhsUnit, rhsUnit);
+                var minPowerup = (int)Parser.ParseEffectOperation(min, effect, lhsUnit, rhsUnit, targetList[j]);
                 pet.statusController.SetMinPowerUp(minPowerup * Status.one);
             } 
             
             if (max != "none") {
-                var maxPowerup = (int)Parser.ParseEffectOperation(max, effect, lhsUnit, rhsUnit);
+                var maxPowerup = (int)Parser.ParseEffectOperation(max, effect, lhsUnit, rhsUnit, targetList[j]);
                 pet.statusController.SetMaxPowerUp(maxPowerup * Status.one);
             }
 

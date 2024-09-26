@@ -106,6 +106,7 @@ public class UnitSkillSystem
             "sameElement" => sameElementBuff,
             "elementRelation" => elementRelation,
             "damage" => skillDamage,
+            "heal" => skillHeal,
             "hit" => isHit ? 1 : 0,
             "criticalResult" => isCritical ? 1 : 0,
             _ => float.MinValue,
@@ -142,6 +143,9 @@ public class UnitSkillSystem
                 return;
             case "damage":
                 skillDamage = (int)num;
+                return;
+            case "heal":
+                skillHeal = (int)num;
                 return;
         }
     }

@@ -48,7 +48,7 @@ public class RoomManager : Manager<RoomManager>
             PhotonNetwork.CurrentRoom?.SetCustomProperties(room);
         }
 
-        var myPets = Player.instance.petBag.Take(petCount).Select(x => {
+        var myPets = Player.instance.petBag.Take(petCount).Select(x => (x == null) ? null : new Pet(x)).Select(x => {
             if (x == null)
                 return x;
             

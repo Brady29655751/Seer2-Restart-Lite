@@ -95,7 +95,7 @@ public class PetBattleStatusController
     } 
 
     public Status GetCurrentStatus(bool ignorePowerup = false) {
-        var _powerupStatus = ignorePowerup ? Status.one : Status.GetPowerUpBuff(powerup);
+        var _powerupStatus = ignorePowerup ? Status.GetPowerUpBuff(powerup.neg) : Status.GetPowerUpBuff(powerup);
         Status status = new Status(_initStatus * _powerupStatus * _multStatus + _addStatus);
         status.hp = hp;
         return status;

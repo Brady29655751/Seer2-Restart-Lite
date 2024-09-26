@@ -58,7 +58,8 @@ public class BattlePetAnimView : BattleBaseView
         }
         else
         {
-            this.currentPetAnim?.SetActive(false);  
+            if (this.currentPetAnim != null)
+                this.currentPetAnim.SetActive(false); 
 
             this.currentPetUI = null; //当前精灵没有动画,但是上一只换场过来的精灵有动画,所以要把这个设为null,并且把动画关闭
             this.currentPetAnim = null;

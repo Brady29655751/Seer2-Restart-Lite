@@ -82,7 +82,7 @@ public static class Parser {
         return new KeyValuePair<int, int>(a, b);
     }
 
-    public static float ParseEffectOperation(string expr, Effect effect, Unit lhsUnit, Unit rhsUnit) {
+    public static float ParseEffectOperation(string expr, Effect effect, Unit lhsUnit, Unit rhsUnit, object otherSource = null) {
         bool negativeFirst = expr.StartsWith("-");
         float sign = negativeFirst ? -1 : 1;
 
@@ -90,14 +90,14 @@ public static class Parser {
             expr = expr.Substring(1);
 
         string[] id = expr.Split(Operator.opDict.Keys.ToArray(), StringSplitOptions.RemoveEmptyEntries);
-        float value = Identifier.GetIdentifier(id[0], effect, lhsUnit, rhsUnit);
+        float value = Identifier.GetIdentifier(id[0], effect, lhsUnit, rhsUnit, otherSource);
         if (id.Length == 1)
             return sign * value;
 
         for (int i = 1, opStartIdx = id[0].Length, opEndIdx = 0; i < id.Length; i++) {
             opEndIdx = expr.IndexOf(id[i], opStartIdx);
             string op = expr.Substring(opStartIdx, opEndIdx - opStartIdx);
-            value = Operator.Operate(op, value, Identifier.GetIdentifier(id[i], effect, lhsUnit, rhsUnit));
+            value = Operator.Operate(op, value, Identifier.GetIdentifier(id[i], effect, lhsUnit, rhsUnit, otherSource));
             opStartIdx = opEndIdx + id[i].Length;
         }
         return sign * value;

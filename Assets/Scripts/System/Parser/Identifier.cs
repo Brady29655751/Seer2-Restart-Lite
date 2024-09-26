@@ -97,12 +97,18 @@ public static class Identifier {
         return GetNumIdentifier(id);
     }
 
-    public static float GetIdentifier(string id, Effect effect, Unit lhsUnit, Unit rhsUnit) {
-        float num = 0;
-
-        id = id.Replace("－", "-");
+    public static float GetIdentifier(string id, Effect effect, Unit lhsUnit, Unit rhsUnit, object otherSource = null) {
         
-        return effect.source switch {
+        id = id.Replace("－", "-");
+
+        float num = 0;
+        bool isOtherSourceAvailable = (otherSource != null) && (id.TryTrimStart("target.", out id));
+        object idSource = isOtherSourceAvailable ? otherSource : effect.source;
+        
+        return idSource switch {
+            BattlePet battlePet => isOtherSourceAvailable ? GetPetIdentifier(id, lhsUnit.petSystem, battlePet) : 
+                (battlePet.TryGetPetIdentifier(id, out num) ? num : GetBattleIdentifier(id, lhsUnit, rhsUnit)),
+            Pet pet => pet.TryGetPetIdentifier(id, out num) ? num : GetBattleIdentifier(id, lhsUnit, rhsUnit),
             Buff buff => buff.TryGetBuffIdentifier(id, out num) ? num : GetBattleIdentifier(id, lhsUnit, rhsUnit),
             Skill skill => skill.TryGetSkillIdentifier(id, out num) ? num : GetBattleIdentifier(id, lhsUnit, rhsUnit),
             _ => GetBattleIdentifier(id, lhsUnit, rhsUnit),
@@ -169,13 +175,13 @@ public static class Identifier {
         return GetNumIdentifier(id);
     }
 
-    public static float GetPetIdentifier(string id, UnitPetSystem petSystem) {
+    public static float GetPetIdentifier(string id, UnitPetSystem petSystem, BattlePet otherSource = null) {
         string trimId = id;
 
         if (petSystem.TryGetPetSystemIdentifier(id, out var num))
             return num;
 
-        var pet = petSystem.pet;
+        var pet = otherSource ?? petSystem.pet;
 
         if (id == "movable")
             return pet.isMovable ? 1 : 0;

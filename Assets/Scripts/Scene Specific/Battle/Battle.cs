@@ -102,6 +102,13 @@ public class Battle
         unit.SetSkill(skill);
 
         if (isMe) {
+            if (!skill.IsSelectReady()) {
+                UI.SetSkillSelectMode(true);
+                UI.SelectOption(1);
+                return;
+            }
+
+            UI.SetSkillSelectMode(false);
             UI.SetBottomBarInteractable(false);
             UI.PVPSetSkillToOthers(skill);
         }

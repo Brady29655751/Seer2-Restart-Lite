@@ -14,6 +14,7 @@ public class BattleManager : Manager<BattleManager>
     [SerializeField] private PhotonView masterView, clientView;
 
     public bool isDone => playerView.isDone && enemyView.isDone;
+    public bool isSkillSelectMode { get; protected set; } = false;
     protected BattleState currentUIState = null;
     protected Queue<BattleState> queue = new Queue<BattleState>();
 
@@ -74,6 +75,15 @@ public class BattleManager : Manager<BattleManager>
         queue.Enqueue(currentState);
     }
 
+    private void SetCurrentUIState(BattleState newState) 
+    {
+        systemView.SetState(currentUIState, newState);
+        playerView.SetState(currentUIState, newState);
+        enemyView.SetState(currentUIState, newState);
+
+        currentUIState = newState;
+    }
+
     /// <summary>
     /// Start processing UI Query. <br/>
     /// If processOne = true, then no checking for done or any UI conficts.
@@ -108,11 +118,7 @@ public class BattleManager : Manager<BattleManager>
             }
         }
 
-        systemView.SetState(currentUIState, newState);
-        playerView.SetState(currentUIState, newState);
-        enemyView.SetState(currentUIState, newState);
-
-        currentUIState = newState;
+        SetCurrentUIState(newState);
 
         if (processOne)
             return;
@@ -128,6 +134,14 @@ public class BattleManager : Manager<BattleManager>
         }
 
         ProcessQuery();
+    }
+
+    public void SetSkillSelectMode(bool isSkillSelectMode) {
+        this.isSkillSelectMode = isSkillSelectMode;
+        systemView.SetSkillSelectMode(isSkillSelectMode);
+
+        if (!isSkillSelectMode)
+            SetCurrentUIState(currentUIState);
     }
 
     public void SelectOption(int index)

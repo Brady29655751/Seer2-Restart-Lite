@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
@@ -36,18 +37,23 @@ public class WorkshopAllController : Module
     }
 
     public void OpenModPetDictionaryPanel() {
-        var petStorage = Database.instance.petInfoDict.Where(entry => PetInfo.IsMod(entry.Key))
-            .OrderByDescending(entry => entry.Key).Select(entry => Pet.GetExamplePet(entry.Key)).ToList();
+        try {
+            var petStorage = Database.instance.petInfoDict.Where(entry => PetInfo.IsMod(entry.Key))
+                .OrderByDescending(entry => entry.Key).Select(entry => Pet.GetExamplePet(entry.Key)).ToList();
 
-        if (petStorage.Count == 0) {
-            Hintbox.OpenHintboxWithContent("你目前还没有制作任何创意精灵哦！", 16);
-            return;
+            if (petStorage.Count == 0) {
+                Hintbox.OpenHintboxWithContent("你目前还没有制作任何创意精灵哦！", 16);
+                return;
+            }
+
+            petDictionaryPanel = Panel.OpenPanel<PetDictionaryPanel>();
+            petDictionaryPanel.SetEditPetCallback(OnEditPet);
+            petDictionaryPanel.SelectMode(PetDictionaryMode.Workshop);
+            petDictionaryPanel.SetStorage(petStorage);
+        } catch (Exception e) {
+            var hintbox = Hintbox.OpenHintboxWithContent("打开创意精灵图鉴发生错误，错误如下：\n" + e.ToString(), 14);
+            hintbox.SetSize(600, 400);
         }
-
-        petDictionaryPanel = Panel.OpenPanel<PetDictionaryPanel>();
-        petDictionaryPanel.SetEditPetCallback(OnEditPet);
-        petDictionaryPanel.SelectMode(PetDictionaryMode.Workshop);
-        petDictionaryPanel.SetStorage(petStorage);
     }
 
     public void OpenAllSkillPanel() {

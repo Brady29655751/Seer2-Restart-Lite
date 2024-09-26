@@ -35,10 +35,37 @@ public class BattlePetChangeView : BattleBaseView
         }
     }
 
+    public void SetSkillSelectMode(bool isSkillSelectMode) {
+        if (!isSkillSelectMode)
+            return;
+
+        var skill = battle.currentState.myUnit.skill;
+        var isSelectDead = skill.effects.Exists(x => x.targetType.Contains("dead"));
+        var isSelectOther = skill.effects.Exists(x => x.targetType.Contains("other"));
+
+        for (int i = 0; i < 6; i++) {    
+            var isTarget = (petBag[i] != null) && (isSelectDead ^ (!petBag[i].isDead));
+            var isCursor = isSelectOther && (cursor == i);
+            var interactable = isTarget && (!isCursor);
+            
+            changeBlockViews[i].SetFightingTag(false);
+            changeBlockViews[i].SetInteractable(interactable, !interactable);
+        }
+    }
+
     public void SelectPet(int index) {
         if (!index.IsInRange(0, changeBlockViews.Length))
             return;
         
+        if (UI.isSkillSelectMode) {
+            var skill = battle.currentState.myUnit.skill;
+            foreach (var e in skill.effects.Where(x => x.IsSelect()))
+                e.abilityOptionDict.Set("target_index", index.ToString());
+            
+            battle.SetSkill(skill, true);
+            return;
+        }
+            
         battle.SetSkill(Skill.GetPetChangeSkill(cursor, index, battle.currentState.isAnyPetDead), true);
         SetChangeBlockChosen(index);
     }

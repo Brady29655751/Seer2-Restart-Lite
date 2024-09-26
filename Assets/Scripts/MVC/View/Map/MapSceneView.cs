@@ -26,6 +26,8 @@ public class MapSceneView : UIModule
         SetResources(map.resources);
         SetEntites(map.entities);
         CheckBattleResult();
+
+        CheckDailyLogin();        
     }
 
     public void SetResources(MapResources resources) {
@@ -106,6 +108,11 @@ public class MapSceneView : UIModule
 
         if (result.isMyWin) { 
             actionList = battleInfo.winHandler.Select(x => NpcHandler.GetNpcEntity(npc, x, npcDict)).ToList();
+
+            // 英格瓦要塞特殊活動
+            if (map.id.IsInRange(81, 90))
+                actionList.AddRange(actionList);
+            
         } else if (result.isOpWin) {
             actionList = battleInfo.loseHandler.Select(x => NpcHandler.GetNpcEntity(npc, x, npcDict)).ToList();
         }
@@ -115,5 +122,15 @@ public class MapSceneView : UIModule
         }
 
         Player.instance.currentNpcId = 0;
+    }
+
+    private void CheckDailyLogin() {
+        var activity = Activity.Find("daily_login");
+        if (bool.Parse(activity.GetData("news", "false")))
+            return;
+
+        Panel.OpenPanel<NewsPanel>();
+        activity.SetData("news", "true");
+        SaveSystem.SaveData();
     }
 }

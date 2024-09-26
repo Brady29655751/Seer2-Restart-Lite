@@ -42,6 +42,10 @@ public class BattleOptionView : BattleBaseView
         skillView.SetInteractable(interactable);
     }
 
+    public void SetSkillSelectMode(bool isSkillSelectMode) {
+        changeView.SetSkillSelectMode(isSkillSelectMode);
+    }
+
     public void SetState(BattleState lastState, BattleState currentState) {
         if (currentState == null)
             return;

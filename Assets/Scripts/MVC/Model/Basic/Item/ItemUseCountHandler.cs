@@ -6,7 +6,10 @@ using UnityEngine;
 public static class ItemUseCountHandler
 {
     public static int HpPotionMaxUseCount(this Item item, object invokeUnit, BattleState state) {
-        string value = item.effects.Find(x => x.ability == EffectAbility.Heal).abilityOptionDict.Get("add", "0");
+        string value = item.effects.Find(x => x.ability == EffectAbility.Heal)?.abilityOptionDict.Get("add", "0");
+        if (string.IsNullOrEmpty(value) || (value == "0"))
+            return 1;
+
         float heal = float.Parse(value);
         if (state == null) {
             Pet pet = (Pet)invokeUnit;

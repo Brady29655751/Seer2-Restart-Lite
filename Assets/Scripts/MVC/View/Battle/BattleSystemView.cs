@@ -81,6 +81,10 @@ public class BattleSystemView : BattleBaseView
         optionView.SetOptionActive(index, active);
     }
 
+    public void SetSkillSelectMode(bool isSkillSelectMode) {
+        optionView.SetSkillSelectMode(isSkillSelectMode);
+    }
+
     public void SetState(BattleState lastState, BattleState currentState) {
         if (currentState == null)
             return;

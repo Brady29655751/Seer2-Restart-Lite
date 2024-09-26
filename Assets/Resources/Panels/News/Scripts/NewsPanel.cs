@@ -14,11 +14,7 @@ public class NewsPanel : Panel
 
     private string GetNews() {
         var news = GameManager.versionData.releaseNote.GetDescription();
-        /*
-        if (Player.instance.gameDataId >= 0) {
-            news += "\n【存档位置】\n" + SaveSystem.savePath;
-        } 
-        */  
-        return news;
+        var note = "<b><size=20><color=#52e5f9>由于游戏可能有闪退、安卓权限、Mod操作等不可预期的情况导致存档毁损，请时常前往「设定＞其他＞导出存档」备份！特别是手机版！！！</color></size></b>\n\n";
+        return note + news;
     }
 }

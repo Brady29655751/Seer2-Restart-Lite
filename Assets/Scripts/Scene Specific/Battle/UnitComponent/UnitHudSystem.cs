@@ -27,6 +27,8 @@ public class UnitHudSystem
         this.CurDamageInfo = rhs.CurDamageInfo;
         this.CurCaptureInfo = rhs.CurCaptureInfo;
         this.CurHealInfo = rhs.CurHealInfo;
+        // this.CurOtherSidePetReactionInfo = rhs.CurOtherSidePetReactionInfo;
+        // this.petAnimType = rhs.petAnimType;
     }
 
     public virtual void OnTurnStart(BattlePet pet)

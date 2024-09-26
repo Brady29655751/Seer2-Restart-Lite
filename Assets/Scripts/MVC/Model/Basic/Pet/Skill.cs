@@ -42,6 +42,7 @@ public class Skill
     public bool isSuper => type == SkillType.必杀;
     public bool isAction => IsAction();
     public bool isAttack => IsAttack();
+    public bool isSelect => IsSelect();
     public bool isCapture => IsCapture();
 
     public string soundId => options.Get("sound", string.Empty);
@@ -154,13 +155,18 @@ public class Skill
 
     public static Skill ParseRPCData(string[] data) {
         int id = int.Parse(data[0]);
-        return id switch {
+        var skill = id switch {
             (int)SkillType.空过 => Skill.GetNoOpSkill(),
             (int)SkillType.道具 => Skill.GetItemSkill(new Item(int.Parse(data[1]))),
             (int)SkillType.換场 => Skill.GetPetChangeSkill(int.Parse(data[1]), int.Parse(data[2]), bool.Parse(data[3])),
             (int)SkillType.逃跑 => Skill.GetEscapeSkill(),
             _ => Skill.GetSkill(id)
         };
+
+        if (!skill.isAction)
+            skill.options.Set("target_index", data[1]);
+
+        return skill;
     }
 
     public string[] ToRPCData() {
@@ -169,7 +175,7 @@ public class Skill
             (int)SkillType.道具 => new string[] { id.ToString(), options.Get("item_id", "0") },
             (int)SkillType.換场 => new string[] { id.ToString(), options.Get("source_index", "0"), options.Get("target_index", "0"), options.Get("passive", "false") },
             (int)SkillType.逃跑 => new string[] { id.ToString() },
-            _ => new string[] { id.ToString() }
+            _ => new string[] { id.ToString(), options.Get("target_index", "-1") }
         };
     }
 
@@ -180,7 +186,7 @@ public class Skill
         while (true) {
             int skillId = Random.Range(minSkillId, maxSkillId + 1);
             Skill skill = Skill.GetSkill(skillId);
-            if (skill.type != SkillType.必杀)
+            if ((skill.type != SkillType.必杀) && (!skill.isSelect))
                 return skill;
         }
     }
@@ -265,6 +271,15 @@ public class Skill
 
     public bool IsAttack() {
         return (type == SkillType.物理) || (type == SkillType.特殊) || (type == SkillType.必杀);
+    }
+
+    public bool IsSelect() {
+        return effects.Exists(x => x.IsSelect());
+    }
+
+    public bool IsSelectReady() {
+        return effects.All(x => (!x.IsSelect()) || 
+            (x.abilityOptionDict.Get("target_index", "-1") != "-1"));    
     }
 
     public bool IsCapture() {

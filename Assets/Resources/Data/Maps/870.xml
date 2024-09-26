@@ -55,7 +55,7 @@
 					</replyHandler>
 				</branch>
 				<branch id="emblem" name="雷伊" icon="Pets/pet/90" size="80,142" pos="0,35">
-					<content><![CDATA[战胜我有20%概率掉落纹章碎片，集齐6个就能兑换纹章。你准备好了吗？]]></content>
+					<content><![CDATA[战胜我有20%概率掉落纹章碎片（保底5次必出），集齐6个就能兑换纹章。你准备好了吗？]]></content>
 					<replyHandler>
 						<reply type="click">
 							<description><![CDATA[我还没准备好]]></description>
@@ -85,6 +85,11 @@
 							<param>content=1枚雷伊纹章碎片已经放入背包</param>
 							<param>option_num=1</param>
 							<param>item_icon=item[400001]</param>
+						</reply>
+						<reply type="branch">
+							<action>setActivity</action>
+							<param>20004</param>
+							<param>guarantee[lei][emblem]=0</param>
 						</reply>
 						<reply type="branch">
 							<action>openDialog</action>
@@ -152,9 +157,14 @@
 					</enemy>
 					<winHandler>
 						<button type="auto">
+							<action>setActivity</action>
+							<param>20004</param>
+							<param>guarantee[lei][emblem]=[expr]activity[20004].guarantee[lei][emblem]+1</param>
+						</button>
+						<button type="auto">
 							<action>openDialog</action>
 							<param>reward</param>
-							<condition>random[0~100]LTE20</condition>
+							<condition>random[0~100]LTE20|activity[20004].guarantee[lei][emblem]GTE[int]5[default]0</condition>
 						</button>
 					</winHandler>
 				</branch>
@@ -216,7 +226,7 @@
 					</replyHandler>
 				</branch>
 				<branch id="emblem" name="凯萨" icon="Pets/pet/234" size="100,120" pos="0,55">
-					<content><![CDATA[战胜我有20%概率掉落纹章碎片，集齐6个就能兑换纹章。你准备好了吗？]]></content>
+					<content><![CDATA[战胜我有20%概率掉落纹章碎片（保底5次必出），集齐6个就能兑换纹章。你准备好了吗？]]></content>
 					<replyHandler>
 						<reply type="click">
 							<description><![CDATA[我还没准备好]]></description>
@@ -230,7 +240,7 @@
 						</reply>
 					</replyHandler>
 				</branch>
-				<branch id="reward" name="凯萨" icon="Pets/pet/90" size="80,142" pos="0,55">
+				<branch id="reward" name="凯萨" icon="Pets/pet/234" size="100,120" pos="0,55">
 					<content><![CDATA[你的英勇赢得了1枚纹章碎片]]></content>
 					<replyHandler>
 						<reply type="click">
@@ -246,6 +256,11 @@
 							<param>content=1枚凯萨纹章碎片已经放入背包</param>
 							<param>option_num=1</param>
 							<param>item_icon=item[400002]</param>
+						</reply>
+						<reply type="branch">
+							<action>setActivity</action>
+							<param>20004</param>
+							<param>guarantee[kaiser][emblem]=0</param>
 						</reply>
 						<reply type="branch">
 							<action>openDialog</action>
@@ -318,9 +333,14 @@
 					</enemy>
 					<winHandler>
 						<button type="auto">
+							<action>setActivity</action>
+							<param>20004</param>
+							<param>guarantee[kaiser][emblem]=[expr]activity[20004].guarantee[kaiser][emblem]+1</param>
+						</button>
+						<button type="auto">
 							<action>openDialog</action>
 							<param>reward</param>
-							<condition>random[0~100]LTE20</condition>
+							<condition>random[0~100]LTE20|activity[20004].guarantee[kaiser][emblem]GTE[int]5[default]0</condition>
 						</button>
 					</winHandler>
 				</branch>

@@ -98,9 +98,14 @@
 							<param>option_num=1</param>
 						</button>
 						<button type="auto">
+							<action>setActivity</action>
+							<param>10001</param>
+							<param>guarantee[1]=[expr]activity[10001].guarantee[1]+1</param>
+						</button>
+						<button type="auto">
 							<action>openDialog</action>
 							<param>reward</param>
-							<condition>random[0~100]LTE10</condition>
+							<condition>random[0~100]LTE10|activity[10001].guarantee[1]GTE[int]20[default]0</condition>
 							<condition>activity[10001].done[1]=[bool]false[default]false</condition>
 						</button>
 					</winHandler>
@@ -202,9 +207,14 @@
 							<param>option_num=1</param>
 						</button>
 						<button type="auto">
+							<action>setActivity</action>
+							<param>10001</param>
+							<param>guarantee[2]=[expr]activity[10001].guarantee[2]+1</param>
+						</button>
+						<button type="auto">
 							<action>openDialog</action>
 							<param>reward</param>
-							<condition>random[0~100]LTE10</condition>
+							<condition>random[0~100]LTE10|activity[10001].guarantee[2]GTE[int]20[default]0</condition>
 							<condition>activity[10001].done[2]=[bool]false[default]false</condition>
 						</button>
 					</winHandler>

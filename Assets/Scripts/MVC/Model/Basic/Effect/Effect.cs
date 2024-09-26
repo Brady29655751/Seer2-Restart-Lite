@@ -14,11 +14,14 @@ public class Effect {
     public EffectTiming timing { get; private set; }
     public int priority { get; private set; }
     public EffectTarget target { get; private set; }
+    public string[] targetType => IsSelect() ? abilityOptionDict.Get("target_type").Split('_') : new string[] { "none" };
     public EffectCondition condition { get; private set; }
     public List<Dictionary<string, string>> condOptionDictList { get; private set; } = new List<Dictionary<string, string>>();
     public EffectAbility type => ability;
     public EffectAbility ability { get; private set; }
     public Dictionary<string, string> abilityOptionDict { get; private set; } = new Dictionary<string, string>();
+
+    public bool isSelect => IsSelect();
 
     public Effect(string _timing, string _priority, string _target, string _condition, string _condition_option, string _ability, string _ability_option) {
         source = null;
@@ -111,6 +114,11 @@ public class Effect {
         };
         var phase = passive ? EffectTiming.OnPassivePetChange : EffectTiming.OnBeforeAttack;
         return new Effect(phase, -1, EffectTarget.CurrentPet, EffectCondition.None, null, EffectAbility.PetChange, ability_option);
+    }
+
+    public bool IsSelect() {
+        return abilityOptionDict.TryGetValue("target_type", out var targetType) &&
+            targetType.Split('_').Contains("index");
     }
 
     public bool Condition(object invokeUnit, BattleState state, bool checkPhase = true, bool checkTurn = true) {

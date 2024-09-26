@@ -34,7 +34,7 @@ public class PetBattleSkillController
     public Skill GetDefaultSkill(int anger) {
         Skill defaultSkill = Skill.GetNoOpSkill();
 
-        if ((superSkill != null) && (superSkill.anger <= anger))
+        if ((superSkill != null) && (superSkill.anger <= anger) && (!superSkill.isSelect))
             return superSkill;
 
         if ((loopSkills == null) || (loopSkills.Count == 0))
@@ -56,9 +56,10 @@ public class PetBattleSkillController
 
     public List<Skill> GetAvailableSkills(int anger, bool withSuper = true) {
         var availableSkills = (((normalSkills?.Count ?? 0) > 0) ?
-            normalSkills.Where(x => (x != null) && (x.anger <= anger)) : loopSkills).ToList();
+            normalSkills.Where(x => (x != null) && (x.anger <= anger)) : loopSkills)
+            .Where(x => !x.isSelect).ToList();
 
-        if (withSuper && (superSkill != null) && (superSkill.anger <= anger))
+        if (withSuper && (superSkill != null) && (superSkill.anger <= anger) && (!superSkill.isSelect))
             availableSkills.Add(superSkill);
 
         if (availableSkills.Count == 0)

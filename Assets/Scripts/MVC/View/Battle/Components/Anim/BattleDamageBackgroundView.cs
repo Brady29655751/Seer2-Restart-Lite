@@ -19,6 +19,7 @@ public class BattleDamageBackgroundView : Module
     private List<RectTransform> damageNumRectList = new List<RectTransform>();
     
     private List<Image> damageNumImageList = new List<Image>();
+    private RectTransform criticalRect;
 
     public GameObject Critical => critical;
 
@@ -28,6 +29,10 @@ public class BattleDamageBackgroundView : Module
 
     public IAnimator Anim => anim;
     
+    protected override void Awake() {
+        criticalRect = this.critical.GetComponent<RectTransform>();
+    }
+
     private void Update()
     {
         foreach (Image img in damageNumImageList)
@@ -62,7 +67,6 @@ public class BattleDamageBackgroundView : Module
             damageNumImageList.Add(img);
             img.sprite = ResourceManager.instance.GetSprite("Numbers/Damage/" + numString[i]);
         }
-        this.critical.transform.position = new Vector3(this.critical.transform.position.x - 25 * (i - 4), this.critical.transform.position.y, this.critical.transform.position.z);
-
+        criticalRect.anchoredPosition = new Vector3(criticalRect.anchoredPosition.x - 25 * (i - 4), criticalRect.anchoredPosition.y);
     }
 }

@@ -56,12 +56,16 @@ public class BattlePetChangeBlockView : Module
         SetInteractable(interactable, !interactable);
     }
 
-    private void SetFightingTag(bool fighting) {
+    public void SetFightingTag(bool fighting) {
         fightingTag.gameObject.SetActive(fighting);
     }
 
-    private void SetInteractable(bool interactable, bool grayWhenDisabled) {
+    public void SetInteractable(bool interactable, bool grayWhenDisabled) {
         button.SetInteractable(interactable, grayWhenDisabled);
-    }
+
+        var imageColor = ((!interactable) && grayWhenDisabled) ? Color.gray : Color.white;
+        icon.color = imageColor;
+        element.color = imageColor;
+    }       
 
 }

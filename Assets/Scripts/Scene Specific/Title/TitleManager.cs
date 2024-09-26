@@ -64,7 +64,12 @@ public class TitleManager : Manager<TitleManager>
             return;
         }
         if (!SaveSystem.IsResourcesExists()) {
-            RequestManager.OnRequestFail("获取资源档案失败。请先点击右下方「导入资源包」按钮，导入游戏资源档案。");
+            var hintbox = Hintbox.OpenHintbox();
+            hintbox.SetSize(480, 240);
+            hintbox.SetTitle("获取资源档案失败");
+            hintbox.SetContent("请到群内下载「基础资源包」\n解压后点击右下方的「导入资源包」按钮\n手动导入里面名为Resources的文件夹\n\n" +
+                "若要新增动画，同样到群内下载对应版本的「动画资源包」\n详情请查看群公告", 16, FontOption.Arial);
+            hintbox.SetOptionNum(1);
             return;
         }
         SceneLoader.instance.ChangeScene(SceneId.Login);

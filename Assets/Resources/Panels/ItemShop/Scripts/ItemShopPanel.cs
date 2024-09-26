@@ -23,21 +23,22 @@ public class ItemShopPanel : Panel
     protected Dictionary<ItemShopType, List<int>> shopItemIdDict = new Dictionary<ItemShopType, List<int>>() {
         { ItemShopType.None, new List<int>() },
         { ItemShopType.PetPotion, new List<int>() { 
-            21010, 20001, 20002, 
+            10018, 21010, 20001, 20002, 
             10238, 10239, 10101, 10111, 10211,
-            110050,
             10011, 10012, 10013, 10014, 10015, 10016, 
-            10001, 10002, 10003, 10004, 10005, 
+            10001, 10002, 10003, 10004, 10005,
+            110050, 
         } },
         { ItemShopType.Mine, new List<int>() { 
             1001,   1002,   1003,   1004,
         } },
         { ItemShopType.Honor, new List<int>() { 
             8001,   8002,   8003,   8004,   8005,
-            300048,
+            8006,   8007,
+            300048, 300058,
         } },
         { ItemShopType.Sign, new List<int>() {
-            500178, 500436, 500959, 500826
+            500178, 500436, 500959, 500826, 500761,
         } },
     };
 

@@ -56,7 +56,7 @@ public class Unit
 
     public bool IsReady()
     {
-        return (skill != null);
+        return (skill != null) && skill.IsSelectReady();
     }
 
     public bool IsMasterUnit()
