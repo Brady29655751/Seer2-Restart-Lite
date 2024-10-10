@@ -8,6 +8,10 @@ public class CookPanel : Panel
 {
     [SerializeField] private CookController cookController;
     
+    public override void Init() {
+        cookController.SetCookItemStorage(Database.instance.itemInfoDict.Keys.Where(x => x.IsInRange(200000, 300000)).Select(x => new Item(x, -1)).ToList());
+    }
+
     public override void SetPanelIdentifier(string id, string param) {
         switch (id) {
             default:

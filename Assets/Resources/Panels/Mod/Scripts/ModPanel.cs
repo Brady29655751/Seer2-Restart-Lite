@@ -17,6 +17,17 @@ public class ModPanel : Panel
         Resources.UnloadUnusedAssets();
     }
 
+    public override void SetPanelIdentifier(string id, string param) {
+        switch (id) {
+            default:
+                base.SetPanelIdentifier(id, param);
+                return;
+            case "data":
+                SetPanelData(ResourceManager.LoadXML<PanelData>("Panels/" + param));
+                return;
+        }
+    }
+
     public void SetPanelData(PanelData panelData) {
         if (panelData == null) {
             loadingText.SetText("加载自制面板失败");

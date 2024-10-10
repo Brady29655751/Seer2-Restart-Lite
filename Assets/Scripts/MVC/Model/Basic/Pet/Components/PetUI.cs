@@ -8,8 +8,9 @@ using UnityEngine;
 public class PetUI
 {
     [XmlIgnore] public PetUIInfo info => Database.instance.GetPetInfo(id)?.ui;
-    [XmlIgnore] public PetHitInfo hitInfo => Database.instance.GetPetHitInfo(skinId);
-    [XmlIgnore] public PetSoundInfo soundInfo => Database.instance.GetPetSoundInfo(skinId);
+    [XmlIgnore] public PetUIInfo skinInfo => Database.instance.GetPetInfo(skinId)?.ui;
+    [XmlIgnore] public PetHitInfo hitInfo => Database.instance.GetPetHitInfo(skinInfo?.defaultAnimId ?? 0);
+    [XmlIgnore] public PetSoundInfo soundInfo => Database.instance.GetPetSoundInfo(skinInfo?.defaultAnimId ?? 0);
 
     [XmlAttribute] public int id;
     [XmlAttribute] public int baseId;
@@ -36,7 +37,7 @@ public class PetUI
 
     public GameObject GetBattleAnim(PetAnimationType type)
     {
-        return PetUISystem.GetPetAnimInstance(skinId, type);
+        return PetUISystem.GetPetAnimInstance(skinInfo?.defaultAnimId ?? 0, type);
     }
 
     public PetUI()

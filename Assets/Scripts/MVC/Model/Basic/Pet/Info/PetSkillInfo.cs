@@ -50,7 +50,7 @@ public class PetSkillInfo
         return skills;
     }
 
-    private List<LearnSkillInfo> GetLearnInfoList() {
+    private List<int> GetLearnLevelList() {
         PetInfo info = Pet.GetPetInfo(id);
         List<int> chain = PetExpSystem.GetEvolveChain(info.basic.baseId, id);
         List<int> levels = new List<int>();
@@ -59,7 +59,10 @@ public class PetSkillInfo
             info = Pet.GetPetInfo(chain[i]);
             levels.AddRange(info.skills.learnLevelList);
         }
+        return levels;
+    }
 
-        return skillList.Zip(levels, (s, l) => new LearnSkillInfo(s, l)).ToList();
+    private List<LearnSkillInfo> GetLearnInfoList() {
+        return skillList.Zip(GetLearnLevelList(), (s, l) => new LearnSkillInfo(s, l)).ToList();
     }
 }

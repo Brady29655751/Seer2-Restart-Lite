@@ -6,6 +6,42 @@
 	</music>
 	<initialPoint>390,135</initialPoint>
 	<entities>
+		<npc id="26101" resId="Pets/pet/40.png" name="Lv35 赤焰兽" size="78,73" pos="600,140" namePos="0,0">
+			<battle>
+				<branch id="default">
+					<settings count="6" capture="true" />
+					<enemy>
+						<pet id="40" level="35">
+							<loopSkill>10957,10959,10959</loopSkill>
+						</pet>
+					</enemy>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>battle</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<npc id="26102" resId="Pets/pet/40.png" name="Lv36 赤焰兽" size="78,73" pos="200,80" namePos="0,0">
+			<battle>
+				<branch id="default">
+					<settings count="6" capture="true" />
+					<enemy>
+						<pet id="40" level="36">
+							<loopSkill>10957,10959,10959</loopSkill>
+						</pet>
+					</enemy>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>battle</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
         <teleport id="1" name="蛮神战场" pos="280,60" targetMapId="240"/>
 		<!-- <teleport id="2" name="烈焰峡谷" pos="100,60" targetMapId="301"/> -->
 		<!-- <teleport id="3" name="火焰山" pos="550,210" targetMapId="240"/> -->

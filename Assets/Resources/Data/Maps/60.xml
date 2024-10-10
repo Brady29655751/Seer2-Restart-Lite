@@ -66,6 +66,43 @@
 			<description><![CDATA[主宠训练营——迪兰特]]></description>
 			<dialog>
 				<branch id="default" name="迪兰特" icon="Pets/pet/3.png" size="100,108" pos="-10,45">
+					<content><![CDATA[精确掌控水流的变化才能突破自己的极限]]></content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[我待会再来找你]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+						<reply type="click">
+							<description><![CDATA[主宠超进化]]></description>
+							<action>openPanel</action>
+							<param>Mod[data=MainPetEvolve/water]</param>
+						</reply>
+						<reply type="branch">
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+						<reply type="click">
+							<description><![CDATA[主宠训练营]]></description>
+							<action>openDialog</action>
+							<param>train</param>
+							<condition>firstPet.baseId=1</condition>
+							<condition>activity[10000].done[1]=[bool]false[default]false</condition>
+						</reply>
+						<reply type="branch">
+							<action>openDialog</action>
+							<param>wrong_pet</param>
+							<condition>firstPet.baseIdNOT1</condition>
+							<condition>activity[10000].done[1]=[bool]false[default]false</condition>
+						</reply>
+						<reply type="branch">
+							<action>openDialog</action>
+							<param>done</param>
+							<condition>activity[10000].done[1]=[bool]true[default]false</condition>
+						</reply>
+					</replyHandler>
+				</branch>
+				<branch id="train" name="迪兰特" icon="Pets/pet/3.png" size="100,108" pos="-10,45">
 					<content><![CDATA[水系主宠训练营的训练，需要有聪颖的智慧，你们准备好了吗？]]></content>
 					<replyHandler>
 						<reply type="click">
@@ -105,7 +142,7 @@
 					</replyHandler>
 				</branch>
 				<branch id="wrong_pet" name="迪兰特" icon="Pets/pet/3.png" size="100,108" pos="-10,45">
-					<content><![CDATA[将迪兰、迪迪兰或迪兰特设为首发精灵再来挑战吧！]]></content>
+					<content><![CDATA[将迪兰、迪迪兰、迪兰特或迪兰特斯设为首发精灵再来挑战吧！]]></content>
 					<replyHandler>
 						<reply type="click">
 							<description><![CDATA[我待会再来找你]]></description>
@@ -356,20 +393,7 @@
 			<eventHandler>
 				<button type="click">
 					<action>openDialog</action>
-					<param>done</param>
-					<condition>activity[10000].done[1]=[bool]true[default]false</condition>
-				</button>
-				<button type="click">
-					<action>openDialog</action>
 					<param>default</param>
-					<condition>firstPet.baseId=1</condition>
-					<condition>activity[10000].done[1]=[bool]false[default]false</condition>
-				</button>
-				<button type="click">
-					<action>openDialog</action>
-					<param>wrong_pet</param>
-					<condition>firstPet.baseIdNOT1</condition>
-					<condition>activity[10000].done[1]=[bool]false[default]false</condition>
 				</button>
 			</eventHandler>
 		</npc>
@@ -377,6 +401,43 @@
 			<description><![CDATA[主宠训练营——休罗斯]]></description>
 			<dialog>
 				<branch id="default" name="休罗斯" icon="Pets/pet/6.png" size="134,109" pos="5,50">
+					<content><![CDATA[猛烈爆发的火焰！燃烧吧！]]></content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[我待会再来找你]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+						<reply type="click">
+							<description><![CDATA[主宠超进化]]></description>
+							<action>openPanel</action>
+							<param>Mod[data=MainPetEvolve/fire]</param>
+						</reply>
+						<reply type="branch">
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+						<reply type="click">
+							<description><![CDATA[主宠训练营]]></description>
+							<action>openDialog</action>
+							<param>train</param>
+							<condition>firstPet.baseId=4</condition>
+							<condition>activity[10000].done[2]=[bool]false[default]false</condition>
+						</reply>
+						<reply type="branch">
+							<action>openDialog</action>
+							<param>wrong_pet</param>
+							<condition>firstPet.baseIdNOT4</condition>
+							<condition>activity[10000].done[2]=[bool]false[default]false</condition>
+						</reply>
+						<reply type="branch">
+							<action>openDialog</action>
+							<param>done</param>
+							<condition>activity[10000].done[2]=[bool]true[default]false</condition>
+						</reply>
+					</replyHandler>
+				</branch>
+				<branch id="train" name="休罗斯" icon="Pets/pet/6.png" size="134,109" pos="5,50">
 					<content><![CDATA[火系主宠训练营的训练，需要有强健的体能，你们准备好了吗？]]></content>
 					<replyHandler>
 						<reply type="click">
@@ -416,7 +477,7 @@
 					</replyHandler>
 				</branch>
 				<branch id="wrong_pet" name="休罗斯" icon="Pets/pet/6.png" size="134,109" pos="5,50">
-					<content><![CDATA[将休咻、休伊尔或休罗斯设为首发精灵再来挑战吧！]]></content>
+					<content><![CDATA[将休咻、休伊尔、休罗斯或休罗伊尔设为首发精灵再来挑战吧！]]></content>
 					<replyHandler>
 						<reply type="click">
 							<description><![CDATA[我待会再来找你]]></description>
@@ -639,20 +700,7 @@
 			<eventHandler>
 				<button type="click">
 					<action>openDialog</action>
-					<param>done</param>
-					<condition>activity[10000].done[2]=[bool]true[default]false</condition>
-				</button>
-				<button type="click">
-					<action>openDialog</action>
 					<param>default</param>
-					<condition>firstPet.baseId=4</condition>
-					<condition>activity[10000].done[2]=[bool]false[default]false</condition>
-				</button>
-				<button type="click">
-					<action>openDialog</action>
-					<param>wrong_pet</param>
-					<condition>firstPet.baseIdNOT4</condition>
-					<condition>activity[10000].done[2]=[bool]false[default]false</condition>
 				</button>
 			</eventHandler>
 		</npc>
@@ -660,6 +708,43 @@
 			<description><![CDATA[主宠训练营——拉奥叶]]></description>
 			<dialog>
 				<branch id="default" name="拉奥叶" icon="Pets/pet/9.png" size="131,119" pos="0,45">
+					<content><![CDATA[要时时刻刻关心其他的小精灵哦！]]></content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[我待会再来找你]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+						<reply type="click">
+							<description><![CDATA[主宠超进化]]></description>
+							<action>openPanel</action>
+							<param>Mod[data=MainPetEvolve/grass]</param>
+						</reply>
+						<reply type="branch">
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+						<reply type="click">
+							<description><![CDATA[主宠训练营]]></description>
+							<action>openDialog</action>
+							<param>train</param>
+							<condition>firstPet.baseId=7</condition>
+							<condition>activity[10000].done[3]=[bool]false[default]false</condition>
+						</reply>
+						<reply type="branch">
+							<action>openDialog</action>
+							<param>wrong_pet</param>
+							<condition>firstPet.baseIdNOT7</condition>
+							<condition>activity[10000].done[3]=[bool]false[default]false</condition>
+						</reply>
+						<reply type="branch">
+							<action>openDialog</action>
+							<param>done</param>
+							<condition>activity[10000].done[3]=[bool]true[default]false</condition>
+						</reply>
+					</replyHandler>
+				</branch>
+				<branch id="train" name="拉奥叶" icon="Pets/pet/9.png" size="131,119" pos="0,45">
 					<content><![CDATA[草系主宠训练营的训练，需要有坚强的耐力，你们准备好了吗？]]></content>
 					<replyHandler>
 						<reply type="click">
@@ -699,7 +784,7 @@
 					</replyHandler>
 				</branch>
 				<branch id="wrong_pet" name="拉奥叶" icon="Pets/pet/9.png" size="131,119" pos="0,45">
-					<content><![CDATA[将拉奥、拉奥苗或拉奥叶设为首发精灵再来挑战吧！]]></content>
+					<content><![CDATA[将拉奥、拉奥苗、拉奥叶或拉奥花设为首发精灵再来挑战吧！]]></content>
 					<replyHandler>
 						<reply type="click">
 							<description><![CDATA[我待会再来找你]]></description>
@@ -931,20 +1016,7 @@
 			<eventHandler>
 				<button type="click">
 					<action>openDialog</action>
-					<param>done</param>
-					<condition>activity[10000].done[3]=[bool]true[default]false</condition>
-				</button>
-				<button type="click">
-					<action>openDialog</action>
 					<param>default</param>
-					<condition>firstPet.baseId=7</condition>
-					<condition>activity[10000].done[3]=[bool]false[default]false</condition>
-				</button>
-				<button type="click">
-					<action>openDialog</action>
-					<param>wrong_pet</param>
-					<condition>firstPet.baseIdNOT7</condition>
-					<condition>activity[10000].done[3]=[bool]false[default]false</condition>
 				</button>
 			</eventHandler>
 		</npc>

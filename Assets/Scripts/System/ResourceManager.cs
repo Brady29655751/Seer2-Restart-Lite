@@ -217,7 +217,9 @@ public class ResourceManager : Singleton<ResourceManager>
             }
             else
             {
-                assetBundle = AssetBundle.LoadFromFile(Application.persistentDataPath + "/PetAnimation/pfa_" + petID);
+                var platformPath = (Application.platform == RuntimePlatform.WindowsPlayer) ? "windows" : "android";
+                var folderPath = PetInfo.IsMod(petID) ? ("/Mod/Pets/anim/" + platformPath) : "/PetAnimation";
+                assetBundle = AssetBundle.LoadFromFile(Application.persistentDataPath + folderPath + "/pfa_" + petID);
                 if (assetBundle == null) //说明精灵的所有动画都没有
                 {
                     return null;
@@ -531,13 +533,19 @@ public class ResourceManager : Singleton<ResourceManager>
                 petInfos.Set(info.id, info);
             }
 
-            if (SaveSystem.TryLoadPetMod(out var modDict, out var featureDict))
+            if (SaveSystem.TryLoadPetMod(out var modDict, out var featureDict, out var hitDict, out var soundDict))
             {
                 foreach (var entry in modDict)
                     petInfos.Set(entry.Key, entry.Value);
 
                 foreach (var entry in featureDict)
                     featureInfo.Set(entry.Key, entry.Value);
+
+                foreach (var entry in hitDict)
+                    hitInfo.Set(entry.Key, entry.Value);
+
+                foreach (var entry in soundDict)
+                    soundInfo.Set(entry.Key, entry.Value);
             }
 
             onSuccess?.Invoke(petInfos);
@@ -637,6 +645,8 @@ public class ResourceManager : Singleton<ResourceManager>
     public Dictionary<int, PetHitInfo> GetPetHitInfo(string[] data)
     {
         Dictionary<int, PetHitInfo> petHitInfos = new Dictionary<int, PetHitInfo>();
+        if (data == null)
+            return petHitInfos;
 
         int dataCol = PetHitInfo.DATA_COL;
         int dataRow = data.Length / dataCol;
@@ -653,6 +663,8 @@ public class ResourceManager : Singleton<ResourceManager>
     public Dictionary<int, PetSoundInfo> GetPetSoundInfo(string[] data)
     {
         Dictionary<int, PetSoundInfo> petSoundInfos = new Dictionary<int, PetSoundInfo>();
+        if (data == null)
+            return petSoundInfos;
 
         int dataCol = PetSoundInfo.DATA_COL;
         int dataRow = data.Length / dataCol;

@@ -452,9 +452,12 @@ public static class SaveSystem
         return true;
     }
 
-    public static bool TryLoadPetMod(out Dictionary<int, PetInfo> petDict, out Dictionary<int, PetFeatureInfo> featureDict) {
+    public static bool TryLoadPetMod(out Dictionary<int, PetInfo> petDict, out Dictionary<int, PetFeatureInfo> featureDict,
+        out Dictionary<int, PetHitInfo> hitDict, out Dictionary<int, PetSoundInfo> soundDict) {
         petDict = new Dictionary<int, PetInfo>();
         featureDict = new Dictionary<int, PetFeatureInfo>();
+        hitDict = new Dictionary<int, PetHitInfo>();
+        soundDict = new Dictionary<int, PetSoundInfo>();
 
         try {
             // Init path.
@@ -464,6 +467,8 @@ public static class SaveSystem
             var expPath = petPath + "exp.csv";
             var skillPath = petPath + "skill.csv";
             var uiPath = petPath + "ui.csv";
+            var hitPath = petPath + "hit.csv";
+            var soundPath = petPath + "sound.csv";
 
             // Check files exist.
             if ((!FileBrowserHelpers.FileExists(basicPath)) || (!FileBrowserHelpers.FileExists(featurePath)) ||
@@ -471,13 +476,14 @@ public static class SaveSystem
                 (!FileBrowserHelpers.FileExists(uiPath)))
                 return false;
 
-
             // Get data.
             var basicData = ResourceManager.GetCSV(FileBrowserHelpers.ReadTextFromFile(basicPath));
             var featureData = ResourceManager.GetCSV(FileBrowserHelpers.ReadTextFromFile(featurePath));
             var expData = ResourceManager.GetCSV(FileBrowserHelpers.ReadTextFromFile(expPath));
             var skillData = ResourceManager.GetCSV(FileBrowserHelpers.ReadTextFromFile(skillPath));
             var uiData = ResourceManager.GetCSV(FileBrowserHelpers.ReadTextFromFile(uiPath));
+            var hitData = FileBrowserHelpers.FileExists(hitPath) ? ResourceManager.GetCSV(FileBrowserHelpers.ReadTextFromFile(hitPath)) : null;
+            var soundData = FileBrowserHelpers.FileExists(soundPath) ? ResourceManager.GetCSV(FileBrowserHelpers.ReadTextFromFile(soundPath)) : null;
 
             // Set infos.
             List<PetBasicInfo> basicInfo = ResourceManager.instance.GetPetBasicInfo(basicData);
@@ -485,6 +491,8 @@ public static class SaveSystem
             Dictionary<int, PetExpInfo> expInfo = ResourceManager.instance.GetPetExpInfo(expData);
             Dictionary<int, PetSkillInfo> skillInfo = ResourceManager.instance.GetPetSkillInfo(skillData);
             Dictionary<int, PetUIInfo> uiInfo = ResourceManager.instance.GetPetUIInfo(uiData);
+            Dictionary<int, PetHitInfo> hitInfo = ResourceManager.instance.GetPetHitInfo(hitData);
+            Dictionary<int, PetSoundInfo> soundInfo = ResourceManager.instance.GetPetSoundInfo(soundData);
 
             // Load to dict.
             for (int i = 0; i < basicInfo.Count; i++) {
@@ -494,7 +502,9 @@ public static class SaveSystem
                 petDict.Set(info.id, info);
             }
 
-            featureDict = featureInfo;            
+            featureDict = featureInfo;  
+            hitDict = hitInfo;
+            soundDict = soundInfo;          
 
         } catch (Exception) {
             return false;
@@ -600,16 +610,20 @@ public static class SaveSystem
         return true;
     }
 
-    public static bool TryLoadPanelMod(string panelName, out PanelData panelData) {
+    public static bool TryLoadPanelMod(string panelName, out PanelData panelData, bool isMod = true) {
         panelData = null;
 
-        var panelPath = Application.persistentDataPath + "/Mod/Panel/" + panelName + "/panel.xml";
+        var dataPath = isMod ? "/Mod" : "/Resources";
+        var panelPath = Application.persistentDataPath + dataPath + "/Panel/" + panelName + "/panel.xml";
         try {
             if (!FileBrowserHelpers.FileExists(panelPath))
                 return false;
 
             panelData = ResourceManager.GetXML<PanelData>(FileBrowserHelpers.ReadTextFromFile(panelPath));
-        } catch (Exception) {
+        } catch (Exception e) {
+            var hintbox = Hintbox.OpenHintboxWithContent(e.ToString(), 16);
+            hintbox.SetTitle("加载自制面板失败");
+            hintbox.SetSize(720, 360);
             return false;
         }
 

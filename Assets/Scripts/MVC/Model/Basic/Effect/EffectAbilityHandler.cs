@@ -267,20 +267,16 @@ public static class EffectAbilityHandler
                 break;
         };
 
-        // Prepare Powerup Status
-        for (int type = 0; type < typeNames.Length - 1; type++) {
-            int powerup = 0;
-            string add = effect.abilityOptionDict.Get(typeNames[type], "0");
-            if (!int.TryParse(add, out powerup))
-                return false;
-
-            status[type] = powerup;
-        }
-
         for (int j = 0; j < targetList.Count; j++) {
             var pet = targetList[j];
             var statusController = pet.statusController;
             var buffController = pet.buffController;
+
+            // Prepare Powerup Status
+            for (int type = 0; type < typeNames.Length - 1; type++) {
+                string add = effect.abilityOptionDict.Get(typeNames[type], "0");
+                status[type] = Parser.ParseEffectOperation(add, effect, lhsUnit, rhsUnit, pet);
+            }
 
             if (isRandom) {
                 string pdf = effect.abilityOptionDict.Get("random_pdf", "none");
@@ -725,7 +721,7 @@ public static class EffectAbilityHandler
             }
 
             // Learn skill.
-            if ((type == "skill") && (op == "+")) {
+            if (type == "skill") {
                 if (!int.TryParse(value, out var skillId))
                     return false;
 
@@ -733,8 +729,10 @@ public static class EffectAbilityHandler
                 if (skill == null)
                     return false;
 
-                if (!pet.skills.LearnNewSkill(skill))
-                    return false;
+                if (op == "+") {
+                    if (!pet.skills.LearnNewSkill(skill))
+                        return false;
+                }
                     
                 SaveSystem.SaveData();
                 return true;

@@ -256,6 +256,9 @@ public class Pet
         switch (id) {
             default:
                 return;
+            case "skill":
+                skills.LearnNewSkill(Skill.GetSkill((int)num, false));
+                return;
             case "personality":
                 basic.personality = (Personality)num;
                 currentStatus = new Status(normalStatus){ hp = currentStatus.hp };

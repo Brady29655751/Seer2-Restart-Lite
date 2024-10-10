@@ -1,0 +1,147 @@
+<panel name="MainPetEvolve/Fire" size="700,430">
+    <npc id="-999" resId="Panel/MainPetEvolve/Fire/background" size="700,430" pos="0,0" color="255,255,255,255"/>
+    <npc id="-1" resId="Pets/pet/640" size="303,303" pos="45,85"/>
+    <npc id="-2" resId="Panel/MainPetEvolve/Fire/button" size="102,91" pos="135,60">
+        <description><![CDATA[注入]]></description>
+        <eventHandler>
+            <button type="click">
+            	<action>openHintbox</action>
+            	<param>type=Item</param>
+                <param>title=提示</param>
+                <param>content=搜集20个火幻进化石再来注入吧！</param>
+                <param>item_icon=item[400009]</param>
+                <param>option_num=1</param>
+                <condition>item[400009].num&lt;20</condition>
+            </button>
+            <button type="click">
+            	<action>openHintbox</action>
+            	<param>type=PetSelect</param>
+                <param>title=选择要进化的休罗斯</param>
+                <param>option_num=2</param>
+                <param>callback=evolve</param>
+                <condition>item[400009].numGTE20</condition>
+            </button>
+        </eventHandler>
+        <callbackHandler>
+            <button type="evolve">
+                <action>openHintbox</action>
+                <param>type=Item</param>
+                <param>title=提示</param>
+                <param>content=必须选择等级100的休罗斯才能进化哦！</param>
+                <param>item_icon=pet[6]</param>
+                <param>option_num=1</param>
+                <condition>data.PetSelect.idNOT6|data.PetSelect.level&lt;100</condition>
+            </button>
+            <button type="evolve">
+                <action>setItem</action>
+                <param>remove</param>
+                <param>400009,20</param>
+                <condition>data.PetSelect.id=6</condition>
+                <condition>data.PetSelect.levelGTE100</condition>
+            </button>
+            <button type="evolve">
+                <action>openHintbox</action>
+                <param>type=Item</param>
+                <param>title=提示</param>
+                <param>content=休罗斯已成功超进化</param>
+                <param>item_icon=pet[640]</param>
+                <param>option_num=1</param>
+                <condition>data.PetSelect.id=6</condition>
+                <condition>data.PetSelect.levelGTE100</condition>
+            </button>
+            <button type="evolve">
+                <action>evolvePet</action>
+                <param>index=data.PetSelectIndex</param>
+                <param>640</param>
+                <condition>data.PetSelect.id=6</condition>
+                <condition>data.PetSelect.levelGTE100</condition>
+            </button>
+            <button type="evolve">
+                <action>setPet</action>
+                <param>index=data.PetSelectIndex</param>
+                <param>skill=10948</param>
+                <param>skill=10949</param>
+                <param>skill=10950</param>
+                <param>skill=10951</param>
+                <condition>data.PetSelect.id=6</condition>
+                <condition>data.PetSelect.levelGTE100</condition>
+            </button>
+        </callbackHandler>
+    </npc>
+    <npc id="-3" resId="Panel/MainPetEvolve/Fire/button" size="70,28" pos="392,210" color="0,0,0,0">
+        <description>七味小厨烹饪合成</description>
+        <eventHandler>
+            <button type="click">
+            	<action>teleport</action>
+            	<param>125</param>
+            </button>
+        </eventHandler>
+    </npc>
+    <npc id="-4" resId="Panel/MainPetEvolve/Fire/button" size="70,28" pos="487,210" color="0,0,0,0">
+        <description>每次对战掉落3个进化石</description>
+        <battle>
+            <branch id="default">
+            	<settings count="6"/>
+            	<enemy>
+            		<pet id="640" level="105">
+            			<status>
+                            <atk>600</atk>
+                            <mat>600</mat>
+            				<hp>5000</hp>
+            			</status>
+                        <initBuff>13,14,17,20,43,-3022</initBuff>
+            			<loopSkill>10950,10951</loopSkill>
+                        <superSkill>10030</superSkill>
+            		</pet>
+            	</enemy>
+            	<winHandler>
+            		<button type="auto">
+            			<action>setItem</action>
+            			<param>add</param>
+            			<param>400009,3</param>
+            		</button>
+            		<button type="auto">
+            			<action>openHintbox</action>
+            			<param>type=Item</param>
+            			<param>title=提示</param>
+            			<param>content=3个火幻进化石已经放入精灵背包</param>
+            			<param>item_icon=item[400009]</param>
+            			<param>option_num=1</param>
+            		</button>
+            		<button type="auto">
+            			<action>setActivity</action>
+            			<param>main_pet_evolve</param>
+            			<param>done[1]=true</param>
+            		</button>
+            	</winHandler>
+            </branch>
+        </battle>
+        <eventHandler>
+            <button type="click">
+            	<action>battle</action>
+            	<param>default</param>
+                <condition>activity[main_pet_evolve].done[1]=[bool]false[default]false</condition>
+            </button>
+            <button type="click">
+            	<action>openHintbox</action>
+            	<param>title=提示</param>
+                <param>content=今天已经挑战过了，明天再来吧！</param>
+                <param>option_num=1</param>
+                <condition>activity[main_pet_evolve].done[1]=[bool]true[default]false</condition>
+            </button>
+        </eventHandler>
+    </npc>
+    <npc id="-5" resId="Panel/MainPetEvolve/Fire/button" size="70,28" pos="582,210" color="0,0,0,0">
+        <description>购买进化石</description>
+        <eventHandler>
+            <button type="click">
+            	<action>openPanel</action>
+            	<param>ItemShop</param>
+                <param>mode=buy</param>
+                <param>currency=400009/2</param>
+                <param>item=400009</param>
+                <param>title=购买进化石</param>
+            </button>
+        </eventHandler>
+    </npc>
+</panel>

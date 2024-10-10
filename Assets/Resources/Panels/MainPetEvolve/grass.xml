@@ -1,0 +1,147 @@
+<panel name="MainPetEvolve/Grass" size="700,430">
+    <npc id="-999" resId="Panel/MainPetEvolve/Grass/background" size="700,430" pos="0,0" color="255,255,255,255"/>
+    <npc id="-1" resId="Pets/pet/618" size="256,327" pos="45,85"/>
+    <npc id="-2" resId="Panel/MainPetEvolve/Grass/button" size="102,91" pos="135,60">
+        <description><![CDATA[注入]]></description>
+        <eventHandler>
+            <button type="click">
+            	<action>openHintbox</action>
+            	<param>type=Item</param>
+                <param>title=提示</param>
+                <param>content=搜集20个草目进化石再来注入吧！</param>
+                <param>item_icon=item[400007]</param>
+                <param>option_num=1</param>
+                <condition>item[400007].num&lt;20</condition>
+            </button>
+            <button type="click">
+            	<action>openHintbox</action>
+            	<param>type=PetSelect</param>
+                <param>title=选择要进化的拉奥叶</param>
+                <param>option_num=2</param>
+                <param>callback=evolve</param>
+                <condition>item[400007].numGTE20</condition>
+            </button>
+        </eventHandler>
+        <callbackHandler>
+            <button type="evolve">
+                <action>openHintbox</action>
+                <param>type=Item</param>
+                <param>title=提示</param>
+                <param>content=必须选择等级100的拉奥叶才能进化哦！</param>
+                <param>item_icon=pet[9]</param>
+                <param>option_num=1</param>
+                <condition>data.PetSelect.idNOT9|data.PetSelect.level&lt;100</condition>
+            </button>
+            <button type="evolve">
+                <action>setItem</action>
+                <param>remove</param>
+                <param>400007,20</param>
+                <condition>data.PetSelect.id=9</condition>
+                <condition>data.PetSelect.levelGTE100</condition>
+            </button>
+            <button type="evolve">
+                <action>openHintbox</action>
+                <param>type=Item</param>
+                <param>title=提示</param>
+                <param>content=拉奥叶已成功超进化</param>
+                <param>item_icon=pet[618]</param>
+                <param>option_num=1</param>
+                <condition>data.PetSelect.id=9</condition>
+                <condition>data.PetSelect.levelGTE100</condition>
+            </button>
+            <button type="evolve">
+                <action>evolvePet</action>
+                <param>index=data.PetSelectIndex</param>
+                <param>618</param>
+                <condition>data.PetSelect.id=9</condition>
+                <condition>data.PetSelect.levelGTE100</condition>
+            </button>
+            <button type="evolve">
+                <action>setPet</action>
+                <param>index=data.PetSelectIndex</param>
+                <param>skill=10952</param>
+                <param>skill=10953</param>
+                <param>skill=10954</param>
+                <param>skill=10955</param>
+                <condition>data.PetSelect.id=9</condition>
+                <condition>data.PetSelect.levelGTE100</condition>
+            </button>
+        </callbackHandler>
+    </npc>
+    <npc id="-3" resId="Panel/MainPetEvolve/Grass/button" size="70,28" pos="392,210" color="0,0,0,0">
+        <description>七味小厨烹饪合成</description>
+        <eventHandler>
+            <button type="click">
+            	<action>teleport</action>
+            	<param>125</param>
+            </button>
+        </eventHandler>
+    </npc>
+    <npc id="-4" resId="Panel/MainPetEvolve/Grass/button" size="70,28" pos="487,210" color="0,0,0,0">
+        <description>每次对战掉落3个进化石</description>
+        <battle>
+            <branch id="default">
+            	<settings count="6"/>
+            	<enemy>
+            		<pet id="618" level="105">
+            			<status>
+                            <def>400</def>
+                            <mdf>400</mdf>
+            				<hp>5000</hp>
+            			</status>
+                        <initBuff>13,20,29,-3022</initBuff>
+            			<loopSkill>10940,10048,10955,10036,10943</loopSkill>
+                        <superSkill>10046</superSkill>
+            		</pet>
+            	</enemy>
+            	<winHandler>
+            		<button type="auto">
+            			<action>setItem</action>
+            			<param>add</param>
+            			<param>400007,3</param>
+            		</button>
+            		<button type="auto">
+            			<action>openHintbox</action>
+            			<param>type=Item</param>
+            			<param>title=提示</param>
+            			<param>content=3个草目进化石已经放入精灵背包</param>
+            			<param>item_icon=item[400007]</param>
+            			<param>option_num=1</param>
+            		</button>
+            		<button type="auto">
+            			<action>setActivity</action>
+            			<param>main_pet_evolve</param>
+            			<param>done[3]=true</param>
+            		</button>
+            	</winHandler>
+            </branch>
+        </battle>
+        <eventHandler>
+            <button type="click">
+            	<action>battle</action>
+            	<param>default</param>
+                <condition>activity[main_pet_evolve].done[3]=[bool]false[default]false</condition>
+            </button>
+            <button type="click">
+            	<action>openHintbox</action>
+            	<param>title=提示</param>
+                <param>content=今天已经挑战过了，明天再来吧！</param>
+                <param>option_num=1</param>
+                <condition>activity[main_pet_evolve].done[3]=[bool]true[default]false</condition>
+            </button>
+        </eventHandler>
+    </npc>
+    <npc id="-5" resId="Panel/MainPetEvolve/Grass/button" size="70,28" pos="582,210" color="0,0,0,0">
+        <description>购买进化石</description>
+        <eventHandler>
+            <button type="click">
+            	<action>openPanel</action>
+            	<param>ItemShop</param>
+                <param>mode=buy</param>
+                <param>currency=400007/2</param>
+                <param>item=400007</param>
+                <param>title=购买进化石</param>
+            </button>
+        </eventHandler>
+    </npc>
+</panel>

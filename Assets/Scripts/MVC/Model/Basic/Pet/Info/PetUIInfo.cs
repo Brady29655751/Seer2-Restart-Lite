@@ -10,7 +10,7 @@ public class PetUIInfo
     public const int DATA_COL = 4;
     public int id, baseId;
 
-    public int defaultId;
+    public int defaultId, defaultAnimId;
 
     public int defaultSkinId;
     public List<int> specialSkinList = new List<int>();
@@ -38,6 +38,7 @@ public class PetUIInfo
         baseId = petBaseId;
         defaultId = petId;
         defaultSkinId = petId;
+        defaultAnimId = petId;
         defaultFeatureList = new List<int>(){ petBaseId };
     }
 
@@ -52,6 +53,7 @@ public class PetUIInfo
 
         defaultId = int.Parse(options.Get("default_id", id.ToString()));
         defaultSkinId = int.Parse(options.Get("default_skin", id.ToString()));
+        defaultAnimId = int.Parse(options.Get("default_anim", defaultSkinId.ToString()));
         defaultFeatureList = options.Get("default_feature", baseId.ToString()).ToIntList('/');
         defaultBuffIds = options.Get("default_buff", "none").ToIntList('/');
     }

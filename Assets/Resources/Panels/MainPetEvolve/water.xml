@@ -1,0 +1,146 @@
+<panel name="MainPetEvolve/Water" size="700,430">
+    <npc id="-999" resId="Panel/MainPetEvolve/Water/background" size="700,430" pos="0,0" color="255,255,255,255"/>
+    <npc id="-1" resId="Pets/pet/632" size="378,328" pos="0,85"/>
+    <npc id="-2" resId="Panel/MainPetEvolve/Water/button" size="102,91" pos="135,60">
+        <description><![CDATA[注入]]></description>
+        <eventHandler>
+            <button type="click">
+            	<action>openHintbox</action>
+            	<param>type=Item</param>
+                <param>title=提示</param>
+                <param>content=搜集20个水脉进化石再来注入吧！</param>
+                <param>item_icon=item[400008]</param>
+                <param>option_num=1</param>
+                <condition>item[400008].num&lt;20</condition>
+            </button>
+            <button type="click">
+            	<action>openHintbox</action>
+            	<param>type=PetSelect</param>
+                <param>title=选择要进化的迪兰特</param>
+                <param>option_num=2</param>
+                <param>callback=evolve</param>
+                <condition>item[400008].numGTE20</condition>
+            </button>
+        </eventHandler>
+        <callbackHandler>
+            <button type="evolve">
+                <action>openHintbox</action>
+                <param>type=Item</param>
+                <param>title=提示</param>
+                <param>content=必须选择等级100的迪兰特才能进化哦！</param>
+                <param>item_icon=pet[3]</param>
+                <param>option_num=1</param>
+                <condition>data.PetSelect.idNOT3|data.PetSelect.level&lt;100</condition>
+            </button>
+            <button type="evolve">
+                <action>setItem</action>
+                <param>remove</param>
+                <param>400008,20</param>
+                <condition>data.PetSelect.id=3</condition>
+                <condition>data.PetSelect.levelGTE100</condition>
+            </button>
+            <button type="evolve">
+                <action>openHintbox</action>
+                <param>type=Item</param>
+                <param>title=提示</param>
+                <param>content=迪兰特已成功超进化</param>
+                <param>item_icon=pet[632]</param>
+                <param>option_num=1</param>
+                <condition>data.PetSelect.id=3</condition>
+                <condition>data.PetSelect.levelGTE100</condition>
+            </button>
+            <button type="evolve">
+                <action>evolvePet</action>
+                <param>index=data.PetSelectIndex</param>
+                <param>632</param>
+                <condition>data.PetSelect.id=3</condition>
+                <condition>data.PetSelect.levelGTE100</condition>
+            </button>
+            <button type="evolve">
+                <action>setPet</action>
+                <param>index=data.PetSelectIndex</param>
+                <param>skill=10944</param>
+                <param>skill=10945</param>
+                <param>skill=10946</param>
+                <param>skill=10947</param>
+                <condition>data.PetSelect.id=3</condition>
+                <condition>data.PetSelect.levelGTE100</condition>
+            </button>
+        </callbackHandler>
+    </npc>
+    <npc id="-3" resId="Panel/MainPetEvolve/Water/button" size="70,28" pos="392,210" color="0,0,0,0">
+        <description>七味小厨烹饪合成</description>
+        <eventHandler>
+            <button type="click">
+            	<action>teleport</action>
+            	<param>125</param>
+            </button>
+        </eventHandler>
+    </npc>
+    <npc id="-4" resId="Panel/MainPetEvolve/Water/button" size="70,28" pos="487,210" color="0,0,0,0">
+        <description>每次对战掉落3个进化石</description>
+        <battle>
+            <branch id="default">
+            	<settings count="6"/>
+            	<enemy>
+            		<pet id="632" level="105">
+            			<status>
+                            <spd>6000</spd>
+            				<hp>5000</hp>
+            			</status>
+                        <initBuff>13,14,17,20,43,-3022</initBuff>
+            			<loopSkill>10946,10945,10945</loopSkill>
+                        <superSkill>10013</superSkill>
+            		</pet>
+            	</enemy>
+            	<winHandler>
+            		<button type="auto">
+            			<action>setItem</action>
+            			<param>add</param>
+            			<param>400008,3</param>
+            		</button>
+            		<button type="auto">
+            			<action>openHintbox</action>
+            			<param>type=Item</param>
+            			<param>title=提示</param>
+            			<param>content=3个水脉进化石已经放入精灵背包</param>
+            			<param>item_icon=item[400008]</param>
+            			<param>option_num=1</param>
+            		</button>
+            		<button type="auto">
+            			<action>setActivity</action>
+            			<param>main_pet_evolve</param>
+            			<param>done[2]=true</param>
+            		</button>
+            	</winHandler>
+            </branch>
+        </battle>
+        <eventHandler>
+            <button type="click">
+            	<action>battle</action>
+            	<param>default</param>
+                <condition>activity[main_pet_evolve].done[2]=[bool]false[default]false</condition>
+            </button>
+            <button type="click">
+            	<action>openHintbox</action>
+            	<param>title=提示</param>
+                <param>content=今天已经挑战过了，明天再来吧！</param>
+                <param>option_num=1</param>
+                <condition>activity[main_pet_evolve].done[2]=[bool]true[default]false</condition>
+            </button>
+        </eventHandler>
+    </npc>
+    <npc id="-5" resId="Panel/MainPetEvolve/Water/button" size="70,28" pos="582,210" color="0,0,0,0">
+        <description>购买进化石</description>
+        <eventHandler>
+            <button type="click">
+            	<action>openPanel</action>
+            	<param>ItemShop</param>
+                <param>mode=buy</param>
+                <param>currency=400008/2</param>
+                <param>item=400008</param>
+                <param>title=购买进化石</param>
+            </button>
+        </eventHandler>
+    </npc>
+</panel>
