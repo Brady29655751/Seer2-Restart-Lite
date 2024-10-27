@@ -189,6 +189,7 @@ public static class Identifier {
         if (id == "dead")
             return pet.isDead ? 1 : 0;
 
+        //TODO Extend this with variable, such as op.pet.element
         if (id.TryTrimStart("defElementRelation", out trimId) &&
             trimId.TryTrimParentheses(out trimId) &&
             int.TryParse(trimId, out var elementId)) {

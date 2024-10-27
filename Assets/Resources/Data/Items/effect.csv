@@ -53,6 +53,7 @@ id,timing,priority,target,condition,cond_option,effect,effect_option
 10301,resident\resident,-1\-1,state\state,none\none,none\none,set_player\set_player,param_count=2&action=setItem&param[0]=add&param[1]=1，2000\param_count=5&action=openHintbox&param[0]=type＝Item&param[1]=title＝提示&param[2]=content＝获得了 2000 赛尔豆！&param[3]=item_icon＝item[1]&param[4]=option_num＝1
 20001,resident,-1,pet,pet,type=buff[400003]&buff[400003]_cmp=0,set_pet,type=buff&op=+&value=400003
 20002,resident\resident\on_remove_buff,-1\-1\-1,pet\pet\pet,pet\pet\none,type=buff[400004]&buff[400004]_cmp=0\type=buff[400004]&buff[400004]_cmp=0\none,set_pet\set_pet\set_pet,type=buff&op=+&value=400004\type=record[evolveBan]&op=SET&value=1\type=record[evolveBan]&op=SET&value=0
+21006,resident,-1,pet,pet,type=buff[410006]/buff[group:star_soul]&buff[410006]_cmp=0&buff[group:star_soul]_op=<&buff[group:star_soul]_cmp=5,set_pet,type=buff&op=+&value=410006
 21010,resident,-1,pet,pet,type=buff[410010]/buff[group:star_soul]&buff[410010]_cmp=0&buff[group:star_soul]_op=<&buff[group:star_soul]_cmp=5,set_pet,type=buff&op=+&value=410010
 110050,resident,-1,pet,pet,type=skill[10050]&skill[10050]_cmp=0,set_pet,type=skill&op=+&value=10050
 110454,resident,-1,pet,pet,type=baseId/skill[10454]&baseId_cmp=90&skill[10454]_cmp=0,set_pet,type=skill&op=+&value=10454
@@ -73,6 +74,7 @@ id,timing,priority,target,condition,cond_option,effect,effect_option
 300323,resident,-1,pet,pet,type=baseId/emblem&baseId_cmp=323&emblem_cmp=0,set_pet,type=emblem&op=SET&value=1
 300326,resident,-1,pet,pet,type=baseId/emblem&baseId_cmp=326&emblem_cmp=0,set_pet,type=emblem&op=SET&value=1
 300329,resident,-1,pet,pet,type=baseId/emblem&baseId_cmp=329&emblem_cmp=0,set_pet,type=emblem&op=SET&value=1
+300332,resident,-1,pet,pet,type=baseId/emblem&baseId_cmp=332&emblem_cmp=0,set_pet,type=emblem&op=SET&value=1
 300845,resident,-1,pet,pet,type=baseId/emblem&baseId_cmp=845&emblem_cmp=0,set_pet,type=emblem&op=SET&value=1
 310970,resident,-1,pet,pet,type=baseId&baseId_cmp=970,set_pet,type=featureType&op=+&value=1
 400001,none,-1,none,none,none,none,none

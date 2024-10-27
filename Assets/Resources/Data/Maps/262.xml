@@ -1,0 +1,48 @@
+<map name="烈焰峡谷" category="4" id="262" weather="3">
+	<fightMap>100004</fightMap>
+	<music category="4">
+		<bgm>BGM_260</bgm>
+		<fx>FX_124</fx>
+	</music>
+	<initialPoint>390,135</initialPoint>
+	<entities>
+		<npc id="26201" resId="Pets/pet/76.png" name="" size="30,30" pos="430,215" color="0,0,0,0">
+			<description>奇怪的尾巴</description>
+			<dialog>
+				<branch id="default" name="达克拉尔" icon="Pets/pet/76" size="90,129" pos="10,35">
+					<content><![CDATA[哼！你竟敢打扰我用餐！我要烧死你！]]></content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[抱歉抱歉（快步离开）]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+						<reply type="click">
+							<description><![CDATA[来就来！]]></description>
+							<action>battle</action>
+							<param>default</param>
+						</reply>
+					</replyHandler>
+				</branch>
+			</dialog>
+			<battle>
+				<branch id="default">
+					<settings count="6" capture="true" />
+					<enemy>
+						<pet id="76" level="40">
+							<initBuff>-2</initBuff>
+							<loopSkill>10985,10986,10987,10988,-4</loopSkill>
+						</pet>
+					</enemy>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>openDialog</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+        <teleport id="1" name="赤链山脉" pos="290,125" targetMapId="261"/>
+	</entities>
+</map>

@@ -69,10 +69,12 @@ public class WorkshopBuffController : Module
     }
 
     public void OnDIYBuff() {
+        /*
         if (Application.platform == RuntimePlatform.Android) {
             Hintbox.OpenHintboxWithContent("手机版工坊入口已关闭\n请用电脑制作Mod", 16);
             return;
         }
+        */
 
         if (!VerifyDIYBuff(out var error)) {
             Hintbox.OpenHintboxWithContent(error, 16);
@@ -92,10 +94,12 @@ public class WorkshopBuffController : Module
     }
 
     public void OnDeleteBuff() {
+        /*
         if (Application.platform == RuntimePlatform.Android) {
             Hintbox.OpenHintboxWithContent("手机版工坊入口已关闭\n请用电脑制作Mod", 16);
             return;
         }
+        */
 
         var hintbox = Hintbox.OpenHintbox();
         hintbox.SetTitle("提示");

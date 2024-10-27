@@ -51,10 +51,12 @@ public class WorkshopSkillController : Module
     }
 
     public void OnDIYSkill() {
+        /*
         if (Application.platform == RuntimePlatform.Android) {
             Hintbox.OpenHintboxWithContent("手机版工坊入口已关闭\n请用电脑制作Mod", 16);
             return;
         }
+        */
 
         if (!VerifyDIYSkill(out var error)) {
             Hintbox.OpenHintboxWithContent(error, 16);
@@ -74,10 +76,12 @@ public class WorkshopSkillController : Module
     }
 
     public void OnDeleteSkill() {
+        /*
         if (Application.platform == RuntimePlatform.Android) {
             Hintbox.OpenHintboxWithContent("手机版工坊入口已关闭\n请用电脑制作Mod", 16);
             return;
         }
+        */
 
         var hintbox = Hintbox.OpenHintbox();
         hintbox.SetTitle("提示");

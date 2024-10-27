@@ -14,6 +14,8 @@ public class BattleDamageAnimView : Module
     [SerializeField] private Color32 healNegativeColor;
     [SerializeField] private FightCamaraController camara;
 
+    private SettingsData settingsData => Player.instance.gameData.settingsData;
+
     public void SetHealObject(UnitHudSystem.HealInfo info)
     {
         if ((info.Heal == 0) && (!info.IsForceShowHeal))
@@ -59,14 +61,14 @@ public class BattleDamageAnimView : Module
         script.Critical.SetActive(isDamage && isCritical);
         damageAnchoredRect.transform.localScale =
             (isDamage && (isCritical || damage > 500)) ? new Vector3(1.2f, 1.2f, 1.2f) : Vector3.one; //暴击或伤害大的时候放大
-        if (isDamage)
+        if (type && isDamage)   // 攻擊傷害才適用屏幕效果
         {
-            if (isCritical || damage > 400)
+            if (isCritical || (settingsData.shakeWhenBigDamage && (damage > 400)))
             {
                 camara.ScreenShake(); //暴击或伤害较大时屏幕大幅震动
             }
 
-            if (damage > 500) //伤害过大时屏幕闪烁
+            if (settingsData.flashWhenBigDamage && (damage > 500)) //伤害过大时屏幕闪烁
             {
                 camara.ScreenFlash();
             }

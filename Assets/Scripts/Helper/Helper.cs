@@ -121,6 +121,24 @@ namespace System {
             return str.ToFloatList(delimeter)?.Select(x => (int)x).ToList();
         }
 
+        public static List<int> ToIntRange(this string str) {
+            if (string.IsNullOrEmpty(str) || (str == "none"))
+                return new List<int>();
+
+            int startIndex = str.IndexOf('[');
+            int middleIndex = str.IndexOf('~');
+            int endIndex = str.IndexOf(']');
+
+            if (middleIndex == -1)
+                return str.Substring(startIndex + 1, endIndex - startIndex - 1).ToIntList('|');
+            
+            string startExpr = str.Substring(startIndex + 1, middleIndex - startIndex - 1);
+            string endExpr = str.Substring(middleIndex + 1, endIndex - middleIndex - 1);
+            int startRange = int.Parse(startExpr);
+            int endRange = int.Parse(endExpr);
+            return Enumerable.Range(startRange, endRange - startRange + 1).ToList();
+        }
+
         /// <summary>
         /// Parse the given string to Vector2. <br/>
         /// We expect input to be "xxx,yyy"

@@ -65,10 +65,12 @@ public class WorkshopItemController : Module
     }
 
     public void OnDIYItem() {
+        /*
         if (Application.platform == RuntimePlatform.Android) {
             Hintbox.OpenHintboxWithContent("手机版工坊入口已关闭\n请用电脑制作Mod", 16);
             return;
         }
+        */
 
         if (!VerifyDIYItem(out var error)) {
             Hintbox.OpenHintboxWithContent(error, 16);
@@ -88,10 +90,12 @@ public class WorkshopItemController : Module
     }
 
     public void OnDeleteItem() {
+        /*
         if (Application.platform == RuntimePlatform.Android) {
             Hintbox.OpenHintboxWithContent("手机版工坊入口已关闭\n请用电脑制作Mod", 16);
             return;
         }
+        */
 
         var hintbox = Hintbox.OpenHintbox();
         hintbox.SetTitle("提示");

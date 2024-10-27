@@ -9,6 +9,8 @@ public class VolumeSettingModel : Module
     public float UIVolume { get; private set; }
     public float battleBGMVolume { get; private set; }
     public float battleSEVolume { get; private set; }
+    public bool flashWhenBigDamage { get; private set; }
+    public bool shakeWhenBigDamage { get; private set;}
 
     public float battleAnimSpeed { get; private set; }
     
@@ -17,6 +19,8 @@ public class VolumeSettingModel : Module
         UIVolume = settingsData.UIVolume;
         battleBGMVolume = settingsData.battleBGMVolume;
         battleSEVolume = settingsData.battleSEVolume;
+        flashWhenBigDamage = settingsData.flashWhenBigDamage;
+        shakeWhenBigDamage = settingsData.shakeWhenBigDamage;
         battleAnimSpeed = settingsData.battleAnimSpeed;
     }
 
@@ -25,6 +29,8 @@ public class VolumeSettingModel : Module
         settingsData.UIVolume = UIVolume;
         settingsData.battleBGMVolume = battleBGMVolume;
         settingsData.battleSEVolume = battleSEVolume;
+        settingsData.flashWhenBigDamage = flashWhenBigDamage;
+        settingsData.shakeWhenBigDamage = shakeWhenBigDamage;
         settingsData.battleAnimSpeed = battleAnimSpeed;
         SaveSystem.SaveData();
     }
@@ -41,6 +47,15 @@ public class VolumeSettingModel : Module
     public void SetBattleSEVolume(float value) {
         battleSEVolume = value;
     }
+
+    public void SetFlash(bool isOn) {
+        flashWhenBigDamage = isOn;
+    }
+
+    public void SetShake(bool isOn) {
+        shakeWhenBigDamage = isOn;
+    }
+
     public void SetBattleAnimSpeed(float value) {
         battleAnimSpeed = value;
     }

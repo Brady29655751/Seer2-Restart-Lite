@@ -11,7 +11,7 @@ public class BattleSkillBubbleAnimView : BattleBaseView
 
     public void SetSkill(Skill skill)
     {
-        skillName.text = skill.name;
+        skillName.text = skill.name + ((skill.combo != 1) ? ("（" + skill.combo + "连击）") : string.Empty);
         this.SetActive();
     }
 

@@ -40,7 +40,7 @@ public class PetDictionaryController : Module
 
     public void SetPetStorage(List<Pet> storage) {
         if ((mode == PetDictionaryMode.Workshop) && (List.IsNullOrEmpty(petWorkshop)))
-            petWorkshop = storage.ToList();
+            petWorkshop = storage.Where(x => !x.info.ui.hide).ToList();
 
         var petStorage = (mode == PetDictionaryMode.Workshop) ? petWorkshop : storage.ToList();
         selectController.SetStorage(petStorage);

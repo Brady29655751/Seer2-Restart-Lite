@@ -85,7 +85,11 @@ public static class EffectAbilityHandler
         Unit petChangeUnit = (who == "me") ? state.GetUnitById(invokeUnit.id) : state.GetRhsUnitById(invokeUnit.id);
 
         // Check pet bag index.
-        int targetIndex = (target == "random") ? petChangeUnit.petSystem.petBag.FindIndex(x => (x != petChangeUnit.pet) && (!x.isDead)) : int.Parse(target);
+        var randomIndexList = petChangeUnit.petSystem.petBag.FindAllIndex(x => (x != null) && (x != petChangeUnit.pet) && (!x.isDead)).ToList();
+        if ((target == "random") && (randomIndexList.Count == 0))
+            return false;
+
+        int targetIndex = (target == "random") ? randomIndexList.Random() : int.Parse(target);
         if (targetIndex < 0)
             return false;
 
@@ -93,6 +97,7 @@ public static class EffectAbilityHandler
         // Legacy Buffs: 死亡繼承
         bool isDead = petChangeUnit.pet.isDead;
         float anger = petChangeUnit.pet.anger;
+        float petSendAngerRatio = (petChangeUnit.pet.buffController.GetBuff(63)?.value ?? 80) / 100f;
         var inheritBuffs = petChangeUnit.pet.buffs.FindAll(x => x.info.inherit);
         var legacyBuffs = petChangeUnit.pet.buffs.FindAll(x => x.info.legacy);
 
@@ -102,7 +107,8 @@ public static class EffectAbilityHandler
         petChangeUnit.petSystem.RefreshStayTurn();
 
         // Set anger to 80% original anger. Inherit buffs according to dead or not.
-        petChangeUnit.pet.anger = Mathf.FloorToInt(anger * 0.8f);
+        float petReceiveAngerRatio = (petChangeUnit.pet.buffController.GetBuff(64)?.value ?? 100) / 100f;
+        petChangeUnit.pet.anger = Mathf.FloorToInt(anger * petSendAngerRatio * petReceiveAngerRatio);
         petChangeUnit.pet.buffController.AddRangeBuff((isDead ? legacyBuffs : inheritBuffs), petChangeUnit, state);
 
         // Record that this pet has participated in fight.
@@ -205,6 +211,7 @@ public static class EffectAbilityHandler
         string who = effect.abilityOptionDict.Get("who", "me");
         string mult = effect.abilityOptionDict.Get("mult", "0/1");
         string add = effect.abilityOptionDict.Get("add", "0");
+        string set = effect.abilityOptionDict.Get("set", "none");
         string min = effect.abilityOptionDict.Get("min", "none");
         string max = effect.abilityOptionDict.Get("max", "none");
 
@@ -216,9 +223,14 @@ public static class EffectAbilityHandler
         statusController.minAnger = (min == "none") ? statusController.minAnger : (int)Parser.ParseEffectOperation(min, effect, lhsUnit, rhsUnit);
         statusController.maxAnger = (max == "none") ? statusController.maxAnger : (int)Parser.ParseEffectOperation(max, effect, lhsUnit, rhsUnit);
 
-        float anger = Parser.ParseEffectOperation(add, effect, lhsUnit, rhsUnit);
-        int angerAdd = (int)(anger * ((anger > 0) ? (lhsUnit.pet.battleStatus.angrec / 100f) : 1));
-        lhsUnit.pet.anger += angerAdd;
+        if (set == "none") {
+            float anger = Parser.ParseEffectOperation(add, effect, lhsUnit, rhsUnit);
+            int angerAdd = (int)(anger * ((anger > 0) ? (lhsUnit.pet.battleStatus.angrec / 100f) : 1));
+            lhsUnit.pet.anger += angerAdd;
+        } else {
+            float anger = Parser.ParseEffectOperation(set, effect, lhsUnit, rhsUnit);
+            lhsUnit.pet.anger = (int)anger;
+        }
         return true;
     }
 
@@ -374,7 +386,10 @@ public static class EffectAbilityHandler
             float statusMult = Parser.ParseEffectOperation(mult, effect, lhsUnit, rhsUnit);
             int statusAdd = (int)Parser.ParseEffectOperation(add, effect, lhsUnit, rhsUnit);
 
-            statusAdd += Mathf.FloorToInt(pet.initStatus[statusType] * statusMult);
+            if (statusMult != 0)
+                pet.statusController.MultCurrentStatus(statusType, statusMult);
+
+            //statusAdd += Mathf.FloorToInt(pet.initStatus[statusType] * statusMult);
             pet.statusController.AddBattleStatus(statusType, statusAdd);
         }
 
@@ -415,18 +430,33 @@ public static class EffectAbilityHandler
         Unit invokeUnit = (Unit)effect.invokeUnit;
         Unit lhsUnit = (who == "me") ? state.GetUnitById(invokeUnit.id) : state.GetRhsUnitById(invokeUnit.id);
         Unit rhsUnit = state.GetRhsUnitById(lhsUnit.id);
-        
-        int buffId = id switch {
-            "random[unhealthy]" => Database.instance.buffInfoDict.Where(entry => entry.Value.type == BuffType.Unhealthy).Select(entry => entry.Key).ToList().Random(), 
-            "random[abnormal]"  => Database.instance.buffInfoDict.Where(entry => entry.Value.type == BuffType.Abnormal).Select(entry => entry.Key).ToList().Random(),
-            _ => (int)Parser.ParseEffectOperation(id, effect, lhsUnit, rhsUnit),
-        };
-        if (string.IsNullOrEmpty(key) && (Buff.GetBuffInfo(buffId) == null))
-            return false;
-
         var buffController = lhsUnit.pet.buffController;
         int buffTurn = (int)Parser.ParseEffectOperation(turn, effect, lhsUnit, rhsUnit);
         int buffValue = (int)Parser.ParseEffectOperation(value, effect, lhsUnit, rhsUnit);
+
+        int buffId = 0;
+        var buffIdList = new List<int>();
+
+        if (id.TryTrimStart("unique", out var trimId)) {
+            buffIdList = trimId.ToIntRange();
+            if (!string.IsNullOrEmpty(key) || (buffIdList.Exists(x => Buff.GetBuffInfo(x) == null)))
+                return false;
+
+            buffIdList = buffIdList.Where(x => !buffController.buffs.Exists(y => y.id == x)).ToList();
+            if (List.IsNullOrEmpty(buffIdList))
+                return false;
+
+            buffId = buffIdList.Random();
+        } else {
+            buffId = id switch {
+                "random[unhealthy]" => Database.instance.buffInfoDict.Where(entry => entry.Value.type == BuffType.Unhealthy).Select(entry => entry.Key).ToList().Random(), 
+                "random[abnormal]"  => Database.instance.buffInfoDict.Where(entry => entry.Value.type == BuffType.Abnormal).Select(entry => entry.Key).ToList().Random(),
+                _ => (int)Parser.ParseEffectOperation(id, effect, lhsUnit, rhsUnit),
+            };
+        }
+        if (string.IsNullOrEmpty(key) && (Buff.GetBuffInfo(buffId) == null))
+            return false;
+
         Buff newBuff = new Buff(buffId, buffTurn, buffValue);
 
         if (!string.IsNullOrEmpty(key)) {
@@ -851,7 +881,8 @@ public static class EffectAbilityHandler
                     (x.id != Buff.GetEmblemBuff(battlePet).id) &&
                     (x.info.type != BuffType.Unhealthy) &&
                     (x.info.type != BuffType.Abnormal) &&
-                    (!battlePet.info.ui.defaultBuffIds.Exists(y => x.id == y))
+                    (!battlePet.info.ui.defaultBuffIds.Exists(y => x.id == y)) &&
+                    (!lhsUnit.pet.initBuffs.Exists(y => x.id == y.id))
                 ));
             }
 

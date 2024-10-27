@@ -40,6 +40,14 @@ public class VolumeSettingController : Module
         volumeView.SetUIVolume(volumeModel.UIVolume);
     }
 
+    public void OnBigDamageFlashChanged(bool isOn) {
+        volumeModel.SetFlash(isOn);
+    }
+
+    public void OnBigDamageShakeChanged(bool isOn) {
+        volumeModel.SetShake(isOn);
+    }
+
     public void OnBattleAnimSpeedChanged() {
         float speed = (volumeModel.battleAnimSpeed == 1) ? 2 : 1;
         volumeModel.SetBattleAnimSpeed(speed);

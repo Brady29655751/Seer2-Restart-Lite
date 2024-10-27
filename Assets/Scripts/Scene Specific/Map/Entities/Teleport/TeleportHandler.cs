@@ -25,6 +25,8 @@ public static class TeleportHandler
         button.onPointerExitEvent.SetListener(() => infoPrompt.SetActive(false));
         button.onPointerOverEvent.SetListener(() => infoPrompt.SetInfoPromptWithAutoSize(info.name, TextAnchor.MiddleCenter));
         button.onPointerClickEvent.SetListener(() => Transport(info.pos, () => Teleport(info)));
+        if (button.image != null)
+            button.image.color = info.color;
     }
 
     public static void Transport(Vector2 canvasPos, Action onArrive) {

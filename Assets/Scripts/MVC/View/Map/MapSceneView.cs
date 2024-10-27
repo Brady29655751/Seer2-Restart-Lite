@@ -109,9 +109,11 @@ public class MapSceneView : UIModule
         if (result.isMyWin) { 
             actionList = battleInfo.winHandler.Select(x => NpcHandler.GetNpcEntity(npc, x, npcDict)).ToList();
 
+            /*
             // 主寵訓練營特殊活動
             if ((map.id == 60) && ((npc?.GetInfo()?.id ?? 0) >= 6000))
                 actionList.AddRange(actionList);
+            */
             
         } else if (result.isOpWin) {
             actionList = battleInfo.loseHandler.Select(x => NpcHandler.GetNpcEntity(npc, x, npcDict)).ToList();

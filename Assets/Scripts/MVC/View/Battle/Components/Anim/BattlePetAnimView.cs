@@ -15,7 +15,6 @@ public class BattlePetAnimView : BattleBaseView
     [SerializeField] private FightCamaraController camara;
     [SerializeField] private bool isMyView;
     [SerializeField] private IAnimator powerSkillAnim;
-    private static readonly object _lock = new object();
 
     private PetUI currentPetUI; //仅限有动画的精灵使用这个字段,如果不为null,说明这个精灵有动画
     private GameObject currentPetAnim;
@@ -58,8 +57,10 @@ public class BattlePetAnimView : BattleBaseView
         }
         else
         {
+            // GameObject == null 不代表真的是Null，僅為Unity認定的Null
+            // 此時無法做SetActive，但使用 ?. 會檢測到非Null而繼續執行導致報錯
             if (this.currentPetAnim != null)
-                this.currentPetAnim.SetActive(false); 
+                this.currentPetAnim.SetActive(false);  
 
             this.currentPetUI = null; //当前精灵没有动画,但是上一只换场过来的精灵有动画,所以要把这个设为null,并且把动画关闭
             this.currentPetAnim = null;
@@ -102,14 +103,17 @@ public class BattlePetAnimView : BattleBaseView
         isPetDone = false;
 
         // 若為必殺技則立刻播放技能音效
+        // PetUI 和 SoundInfo 有可能為 Null，必須用?.額外判定
         var sound = this.currentPetUI?.soundInfo?.GetSoundByType(type);
         bool isSuperSkill = (type is PetAnimationType.Super or PetAnimationType.SecondSuper);
         if (isSuperSkill)
             PlaySkillSound(sound);
 
         //使用技能动画,或者是通用技能动画
-        if (this.currentPetUI != null && (this.currentPetAnim = this.currentPetUI.GetBattleAnim(type)) != null)
+        GameObject tmp;
+        if (this.currentPetUI != null && (tmp = this.currentPetUI.GetBattleAnim(type)) != null)
         {
+            this.currentPetAnim = tmp;
             //如果两个都不为null,说明这个精灵有动画,执行这个
             SwfClipController controller = this.currentPetAnim.GetComponent<SwfClipController>();
             controller.clip.sortingOrder = 2; //攻击动画在2层,其他精灵动画都在1层,但捕捉动画在UI层在上面的
@@ -192,8 +196,10 @@ public class BattlePetAnimView : BattleBaseView
     {
         //包括被打/被暴击/闪避
         this.isPetDone = false;
-        if (currentPetUI != null && (this.currentPetAnim = this.currentPetUI.GetBattleAnim(type)) != null)
+        GameObject tmp;
+        if (currentPetUI != null && (tmp = this.currentPetUI.GetBattleAnim(type)) != null)
         {
+            this.currentPetAnim = tmp;
             SwfClipController controller = this.currentPetAnim.GetComponent<SwfClipController>();
             controller.clip.sortingOrder = 1;
             this.currentPetAnim.transform.position = new Vector3(this.currentPetAnim.transform.position.x,
@@ -214,8 +220,10 @@ public class BattlePetAnimView : BattleBaseView
 
     public void SetPetStateAnim(PetAnimationType type) //失败,胜利,濒死
     {
-        if (currentPetUI != null && (this.currentPetAnim = this.currentPetUI.GetBattleAnim(type)) != null)
+        GameObject tmp;
+        if (currentPetUI != null && (tmp = this.currentPetUI.GetBattleAnim(type)) != null)
         {
+            this.currentPetAnim = tmp;
             SwfClipController controller = this.currentPetAnim.GetComponent<SwfClipController>();
             controller.clip.sortingOrder = 1;
             this.currentPetAnim.transform.position = new Vector3(this.currentPetAnim.transform.position.x,
