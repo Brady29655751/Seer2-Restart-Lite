@@ -174,6 +174,9 @@ public class BattlePet : Pet
             case "subElement":
                 buffController.SetSubElement((Element)value);
                 return;
+            case "stayTurn":
+                stayTurn = (int)value;
+                return;
         }
     }
 

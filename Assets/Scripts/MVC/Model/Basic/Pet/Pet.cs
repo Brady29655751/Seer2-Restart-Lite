@@ -224,6 +224,7 @@ public class Pet
             "baseId" => basic.baseId,
             "element" => elementId,
             "subElement" => subElementId,
+            "gender" => (float)info.basic.gender,
             "personality" => (float)basic.personality,
             "height" => basic.height,
             "weight" => basic.weight,

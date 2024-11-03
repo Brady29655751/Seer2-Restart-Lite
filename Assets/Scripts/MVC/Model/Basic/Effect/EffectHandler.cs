@@ -47,8 +47,9 @@ public class EffectHandler
             return;
         
         for (int i = 0; i < queue.Count; i++) {
-            if ((checkList == null) || (checkList[i]))
+            if ((checkList == null) || (checkList[i])) {
                 queue[i].Value.Apply(queue[i].Key, state);
+            }
         }
     }
 

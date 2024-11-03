@@ -22,19 +22,7 @@ public static class Identifier {
                 return Player.instance.random;
             }
 
-            int startIndex = trimId.IndexOf('[');
-            int middleIndex = trimId.IndexOf('~');
-            int endIndex = trimId.IndexOf(']');
-
-            if (middleIndex == -1)
-                return trimId.Substring(startIndex + 1, endIndex - startIndex - 1).ToIntList('|').Random();
-
-            string startExpr = trimId.Substring(startIndex + 1, middleIndex - startIndex - 1);
-            string endExpr = trimId.Substring(middleIndex + 1, endIndex - middleIndex - 1);
-            int startRange = int.Parse(startExpr);
-            int endRange = int.Parse(endExpr);
-
-            return Random.Range(startRange, endRange + 1);
+            return trimId.ToIntRange().Random();
         }
 
         return float.TryParse(id, out num) ? num : 0;

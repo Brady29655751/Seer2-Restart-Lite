@@ -6,6 +6,70 @@
     	<fx>FX_120</fx>
     </music>
 	<entities>
+		<npc id="20201" resId="Pets/pet/762" name="Lv60 迦拉特" size="95,79" pos="270,145" namePos="0,0">
+			<description>似曾相似的精灵</description>
+			<dialog>
+				<branch id="default" name="迦拉特" icon="Pets/pet/762" size="95,79" pos="0,55">
+					<content>一切都是三相循环</content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[好眼熟阿]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+						<reply type="click">
+							<description><![CDATA[跳脱循环才能抵达全新世界]]></description>
+							<action>battle</action>
+							<param>default</param>
+						</reply>
+					</replyHandler>
+				</branch>
+			</dialog>
+			<battle>
+				<branch id="default">
+					<settings count="1"/>
+					<enemy>
+						<pet id="762" level="60">
+							<status>
+								<spd>2147483647</spd>
+								<hp>2000</hp>
+							</status>
+							<initBuff>13,14,17,20,23,-3022,-3024,-3025</initBuff>
+							<loopSkill>11029</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setItem</action>
+							<param>add</param>
+							<param>320761,1</param>
+							<condition>activity[20007].done=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=1个熵晶体已经放入背包</param>
+							<param>item_icon=item[320761]</param>
+							<param>option_num=1</param>
+							<condition>activity[20007].done=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>20007</param>
+							<param>done=true</param>
+							<condition>activity[20007].done=[bool]false[default]false</condition>
+						</button>
+					</winHandler>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>openDialog</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
 		<teleport id="1" name="幻彩珊瑚" pos="130,230" targetMapId="203"/>
 		<teleport id="2" name="彩虹珊瑚湾" pos="815,355" targetMapId="201"/>
 	</entities>

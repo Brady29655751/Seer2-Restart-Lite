@@ -137,7 +137,7 @@ id,name,type,copyType,turn,options,description
 3035,永恒极光,turn,replace,3,none,击败对手则恢复200点体力
 3036,致胜约束,turn,replace,2,none,使自己的怒气不低于20
 3037,森林祝福,mark,replace,-1,none,体力回复率提高25%
-3038,扎根,turn,replace,5,res=19,每回合回复1/8体力
+3038,再生,turn,replace,5,res=19,每回合回复1/8体力
 3039,森之源,turn,replace,5,res=19,每回合回复1/16体力
 3040,增重,mark,stack,-1,auto_remove=true&max_val=2,增重50KG，最多叠加2层。[ENDL]当前为[value]层
 3041,失重,turn,replace,2,none,减重75KG
@@ -174,7 +174,7 @@ id,name,type,copyType,turn,options,description
 3072,精华护体,turn,replace,5,none,前3回合受到物理伤害减半，后2回合受到的特殊伤害减半。
 3073,生命倒流,mark,block,-1,none,提升自身1/8体力最大值（整场战斗只能发动一次）
 3074,生命复苏,chance,replace,-1,keep=false&inherit=true,主动换场时下一个出场精灵恢复1/4体力
-3075,复苏领域,mark,replace,-1,inherit=true,回合结束时若自身体力低于1/2会回复1/12体力
+3075,复苏领域,mark,replace,-1,inherit=true,对手攻击时若自身体力低于1/2会恢复自身1/12体力
 3076,光之盾,shield,replace,-1,res=32,使对手的技能失效
 3077,物理伤害增加,chance,replace,-1,none,使下一次物理技能伤害增加[value]%
 3078,特殊伤害增加,chance,replace,-1,none,使下一次特殊技能伤害增加[value]%
@@ -233,7 +233,15 @@ id,name,type,copyType,turn,options,description
 3131,无限气力,turn,replace,2,none,每回合强化物攻1级
 3132,焰火,turn,replace,3,none,使自身火系技能伤害增加70%
 3133,怒瞳,turn,replace,5,none,受到伤害的10%回复自身怒气
-3134,火环之心,mark,stack,-1,max_val=10&auto_remove=true,每层伤害增加6%，最多叠加10层。[ENDL]当前为[value]层
+3134,火环之心,mark,stack,-1,max_val=10&auto_remove=true,每层伤害增加6%，最多叠加10层[ENDL]当前为[value]层
+3135,火苗,turn,stack,2,max_val=100,每回合损失[value]点体力，最高100点
+3136,幽灵,mark,stack,-1,max_val=11&auto_remove=true, 11层时转变为狂欢，最多叠加11层[ENDL]当前为[value]层
+3137,狂欢,turn,replace,2,none,免疫幽灵状态。闪避率增加100%。必杀技以外的所有技能先制+1、克制系数不低于1且攻击时不消耗怒气
+3138,宴会终结,turn,replace,3,none,恢复自身最大体力的1/8，受到攻击时获得1个幽灵
+3139,不谐暗光,turn,replace,3,none,受到光系技能伤害减半
+3140,幽灵效果触发,turn,replace,1,hide=true,攻击后添加对应层数的幽灵
+3141,液态化,mark,replace,-1,none,受到攻击后回复自身1/16体力
+3142,融化,turn,replace,3,keep=false&inherit=true,受到攻击时随机弱化对手1项能力1级
 3143,焦点腐蚀,mark,replace,-1,none,特定攻击技能造成伤害的1/4将恢复自身体力
 3279,蜂纹,mark,stack,-1,auto_remove=true&max_val=3,每一层使中毒造成的伤害增加30，最多叠加3层。[ENDL]当前为[value]层
 3280,青蜂之舞,turn,replace,3,res=18,闪避率增加50%
@@ -264,9 +272,10 @@ id,name,type,copyType,turn,options,description
 100140,虚空,feature,replace,-1,max_val=10,每次技能命中后会增加10%闪避率，闪避后获得虚空感应
 100146,腐蚀,feature,replace,-1,none,自身具有焦点腐蚀时，技能威力增加10
 100149,连击,feature,replace,-1,none,使连击2次以上的技能连击次数增加1次
-100151,青蜂,feature,replace,-1,none,攻击技能命中处于中毒状态的对手会重置中毒状态为3回合
+100151,青蜂,feature,replace,-1,none,技能命中处于中毒状态的对手会重置中毒状态为3回合
 100154,紫电,feature,replace,-1,none,特攻技能伤害增加10%，物攻技能命中率增加10%
 100178,潜能,feature,replace,-1,none,攻击附带自身个体值的伤害
+100192,炽热,feature,replace,-1,none,炎热时每回合使对手失去1/16体力，最高不超过自身最大体力的1/16
 100200,毒粉,feature,replace,-1,none,自身具有花粉弥漫时，每回合使对手失去25点体力
 100214,神光,feature,replace,-1,none,出手前体力高于1/2时免疫不良，低于1/2时光系技能必中
 100220,联动,feature,replace,-1,none,物攻技能使自身特攻值增加25点，特攻技能使自身物防值增加25点，可叠加3次
@@ -274,6 +283,7 @@ id,name,type,copyType,turn,options,description
 100234,炎帝,feature,replace,-1,none,怒气永不低于25，且回合开始时怒气高于50会免疫异常1回合
 100235,羽刃,feature,replace,-1,max_val=32,攻击时已累积三十二式会增加30固伤[ENDL]当前累积[value]式
 100241,幻斑,feature,replace,-1,none,攻击时10%使对手昏迷2回合
+100280,狂欢,feature,replace,-1,none,狂欢状态下所有技能必中
 100301,森林,feature,replace,-1,none,自身具有森林祝福时受到的伤害减少10%
 100302,红球,feature,replace,-1,none,当仅有红色水球时，水系技能伤害增加20%
 100320,影魔,feature,replace,-1,none,回合结束时每1个影子都能为自身恢复10点体力
@@ -285,6 +295,7 @@ id,name,type,copyType,turn,options,description
 100436,甲骨,feature,replace,-1,none,出场时获得不屈状态
 100495,战神,feature,replace,-1,none,古战场时每回合回复1/16体力
 100761,固态,feature,replace,-1,none,固态化状态下受到的克制系伤害不超过200
+100762,液态,feature,replace,-1,none,液态化状态下受到的暴击伤害减少25%
 100826,五味,feature,replace,-1,none,属性技能命中后有15%几率恢复1/6体力
 100845,割裂,feature,replace,-1,none,特攻技能使自身物攻值增加25点，物攻技能使自身特防值增加25点，可叠加3次[ENDL]（这只精灵视为埃鲁达克的对应型态）
 100959,逻辑,feature,replace,-1,none,回合结束时自身体力低于1/8会强化1级速度
@@ -295,7 +306,7 @@ id,name,type,copyType,turn,options,description
 100965,背星,feature,replace,-1,none,星移环境下攻击造成的伤害不低于100
 100966,心星,feature,replace,-1,none,星移环境下每回合增加5点怒气
 100970,星移,feature,replace,-1,none,上场后首次决定技能时使环境转变为星移
-100981,灵目,feature,replace,-1,none,免疫不良状态，回合结束时体力低于1/8时会自动恢复1/8体力
+100981,灵目,feature,replace,-1,none,免疫不良状态，对手攻击时若自身体力低于1/8会恢复1/8体力
 100982,灵脉,feature,replace,-1,none,免疫不良状态，回合结束时体力为1会怒气回满，血衣状态下对手暴击-1
 100988,灵影,feature,replace,-1,none,免疫不良状态，被对手技能命中时生成1枚影钩
 100989,最强,feature,replace,-1,none,全能力值提升100点
@@ -331,6 +342,7 @@ id,name,type,copyType,turn,options,description
 200151,蜂纹,emblem,replace,-1,none,对手具有蜂纹时，自身攻击技能造成伤害的1/10会恢复自身的体力
 200154,挑衅,emblem,replace,-1,none,挑衅也增加自身20点怒气
 200178,必杀,emblem,replace,-1,none,必杀技的属性相克系数不会低于1
+200192,高热,emblem,replace,-1,none,对手烧伤或免疫烧伤时伤害增加10%
 200200,荧光,emblem,replace,-1,none,对手具有荧光花粉时，每回合恢复自身25点体力
 200214,光武,emblem,replace,-1,none,使用光系技能恢复5点怒气
 200220,联防,emblem,replace,-1,none,非首发时受到的伤害减少10%
@@ -338,6 +350,7 @@ id,name,type,copyType,turn,options,description
 200234,阳炎,emblem,replace,-1,none,在炎热环境下所有技能必中
 200235,羽刃,emblem,replace,-1,none,对手的物攻技能命中时会使其损失50点体力
 200241,深海,emblem,replace,-1,none,深海场地下受到的伤害减少10%
+200280,召唤,emblem,replace,-1,none,回合结束时若自身具有幽灵则会增加1层
 200301,祝福,emblem,replace,-1,none,使森林祝福提升的体力回复率提高5%
 200302,蓝球,emblem,replace,-1,none,每消耗1个蓝色水球时增加自身10点怒气
 200320,影子,emblem,replace,-1,none,出场时获得1个影子
@@ -349,6 +362,7 @@ id,name,type,copyType,turn,options,description
 200436,棒骨,emblem,replace,-1,none,棒骨的反弹效果和反弹上限增加10%
 200495,怒战,emblem,replace,-1,none,古战场时攻击附带35点伤害
 200761,冰晶,emblem,replace,-1,none,冰晶类技能命中后会消除对手5点怒气
+200762,变幻,emblem,replace,-1,none,使用威力为0的技能会在决定技能时恢复5点怒气
 200826,萌月,emblem,replace,-1,none,使五味特性触发恢复体力的几率增加10%
 200845,联攻,emblem,replace,-1,none,非首发时造成的伤害增加10%
 200959,专注,emblem,replace,-1,none,击败对手时清除自身异常状态
@@ -392,6 +406,7 @@ id,name,type,copyType,turn,options,description
 400003,镇静剂,item,replace,-1,item=20001,暴击率降低为0并转为对应的伤害倍率强化
 400004,神秘果实,item,replace,-1,item=20002,使精灵无法自然进化
 410006,锁魂星魂,item,replace,-1,item=21006,命中上升15%
+410007,神耀星魂,item,replace,-1,item=21007,暴击率增加15%
 410010,怒劫星魂,item,replace,-1,item=21010,每回合开始时回复15怒气
 600002,深海,mark,replace,-1,none,双方受到攻击时15%概率溺水
 600008,影触,mark,replace,-1,none,每回合随机弱化双方1项能力1级
@@ -427,3 +442,5 @@ id,name,type,copyType,turn,options,description
 -3021,虚弱大厅,mark,replace,-1,res=46,受到攻击时使对手能力值下降100点
 -3022,至尊光环,mark,replace,-1,hide=true,至尊光环(2)
 -3023,狂暴回廊,mark,replace,-1,res=63,怒气上限提升至500点
+-3024,液态迦拉特,turn,replace,9,hide=true,死亡或第9回合变身固态迦拉特並保留2000体力
+-3025,固态迦拉特,mark,replace,-1,hide=true,固态迦拉特的技能和恒久光辉

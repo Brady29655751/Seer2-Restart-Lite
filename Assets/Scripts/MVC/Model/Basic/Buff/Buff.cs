@@ -113,15 +113,18 @@ public class Buff
         return new Buff(id, -1, 1);
     }
 
-    public static string GetBuffDescriptionPreview(string rawDescription, string valueReplace = "0") {
+    public static string GetBuffDescriptionPreview(string rawDescription, Buff referenceBuff = null) {
         string desc = rawDescription;
-        desc = desc.Replace("[value]", valueReplace).Replace("[ENDL]", "\n");
+
+        referenceBuff ??= new Buff(-1, 0, 0);
+
+        desc = desc.Replace("[value]", referenceBuff.value.ToString()).Replace("[ENDL]", "\n");
         desc = desc.Replace("[-]", "</color>").Replace("[", "<color=#").Replace("]", ">");
         return desc;
     }
 
     public string GetDescription() {
-        string desc = GetBuffDescriptionPreview(info.description, value.ToString());
+        string desc = GetBuffDescriptionPreview(info.description, this);
 
         if (!info.keep && !IsUnhealthy() && !IsAbnormal()) 
             desc += "（若精灵换场则不保留）";

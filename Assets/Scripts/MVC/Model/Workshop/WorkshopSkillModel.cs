@@ -25,7 +25,7 @@ public class WorkshopSkillModel : Module
     public string description => descriptionInputField.inputString?.Replace("\n", "[ENDL]") ?? string.Empty;
     public string descriptionPreview => Skill.GetSkillDescriptionPreview(description);
     public string options => optionInputField.inputString;
-    public string optionsAll => ((priority == 0) ? string.Empty : ("priority=" + priority)) + (string.IsNullOrEmpty(options) ? string.Empty : ("&" + options)).TrimStart("&");
+    public string optionsAll => ((priority == 0) ? string.Empty : ("priority=" + priority)) + (string.IsNullOrEmpty(options) ? string.Empty : ("&" + options)).TrimEnd("&");
 
     public List<Effect> effectList = new List<Effect>();
 

@@ -125,18 +125,21 @@ namespace System {
             if (string.IsNullOrEmpty(str) || (str == "none"))
                 return new List<int>();
 
-            int startIndex = str.IndexOf('[');
-            int middleIndex = str.IndexOf('~');
-            int endIndex = str.IndexOf(']');
+            var strRanges = str.Replace("－", "-").TrimParentheses().Split('|');
+            var allRanges = new List<int>();
 
-            if (middleIndex == -1)
-                return str.Substring(startIndex + 1, endIndex - startIndex - 1).ToIntList('|');
-            
-            string startExpr = str.Substring(startIndex + 1, middleIndex - startIndex - 1);
-            string endExpr = str.Substring(middleIndex + 1, endIndex - middleIndex - 1);
-            int startRange = int.Parse(startExpr);
-            int endRange = int.Parse(endExpr);
-            return Enumerable.Range(startRange, endRange - startRange + 1).ToList();
+            for (int i = 0; i < strRanges.Length; i++) {
+                var range = strRanges[i].Split('~').Select(int.Parse).ToList();
+                if (range.Count == 1) {
+                    allRanges.Add(range[0]);
+                    continue;
+                }
+                int min = Mathf.Min(range[0], range[1]);
+                int max = Mathf.Max(range[0], range[1]);
+                allRanges.AddRange(Enumerable.Range(min, max - min + 1));               
+            }
+
+            return allRanges;
         }
 
         /// <summary>

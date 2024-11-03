@@ -328,6 +328,7 @@ public class Skill
             "ignoreShield" => ignoreShield ? 1 : 0,
             "ignorePowerup" => ignorePowerup ? 1 : 0,
             "effect" => effects.Count,
+            "isSelect" => IsSelect() ? 1 : 0,
             _ => float.MinValue,
         };
     }

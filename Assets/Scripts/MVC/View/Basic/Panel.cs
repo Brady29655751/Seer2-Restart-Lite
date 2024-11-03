@@ -25,6 +25,11 @@ public class Panel : UIModule
     }
 
     public static Panel OpenPanel(string panelName) {
+        if ((panelName == "null") || (panelName == "none")) {
+            Panel.CloseTopPanel();
+            return null;
+        }
+
         bool isModPanel = panelName.TryTrimStart("[Mod]", out var trimPanelName);
         panelName = isModPanel ? "Mod" : panelName.Replace("Panel", string.Empty);
 
@@ -68,6 +73,16 @@ public class Panel : UIModule
             TeleportHandler.Teleport(mapId);
         else 
             Panel.OpenPanel(linkId);
+    }
+
+    public static void CloseTopPanel() {
+        GameObject canvas = GameObject.Find("Canvas");
+        Panel panel = null;
+        foreach (Transform child in canvas.transform)
+            panel = child.GetComponentInChildren<Panel>() ?? panel;
+        
+        if (panel != null)
+            panel.ClosePanel();
     }
 
     public virtual void ClosePanel() {

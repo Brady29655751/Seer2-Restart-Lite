@@ -82,14 +82,15 @@ public static class EffectAbilityHandler
         string target = effect.abilityOptionDict.Get("target_index", "-1");
 
         Unit invokeUnit = (Unit)effect.invokeUnit;
-        Unit petChangeUnit = (who == "me") ? state.GetUnitById(invokeUnit.id) : state.GetRhsUnitById(invokeUnit.id);
+        Unit rhsUnit = state.GetRhsUnitById(invokeUnit.id);
+        Unit petChangeUnit = (who == "me") ? state.GetUnitById(invokeUnit.id) : rhsUnit;
 
         // Check pet bag index.
         var randomIndexList = petChangeUnit.petSystem.petBag.FindAllIndex(x => (x != null) && (x != petChangeUnit.pet) && (!x.isDead)).ToList();
         if ((target == "random") && (randomIndexList.Count == 0))
             return false;
 
-        int targetIndex = (target == "random") ? randomIndexList.Random() : int.Parse(target);
+        int targetIndex = (target == "random") ? randomIndexList.Random() : (int)(Parser.ParseEffectOperation(target, effect, invokeUnit, rhsUnit));
         if (targetIndex < 0)
             return false;
 
@@ -146,7 +147,7 @@ public static class EffectAbilityHandler
                 targetList.Add(lhsUnit.pet);
                 break;
             case EffectTarget.CurrentPetBag:
-                var targetType = effect.abilityOptionDict.Get("target_type", string.Empty).Split('_');
+                var targetType = effect.targetType;
                 var targetNum = (int)Parser.ParseEffectOperation(effect.abilityOptionDict.Get("target_num", "-1"), effect, lhsUnit, rhsUnit);
                 var targetIndex = (int)Parser.ParseEffectOperation(effect.abilityOptionDict.Get("target_index", "-1"), effect, lhsUnit, rhsUnit);
 
@@ -260,7 +261,7 @@ public static class EffectAbilityHandler
                 targetList.Add(lhsUnit.pet);
                 break;
             case EffectTarget.CurrentPetBag:
-                var targetType = effect.abilityOptionDict.Get("target_type", string.Empty).Split('_');
+                var targetType = effect.targetType;
                 var targetNum = (int)Parser.ParseEffectOperation(effect.abilityOptionDict.Get("target_num", "-1"), effect, lhsUnit, rhsUnit);
                 var targetIndex = (int)Parser.ParseEffectOperation(effect.abilityOptionDict.Get("target_index", "-1"), effect, lhsUnit, rhsUnit);
 
@@ -534,7 +535,33 @@ public static class EffectAbilityHandler
         string transfer = effect.abilityOptionDict.Get("transfer", "false");
         string reverse = effect.abilityOptionDict.Get("reverse", "false");
 
-        List<int> idRange = idList.ToIntList('/');
+        Unit invokeUnit = (Unit)effect.invokeUnit;
+        Unit lhsUnit = (source == "me") ? state.GetUnitById(invokeUnit.id) : state.GetRhsUnitById(invokeUnit.id);
+        Unit rhsUnit = (target == "me") ? state.GetUnitById(invokeUnit.id) : state.GetRhsUnitById(invokeUnit.id);
+        var lhsBuffController = lhsUnit.pet.buffController;
+        var rhsBuffController = rhsUnit.pet.buffController;
+        var copyType = typeList.ToBuffType();
+        IEnumerable<Buff> buffs = null;
+
+        List<int> GetRandomBuff(bool unique = false) {
+            var all = lhsBuffController.GetRangeBuff(x => (!x.info.hide) && 
+                (!x.id.IsWithin(-10_0000, 10)) && (x.info.type != BuffType.Item))
+                .Select(x => x.id).ToList();
+
+            if (unique) 
+                all.RemoveAll(id => rhsBuffController.GetBuff(id) != null);
+            
+            if (List.IsNullOrEmpty(all))
+                return new List<int>();
+
+            return all.Random(1);
+        }
+
+        List<int> idRange = idList switch {
+            "random"            => GetRandomBuff(false),
+            "unique[random]"    => GetRandomBuff(true),
+            _                   => idList.ToIntList('/'),
+        };
         string[] typeRange = typeList.Split('/');
         bool isId = (idList != "0") && (idRange.Count != 0);
         bool isType = (typeList != "none");
@@ -544,14 +571,6 @@ public static class EffectAbilityHandler
 
         if (!bool.TryParse(transfer, out bool isTransfer) || !bool.TryParse(reverse, out bool isReverse))
             return false;
-        
-        Unit invokeUnit = (Unit)effect.invokeUnit;
-        Unit lhsUnit = (source == "me") ? state.GetUnitById(invokeUnit.id) : state.GetRhsUnitById(invokeUnit.id);
-        Unit rhsUnit = (target == "me") ? state.GetUnitById(invokeUnit.id) : state.GetRhsUnitById(invokeUnit.id);
-        var lhsBuffController = lhsUnit.pet.buffController;
-        var rhsBuffController = rhsUnit.pet.buffController;
-        var copyType = typeList.ToBuffType();
-        IEnumerable<Buff> buffs = null;
 
         if (isId) {
             buffs = lhsBuffController.GetRangeBuff(x => idRange.Contains(x.id));

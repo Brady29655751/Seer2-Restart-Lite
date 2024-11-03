@@ -17,6 +17,7 @@ public class BattleAudioView : BattleBaseView
         
         yield return new WaitForSeconds(1.5f);
 
+        /*
         AudioClip bgm = null;
 
         if (!battle.settings.isMod) {
@@ -24,8 +25,9 @@ public class BattleAudioView : BattleBaseView
             AudioSystem.instance.PlayMusic(bgm, AudioVolumeType.BattleBGM);
             yield break;
         }
+        */
 
-        ResourceManager.instance.GetLocalAddressables<AudioClip>("BGM/fight/BGM_" + GetBattleBGMId(battle.settings.mode) + ".mp3", true,
+        ResourceManager.instance.GetLocalAddressables<AudioClip>("BGM/fight/BGM_" + GetBattleBGMId(battle.settings.mode) + ".mp3", battle.settings.isMod,
             (bgm) => AudioSystem.instance.PlayMusic(bgm, AudioVolumeType.BattleBGM));
     }
 

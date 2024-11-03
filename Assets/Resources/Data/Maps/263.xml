@@ -1,0 +1,343 @@
+<map name="火焰山" category="4" id="263" weather="3">
+	<fightMap>100004</fightMap>
+	<music category="4">
+		<bgm>BGM_260</bgm>
+		<fx>FX_123</fx>
+	</music>
+	<initialPoint>660,95</initialPoint>
+	<entities>
+		<npc id="26301" resId="26301" name="Lv 35 巴尔卡" size="110,108" pos="185,215" namePos="0,-10">
+			<description>没有什么王者能永远统治</description>
+			<dialog>
+				<branch id="default" name="巴尔卡" icon="26301" size="110,108" pos="0,45">
+					<content><![CDATA[火幻氏族！你会重夺以往的荣耀！]]></content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[加油！]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+						<reply type="click">
+							<description><![CDATA[我想和你切磋]]></description>
+							<action>battle</action>
+							<param>default</param>
+						</reply>
+					</replyHandler>
+				</branch>
+				<branch id="reward" name="巴尔卡" icon="26301" size="110,108" pos="0,45">
+					<content><![CDATA[你是位非常厉害的勇士，这些奖励送给你]]></content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[谢谢]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+						<reply type="branch">
+							<action>setItem</action>
+							<param>add</param>
+							<param>10238,3</param>
+						</reply>
+						<reply type="branch">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=3个纷绚果萃已经放入精灵背包</param>
+							<param>item_icon=item[10238]</param>
+							<param>option_num=1</param>
+						</reply>
+						<reply type="branch">
+							<action>setActivity</action>
+							<param>10003</param>
+							<param>done[1]=true</param>
+						</reply>
+					</replyHandler>
+				</branch>
+			</dialog>
+			<battle>
+				<branch id="default">
+					<settings count="6">
+						<weather>3</weather>
+					</settings>
+					<enemy>
+						<pet id="39" level="10">
+							<loopSkill>10956,10050,10050</loopSkill>
+						</pet>
+						<pet id="39" level="15">
+							<loopSkill>10957,10519,10519</loopSkill>
+						</pet>
+						<pet id="39" level="20">
+							<loopSkill>10957,10958</loopSkill>
+						</pet>
+						<pet id="39" level="25">
+							<loopSkill>10957,10958</loopSkill>
+						</pet>
+						<pet id="40" level="30">
+							<loopSkill>10957,10959,10959</loopSkill>
+						</pet>
+						<pet id="40" level="35">
+							<loopSkill>10957,10959,10959</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setItem</action>
+							<param>add</param>
+							<param>10201,3</param>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=3个砂糖甜饼已经放入背包</param>
+							<param>item_icon=item[10201]</param>
+							<param>option_num=1</param>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>10003</param>
+							<param>guarantee[1]=[expr]activity[10003].guarantee[1]+1</param>
+						</button>
+						<button type="auto">
+							<action>openDialog</action>
+							<param>reward</param>
+							<condition>random[0~100]LTE10|activity[10003].guarantee[1]GTE[int]20[default]0</condition>
+							<condition>activity[10003].done[1]=[bool]false[default]false</condition>
+						</button>
+					</winHandler>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>openDialog</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<npc id="26302" resId="26302" name="Lv75 洛克" size="97,96" pos="350,190" namePos="0,-5">
+			<description>战争！掠夺！</description>
+			<dialog>
+				<branch id="default" name="洛克" icon="26302" size="97,96" pos="0,45">
+					<content><![CDATA[哇哈哈哈哈哈！你也要来挑战我吗！]]></content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[好可怕阿！]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+						<reply type="click">
+							<description><![CDATA[我要挑战你]]></description>
+							<action>battle</action>
+							<param>default</param>
+						</reply>
+					</replyHandler>
+				</branch>
+				<branch id="reward" name="洛克" icon="26302" size="97,96" pos="0,45">
+					<content><![CDATA[哼！勇气可嘉！]]></content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[（汗）]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+						<reply type="branch">
+							<action>setItem</action>
+							<param>add</param>
+							<param>2,50</param>
+						</reply>
+						<reply type="branch">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=50 星钻已经放入背包</param>
+							<param>item_icon=item[2]</param>
+							<param>option_num=1</param>
+						</reply>
+						<reply type="branch">
+							<action>setActivity</action>
+							<param>10003</param>
+							<param>done[2]=true</param>
+						</reply>
+					</replyHandler>
+				</branch>
+			</dialog>
+			<battle>
+				<branch id="default">
+					<settings count="6">
+						<weather>3</weather>
+					</settings>
+					<enemy>
+						<pet id="76" level="40">
+							<loopSkill>10985,10988</loopSkill>
+						</pet>
+						<pet id="76" level="50">
+							<loopSkill>10985,10988</loopSkill>
+						</pet>
+						<pet id="76" level="60">
+							<loopSkill>10985,10988</loopSkill>
+						</pet>
+						<pet id="76" level="65">
+							<loopSkill>10985,10988</loopSkill>
+						</pet>
+						<pet id="76" level="70">
+							<loopSkill>10985,10988</loopSkill>
+						</pet>
+						<pet id="76" level="75">
+							<loopSkill>10985,10988</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setItem</action>
+							<param>add</param>
+							<param>1,1000</param>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=1000 赛尔豆已经放入背包</param>
+							<param>item_icon=item[1]</param>
+							<param>option_num=1</param>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>10003</param>
+							<param>guarantee[2]=[expr]activity[10003].guarantee[2]+1</param>
+						</button>
+						<button type="auto">
+							<action>openDialog</action>
+							<param>reward</param>
+							<condition>random[0~100]LTE10|activity[10003].guarantee[2]GTE[int]20[default]0</condition>
+							<condition>activity[10003].done[2]=[bool]false[default]false</condition>
+						</button>
+					</winHandler>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>openDialog</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<npc id="26303" resId="Pets/pet/193" name="Lv100 凯瑟琳" size="75,104" pos="520,140" namePos="0,-5">
+			<description>……</description>
+			<dialog>
+				<branch id="default" name="凯瑟琳" icon="Pets/pet/193" size="75,104" pos="0,45">
+					<content><![CDATA[展....示你的.....热忱]]></content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[（听不太清楚说什么）]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+						<reply type="click">
+							<description><![CDATA[我会展示我的热血和荣耀]]></description>
+							<action>battle</action>
+							<param>default</param>
+						</reply>
+					</replyHandler>
+				</branch>
+				<branch id="done" name="凯瑟琳" icon="Pets/pet/193" size="75,104" pos="0,45">
+					<content><![CDATA[（满意的眼神）]]></content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[呃，谢谢？]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+					</replyHandler>
+				</branch>
+				<branch id="boss_escape" name="凯瑟琳" icon="Pets/pet/193" size="75,104" pos="0,45">
+					<content><![CDATA[我...和你...走]]></content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[好耶！]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+						<reply type="branch">
+							<action>getPet</action>
+							<param>192</param>
+						</reply>
+						<reply type="branch">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=【凯瑟】已经放入精灵仓库</param>
+							<param>item_icon=pet[192]</param>
+							<param>option_num=1</param>
+						</reply>
+						<reply type="branch">
+							<action>setActivity</action>
+							<param>10003</param>
+							<param>done[3]=true</param>
+						</reply>
+					</replyHandler>
+				</branch>
+			</dialog>
+			<battle>
+				<branch id="default">
+					<settings count="6">
+						<weather>3</weather>
+					</settings>
+					<enemy>
+						<pet id="40" level="100">
+							<status>
+								<atk>1000</atk>
+								<mat>1000</mat>
+								<hp>2500</hp>
+							</status>
+							<initBuff>13,14,17,20,98</initBuff>
+							<loopSkill>10956,10963,10966</loopSkill>
+							<superSkill>10964</superSkill>
+						</pet>
+						<pet id="76" level="100">
+							<status>
+								<atk>1000</atk>
+								<mat>1000</mat>
+								<def>600</def>
+								<mdf>600</mdf>
+								<hp>2500</hp>
+							</status>
+							<initBuff>13,14,17,20,98</initBuff>
+							<loopSkill>10985,10985,10991</loopSkill>
+							<superSkill>10992</superSkill>
+						</pet>
+						<pet id="193" level="100">
+							<status>
+								<atk>1000</atk>
+								<mat>1000</mat>
+								<def>1000</def>
+								<mdf>1000</mdf>
+								<hp>5000</hp>
+							</status>
+							<initBuff>13,14,17,20,98</initBuff>
+							<loopSkill>11008,11007,11009</loopSkill>
+							<superSkill>11006</superSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>openDialog</action>
+							<param>boss_escape</param>
+						</button>
+					</winHandler>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>openDialog</action>
+					<param>default</param>
+					<condition>activity[10003].done[3]=[bool]false[default]false</condition>
+				</button>
+				<button type="click">
+					<action>openDialog</action>
+					<param>done</param>
+					<condition>activity[10003].done[3]=[bool]true[default]false</condition>
+				</button>
+			</eventHandler>
+		</npc>
+        <teleport id="1" name="赤链山脉" pos="775,80" targetMapId="261"/>
+	</entities>
+</map>
