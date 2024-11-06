@@ -59,7 +59,8 @@ public static class TeleportHandler
         SceneLoader.instance.ChangeScene(SceneId.Map);
     }
 
-    public static void SwitchDayNight(Vector2 targetPos = default(Vector2)) {
-        Teleport(-Player.instance.currentMapId, targetPos);
+    public static void SwitchDayNight(int dayNightSwitch, Vector2 targetPos = default(Vector2)) {
+        int targetMapId = (Mathf.Abs(dayNightSwitch) == 1) ? (-Player.instance.currentMapId) : dayNightSwitch;
+        Teleport(targetMapId, targetPos);
     }
 }

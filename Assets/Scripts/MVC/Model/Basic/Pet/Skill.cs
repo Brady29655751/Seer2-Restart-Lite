@@ -32,7 +32,7 @@ public class Skill
     public List<string> referBuffList = new List<string>();
 
     public float critical;
-    public int combo;
+    public int combo, chain;
     public int priority;
     public bool ignoreShield = false;
     public bool ignorePowerup = false;
@@ -69,7 +69,7 @@ public class Skill
         accuracy = int.Parse(_slicedData[6]);
         options.ParseOptions(_slicedData[7]);
 
-        combo = 1;
+        combo = chain = 1;
         InitOptionsProperty();
 
         rawDescription = _slicedData[8];
@@ -86,7 +86,7 @@ public class Skill
         this.accuracy = accuracy;
         this.options.ParseOptions(options);
         
-        combo = 1;
+        combo = chain = 1;
         InitOptionsProperty();
 
         this.rawDescription = rawDescription;
@@ -118,6 +118,7 @@ public class Skill
         isSecondSuper = rhs.isSecondSuper;
         critical = rhs.critical;
         combo = rhs.combo;
+        chain = rhs.chain;
         priority = rhs.priority;
         ignoreShield = rhs.ignoreShield;
         ignorePowerup = rhs.ignorePowerup;
@@ -139,7 +140,7 @@ public class Skill
             (isSecondSuper ? ("second_super=true&") : string.Empty) +
             (ignoreShield ? ("ignore_shield=" + ignoreShield + "&") : string.Empty) + 
             (ignorePowerup ? ("ignore_powerup=" + ignorePowerup + "&") : string.Empty) + 
-            (List.IsNullOrEmpty(referBuffList) ? string.Empty : ("ref_buff=" + referBuffList.ConcatToString("/")));
+            (ListHelper.IsNullOrEmpty(referBuffList) ? string.Empty : ("ref_buff=" + referBuffList.ConcatToString("/")));
         
         string otherOptionString = options.Where(entry => !defaultOptionKeys.Contains(entry.Key)).Select(entry => entry.Key + "=" + entry.Value).ConcatToString("&");
         string allOptionString = string.IsNullOrEmpty(rawOptionString + otherOptionString) ? "none" : (rawOptionString + "&" + otherOptionString); 
@@ -240,7 +241,7 @@ public class Skill
         if ((accuracy <= 100) && (accuracy != (isAttack ? 95 : 100))) {
             desc = "[52e5f9]【命中率 " + accuracy + "%】[-][ENDL]" + desc;
         }
-        if (!List.IsNullOrEmpty(referBuffList)) {
+        if (!ListHelper.IsNullOrEmpty(referBuffList)) {
             for (int i = 0; i < referBuffList.Count; i++) {
                 bool isWithValue = referBuffList[i].TryTrimParentheses(out var value);
                 var buffId = int.Parse(isWithValue ? referBuffList[i].Substring(0, referBuffList[i].IndexOf('[')) : referBuffList[i]);
@@ -325,6 +326,7 @@ public class Skill
             "priority" => priority,
             "critical" => critical,
             "combo" => combo,
+            "chain" => chain,
             "ignoreShield" => ignoreShield ? 1 : 0,
             "ignorePowerup" => ignorePowerup ? 1 : 0,
             "effect" => effects.Count,
@@ -371,6 +373,9 @@ public class Skill
                 return;
             case "combo":
                 combo = (int)value;
+                return;
+            case "chain":
+                chain = (int)value;
                 return;
             case "ignoreShield":
                 ignoreShield = (value != 0);

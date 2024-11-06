@@ -39,7 +39,7 @@ public static class ItemUseCountHandler
     }
 
     public static int StuffMaxUseCount(this Item item, object invokeUnit, BattleState state) {
-        if (List.IsNullOrEmpty(item.effects))
+        if (ListHelper.IsNullOrEmpty(item.effects))
             return int.MaxValue;
 
         return item.effects.Select(x => int.Parse(x.abilityOptionDict.Get("max_use", "1"))).Min();

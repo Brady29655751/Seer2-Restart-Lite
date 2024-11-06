@@ -137,7 +137,7 @@ public class PetSkill
     }
 
     public Skill GetBackupSuperSkill() {
-        if(List.IsNullOrEmpty(ownSuperSkill) || (ownSuperSkill.Count == 1))
+        if(ListHelper.IsNullOrEmpty(ownSuperSkill) || (ownSuperSkill.Count == 1))
             return null;
         
         int id = ownSuperSkill.Select(x => x.id).IndexOf(superSkillId);

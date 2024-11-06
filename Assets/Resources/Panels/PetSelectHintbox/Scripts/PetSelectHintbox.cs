@@ -22,7 +22,7 @@ public class PetSelectHintbox : Hintbox
             case "storage":
                 SetStorage(param.Split('/').Select(p => {
                     var petInfo = p.ToIntList();
-                    if (List.IsNullOrEmpty(petInfo))
+                    if (ListHelper.IsNullOrEmpty(petInfo))
                         return null;
 
                     if (petInfo.Count == 1)

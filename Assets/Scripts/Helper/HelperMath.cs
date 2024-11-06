@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace UnityEngine {
 
-public static class Math {
+public static class MathHelper {
 
     /// <summary>
     /// Check if a number is in the range (Max exclusive).

@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace System {
-    public static class String {
+    public static class StringHelper {
         public static string ConcatToString(this IEnumerable<string> stringList, string eachConcatWith) {
             string result = string.Empty;
             foreach (var str in stringList) {   

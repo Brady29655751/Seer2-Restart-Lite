@@ -122,7 +122,20 @@ public class BattleState
     }
 
     public virtual void GiveTurnToNextUnit() {
-        whosTurn = isAllTurnDone ? 0 : -whosTurn;
+        if ((!masterUnit.isDone) && (!clientUnit.isDone))
+            return;
+
+        if (!masterUnit.isDone) {
+            whosTurn = masterUnit.id;
+            return;
+        }
+
+        if (!clientUnit.isDone) {
+            whosTurn = clientUnit.id;
+            return;
+        }
+
+        whosTurn = 0;
     }
 
     public virtual Unit GetUnitById(int id) {

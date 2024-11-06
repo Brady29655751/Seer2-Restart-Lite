@@ -92,7 +92,7 @@ public class Effect {
             return "none";
 
         var dict = new Dictionary<string, string>(abilityOptionDict);
-        if (!List.IsNullOrEmpty(excludeKeys))
+        if (!ListHelper.IsNullOrEmpty(excludeKeys))
             excludeKeys.ForEach(x => dict.Remove(x));
 
         return dict.Select(entry => entry.Key + "=" + entry.Value).ConcatToString("&");

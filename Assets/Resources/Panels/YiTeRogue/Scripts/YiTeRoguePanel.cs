@@ -14,7 +14,7 @@ public class YiTeRoguePanel : Panel
     
 
     public override void Init() {
-        //if (List.IsNullOrEmpty(rogueData.eventMap))
+        //if (ListHelper.IsNullOrEmpty(rogueData.eventMap))
             rogueData.CreateRogue();
         
         rogueView.SetMap();

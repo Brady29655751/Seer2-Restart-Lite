@@ -64,7 +64,7 @@ public class PetUIInfo
 
     public string[] GetRawInfoStringArray() {
         // If no info, then no need to write.
-        if (List.IsNullOrEmpty(specialSkinList) && List.IsNullOrEmpty(options))
+        if (ListHelper.IsNullOrEmpty(specialSkinList) && ListHelper.IsNullOrEmpty(options))
             return null;
 
         var rawSkinList = specialSkinList.Select(x => x.ToString()).ConcatToString("/");

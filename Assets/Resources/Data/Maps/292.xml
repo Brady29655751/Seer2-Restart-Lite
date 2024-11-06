@@ -1,0 +1,78 @@
+<map name="幻空岭" category="4" id="292">
+	<fightMap>100004</fightMap>
+	<music category="4">
+		<bgm>BGM_292</bgm>
+		<fx>FX_119</fx>
+	</music>
+	<initialPoint>390,105</initialPoint>
+	<entities>
+		<npc id="29201" resId="Pets/pet/983" name="Lv 105 幻灵兽" size="280,210" pos="350,190" namePos="30,0">
+			<description><![CDATA[幻灵兽]]></description>
+			<dialog>
+				<branch id="default" name="幻灵兽" icon="Pets/pet/983" size="132,90" pos="0,55">
+					<content><![CDATA[我是精灵王之躯体，火幻氏族不朽的守护者]]></content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[幻灵兽居然隐藏在神灯之中]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+						<reply type="click">
+							<description><![CDATA[挑战幻灵兽]]></description>
+							<action>battle</action>
+							<param>default</param>
+						</reply>
+					</replyHandler>
+				</branch>
+			</dialog>
+			<battle>
+				<branch id="default">
+					<settings count="6">
+						<weather>3</weather>
+					</settings>
+					<enemy>
+						<pet id="983" level="105">
+							<status>
+								<atk>500</atk>
+								<mat>500</mat>
+								<hp>25000</hp>
+							</status>
+							<initBuff>14,17,20,-3022,-3026,-3027</initBuff>
+							<headerSkill>11048,11046,11051,11048,11050</headerSkill>
+							<loopSkill>11041,11052,11045,11042</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>getPet</action>
+							<param>983,100</param>
+							<condition>activity[soul].done[north][3]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=【幻灵兽】已经放入精灵仓库</param>
+							<param>item_icon=pet[983]</param>
+							<param>option_num=1</param>
+							<condition>activity[soul].done[north][3]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>soul</param>
+							<param>done[north][3]=true</param>
+							<condition>activity[soul].done[north][3]=[bool]false[default]false</condition>
+						</button>
+					</winHandler>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>openDialog</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+        <teleport id="1" name="幻空通道" pos="720,180" targetMapId="291"/>
+	</entities>
+</map>

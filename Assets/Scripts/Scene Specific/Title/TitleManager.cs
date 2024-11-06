@@ -69,7 +69,7 @@ public class TitleManager : Manager<TitleManager>
             hintbox.SetTitle("获取资源档案失败");
             hintbox.SetContent("请到群内下载「基础资源包」\n解压后点击右下方的「导入资源包」按钮\n手动导入里面名为Resources的文件夹\n\n" +
                 "若要新增动画，同样到群内下载对应版本的「动画资源包」\n详情请查看群公告\n\n" +
-                "导入过程会花费大约60秒左右，请耐心等待\n若长时间无反应或卡在地图加载页面，可能为文件缺失，请重新正确导入", 16, FontOption.Arial);
+                "<color=#ffbb33>导入过程会卡顿，请耐心等待【导入成功】的提示出现</color>\n若长时间卡在地图加载页面，请重新正确导入", 16, FontOption.Arial);
             hintbox.SetOptionNum(1);
             return;
         }

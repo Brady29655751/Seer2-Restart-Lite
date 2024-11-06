@@ -71,7 +71,7 @@ public static class PetExpSystem
         var info = Pet.GetPetInfo(baseId);
         var evolveIds = info.exp.evolvePetIds;
 
-        if (List.IsNullOrEmpty(evolveIds) || (evolveIds.All(x => x == 0)))
+        if (ListHelper.IsNullOrEmpty(evolveIds) || (evolveIds.All(x => x == 0)))
             return null;
 
         for (int i = 0; i < evolveIds.Count; i++) {

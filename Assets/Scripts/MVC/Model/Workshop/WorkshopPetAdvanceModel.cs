@@ -209,7 +209,7 @@ public class WorkshopPetAdvanceModel : Module
         error = string.Empty;
 
         /*
-        if (List.IsNullOrEmpty(learnSkillInfoList)) {
+        if (ListHelper.IsNullOrEmpty(learnSkillInfoList)) {
             error = "技能不能为空！";
             return false;
         }

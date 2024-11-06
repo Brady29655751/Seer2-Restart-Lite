@@ -33,7 +33,7 @@ public class BuffInfo
     public Sprite icon { get => GetIcon(); }
 
     public static bool IsMod(int id) {
-        return id.IsWithin(80_0013, 89_9999) || id.IsWithin(90_0013, 99_9999) || (id < -10_0000);
+        return id.IsWithin(51_0001, 59_9999) || id.IsWithin(80_0013, 89_9999) || id.IsWithin(90_0013, 99_9999) || (id < -10_0000);
     }
 
     public BuffInfo(int id, string name, BuffType type, CopyHandleType copyHandleType, int turn, string options, string description) {

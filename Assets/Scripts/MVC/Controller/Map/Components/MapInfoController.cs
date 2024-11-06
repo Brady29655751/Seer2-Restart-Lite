@@ -31,6 +31,6 @@ public class MapInfoController : UIModule
     }
 
     public void SwitchDayNight() {
-        TeleportHandler.SwitchDayNight();
+        TeleportHandler.SwitchDayNight(infoModel.dayNightSwitch);
     }
 }

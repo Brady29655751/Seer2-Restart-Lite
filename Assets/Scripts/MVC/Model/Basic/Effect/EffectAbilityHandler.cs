@@ -196,7 +196,7 @@ public static class EffectAbilityHandler
             if ((type == "item") && (who == "me")) {
                 lhsUnit.skillSystem.itemHeal += healAdd;
             } else if ((type == "skill") && (who == "me")) {
-                lhsUnit.skillSystem.skillHeal += healAdd;;
+                lhsUnit.skillSystem.skillHeal += healAdd;
             } else if (type == "buff") {
                 lhsUnit.skillSystem.buffHeal += healAdd;
                 healAdd = 0;
@@ -374,7 +374,7 @@ public static class EffectAbilityHandler
         string add = effect.abilityOptionDict.Get("add", "0");
 
         var typeList = type.ToIntList('/');
-        if (List.IsNullOrEmpty(typeList))
+        if (ListHelper.IsNullOrEmpty(typeList))
             return false;
 
         for (int i = 0; i < typeList.Count; i++) {
@@ -444,7 +444,7 @@ public static class EffectAbilityHandler
                 return false;
 
             buffIdList = buffIdList.Where(x => !buffController.buffs.Exists(y => y.id == x)).ToList();
-            if (List.IsNullOrEmpty(buffIdList))
+            if (ListHelper.IsNullOrEmpty(buffIdList))
                 return false;
 
             buffId = buffIdList.Random();
@@ -551,7 +551,7 @@ public static class EffectAbilityHandler
             if (unique) 
                 all.RemoveAll(id => rhsBuffController.GetBuff(id) != null);
             
-            if (List.IsNullOrEmpty(all))
+            if (ListHelper.IsNullOrEmpty(all))
                 return new List<int>();
 
             return all.Random(1);
@@ -710,7 +710,7 @@ public static class EffectAbilityHandler
             var skillIdList = value.Split('/').Select(x => (int)Parser.ParseEffectOperation(x, effect, lhsUnit, rhsUnit)).ToList();
             skillIdList = skillIdList.Random(randomTypeCount, false);
 
-            if ((!List.IsNullOrEmpty(skillIdList)) && (skillIdList.Count > 1)) {
+            if ((!ListHelper.IsNullOrEmpty(skillIdList)) && (skillIdList.Count > 1)) {
                 var effectList = new List<Effect>();
                 skillIdList.ForEach(skillId => effectList.AddRange(Skill.GetSkill(skillId, false)?.effects
                     .Select(x => new Effect(x)) ?? new List<Effect>()));
@@ -847,14 +847,14 @@ public static class EffectAbilityHandler
             // Else take it as an int list and get skill ids.
             if (normalSkillExpr == "op") {
                 var opSkillController = rhsUnit.pet.skillController;
-                normalSkills = (List.IsNullOrEmpty(opSkillController.normalSkills) ? opSkillController.loopSkills : opSkillController.normalSkills)
+                normalSkills = (ListHelper.IsNullOrEmpty(opSkillController.normalSkills) ? opSkillController.loopSkills : opSkillController.normalSkills)
                     .GroupBy(x => x?.id ?? 0).Select(x => x.First()).Take(4).ToArray();
 
                 Array.Resize(ref normalSkills, 4);
             } else if (normalSkillExpr.TryTrimStart("shift", out var normalTrim) &&
                 normalTrim.TryTrimParentheses(out var normalShift) &&
                 int.TryParse(normalShift, out var normalShiftCount)) {
-                normalSkills = (List.IsNullOrEmpty(battlePet.skillController.normalSkills) ? battlePet.skillController.loopSkills : battlePet.skillController.normalSkills)
+                normalSkills = (ListHelper.IsNullOrEmpty(battlePet.skillController.normalSkills) ? battlePet.skillController.loopSkills : battlePet.skillController.normalSkills)
                     .Where(x => x != null).Select(x => Skill.GetSkill(x.id + normalShiftCount, false)).Take(4).ToArray();
             } else {
                 normalSkills = normalSkillExpr.ToIntList('/').Take(4).Select(id => Skill.GetSkill(id, false)).ToArray();

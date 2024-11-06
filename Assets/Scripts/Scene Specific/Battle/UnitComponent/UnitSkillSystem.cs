@@ -78,8 +78,10 @@ public class UnitSkillSystem
     }
 
     public int CalculateDamage(BattlePet atkPet, BattlePet defPet) {
+        skillDamage = 0;
+
         if (skill == null) {
-            return 0;
+            return skillDamage;
         }
 
         for (int i = 0; i < skill.combo; i++) {
