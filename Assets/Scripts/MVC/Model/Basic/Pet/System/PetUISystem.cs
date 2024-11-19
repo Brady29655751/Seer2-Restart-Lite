@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.UI;
 
 public static class PetUISystem
 {
@@ -52,10 +53,15 @@ public static class PetUISystem
         return ResourceManager.instance.GetPetAnimInstance(petId, $"{petId}-" + animName);
     }
 
+    public static Sprite GetSprite(this StatusType statusType) {
+        var statusName = Status.typeNames[(int)statusType];
+        return ResourceManager.instance.Get<Sprite>("Panels/PetBag/Sprites/petValue/" + statusName);
+    }
+
     public static Sprite GetSprite(this Element element)
     {
         int index = (int)element;
-        return ResourceManager.instance.GetSprite("Elements/" + index.ToString());
+        return ResourceManager.instance.GetSprite("Elements/" + index.ToString()) ?? SpriteSet.Question;
     }
 
     public static Sprite GetSprite(this IVRanking ranking)

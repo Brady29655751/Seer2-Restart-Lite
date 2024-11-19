@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using SimpleFileBrowser;
 
 public class LoginRoleController : Module
 {
@@ -16,10 +17,12 @@ public class LoginRoleController : Module
         roleView.SetChosen(chosen);
     }
 
-    public bool Login() {
-        if (roleModel.data.IsEmpty()) {
+    public bool Login(out string error) {
+        error = string.Empty;
+
+        if (roleModel.data.IsEmpty())
             return false;
-        }
+        
         Player.instance.gameData = roleModel.data;
         GameManager.instance.ChangeState(GameState.Login);
         return true;

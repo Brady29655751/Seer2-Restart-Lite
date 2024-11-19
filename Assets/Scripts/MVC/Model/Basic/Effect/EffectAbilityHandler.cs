@@ -40,8 +40,7 @@ public static class EffectAbilityHandler
             return false;
 
         string prob = effect.abilityOptionDict.Get("prob", "0");
-        float value;
-        if (!float.TryParse(prob, out value))
+        if (!float.TryParse(prob, out float value))
             return false;
 
         Unit invokeUnit = (Unit)effect.invokeUnit;
@@ -63,7 +62,7 @@ public static class EffectAbilityHandler
                 value *= 2f;
         }
 
-        bool isSuccess = (value >= lhsUnit.RNG());
+        bool isSuccess = (rhsUnit.pet.basic.baseId == 10) || (value >= lhsUnit.RNG());
         lhsUnit.skill.options.Set("capture_result", isSuccess ? "true" : "false");
         
         if (isSuccess) {
@@ -101,6 +100,12 @@ public static class EffectAbilityHandler
         float petSendAngerRatio = (petChangeUnit.pet.buffController.GetBuff(63)?.value ?? 80) / 100f;
         var inheritBuffs = petChangeUnit.pet.buffs.FindAll(x => x.info.inherit);
         var legacyBuffs = petChangeUnit.pet.buffs.FindAll(x => x.info.legacy);
+        var tmpPhase = state.phase;
+
+        // On before pet change
+        state.phase = EffectTiming.OnBeforePetChange;
+        state.ApplyBuffs();
+        state.phase = tmpPhase;
 
         // Remove buffs that dont keep when change pet. Refresh stayTurn of all pet to 0.
         petChangeUnit.pet.buffController.RemoveRangeBuff(x => !x.info.keep, petChangeUnit, state);
@@ -115,6 +120,11 @@ public static class EffectAbilityHandler
         // Record that this pet has participated in fight.
         if (petChangeUnit.id == state.myUnit.id)
             state.result.AddFightPetCursor(targetIndex);
+
+        // On after pet change
+        state.phase = EffectTiming.OnAfterPetChange;
+        state.ApplyBuffs();
+        state.phase = tmpPhase;
         
         return true;
     }
@@ -663,6 +673,8 @@ public static class EffectAbilityHandler
             skillSystem.skillDamage = (int)Operator.Operate(op, skillSystem.skillDamage, damage);
         } else if (type == "item") {
             skillSystem.itemDamage = (int)Operator.Operate(op, skillSystem.itemDamage, damage);
+        } else {
+            skillSystem.damageDict[type] = (int)Operator.Operate(op, skillSystem.damageDict.Get(type, 0), damage);
         }
 
         return true;

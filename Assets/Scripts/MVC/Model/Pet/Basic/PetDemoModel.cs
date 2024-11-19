@@ -5,7 +5,7 @@ using UnityEngine;
 public class PetDemoModel : Module
 {
     public Pet currentPet { get; private set; }
-    public bool animMode { get; private set; } = true;
+    [SerializeField] public bool animMode = true;
 
     public string petName => currentPet.name;
 

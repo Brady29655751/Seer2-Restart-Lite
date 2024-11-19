@@ -98,9 +98,11 @@ public class PetBagController : Module
     }
 
     public void OpenPetStoragePanel() {
-        demoController?.SetPetAnimationActive(false);
         PetStoragePanel storagePanel = Panel.OpenPanel<PetStoragePanel>();
         storagePanel.onCloseEvent += RefreshPetBag;
     }
     
+    public void TogglePetItemPanel() {
+        buttonView.TogglePetItemPanel();
+    }
 }

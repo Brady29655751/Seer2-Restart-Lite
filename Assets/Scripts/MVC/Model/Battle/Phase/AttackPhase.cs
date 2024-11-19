@@ -59,8 +59,8 @@ public class AttackPhase : BattlePhase
         var defUnit = state.defUnit;
 
         if (atkUnit.skillSystem.isHit) {
-            defUnit.pet.hp -= atkUnit.skillSystem.skillDamage;
-            defUnit.pet.anger += Mathf.FloorToInt((defUnit.pet.maxAnger / 2 - 1) * (1f * atkUnit.skillSystem.skillDamage / defUnit.pet.maxHp) * (defUnit.pet.battleStatus.angrec / 100f));
+            defUnit.pet.hp -= atkUnit.skillSystem.totalSkillDamage;
+            defUnit.pet.anger += Mathf.FloorToInt((defUnit.pet.maxAnger / 2 - 1) * (1f * atkUnit.skillSystem.totalSkillDamage / defUnit.pet.maxHp) * (defUnit.pet.battleStatus.angrec / 100f));
         }
         atkUnit.hudSystem.OnHit(atkUnit, true);
         defUnit.hudSystem.OnHit(defUnit, false);

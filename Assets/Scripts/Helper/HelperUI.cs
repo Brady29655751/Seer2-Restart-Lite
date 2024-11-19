@@ -126,6 +126,7 @@ namespace UnityEngine.UI
     public static class SpriteSet
     {
         public static Sprite Empty => RM.instance.Get<Sprite>("Sprites/Empty");
+        public static Sprite Question => RM.instance.Get<Sprite>("Sprites/Question");
         public static Sprite GetDefaultIconSprite(bool bold = false) =>
             RM.instance.Get<Sprite>("Panels/PetBag/Sprites/" + (bold ? 87 : 85));
 

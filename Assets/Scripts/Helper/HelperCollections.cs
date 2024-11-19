@@ -7,6 +7,11 @@ using UnityEngine.Rendering;
 namespace System.Collections.Generic {
 
 public static class DictionaryHelper {
+
+    public static bool IsNullOrEmpty<TKey, TValue>(this IDictionary<TKey, TValue> dict) {
+        return (dict == null) || (dict.Count == 0);
+    }
+
     public static TValue Get<TKey, TValue>(this IDictionary<TKey, TValue> dict, TKey key, TValue defaultReturn = default(TValue)) { 
         if (dict.ContainsKey(key))
             return dict[key];
@@ -15,11 +20,19 @@ public static class DictionaryHelper {
     }
         
     public static void Set<TKey, TValue>(this IDictionary<TKey, TValue> dict, TKey key, TValue value) {
+        dict[key] = value;
+        /*
         if (dict.ContainsKey(key)) {
             dict[key] = value;
         } else {
             dict.Add(key, value);
         }
+        */
+    }
+
+    public static void AddRange<TKey, TValue>(this IDictionary<TKey, TValue> dict, IDictionary<TKey, TValue> rhs) {
+        foreach (var item in rhs)
+            dict.Set(item.Key, item.Value);
     }
 }
 

@@ -1,6 +1,9 @@
+using System;
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class UnitSkillSystem
 {   
@@ -15,11 +18,17 @@ public class UnitSkillSystem
     public bool isCritical = false;
 
 
-    // damage to op, buff damage to me, heal to me
+    // damage to op, buff damage to me, heal to me.
+    public Dictionary<string, int> damageDict = new Dictionary<string, int>();
+
     public int skillDamage = 0, skillHeal = 0;
     public int itemDamage = 0, itemHeal = 0;
     public int buffDamage = 0, buffHeal = 0;
-    public int damage => skillDamage + itemDamage;
+
+    public int totalSkillDamage => skillDamage + damageDict.Where(entry => entry.Key.StartsWith("skill")).Sum(entry => entry.Value);
+    public int totalItemDamage => itemDamage + damageDict.Where(entry => entry.Key.StartsWith("item")).Sum(entry => entry.Value);
+    public int totalBuffDamage => buffDamage + damageDict.Where(entry => entry.Key.StartsWith("buff")).Sum(entry => entry.Value);
+    public int damage => totalSkillDamage + totalItemDamage;
     public int heal => skillHeal + itemHeal;
 
     public UnitSkillSystem() {
@@ -37,6 +46,8 @@ public class UnitSkillSystem
         isHit = rhs.isHit;
         isCritical = rhs.isCritical;
 
+        damageDict = new Dictionary<string, int>(rhs.damageDict);
+
         skillDamage = rhs.skillDamage;
         buffDamage = rhs.buffDamage;
         itemDamage = rhs.itemDamage;
@@ -53,6 +64,8 @@ public class UnitSkillSystem
         weatherBuff = sameElementBuff = elementRelation = 1f;
         isHit = true;
         isCritical = false;
+
+        damageDict.Clear();
 
         skillDamage = itemDamage = buffDamage = 0;
         skillHeal = itemHeal = buffHeal = 0;
@@ -100,6 +113,16 @@ public class UnitSkillSystem
     }
 
     public float GetSkillSystemIdentifier(string id) {
+        if (id.TryTrimStart("damage", out var trimId) && 
+            trimId.TryTrimParentheses(out var damageType)) 
+        {
+            return damageType switch {
+                "item" => totalItemDamage,
+                "buff" => totalBuffDamage,
+                _ => damageDict[damageType],
+            };
+        }
+
         return id switch {
             "level" => level,
             "atk" => atk,
@@ -107,8 +130,10 @@ public class UnitSkillSystem
             "weather" => weatherBuff,
             "sameElement" => sameElementBuff,
             "elementRelation" => elementRelation,
-            "damage" => skillDamage,
+            "damage" => totalSkillDamage,
             "heal" => skillHeal,
+            "heal[item]" => itemHeal,
+            "heal[buff]" => buffHeal,
             "hit" => isHit ? 1 : 0,
             "criticalResult" => isCritical ? 1 : 0,
             _ => float.MinValue,

@@ -88,7 +88,7 @@ public class PassivePetChangePhase : BattlePhase
         {
             var cursor = opUnit.petSystem.cursor;
             var defaultSkill = opUnit.pet.isDead
-                ? Skill.GetPetChangeSkill(cursor, cursor + 1, true)
+                ? Skill.GetPetChangeSkill(cursor, opUnit.petSystem.petBag.FindIndex(x => !x.isDead), true)
                 : opUnit.pet.GetDefaultSkill();
             SetSkill(defaultSkill, false);
         }

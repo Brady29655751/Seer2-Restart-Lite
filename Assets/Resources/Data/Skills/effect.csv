@@ -937,7 +937,7 @@ id,timing,priority,target,condition,cond_option,effect,effect_option
 10926,on_final_dmg_cal,900,skill,none,none,set_damage,op=+&value=op.pet.height
 10927,on_before_attack,-1,skill,pet,type=height&height_op=<&height_cmp=op.pet.height,set_skill,type=combo&op=SET&value=3
 10928,on_before_attack,-1,skill,pet,type=height&height_op=GTE&height_cmp=100,set_skill,type=accuracy&op=+&value=1000
-10929,on_dmg_cal\on_after_attack\on_after_attack,100\-1\0,pet\pet\pet,none\buff\buff,none\who=op&id=3000&type=value&value_op=>&value_cmp=1\who=op&id=3000&own=true,set_skill\add_status\set_buff,type=def&op=*&value=0.6\who=op&type=4&add=25\who=op&id=3000&type=value&op=-&value=1
+10929,on_dmg_cal\on_after_attack\on_after_attack,100\-1\0,pet\pet\pet,buff\buff\buff,who=op&id=3000&own=true\who=op&id=3000&type=value&value_op=>&value_cmp=1\who=op&id=3000&own=true,set_skill\add_status\set_buff,type=def&op=*&value=0.6\who=op&type=4&add=25\who=op&id=3000&type=value&op=-&value=1
 10930,on_before_attack,-1,skill,none,none,set_skill,type=power&op=+&value=op.pet.status.anger
 10931,on_after_attack\on_after_attack,-1\0,pet_bag\pet,none\none,none\none,powerup\remove_buff,target_type=index_other&atk=me.pet.powerup.atk&mat=me.pet.powerup.mat&def=me.pet.powerup.def&mdf=me.pet.powerup.mdf&spd=me.pet.powerup.spd\id=1/3/5/7/9
 10932,on_after_attack,-1,pet,none,none,powerup,mat=1&spd=1
@@ -1050,7 +1050,7 @@ id,timing,priority,target,condition,cond_option,effect,effect_option
 11039,on_after_attack,-1,pet,none,none,powerup,atk=1
 11040,none,-1,none,none,none,none,none
 11041,on_after_attack,-1,pet,none,none,rage,add=25
-11042,on_before_attack\on_final_dmg_cal,-1\900,skill\skill,status\status,status_type=anger&op=>&cmp_value=50\status_type=anger&op=>&cmp_value=100,set_skill\set_damage,type=power&op=+&value=50\op=+&value=50
+11042,on_before_attack\on_final_dmg_cal,-1\900,skill\skill,status\status,status_type=anger&op=>&cmp_value=50\status_type=anger&op=>&cmp_value=100,set_skill\set_damage,type=power&op=+&value=50\op=+&value=100
 11043,on_after_attack,-1,pet,none,none,powerup,mat=1
 11044,on_after_attack,-1,pet,none,none,remove_buff,id=2/4/6/8/10
 11045,none,-1,none,none,none,none,none

@@ -43,7 +43,7 @@ public static class SecretSkillConditionHandler
     }
 
     public static bool GreaterThanDamage(this LearnSkillInfo secretSkillInfo, Pet pet, BattleState endState) {
-        return endState.myUnit.skillSystem.skillDamage >= secretSkillInfo.value;
+        return endState.myUnit.skillSystem.totalSkillDamage >= secretSkillInfo.value;
     }
 
     public static bool SpecialPet(this LearnSkillInfo secretSkillInfo, Pet pet, BattleState endState) {

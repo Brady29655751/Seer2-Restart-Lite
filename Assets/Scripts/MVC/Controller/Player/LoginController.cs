@@ -14,10 +14,12 @@ public class LoginController : Module
         roleControllers[id].SetData(data);
     }
 
-    public bool Login(int id) {
-        if (!id.IsInRange(0, roleControllers.Length))
+    public bool Login(int id, out string error) {
+        if (!id.IsInRange(0, roleControllers.Length)) {
+            error = "角色数量不足";
             return false;
+        }
 
-        return roleControllers[id].Login();
+        return roleControllers[id].Login(out error);
     }
 }

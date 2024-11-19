@@ -36,7 +36,11 @@ public class BattlePhase
         GetEffectHandler(null).CheckAndApply(state);
     }
 
-    protected virtual EffectHandler GetEffectHandler(Unit invokeUnit) {
+    protected virtual void ApplyBuffs() {
+        GetEffectHandler(null, false).CheckAndApply(state);
+    }
+
+    protected virtual EffectHandler GetEffectHandler(Unit invokeUnit, bool addSkillEffect = true) {
 
         if (invokeUnit == null)
             return GetEffectHandler(state.masterUnit).Concat(GetEffectHandler(state.clientUnit));
@@ -52,7 +56,7 @@ public class BattlePhase
                 handler.AddEffects(invokeUnit, e);
         }
 
-        if (invokeUnit.skill != null) 
+        if (addSkillEffect && (invokeUnit.skill != null))
             handler.AddEffects(invokeUnit, invokeUnit.skill.effects);
         
         foreach (var e in buffEffects)

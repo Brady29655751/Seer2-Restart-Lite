@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class PetItemView : Module
 {
+    [SerializeField] private int numInOneRow = 6;
+    [SerializeField] private int showAtRightLimit = 3;
     [SerializeField] private InfoPrompt infoPrompt;
     [SerializeField] private List<PetItemBlockView> itemBlockViews;
 
@@ -24,10 +26,10 @@ public class PetItemView : Module
         infoPrompt.SetActive(active);
     }
 
-    public void ShowItemInfo(Item item) {
+    public void ShowItemInfo(Item item, int index) {
         if (item == null)
             return;
 
-        infoPrompt.SetItem(item);
+        infoPrompt.SetItem(item, index % numInOneRow < showAtRightLimit);
     }
 }

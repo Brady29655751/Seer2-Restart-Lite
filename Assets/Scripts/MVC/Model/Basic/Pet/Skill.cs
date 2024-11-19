@@ -78,18 +78,18 @@ public class Skill
     public Skill(int id, string name, Element element, SkillType type,
         int power, int anger, int accuracy, string options, string rawDescription) {
         this.id = id;
-        this.name = name;
+        this.name = name.ReplaceSpecialWhiteSpaceCharacters(string.Empty);
         this.element = element;
         this.type = type;
         this.power = power;
         this.anger = anger;
         this.accuracy = accuracy;
-        this.options.ParseOptions(options);
+        this.options.ParseOptions(options.ReplaceSpecialWhiteSpaceCharacters(string.Empty));
         
         combo = chain = 1;
         InitOptionsProperty();
 
-        this.rawDescription = rawDescription;
+        this.rawDescription = rawDescription.ReplaceSpecialWhiteSpaceCharacters(string.Empty);
     }
 
     private void InitOptionsProperty() {

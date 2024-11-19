@@ -162,7 +162,10 @@ public class Pet
         /* Basic */
         id = evolvePetId;
 
-        basic = new PetBasic(evolvePetId, (int)originalPet.basic.personality);
+        basic = new PetBasic(evolvePetId, (int)originalPet.basic.personality)
+        {
+            getPetDate = originalPet.basic.getPetDate,
+        };
         feature = new PetFeature(evolvePetId, originalPet.feature.hasEmblem, 
             originalPet.feature.featureId, originalPet.feature.emblemId, originalPet.feature.afterwardBuffIds);
         exp = new PetExp(evolvePetId, originalPet.level, originalPet.totalExp);

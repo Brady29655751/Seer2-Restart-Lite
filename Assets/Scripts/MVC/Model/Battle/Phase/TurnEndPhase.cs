@@ -54,8 +54,8 @@ public class TurnEndPhase : BattlePhase
         var masterUnit = state.masterUnit;
         var clientUnit = state.clientUnit;
 
-        masterUnit.pet.hp += (masterUnit.skillSystem.buffHeal - masterUnit.skillSystem.buffDamage);
-        clientUnit.pet.hp += (clientUnit.skillSystem.buffHeal - clientUnit.skillSystem.buffDamage);
+        masterUnit.pet.hp += (masterUnit.skillSystem.buffHeal - masterUnit.skillSystem.totalBuffDamage);
+        clientUnit.pet.hp += (clientUnit.skillSystem.buffHeal - clientUnit.skillSystem.totalBuffDamage);
 
         masterUnit.hudSystem.OnTurnEnd(masterUnit, clientUnit);
         clientUnit.hudSystem.OnTurnEnd(clientUnit, masterUnit);

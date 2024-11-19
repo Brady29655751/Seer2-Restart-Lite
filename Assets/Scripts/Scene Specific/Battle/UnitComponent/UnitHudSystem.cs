@@ -103,7 +103,7 @@ public class UnitHudSystem
         {
             if (thisUnit.skillSystem.skill.isAttack)
             {
-                this.CurDamageInfo = new DamageInfo(thisUnit.IsMyUnit(), true, thisUnit.skillSystem.skillDamage,
+                this.CurDamageInfo = new DamageInfo(thisUnit.IsMyUnit(), true, thisUnit.skillSystem.totalSkillDamage,
                     thisUnit.skillSystem.isHit, thisUnit.skillSystem.isCritical, thisUnit.skillSystem.elementRelation);
                 this.CurOtherSidePetReactionInfo = new OtherSidePetReactionInfo(this.CurDamageInfo);
             }
@@ -127,8 +127,8 @@ public class UnitHudSystem
 
     public void OnTurnEnd(Unit thisUnit, Unit rhsUnit)
     {
-        int thisResult = thisUnit.skillSystem.buffHeal - thisUnit.skillSystem.buffDamage;
-        int rhsResult = rhsUnit.skillSystem.buffHeal - rhsUnit.skillSystem.buffDamage;
+        int thisResult = thisUnit.skillSystem.buffHeal - thisUnit.skillSystem.totalBuffDamage;
+        int rhsResult = rhsUnit.skillSystem.buffHeal - rhsUnit.skillSystem.totalBuffDamage;
         if (rhsResult < 0)
         {
             this.CurDamageInfo = new DamageInfo(thisUnit.IsMyUnit(), false, Mathf.Abs(rhsResult));

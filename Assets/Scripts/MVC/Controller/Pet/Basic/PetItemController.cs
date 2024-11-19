@@ -13,9 +13,9 @@ public class PetItemController : Module
     public event Action<Item, int> onItemUsedEvent;
     public event Action<Item> onItemSelectEvent;
 
-    public Item[] GetSelectedItem() {
-        return itemModel.currentSelectedItems;
-    }
+    public Item[] GetSelectedItem() => itemModel.currentSelectedItems;
+    public int GetCurrentCategoryIndex() => itemModel.categories.IndexOf(itemModel.currentCategory);
+    public int GetCurrentPage() => itemModel.page;
 
     public void SetPet(Pet pet) {
         itemModel.SetPet(pet);
@@ -23,6 +23,11 @@ public class PetItemController : Module
 
     public void SetItemBag(List<Item> items) {
         itemModel.SetStorage(items);
+        OnItemSetPage();
+    }
+
+    public void SelectCategory(int index) {
+        itemModel.SelectCategory(index);
         OnItemSetPage();
     }
 
@@ -83,13 +88,18 @@ public class PetItemController : Module
             return;
         }
 
-        itemView.ShowItemInfo(itemModel.items[index]);
+        itemView.ShowItemInfo(itemModel.items[index], index);
     }
 
     public void OnItemSetPage() {
         itemView.SetItems(itemModel.selections.ToList());
         pageView?.SetPage(itemModel.page, itemModel.lastPage);
         Select(0);
+    }
+
+    public void SetPage(int index) {
+        itemModel.SetPage(Mathf.Clamp(index, 0, itemModel.lastPage));
+        OnItemSetPage();
     }
 
     public void OnItemPrevPage() {

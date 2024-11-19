@@ -89,9 +89,13 @@ public class BattleSystemView : BattleBaseView
         if (currentState == null)
             return;
 
+        var stateBuffs = currentState.stateBuffs.Select(x => x.Value).ToList();
+        if (currentState.weather != 0)
+            stateBuffs.Insert(0, currentState.weatherBuff);
+
         optionView.SetState(lastState, currentState);
         weatherView.SetState(lastState, currentState);
-        stateBuffView.SetBuff(currentState.stateBuffs.Select(x => x.Value).ToList());
+        stateBuffView.SetBuff(stateBuffs);
     }
 
 }

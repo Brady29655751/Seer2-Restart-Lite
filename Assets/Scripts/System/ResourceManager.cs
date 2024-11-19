@@ -45,7 +45,7 @@ public class ResourceManager : Singleton<ResourceManager>
     {
         InitUIResources();
         InitGameResources();
-        SaveSystem.TryLoadElementMod();
+        SaveSystem.TryLoadElementMod(out var error);
     }
 
     private void InitUIResources()
@@ -471,10 +471,16 @@ public class ResourceManager : Singleton<ResourceManager>
     {
         LoadCSV(skillUrl + "effect.csv", (data) => {
             var originalDict = GetSkill(info, data);
-            if (SaveSystem.TryLoadSkillMod(out var modDict))
+            if (SaveSystem.TryLoadSkillMod(out var error, out var modDict))
             {
                 foreach (var entry in modDict)
                     originalDict.Set(entry.Key, entry.Value);
+            } else {
+                if (error != string.Empty) {
+                    var hintbox = Hintbox.OpenHintboxWithContent(error, 16);
+                    hintbox.SetTitle("加载自制技能失败");
+                    hintbox.SetSize(720, 360);
+                }
             }
             onSuccess?.Invoke(originalDict);
         }, onFail);
@@ -534,7 +540,7 @@ public class ResourceManager : Singleton<ResourceManager>
                 petInfos.Set(info.id, info);
             }
 
-            if (SaveSystem.TryLoadPetMod(out var modDict, out var featureDict, out var hitDict, out var soundDict))
+            if (SaveSystem.TryLoadPetMod(out var error, out var modDict, out var featureDict, out var hitDict, out var soundDict))
             {
                 foreach (var entry in modDict)
                     petInfos.Set(entry.Key, entry.Value);
@@ -547,6 +553,12 @@ public class ResourceManager : Singleton<ResourceManager>
 
                 foreach (var entry in soundDict)
                     soundInfo.Set(entry.Key, entry.Value);
+            } else {
+                if (error != string.Empty) {
+                    var hintbox = Hintbox.OpenHintboxWithContent(error, 16);
+                    hintbox.SetTitle("加载自制精灵失败");
+                    hintbox.SetSize(720, 360);
+                }         
             }
 
             onSuccess?.Invoke(petInfos);
@@ -706,10 +718,16 @@ public class ResourceManager : Singleton<ResourceManager>
         LoadCSV(buffUrl + "effect.csv", (data) =>
         {
             var originalDict = GetBuffInfo(info, data);
-            if (SaveSystem.TryLoadBuffMod(out var modDict))
+            if (SaveSystem.TryLoadBuffMod(out var error, out var modDict))
             {
                 foreach (var entry in modDict)
                     originalDict.Set(entry.Key, entry.Value);
+            } else {
+                if (error != string.Empty) {
+                    var hintbox = Hintbox.OpenHintboxWithContent(error, 16);
+                    hintbox.SetTitle("加载自制印记失败");
+                    hintbox.SetSize(720, 360);
+                }
             }
 
             onSuccess?.Invoke(originalDict);
@@ -743,10 +761,16 @@ public class ResourceManager : Singleton<ResourceManager>
         LoadCSV(itemUrl + "effect.csv", (data) =>
         {
             var originalDict = GetItemInfo(info, data);
-            if (SaveSystem.TryLoadItemMod(out var modDict))
+            if (SaveSystem.TryLoadItemMod(out var error, out var modDict))
             {
                 foreach (var entry in modDict)
                     originalDict.Set(entry.Key, entry.Value);
+            } else {
+                if (error != string.Empty) {
+                    var hintbox = Hintbox.OpenHintboxWithContent(error, 16);
+                    hintbox.SetTitle("加载自制道具失败");
+                    hintbox.SetSize(720, 360);
+                }
             }
 
             onSuccess?.Invoke(originalDict);
@@ -773,10 +797,16 @@ public class ResourceManager : Singleton<ResourceManager>
         LoadCSV(activityUrl + "info.csv", (data) =>
         {
             var originalDict = GetActivityInfo(data);
-            if (SaveSystem.TryLoadActivityMod(out var modDict))
+            if (SaveSystem.TryLoadActivityMod(out var error, out var modDict))
             {
                 foreach (var entry in modDict)
                     originalDict.Set(entry.Key, entry.Value);
+            } else {
+                if (error != string.Empty) {
+                    var hintbox = Hintbox.OpenHintboxWithContent(error, 16);
+                    hintbox.SetTitle("加载自制活动失败");
+                    hintbox.SetSize(720, 360);
+                }
             }
 
             onSuccess?.Invoke(originalDict);

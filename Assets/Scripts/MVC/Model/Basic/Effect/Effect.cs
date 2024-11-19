@@ -162,7 +162,17 @@ public class Effect {
 
     public bool Apply(object invokeUnit, BattleState state = null) {
         this.invokeUnit = invokeUnit;
-        int repeat = int.Parse(abilityOptionDict.Get("repeat", "1"));
+        var repeatExpr = abilityOptionDict.Get("repeat", "1");
+        int repeat = 1;
+
+        if (state == null)
+            repeat = int.Parse(repeatExpr);
+        else {
+            Unit lhsUnit = (Unit)invokeUnit;
+            Unit rhsUnit = state.GetRhsUnitById(lhsUnit.id);
+            repeat = (int)Parser.ParseEffectOperation(repeatExpr, this, lhsUnit, rhsUnit);
+        }
+
         bool result = true;
 
         for (int i = 0; i < repeat; i++) {

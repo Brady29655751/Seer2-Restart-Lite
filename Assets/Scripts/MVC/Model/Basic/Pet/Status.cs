@@ -11,6 +11,7 @@ public class Status
     public static Status one { get => new Status(1); }
     public static string[] typeNames => new string[6] { "atk", "mat", "def", "mdf", "spd", "hp" };
     public static string[] typeNamesChinese => new string[6] { "物攻", "特攻", "物防", "特防", "速度", "体力" };
+    public static Sprite[] typeSprites => Enumerable.Range(0, 6).Select(x => ((StatusType)x).GetSprite()).ToArray();
 
     protected float[] status = new float[6];
     [XmlElement("atk")] public float atk { get => status[0]; set => status[0] = value; }

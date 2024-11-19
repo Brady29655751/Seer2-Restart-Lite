@@ -82,6 +82,14 @@ public class Buff
         return Database.instance.GetBuffInfo(id);
     }
 
+    public static int GetExtendUIBuffId(bool extend) {
+        return extend ? -6 : -5;
+    }
+
+    public static Buff GetExtendUIBuff(bool extend) {
+        return new Buff(GetExtendUIBuffId(extend));
+    }
+
     public static int GetPowerUpBuffId(int type, int powerup) {
         if (powerup == 0)
             return 0;

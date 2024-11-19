@@ -26,7 +26,7 @@ public class WorkshopPetSkinModel : Module
     public PetUIInfo GetPetUIInfo(int id, int baseId) {
         var uiInfo = new PetUIInfo(id, baseId);
         uiInfo.specialSkinList = skinList;
-        uiInfo.options.ParseOptions(options);
+        uiInfo.options.ParseOptions(options.ReplaceSpecialWhiteSpaceCharacters(string.Empty));
         return uiInfo;
     }
 

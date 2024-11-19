@@ -39,6 +39,9 @@ namespace System {
         }
 
         public static string TrimParentheses(this string str) {
+            if (string.IsNullOrEmpty(str))
+                return str;
+
             int startIndex = str.IndexOf('[');
             int endIndex = str.IndexOf(']');
             if ((startIndex == -1) || (endIndex == -1) || (endIndex < startIndex))
@@ -50,6 +53,24 @@ namespace System {
         public static bool TryTrimParentheses(this string str, out string trim) {
             trim = TrimParentheses(str);
             return trim != str;
+        }
+
+        public static string ReplaceAll(this string str, string[] allOldString, string newString) {
+            if (allOldString == null)
+                return str;
+
+            var result = str;
+            foreach (var s in allOldString)
+                result = result.Replace(s, newString);
+            
+            return result;
+        }
+
+        /// <summary>
+        /// Replace all \t, \r, \n, \v, and \f with newString
+        /// </summary>
+        public static string ReplaceSpecialWhiteSpaceCharacters(this string str, string newString) {
+            return str.ReplaceAll(new string[] { "\t", "\r", "\n", "\v", "\f"}, newString);
         }
 
         public static string ReplaceColorAndNewline(this string str) {

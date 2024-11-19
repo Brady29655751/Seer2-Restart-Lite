@@ -11,7 +11,15 @@ public class UIModule : Module
         infoPrompt?.SetActive(active);
     }
 
+    public void SetInfoPromptContent(string content) {
+        infoPrompt?.SetInfoPromptWithAutoSize(content, TextAnchor.MiddleCenter);
+    }
+
     public void SetDescriptionBoxActive(bool active) {
         descriptionBox?.gameObject.SetActive(active);
+    }
+
+    public void SetDescriptionBoxContent(string content) {
+        descriptionBox?.SetText(content);
     }
 }

@@ -212,6 +212,7 @@ public class WorkshopBuffModel : Module
                 return true;
 
             error = "天气类的序号格式不符\n请点击序号右方的问号查看说明";
+            return false;
         }
 
         if (id > -10_0001) {

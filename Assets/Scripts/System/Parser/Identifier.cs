@@ -171,6 +171,28 @@ public static class Identifier {
 
         var pet = otherSource ?? petSystem.pet;
 
+        if (id.TryTrimStart("bag", out trimId)) {
+            IEnumerable<BattlePet> petBag = petSystem.petBag.Where(x => x != null);
+            while (trimId.TryTrimParentheses(out var trimExpr)) {
+                var options = trimExpr.Split(':');
+                if (options.Length == 2)
+                    petBag = petBag.Where(x => Identifier.GetPetIdentifier(options[0], petSystem, x) == Identifier.GetIdentifier(options[1]));
+
+                trimId.TrimStart("[" + trimExpr + "]");
+            }
+
+            trimId = trimId.TrimStart(".");
+            var count = petBag.Count();
+
+            if (trimId == "count")
+                return count;
+
+            if (count <= 0)
+                return float.MinValue;
+
+            pet = petBag.First();
+        }
+
         if (id == "movable")
             return pet.isMovable ? 1 : 0;
 

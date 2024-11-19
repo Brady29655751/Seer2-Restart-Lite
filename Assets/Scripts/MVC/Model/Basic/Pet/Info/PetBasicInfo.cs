@@ -49,16 +49,16 @@ public class PetBasicInfo
         int gender, int baseHeight, int baseWeight, string description, string habitat, string linkId) {
         this.id = id;
         this.baseId = baseId;
-        this.name = name;
+        this.name = name.ReplaceSpecialWhiteSpaceCharacters(string.Empty);
         this.elementId = (int)element;
         this.subElementId = (int)subElement;
         this.baseStatus = new Status(baseStatus);
         this.gender = gender;
         this.baseHeight = baseHeight;
         this.baseWeight = baseWeight;
-        this.description = description;
-        this.habitat = habitat;
-        this.linkId = linkId;
+        this.description = description.ReplaceSpecialWhiteSpaceCharacters(string.Empty);
+        this.habitat = habitat.ReplaceSpecialWhiteSpaceCharacters(string.Empty);
+        this.linkId = linkId.ReplaceSpecialWhiteSpaceCharacters(string.Empty);
     }
 
     public string[] GetRawInfoStringArray() {

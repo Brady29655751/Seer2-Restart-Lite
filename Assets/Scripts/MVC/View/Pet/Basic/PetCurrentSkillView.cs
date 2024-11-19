@@ -47,12 +47,12 @@ public class PetCurrentSkillView : Module
         infoPrompt.SetActive(active);
     }
 
-    public void SetSkillInfoPromptContent(Skill skill) {
+    public void SetSkillInfoPromptContent(Skill skill, bool showAtRight = true) {
         if (skill == null) {
             infoPrompt.SetActive(false);
             return;
         }
 
-        infoPrompt.SetSkill(skill);
+        infoPrompt.SetSkill(skill, showAtRight);
     }
 }

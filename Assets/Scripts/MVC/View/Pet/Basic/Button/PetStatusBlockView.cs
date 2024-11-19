@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class PetStatusBlockView : Module
 {
-    [SerializeField] private Text statusTypeText;
+    [SerializeField] private Image statusTypeImage;
     [SerializeField] private Text statusText;
     [SerializeField] private Text evText;
     [SerializeField] private IButton addButton;
@@ -26,8 +26,7 @@ public class PetStatusBlockView : Module
 
 
     public void SetStatus(float status, int type) {
-        string[] typeNames = Status.typeNamesChinese;
-        statusTypeText.text = typeNames[type];
+        statusTypeImage.SetSprite(Status.typeSprites[type]);
         statusText.text = status.ToString();
     }
 

@@ -3,6 +3,7 @@ using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Text.RegularExpressions;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 
@@ -38,12 +39,12 @@ public class BuffInfo
 
     public BuffInfo(int id, string name, BuffType type, CopyHandleType copyHandleType, int turn, string options, string description) {
         this.id = id;
-        this.name = name;
+        this.name = name.ReplaceSpecialWhiteSpaceCharacters(string.Empty);
         this.type = type;
         this.copyHandleType = copyHandleType;
         this.turn = turn;
-        this.options.ParseOptions(options);
-        this.description = description;
+        this.options.ParseOptions(options.ReplaceSpecialWhiteSpaceCharacters(string.Empty));
+        this.description = description.ReplaceSpecialWhiteSpaceCharacters(string.Empty);;
 
         InitOptionsProperty();
     }
@@ -114,6 +115,10 @@ public class BuffInfo
         int mod = 10_0000;
         int _type = id / mod;
         int _pet = id % mod;
+
+        if ((id == -5) || (id == -6))
+            return int.MaxValue;
+
         if (type == BuffType.Feature) {
             return (-2 * mod) + (_pet - mod);
         }

@@ -25,6 +25,12 @@ public class PetStatusController : Module
         statusModel.SetPet(pet);
         statusView.SetPet(statusModel.currentPet);
         evView?.SetPet(statusModel.currentPet);
+
+        // Clean max ev mode.
+        if (statusModel.isMaxEVMode) {
+            statusModel.isMaxEVMode = false;
+            statusView.SetMaxEVBoxActive(false);
+        }
     }
 
     public void OnResetEVButtonClick() {
@@ -50,17 +56,30 @@ public class PetStatusController : Module
     }
 
     public void OnSetEVButtonClick() {
-        if (statusModel.isSettingEV) {
+        if (statusModel.isSettingEV) 
+        {
             statusModel.OnAfterSetEV(true);
             statusView.OnAfterSetEV(statusModel.status, statusModel.ev);
             evView?.OnAfterSetEV(statusModel.evStorage);
+
+            if (statusModel.isMaxEVMode) {
+                statusModel.isMaxEVMode = false;
+                statusView.SetMaxEVBoxActive(false);
+            }
+
             onSetEVSuccessEvent?.Invoke(statusModel.currentPet);
-        } else {
+        } 
+        else 
+        {
             if (statusModel.evStorage <= 0)
                 return;
+
             statusModel.OnBeforeSetEV();
             statusView.OnBeforeSetEV(statusModel.status, statusModel.ev);
             evView?.OnBeforeSetEV(statusModel.evStorage);
+
+            if (statusModel.isMaxEVMode)
+                statusView.SetMaxEVBoxActive(true);
         }
     }
 
@@ -68,7 +87,8 @@ public class PetStatusController : Module
         if (statusModel.evStorage <= 0)
             return;
 
-        statusView.SetMaxEVBoxActive(true);   
+        statusModel.isMaxEVMode = true;
+        OnSetEVButtonClick();
     }
 
     private void SetEVWithSpeed(int type, int speed) {
@@ -82,21 +102,34 @@ public class PetStatusController : Module
     }
 
     public void OnAddEV(int type) {
-        SetEVWithSpeed(type, 1);
+        SetEVWithSpeed(type, statusModel.evSpeed);
+
+        if (statusModel.isMaxEVMode)
+            OnSetEVButtonClick();
     }
 
     public void OnMinusEV(int type) {
-        SetEVWithSpeed(type, -1);
+        SetEVWithSpeed(type, -statusModel.evSpeed);
+
+        if (statusModel.isMaxEVMode)
+            OnSetEVButtonClick();
     }
 
     public void OnAddEVButtonHold(int type) {
-        SetEVWithSpeed(type, 5);
+        if (statusModel.isMaxEVMode)
+            return;
+
+        SetEVWithSpeed(type, 5 * statusModel.evSpeed);
     }
 
     public void OnMinusEVButtonHold(int type) {
-        SetEVWithSpeed(type, -5);
+        if (statusModel.isMaxEVMode)
+            return;
+
+        SetEVWithSpeed(type, -5 * statusModel.evSpeed);
     }
 
+    [Obsolete]
     public void OnMaxEV(int type) {
         statusModel.OnMaxEV(type);
         statusView.OnSetEV(statusModel.status, statusModel.ev);

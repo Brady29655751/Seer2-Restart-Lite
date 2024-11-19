@@ -34,7 +34,8 @@ public class AfterAttackPhase : BattlePhase
 
     private void GiveTurnToNextUnit() {
         state.atkUnit.skill.chain--;
-        state.atkUnit.isDone = (state.atkUnit.skill.chain <= 0);
+        state.atkUnit.petSystem.chain++;
+        state.atkUnit.isDone = state.atkUnit.skill.chain <= 0;
         state.GiveTurnToNextUnit();
     }
 }

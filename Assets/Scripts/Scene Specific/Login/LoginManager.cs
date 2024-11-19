@@ -39,11 +39,17 @@ public class LoginManager : Manager<LoginManager>
 
         Player.instance.gameDataId = id;
         
-        if (loginController.Login(id)) {
+        if (loginController.Login(id, out var error)) {
             SceneLoader.instance.ChangeScene(SceneId.Map);
             return;
         }
-        createController.SetActive(true);
+
+        if (string.IsNullOrEmpty(error)) {
+            createController.SetActive(true);
+            return;
+        }
+            
+        Hintbox.OpenHintboxWithContent(error, 16);
     }
 
     public void CreateRole() {

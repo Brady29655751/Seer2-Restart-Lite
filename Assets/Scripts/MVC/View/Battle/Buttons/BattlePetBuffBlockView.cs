@@ -8,6 +8,8 @@ using UnityEngine.UI;
 public class BattlePetBuffBlockView : Module
 {
     public Buff buff { get; private set; }
+    public RectTransform rectTransform => rect;
+    [SerializeField] private RectTransform rect;
     [SerializeField] private IButton button;
     [SerializeField] private Text valueText;
     

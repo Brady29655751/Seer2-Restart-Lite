@@ -31,6 +31,11 @@ public static class ItemDatabase
         { ItemCategory.Battle, new List<ItemType>() { ItemType.HpPotion } },
         { ItemCategory.Capture, new List<ItemType>() { ItemType.Capture } },
         { ItemCategory.Stuff, new List<ItemType>() { ItemType.Mine, ItemType.Stuff }},
+
+        { ItemCategory.PetGrow, new List<ItemType>() { ItemType.Evolve, ItemType.EXP, ItemType.EV, ItemType.IV, ItemType.Personality } },
+        { ItemCategory.PetEmblem, new List<ItemType>() { ItemType.Emblem } },
+        { ItemCategory.PetBattle, new List<ItemType>() { ItemType.HpPotion, ItemType.Skill, ItemType.Buff } },
+        { ItemCategory.PetOthers, new List<ItemType>() { ItemType.Package } },
     };
 
     public static ItemType ToItemType(this string type) {
@@ -77,4 +82,8 @@ public enum ItemCategory {
     Battle,
     Capture,
     Stuff,
+    PetGrow,
+    PetEmblem,
+    PetBattle,
+    PetOthers,
 }

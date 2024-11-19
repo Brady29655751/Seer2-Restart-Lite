@@ -11,7 +11,7 @@ public class VersionData
     [XmlElement("gameVersion")] public string gameVersion;
     [XmlElement("buildVersion")] public string buildVersion;
     
-    public static List<string> versionType => new List<string>() { "alpha", "beta", "lite " };
+    public static List<string> versionType => new List<string>() { "alpha", "beta", "lite" };
 
     public DateTime releaseDate;
     public string releaseNote;
@@ -38,10 +38,20 @@ public class VersionData
 
         if (lhsVersionIndex != rhsVersionIndex)
             return lhsVersionIndex.CompareTo(rhsVersionIndex);
-        
-        float lhsVersionNumber = float.Parse(lhsVersion.TrimStart(versionType[lhsVersionIndex] + "_"));
-        float rhsVersionNumber = float.Parse(lhsVersion.TrimStart(versionType[rhsVersionIndex] + "_"));
-        return lhsVersionNumber.CompareTo(rhsVersionNumber);
+
+        var lhsVersionSplit = (lhsVersion.TrimStart(versionType[lhsVersionIndex] + "_")).Split('.').Select(int.Parse).ToArray();
+        var rhsVersionSplit = (rhsVersion.TrimStart(versionType[rhsVersionIndex] + "_")).Split('.').Select(int.Parse).ToArray();
+        var length = Mathf.Max(lhsVersionSplit.Length, rhsVersionSplit.Length);
+
+        for (int i = 0; i < length; i++) {
+            var lhs = (i < lhsVersionSplit.Length) ? lhsVersionSplit[i] : -1;
+            var rhs = (i < rhsVersionSplit.Length) ? rhsVersionSplit[i] : -1;
+
+            if (lhs != rhs)
+                return lhs.CompareTo(rhs);
+        }
+
+        return 0;
     }
 }
 
@@ -59,12 +69,12 @@ public class VersionPetData {
     [XmlElement("topicPetId")] public string topicPets;
     [XmlIgnore] public List<int> topicPetIds => topicPets.ToIntList();
 
-    [XmlIgnore] public List<Pet> petAllWithMod => Database.instance.petInfoDict.Select(entry => Pet.GetExamplePet(entry.Key))
+    [XmlIgnore] public List<Pet> petAllWithMod => Database.instance.petInfoDict.Select(entry => Pet.GetExamplePet(entry.Key)).Where(x => x != null)
         .OrderByDescending((Pet x) => (x.id > 0) ? (int.MaxValue - x.id) : (x.id)).ToList();
-    [XmlIgnore] public List<Pet> petDictionary => Enumerable.Range(minPetId, maxPetId - minPetId + 1).Select(x => Pet.GetExamplePet(x)).Where(x => x != null)
+    [XmlIgnore] public List<Pet> petDictionary => petAllWithMod.Where(x => x.id.IsWithin(minPetId, maxPetId))
         .OrderByDescending((Pet x) => (x.id > 0) ? (int.MaxValue - x.id) : (x.id)).ToList();
 
-    [XmlIgnore] public List<Pet> petTopic => topicPetIds.Select(x => Pet.GetExamplePet(x)).Where(x => (x != null)).ToList();
+    [XmlIgnore] public List<Pet> petTopic => topicPetIds.Select(Pet.GetExamplePet).Where(x => (x != null)).ToList();
 }
 
 public class VersionSkillData {

@@ -46,14 +46,14 @@ public class ItemInfo
     public ItemInfo(int id, string itemName, ItemType type, int price, int currencyType, 
         string options, string itemDescription, string effectDescription) {
         this.id = id;
-        this.name = itemName;
+        this.name = itemName.ReplaceSpecialWhiteSpaceCharacters(string.Empty);
         this.type = type;
         this.currencyType = currencyType;
         this.price = price;
-        this.options.ParseOptions(options);
+        this.options.ParseOptions(options.ReplaceSpecialWhiteSpaceCharacters(string.Empty));
         InitOptionProperty();
-        this.itemDescription = (itemDescription == "none") ? string.Empty : itemDescription;
-        this.effectDescription = effectDescription.Trim();
+        this.itemDescription = (itemDescription == "none") ? string.Empty : itemDescription.ReplaceSpecialWhiteSpaceCharacters(string.Empty);
+        this.effectDescription = effectDescription.ReplaceSpecialWhiteSpaceCharacters(string.Empty);
     }
 
     public void SetEffects(List<Effect> _effects) {

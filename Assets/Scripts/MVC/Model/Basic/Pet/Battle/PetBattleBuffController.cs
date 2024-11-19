@@ -164,9 +164,8 @@ public class PetBattleBuffController
 
         var tmpPhase = state.phase;
         state.phase = EffectTiming.OnRemoveBuff;
-        for (int i = 0; i < buff.effects.Count; i++) {
-            buff.effects[i].CheckAndApply(buffUnit, state, true, false);
-        }
+        buff.effects.OrderBy(x => x.priority).ToList()
+            .ForEach(x => x.CheckAndApply(buffUnit, state, true, false));
         state.phase = tmpPhase;
     }
 

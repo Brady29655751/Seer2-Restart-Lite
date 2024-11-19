@@ -8,9 +8,9 @@ using FTRuntime;
 public class PetDemoView : Module
 {
     [SerializeField] private bool featurePromptLeft = false;
-    [SerializeField] private float petAnimLocalScale = 1f;
-    [SerializeField] private Vector2 petAnimCoefficientX, petAnimCoefficientY;
+    [SerializeField] private Vector2 animPosOffset = new Vector2(1098, 658);
 
+    [SerializeField] private Camera animationCamera;
     [SerializeField] private InfoPrompt infoPrompt;
     [SerializeField] private Image demoImage;
     [SerializeField] private Text nameText;
@@ -27,8 +27,13 @@ public class PetDemoView : Module
     
     [SerializeField] private IButton IVButton;
 
+    private Canvas canvas;
     private GameObject currentPetAnim;
     private Pet currentPet;
+
+    protected override void Awake() {
+        canvas = GameObject.Find("Canvas").GetComponent<Canvas>();
+    }
 
     public void SetPet(Pet pet, bool animMode = true) {
         gameObject.SetActive(pet != null);
@@ -127,13 +132,16 @@ public class PetDemoView : Module
             this.currentPetAnim.SetActive(true);
             demoImage.gameObject.SetActive(false);
 
-            this.currentPetAnim.transform.SetParent(transform);
+            this.currentPetAnim.transform.SetParent(animationCamera.transform);
             this.currentPetAnim.transform.SetAsFirstSibling();
-            this.currentPetAnim.transform.localScale *= petAnimLocalScale;
+            
+            animationCamera.orthographicSize = this.currentPetAnim.transform.localScale.x * 2 * canvas.transform.localScale.x;
+            
             SwfClipController controller = this.currentPetAnim.GetComponent<SwfClipController>();
             controller.clip.sortingOrder = 1;
-            this.currentPetAnim.transform.position = new Vector3(this.currentPetAnim.transform.position.x * petAnimCoefficientX.x + petAnimCoefficientX.y,
-                this.currentPetAnim.transform.position.y * petAnimCoefficientY.x + petAnimCoefficientY.y, 0);
+
+            var animPos = this.currentPetAnim.transform.localPosition;
+            this.currentPetAnim.transform.localPosition = new Vector3(animPos.x + animPosOffset.x, animPos.y + animPosOffset.y, 1);
             return;
         }
 

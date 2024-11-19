@@ -12,7 +12,7 @@ public class TitleManager : Manager<TitleManager>
     [SerializeField] private List<GameObject> backgroundGadgetObjectList;
     [SerializeField] private IButton startButton;
     [SerializeField] private IText versionDateText, versionStringText;
-    [SerializeField] private GameObject toolBarObject, modOperateObject;
+    [SerializeField] private GameObject toolBarObject, modOperateObject, helpObject;
 
     private void Start() {
         StartCoroutine(CheckVersionData());
@@ -68,7 +68,7 @@ public class TitleManager : Manager<TitleManager>
             hintbox.SetSize(540, 360);
             hintbox.SetTitle("获取资源档案失败");
             hintbox.SetContent("请到群内下载「基础资源包」\n解压后点击右下方的「导入资源包」按钮\n手动导入里面名为Resources的文件夹\n\n" +
-                "若要新增动画，同样到群内下载对应版本的「动画资源包」\n详情请查看群公告\n\n" +
+                "若要新增动画，同样到群内下载对应的「动画资源包」\n详情请查看群公告和右下方的<color=#ffbb33>【帮助】</color>\n\n" +
                 "<color=#ffbb33>导入过程会卡顿，请耐心等待【导入成功】的提示出现</color>\n若长时间卡在地图加载页面，请重新正确导入", 16, FontOption.Arial);
             hintbox.SetOptionNum(1);
             return;
@@ -129,7 +129,6 @@ public class TitleManager : Manager<TitleManager>
             Hintbox.OpenHintboxWithContent("需选择外部文件，而非默认存档位置文件", 16);
             return;
         }
-
         var isSuccessImporting = SaveSystem.TryImportResources(paths[0], out var error);
         var message = isSuccessImporting ? "导入成功" : ("导入失败\n" + error);
         var hintbox = Hintbox.OpenHintboxWithContent(message, 16);
@@ -197,9 +196,9 @@ public class TitleManager : Manager<TitleManager>
     }
 
     private void OnUpdateSuccess(string[] paths) {
-        if ((paths[0] == Application.persistentDataPath) || 
+        if ((paths[0] == (Application.persistentDataPath + "/Mod")) || 
             FileBrowserHelpers.IsPathDescendantOfAnother(paths[0], Application.persistentDataPath)) {
-            Hintbox.OpenHintboxWithContent("需选择外部Mod文件，而非默认存档位置的文件", 16);
+            Hintbox.OpenHintboxWithContent("需选择其他Mod文件，而非默认的Mod文件", 16);
             return;
         }
 
@@ -223,6 +222,14 @@ public class TitleManager : Manager<TitleManager>
             if (isSuccessDeleted)
                 hintbox.SetOptionCallback(Application.Quit);
         });
+    }
+
+    #endregion
+
+    #region help
+
+    public void OnHelp(bool active) {
+        helpObject?.SetActive(active);
     }
 
     #endregion

@@ -8,6 +8,11 @@ public class PetStatusModel : Module
 {
     public Pet currentPet;
     public bool isSettingEV { get; private set; }
+    public bool isMaxEVMode {
+        get => evSpeed == 255;
+        set => evSpeed = value ? 255 : 1;
+    }
+    public int evSpeed { get; private set; } = 1;
     public int evStorage => tmpEVStorage;
     public Status ev => new Status(tmpEV);
     public Status status => tmpStatus;
@@ -22,6 +27,7 @@ public class PetStatusModel : Module
     public void SetPet(Pet pet) {
         currentPet = pet;
         isSettingEV = false;
+        evSpeed = 1;
         if (currentPet == null)
             return;
         tmpEV = new Status(currentPet.talent.ev);
@@ -70,19 +76,6 @@ public class PetStatusModel : Module
         tmpEVStorage -= add;
     }
 
-    public void OnMaxEV(int type) {
-        int storage = currentPet.talent.evStorage;
-        int ev = (int)currentPet.talent.ev[type];
-        int add = Mathf.Clamp(255 - ev, 0, storage);
-        if (add <= 0)
-            return;
-
-        tmpEV = new Status(currentPet.talent.ev);
-        tmpEV[type] = ev + add;
-        tmpEVStorage = storage - add;
-        OnAfterSetEV(true);
-    }
-
     public void OnAfterSetEV(bool success) {
         if (currentPet == null)
             return;
@@ -97,6 +90,20 @@ public class PetStatusModel : Module
             tmpEVStorage = currentPet.talent.evStorage;
         }
         isSettingEV = false;
+    }
+
+    [Obsolete]
+    public void OnMaxEV(int type) {
+        int storage = currentPet.talent.evStorage;
+        int ev = (int)currentPet.talent.ev[type];
+        int add = Mathf.Clamp(255 - ev, 0, storage);
+        if (add <= 0)
+            return;
+    
+        tmpEV = new Status(currentPet.talent.ev);
+        tmpEV[type] = ev + add;
+        tmpEVStorage = storage - add;
+        OnAfterSetEV(true);
     }
 
 }

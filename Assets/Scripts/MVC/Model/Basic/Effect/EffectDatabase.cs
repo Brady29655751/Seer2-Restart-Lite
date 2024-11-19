@@ -6,6 +6,8 @@ using UnityEngine;
 public static class EffectDatabase {
 
     private static Dictionary<string, EffectTiming> timingConvDict = new Dictionary<string, EffectTiming>() {
+        {"on_after_pet_change", EffectTiming.OnAfterPetChange},
+        {"on_before_pet_change", EffectTiming.OnBeforePetChange},
         {"on_remove_buff", EffectTiming.OnRemoveBuff},
         {"on_add_buff", EffectTiming.OnAddBuff},
         {"on_passive_pet_change", EffectTiming.OnPassivePetChange},
@@ -104,6 +106,7 @@ public static class EffectDatabase {
 }
 
 public enum EffectTiming {
+    OnBeforePetChange = -4, OnAfterPetChange = -5,
     OnAddBuff = -2, OnRemoveBuff = -3,
     OnPassivePetChange = -1,
 

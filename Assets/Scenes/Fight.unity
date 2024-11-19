@@ -3051,8 +3051,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   descriptionBox: {fileID: 986414083}
   infoPrompt: {fileID: 1333918287}
-  button: {fileID: 2075130504}
-  weatherIcon: {fileID: 1428898843}
   turnText: {fileID: 903046000}
 --- !u!1 &297795488
 GameObject:
@@ -9122,7 +9120,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &903045999
 RectTransform:
   m_ObjectHideFlags: 0
@@ -14448,7 +14446,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1428898842
 RectTransform:
   m_ObjectHideFlags: 0
@@ -20022,64 +20020,16 @@ MonoBehaviour:
   sound: {fileID: 0}
   onPointerClickEvent:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 296058626}
-        m_TargetAssemblyTypeName: BattleWeatherView, Assembly-CSharp
-        m_MethodName: SwitchMode
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
   onPointerOverEvent:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 296058626}
-        m_TargetAssemblyTypeName: BattleWeatherView, Assembly-CSharp
-        m_MethodName: ShowWeatherDescription
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
   onPointerEnterEvent:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 296058626}
-        m_TargetAssemblyTypeName: BattleWeatherView, Assembly-CSharp
-        m_MethodName: SetWeatherInfoPromptActive
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 1
-        m_CallState: 2
+      m_Calls: []
   onPointerExitEvent:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 296058626}
-        m_TargetAssemblyTypeName: BattleWeatherView, Assembly-CSharp
-        m_MethodName: SetWeatherInfoPromptActive
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
   onPointerHoldEvent:
     m_PersistentCalls:
       m_Calls: []

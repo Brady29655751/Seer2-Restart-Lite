@@ -7,7 +7,9 @@ using UnityEngine;
 public class BattlePetBuffView : BattleBaseView
 {
     [SerializeField] private bool anchoredAtLeft;
+    [SerializeField] private bool isExtendMode = true;   // "Currently" buffs are extended or not.
     [SerializeField] private int numInOneRow = 7;
+    [SerializeField] private int numLimitExtend = 7;
     [SerializeField] private int buffBlockSize = 32;
     [SerializeField] private GameObject buffPanel;
     [SerializeField] private GameObject buffButtonPrefab;
@@ -15,16 +17,59 @@ public class BattlePetBuffView : BattleBaseView
     private List<Buff> buffList = new List<Buff>();
     private List<BattlePetBuffBlockView> buffButtonList = new List<BattlePetBuffBlockView>();
 
+    public void SetExtendMode(bool active) {
+        if (active) {
+            for (int i = 0; i < buffButtonList.Count; i++) {
+                int copy = i;
+                buffButtonList[i].gameObject.SetActive(true);
+                buffButtonList[i].rectTransform.anchoredPosition = GetBuffBlockAnchoredPosition(copy);
+
+                if ((i >= numLimitExtend) && (i == buffButtonList.Count - 1)) {
+                    Action onPointerOver = () => OnPointerOver(copy);
+                    Action onPointerClick = () => SetExtendMode(false);
+                    buffButtonList[i].rectTransform.anchoredPosition = GetBuffBlockAnchoredPosition(copy);
+                    buffButtonList[i].SetBuff(Buff.GetExtendUIBuff(false), onPointerEnter, OnPointerExit, onPointerOver.Invoke, onPointerClick.Invoke);
+                }
+            }
+        } else {
+            for (int i = 0; i < buffButtonList.Count; i++) {
+                int copy = i;
+                buffButtonList[i].gameObject.SetActive((i < numLimitExtend - 1) || (i == buffButtonList.Count - 1));
+                buffButtonList[i].rectTransform.anchoredPosition = GetBuffBlockAnchoredPosition(copy);
+
+                if ((i >= numLimitExtend) && (i == buffButtonList.Count - 1)) {
+                    Action onPointerOver = () => OnPointerOver(copy);
+                    Action onPointerClick = () => SetExtendMode(true);
+                    buffButtonList[i].rectTransform.anchoredPosition = GetBuffBlockAnchoredPosition(numLimitExtend - 1);
+                    buffButtonList[i].SetBuff(Buff.GetExtendUIBuff(true), onPointerEnter, OnPointerExit, onPointerOver.Invoke, onPointerClick.Invoke);
+                }
+            }
+        }
+        isExtendMode = active;
+    }
+
     public void SetBuff(List<Buff> buffs, Action<Buff> onPointerClick = null) {
         List<Buff> newBuffList = buffs.Where(x => !x.info.hide).OrderBy(x => x.info.sortPriority).ToList();
+        if (newBuffList.Count >= numLimitExtend)
+            newBuffList.Add(Buff.GetExtendUIBuff(!isExtendMode));
+
         int diffLength = newBuffList.Count - buffList.Count;
-        if (diffLength > 0) {
+        if (diffLength > 0)
             AddBuffBlocks(diffLength);
-        } else if (diffLength < 0) {
+        else if (diffLength < 0)
             RemoveBuffBlocks(diffLength);
-        }
+
         buffList = newBuffList;
         SetBuffBlocks(onPointerClick);
+        SetExtendMode(isExtendMode);
+    }
+
+    private Vector2 GetBuffBlockAnchoredPosition(int index) {
+        int deltaX = (anchoredAtLeft ? 1 : -1) * buffBlockSize;
+        int deltaY = -buffBlockSize;
+        int col = index / numInOneRow;
+        int row = index % numInOneRow;
+        return new Vector2(0 + deltaX * row, 0 + deltaY * col);
     }
 
     private void AddBuffBlocks(int num) {
@@ -46,9 +91,9 @@ public class BattlePetBuffView : BattleBaseView
 
     private void RemoveBuffBlocks(int num) {
         num = Mathf.Abs(num);
-        for (int i = 0; i < num; i++) {
+        for (int i = 0; i < num; i++)
             Destroy(buffButtonList[buffList.Count - i - 1].gameObject);
-        }
+        
         buffButtonList.RemoveRange(buffList.Count - num, num);
     }
 
@@ -56,7 +101,15 @@ public class BattlePetBuffView : BattleBaseView
         for (int i = 0; i < buffList.Count; i++) {
             int copy = i;
             Action onPointerOver = () => OnPointerOver(copy);
-            Action onPointerClick = () => OnPointerClick?.Invoke(buffList[copy]);
+            Action onPointerClick = () => {
+                var buffId = buffList[copy]?.id ?? 0;
+                if (buffId == Buff.GetExtendUIBuffId(true))
+                    SetExtendMode(true);
+                else if (buffId == Buff.GetExtendUIBuffId(false))
+                    SetExtendMode(false);
+                else
+                    OnPointerClick?.Invoke(buffList[copy]);
+            };
             buffButtonList[i].SetBuff(buffList[i], onPointerEnter, OnPointerExit, onPointerOver.Invoke, onPointerClick.Invoke);
         }
     }

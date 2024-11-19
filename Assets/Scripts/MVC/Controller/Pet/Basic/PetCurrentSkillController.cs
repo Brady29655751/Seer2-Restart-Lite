@@ -63,7 +63,7 @@ public class PetCurrentSkillController : Module
     }
 
     public void SetSuperSkillInfo() {
-        currentSkillView.SetSkillInfoPromptContent(currentSkillModel.superSkill);
+        currentSkillView.SetSkillInfoPromptContent(currentSkillModel.superSkill, false);
     }
 
     public Skill SwapNormalSkill(Skill backupSkill) {

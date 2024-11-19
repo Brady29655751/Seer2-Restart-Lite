@@ -213,11 +213,21 @@ public static class SaveSystem
             for (int id = 0; id < MAX_SAVE_COUNT; id++) {
                 var data = LoadData(id);
 
+                // Clean pet storage
                 data.petStorage.RemoveAll(x => PetInfo.IsMod(x?.id ?? 0));
-                data.petBag = data.petBag.Where(x => !PetInfo.IsMod(x?.id ?? 0)).ToArray();
-                Array.Resize(ref data.petBag, 6);
-                data.pvpPetTeam.RemoveAll(x => x.value.Any(y => PetInfo.IsMod(y?.id ?? 0)));
+                data.petStorage.ForEach(x => x.feature.afterwardBuffIds.RemoveAll(BuffInfo.IsMod));
 
+                // Clean pet bag
+                var petBag = data.petBag.Where(x => !PetInfo.IsMod(x?.id ?? 0));
+                foreach (var p in petBag)
+                    p.feature.afterwardBuffIds.RemoveAll(BuffInfo.IsMod);
+                data.petBag = petBag.ToArray();
+                Array.Resize(ref data.petBag, 6);
+
+                // Clean pvp team
+                data.pvpPetTeam.RemoveAll(x => x.value.Any(y => PetInfo.IsMod(y?.id ?? 0) || ((y?.feature.afterwardBuffIds.Exists(BuffInfo.IsMod)) ?? false)));
+
+                // Clean activity and item
                 data.activityStorage.RemoveAll(x => ActivityInfo.IsMod(x.id));
                 data.itemStorage.RemoveAll(x => ItemInfo.IsMod(x.id));
 
@@ -269,8 +279,9 @@ public static class SaveSystem
         return true;
     }
 
-    public static bool TryLoadBuffMod(out Dictionary<int, BuffInfo> buffDict) {
+    public static bool TryLoadBuffMod(out string error, out Dictionary<int, BuffInfo> buffDict) {
         buffDict = null;
+        error = string.Empty;
 
         var buffPath = Application.persistentDataPath + "/Mod/Buffs/";
         try {
@@ -283,7 +294,8 @@ public static class SaveSystem
             var effect = ResourceManager.GetCSV(FileBrowserHelpers.ReadTextFromFile(effectPath));
             
             buffDict = ResourceManager.instance.GetBuffInfo(data, effect);
-        } catch (Exception) {
+        } catch (Exception e) {
+            error = e.ToString();
             return false;
         }
         return true;
@@ -321,8 +333,9 @@ public static class SaveSystem
         return true;
     }
 
-    public static bool TryLoadSkillMod(out Dictionary<int, Skill> skillDict) {
+    public static bool TryLoadSkillMod(out string error, out Dictionary<int, Skill> skillDict) {
         skillDict = null;
+        error = string.Empty;
 
         var skillPath = Application.persistentDataPath + "/Mod/Skills/";
         try {
@@ -335,7 +348,8 @@ public static class SaveSystem
             var effect = ResourceManager.GetCSV(FileBrowserHelpers.ReadTextFromFile(effectPath));
 
             skillDict = ResourceManager.instance.GetSkill(data, effect);
-        } catch (Exception) {
+        } catch (Exception e) {
+            error = e.ToString();
             return false;
         }
         return true;
@@ -452,12 +466,14 @@ public static class SaveSystem
         return true;
     }
 
-    public static bool TryLoadPetMod(out Dictionary<int, PetInfo> petDict, out Dictionary<int, PetFeatureInfo> featureDict,
+    public static bool TryLoadPetMod(out string error, out Dictionary<int, PetInfo> petDict, out Dictionary<int, PetFeatureInfo> featureDict,
         out Dictionary<int, PetHitInfo> hitDict, out Dictionary<int, PetSoundInfo> soundDict) {
         petDict = new Dictionary<int, PetInfo>();
         featureDict = new Dictionary<int, PetFeatureInfo>();
         hitDict = new Dictionary<int, PetHitInfo>();
         soundDict = new Dictionary<int, PetSoundInfo>();
+
+        error = string.Empty;
 
         try {
             // Init path.
@@ -506,7 +522,8 @@ public static class SaveSystem
             hitDict = hitInfo;
             soundDict = soundInfo;          
 
-        } catch (Exception) {
+        } catch (Exception e) {
+            error = e.ToString();
             return false;
         }
 
@@ -532,8 +549,9 @@ public static class SaveSystem
         return true;
     }
 
-    public static bool TryLoadActivityMod(out Dictionary<string, ActivityInfo> activityDict) {
+    public static bool TryLoadActivityMod(out string error, out Dictionary<string, ActivityInfo> activityDict) {
         activityDict = null;
+        error = string.Empty;
 
         var activityPath = Application.persistentDataPath + "/Mod/Activities/";
         try {
@@ -544,7 +562,8 @@ public static class SaveSystem
             var data = ResourceManager.GetCSV(FileBrowserHelpers.ReadTextFromFile(infoPath));
 
             activityDict = ResourceManager.instance.GetActivityInfo(data);
-        } catch (Exception) {
+        } catch (Exception e) {
+            error = e.ToString();
             return false;
         }
         return true;
@@ -590,8 +609,9 @@ public static class SaveSystem
         return true;
     }
 
-    public static bool TryLoadItemMod(out Dictionary<int, ItemInfo> itemDict) {
+    public static bool TryLoadItemMod(out string error, out Dictionary<int, ItemInfo> itemDict) {
         itemDict = null;
+        error = string.Empty;
 
         var itemPath = Application.persistentDataPath + "/Mod/Items/";
         try {
@@ -604,7 +624,8 @@ public static class SaveSystem
             var effect = ResourceManager.GetCSV(FileBrowserHelpers.ReadTextFromFile(effectPath));
 
             itemDict = ResourceManager.instance.GetItemInfo(data, effect);
-        } catch (Exception) {
+        } catch (Exception e) {
+            error = e.ToString();
             return false;
         }
         return true;
@@ -630,9 +651,11 @@ public static class SaveSystem
         return true;
     }
 
-    public static bool TryLoadElementMod() {
+    public static bool TryLoadElementMod(out string error) {
         var elementPath = Application.persistentDataPath + "/Mod/Elements/";
         var spritePath = ResourceManager.instance.spritePath + "Elements/";
+
+        error = string.Empty;
 
         try {
             string infoPath = elementPath + "info.csv";
@@ -653,7 +676,8 @@ public static class SaveSystem
 
                 ResourceManager.instance.Set<Sprite>(spritePath + i, sprite);
             }
-        } catch (Exception) {
+        } catch (Exception e) {
+            error = e.ToString();
             return false;
         }
 

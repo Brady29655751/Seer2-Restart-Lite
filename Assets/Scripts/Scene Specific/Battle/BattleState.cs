@@ -159,4 +159,35 @@ public class BattleState
     public virtual bool IsGoLast(int unitId) {
         return actionOrder.LastOrDefault() == unitId;
     }
+
+    public virtual void ApplySkillsAndBuffs() {
+        GetEffectHandler(null).CheckAndApply(this);
+    }
+
+    public virtual void ApplyBuffs() {
+        GetEffectHandler(null, false).CheckAndApply(this);
+    }
+
+    public virtual EffectHandler GetEffectHandler(Unit invokeUnit, bool addSkillEffect = true) {
+
+        if (invokeUnit == null)
+            return GetEffectHandler(masterUnit).Concat(GetEffectHandler(clientUnit));
+
+        var buffEffects = invokeUnit.pet.buffs.Select(x => x.effects);
+        var handler = new EffectHandler();
+
+        handler.AddEffects(invokeUnit, weatherBuff.effects);
+
+        var stateEffects = stateBuffs.Select(x => x.Value.effects);
+        foreach (var e in stateEffects)
+            handler.AddEffects(invokeUnit, e);
+
+        if (addSkillEffect && (invokeUnit.skill != null))
+            handler.AddEffects(invokeUnit, invokeUnit.skill.effects);
+
+        foreach (var e in buffEffects)
+            handler.AddEffects(invokeUnit, e);
+
+        return handler;
+    }
 }
