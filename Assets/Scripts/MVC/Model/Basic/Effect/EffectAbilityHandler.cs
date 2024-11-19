@@ -478,8 +478,7 @@ public static class EffectAbilityHandler
             return true;
         }
 
-        buffController.AddBuff(newBuff, lhsUnit, state);
-        return true;
+        return buffController.AddBuff(newBuff, lhsUnit, state);
     }
 
     public static bool RemoveBuff(this Effect effect, BattleState state) {
@@ -496,10 +495,8 @@ public static class EffectAbilityHandler
         bool isId = (idList != "0") && (idRange.Count != 0);
         bool isType = (typeList != "none");
 
-        if (isKey) {
-            state.stateBuffs.RemoveAll(x => keyRange.Contains(x.Key));
-            return true;
-        }
+        if (isKey)
+            return state.stateBuffs.RemoveAll(x => keyRange.Contains(x.Key)) > 0;
 
         Unit invokeUnit = (Unit)effect.invokeUnit;
         Unit lhsUnit = (who == "me") ? state.GetUnitById(invokeUnit.id) : state.GetRhsUnitById(invokeUnit.id);
@@ -507,15 +504,16 @@ public static class EffectAbilityHandler
         var statusController = lhsUnit.pet.statusController;
 
         if (isType) {
+            var isSuccess = false;
             foreach (var type in typeRange) {
                 var buffType = type.ToBuffType();
                 if (buffType == BuffType.TurnBased)
-                    buffController.RemoveRangeBuff(x => (!x.id.IsWithin(-10_0000, 0)) && (x.turn > 0) && 
+                    isSuccess |= buffController.RemoveRangeBuff(x => (!x.id.IsWithin(-10_0000, 0)) && (x.turn > 0) && 
                         (x.info.type != BuffType.Unhealthy) && (x.info.type != BuffType.Abnormal), lhsUnit, state);
                 else 
-                    buffController.RemoveRangeBuff(x => (!x.id.IsWithin(-10_0000, 0)) && (x.info.type == buffType), lhsUnit, state);
+                    isSuccess |= buffController.RemoveRangeBuff(x => (!x.id.IsWithin(-10_0000, 0)) && (x.info.type == buffType), lhsUnit, state);
             }
-            return true;
+            return isSuccess;
         }
         if (isId) {
             foreach (var id in idRange) {
@@ -530,8 +528,7 @@ public static class EffectAbilityHandler
                 if ((id % 2 == 1) ^ (statusController.powerup[buffId] < 0))
                     statusController.SetPowerUp(buffId, 0);
             }
-            buffController.RemoveRangeBuff(x => idRange.Contains(x.id), lhsUnit, state);
-            return true;
+            return buffController.RemoveRangeBuff(x => idRange.Contains(x.id), lhsUnit, state);
         }
 
         return false;
@@ -993,33 +990,6 @@ public static class EffectAbilityHandler
         };
 
         NpcHandler.GetNpcAction(null, handler, null)?.Invoke();
-
-        /*
-        // Set item.
-        if (type == "item") {
-            var itemInfo = value.Split('/').Select(x => (int)Identifier.GetNumIdentifier(x)).ToList();
-            Action<Item> itemFunc = op switch {
-                "+" => Item.Add,
-                "-" => (x) => Item.Remove(x.id, x.num),
-                _ => null
-            };
-            string itemHint = op switch {
-                "+" => "获得",
-                "-" => "失去",
-                _ => string.Empty,
-            };
-            if (itemFunc != null) {
-                var item = new Item(itemInfo[0], itemInfo[1]);
-                itemFunc.Invoke(item);
-                ItemHintbox itemHintbox = Hintbox.OpenHintbox<ItemHintbox>();
-                itemHintbox.SetTitle("提示");
-                itemHintbox.SetContent(itemHint + "了 " + item.num + " 个 " + item.name, 16, FontOption.Arial);
-                itemHintbox.SetOptionNum(1);
-                itemHintbox.SetIcon(item.icon);
-            }
-            return true;
-        }
-        */
         return true;
     }
 }

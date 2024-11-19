@@ -198,6 +198,17 @@ public class Effect {
                 _ => true
             });
         }
+
+        var postApply = abilityOptionDict.Get("on_" + (result ? "success" : "fail"), "0").ToIntList('/');
+        foreach (var skillId in postApply) {
+            var effects = Skill.GetSkill(skillId, false)?.effects?.OrderBy(x => x.priority);
+            if (effects == null)
+                continue;
+
+            foreach (var e in effects)
+                e.CheckAndApply(invokeUnit, state);
+        }
+
         return result;
     }
 

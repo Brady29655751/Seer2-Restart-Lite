@@ -91,68 +91,70 @@ public class PetBattleBuffController
         OnAddBuff(newBuff, buffUnit, state);
     }
 
-    public void AddBuff(Buff newBuff, Unit buffUnit, BattleState state) {
+    public bool AddBuff(Buff newBuff, Unit buffUnit, BattleState state) {
         if (newBuff == null)
-            return;
+            return false;
 
         if (IsBuffBlocked(newBuff.id) && !newBuff.IsPower())
-            return;
+            return false;
 
         if (state == null) {
             buffs.Add(newBuff);
-            return;
+            return true;
         }
 
         Buff oldBuff = GetBuff(newBuff.id);
 
         if (oldBuff == null) {
             NewBuff(newBuff, buffUnit, state);
-            return;
+            return true;
         }
 
         switch (newBuff.info.copyHandleType) {
             default:
             case CopyHandleType.New:
                 NewBuff(newBuff, buffUnit, state);
-                break;
+                return true;
             case CopyHandleType.Block:
-                break;
+                return false;
             case CopyHandleType.Replace:
                 int oldBuffTurn = (oldBuff.turn == -1) ? int.MaxValue : oldBuff.turn;
                 int newBuffTurn = (newBuff.turn == -1) ? int.MaxValue : newBuff.turn;
                 if (oldBuffTurn <= newBuffTurn) {
                     RemoveBuff(oldBuff, buffUnit, state);
                     NewBuff(newBuff, buffUnit, state);
+                    return true;
                 }
-                break;
+                return false;
             case CopyHandleType.Stack:
                 if (oldBuff.value < oldBuff.info.maxValue) {
                     oldBuff.value += newBuff.value;
                     OnAddBuff(newBuff, buffUnit, state);
+                    return true;
                 }
-                break;
+                return false;
             case CopyHandleType.Max:
                 if (newBuff.value > oldBuff.value) {
                     RemoveBuff(oldBuff, buffUnit, state);
                     NewBuff(newBuff, buffUnit, state);
+                    return true;
                 }
-                break;
+                return false;
             case CopyHandleType.Min:
                 if (newBuff.value < oldBuff.value) {
                     RemoveBuff(oldBuff, buffUnit, state);
                     NewBuff(newBuff, buffUnit, state);
+                    return true;
                 }
-                break;
+                return false;
         }
     }
 
-    public void AddRangeBuff(IEnumerable<Buff> buffRange, Unit buffUnit, BattleState state) {
+    public bool AddRangeBuff(IEnumerable<Buff> buffRange, Unit buffUnit, BattleState state) {
         if (buffRange == null)
-            return;
+            return false;
 
-        foreach (var buff in buffRange) {
-            AddBuff(buff, buffUnit, state);
-        }
+        return buffRange.Select(buff => AddBuff(buff, buffUnit, state)).Any(x => x);
     }
 
     private void OnRemoveBuff(Buff buff, Unit buffUnit, BattleState state) {
@@ -170,29 +172,27 @@ public class PetBattleBuffController
     }
 
 
-    public void RemoveBuff(Buff buff, Unit buffUnit, BattleState state) {
+    public bool RemoveBuff(Buff buff, Unit buffUnit, BattleState state) {
         if (buff == null)
-            return;
+            return false;
 
         OnRemoveBuff(buff, buffUnit, state);
-        buffs.Remove(buff);
+        return buffs.Remove(buff);
     }
 
-    public void RemoveBuff(Predicate<Buff> pred, Unit buffUnit, BattleState state) {
-        RemoveBuff(buffs.Find(pred), buffUnit, state);
+    public bool RemoveBuff(Predicate<Buff> pred, Unit buffUnit, BattleState state) {
+        return RemoveBuff(buffs.Find(pred), buffUnit, state);
     }
 
-    public void RemoveRangeBuff(IEnumerable<Buff> buffRange, Unit buffUnit, BattleState state) {
+    public bool RemoveRangeBuff(IEnumerable<Buff> buffRange, Unit buffUnit, BattleState state) {
         if (buffRange == null)
-            return;
+            return false;
             
-        foreach (var buff in buffRange) {
-            RemoveBuff(buff, buffUnit, state);
-        }
+        return buffRange.Select(buff => RemoveBuff(buff, buffUnit, state)).Any(x => x);
     }
 
-    public void RemoveRangeBuff(Predicate<Buff> pred, Unit buffUnit, BattleState state) {
-        RemoveRangeBuff(buffs.FindAll(pred), buffUnit, state);
+    public bool RemoveRangeBuff(Predicate<Buff> pred, Unit buffUnit, BattleState state) {
+        return RemoveRangeBuff(buffs.FindAll(pred), buffUnit, state);
     }
 
     public void BlockBuff(List<int> idList) {
