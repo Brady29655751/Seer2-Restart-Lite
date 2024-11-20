@@ -46,7 +46,7 @@ public class PetCurrentSkillController : Module
 
     public void SelectSuperSkill() {
         currentSkillModel.SelectSuperSkill();
-        currentSkillView.SelectSuperSkill();
+        currentSkillView.SelectSuperSkill(currentSkillModel.isSuperSkillChosen);
         onSelectSuperSkillEvent?.Invoke(currentSkillModel.currentSelectedSuperSkill);
     }
 

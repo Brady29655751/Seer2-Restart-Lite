@@ -6,13 +6,14 @@ using UnityEngine;
 public class PlayerModel : Module
 {
     private Map map;
-    [SerializeField] private float speed = 8f;
+    [SerializeField] protected const float speed = 8f;
     [SerializeField] private Vector2 canvasSize = new Vector2(960, 540);
     public Action onArriveEvent;
     public Vector2 targetPos { get; private set; }  // Type: Canvas Pos.
     public Vector2 currentPos { get; private set; } // Type: Canvas Pos.
     public Vector2 direction => (targetPos - currentPos); 
     public bool isMoving => (targetPos != currentPos);
+    public bool useRobot => Player.instance.gameData.settingsData.useRobotAsPlayer;
 
     public void SetMap(Map map) {
         this.map = map;

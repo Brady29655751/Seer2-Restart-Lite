@@ -7,15 +7,22 @@ using UnityEngine.UI;
 public class PlayerController : Manager<PlayerController>
 {
     [SerializeField] private PlayerModel playerModel;
-    [SerializeField] private PlayerView playerView;
+    [SerializeField] private PlayerView nonoView;
+    [SerializeField] private RobotView robotView;
+    private PlayerView playerView;
 
     private void FixedUpdate() {
         playerModel.OnPlayerMove();
         playerView.SetPlayerPosition(playerModel.currentPos);
+        if (!playerModel.isMoving)
+            playerView.SetDirection(new Vector2(0, 0));
     }
 
     public void SetMap(Map map) {
         playerModel.SetMap(map);
+        nonoView.gameObject.SetActive(!playerModel.useRobot);
+        robotView.gameObject.SetActive(playerModel.useRobot);
+        playerView = playerModel.useRobot ? robotView : nonoView;
     }
 
     public void SetDestinationByMousePos() { 

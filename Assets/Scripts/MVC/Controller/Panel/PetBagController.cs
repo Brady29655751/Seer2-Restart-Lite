@@ -47,6 +47,10 @@ public class PetBagController : Module
         selectController.Select(0);
     }
 
+    public void SetPetDrop(int dropIndex, RectTransform rectTransform = null) {
+        buttonModel.SetPetDrop(dropIndex);
+    }
+
     public void SetPetFirst() {
         buttonModel.SetPetFirst();
         RefreshPetBag();

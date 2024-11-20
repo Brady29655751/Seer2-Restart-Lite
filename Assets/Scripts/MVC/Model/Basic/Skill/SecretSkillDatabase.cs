@@ -9,6 +9,11 @@ public class LearnSkillInfo {
     public int value;
     public string learnDescription => GetLearnDescription();
 
+    public override string ToString()
+    {
+        return "skill: " + skill.name + " / value: " + value;
+    }
+
     public LearnSkillInfo() {}
 
     public LearnSkillInfo(Skill skill, int learnLevel) {

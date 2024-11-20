@@ -18,7 +18,8 @@ public class PetBagPanel : Panel
     [SerializeField] private PetDemoController demoController;
     [SerializeField] private PetFeatureController featureController;
     [SerializeField] private PetStatusController statusController;
-    [SerializeField] private PetSwapSkillController skillController;
+    [SerializeField] private PetCurrentSkillController skillController;
+    [SerializeField] private PetSwapSkillController swapSkillController;
     [SerializeField] private PetItemController itemController;
     [SerializeField] private PetInfoController infoController;
     [SerializeField] private PetSkinController skinController;
@@ -58,6 +59,7 @@ public class PetBagPanel : Panel
 
         selectController.onSelectPetEvent += statusController.SetPet;
         selectController.onSelectPetEvent += skillController.SetPet;
+        selectController.onSelectPetEvent += swapSkillController.SetPet;
         selectController.onSelectPetEvent += itemController.SetPet;
         selectController.onSelectPetEvent += infoController.SetPet;
         selectController.onSelectPetEvent += skinController.SetPet;
@@ -117,11 +119,14 @@ public class PetBagPanel : Panel
     private void OnSetPersonalitySuccess(Personality personality) {
         RefreshPetBag(petBag);
     }
-
     private void RefreshPetBag(Pet[] bag) {
         int cursor = selectController.GetCursor().FirstOrDefault();
         SetPetBag(bag);
         selectController.Select(cursor);
+    }
+
+    public void RefreshPetBag() {
+        RefreshPetBag(petBag);
     }
 
     public void SetPetBag(Pet[] bag) {

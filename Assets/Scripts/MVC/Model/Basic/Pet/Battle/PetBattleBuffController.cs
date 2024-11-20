@@ -51,7 +51,7 @@ public class PetBattleBuffController
     }
 
     public bool IsUnmovableEffected() {
-        return buffs.Any(x => x.IsUnmovable());
+        return buffs.Exists(x => x.IsUnmovable());
     }
 
     public bool IsBuffBlocked(int id) {
@@ -154,7 +154,11 @@ public class PetBattleBuffController
         if (buffRange == null)
             return false;
 
-        return buffRange.Select(buff => AddBuff(buff, buffUnit, state)).Any(x => x);
+        var isSuccess = false;
+        foreach (var buff in buffRange)
+            isSuccess |= AddBuff(buff, buffUnit, state);
+
+        return isSuccess;
     }
 
     private void OnRemoveBuff(Buff buff, Unit buffUnit, BattleState state) {
@@ -188,7 +192,11 @@ public class PetBattleBuffController
         if (buffRange == null)
             return false;
             
-        return buffRange.Select(buff => RemoveBuff(buff, buffUnit, state)).Any(x => x);
+        var isSuccess = false;
+        foreach (var buff in buffRange)
+            isSuccess |= RemoveBuff(buff, buffUnit, state);
+
+        return isSuccess;
     }
 
     public bool RemoveRangeBuff(Predicate<Buff> pred, Unit buffUnit, BattleState state) {

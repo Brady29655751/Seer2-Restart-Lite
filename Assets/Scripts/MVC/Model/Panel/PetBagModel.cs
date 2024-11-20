@@ -23,14 +23,21 @@ public class PetBagModel : Module
         mode = newMode;
     }
 
+    public void SetPetSwap(int indexA, int indexB) {
+        petBag.Swap(indexA, indexB);
+        if (mode == PetBagMode.Normal)
+            SaveSystem.SaveData();
+    }
+
+    public void SetPetDrop(int dropIndex) {
+        SetPetSwap(selectModel.startDragIndex, dropIndex);
+    }
+
     public void SetPetFirst() {
         if (selectModel.cursor.Length <= 0)
             return;
-        
-        petBag.Swap(0, selectModel.cursor[0]);
 
-        if (mode == PetBagMode.Normal)
-            SaveSystem.SaveData();
+        SetPetSwap(0, selectModel.cursor[0]);
     }
 
     public void SetPetHeal() {

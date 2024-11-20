@@ -32,7 +32,7 @@ public class PetSkillBlockView : Module
     }
 
     public void SetChosen(bool chosen) {
-        skillButton.image?.SetSkillBackgroundSprite(chosen, isSuperSkillBlock, currentSecretType);
+        skillButton.image.SetSkillBackgroundSprite(chosen, isSuperSkillBlock, currentSecretType);
     }
 
     private void SetName() {

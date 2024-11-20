@@ -43,7 +43,7 @@ public class ISelectableArray<T>
         InitSelectedFlag(keepSelected);
     }
 
-    private void InitSelectedFlag(bool keepSelected) {
+    public void InitSelectedFlag(bool keepSelected) {
         int[] oldSelected = currentSelectIndex;
         isSelected = new bool[capacity];
         if (keepSelected && (oldSelected != null)) {

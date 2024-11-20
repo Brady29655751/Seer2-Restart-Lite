@@ -41,8 +41,10 @@ public class PetSkill
     /* Pet backup skills */
     public Skill[] backupNormalSkill => ownSkill.Where(x => (x != null) && (!x.isAction) && (x.type != SkillType.必杀) && 
         normalSkill.All(y => (x.id != (y?.id ?? 0)))).ToArray();
+    public LearnSkillInfo[] backupNormalSkillInfo => GetLearnSkillInfos(backupNormalSkill.Select(x => x.id).ToArray());
     
     public Skill backupSuperSkill => GetBackupSuperSkill();
+    public LearnSkillInfo backupSuperSkillInfo => GetLearnSkillInfos(backupSuperSkill.id);
 
 
     /* Pet secret skills */
@@ -136,15 +138,23 @@ public class PetSkill
         return ret;
     }
 
-    public Skill GetBackupSuperSkill() {
-        if(ListHelper.IsNullOrEmpty(ownSuperSkill) || (ownSuperSkill.Count == 1))
+    public Skill GetBackupSuperSkill(Func<Skill, bool> predicate = null) {
+        if(ListHelper.IsNullOrEmpty(ownSuperSkill) || (ownSuperSkill.Count < 2))
             return null;
         
-        int id = ownSuperSkill.Select(x => x.id).IndexOf(superSkillId);
-        if (id < 0)
+        predicate ??= (x => true);
+        var storage = ownSuperSkill.Where(predicate).ToList();
+        if (storage.Count == 0)
             return null;
 
-        return ownSuperSkill[(id + 1) % ownSuperSkill.Count];
+        if (storage.Count == 1)
+            return (storage[0].id == superSkillId) ? null : storage[0];
+
+        int id = storage.Select(x => x.id).IndexOf(superSkillId);
+        if (id < 0)
+            return storage[0];
+
+        return storage[(id + 1) % storage.Count];
     }
 
     public void SwapNormalSkill(Skill oldSkill, Skill newSkill) {
@@ -161,9 +171,9 @@ public class PetSkill
         SaveSystem.SaveData();
     }
 
-    public void SwapSuperSkill() {
-        if (backupSuperSkill != null) {
-            superSkillId = backupSuperSkill.id;
+    public void SwapSuperSkill(Skill backupSkill) {
+        if (backupSkill != null) {
+            superSkillId = backupSkill.id;
             SaveSystem.SaveData();
         }
     }

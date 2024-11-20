@@ -22,6 +22,9 @@ public class EffectHandler
     }
 
     public void AddEffects(object invokeUnit, List<Effect> effects) {
+        if (effects == null)
+            return;
+            
         queue.AddRange(effects.Select(x => new KeyValuePair<object, Effect>(invokeUnit, x)));
     }
 

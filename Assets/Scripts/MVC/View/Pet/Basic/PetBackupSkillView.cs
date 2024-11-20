@@ -13,15 +13,20 @@ public class PetBackupSkillView : Module
     [SerializeField] private PetSkillBlockView superSkillBlockView;
     [SerializeField] private PetSkillBlockView[] normalSkillBlockViews = new PetSkillBlockView[4];
 
-    public void SetPet(Pet pet) {
-        if (pet == null)
-            return;
-        SetNormalSkills(pet.skills.GetLearnSkillInfos(pet.backupNormalSkill.Select(x => x.id).ToArray()));
-        SetSuperSkill((pet.backupSuperSkill == null) ? null : pet.skills.GetLearnSkillInfos(pet.backupSuperSkill.id));
+    public void SetPet(LearnSkillInfo[] normalSkillInfos, LearnSkillInfo superSkillInfo) {
+        // if (pet == null)
+        //     return;
+
+        SetNormalSkills(normalSkillInfos);
+        SetSuperSkill(superSkillInfo);
         SetActive(false);
     }
 
     public void SetActive(bool active) {
+        foreach (var block in normalSkillBlockViews)
+            block.SetChosen(false);
+
+        superSkillBlockView.SetChosen(false);
         background?.gameObject.SetActive(active);
     }
 
@@ -38,36 +43,24 @@ public class PetBackupSkillView : Module
     }
 
     public void SelectNormalSkill(int index) {
-        if (!index.IsInRange(0, 4))
-            return;
-
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < 4; i++)
             normalSkillBlockViews[i].SetChosen(i == index);
-        }
     }
 
-    public void SelectSuperSkill() {
-        superSkillBlockView.SetChosen(true);
-    }
-
-    public void OnResetButtonClick() {    
-        foreach (var block in normalSkillBlockViews) {
-            block.SetChosen(false);
-        }
-        superSkillBlockView.SetChosen(false);
-        background?.gameObject.SetActive(!background.gameObject.activeSelf);
+    public void SelectSuperSkill(bool chosen) {
+        superSkillBlockView.SetChosen(chosen);
     }
 
     public void SetInfoPromptActive(bool active) {
         infoPrompt.SetActive(active);
     }
 
-    public void SetSkillInfoPromptContent(Skill skill) {
+    public void SetSkillInfoPromptContent(Skill skill, bool showAtRight = true) {
         if (skill == null) {
             infoPrompt.SetActive(false);
             return;
         }
 
-        infoPrompt.SetSkill(skill, false);
+        infoPrompt.SetSkill(skill, showAtRight);
     }
 }

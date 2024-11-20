@@ -46,10 +46,7 @@ public class SelectModel<T> : Module, IPageHandler
     }
 
     public virtual void SetPage(int newPage) {
-        if (!newPage.IsWithin(0, lastPage))
-            return;
-
-        page = newPage;
+        page = Mathf.Clamp(newPage, 0, lastPage);
         T[] newSelections = resultStorage.Where((x, i) => PageFilter(i)).ToArray();
         SetSelections(newSelections);
     }
@@ -104,15 +101,14 @@ public class SelectModel<T> : Module, IPageHandler
 
     public virtual void SelectAll(bool active) {
         int currentSelectCount = cursor.Length;
-        for (int i = 0; i < currentSelectCount; i++) {
+        for (int i = 0; i < currentSelectCount; i++)
             Select(cursor.Last());
-        }
+
         if (!active)
             return;
         
-        for (int i = 0; i < capacity; i++) {
+        for (int i = 0; i < capacity; i++)
             Select(i);
-        }
     }
 
     public virtual void Remove(int index) {
@@ -136,6 +132,14 @@ public class SelectModel<T> : Module, IPageHandler
 
         T oldItem = selections[index];
         storage.Update(oldItem, newItem);
+    }
+
+    public virtual void Swap(T newItem, int index) {
+        if (!index.IsInRange(0, capacity))
+            return;
+
+        T oldItem = selections[index];
+        storage.Swap(storage.IndexOf(oldItem), storage.IndexOf(newItem));
     }
 
     public virtual void ResetFilter(int defaultSelectPage = 0) {

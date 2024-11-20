@@ -46,17 +46,20 @@ public class WorkshopEffectModel : Module
     }
 
     public EffectTiming GetEffectTiming() {
-        if (timingDropdown.value.IsWithin(4, 7))
-            return (EffectTiming)(timingDropdown.value - 2);
+        const int prevStage = 4, midStage = 9, lastStage = 17;
 
-        if (timingDropdown.value.IsWithin(8, 15))
-            return (EffectTiming)(timingDropdown.value - 1);
+        if (timingDropdown.value.IsWithin(1, prevStage))
+            return (EffectTiming)(-timingDropdown.value - 1);
+
+        if (timingDropdown.value.IsWithin(prevStage + 2, midStage))
+            return (EffectTiming)(timingDropdown.value - prevStage);
+
+        if (timingDropdown.value.IsWithin(midStage + 1, lastStage))
+            return (EffectTiming)(timingDropdown.value - (midStage - 6));
 
         return timingDropdown.value switch {
-            1   => EffectTiming.OnAddBuff,
-            2   => EffectTiming.OnRemoveBuff,
-            3   => EffectTiming.Resident,
-            16  => EffectTiming.OnBattleEnd,
+            prevStage + 1  => EffectTiming.Resident,
+            lastStage + 1  => EffectTiming.OnBattleEnd,
             _ => EffectTiming.None,
         };
     }

@@ -39,8 +39,8 @@ public class PetCurrentSkillView : Module
         }
     }
 
-    public void SelectSuperSkill() {
-        superSkillBlockView.SetChosen(true);
+    public void SelectSuperSkill(bool chosen) {
+        superSkillBlockView.SetChosen(chosen);
     }
 
     public void SetInfoPromptActive(bool active) {

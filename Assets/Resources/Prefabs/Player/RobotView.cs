@@ -3,13 +3,14 @@ using System;
 // using Script.Map.Room;
 // using Script.Panel.Hintbox;
 using UnityEngine;
+using UnityEngine.UI;
 
-    public class RobotView : MonoBehaviour
+    public class RobotView : PlayerView
     {
-        [SerializeField] private Animator animationController;
-        [SerializeField] private Rigidbody2D rg2d;
-        [SerializeField] private const float Speed = 3.0f;
-        [SerializeField] private GameObject playerAnim;
+        // [SerializeField] protected const float Speed = 1.5f;
+        [SerializeField] protected Animator animationController;
+        protected Image playerImage => playerButton.image;
+        // [SerializeField] protected new RectTransform playerRect;
 
         public Vector3 Position
         {
@@ -18,30 +19,46 @@ using UnityEngine;
 
         }
 
+        /*
         private void Update()
         {
             bool[] direction = new bool[4];
-            direction[0] = Input.GetKey(KeyCode.W); // 上
-            direction[1] = Input.GetKey(KeyCode.S); // 下
-            direction[2] = Input.GetKey(KeyCode.A); // 左
-            direction[3] = Input.GetKey(KeyCode.D); // 右
-            this.rg2d.velocity = new Vector2(direction[3] ? Speed : direction[2] ? -Speed : 0, direction[0] ? Speed : direction[1] ? -Speed : 0);
+            direction[0] = Input.GetKey(KeyCode.UpArrow); // 上
+            direction[1] = Input.GetKey(KeyCode.DownArrow); // 下
+            direction[2] = Input.GetKey(KeyCode.LeftArrow); // 左
+            direction[3] = Input.GetKey(KeyCode.RightArrow); // 右
+            this.Position = new Vector2(this.Position.x + (direction[3] ? Speed : direction[2] ? -Speed : 0), this.Position.y + (direction[0] ? Speed : direction[1] ? -Speed : 0));
             SetDirection(direction);
         }
+        */
 
-        public void SetDirection(bool[] direction)
+        public override void SetDirection(Vector2 dir)
         {
+            bool[] direction = new bool[] { dir[1] > 0, dir[1] < 0, dir[0] < 0, dir[0] > 0 };
             bool isMove = direction[0] || direction[1] || direction[2] || direction[3];//上下左右
+
+            animationController.enabled = isMove;
+
             if (!isMove)
             {
-                animationController.Play("Idle");
+                // animationController.Play("Idle");
+                Sprite directionSprite = GetPlayerDirectionSprite(lastDirection);
+                if (directionSprite != null) {
+                    playerImage?.SetSprite(directionSprite); 
+                    playerRect.localScale = new Vector3((lastDirection.x < 0) ? 1 : -1, 1, 1);
+                }
+                
+                playerImage.SetNativeSize();
+                playerNameText.rectTransform.localScale = this.playerRect.localScale;
+
+                lastDirection = dir;
                 return;
             }
             if (direction[0])//上
             {
                 if (direction[2] || direction[3])
                 {
-                    this.playerAnim.transform.localScale = new Vector3(direction[2] ? 1 : -1, 1, 1);
+                    this.playerRect.localScale = new Vector3(direction[2] ? 1 : -1, 1, 1);
                     animationController.Play("SidelongBack");
                 }else
                 {
@@ -51,7 +68,7 @@ using UnityEngine;
             {
                 if (direction[2] || direction[3])
                 {
-                    this.playerAnim.transform.localScale = new Vector3(direction[2] ? 1 : -1, 1, 1);
+                    this.playerRect.localScale = new Vector3(direction[2] ? 1 : -1, 1, 1);
                     animationController.Play("Sidelong");
                 }
                 else
@@ -61,9 +78,12 @@ using UnityEngine;
             }
             else
             {
-                this.playerAnim.transform.localScale = new Vector3(direction[2] ? 1 : -1, 1, 1);
+                this.playerRect.localScale = new Vector3(direction[2] ? 1 : -1, 1, 1);
                 animationController.Play("LeftRight");
             }
-            
+            playerNameText.rectTransform.localScale = this.playerRect.localScale;
+            playerImage.SetNativeSize();
+
+            lastDirection = dir;
         }
     }

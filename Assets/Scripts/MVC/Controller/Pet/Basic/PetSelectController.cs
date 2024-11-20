@@ -99,5 +99,16 @@ public class PetSelectController : Module
         Select(0);
     }
 
+    public void StartDrag(int index, RectTransform rectTransform) {
+        selectModel.StartDrag(index, rectTransform);
+    }
 
+    public void EndDrag(int index, RectTransform rectTransform) {
+        selectModel.EndDrag(index, rectTransform);
+    }
+
+    public void Drop(int index, RectTransform rectTransform) {
+        selectModel.Drop(index);
+        Select(index);
+    }
 }

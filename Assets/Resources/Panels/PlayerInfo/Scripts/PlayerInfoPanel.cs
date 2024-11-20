@@ -9,6 +9,8 @@ public class PlayerInfoPanel : Panel
     private GameData data => Player.instance.gameData;
     [SerializeField] private ChangeNameController changeNameController;
     [SerializeField] private PlayerInfoController infoController;
+    [SerializeField] private Image playerImage;
+    [SerializeField] private Sprite nonoSprite, robotSprite;
 
     protected override void Awake()
     {
@@ -24,6 +26,7 @@ public class PlayerInfoPanel : Panel
     private void InitPlayerData() {
         changeNameController.InitName(data.nickname);
         infoController.ShowCurrency();
+        SetPlayerSprite();
     }
 
     private void InitChangeNameSubscriptions() {
@@ -34,6 +37,18 @@ public class PlayerInfoPanel : Panel
         if (PlayerController.instance != null) {
             changeNameController.onChangeNameSuccessEvent += PlayerController.instance.SetPlayerName;
         }
+    }
+
+    private void SetPlayerSprite() {
+        var sprite = data.settingsData.useRobotAsPlayer ? robotSprite : nonoSprite;
+        playerImage?.SetSprite(sprite);
+        playerImage?.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, sprite.GetResizedWidth(100));
+    }
+
+    public void ChangePlayerRobot() {
+        data.settingsData.useRobotAsPlayer = !data.settingsData.useRobotAsPlayer;
+        SetPlayerSprite();
+        SaveSystem.SaveData();
     }
 
 }

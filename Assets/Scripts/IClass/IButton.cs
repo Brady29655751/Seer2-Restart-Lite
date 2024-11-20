@@ -11,9 +11,12 @@ public class IButton : IMonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     IPointerDownHandler, IPointerUpHandler
 {   
     protected Vector3 initPos;
-    public RectTransform rect { get; protected set; } = null;
-    public Image image {get; protected set;} = null;
-    public Button button {get; protected set;} = null;
+    protected Image _image = null;
+    protected Button _button = null;
+
+    public RectTransform rect => image.rectTransform;
+    public Image image => _image ??= gameObject.GetComponent<Image>();
+    public Button button => _button ??= gameObject.GetComponent<Button>(); 
     private Sprite initSprite;
 
     [SerializeField] protected bool playSoundWhenHover = false;
@@ -36,9 +39,6 @@ public class IButton : IMonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 
     protected override void Awake() {
         base.Awake();
-        rect = gameObject.GetComponent<RectTransform>();
-        button = gameObject.GetComponent<Button>();
-        image = gameObject.GetComponent<Image>();
         initSprite = image.sprite;
         initPos = rect.anchoredPosition;
     }
@@ -173,9 +173,6 @@ public class IButton : IMonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     }
 
     public virtual void SetSprite(Sprite sprite) {
-        if (image == null)
-            image = gameObject.GetComponent<Image>();
-
         image.sprite = sprite;
     }
     public virtual void SetBGM(AudioClip bgm) {

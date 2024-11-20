@@ -12,21 +12,36 @@ public class PetBackupSkillController : Module
     public event Action<Skill> onSelectNormalSkillEvent;
     public event Action<Skill> onSelectSuperSkillEvent;
 
+    public Skill currentSelectedNormalSkill => backupSkillModel.currentSelectedNormalSkill;
+    public Skill currentSelectedSuperSkill => backupSkillModel.currentSelectedSuperSkill;
+
+    public bool Filter(Skill skill) => backupSkillModel.SpecialFilter(skill);
+
     public void SetPet(Pet pet) {
         backupSkillModel.SetPet(pet);
-        backupSkillView.SetPet(pet);
+        backupSkillView.SetPet(backupSkillModel.normalSkillInfos, backupSkillModel.superSkillInfo);
+        OnBackupSkillSetPage();
+    }
+
+    public void Refresh() {
+        backupSkillModel.SetPet(backupSkillModel.currentPet, backupSkillModel.page, true);
+        backupSkillView.SetPet(backupSkillModel.normalSkillInfos, backupSkillModel.superSkillInfo);
         OnBackupSkillSetPage();
     }
 
     public void SelectNormalSkill(int index) {
         backupSkillModel.SelectNormalSkill(index);
         backupSkillView.SelectNormalSkill(index);
+
+        if (index < 0)
+            return;
+
         onSelectNormalSkillEvent?.Invoke(backupSkillModel.currentSelectedNormalSkill);
     }
 
     public void SelectSuperSkill() {
         backupSkillModel.SelectSuperSkill();
-        backupSkillView.SelectSuperSkill();
+        backupSkillView.SelectSuperSkill(backupSkillModel.isSuperSkillChosen);
         onSelectSuperSkillEvent?.Invoke(backupSkillModel.currentSelectedSuperSkill);
     }
 
@@ -43,7 +58,7 @@ public class PetBackupSkillController : Module
     }
 
     public void SetSuperSkillInfo() {
-        backupSkillView.SetSkillInfoPromptContent(backupSkillModel.superSkill);
+        backupSkillView.SetSkillInfoPromptContent(backupSkillModel.superSkill, false);
     }
 
     public Skill SwapNormalSkill(Skill currentSkill) {
@@ -72,10 +87,9 @@ public class PetBackupSkillController : Module
         return backupSkill;
     }
 
-
-    public void OnResetButtonClick() {
-        backupSkillModel.OnResetButtonClick();
-        backupSkillView.OnResetButtonClick();
+    public void SetActive(bool active) {
+        backupSkillModel.SetActive(active);
+        backupSkillView.SetActive(active);
     }
 
     public void OnBackupSkillSetPage() {

@@ -6,10 +6,12 @@ using UnityEngine.UI;
 
 public class PlayerView : Module
 {
-    [SerializeField] private RectTransform playerRect;
-    [SerializeField] private IButton playerButton;
-    [SerializeField] private Sprite[] playerDirectionSprite = new Sprite[4];
-    [SerializeField] private Text playerNameText;
+    [SerializeField] protected RectTransform playerRect;
+    [SerializeField] protected IButton playerButton;
+    [SerializeField] protected Sprite[] playerDirectionSprite = new Sprite[4];
+    [SerializeField] protected Text playerNameText;
+
+    protected Vector2 lastDirection = Vector2.zero;
 
     // 0: Front Left,   1: Back Left
     // 2: Front Right,  3: Back Right
@@ -27,11 +29,12 @@ public class PlayerView : Module
         return playerDirectionSprite[idx];
     }
 
-    public void SetDirection(Vector2 direction) {
+    public virtual void SetDirection(Vector2 direction) {
         Sprite directionSprite = GetPlayerDirectionSprite(direction);
         if (directionSprite != null) {
             playerButton.SetSprite(directionSprite); 
         }
+        lastDirection = direction;
     }
 
     public void SetPlayerPosition(Vector2 currentPos) {

@@ -54,7 +54,7 @@ public class InfoPrompt : IMonoBehaviour
     public void SetInfoPromptWithAutoSize(string content, TextAnchor align, float lineSpacing = 1.2f) {
         // int sizeX = 21 + (text.fontSize) * Mathf.Min(content.Length, 21);
         // int sizeY = 35 + (text.fontSize + 6) * ((content.Length - 1) / 21);
-        Vector2 size = new Vector2(content.GetPreferredSize(21, text.fontSize).x, this.text.preferredHeight + 61);
+        Vector2 size = new Vector2(content.GetPreferredSize(21, text.fontSize).x, this.text.preferredHeight + 21);
         SetInfoPrompt(size, content, align, lineSpacing);
     }
 
@@ -67,7 +67,7 @@ public class InfoPrompt : IMonoBehaviour
     public void SetSkill(Skill skill, bool showAtRight = true) {
         string header = "<size=18><color=#52e5f9>" + skill.name + "</color></size><size=4>\n\n</size>";
         string text = skill.description;
-        Vector2 size = new Vector2(text.GetPreferredSize(15, 14, 21, 61).x, this.text.preferredHeight + 61);
+        Vector2 size = new Vector2(text.GetPreferredSize(15, 14, 21, 61).x, this.text.preferredHeight + 41);
         Vector2 fixPos = new Vector2(-size.x - 2, -size.y / 2 - 2);
         
         if (showAtRight) {
@@ -80,7 +80,7 @@ public class InfoPrompt : IMonoBehaviour
     public void SetBuff(Buff buff, bool showAtRight = true) {
         string header = "<size=18><color=#52e5f9>" + buff.name + "</color></size><size=4>\n\n</size>";
         string text = buff.description;
-        Vector2 size = new Vector2(text.GetPreferredSize(15, 14, 21, 61).x, this.text.preferredHeight + 61);
+        Vector2 size = new Vector2(text.GetPreferredSize(15, 14, 21, 61).x, this.text.preferredHeight + 41);
         Vector2 fixPos = showAtRight ? new Vector2(12, -size.y + 24) : new Vector2(-size.x - 2, -size.y + 24);
         
         SetInfoPrompt(size, header + text, fixPos, TextAnchor.MiddleLeft);
@@ -91,7 +91,7 @@ public class InfoPrompt : IMonoBehaviour
         string itemDesc = item.info.GetItemDescription();
         string effectDesc = item.info.GetEffectDescription();
         string text = ((itemDesc == string.Empty) ? string.Empty : (itemDesc + "\n\n")) + effectDesc;
-        Vector2 size = new Vector2(text.GetPreferredSize(15, 14, 21, 61).x, this.text.preferredHeight + 61);
+        Vector2 size = new Vector2(text.GetPreferredSize(15, 14, 21, 61).x, this.text.preferredHeight + 41);
         Vector2 fixPos = new Vector2(-size.x - 2, -size.y / 2 - 2);
 
         if (showAtRight) {
