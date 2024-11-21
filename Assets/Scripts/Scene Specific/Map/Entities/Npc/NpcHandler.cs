@@ -38,19 +38,8 @@ public static class NpcHandler
 
             for (int j = 0;  j < conditionOr.Length; j++) {
                 Func<bool> orCondition = new Func<bool>(newCondition);
-                int opIndex = -1;
-                string op = "=";
-                foreach (var key in Operator.condDict.Keys) {
-                    opIndex = conditionOr[j].IndexOf(key);
-                    if (opIndex != -1) {
-                        op = key;
-                        break;
-                    }
-                }
-                string type = conditionOr[j].Substring(0, opIndex);
-                string value = conditionOr[j].Substring(opIndex + op.Length);
-
-                newCondition = () => orCondition.Invoke() || (NpcConditionHandler.GetNpcCondition(op, type, value).Invoke());
+                var split = Operator.SplitCondition(conditionOr[j], out var op, toHalf: false);
+                newCondition = () => orCondition.Invoke() || (NpcConditionHandler.GetNpcCondition(op, split.Key, split.Value).Invoke());
             }
             condition = () => oldCondition.Invoke() && newCondition.Invoke();
         }

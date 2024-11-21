@@ -21,6 +21,10 @@ public class Battle
         Init(player, enemy, settings);
     }
 
+    public Battle(BattlePet[] player, BattlePet[] enemy, BattleSettings settings) {
+        Init(player, enemy, settings);
+    }
+
     /// <summary>
     /// Create battle from XML-serialized battle info.
     /// </summary>

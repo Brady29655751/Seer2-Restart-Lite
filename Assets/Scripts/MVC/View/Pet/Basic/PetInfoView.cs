@@ -6,6 +6,7 @@ using UnityEngine.UI;
 
 public class PetInfoView : Module
 {
+    [SerializeField] private bool showPersonalityDetail = false;
     [SerializeField] private Text idText;
     [SerializeField] private Text levelText;
     [SerializeField] private Text evolveLevelText;
@@ -46,7 +47,9 @@ public class PetInfoView : Module
     }
 
     public void SetPersonality(Personality personality) {
-        personalityText?.SetText(personality.ToString());
+        var desc = Status.GetPersonalityBuffDescription(personality, " ", string.Empty);
+        var detail = showPersonalityDetail ? (" <color=#ffbb33>(" + desc + ")</color>") : string.Empty;
+        personalityText?.SetText(personality.ToString() + detail);
     }
 
     public void SetHeightAndWeight(int height, int weight) {

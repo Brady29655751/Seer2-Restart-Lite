@@ -46,7 +46,7 @@ public class WorkshopEffectModel : Module
     }
 
     public EffectTiming GetEffectTiming() {
-        const int prevStage = 4, midStage = 9, lastStage = 17;
+        const int prevStage = 5, midStage = 10, lastStage = 18;
 
         if (timingDropdown.value.IsWithin(1, prevStage))
             return (EffectTiming)(-timingDropdown.value - 1);

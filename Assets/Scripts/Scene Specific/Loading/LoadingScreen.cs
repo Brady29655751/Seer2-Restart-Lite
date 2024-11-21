@@ -55,4 +55,8 @@ public class LoadingScreen : IMonoBehaviour
         yield return new WaitForSeconds(seconds);
         finishedCallback?.Invoke();
     }
+
+    public virtual void SetText(string content) {
+        loadingText?.SetText(content);
+    }
 }

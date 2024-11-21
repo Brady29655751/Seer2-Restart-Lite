@@ -149,32 +149,7 @@ public static class EffectAbilityHandler
         Unit invokeUnit = (Unit)effect.invokeUnit;
         Unit lhsUnit = (who == "me") ? state.GetUnitById(invokeUnit.id) : state.GetRhsUnitById(invokeUnit.id);
         Unit rhsUnit = state.GetRhsUnitById(lhsUnit.id);
-
-        List<BattlePet> targetList = new List<BattlePet>();
-
-        switch (effect.target) {
-            default:
-                targetList.Add(lhsUnit.pet);
-                break;
-            case EffectTarget.CurrentPetBag:
-                var targetType = effect.targetType;
-                var targetNum = (int)Parser.ParseEffectOperation(effect.abilityOptionDict.Get("target_num", "-1"), effect, lhsUnit, rhsUnit);
-                var targetIndex = (int)Parser.ParseEffectOperation(effect.abilityOptionDict.Get("target_index", "-1"), effect, lhsUnit, rhsUnit);
-
-                var petBag = lhsUnit.petSystem.petBag;
-                targetList = petBag.Where(x => x != null).ToList();
-                if (targetType.Contains("other"))
-                    targetList.Remove(lhsUnit.pet);
-
-                if (targetType.Contains("random"))
-                    targetList = targetList.Random(targetNum, false);
-                else if (targetType.Contains("index") && (targetIndex.IsInRange(0, petBag.Length)))
-                    targetList = new List<BattlePet>(){ petBag[targetIndex] };
-                else if (targetNum >= 0)
-                    targetList = targetList.Take(targetNum).ToList();
-
-                break;
-        };
+        List<BattlePet> targetList = Parser.GetBattlePetTargetList(state, effect, lhsUnit, rhsUnit);
 
         for (int i = 0; i < targetList.Count; i++) {
             var heal = Parser.ParseEffectOperation(add, effect, lhsUnit, rhsUnit, targetList[i]);
@@ -263,32 +238,7 @@ public static class EffectAbilityHandler
         Unit invokeUnit = (Unit)effect.invokeUnit;
         Unit lhsUnit = (who == "me") ? state.GetUnitById(invokeUnit.id) : state.GetRhsUnitById(invokeUnit.id);
         Unit rhsUnit = state.GetRhsUnitById(lhsUnit.id);
-        List<BattlePet> targetList = new List<BattlePet>();
-
-        // Prepare Target List
-        switch (effect.target) {
-            default:
-                targetList.Add(lhsUnit.pet);
-                break;
-            case EffectTarget.CurrentPetBag:
-                var targetType = effect.targetType;
-                var targetNum = (int)Parser.ParseEffectOperation(effect.abilityOptionDict.Get("target_num", "-1"), effect, lhsUnit, rhsUnit);
-                var targetIndex = (int)Parser.ParseEffectOperation(effect.abilityOptionDict.Get("target_index", "-1"), effect, lhsUnit, rhsUnit);
-
-                var petBag = lhsUnit.petSystem.petBag;
-                targetList = petBag.Where(x => x != null).ToList();
-                if (targetType.Contains("other"))
-                    targetList.Remove(lhsUnit.pet);
-
-                if (targetType.Contains("random"))
-                    targetList = targetList.Random(targetNum, false);
-                else if (targetType.Contains("index") && (targetIndex.IsInRange(0, petBag.Length)))
-                    targetList = new List<BattlePet>(){ petBag[targetIndex] };
-                else if (targetNum >= 0)
-                    targetList = targetList.Take(targetNum).ToList();
-
-                break;
-        };
+        List<BattlePet> targetList = Parser.GetBattlePetTargetList(state, effect, lhsUnit, rhsUnit);
 
         for (int j = 0; j < targetList.Count; j++) {
             var pet = targetList[j];

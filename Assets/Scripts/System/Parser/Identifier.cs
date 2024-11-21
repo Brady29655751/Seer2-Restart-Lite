@@ -173,12 +173,18 @@ public static class Identifier {
 
         if (id.TryTrimStart("bag", out trimId)) {
             IEnumerable<BattlePet> petBag = petSystem.petBag.Where(x => x != null);
-            while (trimId.TryTrimParentheses(out var trimExpr)) {
+            while (trimId.TryTrimParentheses(out var trimExpr, '(', ')')) {
+                var op = "=";
                 var options = trimExpr.Split(':');
-                if (options.Length == 2)
-                    petBag = petBag.Where(x => Identifier.GetPetIdentifier(options[0], petSystem, x) == Identifier.GetIdentifier(options[1]));
-
-                trimId.TrimStart("[" + trimExpr + "]");
+                if (options.Length != 2) {
+                    var split = Operator.SplitCondition(trimExpr, out op);
+                    options = new string[] { split.Key, split.Value };  
+                }
+                petBag = petBag.Where(x => Operator.Condition(op, 
+                    Identifier.GetPetIdentifier(options[0], petSystem, x),
+                    Identifier.GetPetIdentifier(options[1], petSystem, x))
+                );
+                trimId.TrimStart("(" + trimExpr + ")");
             }
 
             trimId = trimId.TrimStart(".");

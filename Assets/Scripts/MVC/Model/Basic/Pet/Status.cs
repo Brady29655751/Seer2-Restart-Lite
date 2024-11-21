@@ -205,11 +205,11 @@ public class Status
         return buff;
     }
 
-    public static string GetPersonalityBuffDescription(Personality p) {
+    public static string GetPersonalityBuffDescription(Personality p, string delim = "\n", string amount = "10%") {
         int id = (int)p;
         int up = id / 5;
         int down = id % 5;
-        return (up == down) ? "平衡发展" : (typeNamesChinese[up] + "+10%\n" + typeNamesChinese[down] + "-10%");
+        return (up == down) ? "平衡发展" : (typeNamesChinese[up] + "+" + amount + delim + typeNamesChinese[down] + "-" + amount);
     }
 
     public static Status GetPowerUpBuff(Status powerup) {

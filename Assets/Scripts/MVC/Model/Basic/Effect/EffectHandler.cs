@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
@@ -26,6 +27,18 @@ public class EffectHandler
             return;
             
         queue.AddRange(effects.Select(x => new KeyValuePair<object, Effect>(invokeUnit, x)));
+    }
+
+    public void RemoveEffects(Func<Effect, bool> filter) {
+        queue.RemoveAll(pair => filter(pair.Value));
+    }
+
+    public List<Effect> GetEffects(Func<Effect, bool> filter) {
+        return queue.Select(pair => pair.Value).Where(filter).ToList();
+    }
+
+    public List<Effect> GetEffects(Func<Effect, int, bool> filter) {
+        return queue.Select(pair => pair.Value).Where(filter).ToList();
     }
 
     public List<bool> Condition(BattleState state, bool checkPhase = true) {

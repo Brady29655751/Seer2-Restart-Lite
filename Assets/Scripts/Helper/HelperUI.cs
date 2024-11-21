@@ -128,7 +128,7 @@ namespace UnityEngine.UI
         public static Sprite Empty => RM.instance.Get<Sprite>("Sprites/Empty");
         public static Sprite Question => RM.instance.Get<Sprite>("Sprites/Question");
         public static Sprite GetDefaultIconSprite(bool bold = false) =>
-            RM.instance.Get<Sprite>("Panels/PetBag/Sprites/" + (bold ? 87 : 85));
+            RM.instance.Get<Sprite>("Panels/OldPetBag/Sprites/" + (bold ? 87 : 85));
 
         public static bool TryCreateSpriteFromBytes(byte[] bytes, out Sprite sprite)
         {

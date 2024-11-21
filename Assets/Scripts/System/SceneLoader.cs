@@ -22,7 +22,7 @@ public class SceneLoader : Singleton<SceneLoader>
         OnBeforeLoading();
     }
 
-    public LoadingScreen ShowLoadingScreen(int sceneId = 0) {
+    public LoadingScreen ShowLoadingScreen(int sceneId = 0, string text = null) {
         canvas.SetActive(true);
         for (int i = 0; i < loadingScreens.Length; i++) {
             GetLoadingScreen(i).gameObject.SetActive(false);
@@ -30,6 +30,10 @@ public class SceneLoader : Singleton<SceneLoader>
         currentLoadingScreen = GetLoadingScreen(sceneId);
         currentLoadingScreen.gameObject.SetActive(true);
         currentLoadingScreen.background.gameObject.SetActive(true);
+
+        if (text != null)
+            currentLoadingScreen.SetText(text);
+            
         return currentLoadingScreen;
     }
     

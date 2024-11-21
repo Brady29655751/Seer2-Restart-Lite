@@ -69,6 +69,7 @@ id,name,type,copyType,turn,options,description
 63,怒气传递,mark,replace,-1,none,替换下场只会使下一只精灵保留[value]%的怒气
 64,怒气接受,mark,replace,-1,res=63,替换上场只会保留上一只精灵传递折损后的[value]%怒气
 65,多段行动,mark,replace,-1,none,1回合中可以行动[value]次
+66,转移治疗,mark,replace,-1,none,回复的体力全部转移给背包中首位其他存活的受伤精灵[ENDL]（回合结束回复的体力除外）
 95,至尊光环,mark,replace,-1,none,自身弱化不超过[value]级，对手强化不超过[value]级
 96,限伤,mark,replace,-1,none,受到的伤害不超过最大体力的1/[value]
 97,暴怒,mark,replace,-1,hide=true,锁定100怒气
@@ -457,7 +458,7 @@ id,name,type,copyType,turn,options,description
 -3021,虚弱大厅,mark,replace,-1,res=46,受到攻击时使对手能力值下降100点
 -3022,至尊光环(2),mark,replace,-1,hide=true,至尊光环(2)
 -3023,狂暴回廊,mark,replace,-1,res=63,怒气上限提升至500点
--3024,液态迦拉特,turn,replace,-1,hide=true,死亡变身固态迦拉特並保留2000体力
+-3024,液态迦拉特,mark,replace,-1,hide=true,死亡变身固态迦拉特並保留2000体力
 -3025,固态迦拉特,mark,replace,-1,hide=true,固态迦拉特的技能和恒久光辉
 -3026,爆炎,mark,max,-1,min_val=50&max_val=100,爆炎值最低50。对手使用攻击技能-10，属性技能+10，换场+20。达到100时秒杀对手且爆炎值再也不会降低[ENDL]当前爆炎值为[value]
 -3027,焚火天躯,mark,replace,-1,hide=true,200怒以上使用焚火天躯且伤害不低于200

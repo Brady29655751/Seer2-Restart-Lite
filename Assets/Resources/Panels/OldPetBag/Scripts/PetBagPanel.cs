@@ -77,7 +77,7 @@ public class PetBagPanel : Panel
             featureController.onRemoveBuffEvent += OnRemoveBuffSuccess;
 
         if (teamController != null)
-            teamController.onSelectTeamSuccessEvent += RefreshPetBag;
+            teamController.onSelectTeamSuccessEvent += OnSelectTeamSuccess;
 
         if (switchController != null)
             switchController.onSwitchSuccessEvent += OnSwitchPetSuccess;
@@ -108,6 +108,21 @@ public class PetBagPanel : Panel
 
     private void OnRemoveBuffSuccess(Buff buff) {
         RefreshPetBag(petBag);
+    }
+
+    private void OnSelectTeamSuccess(Pet[] bag) {
+        void OnSuccess(Pet[] newBag) {
+            RefreshPetBag(newBag);
+            Hintbox.OpenHintboxWithContent("切换队伍成功", 16);
+        }
+        
+        switch (mode) {
+            default:
+                break;
+            case PetBagMode.PVP:
+                OnSuccess(bag);
+                break;
+        }   
     }
 
     private void OnSwitchPetSuccess(Pet pet) {
@@ -143,5 +158,6 @@ public class PetBagPanel : Panel
 public enum PetBagMode {
     Normal = 0,
     PVP = 1,
-    YiTeRogue = 2,
+    Dictionary = 2,
+    YiTeRogue = 3,
 }

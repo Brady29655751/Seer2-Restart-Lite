@@ -37,6 +37,7 @@ public class GameData
     public Pet[] petBag = new Pet[6];
     public List<Pet> petStorage = new List<Pet>();
     public List<IKeyValuePair<string, Pet[]>> pvpPetTeam = new List<IKeyValuePair<string, Pet[]>>();
+    [XmlIgnore] public List<Pet> petDict => petBag.Concat(petStorage).Where(x => x != null).ToList();
     
     [XmlIgnore] public List<Item> itemBag { 
         get => itemStorage.OrderBy(x => x.id).ToList();

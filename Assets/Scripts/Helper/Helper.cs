@@ -38,21 +38,34 @@ namespace System {
             return str.StartsWith(prefix);
         }
 
-        public static string TrimParentheses(this string str) {
+        public static string TrimParentheses(this string str, char leftPar = '[', char rightPar = ']') {
             if (string.IsNullOrEmpty(str))
                 return str;
 
-            int startIndex = str.IndexOf('[');
-            int endIndex = str.IndexOf(']');
+            int startIndex = str.IndexOf(leftPar);
+            int endIndex = str.IndexOf(rightPar);
             if ((startIndex == -1) || (endIndex == -1) || (endIndex < startIndex))
                 return str;
 
             return str.Substring(startIndex + 1, endIndex - startIndex - 1);
         }
 
-        public static bool TryTrimParentheses(this string str, out string trim) {
-            trim = TrimParentheses(str);
+        public static bool TryTrimParentheses(this string str, out string trim, char leftPar = '[', char rightPar = ']') {
+            trim = TrimParentheses(str, leftPar, rightPar);
             return trim != str;
+        }
+
+        public static List<string> TrimParenthesesLoop(this string str, char leftPar = '[', char rightPar = ']') {
+            List<string> result = new List<string>();
+            while (str.TryTrimParentheses(out var trimStr, leftPar, rightPar)) {
+                result.Add(trimStr);
+                str = str.TrimStart(leftPar + trimStr + rightPar);
+            }
+
+            if (ListHelper.IsNullOrEmpty(result))
+                return null;
+
+            return result;
         }
 
         public static string ReplaceAll(this string str, string[] allOldString, string newString) {

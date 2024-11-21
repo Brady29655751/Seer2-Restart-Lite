@@ -34,6 +34,9 @@ public class Map
     [XmlIgnore] public Vector2Int pathSize => resources.pathSize;
 
     public static bool IsMod(int id) => id < -50000;
+    public static void GetMap(int id, Action<Map> onSuccess = null, Action<string> onFail = null) {
+        ResourceManager.instance.LoadMap(id, onSuccess, onFail);
+    }
 
     public void SetResources(MapResources resources) {
         this.resources = resources;

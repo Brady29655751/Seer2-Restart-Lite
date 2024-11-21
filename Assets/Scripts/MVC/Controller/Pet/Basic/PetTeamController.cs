@@ -5,9 +5,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
+using UnityEngine.SceneManagement;
 
 public class PetTeamController : Module
 {
+    [SerializeField] private PetBagMode mode = PetBagMode.PVP;
     [SerializeField] private PetSelectController selectController;
     [SerializeField] private PetTeamModel teamModel;
     [SerializeField] private PetSelectView teamView;
@@ -15,7 +17,7 @@ public class PetTeamController : Module
 
     public event Action<Pet[]> onSelectTeamSuccessEvent;
 
-    private int petCount => (int)PhotonNetwork.CurrentRoom.CustomProperties["count"];
+    private int petCount => mode == PetBagMode.PVP ? (int)PhotonNetwork.CurrentRoom.CustomProperties["count"] : 6;
 
     public override void Init()
     {
@@ -46,7 +48,7 @@ public class PetTeamController : Module
             SetStorage(Player.instance.gameData.pvpPetTeam);
             SaveSystem.SaveData();
 
-            message = "成功保存当前PVP队伍配置";
+            message = "成功保存当前队伍配置";
         }
 
         Hintbox.OpenHintboxWithContent(message, 16);
@@ -78,8 +80,6 @@ public class PetTeamController : Module
     public void OnConfirmTeam() {
         var team = teamModel.currentSelectedItems.FirstOrDefault()?.value.Select(x => (x == null) ? null : new Pet(x)).ToArray();
         onSelectTeamSuccessEvent?.Invoke(team);
-
-        Hintbox.OpenHintboxWithContent("切换队伍成功", 16);
     }
 
     private void OnSetPage() {

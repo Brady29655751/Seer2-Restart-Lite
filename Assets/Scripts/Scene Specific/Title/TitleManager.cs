@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using SimpleFileBrowser;
 using System.IO;
+using System.IO.Compression;
 
 public class TitleManager : Manager<TitleManager>
 {
@@ -19,6 +20,14 @@ public class TitleManager : Manager<TitleManager>
 
         FileBrowser.AddQuickLink("默认存档位置", Application.persistentDataPath);
         SetBackgroundPageImage();
+        
+        // var loadingScreen = SceneLoader.instance.ShowLoadingScreen();
+        // RequestManager.instance.Download("https://www.dropbox.com/scl/fi/8skjwkfo4ujqal0b9jwnz/Basic.zip?rlkey=ips7c15koiamebdpu2lj3xk6p&st=qky6vao3&dl=1", 
+        //     Application.persistentDataPath + "/Basic.zip", () => {
+        //         loadingScreen.SetText("正在解壓縮");
+        //         ZipFile.ExtractToDirectory(Application.persistentDataPath + "/Basic.zip", Application.persistentDataPath + "/Test");
+        //         SceneLoader.instance.HideLoadingScreen();
+        //     }, (e) => Debug.Log(e), loadingScreen.ShowLoadingProgress);
     }
 
     private IEnumerator CheckVersionData() {

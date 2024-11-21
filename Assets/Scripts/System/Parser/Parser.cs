@@ -122,4 +122,74 @@ public static class Parser {
         }
         return sign * value;
     }
+
+    public static List<BattlePet> GetBattlePetTargetList(BattleState state, Effect effect, Unit lhsUnit, Unit rhsUnit) {
+        return effect.target switch {
+            EffectTarget.CurrentPetBag => GetBattlePetTargetListFromPetBag(effect, lhsUnit, rhsUnit),
+            _ => GetBattlePetTargetListFromDefault(state, effect, lhsUnit, rhsUnit),
+        };
+    }
+
+    public static List<BattlePet> GetBattlePetTargetListFromDefault(BattleState state, Effect effect, Unit lhsUnit, Unit rhsUnit) {
+        var phase = state.phase;
+        state.phase = EffectTiming.OnSelectTarget;
+
+        var handler = state.GetEffectHandler(lhsUnit, false);
+        var condition = handler.Condition(state);
+        var lastEffect = handler.GetEffects((x, i) => condition[i] && (effect.ability == effect.ability)).LastOrDefault();
+
+        state.phase = phase;
+
+        return (lastEffect == null) ? new List<BattlePet>() { lhsUnit.pet } :
+            Parser.GetBattlePetTargetListFromPetBag(lastEffect, lhsUnit, rhsUnit);
+    }
+
+    public static List<BattlePet> GetBattlePetTargetListFromPetBag(Effect effect, Unit lhsUnit, Unit rhsUnit) {
+        var targetList = new List<BattlePet>();
+        
+        var targetType = effect.targetType;
+        var targetFilter = Parser.ParseBattlePetTargetFilter(effect, lhsUnit, rhsUnit);
+        var targetNum = (int)Parser.ParseEffectOperation(effect.abilityOptionDict.Get("target_num", "-1"), effect, lhsUnit, rhsUnit);
+        var targetIndex = (int)Parser.ParseEffectOperation(effect.abilityOptionDict.Get("target_index", "-1"), effect, lhsUnit, rhsUnit);
+
+        var petBag = lhsUnit.petSystem.petBag;
+        targetList = petBag.Where(x => x != null).Where(targetFilter).ToList();
+
+        if (targetType.Contains("other"))
+            targetList.Remove(lhsUnit.pet);
+
+        if (targetType.Contains("random"))
+            targetList = targetList.Random(targetNum, false);
+        else if (targetType.Contains("index") && (targetIndex.IsInRange(0, petBag.Length)))
+            targetList = new List<BattlePet>(){ petBag[targetIndex] };
+        else if (targetNum >= 0)
+            targetList = targetList.Take(targetNum).ToList();
+
+        return targetList;
+    }
+
+    public static Func<BattlePet, bool> ParseBattlePetTargetFilter(Effect effect, Unit lhsUnit, Unit rhsUnit) {
+        var targetFilter = effect.targetFilter;
+        bool Filter(BattlePet pet) {
+            if (targetFilter == null)
+                return true;
+
+            foreach (var filter in targetFilter) {
+                var op = "=";
+                var options = filter.Split(':');
+                if (options.Length != 2) {
+                    var split = Operator.SplitCondition(filter, out op);
+                    options = new string[] { split.Key, split.Value };  
+                }
+                var condition = Operator.Condition(op, 
+                    Identifier.GetPetIdentifier(options[0], lhsUnit.petSystem, pet),
+                    Identifier.GetPetIdentifier(options[1], lhsUnit.petSystem, pet)
+                );
+                if (!condition)
+                    return false;
+            }
+            return true;
+        }
+        return Filter;
+    }
 }

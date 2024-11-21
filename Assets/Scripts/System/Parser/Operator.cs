@@ -13,6 +13,29 @@ public static class Operator {
         {"GTE", GreaterThanOrEqual},
         {"NOT", NotEqual}
     };
+
+    public static string ToHalfCondition(this string str) {
+        return str.Replace("＜", "<").Replace("＞", ">").Replace("＝", "=");
+    }
+
+    public static KeyValuePair<string, string> SplitCondition(this string str, out string op, string defaultOp = "=", bool toHalf = true) {
+        var halfStr = toHalf ? str.ToHalfCondition() : str;
+        var opIndex = -1;
+
+        op = defaultOp;
+    
+        foreach (var key in Operator.condDict.Keys) {
+            opIndex = halfStr.IndexOf(key);
+            if (opIndex != -1) {
+                op = key;
+                break;
+            }
+        }
+        string type = halfStr.Substring(0, opIndex);
+        string value = halfStr.Substring(opIndex + op.Length);
+        return new KeyValuePair<string, string>(type, value);
+    }
+
     public static bool Condition(string op, float lhs, float rhs) {
         return condDict.ContainsKey(op) ? condDict.Get(op).Invoke(lhs, rhs) : false;
     }

@@ -37,8 +37,7 @@ public class PetBagController : Module
     private Pet[] GetPetBag() {
         return mode switch {
             PetBagMode.Normal => Player.instance.gameData.petBag,
-            PetBagMode.PVP => selectController.GetPetSelections(),
-            _ => Player.instance.gameData.petBag,
+            _ => selectController.GetPetSelections(),
         };
     }
 
