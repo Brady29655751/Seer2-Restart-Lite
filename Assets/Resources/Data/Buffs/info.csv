@@ -69,7 +69,9 @@ id,name,type,copyType,turn,options,description
 63,怒气传递,mark,replace,-1,none,替换下场只会使下一只精灵保留[value]%的怒气
 64,怒气接受,mark,replace,-1,res=63,替换上场只会保留上一只精灵传递折损后的[value]%怒气
 65,多段行动,mark,replace,-1,none,1回合中可以行动[value]次
-66,转移治疗,mark,replace,-1,none,回复的体力全部转移给背包中首位其他存活的受伤精灵[ENDL]（回合结束回复的体力除外）
+66,转移治疗,mark,replace,-1,res=-14,回复的体力全部转移给背包中首位其他存活的受伤精灵[ENDL]（回合结束回复的体力除外）
+67,随机数提升,mark,replace,-1,none,我方条件类随机数提升[value]
+68,随机数固定,mark,replace,-1,none,我方条件类随机数固定为[value]
 95,至尊光环,mark,replace,-1,none,自身弱化不超过[value]级，对手强化不超过[value]级
 96,限伤,mark,replace,-1,none,受到的伤害不超过最大体力的1/[value]
 97,暴怒,mark,replace,-1,hide=true,锁定100怒气
@@ -171,7 +173,7 @@ id,name,type,copyType,turn,options,description
 3065,水龙缠绕,chance,replace,-1,none,下一次攻击连击数改为1
 3066,充电,chance,replace,-1,res=3050,下一次使用电系技能伤害翻倍
 3067,雷神觉醒,turn,replace,3,none,每回合回复35点怒气
-3068,星之辉,mark,stack,-1,none,特定技能效果触发率提升[value]%
+3068,星之辉,mark,stack,-1,res=67,特定技能效果触发率提升[value]%
 3069,后空翻,turn,replace,1,res=18,躲避物理攻击，但自身受到特殊攻击伤害翻倍
 3070,无力,mark,replace,-1,none,造成的伤害降低25%
 3071,洪流,turn,replace,3,keep=false,每回合损失55点体力

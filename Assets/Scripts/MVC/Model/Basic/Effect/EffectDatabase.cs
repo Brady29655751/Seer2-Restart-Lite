@@ -5,14 +5,7 @@ using UnityEngine;
 
 public static class EffectDatabase {
 
-    private static Dictionary<string, EffectTiming> timingConvDict = new Dictionary<string, EffectTiming>() {
-        {"on_select_target", EffectTiming.OnSelectTarget},
-        {"on_after_pet_change", EffectTiming.OnAfterPetChange},
-        {"on_before_pet_change", EffectTiming.OnBeforePetChange},
-        {"on_remove_buff", EffectTiming.OnRemoveBuff},
-        {"on_add_buff", EffectTiming.OnAddBuff},
-        {"on_passive_pet_change", EffectTiming.OnPassivePetChange},
-        
+    private static Dictionary<string, EffectTiming> timingConvDict = new Dictionary<string, EffectTiming>() {    
         {"none", EffectTiming.None},
         {"resident", EffectTiming.Resident},
         {"on_battle_start", EffectTiming.OnBattleStart},
@@ -29,6 +22,13 @@ public static class EffectDatabase {
         {"on_after_attack", EffectTiming.OnAfterAttack},
         {"on_turn_end", EffectTiming.OnTurnEnd},
         {"on_battle_end", EffectTiming.OnBattleEnd},
+
+        {"on_passive_pet_change", EffectTiming.OnPassivePetChange},
+        {"on_select_target", EffectTiming.OnSelectTarget},
+        {"on_add_buff", EffectTiming.OnAddBuff},
+        {"on_remove_buff", EffectTiming.OnRemoveBuff},
+        {"on_before_pet_change", EffectTiming.OnBeforePetChange},
+        {"on_after_pet_change", EffectTiming.OnAfterPetChange},
     };
 
     private static Dictionary<string, EffectTarget> targetConvDict = new Dictionary<string, EffectTarget>() {
@@ -107,16 +107,14 @@ public static class EffectDatabase {
 }
 
 public enum EffectTiming {
-    OnSelectTarget = -6,
-    OnBeforePetChange = -4, OnAfterPetChange = -5,
-    OnAddBuff = -2, OnRemoveBuff = -3,
-    OnPassivePetChange = -1,
-
     None = 0, Resident = 1, OnBattleStart = 2,
     OnTurnStart = 3, OnTurnReady = 4, OnDecidePriority = 5, OnPriorityReady = 6, OnBeforeAttack = 7,
     OnBeforeDamageCalculate = 8, OnDamageCalculate = 9, OnAfterDamageCalculate = 10, OnFinalDamageCalculate = 11,
-    OnAttack = 12, OnAfterAttack = 13, OnTurnEnd = 14, 
-    OnBattleEnd = 999,
+    OnAttack = 12, OnAfterAttack = 13, OnTurnEnd = 14, OnBattleEnd = 999,
+
+    OnPassivePetChange = -1, OnSelectTarget = -2,
+    OnAddBuff = -3, OnRemoveBuff = -4,
+    OnBeforePetChange = -5, OnAfterPetChange = -6,
 }
 
 public enum EffectTarget {

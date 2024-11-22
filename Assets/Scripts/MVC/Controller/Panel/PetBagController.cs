@@ -108,4 +108,9 @@ public class PetBagController : Module
     public void TogglePetItemPanel() {
         buttonView.TogglePetItemPanel();
     }
+
+    public void TestBattle(int mapId) {
+        Map.TestBattle(mapId, selectController?.GetPetSelections());
+    }
+
 }

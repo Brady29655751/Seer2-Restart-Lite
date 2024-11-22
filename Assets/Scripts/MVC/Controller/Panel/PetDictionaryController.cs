@@ -49,36 +49,7 @@ public class PetDictionaryController : Module
     }
 
     public void TestBattle(int mapId) {
-        Map.GetMap(mapId, OnLoadTestBattleMapSuccess, (error) => {
-            Hintbox.OpenHintboxWithContent(error, 16);
-        });
-    }
-
-    private void OnLoadTestBattleMapSuccess(Map map) {
-        if (map == null) {
-            Hintbox.OpenHintboxWithContent("加载的地图为空", 16);
-            return;
-        }
-        var npcId = map.id * 100 + (map.id > 0 ? 1 : -1);
-        var battleInfo = map?.entities?.npcs?.Find(x => x.id == npcId)?.battleHandler?.Find(x => x?.id == "test");
-        if (battleInfo == null) {
-            Hintbox.OpenHintboxWithContent("测试的NPC战斗信息为空", 16);
-            return;
-        }
-
-        var player = petBagPanel?.petBag?.Select(BattlePet.GetBattlePet).ToArray();
-        var enemy = battleInfo.enemyInfo?.Select(BattlePet.GetBattlePet).ToArray();
-
-        if ((player == null) || (enemy == null)) {
-            Hintbox.OpenHintboxWithContent("测试的精灵信息为空", 16);
-            return;
-        }
-        BattleSettings settings = new BattleSettings(battleInfo.settings){ 
-            isSimulate = true, 
-            isCaptureOK = false 
-        };
-        Battle battle = new Battle(player, enemy, settings);
-        SceneLoader.instance.ChangeScene(SceneId.Battle);
+        Map.TestBattle(mapId, petBagPanel?.petBag);
     }
 }
 

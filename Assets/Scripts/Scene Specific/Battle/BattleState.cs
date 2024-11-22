@@ -190,4 +190,17 @@ public class BattleState
 
         return handler;
     }
+
+    public virtual List<Effect> GetEffectsByTiming(EffectTiming timing, EffectHandler handler, Func<Effect, bool> filter = null) {
+        filter ??= (e) => true;
+
+        var tmpPhase = phase;
+        phase = timing;
+
+        var condition = handler.Condition(this);
+        var effects = handler.GetEffects((x, i) => condition[i] && filter(x));
+
+        phase = tmpPhase;
+        return effects;
+    }
 }

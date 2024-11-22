@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Xml.Serialization;
 using System.Collections;
 using System.Collections.Generic;
@@ -36,6 +37,38 @@ public class Map
     public static bool IsMod(int id) => id < -50000;
     public static void GetMap(int id, Action<Map> onSuccess = null, Action<string> onFail = null) {
         ResourceManager.instance.LoadMap(id, onSuccess, onFail);
+    }
+
+    public static void TestBattle(int mapId, Pet[] petBag) {
+        Map.GetMap(mapId, (map) => Map.OnLoadTestBattleMapSuccess(map, petBag), 
+            (error) => Hintbox.OpenHintboxWithContent(error, 16));
+    }
+
+    private static void OnLoadTestBattleMapSuccess(Map map, Pet[] petBag) {
+        if (map == null) {
+            Hintbox.OpenHintboxWithContent("加载的地图为空", 16);
+            return;
+        }
+        var npcId = map.id * 100 + (map.id > 0 ? 1 : -1);
+        var battleInfo = map?.entities?.npcs?.Find(x => x.id == npcId)?.battleHandler?.Find(x => x?.id == "test");
+        if (battleInfo == null) {
+            Hintbox.OpenHintboxWithContent("测试的NPC战斗信息为空", 16);
+            return;
+        }
+
+        var player = petBag?.Select(BattlePet.GetBattlePet).ToArray();
+        var enemy = battleInfo.enemyInfo?.Select(BattlePet.GetBattlePet).ToArray();
+
+        if ((player == null) || (enemy == null)) {
+            Hintbox.OpenHintboxWithContent("测试的精灵信息为空", 16);
+            return;
+        }
+        BattleSettings settings = new BattleSettings(battleInfo.settings){ 
+            isSimulate = true, 
+            isCaptureOK = false 
+        };
+        Battle battle = new Battle(player, enemy, settings);
+        SceneLoader.instance.ChangeScene(SceneId.Battle);
     }
 
     public void SetResources(MapResources resources) {

@@ -70,6 +70,8 @@ id,timing,priority,target,condition,cond_option,effect,effect_option
 64,none,-1,none,none,none,none,none
 65,on_turn_ready,1000,skill,none,none,set_skill,type=chain&op=SET&value=value
 66,on_select_target,-1,pet_bag,none,whos_turn=all,heal,target_type=other&target_filter=(dead:0)(status.hp<status.maxHp)&target_num=1
+67,none,-1,none,none,none,none,none
+68,none,-1,none,none,none,none,none
 95,on_add_buff\on_add_buff\on_remove_buff\on_remove_buff,-1\-1\-1\-1,pet_bag\pet\pet_bag\pet,none\none\none\none,none\none\none\none,powerup\powerup\powerup\powerup,who=op&max=value\min=-value\who=op&max=6\min=-6
 96,on_final_dmg_cal,-100,skill,skill,whos_turn=op&who=op&type=type&type_op=>&type_cmp=0,set_damage,who=op&op=SET&value=me.pet.status.maxHp/value[MIN]op.skill.damage
 97,on_add_buff\on_remove_buff,-1\-1,pet\pet,none\none,none\none,rage\rage,min=100\min=0

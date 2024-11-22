@@ -8781,7 +8781,9 @@ MonoBehaviour:
   descriptionBox: {fileID: 0}
   infoPrompt: {fileID: 3577997761211002942}
   anchoredAtLeft: 1
+  isExtendMode: 1
   numInOneRow: 5
+  numLimitExtend: 7
   buffBlockSize: 45
   buffPanel: {fileID: 1086797170}
   buffButtonPrefab: {fileID: 2803354942318481251, guid: c0a04087b0cfc3b4cb0526b632bd17cd, type: 3}
@@ -16097,6 +16099,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c652d578dae08be4c8b9a4f26690374b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mode: 1
   selectController: {fileID: 6502563925905585107}
   teamModel: {fileID: 1245415964}
   teamView: {fileID: 2102246103}
@@ -19957,7 +19960,9 @@ MonoBehaviour:
   descriptionBox: {fileID: 0}
   infoPrompt: {fileID: 3577997761211002942}
   anchoredAtLeft: 1
+  isExtendMode: 1
   numInOneRow: 5
+  numLimitExtend: 7
   buffBlockSize: 45
   buffPanel: {fileID: 461020245}
   buffButtonPrefab: {fileID: 2803354942318481251, guid: c0a04087b0cfc3b4cb0526b632bd17cd, type: 3}
@@ -27601,6 +27606,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentSkillController: {fileID: 2881065223242568331}
   backupSkillController: {fileID: 4035155878247932229}
+  specialSkillController: {fileID: 0}
 --- !u!114 &1246118900289713454
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -27933,7 +27939,8 @@ MonoBehaviour:
   demoController: {fileID: 2556012279288592732}
   featureController: {fileID: 45936915}
   statusController: {fileID: 1859881647044260143}
-  skillController: {fileID: 1186970300197963043}
+  skillController: {fileID: 0}
+  swapSkillController: {fileID: 0}
   itemController: {fileID: 371958611289007823}
   infoController: {fileID: 2809041037967051100}
   skinController: {fileID: 8113021123607776157}
@@ -29439,6 +29446,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee2dcb75062cded4d94cdbba92d771cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  animMode: 1
 --- !u!114 &2198848576059646443
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -31289,6 +31297,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4fdcc16e24c869f438480747484a7fa5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  showPersonalityDetail: 0
   idText: {fileID: 5535348081811887063}
   levelText: {fileID: 5535348080825980319}
   evolveLevelText: {fileID: 5535348082874087300}
@@ -31312,6 +31321,7 @@ MonoBehaviour:
   selectCount: 1
   capacity: 4
   pageMode: 1
+  special: 0
 --- !u!1001 &3199331329830499814
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -32215,6 +32225,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fc40c895851d6f94884cc56af8d3097c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  numInOneRow: 6
+  showAtRightLimit: 3
   infoPrompt: {fileID: 3577997761211002942}
   itemBlockViews:
   - {fileID: 5525431656671048196}
@@ -40071,6 +40083,7 @@ MonoBehaviour:
   capacity: 20
   pageMode: 0
   categories: 02000000
+  currentCategory: 0
 --- !u!224 &5622763582668923029
 RectTransform:
   m_ObjectHideFlags: 0
@@ -42416,9 +42429,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   featurePromptLeft: 0
-  petAnimLocalScale: 0.7
-  petAnimCoefficientX: {x: 0.6, y: -0.55}
-  petAnimCoefficientY: {x: 0.7, y: 0.05}
+  animPosOffset: {x: 1098, y: 658}
+  animationCamera: {fileID: 0}
   infoPrompt: {fileID: 3577997761211002942}
   demoImage: {fileID: 5535348082845110003}
   nameText: {fileID: 5535348081131967692}
@@ -43062,6 +43074,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   firstButton: {fileID: 1406088171635603850}
   trainButton: {fileID: 0}
+  itemPanelObject: {fileID: 0}
 --- !u!114 &7671964173614924802
 MonoBehaviour:
   m_ObjectHideFlags: 0

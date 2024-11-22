@@ -71,8 +71,12 @@ public static class EffectConditionHandler
     public static bool RandomNumber(this Effect effect, BattleState state, Dictionary<string, string> condOptions) {
         string who = condOptions.Get("who", "me");
         string type = condOptions.Get("random_type", "rng");
-        string op = condOptions.Get("random_op", "LTE");
-        string cmpValue = condOptions.Get("random_cmp", "100");
+        var isOpExist = condOptions.TryGet("random_op", out var op, "LTE");
+        var isValueExist = condOptions.TryGet("random_cmp", out var cmpValue, "100");
+
+        // No random condition if no specify.
+        if ((!isOpExist) && (!isValueExist))
+            return true;
 
         float random = Player.instance.random;
         float value;
@@ -88,6 +92,8 @@ public static class EffectConditionHandler
             rhsUnit = state.GetRhsUnitById(lhsUnit.id);
             
             random = (type == "rng") ? Random.Range(0, 100) : lhsUnit.random;
+            random += lhsUnit.pet.buffController.GetBuff(67)?.value ?? 0;
+            random = lhsUnit.pet.buffController.GetBuff(68)?.value ?? random;
         }
 
         if (op == "IN") {

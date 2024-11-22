@@ -8,7 +8,6 @@ using FTRuntime;
 public class PetDemoView : Module
 {
     [SerializeField] private bool featurePromptLeft = false;
-    [SerializeField] private Vector2 animPosOffset = new Vector2(1098, 658);
 
     [SerializeField] private Camera animationCamera;
     [SerializeField] private InfoPrompt infoPrompt;
@@ -135,13 +134,11 @@ public class PetDemoView : Module
             this.currentPetAnim.transform.SetParent(animationCamera.transform);
             this.currentPetAnim.transform.SetAsFirstSibling();
             
-            animationCamera.orthographicSize = this.currentPetAnim.transform.localScale.x * 2 * canvas.transform.localScale.x;
-            
             SwfClipController controller = this.currentPetAnim.GetComponent<SwfClipController>();
             controller.clip.sortingOrder = 1;
 
             var animPos = this.currentPetAnim.transform.localPosition;
-            this.currentPetAnim.transform.localPosition = new Vector3(animPos.x + animPosOffset.x, animPos.y + animPosOffset.y, 1);
+            this.currentPetAnim.transform.localPosition = new Vector3(animPos.x, animPos.y, 1);
             return;
         }
 

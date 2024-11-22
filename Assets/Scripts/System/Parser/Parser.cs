@@ -131,15 +131,8 @@ public static class Parser {
     }
 
     public static List<BattlePet> GetBattlePetTargetListFromDefault(BattleState state, Effect effect, Unit lhsUnit, Unit rhsUnit) {
-        var phase = state.phase;
-        state.phase = EffectTiming.OnSelectTarget;
-
         var handler = state.GetEffectHandler(lhsUnit, false);
-        var condition = handler.Condition(state);
-        var lastEffect = handler.GetEffects((x, i) => condition[i] && (effect.ability == effect.ability)).LastOrDefault();
-
-        state.phase = phase;
-
+        var lastEffect = state.GetEffectsByTiming(EffectTiming.OnSelectTarget, handler, e => e.ability == effect.ability).LastOrDefault();
         return (lastEffect == null) ? new List<BattlePet>() { lhsUnit.pet } :
             Parser.GetBattlePetTargetListFromPetBag(lastEffect, lhsUnit, rhsUnit);
     }
@@ -152,15 +145,16 @@ public static class Parser {
         var targetNum = (int)Parser.ParseEffectOperation(effect.abilityOptionDict.Get("target_num", "-1"), effect, lhsUnit, rhsUnit);
         var targetIndex = (int)Parser.ParseEffectOperation(effect.abilityOptionDict.Get("target_index", "-1"), effect, lhsUnit, rhsUnit);
 
-        var petBag = lhsUnit.petSystem.petBag;
+        var petUnit = targetType.Contains("op") ? rhsUnit : lhsUnit; 
+        var petBag = petUnit.petSystem.petBag;
         targetList = petBag.Where(x => x != null).Where(targetFilter).ToList();
 
         if (targetType.Contains("other"))
-            targetList.Remove(lhsUnit.pet);
+            targetList.Remove(petUnit.pet);
 
         if (targetType.Contains("random"))
             targetList = targetList.Random(targetNum, false);
-        else if (targetType.Contains("index") && (targetIndex.IsInRange(0, petBag.Length)))
+        else if (targetType.Contains("index") && targetIndex.IsInRange(0, petBag.Length))
             targetList = new List<BattlePet>(){ petBag[targetIndex] };
         else if (targetNum >= 0)
             targetList = targetList.Take(targetNum).ToList();

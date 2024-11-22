@@ -391,44 +391,48 @@ public static class EffectAbilityHandler
         Unit invokeUnit = (Unit)effect.invokeUnit;
         Unit lhsUnit = (who == "me") ? state.GetUnitById(invokeUnit.id) : state.GetRhsUnitById(invokeUnit.id);
         Unit rhsUnit = state.GetRhsUnitById(lhsUnit.id);
-        var buffController = lhsUnit.pet.buffController;
-        int buffTurn = (int)Parser.ParseEffectOperation(turn, effect, lhsUnit, rhsUnit);
-        int buffValue = (int)Parser.ParseEffectOperation(value, effect, lhsUnit, rhsUnit);
+        List<BattlePet> targetList = Parser.GetBattlePetTargetList(state, effect, lhsUnit, rhsUnit);
 
-        int buffId = 0;
-        var buffIdList = new List<int>();
+        bool isSuccess = false;
 
-        if (id.TryTrimStart("unique", out var trimId)) {
-            buffIdList = trimId.ToIntRange();
-            if (!string.IsNullOrEmpty(key) || (buffIdList.Exists(x => Buff.GetBuffInfo(x) == null)))
+        for (int j = 0; j < targetList.Count; j++) {
+            var pet = targetList[j];
+            var buffController = targetList[j].buffController;
+            int buffTurn = (int)Parser.ParseEffectOperation(turn, effect, lhsUnit, rhsUnit);
+            int buffValue = (int)Parser.ParseEffectOperation(value, effect, lhsUnit, rhsUnit);
+            int buffId = 0;
+            var buffIdList = new List<int>();
+
+            if (id.TryTrimStart("unique", out var trimId)) {
+                buffIdList = trimId.ToIntRange();
+                if (!string.IsNullOrEmpty(key) || (buffIdList.Exists(x => Buff.GetBuffInfo(x) == null)))
+                    return false;
+                buffIdList = buffIdList.Where(x => !buffController.buffs.Exists(y => y.id == x)).ToList();
+                if (ListHelper.IsNullOrEmpty(buffIdList))
+                    return false;
+                buffId = buffIdList.Random();
+            } else {
+                buffId = id switch {
+                    "random[unhealthy]" => Database.instance.buffInfoDict.Where(entry => entry.Value.type == BuffType.Unhealthy).Select(entry => entry.Key).ToList().Random(), 
+                    "random[abnormal]"  => Database.instance.buffInfoDict.Where(entry => entry.Value.type == BuffType.Abnormal).Select(entry => entry.Key).ToList().Random(),
+                    _ => (int)Parser.ParseEffectOperation(id, effect, lhsUnit, rhsUnit),
+                };
+            }
+            if (string.IsNullOrEmpty(key) && (Buff.GetBuffInfo(buffId) == null))
                 return false;
 
-            buffIdList = buffIdList.Where(x => !buffController.buffs.Exists(y => y.id == x)).ToList();
-            if (ListHelper.IsNullOrEmpty(buffIdList))
-                return false;
+            Buff newBuff = new Buff(buffId, buffTurn, buffValue);
+            if (!string.IsNullOrEmpty(key)) {
+                state.stateBuffs.RemoveAll(x => x.Key == key);
+                if (newBuff != null)
+                    state.stateBuffs.Add(new KeyValuePair<string, Buff>(key, newBuff));
 
-            buffId = buffIdList.Random();
-        } else {
-            buffId = id switch {
-                "random[unhealthy]" => Database.instance.buffInfoDict.Where(entry => entry.Value.type == BuffType.Unhealthy).Select(entry => entry.Key).ToList().Random(), 
-                "random[abnormal]"  => Database.instance.buffInfoDict.Where(entry => entry.Value.type == BuffType.Abnormal).Select(entry => entry.Key).ToList().Random(),
-                _ => (int)Parser.ParseEffectOperation(id, effect, lhsUnit, rhsUnit),
-            };
+                return true;
+            }
+
+            isSuccess |= buffController.AddBuff(newBuff, lhsUnit, state);
         }
-        if (string.IsNullOrEmpty(key) && (Buff.GetBuffInfo(buffId) == null))
-            return false;
-
-        Buff newBuff = new Buff(buffId, buffTurn, buffValue);
-
-        if (!string.IsNullOrEmpty(key)) {
-            state.stateBuffs.RemoveAll(x => x.Key == key);
-            if (newBuff != null)
-                state.stateBuffs.Add(new KeyValuePair<string, Buff>(key, newBuff));
-            
-            return true;
-        }
-
-        return buffController.AddBuff(newBuff, lhsUnit, state);
+        return isSuccess;
     }
 
     public static bool RemoveBuff(this Effect effect, BattleState state) {

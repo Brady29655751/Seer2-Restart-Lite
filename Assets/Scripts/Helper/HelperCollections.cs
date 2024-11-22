@@ -12,11 +12,25 @@ public static class DictionaryHelper {
         return (dict == null) || (dict.Count == 0);
     }
 
+    public static bool TryGet<TKey, TValue>(this IDictionary<TKey, TValue> dict, TKey key, out TValue value, TValue defaultReturn = default(TValue)) {
+        bool isKeyExist = dict.ContainsKey(key);
+        if (isKeyExist)
+            value = dict[key];
+        else
+            value = defaultReturn;
+
+        return isKeyExist;
+    }
+
     public static TValue Get<TKey, TValue>(this IDictionary<TKey, TValue> dict, TKey key, TValue defaultReturn = default(TValue)) { 
+        dict.TryGet(key, out var value, defaultReturn);
+        return value;
+        /*
         if (dict.ContainsKey(key))
             return dict[key];
         else
             return defaultReturn;
+        */
     }
         
     public static void Set<TKey, TValue>(this IDictionary<TKey, TValue> dict, TKey key, TValue value) {
