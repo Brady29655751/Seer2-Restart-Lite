@@ -54,9 +54,15 @@ public class PetBattleBuffController
         return buffs.Exists(x => x.IsUnmovable());
     }
 
-    public bool IsBuffBlocked(int id) {
-        var type = Buff.GetBuffInfo(id)?.type ?? BuffType.None;
-        return blockBuffIds.Contains(id) || IsBuffTypeBlocked(type);
+    public bool IsBuffBlocked(Buff buff) {
+        if (buff == null)
+            return false;
+
+        return IsBuffIdBlocked(buff.id) || blockBuffTypes.Exists(buff.IsType);
+    }
+
+    public bool IsBuffIdBlocked(int id) {
+        return blockBuffIds.Contains(id);
     }
 
     public bool IsBuffTypeBlocked(BuffType type) {
@@ -95,7 +101,7 @@ public class PetBattleBuffController
         if (newBuff == null)
             return false;
 
-        if (IsBuffBlocked(newBuff.id) && !newBuff.IsPower())
+        if (IsBuffBlocked(newBuff) && !newBuff.IsPower())
             return false;
 
         if (state == null) {

@@ -46,6 +46,7 @@ public static class BuffDatabase
 }
 
 public enum BuffType {
+    All = -1,       // 全部
     None = 0,       // 無
     Feature = 1,    // 特性類狀態
     Emblem = 2,     // 紋章類狀態

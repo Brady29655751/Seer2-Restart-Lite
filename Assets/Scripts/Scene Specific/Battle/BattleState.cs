@@ -36,7 +36,7 @@ public class BattleState
         this.whosTurn = 0;
         this.phase = EffectTiming.OnBattleStart;
         this.weather = settings.weather;
-        this.stateBuffs = new List<KeyValuePair<string, Buff>>();
+        this.stateBuffs = settings.initBuffs;
 
         this.masterUnit = new Unit(masterTurn);
         this.clientUnit = new Unit(clientTurn);

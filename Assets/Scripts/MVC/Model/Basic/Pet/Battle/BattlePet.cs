@@ -193,7 +193,7 @@ public class BattlePet : Pet
             var powerup = (int)status[type];
             var id = Buff.GetPowerUpBuffId(type, powerup);
 
-            if (!buffController.IsBuffBlocked(id)) {
+            if (!buffController.IsBuffIdBlocked(id)) {
                 statusController.AddPowerUp(type, powerup);
             }
 

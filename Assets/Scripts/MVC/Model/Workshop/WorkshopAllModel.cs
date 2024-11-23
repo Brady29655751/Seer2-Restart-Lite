@@ -67,9 +67,9 @@ public class WorkshopAllModel : Module
     }
 
     private void OnUpdateSuccess(string[] paths) {
-        if ((paths[0] == Application.persistentDataPath) || 
-            FileBrowserHelpers.IsPathDescendantOfAnother(paths[0], Application.persistentDataPath)) {
-            Hintbox.OpenHintboxWithContent("需选择外部Mod文件，而非默认存档位置的文件", 16);
+        if ((paths[0] == (Application.persistentDataPath + "/Mod")) ||
+            FileBrowserHelpers.IsPathDescendantOfAnother(paths[0], Application.persistentDataPath + "/Mod")) {
+            Hintbox.OpenHintboxWithContent("需选择其他Mod文件，而非默认的Mod文件", 16);
             return;
         }
 

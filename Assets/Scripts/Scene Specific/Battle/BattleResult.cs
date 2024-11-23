@@ -70,8 +70,8 @@ public class BattleResult
         }
 
         if (state == BattleResultState.CaptureSuccess) {
-            int baseId = endState.opUnit.pet.basic.baseId;
-            capturePet = new Pet(baseId, endState.settings.captureLevel);
+            var pet = endState.opUnit.pet;
+            capturePet = new Pet(pet.basic.baseId, endState.settings.captureLevel, pet.feature.hasEmblem);
             Pet.Add(capturePet);
             SaveSystem.SaveData();
             return;

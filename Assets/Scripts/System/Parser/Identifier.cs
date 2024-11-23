@@ -277,7 +277,7 @@ public static class Identifier {
                 BuffType buffType = buffIdExpr.ToBuffType();
 
                 return id switch {
-                    "count" => buffs.Count(x => x.info.type == buffType),
+                    "count" => buffs.Count(x => x.IsType(buffType)),
                     "block" => buffController.IsBuffTypeBlocked(buffType) ? 1 : 0,
                     _ => 0,
                 };
@@ -288,7 +288,7 @@ public static class Identifier {
 
             return id switch {
                 "count" => buffs.Count(x => x.id == buffId),
-                "block" => buffController.IsBuffBlocked(buffId) ? 1 : 0,
+                "block" => buffController.IsBuffIdBlocked(buffId) ? 1 : 0,
                 _ => buff.TryGetBuffIdentifier(id, out float num) ? num : GetNumIdentifier(id),
             };
         }

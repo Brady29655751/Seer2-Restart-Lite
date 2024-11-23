@@ -123,6 +123,33 @@ public static class Parser {
         return sign * value;
     }
 
+    public static Func<T, bool> ParseConditionFilter<T>(string filterExpr, Func<string, T, float> idConverter, char leftPar = '(', char rightPar = ')') {
+        return ParseConditionFilter<T>(filterExpr, (ids, value) => ids.Select(id => idConverter.Invoke(id, value)).ToArray(), leftPar, rightPar);
+    }
+
+    public static Func<T, bool> ParseConditionFilter<T>(string filterExpr, Func<string[], T, float[]> idConverter, char leftPar = '(', char rightPar = ')') {        
+        var filterLoop = filterExpr?.TrimParenthesesLoop(leftPar, rightPar);
+        bool Filter(T value) {
+            if (filterLoop == null)
+                return true;
+
+            foreach (var filter in filterLoop) {
+                var op = "=";
+                var options = filter.Split(':');
+                if (options.Length != 2) {
+                    var split = Operator.SplitCondition(filter, out op);
+                    options = new string[] { split.Key, split.Value };  
+                }
+                var ids = idConverter.Invoke(options, value);
+                var condition = Operator.Condition(op, ids[0], ids[1]);
+                if (!condition)
+                    return false;
+            }
+            return true;
+        }
+        return Filter;
+    }
+
     public static List<BattlePet> GetBattlePetTargetList(BattleState state, Effect effect, Unit lhsUnit, Unit rhsUnit) {
         return effect.target switch {
             EffectTarget.CurrentPetBag => GetBattlePetTargetListFromPetBag(effect, lhsUnit, rhsUnit),
@@ -141,7 +168,7 @@ public static class Parser {
         var targetList = new List<BattlePet>();
         
         var targetType = effect.targetType;
-        var targetFilter = Parser.ParseBattlePetTargetFilter(effect, lhsUnit, rhsUnit);
+        var targetFilter = Parser.ParseConditionFilter<BattlePet>(effect.targetFilter, (id, pet) => Identifier.GetPetIdentifier(id, lhsUnit.petSystem, pet)); 
         var targetNum = (int)Parser.ParseEffectOperation(effect.abilityOptionDict.Get("target_num", "-1"), effect, lhsUnit, rhsUnit);
         var targetIndex = (int)Parser.ParseEffectOperation(effect.abilityOptionDict.Get("target_index", "-1"), effect, lhsUnit, rhsUnit);
 
@@ -160,30 +187,5 @@ public static class Parser {
             targetList = targetList.Take(targetNum).ToList();
 
         return targetList;
-    }
-
-    public static Func<BattlePet, bool> ParseBattlePetTargetFilter(Effect effect, Unit lhsUnit, Unit rhsUnit) {
-        var targetFilter = effect.targetFilter;
-        bool Filter(BattlePet pet) {
-            if (targetFilter == null)
-                return true;
-
-            foreach (var filter in targetFilter) {
-                var op = "=";
-                var options = filter.Split(':');
-                if (options.Length != 2) {
-                    var split = Operator.SplitCondition(filter, out op);
-                    options = new string[] { split.Key, split.Value };  
-                }
-                var condition = Operator.Condition(op, 
-                    Identifier.GetPetIdentifier(options[0], lhsUnit.petSystem, pet),
-                    Identifier.GetPetIdentifier(options[1], lhsUnit.petSystem, pet)
-                );
-                if (!condition)
-                    return false;
-            }
-            return true;
-        }
-        return Filter;
     }
 }

@@ -225,9 +225,7 @@ public static class EffectConditionHandler
             if (buffType == BuffType.None)
                 return false;
 
-            return ownBuff != ListHelper.IsNullOrEmpty((buffType == BuffType.TurnBased) ? 
-                pet.buffController.GetRangeBuff(x => x.turn > 0) :
-                pet.buffController.GetRangeBuff(x => x.info.type == buffType));
+            return ownBuff != ListHelper.IsNullOrEmpty(pet.buffController.GetRangeBuff(x => x.IsType(buffType)));
         }
 
         var buff = string.IsNullOrEmpty(key) ? pet.buffController.GetBuff(buffId) : state.stateBuffs.Find(x => x.Key == key).Value;

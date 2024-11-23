@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Xml.Serialization;
 using System.Collections;
 using System.Collections.Generic;
@@ -22,6 +23,8 @@ public class BattleSettings
         set => modeId = (int)value;
     }
     [XmlElement("weather")] public int weather = 0;
+    [XmlElement("initBuff")] public string initBuffExpr;
+    [XmlIgnore] public List<KeyValuePair<string, Buff>> initBuffs => GetInitBuffs();
 
     public BattleSettings() {}
 
@@ -48,6 +51,7 @@ public class BattleSettings
         weather = rhs.weather;
         petCount = rhs.petCount;
         time = rhs.time;
+        initBuffExpr = rhs.initBuffExpr;
     }
 
     public float GetSettingsIdentifier(string id) {
@@ -64,6 +68,13 @@ public class BattleSettings
             "captureLevel" => isCaptureOK ? captureLevel : -1,
             _ => float.MinValue,
         };
+    }
+
+    public List<KeyValuePair<string, Buff>> GetInitBuffs() {
+        return initBuffExpr?.TrimParenthesesLoop()?.Select(x => {
+            var split = x.Split(':');
+            return new KeyValuePair<string, Buff>(split[0], new Buff(int.Parse(split[1])));
+        }).ToList() ?? new List<KeyValuePair<string, Buff>>();
     }
 
 }

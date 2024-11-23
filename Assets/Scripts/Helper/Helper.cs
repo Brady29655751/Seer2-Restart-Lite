@@ -57,6 +57,9 @@ namespace System {
 
         public static List<string> TrimParenthesesLoop(this string str, char leftPar = '[', char rightPar = ']') {
             List<string> result = new List<string>();
+            if (string.IsNullOrEmpty(str))
+                return null;
+
             while (str.TryTrimParentheses(out var trimStr, leftPar, rightPar)) {
                 result.Add(trimStr);
                 str = str.TrimStart(leftPar + trimStr + rightPar);

@@ -418,10 +418,11 @@ public static class EffectAbilityHandler
                     _ => (int)Parser.ParseEffectOperation(id, effect, lhsUnit, rhsUnit),
                 };
             }
-            if (string.IsNullOrEmpty(key) && (Buff.GetBuffInfo(buffId) == null))
+            var newBuffInfo = Buff.GetBuffInfo(buffId);
+            if (string.IsNullOrEmpty(key) && (newBuffInfo == null))
                 return false;
 
-            Buff newBuff = new Buff(buffId, buffTurn, buffValue);
+            Buff newBuff = (newBuffInfo == null) ? null : new Buff(buffId, buffTurn, buffValue);
             if (!string.IsNullOrEmpty(key)) {
                 state.stateBuffs.RemoveAll(x => x.Key == key);
                 if (newBuff != null)
@@ -440,17 +441,19 @@ public static class EffectAbilityHandler
         string who = effect.abilityOptionDict.Get("who", "me");
         string idList = effect.abilityOptionDict.Get("id", "0");
         string typeList = effect.abilityOptionDict.Get("type", "none");
+        string filterList = effect.abilityOptionDict.Get("filter", "none");
 
         string[] keyRange = keyList.Split('/');
         List<int> idRange = idList.ToIntList('/');
         string[] typeRange = typeList.Split('/');
 
-        bool isKey = (!string.IsNullOrEmpty(keyList));
+        bool isKey = !string.IsNullOrEmpty(keyList);
         bool isId = (idList != "0") && (idRange.Count != 0);
-        bool isType = (typeList != "none");
+        bool isType = typeList != "none";
+        var filter = Parser.ParseConditionFilter<Buff>(filterList, (id, buff) => buff?.GetBuffIdentifier(id) ?? float.MinValue);
 
         if (isKey)
-            return state.stateBuffs.RemoveAll(x => keyRange.Contains(x.Key)) > 0;
+            return state.stateBuffs.RemoveAll(x => keyRange.Contains(x.Key) && filter(x.Value)) > 0;
 
         Unit invokeUnit = (Unit)effect.invokeUnit;
         Unit lhsUnit = (who == "me") ? state.GetUnitById(invokeUnit.id) : state.GetRhsUnitById(invokeUnit.id);
@@ -461,17 +464,14 @@ public static class EffectAbilityHandler
             var isSuccess = false;
             foreach (var type in typeRange) {
                 var buffType = type.ToBuffType();
-                if (buffType == BuffType.TurnBased)
-                    isSuccess |= buffController.RemoveRangeBuff(x => (!x.id.IsWithin(-10_0000, 0)) && (x.turn > 0) && 
-                        (x.info.type != BuffType.Unhealthy) && (x.info.type != BuffType.Abnormal), lhsUnit, state);
-                else 
-                    isSuccess |= buffController.RemoveRangeBuff(x => (!x.id.IsWithin(-10_0000, 0)) && (x.info.type == buffType), lhsUnit, state);
+                isSuccess |= buffController.RemoveRangeBuff(x => (!x.IsUneffectable()) && x.IsType(buffType), lhsUnit, state);
             }
             return isSuccess;
         }
         if (isId) {
             foreach (var id in idRange) {
-                if (!new Buff(id).IsPower())
+                var buff = new Buff(id);
+                if ((!buff.IsPower()) || (!filter(buff)))
                     continue;
 
                 int buffId = (id - 1) / 2;
@@ -482,7 +482,7 @@ public static class EffectAbilityHandler
                 if ((id % 2 == 1) ^ (statusController.powerup[buffId] < 0))
                     statusController.SetPowerUp(buffId, 0);
             }
-            return buffController.RemoveRangeBuff(x => idRange.Contains(x.id), lhsUnit, state);
+            return buffController.RemoveRangeBuff(x => idRange.Contains(x.id) && filter(x), lhsUnit, state);
         }
 
         return false;
@@ -491,6 +491,7 @@ public static class EffectAbilityHandler
     public static bool CopyBuff(this Effect effect, BattleState state) {
         string idList = effect.abilityOptionDict.Get("id", "0");
         string typeList = effect.abilityOptionDict.Get("type", "none");
+        string filterList = effect.abilityOptionDict.Get("filter", "none");
         string source = effect.abilityOptionDict.Get("source", "op");
         string target = effect.abilityOptionDict.Get("target", "me");
         string transfer = effect.abilityOptionDict.Get("transfer", "false");
@@ -502,11 +503,12 @@ public static class EffectAbilityHandler
         var lhsBuffController = lhsUnit.pet.buffController;
         var rhsBuffController = rhsUnit.pet.buffController;
         var copyType = typeList.ToBuffType();
+        var filter = Parser.ParseConditionFilter<Buff>(filterList, (id, buff) => buff?.GetBuffIdentifier(id) ?? float.MinValue);
         IEnumerable<Buff> buffs = null;
 
         List<int> GetRandomBuff(bool unique = false) {
-            var all = lhsBuffController.GetRangeBuff(x => (!x.info.hide) && 
-                (!x.id.IsWithin(-10_0000, 10)) && (x.info.type != BuffType.Item))
+            var all = lhsBuffController.GetRangeBuff(x => (!x.info.hide) && (!x.IsUneffectable()) &&
+                (!x.IsPower()) && (!x.IsType(BuffType.Item)) && filter(x))
                 .Select(x => x.id).ToList();
 
             if (unique) 
@@ -534,7 +536,7 @@ public static class EffectAbilityHandler
             return false;
 
         if (isId) {
-            buffs = lhsBuffController.GetRangeBuff(x => idRange.Contains(x.id));
+            buffs = lhsBuffController.GetRangeBuff(x => idRange.Contains(x.id) && filter(x));
             var powerup = lhsUnit.pet.statusController.powerup;
             var status = new Status();
             foreach (var buff in buffs) {
@@ -553,7 +555,7 @@ public static class EffectAbilityHandler
             rhsUnit.pet.PowerUp(status, rhsUnit, state);
         }
         if (isType) {
-            buffs = lhsBuffController.GetRangeBuff(x => x.info.type == copyType);
+            buffs = lhsBuffController.GetRangeBuff(x => x.IsType(copyType) && filter(x));
             rhsBuffController.AddRangeBuff(buffs.Select(x => new Buff(x)), rhsUnit, state);
         }
 
@@ -861,8 +863,7 @@ public static class EffectAbilityHandler
                 buffs.AddRange(battlePet.buffController.GetRangeBuff(x => (x != null) && (!x.IsPower()) &&
                     (x.id != Buff.GetFeatureBuff(battlePet).id) &&
                     (x.id != Buff.GetEmblemBuff(battlePet).id) &&
-                    (x.info.type != BuffType.Unhealthy) &&
-                    (x.info.type != BuffType.Abnormal) &&
+                    (!x.IsUnhealthy()) && (!x.IsAbnormal()) &&
                     (!battlePet.info.ui.defaultBuffIds.Exists(y => x.id == y)) &&
                     (!lhsUnit.pet.initBuffs.Exists(y => x.id == y.id))
                 ));

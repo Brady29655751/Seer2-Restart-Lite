@@ -47,6 +47,18 @@ public class Buff
         }
     }
 
+    public bool IsType(BuffType type) {
+        return type switch {
+            BuffType.All        => true,
+            BuffType.TurnBased  => (turn > 0) && (!IsUnhealthy()) && (!IsAbnormal()),
+            _                   => info.type == type,
+        };
+    }
+
+    public bool IsUneffectable() {
+        return (id <= 0) && (!BuffInfo.IsMod(id));
+    }
+
     public bool IsPower() {
         return id.IsWithin(1, 10);
     }

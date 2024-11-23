@@ -15,7 +15,7 @@ public class Effect {
     public int priority { get; private set; }
     public EffectTarget target { get; private set; }
     public string[] targetType => abilityOptionDict.Get("target_type", "none").Split('_');
-    public string[] targetFilter => abilityOptionDict.Get("target_filter", "none").TrimParenthesesLoop('(', ')')?.ToArray();
+    public string targetFilter => abilityOptionDict.Get("target_filter", "none");
     public EffectCondition condition { get; private set; }
     public List<Dictionary<string, string>> condOptionDictList { get; private set; } = new List<Dictionary<string, string>>();
     public EffectAbility type => ability;
