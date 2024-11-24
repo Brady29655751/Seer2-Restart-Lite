@@ -11,6 +11,8 @@ public class Item
 {
     public const int COIN_ID = 1, DIAMOND_ID = 2;
 
+    public static List<Item> petItemDatabase => ItemInfo.database.Where(x => (x.effects?.All(x => x.ability == EffectAbility.SetPet) ?? false) &&
+        (x.id == x.getId)).Select(x => new Item(x.id, 9999)).ToList();
     public static List<Item> itemStorage => Player.instance.gameData.itemStorage;
     public ItemInfo info => GetItemInfo(id);
     public string name => info.name;
@@ -163,13 +165,16 @@ public class Item
         return (handler.Condition(state, false).Any(x => x)) && (GetMaxUseCount(invokeUnit, state) > 0);
     }
 
-    public int Use(object invokeUnit, BattleState state, int useCount = 1) {
+    public int Use(object invokeUnit, BattleState state, int useCount = 1, bool saveData = true) {
         int count = useCount;
 
         if ((info.type == ItemType.EXP) && (!effects.Exists(x => x.abilityOptionDict.ContainsKey("max_use"))))
             count = this.UseExp(invokeUnit, state, useCount);
         else
             count = this.UseDefault(invokeUnit, state, useCount);
+
+        if (!saveData)
+            return count;
 
         if (info.removable)
             Item.Remove(id, count);

@@ -23,10 +23,10 @@ public class PetBagPanel : Panel
     [SerializeField] private PetItemController itemController;
     [SerializeField] private PetInfoController infoController;
     [SerializeField] private PetSkinController skinController;
-
     [SerializeField] private PetPersonalityController personalityController;
-    [SerializeField] private PetSwitchController switchController;
     [SerializeField] private PetTeamController teamController;
+
+    // [SerializeField] private PetSwitchController switchController;
 
     protected override void Awake() {
         base.Awake();
@@ -37,10 +37,14 @@ public class PetBagPanel : Panel
     public override void Init()
     {
         base.Init();
+        itemController?.SetMode(mode);
         switch (mode) {
             case PetBagMode.Normal:
                 SetPetBag(playerPetBag);
                 SetItemBag(playerItemBag);
+                break;
+            case PetBagMode.Dictionary:
+                SetItemBag(Item.petItemDatabase);
                 break;
             case PetBagMode.PVP:
                 break;
@@ -79,8 +83,8 @@ public class PetBagPanel : Panel
         if (teamController != null)
             teamController.onSelectTeamSuccessEvent += OnSelectTeamSuccess;
 
-        if (switchController != null)
-            switchController.onSwitchSuccessEvent += OnSwitchPetSuccess;
+        // if (switchController != null)
+        //     switchController.onSwitchSuccessEvent += OnSwitchPetSuccess;
 
         if (personalityController != null)
             personalityController.onSelectPersonalityEvent += OnSetPersonalitySuccess;
@@ -94,8 +98,9 @@ public class PetBagPanel : Panel
         var itemCategoryIndex = itemController.GetCurrentCategoryIndex();
         var itemPage = itemController.GetCurrentPage();
 
-        RefreshPetBag(playerPetBag);
-        SetItemBag(playerItemBag);
+        RefreshPetBag();
+        if (mode == PetBagMode.Normal)
+            SetItemBag(playerItemBag);
 
         itemController.SelectCategory(itemCategoryIndex);
         itemController.SetPage(itemPage);

@@ -6,7 +6,6 @@ using UnityEngine;
 
 public class PetStorageView : Module
 {
-    private Pet[] petBag => Player.instance.petBag;
     [SerializeField] private IButton takeButton;
     [SerializeField] private IButton releaseButton;
 
@@ -30,7 +29,7 @@ public class PetStorageView : Module
         hintbox.SetContent("携带成功", 16, FontOption.Arial);
     }
 
-    public void OnPetExchange(Action<Pet> onExchangeCallback = null, Action onFailCallback = null) {
+    public void OnPetExchange(Pet[] petBag, Action<Pet> onExchangeCallback = null, Action onFailCallback = null) {
         PetSelectHintbox hintbox = Hintbox.OpenHintbox<PetSelectHintbox>();
         hintbox.SetStorage(petBag.ToList());
         hintbox.SetOptionNum(2);

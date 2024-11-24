@@ -2,6 +2,7 @@ using System.Xml.Serialization;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class PetInfo
 {
@@ -18,6 +19,8 @@ public class PetInfo
     public PetUIInfo ui;
 
     public static bool IsMod(int id) => (id < -12);
+    public static List<PetInfo> database => Database.instance.petInfoDict.Select(x => x.Value).Where(x => x != null)
+        .OrderByDescending(x => x.id.GetSortPriority()).ToList();
 
     public PetInfo() {}
 

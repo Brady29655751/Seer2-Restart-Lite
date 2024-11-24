@@ -55,6 +55,7 @@ public class Battle
             mode = BattleMode.PVP,
             petCount = (int)roomHash["count"],
             time = (int)roomHash["time"],
+            initBuffs = ((int[])roomHash["buff"]).Select((x, i) => new KeyValuePair<string, Buff>("rule[" + i + "]", new Buff(x))).ToList(),
             weather = 0,
             isSimulate = true,
             isEscapeOK = true,

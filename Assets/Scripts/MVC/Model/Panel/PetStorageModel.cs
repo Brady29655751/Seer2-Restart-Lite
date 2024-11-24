@@ -6,14 +6,21 @@ using UnityEngine;
 
 public class PetStorageModel : Module
 {
-    private Pet[] petBag => Player.instance.gameData.petBag;
-    private List<Pet> petStorage => Player.instance.gameData.petStorage;
+    private PetBagMode mode;
+    public Pet[] petBag => (mode == PetBagMode.Normal) ? Player.instance.gameData.petBag : petBagPanel.petBag;
+    public List<Pet> petStorage => PetStoragePanel.GetDefaultPetStorage(mode);
+
     [SerializeField] private PetSelectModel storageSelectModel;
+    [SerializeField] private PetBagPanel petBagPanel = null;
 
     public int storageSelectRefreshPage => storageSelectModel.GetRefreshPageAfterRemoved();
     public int storageSelectPage => storageSelectModel.page;
     public int storageSelectCursor => ((storageSelectModel.cursor.Length > 0) ? 
         storageSelectModel.cursor[0] : 0);
+
+    public void SetMode(PetBagMode mode) {
+        this.mode = mode;
+    }
 
     public bool OnPetTake() {
         if (storageSelectModel.cursor.Length <= 0)
@@ -29,10 +36,15 @@ public class PetStorageModel : Module
     public void SetPetTake(Pet oldPet) {
         Pet newPet = storageSelectModel.currentSelectedItems[0];
         
-        petStorage.Remove(newPet);
-        if (oldPet != null) {
-            petStorage.Add(oldPet);
+        if (mode != PetBagMode.Normal) {
+            petBag.Update(oldPet, newPet);
+            petBagPanel?.RefreshPetBag();
+            return;
         }
+        petStorage.Remove(newPet);
+        if (oldPet != null)
+            petStorage.Add(oldPet);
+        
         petBag.Update(oldPet, newPet);
         SaveSystem.SaveData();
     }

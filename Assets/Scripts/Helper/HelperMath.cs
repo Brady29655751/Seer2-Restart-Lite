@@ -8,6 +8,16 @@ namespace UnityEngine {
 public static class MathHelper {
 
     /// <summary>
+    /// Convert x to (int.Max - x) if positive, else x itself.
+    /// </summary>
+    public static int GetSortPriority(this int x) {
+        if (x > 0)
+            return int.MaxValue - x;
+        
+        return x;
+    }
+
+    /// <summary>
     /// Check if a number is in the range (Max exclusive).
     /// </summary>
     public static bool IsInRange(this int num, int min, int max) {

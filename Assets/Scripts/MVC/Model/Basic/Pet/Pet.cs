@@ -30,6 +30,7 @@ public class Pet
     #region properties
     // Properties and Shortcut.
     /* Basic */
+    public int hashId => GetPetHashId();
     public string name => info.basic.name;
 
     /* Feature */
@@ -183,6 +184,15 @@ public class Pet
         return "id: " + id.ToString() + " name: " + name;
     }
 
+    public int GetPetHashId() {
+        unchecked {
+            int hash = 17;
+            hash = hash * 31 + basic.hashId;
+            hash = hash * 31 + ui.hashId;
+            return hash;
+        };
+    }
+
     public virtual float GetPetIdentifier(string id) {
         if (id.TryTrimStart("status.", out var trimStatus)) {
             trimStatus = trimStatus.ToLower();
@@ -225,6 +235,7 @@ public class Pet
         return id switch {
             "id" => info.ui.defaultId,
             "baseId" => basic.baseId,
+            "skinId" => ui.skinId,
             "element" => elementId,
             "subElement" => subElementId,
             "gender" => (float)info.basic.gender,
@@ -259,6 +270,9 @@ public class Pet
 
         switch (id) {
             default:
+                return;
+            case "skinId":
+                ui.skinId = (int)num;
                 return;
             case "skill":
                 skills.LearnNewSkill(Skill.GetSkill((int)num, false));

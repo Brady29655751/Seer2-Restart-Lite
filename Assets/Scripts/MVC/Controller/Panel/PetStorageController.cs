@@ -6,6 +6,7 @@ using UnityEngine;
 
 public class PetStorageController : Module
 {
+    [SerializeField] private PetBagMode mode = PetBagMode.Normal;
     [SerializeField] private PetStorageModel buttonModel;
     [SerializeField] private PetStorageView buttonView;
     [SerializeField] private PetSelectController selectController;
@@ -17,15 +18,21 @@ public class PetStorageController : Module
         InitSelectSubscriptions();
     }
 
+    public override void Init()
+    {
+        base.Init();
+        buttonModel.SetMode(mode);
+    }
+
     private void InitSelectSubscriptions() {
         selectController.onSetStorageEvent += buttonView.OnSetStorage;
         selectController.onSelectPetEvent += buttonView.OnSelect;
     }   
 
     public void SetPetStorage() {
-        int page = buttonModel.storageSelectRefreshPage;
+        int page = (mode == PetBagMode.PVP) ? buttonModel.storageSelectPage : buttonModel.storageSelectRefreshPage;
         int cursor = buttonModel.storageSelectCursor;
-        var petStorage = Player.instance.gameData.petStorage;
+        var petStorage = buttonModel.petStorage;
         selectController.SetStorage(petStorage.ToList(), page);
         selectController.Select(cursor);
     }
@@ -40,7 +47,7 @@ public class PetStorageController : Module
             buttonModel.SetPetTake(pet);
             OnAfterPetTake();
         };
-        buttonView.OnPetExchange(callback, () => demoController?.SetPetAnimationActive(true));
+        buttonView.OnPetExchange(buttonModel.petBag, callback, () => demoController?.SetPetAnimationActive(true));
     }
 
     private void OnAfterPetTake() {

@@ -8,7 +8,8 @@ using UnityEngine.UI;
 public class CreateRoomView : Module
 {
     [SerializeField] private Hintbox hintbox;
-    [SerializeField] private Image petCountBackground, turnTimeBackground;
+    [SerializeField] private BattlePetBuffView buffView;
+    [SerializeField] private Image petCountBackground, turnTimeBackground, itemBagBackground;
 
     public void SetPetCount(int count) {
         int posX = 200 + ((count == 1) ? 0 : 1) * 105;
@@ -19,6 +20,15 @@ public class CreateRoomView : Module
         int[] timeList = new int[] { 10, 30, 60 };
         int posX = 200 + timeList.IndexOf(time) * 70;
         turnTimeBackground.rectTransform.anchoredPosition = new Vector2(posX, 0);   
+    }
+
+    public void SetRules(List<Buff> rules) {
+        buffView.SetBuff(rules);
+    }
+
+    public void SetItemBagApproval(bool approved) {
+        int posX = 200 + (approved ? 0 : 1) * 105;
+        itemBagBackground.rectTransform.anchoredPosition = new Vector2(posX, 0);
     }
 
     public void CreateRoom() {

@@ -26,6 +26,8 @@ public class PetBagModel : Module
         petBag.Swap(indexA, indexB);
         if (mode == PetBagMode.Normal)
             SaveSystem.SaveData();
+        else
+            selectModel.SetPage(selectModel.page);
     }
 
     public void SetPetDrop(int dropIndex) {
@@ -63,15 +65,18 @@ public class PetBagModel : Module
 
     public bool SetPetHome() {
         int petBagCount = selectModel.selections.Count(x => x != null);
-        if (petBagCount <= 1) {
+        if (petBagCount <= 1)
             return false;
-        }
+
         if (selectModel.cursor.Length <= 0)
             return false;
 
         int index = selectModel.cursor[0];
         Pet pet = selectModel.currentSelectedItems[0];
-        petStorage.Add(pet);
+
+        if (mode == PetBagMode.Normal)
+            petStorage.Add(pet);
+
         petBag.MoveRangeTo(index + 1, petBag.Length, index);
         petBag[petBag.Length - 1] = null;
 

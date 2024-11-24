@@ -422,8 +422,9 @@ public static class EffectAbilityHandler
             if (string.IsNullOrEmpty(key) && (newBuffInfo == null))
                 return false;
 
+            // The key prefix "rule" is reserved for pvp rules.
             Buff newBuff = (newBuffInfo == null) ? null : new Buff(buffId, buffTurn, buffValue);
-            if (!string.IsNullOrEmpty(key)) {
+            if ((!string.IsNullOrEmpty(key)) && (!key.TryTrimStart("rule", out _))) {
                 state.stateBuffs.RemoveAll(x => x.Key == key);
                 if (newBuff != null)
                     state.stateBuffs.Add(new KeyValuePair<string, Buff>(key, newBuff));
@@ -443,7 +444,8 @@ public static class EffectAbilityHandler
         string typeList = effect.abilityOptionDict.Get("type", "none");
         string filterList = effect.abilityOptionDict.Get("filter", "none");
 
-        string[] keyRange = keyList.Split('/');
+        // The key prefix "rule" is reserved for pvp rules.
+        string[] keyRange = keyList.Split('/').Where(x => !x.TryTrimStart("rule", out _)).ToArray();
         List<int> idRange = idList.ToIntList('/');
         string[] typeRange = typeList.Split('/');
 
@@ -702,7 +704,7 @@ public static class EffectAbilityHandler
             Pet pet = (Pet)effect.invokeUnit;
 
             oldValue = pet.GetPetIdentifier(type);
-            newValue = pet.TryGetPetIdentifier(value, out newValue) ? newValue : Identifier.GetNumIdentifier(value);
+            newValue = pet.TryGetPetIdentifier(value, out var num) ? num : Identifier.GetNumIdentifier(value);
 
             // Evolve pet.
             if ((type == "id") && (op == "SET")) {
@@ -715,6 +717,14 @@ public static class EffectAbilityHandler
                     return false;
                     
                 pet.MegaEvolve(evolveId, keepSkill);
+                return true;
+            }
+
+            // Add Skin.
+            if ((type == "skinId") && (op == "+")) {
+                var newSkinId = value.ToIntList('/');
+                pet.ui.specialSkinList.AddRange(newSkinId.Where(id => Pet.GetPetInfo(id) != null));
+                SaveSystem.SaveData();
                 return true;
             }
 
@@ -762,6 +772,7 @@ public static class EffectAbilityHandler
                     pet.feature.afterwardBuffIds.Remove(buffId);
                     
                 SaveSystem.SaveData();
+                return true;
             }   
 
             pet.SetPetIdentifier(type, Operator.Operate(op, oldValue, newValue));
@@ -842,6 +853,10 @@ public static class EffectAbilityHandler
             Pet switchPet = new Pet((int)newValue, battlePet);
             switchPet.normalSkill = normalSkills;
             switchPet.superSkill = superSkill;
+
+            // Check if inherit skin.
+            if (inheritList.Contains("skin"))
+                switchPet.ui.skinId = battlePet.ui.skinId;
 
             // Check if inherit hp.
             var cursor = lhsUnit.petSystem.cursor;

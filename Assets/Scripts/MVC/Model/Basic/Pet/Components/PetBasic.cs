@@ -43,7 +43,7 @@ public class PetBasic
         personality = (info.baseStatus.atk >= info.baseStatus.mat) ? Personality.固执 : Personality.保守;
     }
 
-    public int uid
+    public int hashId
     {
         get
         {

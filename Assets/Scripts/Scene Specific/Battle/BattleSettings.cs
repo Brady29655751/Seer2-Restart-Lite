@@ -24,7 +24,10 @@ public class BattleSettings
     }
     [XmlElement("weather")] public int weather = 0;
     [XmlElement("initBuff")] public string initBuffExpr;
-    [XmlIgnore] public List<KeyValuePair<string, Buff>> initBuffs => GetInitBuffs();
+    [XmlIgnore] public List<KeyValuePair<string, Buff>> initBuffs {
+        get => GetInitBuffs();
+        set => initBuffExpr = value.Select(x => "(" + x.Key + ":" + (x.Value?.id ?? 0) + ")").ConcatToString(string.Empty);
+    }
 
     public BattleSettings() {}
 
@@ -71,7 +74,7 @@ public class BattleSettings
     }
 
     public List<KeyValuePair<string, Buff>> GetInitBuffs() {
-        return initBuffExpr?.TrimParenthesesLoop()?.Select(x => {
+        return initBuffExpr?.TrimParenthesesLoop('(', ')')?.Select(x => {
             var split = x.Split(':');
             return new KeyValuePair<string, Buff>(split[0], new Buff(int.Parse(split[1])));
         }).ToList() ?? new List<KeyValuePair<string, Buff>>();

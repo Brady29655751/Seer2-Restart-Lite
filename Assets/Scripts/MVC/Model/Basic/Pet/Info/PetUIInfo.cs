@@ -80,13 +80,17 @@ public class PetUIInfo
         return options.Select(entry => entry.Key + "=" + entry.Value).ConcatToString("&");
     }
 
-    public List<int> GetAllSkinList(int currentSkinId) {
+    public List<int> GetAllSkinList(PetUI currentPetUI) {
+        var currentSkinId = currentPetUI.skinId;
         var allEvovlePetIds = Pet.GetPetInfo(id).allEvolvePetIds;
         var allDefaultSkinIds = allEvovlePetIds.Select(x => Pet.GetPetInfo(x).ui.defaultSkinId).Distinct().ToList();
         if (!allDefaultSkinIds.Contains(defaultSkinId))
             allDefaultSkinIds.Add(defaultSkinId);
 
         var allSkinList = specialSkinList.Concat(allDefaultSkinIds).ToList();
+        if (!ListHelper.IsNullOrEmpty(currentPetUI.specialSkinList))
+            allSkinList.AddRange(currentPetUI.specialSkinList);
+
         if (currentSkinId != 0) {
             allSkinList.Remove(currentSkinId);
             allSkinList.Insert(0, currentSkinId);

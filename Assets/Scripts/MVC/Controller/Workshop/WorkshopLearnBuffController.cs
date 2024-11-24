@@ -43,7 +43,7 @@ public class WorkshopLearnBuffController : Module
         return buffModel.VerifyDIYLearnBuff(out error);
     }
 
-    private void OnConfirmDIYLearnBuff() {
+    public void OnConfirmDIYLearnBuff() {
         onDIYSuccessCallback?.Invoke(buffModel.currentBuffInfo);
     }
 }

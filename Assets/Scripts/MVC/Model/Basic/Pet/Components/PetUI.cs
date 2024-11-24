@@ -14,6 +14,7 @@ public class PetUI
 
     [XmlAttribute] public int id;
     [XmlAttribute] public int baseId;
+    public List<int> specialSkinList;
 
     [XmlIgnore]
     public int skinId
@@ -27,6 +28,19 @@ public class PetUI
     {
         get => (baseId == 0) ? info.baseId : baseId;
         set => baseId = value;
+    }
+
+    [XmlIgnore]
+    public int hashId {
+        get 
+        {
+            unchecked 
+            {
+                int hash = 17;
+                hash = hash * 31 + skinId;
+                return hash;
+            }
+        }
     }
 
     [XmlIgnore] public Sprite icon => PetUISystem.GetPetIcon(skinId);

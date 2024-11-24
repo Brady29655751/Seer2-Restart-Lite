@@ -28,7 +28,7 @@ public class BattleAnimView : BattleBaseView
     private void SetPet(Unit lastUnit, Unit currentUnit)
     {
         // int lastCursor = (lastUnit == null) ? -1 : lastUnit.petSystem.cursor;
-        int currentPetId = currentUnit?.pet?.basic.uid ?? 0;
+        int currentPetId = currentUnit?.pet?.hashId ?? 0;
         if (lastPetId != currentPetId)
         {
             petView.SetPet(currentUnit.pet);

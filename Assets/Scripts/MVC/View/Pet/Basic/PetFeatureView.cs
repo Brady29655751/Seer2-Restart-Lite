@@ -12,8 +12,8 @@ public class PetFeatureView : Module
     
     public void SetPet(Pet pet) {
         currentPet = pet;
-        SetDefaultBuffs((new List<Buff>(){ Buff.GetFeatureBuff(pet), Buff.GetEmblemBuff(pet) }).Concat(pet.info.ui.defaultBuffs).ToList());
-        SetAfterwardBuffs(pet.feature.afterwardBuffs);
+        SetDefaultBuffs((pet == null) ? new List<Buff>() : (new List<Buff>(){ Buff.GetFeatureBuff(pet), Buff.GetEmblemBuff(pet) }).Concat(pet.info.ui.defaultBuffs).ToList());
+        SetAfterwardBuffs(pet?.feature.afterwardBuffs ?? new List<Buff>());
     }
 
     public void SetOnRemoveCallback(Action<Buff> onRemoveCallback) {

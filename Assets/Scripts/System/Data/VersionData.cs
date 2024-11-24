@@ -69,10 +69,8 @@ public class VersionPetData {
     [XmlElement("topicPetId")] public string topicPets;
     [XmlIgnore] public List<int> topicPetIds => topicPets.ToIntList();
 
-    [XmlIgnore] public List<Pet> petAllWithMod => Database.instance.petInfoDict.Select(entry => Pet.GetExamplePet(entry.Key)).Where(x => x != null)
-        .OrderByDescending((Pet x) => (x.id > 0) ? (int.MaxValue - x.id) : (x.id)).ToList();
-    [XmlIgnore] public List<Pet> petDictionary => petAllWithMod.Where(x => x.id.IsWithin(minPetId, maxPetId))
-        .OrderByDescending((Pet x) => (x.id > 0) ? (int.MaxValue - x.id) : (x.id)).ToList();
+    [XmlIgnore] public List<Pet> petAllWithMod => PetInfo.database.Select(x => Pet.GetExamplePet(x.id )).Where(x => x != null).ToList();
+    [XmlIgnore] public List<Pet> petDictionary => petAllWithMod.Where(x => x.id.IsWithin(minPetId, maxPetId)).ToList();
 
     [XmlIgnore] public List<Pet> petTopic => topicPetIds.Select(Pet.GetExamplePet).Where(x => (x != null)).ToList();
 }

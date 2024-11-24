@@ -6,6 +6,7 @@ using UnityEngine;
 
 public class PetItemController : Module
 {
+    private PetBagMode mode = PetBagMode.Normal;
     [SerializeField] private PetItemModel itemModel;
     [SerializeField] private PetItemView itemView;
     [SerializeField] private PageView pageView;
@@ -16,6 +17,10 @@ public class PetItemController : Module
     public Item[] GetSelectedItem() => itemModel.currentSelectedItems;
     public int GetCurrentCategoryIndex() => itemModel.categories.IndexOf(itemModel.currentCategory);
     public int GetCurrentPage() => itemModel.page;
+
+    public void SetMode(PetBagMode mode) {
+        this.mode = mode;
+    }
 
     public void SetPet(Pet pet) {
         itemModel.SetPet(pet);
@@ -68,12 +73,12 @@ public class PetItemController : Module
         SelectNumHintbox ihb = Hintbox.OpenHintbox<SelectNumHintbox>();
         ihb.SetTitle(item.name);
         ihb.SetContent(item.info.effectDescription, 14, FontOption.Arial);
-        ihb.SetIcon(  item.icon);
+        ihb.SetIcon(item.icon);
         ihb.SetMinValue(1);
         ihb.SetMaxValue(Mathf.Min(item.num, item.GetMaxUseCount(itemModel.currentPet, null), 999));
         ihb.SetOptionNum(2);
         ihb.SetOptionCallback(() => {
-            int usedNum = item.Use(itemModel.currentPet, null, ihb.GetInputValue());
+            int usedNum = item.Use(itemModel.currentPet, null, ihb.GetInputValue(), mode == PetBagMode.Normal);
             OnItemUsed(item, usedNum);
         }, true); 
     }

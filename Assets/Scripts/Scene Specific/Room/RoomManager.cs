@@ -10,6 +10,7 @@ public class RoomManager : Manager<RoomManager>
 {
     [SerializeField] private RoomSettingsView roomSettingsView;
     [SerializeField] private PetBagPanel petBagPanel;
+    [SerializeField] private PetStoragePanel petStoragePanel;
 
     protected override void Awake()
     {
@@ -42,6 +43,7 @@ public class RoomManager : Manager<RoomManager>
         var player = PhotonNetwork.LocalPlayer.CustomProperties;
         int seed = Random.Range(int.MinValue, int.MaxValue);
         int petCount = (int)(room["count"]);
+        bool isItemOK = (bool)(room["item"]);
 
         if (PhotonNetwork.IsMasterClient) {
             room["seed"] = seed;
@@ -53,17 +55,21 @@ public class RoomManager : Manager<RoomManager>
                 return x;
             
             if (x.level > 100) {
+                x.exp.LevelDown(100);
+                x.currentStatus = x.normalStatus;
+                /*
                 var normalSkillId = x.skills.normalSkillId;
                 var superSkillId = x.skills.superSkillId;
-
-                x.LevelDown(100);
                 x.skills.normalSkillId = normalSkillId.Where(x.skills.ownSkillId.Contains).ToArray();
                 x.skills.normalSkillId = x.skills.normalSkillId.Concat(x.skills.backupNormalSkill.Take(4 - x.skills.normalSkillId.Length).Select(x => x.id)).ToArray();
                 if (x.skills.ownSkillId.Contains(superSkillId))
                     x.skills.superSkillId = superSkillId;
+                */
             }
-            
-            x.feature.afterwardBuffIds.Clear();
+            // Clear afterward buffs if item is locked.
+            if (!isItemOK)
+                x.feature.afterwardBuffIds.Clear();
+
             x.record = new PetRecord();
             if (x.talent.ev.sum > 510) {
                 x.talent.SetEV(Status.zero);
@@ -73,6 +79,7 @@ public class RoomManager : Manager<RoomManager>
         }).Select(x => (x == null) ? null : Pet.ToBestPet(new Pet(x)));
         
         petBagPanel.SetPetBag(myPets.ToArray());
+        petBagPanel.SetItemBag(isItemOK ? Item.petItemDatabase : new List<Item>(){ new Item(10239, 9999) });
         roomSettingsView.SetPet(myPets.ToList(), true);
     }
 
@@ -150,5 +157,10 @@ public class RoomManager : Manager<RoomManager>
     public void ClosePetBag() {
         roomSettingsView.SetPet(petBagPanel.petBag.ToList(), true);
         petBagPanel.SetActive(false);
+    }
+
+    public void SetPetStorageActive(bool active) {
+        petBagPanel.RefreshPetBag();
+        petStoragePanel.SetActive(active);
     }
 }

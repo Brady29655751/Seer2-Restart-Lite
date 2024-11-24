@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,7 +12,7 @@ public class PetSkinModel : SelectModel<int>
 
     public void SetPet(Pet pet) {
         currentPet = pet;
-        SetStorage(uiInfo.GetAllSkinList(pet.ui.skinId));
+        SetStorage(uiInfo.GetAllSkinList(pet.ui));
         SetPage(0);
     }
 
@@ -20,5 +21,6 @@ public class PetSkinModel : SelectModel<int>
             return;
 
         currentPet.ui.skinId = currentSkinId;
+        SaveSystem.SaveData();
     }
 }
