@@ -205,7 +205,7 @@ public class TitleManager : Manager<TitleManager>
     }
 
     private void OnUpdateSuccess(string[] paths) {
-        if ((paths[0] == (Application.persistentDataPath + "/Mod")) ||
+        if ((paths[0] == Application.persistentDataPath) || (paths[0] == (Application.persistentDataPath + "/Mod")) ||
             FileBrowserHelpers.IsPathDescendantOfAnother(paths[0], Application.persistentDataPath + "/Mod")) {
             Hintbox.OpenHintboxWithContent("需选择其他Mod文件，而非默认的Mod文件", 16);
             return;

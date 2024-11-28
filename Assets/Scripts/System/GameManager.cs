@@ -76,8 +76,9 @@ public class GameManager : Singleton<GameManager>
             Mail.VersionUpdate();
             Mission.VersionUpdate();
             Pet.VersionUpdate();
-            gameData.version = versionData.gameVersion;
         }
+        gameData.version = versionData.gameVersion;
+
         if ((DateTime.Now.Date - gameData.lastLoginDate.Date).Days > 0) {
             Mail.DailyLogin();
             Mission.DailyLogin();

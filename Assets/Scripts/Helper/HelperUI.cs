@@ -256,6 +256,14 @@ namespace UnityEngine.UI
 
             text.text = content;
         }
+
+        public static void SetColor(this Text text, Color color)
+        {
+            if (text == null)
+                return;
+
+            text.color = color;
+        }
     }
 }
 

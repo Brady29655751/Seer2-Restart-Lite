@@ -65,6 +65,13 @@ public class BattleSystemView : BattleBaseView
         resultView.ProcessResult(result);
     }
 
+    public bool ShowPetSecretSkillResult() {
+        bool isShowingSecretSkill = battle.result.learnedSecretSkills.Count > 0;
+        if (isShowingSecretSkill)
+            resultView.ShowPetSecretSkillResult();
+        return isShowingSecretSkill;
+    }
+
     public void SetBottomBarInteractable(bool interactable) {
         optionView.SetBottomBarInteractable(interactable);
         if (interactable)

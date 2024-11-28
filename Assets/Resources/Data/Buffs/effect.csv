@@ -426,7 +426,7 @@ id,timing,priority,target,condition,cond_option,effect,effect_option
 410006,on_before_attack,-1,skill,none,none,set_skill,type=accuracy&op=+&value=15
 410007,on_before_attack,-1,skill,none,none,set_skill,type=critical&op=+&value=15
 410010,on_turn_start,-1,pet,none,none,rage,add=15
-600002,on_after_attack,-1,pet,skill,random_cmp=15&who=op&whos_turn=op&whos_attack=op&type=type&type_op=>&type_cmp=0,add_buff,id=1000
+600002,on_after_attack,-1,pet,skill,random_cmp=25&who=op&whos_turn=op&whos_attack=op&type=type&type_op=>&type_cmp=0,add_buff,id=1000
 600008,on_turn_end,-1,pet,none,none,powerup,random=true&atk=-1&mat=-1&def=-1&mdf=-1&spd=-1&random_pdf=uniform
 -11,none,-1,none,none,none,none,none
 -12,none,-1,none,none,none,none,none

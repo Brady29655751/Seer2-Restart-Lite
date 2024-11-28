@@ -7,11 +7,13 @@ using Random = UnityEngine.Random;
 
 public class BattleResult
 {
+    public BattleState endState = null;
     public BattleResultState state = BattleResultState.Fighting;
     public HashSet<int> fightPetCursors = new HashSet<int>() { 0 };
     public uint gainExpPerPet { get; private set; } = 0;
     public int gainEVStoragePerPet { get; private set; } = 0;
     public Pet capturePet = null;
+    public List<Skill> learnedSecretSkills = new List<Skill>();
 
     public bool isBattleEnd => (state != BattleResultState.Fighting);
     public bool isKO => ((state == BattleResultState.Win) || (state == BattleResultState.Lose));
@@ -58,6 +60,7 @@ public class BattleResult
 
     public void ProcessResult(BattleState endState) {
         Random.InitState((int)DateTime.Now.Ticks);
+        this.endState = new BattleState(endState);
         if (endState.settings.isSimulate)
             return;
 
@@ -172,8 +175,11 @@ public class BattleResult
 
         var secretSkillInfo = pet.skills.secretSkillInfo.Where(x => !pet.skills.ownSkillId.Contains(x.skill.id)).ToArray();
         for (int i = 0; i < secretSkillInfo.Length; i++) {
-            if (secretSkillInfo[i].Condition(pet, endState))
-                pet.skills.LearnNewSkill(secretSkillInfo[i].skill);
+            if (secretSkillInfo[i].Condition(pet, endState)) {
+                var skill = secretSkillInfo[i].skill;
+                pet.skills.LearnNewSkill(skill);
+                learnedSecretSkills.Add(skill);
+            }
         }
     }
 

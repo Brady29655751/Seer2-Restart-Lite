@@ -11,12 +11,26 @@ public class BattleResultView : BattleBaseView
     [SerializeField] private GameObject expResultBlockPrefab;
     [SerializeField] private GameObject captureResultBlockPrefab;
     [SerializeField] private GameObject[] resultObject;
+    [SerializeField] private BattleResultSkillView resultSkillView;
 
     public void ProcessResult(BattleResult result) {
         this.result = result;
 
         gameObject.SetActive(true);
         ShowResultKO();
+    }
+
+    public void ShowPetSecretSkillResult() {
+        if (result == null)
+            return;
+
+        foreach (var obj in resultObject)
+            obj?.SetActive(false);
+        
+        var cursor = result.endState.myUnit.petSystem.cursor;
+        resultSkillView?.gameObject.SetActive(true);
+        resultSkillView.ShowNewSkill(Player.instance.petBag[cursor], result.learnedSecretSkills);
+        result.learnedSecretSkills.Clear();
     }
 
     private void ShowResultKO() {

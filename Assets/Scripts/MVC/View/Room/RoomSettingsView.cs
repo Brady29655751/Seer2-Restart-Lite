@@ -10,13 +10,13 @@ using Random = UnityEngine.Random;
 
 public class RoomSettingsView : Module
 {
-    [SerializeField] private IText roomNumText;
-    [SerializeField] private Text turnTimeText;
+    [SerializeField] private Text roomNumText, turnTimeText;
+    [SerializeField] private BattlePetBuffView stateBuffView;
     [SerializeField] private IButton startButton, petBagButton;
     [SerializeField] private Text myNameText, opNameText;
     [SerializeField] private List<PetSelectBlockView> myPets, opPets;
-    [SerializeField] private GameObject myConfirmObject, myCancelObject, opCoverObject;
-    [SerializeField] private IText opStatusText;
+    [SerializeField] private GameObject stateVSObject, myConfirmObject, myCancelObject, opCoverObject;
+    [SerializeField] private Text opStatusText;
 
     public override void Init()
     {
@@ -27,8 +27,12 @@ public class RoomSettingsView : Module
     private void InitRoom() {
         var hash = PhotonNetwork.CurrentRoom.CustomProperties;
         var otherPlayers = PhotonNetwork.PlayerListOthers;
+        var buffs = ((int[])hash["buff"]).Select(x => new Buff(x)).ToList();
         roomNumText?.SetText(PhotonNetwork.CurrentRoom.Name);
         turnTimeText?.SetText("【" + hash["time"] + " 秒】");
+        stateBuffView?.SetBuff(buffs);
+        stateBuffView?.gameObject?.SetActive(buffs.Count > 0);
+        stateVSObject?.SetActive(buffs.Count <= 0);
         SetName(PhotonNetwork.LocalPlayer.NickName, true);
         SetName((otherPlayers.Length == 0) ? null : otherPlayers[0].NickName, false);
         SetBGM();

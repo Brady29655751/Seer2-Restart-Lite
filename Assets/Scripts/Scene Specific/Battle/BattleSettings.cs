@@ -16,6 +16,7 @@ public class BattleSettings
 
 
     [XmlAttribute("count")] public int petCount = 6;
+    [XmlAttribute("parallel")] public int parallelCount = 1;
     [XmlAttribute("time")] public int time = 10;
     [XmlElement("mode")] public int modeId = 0;
     [XmlIgnore] public BattleMode mode {
@@ -53,6 +54,7 @@ public class BattleSettings
         mode = rhs.mode;
         weather = rhs.weather;
         petCount = rhs.petCount;
+        parallelCount = rhs.parallelCount;
         time = rhs.time;
         initBuffExpr = rhs.initBuffExpr;
     }
@@ -61,6 +63,7 @@ public class BattleSettings
         return id switch {
             "mode" => modeId,
             "petCount" => petCount,
+            "parallelCount" => parallelCount,
             "time" => time,
             "weather" => weather,
             "mod" => isMod ? 1 : 0,

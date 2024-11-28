@@ -64,6 +64,9 @@ public class BattleManager : Manager<BattleManager>
             NetworkManager.instance.StartNetworkAction(data);
         }
 
+        if (systemView.ShowPetSecretSkillResult())
+            return;
+
         SceneLoader.instance.ChangeScene(SceneId.Map);
     }
 
