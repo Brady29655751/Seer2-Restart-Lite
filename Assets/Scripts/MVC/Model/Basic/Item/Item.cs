@@ -11,8 +11,14 @@ public class Item
 {
     public const int COIN_ID = 1, DIAMOND_ID = 2;
 
-    public static List<Item> petItemDatabase => ItemInfo.database.Where(x => (x.effects?.All(x => x.ability == EffectAbility.SetPet) ?? false) &&
+    public static List<Item> petItemDatabase => ItemInfo.database.Where(x => (x.effects?.All(y => y.ability == EffectAbility.SetPet) ?? false) &&
         (x.id == x.getId)).Select(x => new Item(x.id, 9999)).ToList();
+    public static List<Item> pvpItemDatabase => petItemDatabase.Where(x => (x.effects?.All(y => {
+        var banned = new List<string>(){ "exp", "level", "skinId", "iv", "emblem" };
+        var type = y.abilityOptionDict.Get("type", "none");
+        return !banned.Contains(type);
+    })) ?? false).ToList();
+    
     public static List<Item> itemStorage => Player.instance.gameData.itemStorage;
     public ItemInfo info => GetItemInfo(id);
     public string name => info.name;

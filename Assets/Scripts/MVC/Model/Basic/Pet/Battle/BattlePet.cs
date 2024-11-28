@@ -7,7 +7,7 @@ using System;
 
 public class BattlePet : Pet
 {
-    public int stayTurn = 0;
+    public int stayTurn = 0, chain = 0;
     public PetBattleStatusController statusController;
     public PetBattleBuffController buffController;
     public PetBattleSkillController skillController;
@@ -49,6 +49,7 @@ public class BattlePet : Pet
             return;
 
         stayTurn = 0;
+        chain = 0;
         statusController = new PetBattleStatusController(normalStatus, currentStatus.hp);
         buffController = new PetBattleBuffController(element, subElement, null);
         skillController = new PetBattleSkillController(normalSkill.ToList(), superSkill);
@@ -60,6 +61,7 @@ public class BattlePet : Pet
         BattleStatus status = new BattleStatus(basicStatus, hiddenStatus);
 
         stayTurn = 0;
+        chain = 0;
 
         statusController = new PetBattleStatusController(status);
         buffController = new PetBattleBuffController(element, subElement, info.initBuffs);
@@ -74,6 +76,7 @@ public class BattlePet : Pet
             return;
         
         stayTurn = rhs.stayTurn;
+        chain = rhs.chain;
 
         statusController = new PetBattleStatusController(rhs.statusController);
         buffController = new PetBattleBuffController(rhs.buffController);
@@ -92,12 +95,15 @@ public class BattlePet : Pet
     /// Get battle pet for PVP mode.
     /// This automatically heal the pet to prevent player forgot it.
     /// </summary>
-    public static BattlePet GetBattlePet(int id, int personality, float[] ev, int[] normalSkill, int superSkill) {
+    public static BattlePet GetBattlePet(int id, int personality, int feature, int emblem, int[] buff, float[] ev, int[] normalSkill, int superSkill) {
         Pet pet = Pet.GetExamplePet(id);
         if (pet == null)
             return null;
 
         pet.basic.personality = (Personality)personality;
+        pet.feature.featureId = feature;
+        pet.feature.emblemId = emblem;
+        pet.feature.afterwardBuffIds = buff.ToList();
         pet.talent.ev = new Status(ev);
         pet.skills.normalSkillId = normalSkill;
         pet.skills.superSkillId = superSkill;
@@ -108,12 +114,15 @@ public class BattlePet : Pet
     public static BattlePet[] GetBattlePetBag(Hashtable hash, int petCount) {
         var id = (int[])hash["pet"];
         var personality = (int[])hash["char"];
+        var feature = (int[])hash["feature"];
+        var emblem = (int[])hash["emblem"];
+        var buff = (int[][])hash["buff"];
         var ev = (float[][])hash["ev"];
         var normalSkill = (int[][])hash["skill"];
         var superSkill = (int[])hash["super"];
 
         return Enumerable.Range(0, petCount).Select(i => (i >= id.Length) ? null :
-            BattlePet.GetBattlePet(id[i], personality[i], ev[i], normalSkill[i], superSkill[i]
+            BattlePet.GetBattlePet(id[i], personality[i], feature[i], emblem[i], buff[i], ev[i], normalSkill[i], superSkill[i]
         )).ToArray();
     }
 
@@ -152,6 +161,7 @@ public class BattlePet : Pet
     public override float GetPetIdentifier(string id) {
         return id switch {
             "stayTurn" => stayTurn,
+            "chain" => chain,
             "element" => (int)buffController.element,
             "subElement" => (int)buffController.subElement,
             _ => base.GetPetIdentifier(id),
@@ -208,6 +218,8 @@ public class BattlePet : Pet
     }
 
     public virtual void OnTurnStart(Unit thisUnit, BattleState state) {
+        stayTurn += 1;
+        chain = 0;
         buffController.OnTurnStart(thisUnit, state);
     }
 

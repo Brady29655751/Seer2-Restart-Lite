@@ -154,6 +154,11 @@ public class Skill
         return avoidNull ? (skill ?? GetNoOpSkill()) : skill;
     }
 
+    public override string ToString()
+    {
+        return "id: " + id + " name: " + name;
+    }
+
     public static Skill ParseRPCData(string[] data) {
         int id = int.Parse(data[0]);
         var skill = id switch {

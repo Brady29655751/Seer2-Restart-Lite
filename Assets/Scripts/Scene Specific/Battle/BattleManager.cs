@@ -98,6 +98,9 @@ public class BattleManager : Manager<BattleManager>
             SetBottomBarInteractable(true);
             SelectOption(currentUIState.myUnit.pet.isDead ? 1 : 0);
             SetOptionActive(2, currentUIState.settings.isCaptureOK);
+            if (currentUIState.settings.parallelCount > 1)
+                SetOptionActive(1, false);
+                
             if ((!currentUIState.settings.isItemOK) || (currentUIState.myUnit.pet.isDead))
             {
                 SetOptionActive(2, false);

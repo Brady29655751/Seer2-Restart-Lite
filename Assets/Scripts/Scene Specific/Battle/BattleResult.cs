@@ -22,9 +22,9 @@ public class BattleResult
     public bool isMyWin => ((state == BattleResultState.Win) || (state == BattleResultState.OpEscape) || (state == BattleResultState.CaptureSuccess));
     public bool isOpWin => ((state == BattleResultState.Lose) || (state == BattleResultState.MyEscape));
 
-    public BattleResult() {
+    public BattleResult(BattleSettings settings) {
         state = BattleResultState.Fighting;
-        fightPetCursors = new HashSet<int>() { 0 };
+        fightPetCursors = new HashSet<int>(Enumerable.Range(0, settings.parallelCount));
     }
 
     public BattleResult(BattleResult rhs) {

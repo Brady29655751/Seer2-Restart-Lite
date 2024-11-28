@@ -8,7 +8,6 @@ public class UnitPetSystem
 {
     public BattlePet[] petBag = new BattlePet[6];
     public int cursor = 0;
-    public int chain = 0;
     public BattlePet pet => petBag[cursor];
     public int petNum => petBag.Count(x => x != null);
     public int alivePetNum => petBag.Count(x => (x != null) && (!x.isDead));
@@ -18,19 +17,21 @@ public class UnitPetSystem
         petBag = new BattlePet[originalPetBag.Length];
         Array.Copy(originalPetBag, petBag, originalPetBag.Length);
         cursor = 0;
-        chain = 0;
     }
 
     public UnitPetSystem(UnitPetSystem rhs) {
         petBag = rhs.petBag.Select(x => (x == null) ? null : new BattlePet(x)).ToArray();
         cursor = rhs.cursor;
-        chain = rhs.chain;
     }
 
     public void OnTurnStart(Unit thisUnit, BattleState state) {
-        chain = 0;
-        pet.stayTurn += 1;
-        pet.OnTurnStart(thisUnit, state);
+        var parallelCount = Mathf.Min(state.settings.parallelCount, alivePetNum);
+        var parallelCursor = cursor;
+
+        GetParallelPetBag(parallelCount).ForEach(x => x.OnTurnStart(thisUnit, state));
+        
+        if ((state.settings.parallelCount > 1) && (pet?.isDead ?? true))
+            cursor = GetNextCursorCircular();
     }
 
     public void RefreshStayTurn() {
@@ -40,10 +41,45 @@ public class UnitPetSystem
         }
     }
 
+    public List<BattlePet> GetParallelPetBag(int parallelCount) {
+        var bag = new List<BattlePet>(){ pet };
+        if (parallelCount == 1)
+            return bag;
+        
+        int parallelCursor = cursor;
+        while ((parallelCursor = GetNextCursorCircular(parallelCursor, (p) => true, (i) => i < parallelCount)) != cursor)
+            bag.Add(petBag[parallelCursor]);
+
+        return bag;
+    }
+
+    /// <summary>
+    /// Get next cursor that the pet is neither null (nor dead by default). <br/>
+    /// If start is less than 0, use current cursor as start.
+    /// </summary>
+    /// <param name="start">Start from which index. The index "start + 1" will be the first searched.</param>
+    /// <param name="petFilter">pet filter</param>
+    /// <param name="indexFilter">index filter</param>
+    /// <returns></returns>
+    public int GetNextCursorCircular(int start = -1, Func<BattlePet, bool> petFilter = null, Func<int, bool> indexFilter = null) {
+        start = (start < 0) ? cursor : start;
+        petFilter ??= (x) => !x.isDead;
+        indexFilter ??= (x) => true;
+        for (int i = 0; i < petBag.Length; i++) {
+            var index = (start + i + 1) % petBag.Length;
+            if (!indexFilter(index))
+                continue;
+
+            var pet = petBag[index];
+            if ((pet != null) && petFilter(pet))
+                return index;
+        }
+        return start;
+    }
+
     public float GetPetSystemIdentifier(string id) {
         return id switch {
             "cursor" => cursor,
-            "chain" => chain,
             "aliveNum" => alivePetNum,
             "deadNum" => deadPetNum,
             _ => float.MinValue,

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class TurnEndPhase : BattlePhase
@@ -45,18 +46,35 @@ public class TurnEndPhase : BattlePhase
     }
 
     private void RaiseAnger() {
-        state.masterUnit.pet.anger += 15;
-        state.clientUnit.pet.anger += 15;
+        var parallelCount = state.settings.parallelCount;
+        var masterUnit = state.masterUnit;
+        var clientUnit = state.clientUnit;
+        var masterPetBag = masterUnit.petSystem.GetParallelPetBag(parallelCount);
+        var clientPetBag = clientUnit.petSystem.GetParallelPetBag(parallelCount);
+
+        masterPetBag.ForEach(x => x.anger += 15);
+        clientPetBag.ForEach(x => x.anger += 15);
     }
 
     private void OnBuffEffected() {
         var lastState = new BattleState(battle.currentState);
+        var parallelCount = state.settings.parallelCount;
         var masterUnit = state.masterUnit;
         var clientUnit = state.clientUnit;
+        var masterPetBag = masterUnit.petSystem.GetParallelPetBag(parallelCount);
+        var clientPetBag = clientUnit.petSystem.GetParallelPetBag(parallelCount);
 
-        masterUnit.pet.hp += (masterUnit.skillSystem.buffHeal - masterUnit.skillSystem.totalBuffDamage);
-        clientUnit.pet.hp += (clientUnit.skillSystem.buffHeal - clientUnit.skillSystem.totalBuffDamage);
+        void ParallelBuffEffected(Unit unit, List<BattlePet> petBag) {
+            for (int i = 0; i < petBag.Count; i++) {
+                var cursor = (parallelCount <= 1) ? 0 : unit.petSystem.petBag.IndexOf(petBag[i]);
+                var skillSystem = unit.parallelSkillSystems[cursor];
+                petBag[i].hp += skillSystem.buffHeal - skillSystem.totalBuffDamage;
+            }
+        }
 
+        ParallelBuffEffected(masterUnit, masterPetBag);
+        ParallelBuffEffected(clientUnit, clientPetBag);
+        
         masterUnit.hudSystem.OnTurnEnd(masterUnit, clientUnit);
         clientUnit.hudSystem.OnTurnEnd(clientUnit, masterUnit);
 

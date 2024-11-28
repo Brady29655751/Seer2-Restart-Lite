@@ -15,14 +15,14 @@ public class Battle
     public BattlePhase currentPhase;
 
     public Battle(Pet[] myPetBag, Pet[] opPetBag, BattleSettings settings) {
-        BattlePet[] player = myPetBag.Where((x, i) => i < settings.petCount).Select(x => BattlePet.GetBattlePet(x)).ToArray();
+        BattlePet[] player = myPetBag.Take(settings.petCount).Select(x => BattlePet.GetBattlePet(x)).ToArray();
         BattlePet[] enemy = opPetBag.Select(x => BattlePet.GetBattlePet(x)).ToArray();
 
         Init(player, enemy, settings);
     }
 
     public Battle(BattlePet[] player, BattlePet[] enemy, BattleSettings settings) {
-        Init(player, enemy, settings);
+        Init(player.Take(settings.petCount).ToArray(), enemy, settings);
     }
 
     /// <summary>
@@ -36,8 +36,8 @@ public class Battle
 
         Pet[] petBag = Player.instance.petBag;
         BattlePet[] myPetBag = (((player == null) || (player.Count == 0)) ?
-            petBag.Where((x, i) => i < info.settings.petCount).Select(x => BattlePet.GetBattlePet(x)) :
-            player.Where((x, i) => i < info.settings.petCount).Select(x => BattlePet.GetBattlePet(x))).ToArray();
+            petBag.Take(info.settings.petCount).Select(x => BattlePet.GetBattlePet(x)) :
+            player.Take(info.settings.petCount).Select(x => BattlePet.GetBattlePet(x))).ToArray();
         BattlePet[] opPetBag = enemy.Select(x => BattlePet.GetBattlePet(x)).ToArray();
         
         Init(myPetBag, opPetBag, info.settings);
@@ -76,8 +76,8 @@ public class Battle
         Player.instance.currentBattle = this;
 
         this.lastState = null;
-        Unit masterTurn = new Unit(masterPetBag, 1);
-        Unit clientTurn = new Unit(clientPetBag, -1);
+        Unit masterTurn = new Unit(masterPetBag, 1, settings);
+        Unit clientTurn = new Unit(clientPetBag, -1, settings);
         this.currentState = new BattleState(settings, masterTurn, clientTurn);
         this.currentPhase = new BattleStartPhase();
     }
@@ -113,12 +113,24 @@ public class Battle
                 return;
             }
 
+            if (settings.parallelCount > 1) {
+                if (skill.type != SkillType.逃跑) {
+                    var state = new BattleState(currentState);
+                    unit.petSystem.cursor = unit.petSystem.GetNextCursorCircular();
+                    UI.SetState(state, currentState);
+                    UI.ProcessQuery(true);
+                }
+                
+                if (!unit.isReady)
+                    return;
+            }
+
             UI.SetSkillSelectMode(false);
             UI.SetBottomBarInteractable(false);
             UI.PVPSetSkillToOthers(skill);
         }
 
-        if (currentState.isAnyPetDead) {
+        if ((settings.parallelCount <= 1) && (currentState.isAnyPetDead)) {
             unit.SetSkill(null);
             currentPhase = currentPhase ?? new PassivePetChangePhase();
             ((PassivePetChangePhase)currentPhase).SetSkill(skill, isMe);
@@ -131,12 +143,22 @@ public class Battle
         }
 
         if ((settings.mode != BattleMode.PVP) && (opUnit.skill == null)) {
-            var cursor = opUnit.petSystem.cursor;
-            var defaultSkill = opUnit.pet.isDead ? Skill.GetPetChangeSkill(cursor, cursor + 1, true) : opUnit.pet.GetDefaultSkill();
-            opUnit.SetSkill(defaultSkill);
+            var parallelCount = Mathf.Min(settings.parallelCount, opUnit.petSystem.alivePetNum);
+            for (int i = 0; i < parallelCount; i++) {
+                var cursor = opUnit.petSystem.cursor;
+                var nextCursor = opUnit.petSystem.GetNextCursorCircular();
+                var defaultSkill = opUnit.pet.GetDefaultSkill();
+                if (opUnit.pet.isDead)
+                    defaultSkill = (settings.parallelCount > 1) ? null : Skill.GetPetChangeSkill(cursor, nextCursor, true);   
+                
+                opUnit.SetSkill(defaultSkill);
+
+                if (parallelCount > 1)
+                    opUnit.petSystem.cursor = nextCursor;
+            }
         }
 
-        if (myUnit.isReady && opUnit.isReady) {
+        if (currentState.isAllUnitReady) {
             currentPhase = new TurnReadyPhase();
             NextPhase();
             return;

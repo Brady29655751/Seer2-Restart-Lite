@@ -10,6 +10,7 @@ public class BattleState
     public BattleState lastTurnState = null;
 
     public int turn;
+    public int parallelTurn;
     public int whosTurn;    // masterTurn: 1, clientTurn: -1
     public EffectTiming phase;
     public int weather;
@@ -22,7 +23,8 @@ public class BattleState
     public BattleSettings settings;
     public BattleResult result;
 
-    public bool isAllTurnDone => IsAllTurnDone();
+    public bool isAllUnitDone => IsAllUnitDone();
+    public bool isAllUnitReady => IsAllUnitReady();
     public bool isAnyPetDead => IsAnyPetDead();
     public Unit myUnit => (settings.mode == BattleMode.PVP) ? (PhotonNetwork.IsMasterClient ? masterUnit : clientUnit) : masterUnit;
     public Unit opUnit => (settings.mode == BattleMode.PVP) ? (PhotonNetwork.IsMasterClient ? clientUnit : masterUnit) : clientUnit;
@@ -33,6 +35,7 @@ public class BattleState
         this.lastTurnState = null;
 
         this.turn = 0;
+        this.parallelTurn = 0;
         this.whosTurn = 0;
         this.phase = EffectTiming.OnBattleStart;
         this.weather = settings.weather;
@@ -43,13 +46,14 @@ public class BattleState
         this.actionOrder = new List<int>();
 
         this.settings = new BattleSettings(settings);
-        this.result = new BattleResult();
+        this.result = new BattleResult(settings);
     }
 
     public BattleState(BattleState rhs) {
         lastTurnState = (rhs.lastTurnState == null) ? null : new BattleState(rhs.lastTurnState);
 
         turn = rhs.turn;
+        parallelTurn = rhs.parallelTurn;
         whosTurn = rhs.whosTurn;
         phase = rhs.phase;
         weather = rhs.weather;
@@ -86,6 +90,7 @@ public class BattleState
 
         return trimId switch {
             "turn" => turn,
+            "parallelTurn" => parallelTurn,
             "phase" => (float)phase,
             "weather" => (float)weather,
             "whosTurn" => whosTurn,
@@ -101,6 +106,7 @@ public class BattleState
             lastTurnState = new BattleState(this){ phase = EffectTiming.OnTurnEnd };
         }
         turn++;
+        parallelTurn = 0;
         whosTurn = 0;
         actionOrder.Clear();
         for (int i = 0; i < stateBuffs.Count; i++) {
@@ -113,8 +119,12 @@ public class BattleState
         clientUnit.OnTurnStart(this);
     }
 
-    public virtual bool IsAllTurnDone() {
+    public virtual bool IsAllUnitDone() {
         return masterUnit.isDone && clientUnit.isDone;
+    }
+
+    public virtual bool IsAllUnitReady() {
+        return masterUnit.isReady && clientUnit.isReady;
     }
 
     public virtual bool IsAnyPetDead() {
@@ -132,6 +142,15 @@ public class BattleState
 
         if (!clientUnit.isDone) {
             whosTurn = clientUnit.id;
+            return;
+        }
+
+        parallelTurn++;
+        if ((settings.parallelCount > 1) && (parallelTurn < settings.parallelCount)) {
+            masterUnit.isDone = clientUnit.isDone = false;
+            masterUnit.petSystem.cursor = masterUnit.petSystem.GetNextCursorCircular();
+            clientUnit.petSystem.cursor = clientUnit.petSystem.GetNextCursorCircular();
+            whosTurn = actionOrder.FirstOrDefault();
             return;
         }
 

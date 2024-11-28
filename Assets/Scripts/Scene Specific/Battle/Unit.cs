@@ -10,8 +10,13 @@ public class Unit
 {
     public int id { get; protected set; }
     public int random;
+    public int parallelCount;
     public UnitPetSystem petSystem;
-    public UnitSkillSystem skillSystem;
+    public List<UnitSkillSystem> parallelSkillSystems = new List<UnitSkillSystem>();
+    public UnitSkillSystem skillSystem {
+        get => (parallelCount <= 1) ? parallelSkillSystems.FirstOrDefault() : parallelSkillSystems[petSystem.cursor];
+        set => parallelSkillSystems.Update(skillSystem, value);
+    }
     public UnitHudSystem hudSystem;
 
     public BattlePet pet => petSystem.pet;
@@ -26,12 +31,14 @@ public class Unit
     public bool isReady => IsReady();
     public bool isDone = false;
 
-    public Unit(BattlePet[] petBag, int idNum)
+    public Unit(BattlePet[] petBag, int idNum, BattleSettings settings)
     {
         id = idNum;
         random = Random.Range(0, 100);
+        parallelCount = settings.parallelCount;
         petSystem = new UnitPetSystem(petBag);
-        skillSystem = new UnitSkillSystem();
+        parallelSkillSystems = Enumerable.Range(0, (parallelCount <= 1) ? 1 : petBag.Length).Select(x => new UnitSkillSystem()).ToList();
+        // skillSystem = new UnitSkillSystem();
         hudSystem = new UnitHudSystem();
     }
 
@@ -39,9 +46,11 @@ public class Unit
     {
         id = rhs.id;
         random = rhs.random;
+        parallelCount = rhs.parallelCount;
         isDone = rhs.isDone;
         petSystem = new UnitPetSystem(rhs.petSystem);
-        skillSystem = new UnitSkillSystem(rhs.skillSystem);
+        parallelSkillSystems = rhs.parallelSkillSystems.Select(x => new UnitSkillSystem(x)).ToList();
+        // skillSystem = new UnitSkillSystem(rhs.skillSystem);
         hudSystem = new UnitHudSystem(rhs.hudSystem);
     }
 
@@ -50,13 +59,29 @@ public class Unit
         isDone = false;
         random = Random.Range(0, 100);
         petSystem.OnTurnStart(this, state);
-        skillSystem.OnTurnStart();
+        parallelSkillSystems.ForEach(x => x.OnTurnStart());
+        // skillSystem.OnTurnStart();
         hudSystem.OnTurnStart(this.pet);
     }
 
     public bool IsReady()
     {
-        return (skill != null) && skill.IsSelectReady();
+        if (parallelCount <= 1)
+            return (skill != null) && skill.IsSelectReady();
+
+        if (parallelSkillSystems.Exists(x => (x?.skill != null) && (x.skill.type == SkillType.逃跑)))
+            return true;
+
+        for (int i = 0; i < parallelSkillSystems.Count; i++) {
+            var pet = petSystem.petBag[i];
+            if ((pet == null) || (pet.isDead))
+                continue;
+            
+            var skill = parallelSkillSystems[i].skill;
+            if ((skill == null) || (!skill.IsSelectReady()))
+                return false;
+        }
+        return true;
     }
 
     public bool IsMasterUnit()

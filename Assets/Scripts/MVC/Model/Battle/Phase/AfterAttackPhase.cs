@@ -19,7 +19,7 @@ public class AfterAttackPhase : BattlePhase
 
     public override BattlePhase GetNextPhase()
     {
-        if (state.isAllTurnDone)
+        if (state.isAllUnitDone)
             return new TurnEndPhase();
 
         return new BeforeAttackPhase();
@@ -34,7 +34,7 @@ public class AfterAttackPhase : BattlePhase
 
     private void GiveTurnToNextUnit() {
         state.atkUnit.skill.chain--;
-        state.atkUnit.petSystem.chain++;
+        state.atkUnit.petSystem.pet.chain++;
         state.atkUnit.isDone = state.atkUnit.skill.chain <= 0;
         state.GiveTurnToNextUnit();
     }

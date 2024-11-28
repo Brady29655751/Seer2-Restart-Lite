@@ -79,7 +79,7 @@ public class RoomManager : Manager<RoomManager>
         }).Select(x => (x == null) ? null : Pet.ToBestPet(new Pet(x)));
         
         petBagPanel.SetPetBag(myPets.ToArray());
-        petBagPanel.SetItemBag(isItemOK ? Item.petItemDatabase : new List<Item>(){ new Item(10239, 9999) });
+        petBagPanel.SetItemBag(isItemOK ? Item.pvpItemDatabase : new List<Item>(){ new Item(10239, 9999) });
         roomSettingsView.SetPet(myPets.ToList(), true);
     }
 
@@ -133,6 +133,9 @@ public class RoomManager : Manager<RoomManager>
 
         hash["pet"] = petBagPanel.petBag.Where(x => x != null).Select(x => x.id).ToArray();
         hash["char"] = petBagPanel.petBag.Where(x => x != null).Select(x => (int)x.basic.personality).ToArray();
+        hash["feature"] = petBagPanel.petBag.Where(x => x != null).Select(x => x.feature.featureId).ToArray();
+        hash["emblem"] = petBagPanel.petBag.Where(x => x != null).Select(x => x.feature.emblemId).ToArray();
+        hash["buff"] = petBagPanel.petBag.Where(x => x != null).Select(x => x.feature.afterwardBuffIds.ToArray()).ToArray();
         hash["ev"] = petBagPanel.petBag.Where(x => x != null).Select(x => x.talent.ev.ToArray()).ToArray();
         hash["skill"] = petBagPanel.petBag.Where(x => x != null).Select(x => x.normalSkill.Select(x => x?.id ?? 0).ToArray()).ToArray();
         hash["super"] = petBagPanel.petBag.Where(x => x != null).Select(x => x.superSkill?.id ?? 0).ToArray();

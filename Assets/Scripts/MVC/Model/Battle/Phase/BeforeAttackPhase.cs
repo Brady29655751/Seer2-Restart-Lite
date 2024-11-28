@@ -11,7 +11,7 @@ public class BeforeAttackPhase : BattlePhase
 
     public override void DoWork()
     {
-        if (state.isAllTurnDone)
+        if (state.isAllUnitDone)
             return;
 
         if (!IsAttackLegal())
@@ -23,7 +23,7 @@ public class BeforeAttackPhase : BattlePhase
 
     public override BattlePhase GetNextPhase()
     {
-        if (state.isAllTurnDone)
+        if (state.isAllUnitDone)
             return new TurnEndPhase();
 
         if (state.atkUnit.skill.isAttack && state.atkUnit.skillSystem.isHit)
