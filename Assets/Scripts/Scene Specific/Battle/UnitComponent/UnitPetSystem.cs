@@ -53,9 +53,14 @@ public class UnitPetSystem
         return bag;
     }
 
+    public List<int> GetParallelPetBagCursor(int parallelCount) {
+        return GetParallelPetBag(parallelCount).Select(petBag.IndexOf).ToList();
+    }
+
     /// <summary>
     /// Get next cursor that the pet is neither null (nor dead by default). <br/>
-    /// If start is less than 0, use current cursor as start.
+    /// If start is less than 0, use current cursor as start. <br/>
+    /// If no pet meets condition, return start (return cursor if start &lt; 0).
     /// </summary>
     /// <param name="start">Start from which index. The index "start + 1" will be the first searched.</param>
     /// <param name="petFilter">pet filter</param>

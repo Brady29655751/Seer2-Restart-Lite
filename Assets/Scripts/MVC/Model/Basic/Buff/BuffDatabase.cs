@@ -6,6 +6,7 @@ using UnityEngine;
 public static class BuffDatabase
 {   
     public static Dictionary<string, BuffType> typeConvDict = new Dictionary<string, BuffType>() {
+        {"all", BuffType.All},
         {"none", BuffType.None},
         {"feature", BuffType.Feature},
         {"emblem", BuffType.Emblem},

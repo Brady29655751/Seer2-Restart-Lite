@@ -3069,6 +3069,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 281332014}
+  - component: {fileID: 281332015}
   m_Layer: 5
   m_Name: Skill Bubble
   m_TagString: Untagged
@@ -3097,6 +3098,19 @@ RectTransform:
   m_AnchoredPosition: {x: -20, y: -127}
   m_SizeDelta: {x: 292, y: 26}
   m_Pivot: {x: 0, y: 1}
+--- !u!114 &281332015
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 281332013}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e536a10154ee48049a217e68758f3e3c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  secondText: {fileID: 0}
 --- !u!1 &283452482
 GameObject:
   m_ObjectHideFlags: 0
@@ -5586,6 +5600,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   descriptionBox: {fileID: 986414083}
   infoPrompt: {fileID: 1333918287}
+  timer: {fileID: 281332015}
   background: {fileID: 1211342210}
   skillName: {fileID: 1085821299}
 --- !u!1001 &534863879
@@ -9209,6 +9224,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 870533467}
+  - component: {fileID: 870533468}
   m_Layer: 5
   m_Name: Skill Bubble
   m_TagString: Untagged
@@ -9237,6 +9253,19 @@ RectTransform:
   m_AnchoredPosition: {x: 20, y: -127}
   m_SizeDelta: {x: 292, y: 26}
   m_Pivot: {x: 1, y: 1}
+--- !u!114 &870533468
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 870533466}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e536a10154ee48049a217e68758f3e3c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  secondText: {fileID: 0}
 --- !u!1 &874290872
 GameObject:
   m_ObjectHideFlags: 0
@@ -20110,6 +20139,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   descriptionBox: {fileID: 986414083}
   infoPrompt: {fileID: 1333918287}
+  timer: {fileID: 870533468}
   background: {fileID: 17308520}
   skillName: {fileID: 557909544}
 --- !u!1 &1902947889

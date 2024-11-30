@@ -8,6 +8,8 @@ using UnityEngine.UI;
 public class BattlePetSkillView : BattleBaseView
 {
     private BattlePet pet;
+    private bool interactable;
+
     [SerializeField] private IButton noOpSkillButton, superSkillButton;
     [SerializeField] private Image[] superSkillButtonBackground = new Image[3];
     [SerializeField] private BattlePetSkillBlockView[] skillBlockViews = new BattlePetSkillBlockView[4];
@@ -18,6 +20,7 @@ public class BattlePetSkillView : BattleBaseView
             
         this.pet = pet;
         SetNormalSkill();
+        SetInteractable(interactable);
     }
 
     public void SetInteractable(bool interactable) {
@@ -29,6 +32,8 @@ public class BattlePetSkillView : BattleBaseView
         SetNormalSkillInteractable(anger);
         SetSuperSkillInteractable(anger);
         SetNoOpSkillInteractable((anger == -1) ? int.MaxValue : anger);
+
+        this.interactable = interactable;
     }
 
     private void SetNormalSkill() {

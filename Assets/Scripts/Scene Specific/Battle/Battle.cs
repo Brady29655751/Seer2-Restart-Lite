@@ -51,9 +51,12 @@ public class Battle
     /// <param name="opHash">Opponent properties</param>
     public Battle(Hashtable roomHash, Hashtable myHash, Hashtable opHash) {
         Random.InitState((int)roomHash["seed"]);
+
+        var petCount = (int)roomHash["count"];
         var roomSettings = new BattleSettings() {
             mode = BattleMode.PVP,
-            petCount = (int)roomHash["count"],
+            petCount = petCount,
+            parallelCount = (petCount == 2) ? 2 : 1,
             time = (int)roomHash["time"],
             initBuffs = ((int[])roomHash["buff"]).Select((x, i) => new KeyValuePair<string, Buff>("rule[" + i + "]", new Buff(x))).ToList(),
             weather = 0,
@@ -115,9 +118,9 @@ public class Battle
 
             if (settings.parallelCount > 1) {
                 if (skill.type != SkillType.逃跑) {
-                    var state = new BattleState(currentState);
+                    //var state = new BattleState(currentState);
                     unit.petSystem.cursor = unit.petSystem.GetNextCursorCircular();
-                    UI.SetState(state, currentState);
+                    UI.SetState(null, currentState);
                     UI.ProcessQuery(true);
                 }
                 
@@ -159,6 +162,8 @@ public class Battle
         }
 
         if (currentState.isAllUnitReady) {
+            myUnit.parallelSkillSystems.ForEach(x => x.EnsureSkillNotNull());
+            opUnit.parallelSkillSystems.ForEach(x => x.EnsureSkillNotNull());
             currentPhase = new TurnReadyPhase();
             NextPhase();
             return;

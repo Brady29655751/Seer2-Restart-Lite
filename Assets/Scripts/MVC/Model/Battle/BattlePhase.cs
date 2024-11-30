@@ -114,6 +114,15 @@ public class BattlePhase
         }
 
         if (defUnit.pet.isDead) {
+            if ((state.settings.parallelCount > 1) && (phase == EffectTiming.OnBeforeAttack)) {
+                int nextAlive = defUnit.petSystem.GetNextCursorCircular();
+                if (nextAlive != defUnit.petSystem.cursor) {
+                    defUnit.petSystem.cursor = nextAlive;
+                    SetUIState(null);
+                    return true;
+                }
+            }
+
             atkUnit.SetSkill(Skill.GetNoOpSkill());
             state.atkUnit.isDone = true;
             SetUIState(null);

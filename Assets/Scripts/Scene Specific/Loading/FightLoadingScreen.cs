@@ -1,7 +1,7 @@
 using System;
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
-using System.Runtime.InteropServices;
 using Photon.Pun;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
@@ -12,7 +12,7 @@ public class FightLoadingScreen : LoadingScreen
 {
     private Battle battle => Player.instance.currentBattle;
     [SerializeField] private AudioClip startLoadingSound;
-    [SerializeField] private BattlePetInfoView playerView, enemyView;
+    [SerializeField] private List<BattlePetInfoView> playerView, enemyView;
 
     public override void OnBeforeLoading(Action callback)
     {
@@ -22,11 +22,32 @@ public class FightLoadingScreen : LoadingScreen
 
         SetLoadingProgressNumber(0);
 
-        var myPet = battle.currentState.myUnit.pet;
-        var opPet = battle.currentState.opUnit.pet;
+        var parallelCount = battle.settings.parallelCount;
+        var myPet = battle.currentState.myUnit.petSystem.petBag.Take(parallelCount).ToList();
+        var opPet = battle.currentState.opUnit.petSystem.petBag.Take(parallelCount).ToList();
         
-        playerView.SetPet(myPet);
-        enemyView.SetPet((opPet.buffController.GetBuff(3090) == null) ? opPet : new BattlePet(new Pet(myPet.id, opPet)));
+        for (int i = 0; i < playerView.Count; i++) {
+            bool active = (i < myPet.Count) && (myPet[i] != null);
+            playerView[i].gameObject.SetActive(active);
+            if (!active)
+                continue;
+
+            playerView[i].SetPet(myPet[i]);
+        }
+
+        for (int i = 0; i < enemyView.Count; i++) {
+            bool active = (i < opPet.Count) && (opPet[i] != null);
+            enemyView[i].gameObject.SetActive(active);
+            if (!active)
+                continue;
+
+            var pet = (opPet[i].buffController.GetBuff(3090) == null) ? opPet[i] : new BattlePet(new Pet(myPet[i].id, opPet[i]));
+            enemyView[i].SetPet(pet);
+        }
+        
+        // playerView.SetPet(myPet);
+        // enemyView.SetPet((opPet.buffController.GetBuff(3090) == null) ? opPet : new BattlePet(new Pet(myPet.id, opPet)));
+
         AudioSystem.instance.PlaySound(startLoadingSound, AudioVolumeType.BattleSE);
         StartCoroutine(WaitSecondsCoroutine(1.5f, callback));
     }

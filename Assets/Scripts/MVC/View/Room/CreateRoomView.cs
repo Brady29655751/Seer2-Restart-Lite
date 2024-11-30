@@ -12,7 +12,8 @@ public class CreateRoomView : Module
     [SerializeField] private Image petCountBackground, turnTimeBackground, itemBagBackground;
 
     public void SetPetCount(int count) {
-        int posX = 200 + ((count == 1) ? 0 : 1) * 105;
+        int[] countList = new int[] { 1, 6, 2 };
+        int posX = 200 + countList.IndexOf(count) * 70;
         petCountBackground.rectTransform.anchoredPosition = new Vector2(posX, 0);
     }
 

@@ -19,6 +19,7 @@ public class BattleState
 
     public Unit masterUnit, clientUnit;
     public List<int> actionOrder = new List<int>();
+    public int actionCursor;
 
     public BattleSettings settings;
     public BattleResult result;
@@ -35,7 +36,6 @@ public class BattleState
         this.lastTurnState = null;
 
         this.turn = 0;
-        this.parallelTurn = 0;
         this.whosTurn = 0;
         this.phase = EffectTiming.OnBattleStart;
         this.weather = settings.weather;
@@ -44,6 +44,7 @@ public class BattleState
         this.masterUnit = new Unit(masterTurn);
         this.clientUnit = new Unit(clientTurn);
         this.actionOrder = new List<int>();
+        this.actionCursor = -1;
 
         this.settings = new BattleSettings(settings);
         this.result = new BattleResult(settings);
@@ -62,6 +63,7 @@ public class BattleState
         masterUnit = new Unit(rhs.masterUnit);
         clientUnit = new Unit(rhs.clientUnit);
         actionOrder = rhs.actionOrder.ToList();
+        actionCursor = rhs.actionCursor;
 
         settings = new BattleSettings(rhs.settings);
         result = new BattleResult(rhs.result);
@@ -90,7 +92,7 @@ public class BattleState
 
         return trimId switch {
             "turn" => turn,
-            "parallelTurn" => parallelTurn,
+            "actionCursor" => actionCursor,
             "phase" => (float)phase,
             "weather" => (float)weather,
             "whosTurn" => whosTurn,
@@ -105,14 +107,17 @@ public class BattleState
             }
             lastTurnState = new BattleState(this){ phase = EffectTiming.OnTurnEnd };
         }
+
         turn++;
-        parallelTurn = 0;
         whosTurn = 0;
         actionOrder.Clear();
+        actionCursor = -1;
+
         for (int i = 0; i < stateBuffs.Count; i++) {
             if (stateBuffs[i].Value.turn > 0)
                 stateBuffs[i].Value.turn--;
         }
+
         stateBuffs.RemoveAll(x => x.Value.turn == 0);
 
         masterUnit.OnTurnStart(this);
@@ -132,9 +137,21 @@ public class BattleState
     }
 
     public virtual void GiveTurnToNextUnit() {
-        if ((!masterUnit.isDone) && (!clientUnit.isDone))
+        actionCursor++;
+        if (actionCursor >= actionOrder.Count) {
+            whosTurn = 0;
             return;
+        }
 
+        whosTurn = (actionOrder[actionCursor] > 0) ? 1 : -1;
+
+        var actionUnit = GetUnitById(whosTurn);
+        actionUnit.isDone = false;
+
+        if (settings.parallelCount > 1)
+            actionUnit.petSystem.cursor = Mathf.Abs(actionOrder[actionCursor]) - 1;
+
+        /*
         if (!masterUnit.isDone) {
             whosTurn = masterUnit.id;
             return;
@@ -155,13 +172,14 @@ public class BattleState
         }
 
         whosTurn = 0;
+        */
     }
 
     public virtual Unit GetUnitById(int id) {
-        if (masterUnit.id == id)
+        if (id > 0)
             return masterUnit;
 
-        if (clientUnit.id == id)
+        if (id < 0)
             return clientUnit;
 
         return null;
