@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class BattleOptionView : BattleBaseView
@@ -50,10 +51,18 @@ public class BattleOptionView : BattleBaseView
         if (currentState == null)
             return;
         
-        Unit currentUnit = currentState.myUnit;
-        skillView.SetPet(currentUnit.pet);
-        changeView.SetPetBag(currentUnit.petSystem.petBag);
-        changeView.SetChangeBlockChosen(currentUnit.petSystem.cursor);
+        int parallelCount = currentState.settings.parallelCount;
+        Unit myUnit = currentState.myUnit;
+        Unit opUnit = currentState.opUnit;
+        var myBag = myUnit.petSystem.petBag;
+        var opBag = opUnit.petSystem.petBag;
+        var petBag = (parallelCount > 1) ? myBag.Take(parallelCount).Concat(Enumerable.Repeat(default(BattlePet), 6 - 2 * parallelCount))
+            .Concat(opBag.Take(parallelCount).Reverse()).ToArray() : myBag;
+        var parallelCursor = (parallelCount > 1) ? opUnit.petSystem.cursor : -1;
+
+        skillView.SetPet(myUnit.pet);
+        changeView.SetPetBag(petBag);
+        changeView.SetChangeBlockChosen(myUnit.petSystem.cursor, parallelCursor);
         captureController.SetItemBag(Player.instance.gameData.itemBag);
         itemController.SetItemBag(Player.instance.gameData.itemBag);
     }

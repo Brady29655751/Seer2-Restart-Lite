@@ -9,7 +9,12 @@ public class BattlePetChangeView : BattleBaseView
 {
     private BattlePet[] petBag;
     private int cursor;
+    [SerializeField] private GameObject parallelIndicator;
     [SerializeField] private BattlePetChangeBlockView[] changeBlockViews = new BattlePetChangeBlockView[6];
+
+    public override void Init() {
+        parallelIndicator?.SetActive(battle.settings.parallelCount > 1);
+    }
 
     public void SetPetBag(BattlePet[] petBag) {
         Array.Resize(ref petBag, 6);
@@ -24,7 +29,7 @@ public class BattlePetChangeView : BattleBaseView
         }
     }
 
-    public void SetChangeBlockChosen(int index)
+    public void SetChangeBlockChosen(int index, int parallelIndex = -1)
     {
         if (!index.IsInRange(0, changeBlockViews.Length))
            return;
@@ -33,6 +38,9 @@ public class BattlePetChangeView : BattleBaseView
         for(int i = 0; i < 6; i++) {
             changeBlockViews[i].SetChosen(i == index);
         }
+
+        if (parallelIndex.IsInRange(0, changeBlockViews.Length))
+            changeBlockViews[5 - parallelIndex].SetChosen(true);
     }
 
     public void SetSkillSelectMode(bool isSkillSelectMode) {
@@ -46,7 +54,8 @@ public class BattlePetChangeView : BattleBaseView
         for (int i = 0; i < 6; i++) {    
             var isTarget = (petBag[i] != null) && (isSelectDead ^ (!petBag[i].isDead));
             var isCursor = isSelectOther && (cursor == i);
-            var interactable = isTarget && (!isCursor);
+            var isParallel = (battle.settings.parallelCount <= 1) || (i < battle.settings.parallelCount);
+            var interactable = isTarget && (!isCursor) && isParallel;
             
             changeBlockViews[i].SetFightingTag(false);
             changeBlockViews[i].SetInteractable(interactable, !interactable);
@@ -65,7 +74,18 @@ public class BattlePetChangeView : BattleBaseView
             battle.SetSkill(skill, true);
             return;
         }
-            
+
+        if (battle.settings.parallelCount > 1) {
+            bool isMe = index < (petBag.Length / 2);
+            int targetIndex = isMe ? index : (petBag.Length - index - 1);
+            var unit = isMe ? battle.currentState.myUnit : battle.currentState.opUnit;
+
+            unit.petSystem.cursor = targetIndex;
+            UI.SetState(null, battle.currentState);
+            UI.ProcessQuery(true);
+            return;
+        }
+        
         battle.SetSkill(Skill.GetPetChangeSkill(cursor, index, battle.currentState.isAnyPetDead), true);
         SetChangeBlockChosen(index);
     }

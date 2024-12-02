@@ -10,7 +10,8 @@ public class SettingsPanel : Panel
     public void ExportRole() {
         var filter = new FileBrowser.Filter("save", ".xml");
         FileBrowser.SetFilters(false, filter);
-        FileBrowser.ShowSaveDialog(OnExportSuccess, OnExportCancel, FileBrowser.PickMode.Files, title: "选择要导出的位置并命名");
+        FileBrowser.ShowSaveDialog(OnExportSuccess, OnExportCancel, FileBrowser.PickMode.Files,
+            initialFilename: "save" + Player.instance.gameDataId, title: "选择要导出的位置并命名");
     }
 
     private void OnExportSuccess(string[] paths) {

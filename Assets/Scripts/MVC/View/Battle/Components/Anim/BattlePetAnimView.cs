@@ -19,9 +19,8 @@ public class BattlePetAnimView : BattleBaseView
     private PetUI currentPetUI; //仅限有动画的精灵使用这个字段,如果不为null,说明这个精灵有动画
     private GameObject currentPetAnim;
 
-    private float animSpeed => (battle.settings.mode == BattleMode.PVP)
-        ? 1f
-        : Player.instance.gameData.settingsData.battleAnimSpeed;
+    private float animSpeed => //(battle.settings.mode == BattleMode.PVP) ? 1f : 
+        Player.instance.gameData.settingsData.battleAnimSpeed;
 
     public bool isDone => isPetDone && isCaptureDone;
     protected bool isCaptureDone = true;

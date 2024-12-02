@@ -217,8 +217,7 @@ public class ResourceManager : Singleton<ResourceManager>
             }
             else
             {
-                var platformPath = ((Application.platform == RuntimePlatform.WindowsPlayer) ||
-                    (Application.platform == RuntimePlatform.WindowsEditor)) ? "windows" : "android";
+                var platformPath = (Application.platform == RuntimePlatform.Android) ? "android" : "windows";
                 var folderPath = PetInfo.IsMod(petID) ? ("/Mod/Pets/anim/" + platformPath) : "/PetAnimation";
                 assetBundle = AssetBundle.LoadFromFile(Application.persistentDataPath + folderPath + "/pfa_" + petID);
                 if (assetBundle == null) //说明精灵的所有动画都没有

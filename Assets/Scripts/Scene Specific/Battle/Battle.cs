@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
+using ExitGames.Client.Photon.StructWrapping;
 
 public class Battle
 {
@@ -107,7 +108,11 @@ public class Battle
         Unit unit = (isMe ? myUnit : opUnit);
         Unit rhsUnit = (isMe ? opUnit : myUnit);
 
-        unit.SetSkill(skill);
+        if (settings.parallelCount > 1) {
+            var sourceIndex = int.Parse(skill.options.Get("parallel_source_index", "0"));
+            unit.parallelSkillSystems[sourceIndex].skill = skill;
+        } else
+            unit.SetSkill(skill);
 
         if (isMe) {
             if (!skill.IsSelectReady()) {
@@ -118,14 +123,15 @@ public class Battle
 
             if (settings.parallelCount > 1) {
                 if (skill.type != SkillType.逃跑) {
-                    //var state = new BattleState(currentState);
                     unit.petSystem.cursor = unit.petSystem.GetNextCursorCircular();
                     UI.SetState(null, currentState);
                     UI.ProcessQuery(true);
                 }
                 
-                if (!unit.isReady)
+                if (!unit.isReady) {
+                    UI.PVPSetSkillToOthers(skill);
                     return;
+                }
             }
 
             UI.SetSkillSelectMode(false);
@@ -147,6 +153,7 @@ public class Battle
 
         if ((settings.mode != BattleMode.PVP) && (opUnit.skill == null)) {
             var parallelCount = Mathf.Min(settings.parallelCount, opUnit.petSystem.alivePetNum);
+            var randomCursor = Random.Range(0, parallelCount);
             for (int i = 0; i < parallelCount; i++) {
                 var cursor = opUnit.petSystem.cursor;
                 var nextCursor = opUnit.petSystem.GetNextCursorCircular();

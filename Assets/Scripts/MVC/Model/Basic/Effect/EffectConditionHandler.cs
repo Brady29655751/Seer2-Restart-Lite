@@ -44,19 +44,23 @@ public static class EffectConditionHandler
         if (state == null)
             return true;
 
-        if ((state.phase != EffectTiming.OnAttack) && (state.phase != EffectTiming.OnAfterAttack))
+        string who = condOptions.Get("whos_attack", "me");
+        if (who == "all")
             return true;
 
-        string who = condOptions.Get("whos_attack", "me");
+        Unit invokeUnit = (Unit)effect.invokeUnit;
+        Unit lhsUnit = (who == "me") ? state.GetUnitById(invokeUnit.id) : state.GetRhsUnitById(invokeUnit.id);
 
-        if (who == "all")
+        bool isAttackPhase = (state.phase == EffectTiming.OnAttack) || (state.phase == EffectTiming.OnAfterAttack);
+        bool isPetChangePhase = (state.phase == EffectTiming.OnBeforePetChange) || (state.phase == EffectTiming.OnAfterPetChange);
+        if (isPetChangePhase)
+            return (lhsUnit.skill?.type ?? SkillType.空过) == SkillType.換场;
+
+        if (!isAttackPhase)
             return true;
 
         string hit = condOptions.Get("is_hit", "true");
         string move = condOptions.Get("is_move", "true");
-        Unit invokeUnit = (Unit)effect.invokeUnit;
-        Unit lhsUnit = (who == "me") ? state.GetUnitById(invokeUnit.id) : state.GetRhsUnitById(invokeUnit.id);
-
         bool isHit = true, isMove = true;
         
         if ((hit != "all") && !bool.TryParse(hit, out isHit))

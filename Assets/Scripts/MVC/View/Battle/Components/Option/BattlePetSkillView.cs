@@ -60,7 +60,11 @@ public class BattlePetSkillView : BattleBaseView
         if (!index.IsInRange(0, skillBlockViews.Length))
             return;
 
-        battle.SetSkill(pet.normalSkill[index], true);
+        var skill = new Skill(pet.normalSkill[index]);
+        if (battle.settings.parallelCount > 1)
+            skill.SetParallelIndex(battle.currentState.myUnit.petSystem.cursor, battle.currentState.opUnit.petSystem.cursor);
+
+        battle.SetSkill(skill, true);
     }
 
     public void ShowNormalSkillInfo(int index) {
@@ -76,8 +80,12 @@ public class BattlePetSkillView : BattleBaseView
     public void SelectSuperSkill() {
         if (pet.superSkill == null)
             return;
-            
-        battle.SetSkill(pet.superSkill, true);
+
+        var skill = new Skill(pet.superSkill);
+        if (battle.settings.parallelCount > 1)
+            skill.SetParallelIndex(battle.currentState.myUnit.petSystem.cursor, battle.currentState.opUnit.petSystem.cursor);
+
+        battle.SetSkill(skill, true);
     }
 
     public void ShowSuperSkillInfo() {

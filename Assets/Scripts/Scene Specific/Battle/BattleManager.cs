@@ -98,8 +98,6 @@ public class BattleManager : Manager<BattleManager>
             SetBottomBarInteractable(true);
             SelectOption(currentUIState.myUnit.pet.isDead ? 1 : 0);
             SetOptionActive(2, currentUIState.settings.isCaptureOK);
-            if (currentUIState.settings.parallelCount > 1)
-                SetOptionActive(1, false);
                 
             if ((!currentUIState.settings.isItemOK) || (currentUIState.myUnit.pet.isDead))
             {
@@ -126,8 +124,24 @@ public class BattleManager : Manager<BattleManager>
 
         SetCurrentUIState(newState);
 
-        if (processOne)
+        if (processOne) 
+        {
+            if ((newState.settings.parallelCount > 1) && (queue.Count <= 0)) 
+            {
+                SetBottomBarInteractable(newState.myUnit.skillSystem.skill == null);
+                SelectOption(newState.myUnit.pet.isDead ? 1 : 0);
+                SetOptionActive(2, newState.settings.isCaptureOK);
+    
+                if ((!newState.settings.isItemOK) || (newState.myUnit.pet.isDead))
+                {
+                    SetOptionActive(2, false);
+                    SetOptionActive(3, false);
+                }
+
+                SetOptionActive(4, !newState.myUnit.pet.isDead);
+            }
             return;
+        }
 
         StartCoroutine(CheckQueryDone(newState));
     }
@@ -203,6 +217,6 @@ public class BattleManager : Manager<BattleManager>
             return;
 
         var photonView = masterView.IsMine ? masterView : clientView;
-        photonView.RPC("RPCSetSkill", RpcTarget.Others, (object)skill.ToRPCData());
+        photonView.RPC("RPCSetSkill", RpcTarget.Others, (object)skill.ToRPCData(battle.settings));
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
@@ -13,6 +14,18 @@ public static class SaveSystem
 {
     public const int MAX_SAVE_COUNT = 3;
     public static string savePath => Application.persistentDataPath + "/save" + Player.instance.gameDataId + ".xml";
+
+    public static bool TryUnzipFile(string zipPath, string dirPath, string dirName) {
+        try {
+            if (FileBrowserHelpers.DirectoryExists(dirPath + "/" + dirName))
+                FileBrowserHelpers.DeleteDirectory(dirPath + "/" + dirName);
+
+            ZipFile.ExtractToDirectory(zipPath, dirPath, true);
+        } catch (Exception) {
+            return false;
+        }
+        return true;
+    }
 
     public static void SaveData() {
         SaveData(Player.instance.gameData);
@@ -107,14 +120,24 @@ public static class SaveSystem
         return true;
     }
 
-    public static bool IsResourcesExists() {
-        return FileBrowserHelpers.DirectoryExists(Application.persistentDataPath + "/Resources");
+    public static string GetResourceVersion() {
+        var resourceDirPath = Application.persistentDataPath + "/Resources";
+        var versionPath = Application.persistentDataPath + "/Resources/version.txt";
+        if ((!FileBrowserHelpers.DirectoryExists(resourceDirPath)) || (!FileBrowserHelpers.FileExists(versionPath)))
+            return VersionData.DefaultVersion;
+        
+        return FileBrowserHelpers.ReadTextFromFile(versionPath).Trim();
+        // return FileBrowserHelpers.DirectoryExists(Application.persistentDataPath + "/Resources");
     }
 
     public static bool TryImportResources(string importPath, out string error) {
         try {
             var dirName = FileBrowserHelpers.GetFilename(importPath);
-            var resourcePath = FileBrowserHelpers.CreateFolderInDirectory(Application.persistentDataPath, dirName);  
+            var resourceName = Application.persistentDataPath + "/" + dirName;
+            if (FileBrowserHelpers.DirectoryExists(resourceName))
+                FileBrowserHelpers.DeleteDirectory(resourceName);
+
+            var resourcePath = FileBrowserHelpers.CreateFolderInDirectory(Application.persistentDataPath, dirName);
             FileBrowserHelpers.CopyDirectory(importPath, resourcePath);
             error = string.Empty;
         } catch (Exception e) {
@@ -182,7 +205,16 @@ public static class SaveSystem
 
     public static bool TryImportMod(string importPath) {
         try {
+            var entries = FileBrowserHelpers.GetEntriesInDirectory(importPath, true).Where(x => x.IsDirectory).ToList();
+            if (entries.Count <= 1)
+                importPath = entries.FirstOrDefault().Path;
+
             var modPath = Application.persistentDataPath + "/Mod";
+            if (IsModExists()) {
+                FileBrowserHelpers.DeleteDirectory(modPath);
+                TryCreateMod(out _);
+            }
+
             FileBrowserHelpers.CopyDirectory(importPath, modPath);   
         } catch (Exception) {
             return false;

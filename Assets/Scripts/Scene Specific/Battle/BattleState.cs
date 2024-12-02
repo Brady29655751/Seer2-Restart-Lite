@@ -125,7 +125,8 @@ public class BattleState
     }
 
     public virtual bool IsAllUnitDone() {
-        return masterUnit.isDone && clientUnit.isDone;
+        return actionCursor >= actionOrder.Count; 
+        // masterUnit.isDone && clientUnit.isDone;
     }
 
     public virtual bool IsAllUnitReady() {
@@ -148,8 +149,10 @@ public class BattleState
         var actionUnit = GetUnitById(whosTurn);
         actionUnit.isDone = false;
 
-        if (settings.parallelCount > 1)
+        if (settings.parallelCount > 1) {
             actionUnit.petSystem.cursor = Mathf.Abs(actionOrder[actionCursor]) - 1;
+            GetRhsUnitById(actionUnit.id).petSystem.cursor = int.Parse(actionUnit.skill?.options.Get("parallel_target_index") ?? "0");
+        }
 
         /*
         if (!masterUnit.isDone) {
@@ -189,12 +192,22 @@ public class BattleState
         return GetUnitById(-lhsId);
     }
 
-    public virtual bool IsGoFirst(int unitId) {
-        return actionOrder.FirstOrDefault() == unitId;
+    public virtual bool IsGoFirst(Unit lhsUnit) {
+        int unitId = lhsUnit.id;
+        if (settings.parallelCount <= 1)
+            return actionOrder.FirstOrDefault() == unitId;
+
+        Unit rhsUnit = GetRhsUnitById(unitId);
+        var lhsCursor = actionOrder.IndexOf((int)Mathf.Sign(lhsUnit.id) * (lhsUnit.petSystem.cursor + 1));
+        var rhsCursor = actionOrder.IndexOf((int)Mathf.Sign(rhsUnit.id) * (rhsUnit.petSystem.cursor + 1));
+        
+        lhsCursor = (lhsCursor < 0) ? int.MaxValue : lhsCursor;
+        rhsCursor = (rhsCursor < 0) ? int.MaxValue : rhsCursor;
+        return lhsCursor < rhsCursor;
     }
 
-    public virtual bool IsGoLast(int unitId) {
-        return actionOrder.LastOrDefault() == unitId;
+    public virtual bool IsGoLast(Unit lhsUnit) {
+        return !IsGoFirst(lhsUnit);
     }
 
     public virtual void ApplySkillsAndBuffs() {

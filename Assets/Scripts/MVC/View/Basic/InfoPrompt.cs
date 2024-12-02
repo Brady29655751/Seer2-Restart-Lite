@@ -47,7 +47,7 @@ public class InfoPrompt : IMonoBehaviour
     }
 
     public void SetInfoPrompt(Vector2 size, string content, TextAnchor align = TextAnchor.MiddleCenter, float lineSpacing = 1.2f) {
-        var fixPos = (Application.platform == RuntimePlatform.WindowsPlayer) ? new Vector2(10, 2) : new Vector2(60, 2);
+        var fixPos = (Application.platform == RuntimePlatform.Android) ? new Vector2(60, 2) : new Vector2(10, 2);
         SetInfoPrompt(size, content, fixPos, align, lineSpacing);
     }
 

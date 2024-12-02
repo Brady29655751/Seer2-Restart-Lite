@@ -160,6 +160,7 @@ public class Skill
     }
 
     public static Skill ParseRPCData(string[] data) {
+        var len = data.Length;
         int id = int.Parse(data[0]);
         var skill = id switch {
             (int)SkillType.空过 => Skill.GetNoOpSkill(),
@@ -172,17 +173,26 @@ public class Skill
         if (!skill.isAction)
             skill.options.Set("target_index", data[1]);
 
+        var parallelSourceIndex = int.Parse(data.Get(len - 2, "0"));
+        var parallelTargetIndex = int.Parse(data.Get(len - 1, "0"));
+        skill.SetParallelIndex(parallelSourceIndex, parallelTargetIndex);
+
         return skill;
     }
 
-    public string[] ToRPCData() {
-        return id switch {
+    public string[] ToRPCData(BattleSettings settings) {
+        var data = id switch {
             (int)SkillType.空过 => new string[] { id.ToString() },
             (int)SkillType.道具 => new string[] { id.ToString(), options.Get("item_id", "0") },
             (int)SkillType.換场 => new string[] { id.ToString(), options.Get("source_index", "0"), options.Get("target_index", "0"), options.Get("passive", "false") },
             (int)SkillType.逃跑 => new string[] { id.ToString() },
             _ => new string[] { id.ToString(), options.Get("target_index", "-1") }
         };
+
+        if (settings.parallelCount > 1)
+            data.Append(options.Get("parallel_source_index", "0")).Append(options.Get("parallel_target_index", "0")).ToArray();
+
+        return data;
     }
 
     public static Skill GetRandomSkill() {
@@ -268,6 +278,16 @@ public class Skill
             e.source = this;
         }
         effects = _effects;
+    }
+
+    public void SetParallelIndex(int parallelSourceIndex = 0, int parallelTargetIndex = 0) {
+        options.Set("parallel_source_index", parallelSourceIndex.ToString());
+        options.Set("parallel_target_index", parallelTargetIndex.ToString());
+
+        effects.ForEach(x => {
+            x?.abilityOptionDict?.Set("parallel_source_index", parallelSourceIndex.ToString());
+            x?.abilityOptionDict?.Set("parallel_target)index", parallelTargetIndex.ToString());
+        });
     }
 
     public bool IsAction() {

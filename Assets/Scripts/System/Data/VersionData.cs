@@ -12,6 +12,7 @@ public class VersionData
     [XmlElement("buildVersion")] public string buildVersion;
     
     public static List<string> versionType => new List<string>() { "alpha", "beta", "lite" };
+    public static string DefaultVersion => "alpha_0.1";
 
     public DateTime releaseDate;
     public string releaseNote;
@@ -29,7 +30,7 @@ public class VersionData
         return (versionData == null) || (versionData.IsEmpty());
     }
 
-    public static int Compare(string lhsVersion, string rhsVersion) {
+    public static int Compare(string lhsVersion, string rhsVersion, int compareBits = int.MaxValue) {
         int lhsVersionIndex = versionType.FindIndex(x => lhsVersion.StartsWith(x));
         int rhsVersionIndex = versionType.FindIndex(x => rhsVersion.StartsWith(x));
 
@@ -44,6 +45,9 @@ public class VersionData
         var length = Mathf.Max(lhsVersionSplit.Length, rhsVersionSplit.Length);
 
         for (int i = 0; i < length; i++) {
+            if (i >= compareBits)
+                break;
+
             var lhs = (i < lhsVersionSplit.Length) ? lhsVersionSplit[i] : -1;
             var rhs = (i < rhsVersionSplit.Length) ? rhsVersionSplit[i] : -1;
 

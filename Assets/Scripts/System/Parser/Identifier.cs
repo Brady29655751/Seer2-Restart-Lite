@@ -116,18 +116,16 @@ public static class Identifier {
                     return 0;
             }
 
-            var actionOrder = state.actionOrder;
-
             if (trimId.TryTrimStart("me.", out trimId)) {
                 return trimId switch {
-                    "order" => (ListHelper.IsNullOrEmpty(actionOrder)) ? 0 : (state.IsGoFirst(lhsUnit.id) ? 1 : 2),
+                    "order" => ListHelper.IsNullOrEmpty(state.actionOrder) ? 0 : (state.IsGoFirst(lhsUnit) ? 1 : 2),
                     _ => GetUnitIdentifier(trimId, lhsUnit)
                 };
             }
 
             if (trimId.TryTrimStart("op.", out trimId)) {
                 return trimId switch {
-                    "order" => (ListHelper.IsNullOrEmpty(actionOrder)) ? 0 : (state.IsGoFirst(rhsUnit.id) ? 1 : 2),
+                    "order" => ListHelper.IsNullOrEmpty(state.actionOrder) ? 0 : (state.IsGoFirst(rhsUnit) ? 1 : 2),
                     _ => GetUnitIdentifier(trimId, rhsUnit)
                 };
             }
