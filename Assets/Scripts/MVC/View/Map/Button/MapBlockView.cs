@@ -20,10 +20,6 @@ public class MapBlockView : Module
         titleObject?.SetActive(active);
     }
 
-    public void GoToMap(int mapId) {
-        TeleportHandler.Teleport(mapId);
-    }
-
     public void OpenModMapPanel() {
         if (!SaveSystem.TryLoadPanelMod("WorldMap", out _)) {
             Hintbox.OpenHintboxWithContent("加载Mod地图失败，可能为未加载Mod或该Mod未制作世界地图", 16);

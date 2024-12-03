@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,6 +6,7 @@ using UnityEngine.UI;
 
 public class PetElementView : Module
 {
+    [SerializeField] private bool isAttackRelation = true;
     [SerializeField] private PetElementFilterButton titleElement;
     [SerializeField] private IText titleElementText;
     [SerializeField] private List<PetElementFilterButton> selectArea;
@@ -32,9 +34,14 @@ public class PetElementView : Module
         titleElement?.SetElement(element);
         titleElementText?.SetText(element.GetElementName());
 
-        var weakElements = PetElementSystem.GetAttackRelation(element, x => x > 1);
-        var resistElements = PetElementSystem.GetAttackRelation(element, x => (x > 0) && (x < 1));
-        var zeroElements = PetElementSystem.GetAttackRelation(element, x => x == 0);
+        Func<Element, Func<float, bool>, List<Element>> RelationFunc = isAttackRelation
+            ? PetElementSystem.GetAttackRelation
+            : PetElementSystem.GetDefenseRelation;
+
+        var weakElements = RelationFunc(element, x => x > 1);
+        var resistElements = RelationFunc(element, x => (x > 0) && (x < 1));
+        var zeroElements = RelationFunc(element, x => x == 0);
+        
         SetElementRelation(weakArea, weakElements);
         SetElementRelation(resistArea, resistElements);
         SetElementRelation(zeroArea, zeroElements);

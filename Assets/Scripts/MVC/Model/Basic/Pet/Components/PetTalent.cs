@@ -11,6 +11,7 @@ public class PetTalent
     public int evStorage = 0;   // 剩餘學習力
 
     public PetTalentInfo info => Database.instance.GetPetInfo(id)?.talent;
+    public int totalEV => (int)ev.sum + evStorage;
     public int IVRankId => (int)IVRank;
     public IVRanking IVRank => PetIVSystem.GetIVRank(iv);     // 資質評級：一般、良、優、稀、極
 

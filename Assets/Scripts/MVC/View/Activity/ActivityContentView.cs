@@ -9,6 +9,7 @@ public class ActivityContentView : Module
 {
     [SerializeField] private Image background;
     [SerializeField] private IText titleText;
+    [SerializeField] private Text titleLegacyText;
     [SerializeField] private Text contentText;
     [SerializeField] private Text timeText;
     [SerializeField] private List<PetItemBlockView> itemBlockViews;
@@ -22,6 +23,7 @@ public class ActivityContentView : Module
         background?.gameObject.SetActive(true);
         background?.SetSprite(  activity.activityBackground);
         titleText?.SetText(activity.name);
+        titleLegacyText?.SetText(activity.name);
         contentText?.SetText(activity.description);
         timeText?.SetText(activity.time);
         for (int i = 0; i < itemBlockViews.Count; i++) {
@@ -32,6 +34,7 @@ public class ActivityContentView : Module
     private void Clear() {
         background?.gameObject.SetActive(false);
         titleText?.SetText(string.Empty);
+        titleLegacyText?.SetText(string.Empty);
         contentText?.SetText(string.Empty);
         timeText?.SetText(string.Empty);
         for (int i = 0; i < itemBlockViews.Count; i++) {

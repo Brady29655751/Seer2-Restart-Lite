@@ -8,13 +8,15 @@ public class PetExp
 {
     [XmlAttribute] public int id;
     public int level;   // 等級
+    public int fixedMaxLevel; // 最高等級 (默認 100)
     public uint totalExp;   // 目前總計獲得EXP
     
     [XmlIgnore] public PetExpInfo info => Database.instance.GetPetInfo(id)?.exp;
     public int expType => info.expType;
     public int evolveLevel => info.evolveLevel;
     public uint levelUpExp => (PetExpSystem.GetTotalExp(level + 1, expType) - totalExp);    // 距離升級所需EXP
-    public uint maxExp => (PetExpSystem.GetTotalExp(100, expType));
+    public int maxLevel => (fixedMaxLevel == 0) ? 100 : fixedMaxLevel;  // 最高等級 
+    public uint maxExp => (PetExpSystem.GetTotalExp(maxLevel, expType));
 
     public PetExp() {}
 
@@ -36,7 +38,7 @@ public class PetExp
     /// <param name="exp">Gain how much exp</param>
     /// <returns>evolve or not</returns>
     public bool GainExp(uint exp) {
-        if (level >= 100)
+        if (level >= maxLevel)
             return false;
 
         if (exp < levelUpExp) {
@@ -44,7 +46,7 @@ public class PetExp
             return false;
         }
 
-        while ((exp >= levelUpExp) && (level < 100)) {
+        while ((exp >= levelUpExp) && (level < maxLevel)) {
             exp -= levelUpExp;
             totalExp += levelUpExp;
             level++;

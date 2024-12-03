@@ -43,9 +43,10 @@ public class Pet
 
     /* Exp and Level */
     public int level => exp.level;  // 等級
+    public int maxLevel => exp.maxLevel;    // 最高等級
     public uint totalExp => exp.totalExp;   // 目前總計獲得EXP
     public uint levelUpExp => exp.levelUpExp;   // 距離升級所需EXP
-    public uint maxExp => exp.maxExp;   // 100級所需EXP
+    public uint maxExp => exp.maxExp;   // 滿級所需EXP
 
     /* Skill */
     [XmlIgnore] public List<Skill> ownSkill => skills.ownSkill;  // 當前習得的所有技能
@@ -243,6 +244,7 @@ public class Pet
             "height" => basic.height,
             "weight" => basic.weight,
             "level" => level,
+            "maxLevel" => maxLevel,
             "exp" => totalExp,
             "levelExp" => levelUpExp,
             "iv" => talent.iv, 
@@ -288,6 +290,11 @@ public class Pet
                 else
                     GainExp(exp.totalExp - PetExpSystem.GetTotalExp(Mathf.Min(toLevel, 100), exp.expType));
                 return;
+            case "maxLevel":
+                exp.fixedMaxLevel = Mathf.Max((int)num, 0);
+                if (maxLevel < level)
+                    LevelDown(maxLevel, true);
+                return;
             case "exp":
                 uint gainExp = (uint)num - totalExp;
                 GainExp(gainExp);
@@ -329,7 +336,7 @@ public class Pet
 
     public Pet GainExp(uint gainExp) {
         bool isLevelUp = (gainExp >= levelUpExp);
-        if (level >= 100)
+        if (level >= maxLevel)
             return this;
             
         if (exp.GainExp(gainExp)) {
@@ -347,15 +354,17 @@ public class Pet
         return this;
     }
 
-    public void LevelDown(int toWhichLevel) {
+    public void LevelDown(int toWhichLevel, bool keepSkill = false) {
         if (level < 1)
             return;
 
         exp.LevelDown(toWhichLevel);
-        skills.ownSkill = null;
-        skills.normalSkill = null;
-        skills.superSkill = null;
-        skills.CheckNewSkill(toWhichLevel);
+        if (!keepSkill) {
+            skills.ownSkill = null;
+            skills.normalSkill = null;
+            skills.superSkill = null;
+            skills.CheckNewSkill(toWhichLevel);
+        }
 
         currentStatus = normalStatus;
         SaveSystem.SaveData();

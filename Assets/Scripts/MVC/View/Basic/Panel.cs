@@ -24,7 +24,7 @@ public class Panel : UIModule
         return panel;
     }
 
-    public static Panel OpenPanel(string panelName) {
+    public new static Panel OpenPanel(string panelName) {
         if ((panelName == "null") || (panelName == "none")) {
             Panel.CloseTopPanel();
             return null;

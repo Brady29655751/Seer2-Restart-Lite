@@ -24,7 +24,7 @@ public class PetInfoView : Module
         SetID(pet.id);
         SetLevel(pet.level);
         SetEvolveLevel(pet.info.exp.evolveLevel);
-        SetLevelUpExp((pet.level >= 100) ? 0 : pet.levelUpExp);
+        SetLevelUpExp((pet.level >= pet.maxLevel) ? 0 : pet.levelUpExp);
         SetPersonality(pet.basic.personality);
         SetHeightAndWeight(pet.basic.height, pet.basic.weight);
         SetGetPetDate(pet.basic.getPetDate);

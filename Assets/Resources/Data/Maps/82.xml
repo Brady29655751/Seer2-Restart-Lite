@@ -6,6 +6,259 @@
 		<bgm>BGM_113</bgm>
 	</music>
 	<entities>
+		<npc id="8201" resId="8101" name="上尉门罗" size="119,91" pos="425,200" namePos="0,0">
+			<description>准备好三倍加速器和学习机提升培养效率！</description>
+			<dialog>
+				<branch id="default" name="上尉门罗" icon="8101" size="119,91" pos="0,55">
+					<content><![CDATA[准备好三倍加速器和学习机提升培养效率！可以在道具商店购买！]]></content>
+					<functionHandler>
+						<func type="click">
+							<description><![CDATA[Lv 20]]></description>
+							<action>battle</action>
+							<param>exp_1</param>
+						</func>
+						<func type="click">
+							<description><![CDATA[Lv 40]]></description>
+							<action>battle</action>
+							<param>exp_2</param>
+						</func>
+						<func type="click">
+							<description><![CDATA[Lv 60]]></description>
+							<action>battle</action>
+							<param>exp_3</param>
+						</func>
+						<func type="click">
+							<description><![CDATA[Lv 80]]></description>
+							<action>battle</action>
+							<param>exp_4</param>
+						</func>
+						<func type="click">
+							<description><![CDATA[Lv 100]]></description>
+							<action>battle</action>
+							<param>exp_5</param>
+						</func>
+					</functionHandler>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[好的]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+						<reply type="click">
+							<description><![CDATA[荣誉兑换]]></description>
+							<action>openPanel</action>
+							<param>ItemShop</param>
+							<param>type=honor</param>
+							<param>currency=3/0</param>
+						</reply>
+						<reply type="click">
+							<description><![CDATA[道具商店]]></description>
+							<action>openPanel</action>
+							<param>ItemShop</param>
+						</reply>
+					</replyHandler>
+				</branch>
+			</dialog>
+			<battle>
+				<branch id="exp_1">
+					<settings count="6"/>
+					<enemy>
+						<pet id="12" level="20">
+							<loopSkill>10051</loopSkill>
+						</pet>
+						<pet id="12" level="20">
+							<loopSkill>10051</loopSkill>
+						</pet>
+						<pet id="12" level="20">
+							<loopSkill>10051</loopSkill>
+						</pet>
+						<pet id="12" level="20">
+							<loopSkill>10051</loopSkill>
+						</pet>
+						<pet id="12" level="20">
+							<loopSkill>10051</loopSkill>
+						</pet>
+						<pet id="12" level="20">
+							<loopSkill>10051</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setItem</action>
+							<param>add</param>
+							<param>3,5</param>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=5 荣誉点已经放入背包</param>
+							<param>item_icon=item[3]</param>
+							<param>option_num=1</param>
+						</button>
+					</winHandler>
+				</branch>
+				<branch id="exp_2">
+					<settings count="6"/>
+					<enemy>
+						<pet id="17" level="40">
+							<loopSkill>10242</loopSkill>
+						</pet>
+						<pet id="17" level="40">
+							<loopSkill>10242</loopSkill>
+						</pet>
+						<pet id="17" level="40">
+							<loopSkill>10242</loopSkill>
+						</pet>
+						<pet id="17" level="40">
+							<loopSkill>10242</loopSkill>
+						</pet>
+						<pet id="17" level="40">
+							<loopSkill>10242</loopSkill>
+						</pet>
+						<pet id="17" level="40">
+							<loopSkill>10242</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setItem</action>
+							<param>add</param>
+							<param>3,10</param>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=10 荣誉点已经放入背包</param>
+							<param>item_icon=item[3]</param>
+							<param>option_num=1</param>
+						</button>
+					</winHandler>
+				</branch>
+				<branch id="exp_3">
+					<settings count="6"/>
+					<enemy>
+						<pet id="691" level="60">
+							<loopSkill>10247</loopSkill>
+						</pet>
+						<pet id="691" level="60">
+							<loopSkill>10247</loopSkill>
+						</pet>
+						<pet id="691" level="60">
+							<loopSkill>10247</loopSkill>
+						</pet>
+						<pet id="691" level="60">
+							<loopSkill>10247</loopSkill>
+						</pet>
+						<pet id="691" level="60">
+							<loopSkill>10247</loopSkill>
+						</pet>
+						<pet id="691" level="60">
+							<loopSkill>10247</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setItem</action>
+							<param>add</param>
+							<param>3,15</param>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=15 荣誉点已经放入背包</param>
+							<param>item_icon=item[3]</param>
+							<param>option_num=1</param>
+						</button>
+					</winHandler>
+				</branch>
+				<branch id="exp_4">
+					<settings count="6"/>
+					<enemy>
+						<pet id="946" level="80">
+							<loopSkill>10208</loopSkill>
+						</pet>
+						<pet id="946" level="80">
+							<loopSkill>10208</loopSkill>
+						</pet>
+						<pet id="946" level="80">
+							<loopSkill>10208</loopSkill>
+						</pet>
+						<pet id="946" level="80">
+							<loopSkill>10208</loopSkill>
+						</pet>
+						<pet id="946" level="80">
+							<loopSkill>10208</loopSkill>
+						</pet>
+						<pet id="946" level="80">
+							<loopSkill>10208</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setItem</action>
+							<param>add</param>
+							<param>3,25</param>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=25 荣誉点已经放入背包</param>
+							<param>item_icon=item[3]</param>
+							<param>option_num=1</param>
+						</button>
+					</winHandler>
+				</branch>
+				<branch id="exp_5">
+					<settings count="6"/>
+					<enemy>
+						<pet id="961" level="100">
+							<loopSkill>10313,10315</loopSkill>
+						</pet>
+						<pet id="962" level="100">
+							<loopSkill>10347</loopSkill>
+						</pet>
+						<pet id="963" level="100">
+							<loopSkill>10366</loopSkill>
+						</pet>
+						<pet id="964" level="100">
+							<loopSkill>10371,10373</loopSkill>
+						</pet>
+						<pet id="965" level="100">
+							<loopSkill>10398</loopSkill>
+						</pet>
+						<pet id="966" level="100">
+							<loopSkill>10434</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setItem</action>
+							<param>add</param>
+							<param>3,40</param>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=40 荣誉点已经放入背包</param>
+							<param>item_icon=item[3]</param>
+							<param>option_num=1</param>
+						</button>
+					</winHandler>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>openDialog</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<!--
 		<npc id="8201" resId="8101" name="Lv 20 第一层守护者" size="119,91" pos="425,200" namePos="0,0">
 			<description>第一层守护者</description>
 			<battle>
@@ -239,6 +492,7 @@
 				</button>
 			</eventHandler>
 		</npc>
+		-->
 		<teleport id="1" name="英格瓦要塞" pos="250,75" targetMapId="81"/>
 	</entities>		
 </map>

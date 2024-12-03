@@ -7,7 +7,7 @@ id,timing,priority,target,condition,cond_option,effect,effect_option
 1002,none,-1,none,none,none,none,none
 1003,none,-1,none,none,none,none,none
 1004,none,-1,none,none,none,none,none
-8001,resident,-1,pet,pet,type=level&level_op=<&level_cmp=100,set_pet,type=exp&op=+&value=50000
+8001,resident,-1,pet,pet,type=level&level_op=<&level_cmp=maxLevel,set_pet,type=exp&op=+&value=50000
 8002,resident,-1,pet,pet,type=iv&iv_op=<&iv_cmp=31,set_pet,type=iv&op=+&value=1
 8003,resident,-1,pet,none,none,set_pet,type=evStorage&op=+&value=510
 8004,on_before_attack,-1,pet,none,none,capture,prob=100
@@ -29,11 +29,11 @@ id,timing,priority,target,condition,cond_option,effect,effect_option
 10018,resident\on_before_attack,-1\-1,pet\pet_bag,status\none,status_type=hp&cmp_value=0\none,heal\heal,type=item&set=target.status.initHp\target_type=index_dead_other&type=item&set=target.status.maxHp
 10101,resident\resident\resident\resident,-1\-1\-1\-1,pet\pet\pet\pet,pet\pet\pet\pet,type=buff[400001]&buff[400001]_cmp=0\type=buff[400001]&buff[400001]_cmp=0\type=buff[400001]&buff[400001]_cmp=0\type=buff[400001]&buff[400001]_cmp=0,set_pet\set_pet\set_pet\set_pet,max_use=1&type=buff&op=+&value=400001\max_use=1&type=record[battleExpMult]&op=SET&value=3\max_use=1&type=record[battleExpChance]&op=SET&value=30\max_use=1&type=record[battleExpBuff]&op=SET&value=400001
 10111,resident\resident\resident\resident,-1\-1\-1\-1,pet\pet\pet\pet,pet\pet\pet\pet,type=buff[400002]&buff[400002]_cmp=0\type=buff[400002]&buff[400002]_cmp=0\type=buff[400002]&buff[400002]_cmp=0\type=buff[400002]&buff[400002]_cmp=0,set_pet\set_pet\set_pet\set_pet,max_use=1&type=buff&op=+&value=400002\max_use=1&type=record[battleEvMult]&op=SET&value=3\max_use=1&type=record[battleEvChance]&op=SET&value=30\max_use=1&type=record[battleEvBuff]&op=SET&value=400002
-10201,resident,-1,pet,pet,type=level&level_op=<&level_cmp=100,set_pet,type=exp&op=+&value=1000
-10202,resident,-1,pet,pet,type=level&level_op=<&level_cmp=100,set_pet,type=exp&op=+&value=2000
-10203,resident,-1,pet,pet,type=level&level_op=<&level_cmp=100,set_pet,type=exp&op=+&value=5000
-10204,resident,-1,pet,pet,type=level&level_op=<&level_cmp=100,set_pet,type=exp&op=+&value=15000
-10205,resident,-1,pet,pet,type=level&level_op=<&level_cmp=100,set_pet,type=exp&op=+&value=50000
+10201,resident,-1,pet,pet,type=level&level_op=<&level_cmp=maxLevel,set_pet,type=exp&op=+&value=1000
+10202,resident,-1,pet,pet,type=level&level_op=<&level_cmp=maxLevel,set_pet,type=exp&op=+&value=2000
+10203,resident,-1,pet,pet,type=level&level_op=<&level_cmp=maxLevel,set_pet,type=exp&op=+&value=5000
+10204,resident,-1,pet,pet,type=level&level_op=<&level_cmp=maxLevel,set_pet,type=exp&op=+&value=15000
+10205,resident,-1,pet,pet,type=level&level_op=<&level_cmp=maxLevel,set_pet,type=exp&op=+&value=50000
 10211,resident,-1,pet,pet,type=level&level_op=>&level_cmp=1,set_pet,max_use=1&type=level&op=SET&value=1
 10221,resident,-1,pet,none,none,set_pet,type=iv&op=SET&value=random[0~31]
 10222,resident,-1,pet,none,none,set_pet,type=iv&op=SET&value=random[11~31]
@@ -79,6 +79,7 @@ id,timing,priority,target,condition,cond_option,effect,effect_option
 300845,resident,-1,pet,pet,type=baseId/emblem&baseId_cmp=845&emblem_cmp=0,set_pet,type=emblem&op=SET&value=1
 310970,resident,-1,pet,pet,type=baseId&baseId_cmp=970,set_pet,type=featureType&op=+&value=1
 320761,resident\resident,-1\-1,pet\pet,pet\pet,type=id&id_cmp=761\type=id&id_cmp=762,set_pet\set_pet,type=id&op=SET&value=762&keep_skill=false\type=id&op=SET&value=761&keep_skill=false
+320970,resident,-1,pet,pet,type=baseId/maxLevel&baseId_cmp=970&maxLevel_op=<&maxLevel_cmp=105,set_pet,type=maxLevel&op=SET&value=105
 400001,none,-1,none,none,none,none,none
 400002,none,-1,none,none,none,none,none
 400003,none,-1,none,none,none,none,none

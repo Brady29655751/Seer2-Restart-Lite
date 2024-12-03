@@ -25,10 +25,6 @@ public class SPTBossPanel : Panel
         }
     }
 
-    public void GoToMap(int mapId) {
-        TeleportHandler.Teleport(mapId);
-    }
-
     public void ShowBossInfo(string bossName) {
         infoPrompt.SetInfoPromptWithAutoSize(bossName, TextAnchor.MiddleLeft);
     }

@@ -114,16 +114,15 @@ public class BattleResult
         gainEVStoragePerPet = endState.opUnit.petSystem.petNum;
 
         DoWork(endState, (state, battlePet, pet) => { 
-            int battleEvMult = 1;
+            int battleEvMult = 1, battleEvChance = 0, battleEvBuffId = 0;
 
             if (battlePet.record.TryGetRecord("battleEvMult", out var battleEvMultExpr) &&
                 battlePet.record.TryGetRecord("battleEvChance", out var battleEvChanceExpr) &&
                 battlePet.record.TryGetRecord("battleEvBuff", out var battleEvBuffExpr)) {
                 
                 battleEvMult = int.Parse(battleEvMultExpr);
-
-                int battleEvChance = int.Parse(battleEvChanceExpr) - 1;
-                int battleEvBuffId = int.Parse(battleEvBuffExpr);
+                battleEvChance = int.Parse(battleEvChanceExpr) - 1;
+                battleEvBuffId = int.Parse(battleEvBuffExpr);
 
                 if (battleEvChance <= 0) {
                     pet.feature.afterwardBuffIds.Remove(battleEvBuffId);
@@ -134,6 +133,11 @@ public class BattleResult
             }
 
             pet.talent.AddEVStorage(gainEVStoragePerPet * battleEvMult); 
+            if (pet.talent.totalEV >= 510) {
+                pet.feature.afterwardBuffIds.Remove(battleEvBuffId);
+                pet.record.SetRecord("battleEvChance", null);
+                pet.record.SetRecord("battleEvBuff", null);
+            }
         });
     }
 
@@ -144,15 +148,15 @@ public class BattleResult
 
         DoWork(endState, (state, battlePet, pet) => { 
             uint battleExpMult = 1;
+            int battleExpChance = 0, battleExpBuffId = 0;
 
             if (battlePet.record.TryGetRecord("battleExpMult", out var battleExpMultExpr) &&
                 battlePet.record.TryGetRecord("battleExpChance", out var battleExpChanceExpr) &&
                 battlePet.record.TryGetRecord("battleExpBuff", out var battleExpBuffExpr)) {
 
                 battleExpMult = uint.Parse(battleExpMultExpr);
-
-                int battleExpChance = int.Parse(battleExpChanceExpr) - 1;
-                int battleExpBuffId = int.Parse(battleExpBuffExpr);
+                battleExpChance = int.Parse(battleExpChanceExpr) - 1;
+                battleExpBuffId = int.Parse(battleExpBuffExpr);
 
                 if (battleExpChance <= 0) {
                     pet.feature.afterwardBuffIds.Remove(battleExpBuffId);
@@ -163,6 +167,11 @@ public class BattleResult
             }
 
             pet.GainExp(gainExpPerPet * battleExpMult); 
+            if (pet.level >= pet.maxLevel) {
+                pet.feature.afterwardBuffIds.Remove(battleExpBuffId);
+                pet.record.SetRecord("battleExpChance", null);
+                pet.record.SetRecord("battleExpBuff", null);
+            }
         });
     }
 

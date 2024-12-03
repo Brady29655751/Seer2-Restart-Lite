@@ -42,14 +42,6 @@ public class MapNoobController : UIModule
         infoPrompt.SetPosition(new Vector2(2, 2));
     }
 
-    public void OpenPanel(string panelName) {
-        Panel.OpenPanel(panelName);
-    }
-
-    public void GoToMap(int mapId) {
-        TeleportHandler.Teleport(mapId);
-    }
-
     public void Extend() {
         var x = isExtended ? -1000 : 0;
         rectTransform.anchoredPosition = new Vector2(x, rectTransform.anchoredPosition.y);

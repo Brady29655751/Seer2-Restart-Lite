@@ -72,16 +72,21 @@ public static class PetElementSystem {
         return GetElementRelation((int)(lhs.elementId), rhs);
     }
 
-    public static List<Element> GetAttackRelation(Element element, Func<float, bool> func) {
+    public static List<Element> GetAttackRelation(Element element, Func<float, bool> filter) {
         List<Element> attackRelation = new List<Element>();
 
         for (int i = 0; i < elementNum; i++) {
             Element e = (Element)i;
             var defenseRelation = elementDefenseRelation.Get(e);
-            if (func.Invoke(defenseRelation[(int)element]))
+            if (filter.Invoke(defenseRelation[(int)element]))
                 attackRelation.Add(e);
         }
         return attackRelation;
+    }
+
+    public static List<Element> GetDefenseRelation(Element element, Func<float, bool> filter) {
+        return elementDefenseRelation.Get(element)?.FindAllIndex(new Predicate<float>(filter))
+            .Select(index => (Element)index).ToList() ?? new List<Element>();
     }
 
 }
