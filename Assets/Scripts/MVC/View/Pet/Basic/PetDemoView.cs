@@ -7,6 +7,7 @@ using FTRuntime;
 
 public class PetDemoView : Module
 {
+    // [SerializeField] private bool isAnimAsync = false;
     [SerializeField] private bool featurePromptLeft = false;
 
     [SerializeField] private Camera animationCamera;
@@ -125,29 +126,51 @@ public class PetDemoView : Module
             return;
         }
 
-        //检测是否有动画
-        if (isAnimMode && ((this.currentPetAnim = pet.ui.GetBattleAnim(PetAnimationType.Idle)) != null))
+        if (!isAnimMode) 
         {
-            this.currentPetAnim.SetActive(true);
-            demoImage.gameObject.SetActive(false);
-
-            this.currentPetAnim.transform.SetParent(animationCamera.transform);
-            this.currentPetAnim.transform.SetAsFirstSibling();
-            
-            SwfClipController controller = this.currentPetAnim.GetComponent<SwfClipController>();
-            controller.clip.sortingOrder = 1;
-
-            var animPos = this.currentPetAnim.transform.localPosition;
-            this.currentPetAnim.transform.localPosition = new Vector3(animPos.x, animPos.y, 1);
+            demoImage.gameObject.SetActive(true);
+            demoImage.SetSprite(pet.ui.battleImage);
             return;
         }
 
-        // 沒有則使用預設的精靈圖片
-        if (isAnimMode)
-            this.currentPetAnim?.SetActive(false);
+        /*
+        if (isAnimAsync) {
+            pet.ui.GetBattleAnimAsync(PetAnimationType.Idle, OnPetAnimLoadCompleted);
+            return;
+        }
+        */
+        
+        OnPetAnimLoadCompleted(pet.ui.GetBattleAnim(PetAnimationType.Idle));
+        
+        void OnPetAnimLoadCompleted(GameObject anim) 
+        {
+            if (this.currentPetAnim != null)
+                DestroyImmediate(this.currentPetAnim);
 
-        demoImage.gameObject.SetActive(true);
-        demoImage.SetSprite(pet.ui.battleImage);
+            //检测是否有动画
+            if ((this.currentPetAnim = anim) != null)
+            {
+                this.currentPetAnim.SetActive(true);
+                demoImage.gameObject.SetActive(false);
+
+                this.currentPetAnim.transform.SetParent(animationCamera.transform);
+                this.currentPetAnim.transform.SetAsFirstSibling();
+
+                SwfClipController controller = this.currentPetAnim.GetComponent<SwfClipController>();
+                controller.clip.sortingOrder = 1;
+
+                var animPos = this.currentPetAnim.transform.localPosition;
+                this.currentPetAnim.transform.localPosition = new Vector3(animPos.x, animPos.y, 1);
+                return;
+            }
+
+            // 沒有則使用預設的精靈圖片
+            // if (isAnimMode)
+            this.currentPetAnim?.SetActive(false);
+            
+            demoImage.gameObject.SetActive(true);
+            demoImage.SetSprite(pet.ui.battleImage);
+        }
     }
 
 }

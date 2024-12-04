@@ -12,6 +12,7 @@ public class BattleOptionView : BattleBaseView
     [SerializeField] private BattlePetItemController itemController;
     [SerializeField] private BattlePetChangeView changeView;
     [SerializeField] private Hintbox escapeView;
+    [SerializeField] private BattleAutoView autoView;
 
     private Module[] options => new Module[5] { skillView, changeView, captureController, itemController, escapeView };
 
@@ -22,6 +23,9 @@ public class BattleOptionView : BattleBaseView
             options[i]?.gameObject.SetActive(true);
             options[i]?.gameObject.SetActive(i == 0);
         }
+
+        autoView?.gameObject.SetActive((battle.settings.mode != BattleMode.PVP) && 
+            (battle.settings.parallelCount <= 1));
     }
 
     public void Select(int index) {
@@ -36,9 +40,9 @@ public class BattleOptionView : BattleBaseView
     }
 
     public void SetBottomBarInteractable(bool interactable) {
-        if (!interactable) {
+        if (!interactable)
             Select(0);
-        }
+        
         optionSelectView.SetInteractableAll(interactable);
         skillView.SetInteractable(interactable);
     }

@@ -35,6 +35,16 @@ public class PetUIInfo
         return PetUISystem.GetPetAnimInstance(defaultSkinId, type);
     }
 
+    public void GetBattleAnimAsync(PetAnimationType type, Action<GameObject> onSuccess, Action<float> onProgress = null)
+    {
+        PetUISystem.GetPetAnimInstanceAsync(defaultSkinId, type, onSuccess, onProgress);
+    }
+
+    public void PreloadPetAnimAsync(Action onSuccess = null, Action<float> onProgress = null) 
+    {
+        PetUISystem.PreloadPetAnimAsync(defaultSkinId, onSuccess, onProgress);
+    }
+
     public PetUIInfo(int petId, int petBaseId) {
         id = petId;
         baseId = petBaseId;

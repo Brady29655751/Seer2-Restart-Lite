@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
@@ -14,6 +15,7 @@ public class PetBagPanel : Panel
     public Pet pet => petBag?[selectController.GetCursor()[0]];
 
     [SerializeField] private PetBagMode mode = PetBagMode.Normal;
+    [SerializeField] private NoobIntroController noobIntroController;
     [SerializeField] private PetSelectController selectController;
     [SerializeField] private PetDemoController demoController;
     [SerializeField] private PetFeatureController featureController;
@@ -38,21 +40,54 @@ public class PetBagPanel : Panel
     {
         base.Init();
         itemController?.SetMode(mode);
-        switch (mode) {
-            case PetBagMode.Normal:
-                SetPetBag(playerPetBag);
-                SetItemBag(playerItemBag);
-                break;
-            case PetBagMode.Dictionary:
-                SetItemBag(Item.petItemDatabase);
-                break;
-            case PetBagMode.PVP:
-                break;
-            case PetBagMode.YiTeRogue:
-                break;
-            default:
-                break;
+        StartCoroutine(PreloadPetAnimCoroutine((mode == PetBagMode.Normal) ? playerPetBag : petBag, InitMode));
+        
+        void InitMode() 
+        {
+            switch (mode) {
+                case PetBagMode.Normal:
+                    SetPetBag(playerPetBag);
+                    SetItemBag(playerItemBag);
+                    break;
+                case PetBagMode.Dictionary:
+                    SetItemBag(Item.petItemDatabase);
+                    break;
+                case PetBagMode.PVP:
+                    break;
+                case PetBagMode.YiTeRogue:
+                    break;
+                default:
+                    break;
+            }
         }
+    }
+
+    private IEnumerator PreloadPetAnimCoroutine(Pet[] preloadPetBag, Action onFinishCallback) {
+        if (ListHelper.IsNullOrEmpty(preloadPetBag))
+            yield break;
+
+        int done = 0;
+        float[] progress = Enumerable.Repeat(0f, preloadPetBag.Length).ToArray();
+        var loadingScreen = SceneLoader.instance.ShowLoadingScreen(-1, "正在加载精灵背包 (0/" + preloadPetBag.Length + ")");
+
+        for (int i = 0; i < preloadPetBag.Length; i++) {
+            int copy = i;
+            var pet = preloadPetBag[copy];
+            if (pet == null)
+                done++;
+            else
+                pet.ui.PreloadPetAnimAsync(() => done++, p => progress[copy] = p);
+        }
+
+        while (done < preloadPetBag.Length) {
+            loadingScreen.ShowLoadingProgress(progress.Sum() / preloadPetBag.Length);
+            loadingScreen.SetText("正在加载精灵背包 (" + done + "/" + preloadPetBag.Length + ")");
+            yield return null;
+        }
+
+        onFinishCallback?.Invoke();
+        noobIntroController?.gameObject.SetActive(false);
+        SceneLoader.instance.HideLoadingScreen();
     }
 
     private void InitSelectSubscriptions() {

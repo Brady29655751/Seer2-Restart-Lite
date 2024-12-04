@@ -36,26 +36,10 @@ public class BattleManager : Manager<BattleManager>
         battle.OnBattleStart();
     }
 
-    public void StartTimer()
-    {
-        systemView.StartTimer();
-    }
-
-    public void DoneTimer()
-    {
-        systemView.DoneTimer();
-    }
-
-    public void StopTimer()
-    {
-        systemView.StopTimer();
-    }
-
-    public void ProcessResult(BattleResult result)
-    {
-        systemView.ProcessResult(result);
-    }
-
+    public void StartTimer() => systemView.StartTimer();
+    public void DoneTimer() => systemView.DoneTimer();
+    public void StopTimer() => systemView.StopTimer();
+    public void ProcessResult(BattleResult result) => systemView.ProcessResult(result);
     public void OnConfirmBattleResult()
     {
         if (battle.settings.mode == BattleMode.PVP)
@@ -105,6 +89,7 @@ public class BattleManager : Manager<BattleManager>
                 SetOptionActive(3, false);
             }
 
+            CheckAutoSkill();
             return;
         }
 
@@ -143,10 +128,10 @@ public class BattleManager : Manager<BattleManager>
             return;
         }
 
-        StartCoroutine(CheckQueryDone(newState));
+        StartCoroutine(CheckQueryDoneCoroutine(newState));
     }
 
-    protected IEnumerator CheckQueryDone(BattleState newState)
+    protected IEnumerator CheckQueryDoneCoroutine(BattleState newState)
     {
         while (!isDone)
         {
@@ -154,6 +139,35 @@ public class BattleManager : Manager<BattleManager>
         }
 
         ProcessQuery();
+    }
+
+    public void CheckAutoSkill() {
+        if (queue.Count > 0)
+            return;
+        
+        StartCoroutine(CheckAutoSkillCoroutine());
+    }
+
+    protected IEnumerator CheckAutoSkillCoroutine() 
+    {
+        // PVP和双打不适用自动战斗
+        systemView.SetAutoBattleActive(false);
+        if ((currentUIState.settings.mode == BattleMode.PVP) || (currentUIState.settings.parallelCount > 1))
+            yield break;
+
+        if (ListHelper.IsNullOrEmpty(battle.autoSkillOrder))
+            yield break;
+
+        var cursor = battle.autoSkillOrder.Get(battle.autoSkillCursor);
+        var pet = currentUIState.myUnit.pet;
+        var skill = pet.normalSkill.Get(cursor - 1) ?? Skill.GetNoOpSkill();
+
+        if ((skill.anger > pet.anger) && (pet.buffController.GetBuff(61) == null))
+            skill = Skill.GetNoOpSkill();
+
+        systemView.SetAutoBattleActive(true);
+        battle.autoSkillCursor = (battle.autoSkillCursor + 1) % battle.autoSkillOrder.Count;
+        battle.SetSkill(skill, true);
     }
 
     public void SetSkillSelectMode(bool isSkillSelectMode) {
@@ -164,20 +178,9 @@ public class BattleManager : Manager<BattleManager>
             SetCurrentUIState(currentUIState);
     }
 
-    public void SelectOption(int index)
-    {
-        systemView.SelectOption(index);
-    }
-
-    public void SetOptionActive(int index, bool active)
-    {
-        systemView.SetOptionActive(index, active);
-    }
-
-    public void SetBottomBarInteractable(bool interactable)
-    {
-        systemView.SetBottomBarInteractable(interactable);
-    }
+    public void SelectOption(int index) => systemView.SelectOption(index);
+    public void SetOptionActive(int index, bool active) => systemView.SetOptionActive(index, active);
+    public void SetBottomBarInteractable(bool interactable) => systemView.SetBottomBarInteractable(interactable);
 
     public void SetBattleEscape()
     {

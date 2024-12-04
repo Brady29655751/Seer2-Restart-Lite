@@ -11,7 +11,9 @@ public class TurnReadyPhase : BattlePhase
 
     public override void DoWork()
     {
-        UI.StopTimer();
+        if (ListHelper.IsNullOrEmpty(battle.autoSkillOrder))
+            UI.StopTimer();
+
         base.DoWork();
     }
 

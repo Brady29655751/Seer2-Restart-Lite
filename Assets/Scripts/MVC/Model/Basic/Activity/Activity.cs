@@ -43,7 +43,7 @@ public class Activity
 
     public static void DailyLogin() {
         var activityStorage = Player.instance.gameData.activityStorage;
-        activityStorage.RemoveAll(x => x.info.type == ActivityType.Daily);
+        activityStorage.RemoveAll(x => (x?.info != null) && (x.info.type == ActivityType.Daily));
     }
 
     public Activity() {}

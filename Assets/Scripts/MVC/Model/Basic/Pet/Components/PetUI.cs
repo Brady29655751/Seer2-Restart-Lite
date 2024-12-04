@@ -1,8 +1,8 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
-using JetBrains.Annotations;
 using UnityEngine;
 
 public class PetUI
@@ -30,6 +30,9 @@ public class PetUI
         set => baseId = value;
     }
 
+    [XmlIgnore] 
+    public int animId => skinInfo?.defaultAnimId ?? 0;
+
     [XmlIgnore]
     public int hashId {
         get 
@@ -51,7 +54,17 @@ public class PetUI
 
     public GameObject GetBattleAnim(PetAnimationType type)
     {
-        return PetUISystem.GetPetAnimInstance(skinInfo?.defaultAnimId ?? 0, type);
+        return PetUISystem.GetPetAnimInstance(animId, type);
+    }
+
+    public void GetBattleAnimAsync(PetAnimationType type, Action<GameObject> onSuccess, Action<float> onProgress = null)
+    {
+        PetUISystem.GetPetAnimInstanceAsync(animId, type, onSuccess, onProgress);
+    }
+
+    public void PreloadPetAnimAsync(Action onSuccess = null, Action<float> onProgress = null) 
+    {   
+        PetUISystem.PreloadPetAnimAsync(animId, onSuccess, onProgress);
     }
 
     public PetUI()

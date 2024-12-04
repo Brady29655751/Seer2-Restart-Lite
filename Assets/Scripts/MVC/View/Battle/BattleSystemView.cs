@@ -23,6 +23,16 @@ public class BattleSystemView : BattleBaseView
         timer.onDoneEvent += OnTimerDone;
     }
 
+    public void SetAutoBattleActive(bool active) {
+        timer.gameObject.SetActive(active);
+        if (!active)
+            return;
+        
+        timer.secondText?.SetText("自动战斗中");
+        timer.secondText?.SetSize(48);
+        timer.secondText?.SetColor(ColorHelper.gold);
+    }
+
     public void StartTimer() {
         timer.SetTimer(battle.settings.time);
     }
@@ -74,6 +84,9 @@ public class BattleSystemView : BattleBaseView
 
     public void SetBottomBarInteractable(bool interactable) {
         optionView.SetBottomBarInteractable(interactable);
+        if (battle.settings.mode != BattleMode.PVP)
+            return;
+
         if (interactable)
             StartTimer();
         else   

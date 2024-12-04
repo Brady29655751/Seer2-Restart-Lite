@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using Photon.Pun;
 using Photon.Realtime;
+using UnityEngine.UI;
 
 public class SceneLoader : Singleton<SceneLoader>
 {
@@ -13,7 +14,7 @@ public class SceneLoader : Singleton<SceneLoader>
     private int nextSceneId;
 
     public GameObject canvas;
-    public LoadingScreen defaultLoadingScreen;
+    public LoadingScreen defaultLoadingScreen, transparentLoadingScreen;
     public LoadingScreen[] loadingScreens = new LoadingScreen[sceneNum];
 
     public void ChangeScene(SceneId index, bool network = false) {
@@ -24,7 +25,7 @@ public class SceneLoader : Singleton<SceneLoader>
 
     public LoadingScreen ShowLoadingScreen(int sceneId = 0, string text = null) {
         canvas.SetActive(true);
-        for (int i = 0; i < loadingScreens.Length; i++) {
+        for (int i = -1; i < loadingScreens.Length; i++) {
             GetLoadingScreen(i).gameObject.SetActive(false);
         }
         currentLoadingScreen = GetLoadingScreen(sceneId);
@@ -77,9 +78,12 @@ public class SceneLoader : Singleton<SceneLoader>
     */
 
     private LoadingScreen GetLoadingScreen(int index) {
-        if (index >= loadingScreens.Length) {
+        if (index < 0)
+            return transparentLoadingScreen;
+
+        if (index >= loadingScreens.Length)
             return defaultLoadingScreen;
-        }
+        
         return (loadingScreens[index] ?? defaultLoadingScreen);
     }
 }

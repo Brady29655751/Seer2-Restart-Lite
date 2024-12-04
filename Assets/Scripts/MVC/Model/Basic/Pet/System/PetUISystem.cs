@@ -53,6 +53,17 @@ public static class PetUISystem
         return ResourceManager.instance.GetPetAnimInstance(petId, $"{petId}-" + animName);
     }
 
+    public static void GetPetAnimInstanceAsync(int petId, PetAnimationType type, Action<GameObject> onSuccess, Action<float> onProgress = null)
+    {
+        string animName = type.ToString();
+        ResourceManager.instance.GetPetAnimInstanceAsync(petId, $"{petId}-" + animName, onSuccess, onProgress);
+    }
+
+    public static void PreloadPetAnimAsync(int petId, Action onSuccess = null, Action<float> onProgress = null)
+    {
+        ResourceManager.instance.GetPetAnimAssetBundleAsync(petId, assetBundle => onSuccess?.Invoke(), onProgress);
+    }
+
     public static Sprite GetSprite(this StatusType statusType) {
         var statusName = Status.typeNames[(int)statusType];
         return ResourceManager.instance.Get<Sprite>("Panels/PetBag/Sprites/petValue/" + statusName);

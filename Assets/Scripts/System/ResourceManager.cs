@@ -200,6 +200,7 @@ public class ResourceManager : Singleton<ResourceManager>
     }
 
     private readonly Dictionary<int, AssetBundle> assetBundleDictionary = new Dictionary<int, AssetBundle>();
+    private readonly List<int> loadingPetAnimAssetBundles = new List<int>();
 
     public GameObject GetPetAnimInstance(int petID, string fileName)
     {
@@ -219,7 +220,11 @@ public class ResourceManager : Singleton<ResourceManager>
             {
                 var platformPath = (Application.platform == RuntimePlatform.Android) ? "android" : "windows";
                 var folderPath = PetInfo.IsMod(petID) ? ("/Mod/Pets/anim/" + platformPath) : "/PetAnimation";
+
+                loadingPetAnimAssetBundles.Add(petID);
                 assetBundle = AssetBundle.LoadFromFile(Application.persistentDataPath + folderPath + "/pfa_" + petID);
+                loadingPetAnimAssetBundles.Remove(petID);
+
                 if (assetBundle == null) //说明精灵的所有动画都没有
                 {
                     return null;
@@ -244,6 +249,81 @@ public class ResourceManager : Singleton<ResourceManager>
         {
             return null;
         }
+    }
+
+    public void GetPetAnimInstanceAsync(int petID, string fileName, Action<GameObject> onSuccess, Action<float> onProgress = null) {
+        if (resDict.ContainsKey(fileName) && resDict[fileName] != null)
+        {
+            onSuccess?.Invoke((GameObject)resDict[fileName]);
+            return;
+        }
+
+        GetPetAnimAssetBundleAsync(petID, assetBundle => {
+            GameObject prefab = assetBundle?.LoadAsset<GameObject>(fileName); //获取精灵的某个特定动画
+            if (prefab == null) //说明精灵的某个特定动画没有
+            {
+                onSuccess?.Invoke(null);
+                return;
+            }
+
+            GameObject anim = Object.Instantiate(prefab);
+            anim.transform.localScale = prefab.transform.localScale;
+            anim.transform.position = prefab.transform.position;
+            resDict[fileName] = anim;
+            onSuccess?.Invoke(anim);
+        }, onProgress);
+    }
+
+    public void GetPetAnimAssetBundleAsync(int petID, Action<AssetBundle> onSuccess, Action<float> onProgress = null) {
+        StartCoroutine(GetPetAnimAssetBundleCoroutine(petID, onSuccess, onProgress));
+    }
+
+    private IEnumerator GetPetAnimAssetBundleCoroutine(int petID, Action<AssetBundle> onSuccess, Action<float> onProgress = null) {
+        AssetBundle assetBundle = null;
+
+        if (this.assetBundleDictionary.TryGetValue(petID, out var value1))
+        {
+            onSuccess?.Invoke(value1);
+            yield break;
+        }
+
+        var platformPath = (Application.platform == RuntimePlatform.Android) ? "android" : "windows";
+        var folderPath = PetInfo.IsMod(petID) ? ("/Mod/Pets/anim/" + platformPath) : "/PetAnimation";
+        AssetBundleCreateRequest request = null;
+
+        try 
+        {
+            if (loadingPetAnimAssetBundles.Contains(petID))
+            {
+                onSuccess?.Invoke(null);
+                yield break;
+            }
+                
+            loadingPetAnimAssetBundles.Add(petID);
+            request = AssetBundle.LoadFromFileAsync(Application.persistentDataPath + folderPath + "/pfa_" + petID);
+        } 
+        catch (Exception) 
+        {
+            loadingPetAnimAssetBundles.Remove(petID);
+            onSuccess?.Invoke(null);
+            yield break;
+        }
+
+        while (!request.isDone) {
+            onProgress?.Invoke(request.progress);
+            yield return null;
+        }
+
+        loadingPetAnimAssetBundles.Remove(petID);
+
+        if ((assetBundle = request.assetBundle) == null) //说明精灵的所有动画都没有
+        {
+            onSuccess?.Invoke(null);
+            yield break;
+        }
+
+        this.assetBundleDictionary[petID] = assetBundle;
+        onSuccess?.Invoke(assetBundle);
     }
 
     public GameObject GetPanel(string item)
