@@ -30,12 +30,12 @@
             </dialog>
             <eventHandler>
                 <!--这个enter可以实现一进入就打开对话-->
-                <button type="enter">
+                <button type="auto">
                     <action>openDialog</action>
                     <param>mission_4_goonsearch_1</param>
                     <condition>mission[4].checkpoint=goonsearch</condition>
                 </button>
-                <button type="enter">
+                <button type="auto">
                     <action>openDialog</action>
                     <param>default</param>
                     <condition>mission[4].checkpointNOTgoonsearch</condition>

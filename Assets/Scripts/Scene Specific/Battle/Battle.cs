@@ -125,14 +125,15 @@ public class Battle
             }
 
             if (settings.parallelCount > 1) {
-                if (skill.type != SkillType.逃跑) {
-                    unit.petSystem.cursor = unit.petSystem.GetNextCursorCircular();
-                    UI.SetState(null, currentState);
-                    UI.ProcessQuery(true);
-                }
-                
                 if (!unit.isReady) {
                     UI.PVPSetSkillToOthers(skill);
+
+                    var nextCursor = unit.petSystem.GetNextCursorCircular();
+                    if ((skill.type != SkillType.逃跑) && (nextCursor != unit.petSystem.cursor)) {
+                        unit.petSystem.cursor = nextCursor;
+                        UI.SetState(null, currentState);
+                        UI.ProcessQuery(true);
+                    }
                     return;
                 }
             }
@@ -163,6 +164,9 @@ public class Battle
                 var defaultSkill = opUnit.pet.GetDefaultSkill();
                 if (opUnit.pet.isDead)
                     defaultSkill = (settings.parallelCount > 1) ? null : Skill.GetPetChangeSkill(cursor, nextCursor, true);   
+
+                if (parallelCount > 1)
+                    defaultSkill.SetParallelIndex(cursor, myUnit.petSystem.petBag.FindIndex(x => (x != null) && (!x.isDead)));
                 
                 opUnit.SetSkill(defaultSkill);
 

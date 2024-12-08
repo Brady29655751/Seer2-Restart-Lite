@@ -86,7 +86,6 @@ public class PetBagPanel : Panel
         }
 
         onFinishCallback?.Invoke();
-        noobIntroController?.gameObject.SetActive(false);
         SceneLoader.instance.HideLoadingScreen();
     }
 

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class NoobIntroController : Module
@@ -17,7 +18,7 @@ public class NoobIntroController : Module
     }
 
     private void CheckNoob() {
-        if (Activity.Find("noob").GetData(noobIntroKey) == "done") {
+        if (Activity.Noob.GetData(noobIntroKey) == "done") {
             gameObject.SetActive(false);
             return;
         }
@@ -38,7 +39,32 @@ public class NoobIntroController : Module
             Item.Add(item);
             Item.OpenHintbox(item);
         });
-        Activity.Find("noob").SetData(noobIntroKey, "done");
+        Activity.Noob.SetData(noobIntroKey, "done");
         SaveSystem.SaveData();
+
+        OnFinishIntro();
+    }
+
+    public void OnFinishIntro(string jump = null) {
+        jump ??= noobIntroKey;
+
+        switch (jump) {
+            default:
+                break;
+            case "map":
+                TeleportHandler.Teleport(61);
+                break;
+            case "train":
+                Map.TestBattle(2, 201, "default");
+                break;
+            case "skip":
+                Activity.Noob.SetData("train", "done");
+                Activity.Noob.SetData("battle", "done");
+                SaveSystem.SaveData();
+                Panel.OpenPanel<SignRewardPanel>();
+                Hintbox.OpenHintboxWithContent("恭喜你完成新手教学！\n有任何问题可以打开地图下方的指引哦！", 16);
+                CheckNoob();
+                break;
+        }
     }
 }

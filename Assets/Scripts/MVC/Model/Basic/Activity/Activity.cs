@@ -9,6 +9,7 @@ using UnityEngine.UI;
 public class Activity
 {
     public ActivityInfo info => GetActivityInfo(id);
+    public static Activity Noob => Activity.Find("noob");
 
     [XmlAttribute("id")] public string id;
 

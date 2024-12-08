@@ -10,6 +10,7 @@ public class VersionData
 {
     [XmlElement("gameVersion")] public string gameVersion;
     [XmlElement("buildVersion")] public string buildVersion;
+    [XmlElement("resourceVersion")] public string resourceVersion;
     
     public static List<string> versionType => new List<string>() { "alpha", "beta", "lite" };
     public static string DefaultVersion => "alpha_0.1";

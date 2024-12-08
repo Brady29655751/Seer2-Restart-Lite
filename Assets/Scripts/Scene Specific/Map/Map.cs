@@ -36,27 +36,31 @@ public class Map
 
     public static bool IsMod(int id) => id < -50000;
     public static void GetMap(int id, Action<Map> onSuccess = null, Action<string> onFail = null) {
-        ResourceManager.instance.LoadMap(id, onSuccess, onFail);
+       ResourceManager.instance.LoadMap(id, onSuccess, onFail);
     }
 
-    public static void TestBattle(int mapId, Pet[] petBag) {
-        Map.GetMap(mapId, (map) => Map.OnLoadTestBattleMapSuccess(map, petBag), 
+    public static void TestBattle(int mapId, int npcId, string battleId, Pet[] petBag = null) {
+        Map.GetMap(mapId, (map) => Map.OnLoadTestBattleMapSuccess(map, npcId, battleId, petBag), 
             (error) => Hintbox.OpenHintboxWithContent(error, 16));
     }
 
-    private static void OnLoadTestBattleMapSuccess(Map map, Pet[] petBag) {
+    public static void TestBattle(int mapId, Pet[] petBag) {
+        Map.GetMap(mapId, (map) => OnLoadTestBattleMapSuccess(map, mapId * 100 + (mapId > 0 ? 1 : -1), "test", petBag),
+            (error) => Hintbox.OpenHintboxWithContent(error, 16));
+    }
+
+    private static void OnLoadTestBattleMapSuccess(Map map, int npcId, string battleId, Pet[] petBag = null) {
         if (map == null) {
             Hintbox.OpenHintboxWithContent("加载的地图为空", 16);
             return;
         }
-        var npcId = map.id * 100 + (map.id > 0 ? 1 : -1);
-        var battleInfo = map?.entities?.npcs?.Find(x => x.id == npcId)?.battleHandler?.Find(x => x?.id == "test");
+        var battleInfo = map?.entities?.npcs?.Find(x => x.id == npcId)?.battleHandler?.Find(x => x?.id == battleId);
         if (battleInfo == null) {
             Hintbox.OpenHintboxWithContent("测试的NPC战斗信息为空", 16);
             return;
         }
 
-        var player = petBag?.Select(BattlePet.GetBattlePet).ToArray();
+        var player = ((petBag?.Select(BattlePet.GetBattlePet)) ?? (battleInfo.playerInfo?.Select(BattlePet.GetBattlePet))).ToArray();
         var enemy = battleInfo.enemyInfo?.Select(BattlePet.GetBattlePet).ToArray();
 
         if ((player == null) || (enemy == null)) {

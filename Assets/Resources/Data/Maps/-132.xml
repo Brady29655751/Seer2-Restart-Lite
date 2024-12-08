@@ -63,6 +63,16 @@
 						</reply>
 					</replyHandler>
 				</branch>
+				<branch id="default_lose" name="拂晓兔" icon="Pets/pet/62.png" size="122,134" pos="0,45">
+					<content><![CDATA[我的恢复能力很强，先使用休罗斯的<b><color=#ffbb33>气力</color></b>之类的技能<b><color=#ffbb33>强化攻击力</color></b>，再一鼓作气攻击吧！]]></content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[我等等再来]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+					</replyHandler>
+				</branch>
 				<branch id="shadow_wrong_pet" name="拂晓兔" icon="Pets/pet/62.png" size="122,134" pos="0,45">
 					<content><![CDATA[只有拂晓兔才能领悟爱的奥义，快把拂晓兔设为首发吧！]]></content>
 					<replyHandler>
@@ -83,6 +93,16 @@
 						</reply>
 					</replyHandler>
 				</branch>
+				<branch id="shadow_lose" name="拂晓兔" icon="Pets/pet/62.png" size="122,134" pos="0,45">
+					<content><![CDATA[运用普通挑战学到的技巧，先<b><color=#ffbb33>强化攻击力</color></b>，再一鼓作气攻击吧！]]></content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[我等等再来]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+					</replyHandler>
+				</branch>
 				<branch id="miracle_wrong_pet" name="拂晓兔" icon="Pets/pet/62.png" size="122,134" pos="0,45">
 					<content><![CDATA[只有通过极影特训激发爱的力量才能引发神迹，快把极影兔设为首发吧！]]></content>
 					<replyHandler>
@@ -95,6 +115,16 @@
 				</branch>
 				<branch id="miracle_level_100" name="拂晓兔" icon="Pets/pet/62.png" size="122,134" pos="0,45">
 					<content><![CDATA[你需要继续累积爱的力量，等级达到100级再来挑战吧！]]></content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[我等等再来]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+					</replyHandler>
+				</branch>
+				<branch id="miracle_lose" name="拂晓兔" icon="Pets/pet/62.png" size="122,134" pos="0,45">
+					<content><![CDATA[运用许多的<b><color=#ffbb33>恢复技能</color></b>，专注于防守，拖以待变慢慢磨过试炼吧！]]></content>
 					<replyHandler>
 						<reply type="click">
 							<description><![CDATA[我等等再来]]></description>
@@ -139,6 +169,12 @@
 							<condition>activity[20001].done=[bool]false[default]false</condition>
 						</button>
 					</winHandler>
+					<loseHandler>
+						<button type="auto">
+							<action>openDialog</action>
+							<param>default_lose</param>
+						</button>
+					</loseHandler>
 				</branch>
 				<branch id="shadow">
 					<settings count="1"/>
@@ -166,6 +202,12 @@
 							<param>option_num=1</param>
 						</button>
 					</winHandler>
+					<loseHandler>
+						<button type="auto">
+							<action>openDialog</action>
+							<param>shadow_lose</param>
+						</button>
+					</loseHandler>
 				</branch>
 				<branch id="miracle">
 					<settings count="1" item="false"/>
@@ -192,6 +234,12 @@
 							<param>option_num=1</param>
 						</button>
 					</winHandler>
+					<loseHandler>
+						<button type="auto">
+							<action>openDialog</action>
+							<param>miracle_lose</param>
+						</button>
+					</loseHandler>
 				</branch>
 			</battle>
 			<eventHandler>

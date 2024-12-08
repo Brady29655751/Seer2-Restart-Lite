@@ -999,6 +999,12 @@
 							<param>Door</param>
 							<param>door=brave</param>
 							<param>mode=hard</param>
+							<condition>activity[door].brave[easy][max]GTE[int]21[default]0</condition>
+							</func>
+						<func type="branch">
+							<action>openDialog</action>
+							<param>lock</param>
+							<condition>activity[door].brave[easy][max]&lt;[int]21[default]0</condition>
 						</func>
 						<func type="click">
 							<description><![CDATA[荣誉兑换]]></description>
@@ -1008,6 +1014,16 @@
 							<param>currency=3/0</param>
 						</func>
 					</functionHandler>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[好的]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+					</replyHandler>
+				</branch>
+				<branch id="lock" name="上尉门罗" icon="8101" size="119,91" pos="0,55">
+					<content><![CDATA[通过左方的简单模式再来挑战吧！]]></content>
 					<replyHandler>
 						<reply type="click">
 							<description><![CDATA[好的]]></description>

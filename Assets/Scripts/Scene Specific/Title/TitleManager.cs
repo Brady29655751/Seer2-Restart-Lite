@@ -16,24 +16,9 @@ public class TitleManager : Manager<TitleManager>
     [SerializeField] private GameObject toolBarObject, modOperateObject, helpObject;
 
     private void Start() {
-        StartCoroutine(CheckVersionData());
-
+        GetVersion();
         FileBrowser.AddQuickLink("默认存档位置", Application.persistentDataPath);
         SetBackgroundPageImage();
-    }
-
-    private IEnumerator CheckVersionData() {
-        while (GameManager.versionData == null)
-            yield return null;
-
-        if (GameManager.versionData.IsEmpty()) {
-            versionDateText?.SetText("----/--/--");
-            versionStringText?.SetText("----");
-            yield break;
-        }
-        
-        versionDateText?.SetText(GameManager.versionData.releaseDate.ToString("yyyy/MM/dd"));
-        versionStringText?.SetText(GameManager.versionData.gameVersion);
     }
 
     private void SetBackgroundPageImage() {
@@ -50,32 +35,78 @@ public class TitleManager : Manager<TitleManager>
     }
 
     public void GameStart() {
-        if (GameManager.versionData == null) {
-            RequestManager.OnRequestFail("正在获取版本档案，请稍候");
+        if (!CheckVersion())
             return;
-        }
-        if (GameManager.versionData.IsEmpty()) {
-            RequestManager.OnRequestFail("获取版本档案失败，请重新启动游戏");
-            return;
-        }
-        if (GameManager.versionData.buildVersion != Application.version) {
-            startButton?.SetInteractable(false, false);
-            // RequestManager.OnRequestFail("检测到新版本，正在获取更新档案大小，请稍候");
-            // RequestManager.instance.GetDownloadSize(GameManager.gameDownloadUrl, OpenUpdateBuildHintbox);
-            OpenUpdateBuildHintbox(150 * (long)1_000_000);
-            return;
-        }
-        var resourceVersion = SaveSystem.GetResourceVersion();
-        if (VersionData.Compare(resourceVersion, GameManager.versionData.gameVersion, 2) < 0) {
-            var hintbox = Hintbox.OpenHintbox();
-            hintbox.SetTitle("资源更新");
-            hintbox.SetContent("检测到游戏资源需要更新\n是否联网下载游戏资源？\n（需要梯子并建议预留1G以上空间）", 16, FontOption.Arial);
-            hintbox.SetOptionNum(2);
-            hintbox.SetOptionCallback(OnDownloadBasicResources);
-            hintbox.SetOptionCallback(OnResourceFail, false);
-            return;
-        }
+        
         SceneLoader.instance.ChangeScene(SceneId.Login);
+    }
+
+    public void GetVersion(bool onlineMode = false) {
+        Hintbox hintbox = null;
+        if (onlineMode) {
+            hintbox = Hintbox.OpenHintboxWithContent("正在联网获取版本档案\n（没梯子会不稳定）", 16);
+            hintbox.SetOptionNum(0);
+        }
+        GameManager.instance.onlineMode = onlineMode;
+        GameManager.instance.GetVersionData(() => OnGetVersionSuccess(hintbox));
+    }
+    
+    private void OnGetVersionSuccess(Hintbox onlineCheckHintbox = null) {
+        var isVersionOK = CheckVersion();
+        if (onlineCheckHintbox == null)
+            return;
+
+        if (!isVersionOK) {
+            onlineCheckHintbox.ClosePanel();
+            return;
+        }
+
+        var message = GameManager.instance.onlineMode ? "获取联网版本档案成功\n目前为最新版本" : "获取联网版本档案失败\n使用本地版本档案";
+        onlineCheckHintbox.SetContent("<color=#ffbb33>" + message + "</color>", 16, FontOption.Arial);
+        onlineCheckHintbox.SetOptionNum(1);
+    }
+
+    private bool CheckVersion() {
+        if (GameManager.versionData == null) {
+            RequestManager.OnRequestFail("正在获取版本档案，请稍候再试");
+            return false;
+        }
+
+        if (GameManager.versionData.IsEmpty()) {
+            versionDateText?.SetText("----/--/--");
+            versionStringText?.SetText("----");
+            RequestManager.OnRequestFail("获取版本档案失败，请重新启动游戏");
+            return false;
+        }
+
+        versionDateText?.SetText(GameManager.versionData.releaseDate.ToString("yyyy/MM/dd"));
+        versionStringText?.SetText(GameManager.versionData.gameVersion);
+        return CheckBuildVersion() && CheckResourceVersion();
+    }
+
+    private bool CheckBuildVersion() {
+        if (GameManager.versionData.buildVersion == Application.version)
+            return true;
+
+        startButton?.SetInteractable(false, false);
+        OpenUpdateBuildHintbox(150 * (long)1_000_000);
+        // RequestManager.OnRequestFail("检测到新版本，正在获取更新档案大小，请稍候");
+        // RequestManager.instance.GetDownloadSize(GameManager.gameDownloadUrl, OpenUpdateBuildHintbox);
+        return false;
+    }
+
+    private bool CheckResourceVersion() {
+        var resourceVersion = SaveSystem.GetResourceVersion();
+        if (VersionData.Compare(resourceVersion, GameManager.versionData.resourceVersion) >= 0)
+            return true;
+
+        var hintbox = Hintbox.OpenHintbox();
+        hintbox.SetTitle("资源更新");
+        hintbox.SetContent("检测到游戏资源需要更新\n是否联网下载游戏资源？\n（需要梯子并建议预留500MB以上空间）", 16, FontOption.Arial);
+        hintbox.SetOptionNum(2);
+        hintbox.SetOptionCallback(OnDownloadBasicResources);
+        hintbox.SetOptionCallback(OnResourceFail, false);
+        return false;
     }
 
     private void OnCancel() {}

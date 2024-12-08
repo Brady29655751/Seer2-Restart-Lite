@@ -105,6 +105,10 @@ public class BattleSystemView : BattleBaseView
         optionView.SetSkillSelectMode(isSkillSelectMode);
     }
 
+    public void StopAutoBattle() {
+        optionView?.StopAutoBattle();
+    }
+
     public void SetState(BattleState lastState, BattleState currentState) {
         if (currentState == null)
             return;

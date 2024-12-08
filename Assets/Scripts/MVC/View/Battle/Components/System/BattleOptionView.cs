@@ -51,6 +51,10 @@ public class BattleOptionView : BattleBaseView
         changeView.SetSkillSelectMode(isSkillSelectMode);
     }
 
+    public void StopAutoBattle() {
+        autoView?.OnToggleAutoBattle(false);
+    }
+
     public void SetState(BattleState lastState, BattleState currentState) {
         if (currentState == null)
             return;
@@ -69,6 +73,11 @@ public class BattleOptionView : BattleBaseView
         changeView.SetChangeBlockChosen(myUnit.petSystem.cursor, parallelCursor);
         captureController.SetItemBag(Player.instance.gameData.itemBag);
         itemController.SetItemBag(Player.instance.gameData.itemBag);
+
+        if (parallelCount > 1)
+            for (int i = 0; i < parallelCount; i++)
+                if (myUnit.parallelSkillSystems.Get(i)?.skill != null)
+                    changeView.SetChangeBlockInteractable(i, false);
     }
 
 }

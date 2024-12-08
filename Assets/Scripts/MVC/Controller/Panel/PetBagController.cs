@@ -110,6 +110,11 @@ public class PetBagController : Module
     }
 
     public void TestBattle(int mapId) {
+        if (Activity.Noob.GetData("battle") != "done") {
+            Hintbox.OpenHintboxWithContent("完成新手战斗教学后解锁", 16);
+            return;
+        }
+
         Map.TestBattle(mapId, selectController?.GetPetSelections());
     }
 

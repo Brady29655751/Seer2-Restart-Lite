@@ -22,6 +22,7 @@ public static class EffectAbilityHandler
         state.phase = EffectTiming.OnBattleEnd;
         state.result.state = lhsUnit.IsMyUnit() ? BattleResultState.Win : BattleResultState.Lose;
         state.myUnit.isDone = state.opUnit.isDone = true;
+        state.actionCursor = state.actionOrder.Count;
         return true;
     }
 
@@ -32,6 +33,7 @@ public static class EffectAbilityHandler
         state.phase = EffectTiming.OnBattleEnd;
         state.result.state = state.atkUnit.IsMyUnit() ? BattleResultState.MyEscape : BattleResultState.OpEscape;
         state.myUnit.isDone = state.opUnit.isDone = true;
+        state.actionCursor = state.actionOrder.Count;
         return true;
     }
 
@@ -69,6 +71,7 @@ public static class EffectAbilityHandler
             state.phase = EffectTiming.OnBattleEnd;
             state.result.state = BattleResultState.CaptureSuccess;
             state.myUnit.isDone = state.opUnit.isDone = true;
+            state.actionCursor = state.actionOrder.Count;
         }
         return true;
     }

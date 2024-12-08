@@ -112,7 +112,7 @@ public static class NpcActionHandler
             DialogManager.instance.CloseDialog();
             return;
         }
-        DialogInfo dialogInfo = npcInfo.dialogHandler.Find(x => x.id == handler.param[0]);
+        DialogInfo dialogInfo = npcInfo?.dialogHandler?.Find(x => x.id == handler.param[0]);
         DialogManager.instance.SetCurrentNpc(npcInfo);
       
         if (dialogInfo?.content.StartsWith("story=") ?? false) {

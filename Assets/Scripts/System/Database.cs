@@ -26,9 +26,11 @@ public class Database : Singleton<Database>
     {
         RM.LoadPetInfo((x) => petInfoDict = x, (y) => featureInfoDict = y, (z) => hitInfoDict = z,
             (w) => soundInfoDict = w);
-        RM.LoadSkill((x) => skillDict = x);
+        RM.LoadSkill((x) => { 
+            skillDict = x;
+            RM.LoadItemInfo((y) => itemInfoDict = y);
+        });
         RM.LoadBuffInfo((x) => buffInfoDict = x);
-        RM.LoadItemInfo((x) => itemInfoDict = x);
         RM.LoadMissionInfo((x) =>
         {
             missionInfoDict = x;

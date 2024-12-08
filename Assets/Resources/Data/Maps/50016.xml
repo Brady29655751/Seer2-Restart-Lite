@@ -268,21 +268,21 @@
             </dialog>
             <eventHandler>
                 <!--这个enter可以实现一进入就打开对话-->
-                <button type="enter">
+                <button type="auto">
                     <action>openDialog</action>
                     <param>mission_5_save_1</param>
                     <condition>mission[5].checkpoint=save</condition>
                 </button>
-                <button type="enter">
+                <button type="auto">
                     <action>openDialog</action>
                     <param>default</param>
                     <condition>mission[5].checkpointNOTsave</condition>
                 </button>
-                <button type="enter">
+                <button type="auto">
                     <action>player</action>
                     <param>sprite=11003</param>
                 </button>
-                <button type="enter">
+                <button type="auto">
                     <action>setNpcParam</action>
                     <param>13301</param>
                     <param>bgm=1/MU_004</param>

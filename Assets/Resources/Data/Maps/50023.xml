@@ -95,17 +95,17 @@
             </dialog>
 
             <eventHandler>
-                <button type="enter">
+                <button type="auto">
                     <action>openDialog</action>
                     <param>mission_6_next_1</param>
                     <condition>mission[6].checkpoint=next</condition>
                 </button>
-                <button type="enter">
+                <button type="auto">
                     <action>openDialog</action>
                     <param>default</param>
                     <condition>mission[6].checkpointNOTnext</condition>
                 </button>
-                <button type="enter">
+                <button type="auto">
                     <action>setNpcParam</action>
                     <param>13301</param>
                     <param>active=false</param>

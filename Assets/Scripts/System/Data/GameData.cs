@@ -51,6 +51,15 @@ public class GameData
     public SettingsData settingsData;
     public YiTeRogueData yiteRogueData;
 
+    [XmlIgnore] public NoobCheckPoint noobCheckPoint => NoobController.noobCheckPoint;
+    [XmlIgnore] public int initMapId => noobCheckPoint switch {
+        NoobCheckPoint.PetBag   => 71,
+        NoobCheckPoint.Map      => 71,
+        NoobCheckPoint.Train    => 61,
+        NoobCheckPoint.Battle   => 61,
+        _ => 70,
+    };
+
     public GameData() {
         InitGameData();
     }
@@ -93,6 +102,10 @@ public class GameData
 
     public bool IsEmpty() {
         return string.IsNullOrEmpty(nickname);
+    }
+
+    public bool IsNoob() {
+        return NoobController.GetNoobCheckPoint() != NoobCheckPoint.Max;
     }
 
 }

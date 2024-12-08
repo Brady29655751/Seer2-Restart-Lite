@@ -40,6 +40,7 @@ public class LoginManager : Manager<LoginManager>
         Player.instance.gameDataId = id;
         
         if (loginController.Login(id, out var error)) {
+            Player.instance.currentMapId = Player.instance.gameData.initMapId;
             SceneLoader.instance.ChangeScene(SceneId.Map);
             return;
         }

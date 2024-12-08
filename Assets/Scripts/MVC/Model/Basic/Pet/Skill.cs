@@ -217,6 +217,7 @@ public class Skill
     public static Skill GetEscapeSkill() {
         Skill skill = new Skill(SkillType.逃跑);
         skill.name = "逃跑";
+        skill.priority = int.MaxValue;
         skill.SetEffects(Effect.GetEscapeEffect());
         return skill;
     }

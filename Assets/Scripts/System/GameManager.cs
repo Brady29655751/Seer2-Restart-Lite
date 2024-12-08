@@ -7,14 +7,15 @@ using UnityEngine;
 public class GameManager : Singleton<GameManager>
 {
     [SerializeField] public bool debugMode = true;
-    [SerializeField] public bool localMode = true;
+    [SerializeField] public bool onlineMode = false;
     public static string serverUrl => "Data/";
     public static string gameFilePostfix => (Application.platform == RuntimePlatform.Android) ? ".apk" : ".zip";
     public static string gameDownloadUrl => GetGameDownloadUrl();
     public static string resourceUrl => "https://www.dropbox.com/scl/fi/8skjwkfo4ujqal0b9jwnz/Basic.zip?rlkey=ips7c15koiamebdpu2lj3xk6p&st=9ueek3ay&dl=1";
     public static string petAnimationUrl => GetPetAnimationUrl();
-    public static string versionDataUrl => "https://www.dropbox.com/scl/fi/ibt7ibuvry3ppitkxtgld/version.xml?rlkey=fk5dd9ujdan5hmy6vvo5388r5&st=lzypn681&dl=1";
-    public static string versionDataPath => serverUrl + "System/version.xml";
+    public static string versionDataRoute => GameManager.instance.onlineMode ? versionDataUrl : versionDataPath;
+    private static string versionDataUrl => "https://www.dropbox.com/scl/fi/ibt7ibuvry3ppitkxtgld/version.xml?rlkey=fk5dd9ujdan5hmy6vvo5388r5&st=lzypn681&dl=1";
+    private static string versionDataPath => serverUrl + "System/version.xml";
     public static VersionData versionData { get; private set; } = null;
     public static GameState state { get; private set; }
     public static event Action<GameState> OnBeforeStateChangedEvent;
@@ -33,6 +34,7 @@ public class GameManager : Singleton<GameManager>
     }
 
     protected void Start() {
+        Utility.InitScreenSizeWithRatio(16, 9);
         ChangeState(GameState.Init);
     }
 
@@ -65,24 +67,7 @@ public class GameManager : Singleton<GameManager>
     }
 
     private void GameInit() {
-        void OnRequestSuccess(VersionData data) {
-            if (data == null) {
-                OnRequestFail(null);
-                return;
-            }
-            versionData = data;
-            Database.instance.Init();
-        }
-        void OnRequestFail(string error) {
-            void OnLocalRequestFail(string message) {
-                versionData = new VersionData();
-                RequestManager.OnRequestFail("获取版本档案失败，请重新启动游戏");
-            }
-            ResourceManager.LoadXML<VersionData>(versionDataPath, OnRequestSuccess, OnLocalRequestFail);
-        } 
-
-        Utility.InitScreenSizeWithRatio(16, 9);
-        ResourceManager.LoadXML<VersionData>(versionDataUrl, OnRequestSuccess, OnRequestFail);
+        GetVersionData();
     }
 
     private void GameQuit() {
@@ -118,6 +103,33 @@ public class GameManager : Singleton<GameManager>
 
     private void GamePlay() {}
     private void GameFight() {}
+
+    public void GetVersionData(Action onFinish = null) {
+        void OnRequestSuccess(VersionData data) {
+            if (data == null) {
+                OnRequestFail(null);
+                return;
+            }
+            versionData = data;
+            Database.instance.Init();
+            onFinish?.Invoke();
+        }
+        void OnRequestFail(string error) {
+            if (!onlineMode)
+                OnLocalRequestFail(error);
+            else {
+                onlineMode = false;
+                ResourceManager.LoadXML<VersionData>(versionDataPath, OnRequestSuccess, OnLocalRequestFail);
+            }
+        }
+        void OnLocalRequestFail(string error) {
+            versionData = new VersionData();
+            RequestManager.OnRequestFail("获取本地版本档案失败，请重新启动游戏");
+            onFinish?.Invoke();
+        }
+        GameManager.versionData = null; 
+        ResourceManager.LoadXML<VersionData>(versionDataRoute, OnRequestSuccess, OnRequestFail);
+    }
 }
 
 public enum GameState {

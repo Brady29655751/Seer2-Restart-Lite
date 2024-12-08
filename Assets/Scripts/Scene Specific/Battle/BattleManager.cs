@@ -162,6 +162,11 @@ public class BattleManager : Manager<BattleManager>
         var pet = currentUIState.myUnit.pet;
         var skill = pet.normalSkill.Get(cursor - 1) ?? Skill.GetNoOpSkill();
 
+        if (pet.isDead) {
+            systemView.StopAutoBattle();
+            yield break;
+        }
+
         if ((skill.anger > pet.anger) && (pet.buffController.GetBuff(61) == null))
             skill = Skill.GetNoOpSkill();
 

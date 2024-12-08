@@ -62,7 +62,7 @@ public class PetBackupSkillController : Module
     }
 
     public Skill SwapNormalSkill(Skill currentSkill) {
-        if ((!backupSkillModel.activeSelf) || (!backupSkillModel.isNormalSkillChosen))
+        if (/*(!backupSkillModel.activeSelf) || */(!backupSkillModel.isNormalSkillChosen))
             return null;
 
         Skill backupSkill = backupSkillModel.currentSelectedNormalSkill;
@@ -75,7 +75,7 @@ public class PetBackupSkillController : Module
     }
 
     public Skill SwapSuperSkill(Skill currentSkill) {
-        if ((!backupSkillModel.activeSelf) || (!backupSkillModel.isSuperSkillChosen))
+        if (/*(!backupSkillModel.activeSelf) || */(!backupSkillModel.isSuperSkillChosen))
             return null;
 
         Skill backupSkill = backupSkillModel.currentSelectedSuperSkill;

@@ -24,9 +24,8 @@ public class BattlePetChangeView : BattleBaseView
     }
 
     private void SetChangeBlocks(BattlePet[] petBag) {
-        for (int i = 0; i < 6; i++) {
-            changeBlockViews[i].SetPet(petBag[i]);        
-        }
+        for (int i = 0; i < 6; i++)
+            changeBlockViews[i].SetPet(petBag[i]);     
     }
 
     public void SetChangeBlockChosen(int index, int parallelIndex = -1)
@@ -35,12 +34,18 @@ public class BattlePetChangeView : BattleBaseView
            return;
 
         cursor = index;
-        for(int i = 0; i < 6; i++) {
+        for(int i = 0; i < 6; i++)
             changeBlockViews[i].SetChosen(i == index);
-        }
 
         if (parallelIndex.IsInRange(0, changeBlockViews.Length))
             changeBlockViews[5 - parallelIndex].SetChosen(true);
+    }
+
+    public void SetChangeBlockInteractable(int index, bool interactable) {
+        if (!index.IsInRange(0, changeBlockViews.Length))
+            return;
+
+        changeBlockViews[index].SetInteractable(interactable, !interactable);
     }
 
     public void SetSkillSelectMode(bool isSkillSelectMode) {
