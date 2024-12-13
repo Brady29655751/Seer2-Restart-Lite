@@ -61,6 +61,16 @@
 						</reply>
 					</replyHandler>
 				</branch>
+				<branch id="default_lose" name="阿卡纳斯" icon="Pets/pet/31.png" size="172,126" pos="10,35">
+					<content><![CDATA[<b><color=#ffbb33>星之尾</color></b>隐藏着神秘的力量]]></content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[能够穿透你的护盾吗？]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+					</replyHandler>
+				</branch>
 			</dialog>
 			<battle>
 				<branch id="default">
@@ -104,6 +114,12 @@
 							<condition>activity[spt].done[north][2][default]=[bool]false[default]false</condition>
 						</button>
 					</winHandler>
+					<loseHandler>
+						<button type="auto">
+							<action>openDialog</action>
+							<param>default_lose</param>
+						</button>
+					</loseHandler>
 				</branch>
 				<branch id="challenge_1">
 					<settings count="1">

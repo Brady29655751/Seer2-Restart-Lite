@@ -83,6 +83,14 @@ public class BattleSettings
         }).ToList() ?? new List<KeyValuePair<string, Buff>>();
     }
 
+    public BattleSettings FixToYiTeRogue() {
+        mode = BattleMode.YiTeRogue;
+        isSimulate = true;
+        isItemOK = true;
+        petCount = 6;
+        parallelCount = 1;
+        return this;
+    }
 }
 
 public enum BattleMode {
@@ -91,5 +99,5 @@ public enum BattleMode {
     PVP = 2,
     SPT = 3,
     Special = 4,
-    Surprise = 5,
+    YiTeRogue = 5,
 }

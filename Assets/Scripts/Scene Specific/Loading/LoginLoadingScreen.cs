@@ -13,6 +13,7 @@ public class LoginLoadingScreen : LoadingScreen
 {
     protected override IEnumerator ChangeSceneCoroutine(int sceneIndex, Action finishedCallback = null) {
         loadingText?.SetText("正在初始化");
+        /*
         var initHandle = Addressables.InitializeAsync();
         yield return initHandle;
 
@@ -65,7 +66,7 @@ public class LoginLoadingScreen : LoadingScreen
             loadingText?.SetText("更新完毕");
         }
         Addressables.Release(checkHandle);
-
+        */
         loadingText?.SetText("正在获取服务器档案。若长时间没有回应，请重新启动。");
         while (!Database.instance.VerifyData(out string error))
             yield return null;

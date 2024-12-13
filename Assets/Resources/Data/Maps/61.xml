@@ -6,7 +6,7 @@
 		<bgm>MU_000</bgm>
 	</music>
 	<entities>
-		<!-- 
+		<!--
 		<npc id="6001" resId="6001" name="克拉克" size="150,105" pos="250,230">
 			<description><![CDATA[英雄出少年啊！]]></description>
 			<dialog>
@@ -128,6 +128,56 @@
 						</reply>
 					</replyHandler>
 				</branch>
+				<branch id="1_lose" name="迪兰特" icon="Pets/pet/3.png" size="100,108" pos="-10,45">
+					<content><![CDATA[仔细查看主宠的特性，在<b><color=#ffbb33>体力低于1/4</color></b>时使用特定技能击败对手吧！]]></content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[原来如此]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+					</replyHandler>
+				</branch>
+				<branch id="2_lose" name="迪兰特" icon="Pets/pet/3.png" size="100,108" pos="-10,45">
+					<content><![CDATA[没有怒气怎么办？使用<b><color=#ffbb33>不消耗怒气</color></b>的技能反打一手！]]></content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[原来如此]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+					</replyHandler>
+				</branch>
+				<branch id="3_lose" name="迪兰特" icon="Pets/pet/3.png" size="100,108" pos="-10,45">
+					<content><![CDATA[反过来<b><color=#ffbb33>先逼对手怒气不足</color></b>无法使用技能，消耗一阵子再攻击！]]></content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[原来如此]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+					</replyHandler>
+				</branch>
+				<branch id="4_lose" name="迪兰特" icon="Pets/pet/3.png" size="100,108" pos="-10,45">
+					<content><![CDATA[<b><color=#ffbb33>海浪之盾</color></b>可以帮助你对抗特殊攻击！]]></content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[原来如此]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+					</replyHandler>
+				</branch>
+				<branch id="5_lose" name="迪兰特" icon="Pets/pet/3.png" size="100,108" pos="-10,45">
+					<content><![CDATA[主宠的必杀技都是<b><color=#ffbb33>必定命中</color></b>，用低怒气的技能累积怒气打出必杀技！]]></content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[原来如此]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+					</replyHandler>
+				</branch>
 			</dialog>
 			<battle>
 				<branch id="1">
@@ -160,6 +210,12 @@
 							<param>done[1]=true</param>
 						</button>
 					</winHandler>
+					<loseHandler>
+						<button type="auto">
+							<action>openDialog</action>
+							<param>1_lose</param>
+						</button>
+					</loseHandler>
 				</branch>
 				<branch id="2">
 					<settings count="1"/>
@@ -201,6 +257,12 @@
 							<param>done[1]=true</param>
 						</button>
 					</winHandler>
+					<loseHandler>
+						<button type="auto">
+							<action>openDialog</action>
+							<param>2_lose</param>
+						</button>
+					</loseHandler>
 				</branch>
 				<branch id="3">
 					<settings count="1"/>
@@ -252,6 +314,12 @@
 							<param>done[1]=true</param>
 						</button>
 					</winHandler>
+					<loseHandler>
+						<button type="auto">
+							<action>openDialog</action>
+							<param>3_lose</param>
+						</button>
+					</loseHandler>
 				</branch>
 				<branch id="4">
 					<settings count="1"/>
@@ -305,6 +373,12 @@
 							<param>done[1]=true</param>
 						</button>
 					</winHandler>
+					<loseHandler>
+						<button type="auto">
+							<action>openDialog</action>
+							<param>4_lose</param>
+						</button>
+					</loseHandler>
 				</branch>
 				<branch id="5">
 					<settings count="1"/>
@@ -355,6 +429,12 @@
 							<param>done[1]=true</param>
 						</button>
 					</winHandler>
+					<loseHandler>
+						<button type="auto">
+							<action>openDialog</action>
+							<param>5_lose</param>
+						</button>
+					</loseHandler>
 				</branch>
 			</battle>
 			<eventHandler>
@@ -463,6 +543,56 @@
 						</reply>
 					</replyHandler>
 				</branch>
+				<branch id="1_lose" name="休罗斯" icon="Pets/pet/6.png" size="134,109" pos="5,50">
+					<content><![CDATA[仔细查看主宠的特性，在<b><color=#ffbb33>体力低于1/4</color></b>时使用特定技能击败对手吧！]]></content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[原来如此]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+					</replyHandler>
+				</branch>
+				<branch id="2_lose" name="休罗斯" icon="Pets/pet/6.png" size="134,109" pos="5,50">
+					<content><![CDATA[使用气力并掌握时机，<b><color=#ffbb33>抢先一步</color></b>击败对手！]]></content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[原来如此]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+					</replyHandler>
+				</branch>
+				<branch id="3_lose" name="休罗斯" icon="Pets/pet/6.png" size="134,109" pos="5,50">
+					<content><![CDATA[对方的防御力很高，尝试模仿对手运用<b><color=#ffbb33>不良状态（烫伤）</color></b>击败对手！]]></content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[原来如此]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+					</replyHandler>
+				</branch>
+				<branch id="4_lose" name="休罗斯" icon="Pets/pet/6.png" size="134,109" pos="5,50">
+					<content><![CDATA[对方的防御力很高而且免疫不良，尝试模仿对手使用<b><color=#ffbb33>怒火猛攻</color></b>造成固定伤害！]]></content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[原来如此]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+					</replyHandler>
+				</branch>
+				<branch id="5_lose" name="休罗斯" icon="Pets/pet/6.png" size="134,109" pos="5,50">
+					<content><![CDATA[对方恢复能力强，运用<b><color=#ffbb33>奋力突破，佯攻，气力，炎之意志</color></b>，打出高额伤害的必杀技一次终结对手！]]></content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[原来如此]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+					</replyHandler>
+				</branch>
 			</dialog>
 			<battle>
 				<branch id="1">
@@ -495,6 +625,12 @@
 							<param>done[2]=true</param>
 						</button>
 					</winHandler>
+					<loseHandler>
+						<button type="auto">
+							<action>openDialog</action>
+							<param>1_lose</param>
+						</button>
+					</loseHandler>
 				</branch>
 				<branch id="2">
 					<settings count="1"/>
@@ -536,6 +672,12 @@
 							<param>done[2]=true</param>
 						</button>
 					</winHandler>
+					<loseHandler>
+						<button type="auto">
+							<action>openDialog</action>
+							<param>2_lose</param>
+						</button>
+					</loseHandler>
 				</branch>
 				<branch id="3">
 					<settings count="1"/>
@@ -578,6 +720,12 @@
 							<param>done[2]=true</param>
 						</button>
 					</winHandler>
+					<loseHandler>
+						<button type="auto">
+							<action>openDialog</action>
+							<param>3_lose</param>
+						</button>
+					</loseHandler>
 				</branch>
 				<branch id="4">
 					<settings count="1"/>
@@ -621,6 +769,12 @@
 							<param>done[2]=true</param>
 						</button>
 					</winHandler>
+					<loseHandler>
+						<button type="auto">
+							<action>openDialog</action>
+							<param>4_lose</param>
+						</button>
+					</loseHandler>
 				</branch>
 				<branch id="5">
 					<settings count="1"/>
@@ -662,6 +816,12 @@
 							<param>done[2]=true</param>
 						</button>
 					</winHandler>
+					<loseHandler>
+						<button type="auto">
+							<action>openDialog</action>
+							<param>5_lose</param>
+						</button>
+					</loseHandler>
 				</branch>
 			</battle>
 			<eventHandler>
@@ -770,6 +930,46 @@
 						</reply>
 					</replyHandler>
 				</branch>
+				<branch id="1_lose" name="拉奥叶" icon="Pets/pet/9.png" size="131,119" pos="0,45">
+					<content><![CDATA[仔细查看主宠的特性，在<b><color=#ffbb33>体力低于1/4</color></b>时使用特定技能击败对手吧！]]></content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[原来如此]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+					</replyHandler>
+				</branch>
+				<branch id="3_lose" name="拉奥叶" icon="Pets/pet/9.png" size="131,119" pos="0,45">
+					<content><![CDATA[对手攻击力很强，善用<b><color=#ffbb33>削弱，治愈</color></b>等技能进行防守！]]></content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[原来如此]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+					</replyHandler>
+				</branch>
+				<branch id="4_lose" name="拉奥叶" icon="Pets/pet/9.png" size="131,119" pos="0,45">
+					<content><![CDATA[几乎无法对对手造成伤害，但对方血量不高，用<b><color=#ffbb33>寄生炸弹</color></b>穿透对手的无敌防御！]]></content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[原来如此]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+					</replyHandler>
+				</branch>
+				<branch id="5_lose" name="拉奥叶" icon="Pets/pet/9.png" size="131,119" pos="0,45">
+					<content><![CDATA[对方血量稍微高一点，用<b><color=#ffbb33>寄生炸弹，利刃刀叶</color></b>互相配合加快削血速度！]]></content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[原来如此]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+					</replyHandler>
+				</branch>
 			</dialog>
 			<battle>
 				<branch id="1">
@@ -802,6 +1002,12 @@
 							<param>done[3]=true</param>
 						</button>
 					</winHandler>
+					<loseHandler>
+						<button type="auto">
+							<action>openDialog</action>
+							<param>1_lose</param>
+						</button>
+					</loseHandler>
 				</branch>
 				<branch id="2">
 					<settings count="1"/>
@@ -843,6 +1049,12 @@
 							<param>done[3]=true</param>
 						</button>
 					</winHandler>
+					<loseHandler>
+						<button type="auto">
+							<action>openDialog</action>
+							<param>1_lose</param>
+						</button>
+					</loseHandler>
 				</branch>
 				<branch id="3">
 					<settings count="1"/>
@@ -884,6 +1096,12 @@
 							<param>done[3]=true</param>
 						</button>
 					</winHandler>
+					<loseHandler>
+						<button type="auto">
+							<action>openDialog</action>
+							<param>3_lose</param>
+						</button>
+					</loseHandler>
 				</branch>
 				<branch id="4">
 					<settings count="1"/>
@@ -927,6 +1145,12 @@
 							<param>done[3]=true</param>
 						</button>
 					</winHandler>
+					<loseHandler>
+						<button type="auto">
+							<action>openDialog</action>
+							<param>4_lose</param>
+						</button>
+					</loseHandler>
 				</branch>
 				<branch id="5">
 					<settings count="1"/>
@@ -978,6 +1202,12 @@
 							<param>done[3]=true</param>
 						</button>
 					</winHandler>
+					<loseHandler>
+						<button type="auto">
+							<action>openDialog</action>
+							<param>5_lose</param>
+						</button>
+					</loseHandler>
 				</branch>
 			</battle>
 			<eventHandler>

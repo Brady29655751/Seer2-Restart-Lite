@@ -85,12 +85,12 @@ public static class Identifier {
         return GetNumIdentifier(id);
     }
 
-    public static float GetIdentifier(string id, Effect effect, Unit lhsUnit, Unit rhsUnit, object otherSource = null) {
+    public static float GetIdentifier(string id, Effect effect, Unit lhsUnit, Unit rhsUnit, object otherSource = null, bool useOtherSourceOnlyWhenTarget = true) {
         
         id = id.Replace("－", "-");
 
         float num = 0;
-        bool isOtherSourceAvailable = (otherSource != null) && (id.TryTrimStart("target.", out id));
+        bool isOtherSourceAvailable = (otherSource != null) && ((!useOtherSourceOnlyWhenTarget) || id.TryTrimStart("target.", out id));
         object idSource = isOtherSourceAvailable ? otherSource : effect.source;
         
         return idSource switch {
@@ -277,6 +277,7 @@ public static class Identifier {
                 return id switch {
                     "count" => buffs.Count(x => x.IsType(buffType)),
                     "block" => buffController.IsBuffTypeBlocked(buffType) ? 1 : 0,
+                    "copy"  => buffController.IsBuffTypeCopied(buffType) ? 1 : 0,
                     _ => 0,
                 };
             }
@@ -287,6 +288,7 @@ public static class Identifier {
             return id switch {
                 "count" => buffs.Count(x => x.id == buffId),
                 "block" => buffController.IsBuffIdBlocked(buffId) ? 1 : 0,
+                "copy"  => buffController.IsBuffIdCopied(buffId) ? 1 : 0,
                 _ => buff.TryGetBuffIdentifier(id, out float num) ? num : GetNumIdentifier(id),
             };
         }

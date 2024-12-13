@@ -9,7 +9,9 @@ public class PetBattleBuffController
     public Element element { get; private set; }
     public Element subElement { get; private set; }
     private List<int> blockBuffIds = new List<int>();
+    private List<int> copyBuffIds = new List<int>();
     private List<BuffType> blockBuffTypes = new List<BuffType>();
+    private List<BuffType> copyBuffTypes = new List<BuffType>();
 
     public List<Buff> buffs = new List<Buff>();
     public bool isMovable => !IsUnmovableEffected();
@@ -24,7 +26,9 @@ public class PetBattleBuffController
         element = rhs.element;
         subElement = rhs.subElement;
         blockBuffIds = new List<int>(rhs.blockBuffIds);
+        copyBuffIds = new List<int>(rhs.copyBuffIds);
         blockBuffTypes = new List<BuffType>(rhs.blockBuffTypes);
+        copyBuffTypes = new List<BuffType>(rhs.copyBuffTypes);
         buffs = rhs.buffs.Select(x => new Buff(x)).ToList();
     }
 
@@ -69,6 +73,21 @@ public class PetBattleBuffController
         return blockBuffTypes.Contains(type);
     }
 
+    public bool IsBuffCopied(Buff buff) {
+        if (buff == null)
+            return false;
+
+        return IsBuffIdCopied(buff.id) || copyBuffTypes.Exists(buff.IsType);
+    }
+
+    public bool IsBuffIdCopied(int id) {
+        return copyBuffIds.Contains(id);
+    }
+
+    public bool IsBuffTypeCopied(BuffType type) {
+        return copyBuffTypes.Contains(type);
+    }
+
     public Buff GetBuff(int id) {
         return buffs.Find(x => x.id == id);
     }
@@ -97,9 +116,14 @@ public class PetBattleBuffController
         OnAddBuff(newBuff, buffUnit, state);
     }
 
-    public bool AddBuff(Buff newBuff, Unit buffUnit, BattleState state) {
+    public bool AddBuff(Buff newBuff, Unit buffUnit, BattleState state, bool triggerCopy = true) {
         if (newBuff == null)
             return false;
+
+        if (triggerCopy && IsBuffCopied(newBuff) && !newBuff.IsPower()) {
+            var rhsUnit = state.GetRhsUnitById(buffUnit.id);
+            rhsUnit.pet.buffController.AddBuff(newBuff, rhsUnit, state, false);
+        }
 
         if (IsBuffBlocked(newBuff) && !newBuff.IsPower())
             return false;
@@ -223,6 +247,22 @@ public class PetBattleBuffController
 
     public void UnblockBuffWithType(List<BuffType> typeList) {
         blockBuffTypes.RemoveRange(typeList);
+    }
+
+    public void CopyBuff(List<int> idList) {
+        copyBuffIds.AddRange(idList);
+    }
+
+    public void CopyBuffWithType(List<BuffType> typeList) {
+        copyBuffTypes.AddRange(typeList);
+    }
+
+    public void UncopyBuff(List<int> idList) {
+        copyBuffIds.RemoveRange(idList);
+    }
+
+    public void UncopyBuffWithType(List<BuffType> typeList) {
+        copyBuffTypes.RemoveRange(typeList);
     }
 
     public void OnTurnStart(Unit thisUnit, BattleState state) {

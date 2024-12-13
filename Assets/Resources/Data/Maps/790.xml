@@ -60,6 +60,16 @@
 						</reply>
 					</replyHandler>
 				</branch>
+				<branch id="default_lose" name="艾丽希斯" icon="Pets/pet/215.png" size="138,147" pos="0,35">
+					<content><![CDATA[吸收...光...的力量...]]></content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[光之力？]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+					</replyHandler>
+				</branch>
 			</dialog>
 			<battle>
 				<branch id="default">
@@ -113,6 +123,12 @@
 							<condition>activity[spt].done[north][9][default]=[bool]false[default]false</condition>
 						</button>
 					</winHandler>
+					<loseHandler>
+						<button type="auto">
+							<action>openDialog</action>
+							<param>default_lose</param>
+						</button>
+					</loseHandler>
 				</branch>
 				<branch id="challenge_1">
 					<settings count="1">

@@ -8,7 +8,9 @@ using UnityEngine.UI;
 public class YiTeRogueView : UIModule
 {
     [SerializeField] private float eventBlockScale = 1.8f;
+    [SerializeField] private ScrollRect rogueScrollRect;
     [SerializeField] private RectTransform rogueContentRect;
+    [SerializeField] private BattlePetBuffView buffView;
     [SerializeField] private GameObject buffButtonPrefab, arrowPrefab;
     [SerializeField] private List<GameObject> arrowList = new List<GameObject>();
     [SerializeField] private List<BattlePetBuffBlockView> eventButtonList = new List<BattlePetBuffBlockView>();
@@ -29,10 +31,14 @@ public class YiTeRogueView : UIModule
         Clear();
 
         var eventMap = YiTeRogueData.instance.eventMap;
+        var isNextPosLocked = YiTeRogueData.instance.isNextPosLocked;
+        var nextPos = YiTeRogueData.instance.nextPos;
+        var floor = YiTeRogueData.instance.floor;
         var trace = YiTeRogueData.instance.trace;
         YiTeRogueEvent rogueEvent = eventMap[0];
 
         rogueContentRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 120 + 120 * eventMap[eventMap.Count - 1].step);
+        rogueScrollRect.horizontalNormalizedPosition = trace.Count * 1f / YiTeRogueEvent.GetEndStepByFloor(floor);
 
         // Instantiate first block.
         InstantiateEventBlock(rogueEvent, trace);
@@ -51,9 +57,10 @@ public class YiTeRogueView : UIModule
             return;
 
         // Instantiate last blocks for chosen.
-        InstantiateEventArrows(rogueEvent, rogueEvent.next);
+        var chosenNext = isNextPosLocked ? new List<int>(){ nextPos - rogueEvent.pos } : rogueEvent.next;
+        InstantiateEventArrows(rogueEvent, chosenNext);
         var currentEventList = eventMap.FindAll(x => (x.step == rogueEvent.step + 1) && 
-            (rogueEvent.next.Exists(y => x.pos == rogueEvent.pos + y)));
+            (chosenNext.Exists(y => x.pos == rogueEvent.pos + y)));
 
         foreach (var e in currentEventList)
             InstantiateEventBlock(e, trace);
@@ -73,9 +80,10 @@ public class YiTeRogueView : UIModule
         rect.localScale = eventBlockScale * Vector3.one;
         blockView.SetBuff(buff, () => SetInfoPromptActive(true), () => SetInfoPromptActive(false), 
             () => infoPrompt.SetBuff(buff), () => {
-                if (trace.Count == rogueEvent.step)
+                if (trace.Count == rogueEvent.step) {
+                    YiTeRogueData.instance.Click(rogueEvent.pos);
                     OpenChoicePanel(rogueEvent);
-                else
+                } else
                     Hintbox.OpenHintboxWithContent("此事件已完成！", 16);
         });
         eventButtonList.Add(blockView);
@@ -96,17 +104,24 @@ public class YiTeRogueView : UIModule
         }
     }
 
-    private void OpenChoicePanel(YiTeRogueEvent rogueEvent) {
+    public void OpenChoicePanel(YiTeRogueEvent rogueEvent, bool withStep = true) {
         choicePanel.SetActive(true);
         titleText?.SetText(rogueEvent.title);
         contentText?.SetText(rogueEvent.content);
         var choices = rogueEvent.choiceList;
         for (int i = 0; i < choiceList.Count; i++) {
-            choiceList[i].SetChoice((i < choices.Count) ? choices[i] : null, SetMap, rogueEvent.pos);
+            choiceList[i].SetChoice((i < choices.Count) ? choices[i] : null, SetMap, rogueEvent.pos, withStep);
         }
     }
 
     public void CloseChoicePanel() {
+        SetMap();
         choicePanel.SetActive(false);
+    }
+
+    public void ToggleBuffPanel() {
+        var isBuffPanelActive = buffView.gameObject.activeSelf;
+        rogueScrollRect.gameObject.SetActive(isBuffPanelActive);
+        buffView.gameObject.SetActive(!isBuffPanelActive);
     }
 }

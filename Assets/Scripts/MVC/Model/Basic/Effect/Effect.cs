@@ -186,7 +186,7 @@ public class Effect {
                 EffectAbility.Rage => this.Rage(state),
                 EffectAbility.Powerup => this.Powerup(state),
                 EffectAbility.AddStatus => this.AddStatus(state),
-                EffectAbility.BlockBuff => this.BlockBuff(state),
+                EffectAbility.BlockBuff => this.BlockOrCopyBuff(state),
                 EffectAbility.AddBuff => this.AddBuff(state),
                 EffectAbility.RemoveBuff => this.RemoveBuff(state),
                 EffectAbility.CopyBuff => this.CopyBuff(state),

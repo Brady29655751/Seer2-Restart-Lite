@@ -63,6 +63,26 @@
 						</reply>
 					</replyHandler>
 				</branch>
+				<branch id="default_lose" name="布鲁托" icon="Pets/pet/17.png" size="123,101" pos="0,55">
+					<content><![CDATA[哇哈哈！只要我不受到<b><color=#ffbb33>衰弱</color></b>，我就不怕<b><color=#ffbb33>根之刺</color></b>！]]></content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[原来如此]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+					</replyHandler>
+				</branch>
+				<branch id="challenge_2_lose" name="拉奥叶" icon="Pets/pet/9.png" size="131,119" pos="0,45">
+					<content><![CDATA[还记得主宠训练营的时候，我如何穿透对手的无敌防御吗？]]></content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[炸弹？]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+					</replyHandler>
+				</branch>
 			</dialog>
 			<battle>
 				<branch id="default">
@@ -106,6 +126,12 @@
 							<condition>activity[spt].done[north][1][default]=[bool]false[default]false</condition>
 						</button>
 					</winHandler>
+					<loseHandler>
+						<button type="auto">
+							<action>openDialog</action>
+							<param>default_lose</param>
+						</button>
+					</loseHandler>
 				</branch>
 				<branch id="challenge_1">
 					<settings count="1">
@@ -180,6 +206,12 @@
 							<condition>activity[spt].done[north][1][challenge_2]=[bool]false[default]false</condition>
 						</button>
 					</winHandler>
+					<loseHandler>
+						<button type="auto">
+							<action>openDialog</action>
+							<param>challenge_2_lose</param>
+						</button>
+					</loseHandler>
 				</branch>
 				<branch id="evolve">
 					<settings count="1">

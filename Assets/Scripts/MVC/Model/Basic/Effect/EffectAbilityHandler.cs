@@ -360,7 +360,7 @@ public static class EffectAbilityHandler
         return true;
     }
 
-    public static bool BlockBuff(this Effect effect, BattleState state) {
+    public static bool BlockOrCopyBuff(this Effect effect, BattleState state) {
         string who = effect.abilityOptionDict.Get("who", "me");
         string op = effect.abilityOptionDict.Get("op", "+");
         string idList = effect.abilityOptionDict.Get("id_list", "0");
@@ -374,13 +374,24 @@ public static class EffectAbilityHandler
         var statusController = lhsUnit.pet.statusController;
         var buffController = lhsUnit.pet.buffController;
 
-        if (op == "+") {
-            buffController.BlockBuff(idBlockList);
-            buffController.BlockBuffWithType(typeBlockList);
-        } else if (op == "-") {
-            buffController.UnblockBuff(idBlockList);
-            buffController.UnblockBuffWithType(typeBlockList);
-        }
+        Action<List<int>> idFunc = op switch {
+            "+" => buffController.BlockBuff,
+            "-" => buffController.UnblockBuff,
+            "*" => buffController.CopyBuff,
+            "/" => buffController.UncopyBuff,
+            _ => (idList) => {},
+        };
+        
+        Action<List<BuffType>> typeFunc = op switch {
+            "+" => buffController.BlockBuffWithType,
+            "-" => buffController.UnblockBuffWithType,
+            "*" => buffController.CopyBuffWithType,
+            "/" => buffController.UncopyBuffWithType,
+            _ => (typeList) => {},
+        };
+
+        idFunc.Invoke(idBlockList);
+        typeFunc.Invoke(typeBlockList);
         return true;
     }
 
@@ -455,21 +466,27 @@ public static class EffectAbilityHandler
         bool isKey = !string.IsNullOrEmpty(keyList);
         bool isId = (idList != "0") && (idRange.Count != 0);
         bool isType = typeList != "none";
-        var filter = Parser.ParseConditionFilter<Buff>(filterList, (id, buff) => buff?.GetBuffIdentifier(id) ?? float.MinValue);
-
-        if (isKey)
-            return state.stateBuffs.RemoveAll(x => keyRange.Contains(x.Key) && filter(x.Value)) > 0;
 
         Unit invokeUnit = (Unit)effect.invokeUnit;
         Unit lhsUnit = (who == "me") ? state.GetUnitById(invokeUnit.id) : state.GetRhsUnitById(invokeUnit.id);
+        Unit rhsUnit = state.GetRhsUnitById(lhsUnit.id);
         var buffController = lhsUnit.pet.buffController;
         var statusController = lhsUnit.pet.statusController;
+        var filter = Parser.ParseConditionFilter<Buff>(filterList, (id, buff) => {
+            if (buff == null)
+                return float.MinValue;
+
+            return Parser.ParseEffectOperation(id, effect, lhsUnit, rhsUnit, buff, false);
+        });
+
+        if (isKey)
+            return state.stateBuffs.RemoveAll(x => keyRange.Contains(x.Key) && filter(x.Value)) > 0;
 
         if (isType) {
             var isSuccess = false;
             foreach (var type in typeRange) {
                 var buffType = type.ToBuffType();
-                isSuccess |= buffController.RemoveRangeBuff(x => (!x.IsUneffectable()) && x.IsType(buffType), lhsUnit, state);
+                isSuccess |= buffController.RemoveRangeBuff(x => (!x.IsUneffectable()) && x.IsType(buffType) && filter(x), lhsUnit, state);
             }
             return isSuccess;
         }
@@ -508,7 +525,12 @@ public static class EffectAbilityHandler
         var lhsBuffController = lhsUnit.pet.buffController;
         var rhsBuffController = rhsUnit.pet.buffController;
         var copyType = typeList.ToBuffType();
-        var filter = Parser.ParseConditionFilter<Buff>(filterList, (id, buff) => buff?.GetBuffIdentifier(id) ?? float.MinValue);
+        var filter = Parser.ParseConditionFilter<Buff>(filterList, (id, buff) => {
+            if (buff == null)
+                return float.MinValue;
+
+            return Parser.ParseEffectOperation(id, effect, lhsUnit, rhsUnit, buff, false);
+        });
         IEnumerable<Buff> buffs = null;
 
         List<int> GetRandomBuff(bool unique = false) {

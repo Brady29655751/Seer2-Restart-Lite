@@ -378,8 +378,6 @@ public class ResourceManager : Singleton<ResourceManager>
             reader.Close();
             return deserialized;
         }
-
-        ;
     }
 
     public static T LoadXML<T>(string path, Action<T> onSuccess = null, Action<string> onFail = null)

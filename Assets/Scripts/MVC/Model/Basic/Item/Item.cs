@@ -64,6 +64,31 @@ public class Item
         return itemHintbox;
     }
 
+    public static void AddTo(Item item, List<Item> toWhichStorage) {
+        var addItem = new Item(item.info.getId, item.num);
+        int index = toWhichStorage.FindIndex(x => x.id == addItem.id);
+        if (index != -1) {
+            toWhichStorage[index].num += addItem.num;
+        } else {
+            toWhichStorage.Add(addItem);
+        }
+        SaveSystem.SaveData();
+    }
+
+    public static void RemoveFrom(int id, int num, List<Item> toWhichStorage) {
+        int index = toWhichStorage.FindIndex(x => x.id == id);
+        if (index != -1) {
+            Item item = toWhichStorage[index];
+            item.num -= num;
+            if (item.num <= 0) {
+                toWhichStorage.Remove(item);
+            }
+            SaveSystem.SaveData();
+            return;
+        } 
+        throw new Exception("Item was not in bag originally.");
+    }
+
     public static Item Find(int id) {
         return itemStorage.Find(x => x.id == id);
     }
@@ -171,7 +196,7 @@ public class Item
         return (handler.Condition(state, false).Any(x => x)) && (GetMaxUseCount(invokeUnit, state) > 0);
     }
 
-    public int Use(object invokeUnit, BattleState state, int useCount = 1, bool saveData = true) {
+    public int Use(object invokeUnit, BattleState state, int useCount = 1, PetBagMode mode = PetBagMode.Normal) {
         int count = useCount;
 
         if ((info.type == ItemType.EXP) && (!effects.Exists(x => x.abilityOptionDict.ContainsKey("max_use"))))
@@ -179,12 +204,15 @@ public class Item
         else
             count = this.UseDefault(invokeUnit, state, useCount);
 
-        if (!saveData)
+        if ((mode != PetBagMode.Normal) && (mode != PetBagMode.YiTeRogue))
             return count;
 
-        if (info.removable)
-            Item.Remove(id, count);
-        else
+        if (info.removable) {
+            if (mode == PetBagMode.Normal)
+                Item.Remove(id, count);
+            else
+                Item.RemoveFrom(id, count, YiTeRogueData.instance.itemBag);
+        } else
             SaveSystem.SaveData();
         
         return count;

@@ -39,12 +39,17 @@ public class Battle
         List<BossInfo> enemy = info.enemyInfo;
 
         Pet[] petBag = Player.instance.petBag;
-        BattlePet[] myPetBag = (((player == null) || (player.Count == 0)) ?
-            petBag.Take(info.settings.petCount).Select(x => BattlePet.GetBattlePet(x)) :
-            player.Take(info.settings.petCount).Select(x => BattlePet.GetBattlePet(x))).ToArray();
+        IEnumerable<BattlePet> myPetBag = null;
+        if (info.settings.mode == BattleMode.YiTeRogue)
+            myPetBag = YiTeRogueData.instance.battlePetBag;
+        else if (ListHelper.IsNullOrEmpty(player))
+            myPetBag = petBag.Take(info.settings.petCount).Select(x => BattlePet.GetBattlePet(x));
+        else
+            myPetBag = player.Take(info.settings.petCount).Select(x => BattlePet.GetBattlePet(x));
+
         BattlePet[] opPetBag = enemy.Select(x => BattlePet.GetBattlePet(x)).ToArray();
         
-        Init(myPetBag, opPetBag, info.settings);
+        Init(myPetBag.ToArray(), opPetBag, info.settings);
     }
 
     /// <summary>

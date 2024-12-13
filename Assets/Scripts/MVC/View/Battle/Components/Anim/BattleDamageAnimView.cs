@@ -30,7 +30,7 @@ public class BattleDamageAnimView : Module
     private IEnumerator SetHealAnim(RectTransform healRect)
     {
         float speed = -0.5f, time = 0;
-        while ((healRect.anchoredPosition.y > -50) && (time < 3))
+        while ((healRect.anchoredPosition.y > -50) && (time < 2.2f))
         {
             healRect.anchoredPosition = new Vector2(healRect.anchoredPosition.x, healRect.anchoredPosition.y + speed);
             time += Time.deltaTime;

@@ -55,6 +55,7 @@ public static class ListHelper {
         return (list == null) || (!list.Any());
     }
 
+    public static List<T> SingleToList<T>(this T item) => new List<T>(){ item };
     public static T Get<T>(this IList<T> list, int index, T defaultValue = default(T)) {
         if (ListHelper.IsNullOrEmpty(list))
             return defaultValue;

@@ -49,7 +49,7 @@ public class MapSceneView : UIModule
     }
 
     public void SetPathMask(MapResources resources) {
-        pathMask.sprite = resources.pathSprite;
+        pathMask.sprite = resources.pathMaskSprite;
     }
 
     #endregion

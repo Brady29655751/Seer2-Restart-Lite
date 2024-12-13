@@ -9,6 +9,16 @@ namespace U_Editor
 
     public class AssetBundleBuilder//打包精灵动画专用
     {
+        /*
+        [MenuItem("Tools/Check Pet Exp System")]
+        public static void CheckPetExpSystem() 
+        {
+            Debug.Log(PetExpSystem.GetTotalExp(0, 1));  
+            Debug.Log(PetExpSystem.GetTotalExp(1, 1));  
+            Debug.Log(PetExpSystem.GetTotalExp(2, 1));  
+        }
+        */
+
         [MenuItem("Tools/Check Active Build Target")]
         public static void CheckActiveBuildTarget() 
         {

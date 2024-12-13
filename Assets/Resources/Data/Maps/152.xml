@@ -62,6 +62,26 @@
         				</reply>
         			</replyHandler>
         		</branch>
+				<branch id="default_lose" name="麦麦迪" icon="Pets/pet/57.png" size="133,108" pos="0,55">
+					<content><![CDATA[古斯的<b><color=#ffbb33>毒叶</color></b>会使精灵慢性中毒，配合<b><color=#ffbb33>毒疗</color></b>恢复自己非常可怕！]]></content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[原来如此]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+					</replyHandler>
+				</branch>
+				<branch id="challenge_2_lose" name="麦麦迪" icon="Pets/pet/57.png" size="133,108" pos="0,55">
+					<content><![CDATA[尝试使用特攻技能累积怒气，并用必杀技一举突破防御！]]></content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[原来如此]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+					</replyHandler>
+				</branch>
         	</dialog>
         	<battle>
         		<branch id="default">
@@ -118,6 +138,12 @@
         					<condition>activity[spt].done[north][4][default]=[bool]false[default]false</condition>
         				</button>
         			</winHandler>
+					<loseHandler>
+						<button type="auto">
+							<action>openDialog</action>
+							<param>default_lose</param>
+						</button>
+					</loseHandler>
         		</branch>
         		<branch id="challenge_1">
         			<settings count="1">
@@ -175,7 +201,7 @@
 								<mdf>1</mdf>
         						<hp>25000</hp>
         					</status>
-        					<initBuff>13,14,17,20,23,26,3017,-3005</initBuff>
+        					<initBuff>13,14,17,20,23,26,3017</initBuff>
         					<loopSkill>10282</loopSkill>
         				</pet>
         			</enemy>
@@ -202,6 +228,12 @@
         					<condition>activity[spt].done[north][4][challenge_2]=[bool]false[default]false</condition>
         				</button>
         			</winHandler>
+					<loseHandler>
+						<button type="auto">
+							<action>openDialog</action>
+							<param>challenge_2_lose</param>
+						</button>
+					</loseHandler>
         		</branch>
         		<branch id="evolve">
         			<settings count="1">

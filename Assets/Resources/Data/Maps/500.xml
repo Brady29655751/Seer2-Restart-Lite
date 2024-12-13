@@ -1,0 +1,50 @@
+<map name="实验禁地" category="5" id="500">
+	<fightMap>100005</fightMap>
+	<music category="5">
+		<bgm>BGM_500</bgm>
+		<fx>FX_101</fx>
+	</music>
+	<initialPoint>420,120</initialPoint>
+	<entities>
+		<npc id="50001" resId="Pets/pet/91.png" name="伊特" size="63,72" pos="600,50">
+			<description>走开！别来惹我！</description>
+			<dialog>
+				<branch id="default" name="伊特" icon="Pets/pet/91.png" size="125,145" pos="10,25">
+					<content><![CDATA[我就是捣蛋鬼怎么样！没有朋友又怎么样！我就这么惹人厌！]]></content>
+					<functionHandler>
+						<func type="click">
+							<description><![CDATA[伊特大乱斗]]></description>
+							<action>openPanel</action>
+							<param>YiTeRogue</param>
+						</func>
+						<func type="branch">
+							<action>openDialog</action>
+							<param>null</param>
+						</func>
+						<func type="click">
+							<description><![CDATA[兑换奖励]]></description>
+							<action>openPanel</action>
+							<param>ItemShop</param>
+							<param>currency=5/2</param>
+						</func>
+					</functionHandler>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[……伊特……]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+					</replyHandler>
+				</branch>
+			</dialog>
+			<eventHandler>
+				<button type="click">
+					<action>openDialog</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+        <!-- <teleport id="1" name="火幻氏族主城" pos="700,90" targetMapId="230"/> -->
+		<!-- <teleport id="2" name="灰烬岔口" pos="100,240" targetMapId="302"/> -->
+	</entities>
+</map>

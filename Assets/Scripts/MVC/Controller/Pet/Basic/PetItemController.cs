@@ -78,7 +78,7 @@ public class PetItemController : Module
         ihb.SetMaxValue(Mathf.Min(item.num, item.GetMaxUseCount(itemModel.currentPet, null), 999));
         ihb.SetOptionNum(2);
         ihb.SetOptionCallback(() => {
-            int usedNum = item.Use(itemModel.currentPet, null, ihb.GetInputValue(), mode == PetBagMode.Normal);
+            int usedNum = item.Use(itemModel.currentPet, null, ihb.GetInputValue(), mode);
             OnItemUsed(item, usedNum);
         }, true); 
     }

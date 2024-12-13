@@ -10,13 +10,21 @@ public class NpcButtonHandler
     public string description;
 
     [XmlAttribute("type")] public string typeId;
-    public ButtonEventType type => typeId.ToButtonEventType();
+    public ButtonEventType type => typeId?.ToButtonEventType() ?? ButtonEventType.None;
 
     [XmlElement("action")] public string actionType;
-    public NpcAction action => actionType.ToNpcAction();
+    public NpcAction action => actionType?.ToNpcAction() ?? NpcAction.None;
 
     [XmlElement("condition")] public List<string> condition;
     [XmlElement("param")] public List<string> param;
+
+    [XmlIgnore] public List<Action> callback = null;
+
+    public static NpcButtonHandler Callback(Action callback) {
+        return new NpcButtonHandler(){ 
+            callback = new List<Action>(){ callback } 
+        };
+    }
 
     public NpcButtonHandler() {}
 
@@ -26,6 +34,7 @@ public class NpcButtonHandler
         actionType = rhs.actionType;
         condition = rhs.condition.ToList();
         param = rhs.param.ToList();
+        callback = rhs.callback;
     }
 
 }

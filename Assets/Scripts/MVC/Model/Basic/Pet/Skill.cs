@@ -173,8 +173,8 @@ public class Skill
         if (!skill.isAction)
             skill.options.Set("target_index", data[1]);
 
-        var parallelSourceIndex = int.Parse(data.Get(len - 2, "0"));
-        var parallelTargetIndex = int.Parse(data.Get(len - 1, "0"));
+        var parallelSourceIndex = int.TryParse(data.Get(len - 2, "0"), out var num) ? num : 0;
+        var parallelTargetIndex = int.TryParse(data.Get(len - 1, "0"), out num) ? num : 0;
         skill.SetParallelIndex(parallelSourceIndex, parallelTargetIndex);
 
         return skill;
@@ -287,7 +287,7 @@ public class Skill
 
         effects.ForEach(x => {
             x?.abilityOptionDict?.Set("parallel_source_index", parallelSourceIndex.ToString());
-            x?.abilityOptionDict?.Set("parallel_target)index", parallelTargetIndex.ToString());
+            x?.abilityOptionDict?.Set("parallel_target_index", parallelTargetIndex.ToString());
         });
     }
 

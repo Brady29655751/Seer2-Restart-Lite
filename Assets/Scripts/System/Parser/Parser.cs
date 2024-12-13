@@ -82,7 +82,7 @@ public static class Parser {
         return new KeyValuePair<int, int>(a, b);
     }
 
-    public static float ParseEffectOperation(string expr, Effect effect, Unit lhsUnit, Unit rhsUnit, object otherSource = null) {
+    public static float ParseEffectOperation(string expr, Effect effect, Unit lhsUnit, Unit rhsUnit, object otherSource = null, bool useOtherSourceOnlyWhenTarget = true) {
         bool negativeFirst = expr.StartsWith("-");
         float sign = negativeFirst ? -1 : 1;
 
@@ -90,14 +90,14 @@ public static class Parser {
             expr = expr.Substring(1);
 
         string[] id = expr.Split(Operator.opDict.Keys.ToArray(), StringSplitOptions.RemoveEmptyEntries);
-        float value = Identifier.GetIdentifier(id[0], effect, lhsUnit, rhsUnit, otherSource);
+        float value = Identifier.GetIdentifier(id[0], effect, lhsUnit, rhsUnit, otherSource, useOtherSourceOnlyWhenTarget);
         if (id.Length == 1)
             return sign * value;
 
         for (int i = 1, opStartIdx = id[0].Length, opEndIdx = 0; i < id.Length; i++) {
             opEndIdx = expr.IndexOf(id[i], opStartIdx);
             string op = expr.Substring(opStartIdx, opEndIdx - opStartIdx);
-            value = Operator.Operate(op, value, Identifier.GetIdentifier(id[i], effect, lhsUnit, rhsUnit, otherSource));
+            value = Operator.Operate(op, value, Identifier.GetIdentifier(id[i], effect, lhsUnit, rhsUnit, otherSource, useOtherSourceOnlyWhenTarget));
             opStartIdx = opEndIdx + id[i].Length;
         }
         return sign * value;
@@ -142,6 +142,10 @@ public static class Parser {
                 }
                 var ids = idConverter.Invoke(options, value);
                 var condition = Operator.Condition(op, ids[0], ids[1]);
+                if (typeof(T) == typeof(Buff)) {
+                    Debug.Log(options[0] + " " + options[1]);
+                    Debug.Log(op + " " + ids[0] + " " + ids[1]);
+                }
                 if (!condition)
                     return false;
             }
@@ -172,7 +176,7 @@ public static class Parser {
         var targetNum = (int)Parser.ParseEffectOperation(effect.abilityOptionDict.Get("target_num", "-1"), effect, lhsUnit, rhsUnit);
         var targetIndex = (int)Parser.ParseEffectOperation(effect.abilityOptionDict.Get("target_index", "-1"), effect, lhsUnit, rhsUnit);
 
-        var petUnit = targetType.Contains("op") ? rhsUnit : lhsUnit; 
+        var petUnit = lhsUnit; 
         var petBag = petUnit.petSystem.petBag;
         targetList = petBag.Where(x => x != null).Where(targetFilter).ToList();
 

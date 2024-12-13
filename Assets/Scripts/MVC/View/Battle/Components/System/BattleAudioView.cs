@@ -38,7 +38,7 @@ public class BattleAudioView : BattleBaseView
             BattleMode.SelfSimulation => 2,
             BattleMode.PVP => 2,
             BattleMode.Special => 3,
-            BattleMode.Surprise => 4,
+            BattleMode.YiTeRogue => 4,
             _ => (int)mode,
         };
     }

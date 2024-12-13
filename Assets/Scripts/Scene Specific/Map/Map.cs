@@ -39,6 +39,10 @@ public class Map
        ResourceManager.instance.LoadMap(id, onSuccess, onFail);
     }
 
+    public static BattleInfo GetBattleInfo(Map map, int npcId, string battleId) {
+        return map?.entities?.npcs?.Find(x => x.id == npcId)?.battleHandler?.Find(x => x?.id == battleId);
+    }
+
     public static void TestBattle(int mapId, int npcId, string battleId, Pet[] petBag = null) {
         Map.GetMap(mapId, (map) => Map.OnLoadTestBattleMapSuccess(map, npcId, battleId, petBag), 
             (error) => Hintbox.OpenHintboxWithContent(error, 16));
@@ -54,7 +58,7 @@ public class Map
             Hintbox.OpenHintboxWithContent("加载的地图为空", 16);
             return;
         }
-        var battleInfo = map?.entities?.npcs?.Find(x => x.id == npcId)?.battleHandler?.Find(x => x?.id == battleId);
+        var battleInfo = GetBattleInfo(map, npcId, battleId);
         if (battleInfo == null) {
             Hintbox.OpenHintboxWithContent("测试的NPC战斗信息为空", 16);
             return;
@@ -88,8 +92,8 @@ public class Map
         return IsPathAvailable(pathPixel.x, pathPixel.y);
     }
     public bool IsPathAvailable(int x, int y) {
-        if (resources.pathTexture == null)
-            return false;
+        if (resources.pathSprite == null)
+            return true;
         return resources.pathTexture.GetPixel(x, y) == Color.white;
     }
 

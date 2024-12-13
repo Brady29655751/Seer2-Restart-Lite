@@ -21,17 +21,17 @@ public static class PetExpSystem
     }
 
     private static Func<int, uint> GetLevelExpFormula(int expType) {
-        switch (expType) {
-            default:
-                return LevelExpTypeA;
-        }
+        return expType switch {
+            1 => LevelExpTypeB,
+            _ => LevelExpTypeA,
+        };
     }
 
     private static Func<int, uint> GetTotalExpFormula(int expType) {
-        switch (expType) {
-            default:
-                return TotalExpTypeA;
-        }
+        return expType switch {
+            1 => TotalExpTypeB,
+            _ => TotalExpTypeA,
+        };
     }
 
     private static uint LevelExpBasic(int level, Vector3 v) {
@@ -49,12 +49,29 @@ public static class PetExpSystem
     /// </summary>
     private static uint LevelExpTypeA(int level) {
         Vector3 a = new Vector3(3.75f, 3.75f, 1);
-        uint exp = LevelExpBasic(level, a) + (uint)((level % 2 == 1) ? 1 : 0);
+        uint exp = LevelExpBasic(level, a) + (uint)((level % 2 > 0) ? 1 : 0);
         return (level == 1) ? exp + 1 : exp;
     }
     private static uint TotalExpTypeA(int level) {
         Vector4 a =  new Vector4(3.75f, 3.75f, 1, 1.5f);
         uint exp = TotalExpBasic(level, a) + n1((level + 1) / 4);
+        return exp;
+    }
+
+    /// <summary>
+    /// 【Type B】 <br/>
+    /// Total: 833330 <br/>
+    /// Lv1 Exp: 6 <br/>
+    /// Lv0 Exp (Constant): 1
+    /// </summary>
+    private static uint LevelExpTypeB(int level) {
+        Vector3 a = new Vector3(2.5f, 2.5f, 0.8f);
+        uint exp = LevelExpBasic(level, a) + (uint)((level % 5 > 0) ? 1 : 0);
+        return exp;
+    }
+    private static uint TotalExpTypeB(int level) {
+        Vector4 a =  new Vector4(2.5f, 2.5f, 0.8f, 1);
+        uint exp = TotalExpBasic(level, a);
         return exp;
     }
 

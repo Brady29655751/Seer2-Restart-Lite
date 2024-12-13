@@ -10,14 +10,26 @@ public class YiTeRoguePanel : Panel
     [SerializeField] private PetBagPanel petBagPanel;
 
     public YiTeRogueData rogueData => YiTeRogueData.instance;
+    public const int ROGUE_NPC_ID = 50001;
     
-    
-
     public override void Init() {
-        //if (ListHelper.IsNullOrEmpty(rogueData.eventMap))
-            rogueData.CreateRogue();
+        Player.instance.currentNpcId = ROGUE_NPC_ID;
+        if ((rogueData == null) || (rogueData.difficulty == YiTeRogueMode.None) || rogueData.isEnd)
+            YiTeRogueData.CreateRogue(YiTeRogueMode.Easy);
         
         rogueView.SetMap();
+    }
+
+    public void OpenChoicePanel(YiTeRogueEvent rogueEvent, bool withStep = true) {
+        rogueView.OpenChoicePanel(rogueEvent, withStep);
+    }
+
+    public void CloseChoicePanel() {
+        rogueView.CloseChoicePanel();
+        if (!YiTeRogueData.instance.isEnd)
+            return;
+
+        ClosePanel();
     }
 
     public void OpenPetBag() {
@@ -25,7 +37,6 @@ public class YiTeRoguePanel : Panel
             Hintbox.OpenHintboxWithContent("背包中还没有任何精灵", 16);
             return;
         }
-
         petBagPanel?.SetActive(true);
         petBagPanel?.SetPetBag(rogueData.petBag);
         petBagPanel?.SetItemBag(rogueData.itemBag);
@@ -38,7 +49,7 @@ public class YiTeRoguePanel : Panel
     }
 
     public void CheckCurrentBuffs() {
-
+        rogueView.ToggleBuffPanel();
     }
     
 }
