@@ -121,6 +121,7 @@ public class YiTeRogueData
 }
 
 public enum YiTeRogueMode {
+    Test = -1,
     None = 0,
     Easy = 1,
     Hard = 2,

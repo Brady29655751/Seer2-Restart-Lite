@@ -10,7 +10,6 @@ public class PetBasicInfo
 
     public int id;
     public int baseId;
-    public List<int> allEvolvePetIds => GetAllEvolvePetId();
     public string name;
     public int elementId, subElementId;
     public Element element => (Element)elementId;
@@ -66,15 +65,5 @@ public class PetBasicInfo
             baseStatus.ToString("/"), gender.ToString(), baseHeight + "/" + baseWeight,
             description, habitat, linkId
         };
-    }
-
-    public List<int> GetAllEvolvePetId() {
-        var evloveIdList = new List<int>();
-        int currentId = baseId;
-        while (currentId != id) {
-            evloveIdList.Add(currentId);
-            currentId = Pet.GetPetInfo(currentId).exp.evolvePetId;
-        }
-        return evloveIdList;
     }
 }

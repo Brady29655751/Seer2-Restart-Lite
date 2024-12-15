@@ -14,7 +14,8 @@ public class YiTeRogueEvent
     public List<int> next;
     public List<IKeyValuePair<string, string>> data;
 
-    [XmlIgnore] public int eventIconBuffId => -13 - ((int)type);
+    [XmlIgnore] public int eventIconBuffId => GetEventIconBuffId(type);
+    [XmlIgnore] public int npcId => GetEventNpcId(type);
     [XmlIgnore] public string title => GetData("title");
     [XmlIgnore] public string content => GetData("content");
     [XmlIgnore] public List<YiTeRogueChoice> choiceList => YiTeRogueChoice.GetChoiceList(this);
@@ -31,8 +32,12 @@ public class YiTeRogueEvent
         dataToSet.value = value;
     }
 
+    public static int GetEventIconBuffId(YiTeRogueEventType type) => -13 - ((int)type);
+    public static int GetEventNpcId(YiTeRogueEventType type) => YiTeRoguePanel.ROGUE_NPC_ID - GetEventIconBuffId(type) - 1;
+
     public static int GetEndFloorByDifficulty(YiTeRogueMode difficulty) {
         return difficulty switch {
+            YiTeRogueMode.Test => 2,
             YiTeRogueMode.Easy => 2,
             YiTeRogueMode.Hard => 4,
             _ => 0,
@@ -88,7 +93,7 @@ public class YiTeRogueEvent
         for (int i = 0; i < previousEvent.next.Count; i++) {
             var nextEvent = new YiTeRogueEvent();
 
-            nextEvent.type = (YiTeRogueEventType)Random.Range(2, 4);
+            nextEvent.type = (YiTeRogueEventType)Random.Range(2, 6);
             nextEvent.pos = previousEvent.pos + previousEvent.next[i];
             nextEvent.step = previousEvent.step + 1;
             nextEvent.data = GetYiTeRogueEventData(nextEvent.type);
@@ -120,21 +125,27 @@ public class YiTeRogueEvent
         var data = new List<IKeyValuePair<string, string>>();
         var difficulty = YiTeRogueData.instance.difficulty;
         var floor = YiTeRogueData.instance.floor;
+        var isEndRogue = floor == YiTeRogueEvent.GetEndFloorByDifficulty(difficulty);
+        var battleMapId = (floor < 2) ? "83" : "84";
         var randomFloor = Identifier.GetNumIdentifier("random[1~6|8~13|15~20]").ToString();
         var randomBoss = (Random.Range(1, 4) * 7).ToString();
+        var randomDialog = type == YiTeRogueEventType.Dialog ? 1.ToString() : 1.ToString();
+
         switch (type) {
             default:
                 break;
             case YiTeRogueEventType.Start:
+                var petId = GameManager.versionData.petData.petDictionary.GroupBy(x => x.basic.baseId).First()
+                    .Select(x => x.id.ToString()).ToList().Random(3, false).ConcatToString("/");
                 data.Add(new IKeyValuePair<string, string>("title", (floor == 0) ? "起始点" : "休息站"));
                 data.Add(new IKeyValuePair<string, string>("content", (floor == 0) ? "选择你的起始伊特吧！" : "回复体力并选择你的新伙伴吧！"));    
-                data.Add(new IKeyValuePair<string, string>("pet", (floor == 0) ? "3/6/9" : "-3/-6/-9"));
+                data.Add(new IKeyValuePair<string, string>("pet", (floor == 0) ? "100/810" : petId));
                 break;
             case YiTeRogueEventType.BattleEasy:
                 data.Add(new IKeyValuePair<string, string>("title", "战斗（简单）"));
                 data.Add(new IKeyValuePair<string, string>("content", "点击下方选项进入战斗"));
-                data.Add(new IKeyValuePair<string, string>("map_id", "84"));
-                data.Add(new IKeyValuePair<string, string>("npc_id", "8401"));
+                data.Add(new IKeyValuePair<string, string>("map_id", battleMapId));
+                data.Add(new IKeyValuePair<string, string>("npc_id", battleMapId + "01"));
                 data.Add(new IKeyValuePair<string, string>("battle_id", randomFloor));
                 data.Add(new IKeyValuePair<string, string>("result", "none"));
                 data.Add(new IKeyValuePair<string, string>("reward", "10201/10221/10231"));
@@ -142,11 +153,19 @@ public class YiTeRogueEvent
             case YiTeRogueEventType.BattleHard:
                 data.Add(new IKeyValuePair<string, string>("title", "战斗（困难）"));
                 data.Add(new IKeyValuePair<string, string>("content", "点击下方选项进入战斗"));
-                data.Add(new IKeyValuePair<string, string>("map_id", "84"));
-                data.Add(new IKeyValuePair<string, string>("npc_id", "8402"));
+                data.Add(new IKeyValuePair<string, string>("map_id", battleMapId));
+                data.Add(new IKeyValuePair<string, string>("npc_id", battleMapId + "02"));
                 data.Add(new IKeyValuePair<string, string>("battle_id", randomFloor));
                 data.Add(new IKeyValuePair<string, string>("result", "none"));
                 data.Add(new IKeyValuePair<string, string>("reward", "10205/10225/10235"));
+                break;
+            case YiTeRogueEventType.Reward:
+            case YiTeRogueEventType.Dialog:
+                var dialogNpc = Map.GetNpcInfo(Player.instance.currentMap, YiTeRogueEvent.GetEventNpcId(type));
+                var dialog = dialogNpc.dialogHandler.Find(x => x.id == randomDialog);
+                data.Add(new IKeyValuePair<string, string>("title", dialog.name));
+                data.Add(new IKeyValuePair<string, string>("content", dialog.content));
+                data.Add(new IKeyValuePair<string, string>("dialog_id", dialog.id));
                 break;
             case YiTeRogueEventType.End:
                 data.Add(new IKeyValuePair<string, string>("title", "战斗（终极）"));
@@ -155,7 +174,7 @@ public class YiTeRogueEvent
                 data.Add(new IKeyValuePair<string, string>("npc_id", "8402"));
                 data.Add(new IKeyValuePair<string, string>("battle_id", randomBoss));
                 data.Add(new IKeyValuePair<string, string>("result", "none"));
-                data.Add(new IKeyValuePair<string, string>("reward", "2/3/4"));
+                data.Add(new IKeyValuePair<string, string>("reward", isEndRogue ? "5" : "2/3/4"));
                 break;
         };
         return data;
@@ -171,5 +190,5 @@ public enum YiTeRogueEventType {
     BattleEasy = 2,
     BattleHard = 3,
     Reward = 4,
-    Choose = 5,
+    Dialog = 5,
 }

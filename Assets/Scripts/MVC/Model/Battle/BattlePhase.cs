@@ -61,7 +61,7 @@ public class BattlePhase
         if (invokeUnit == null)
             return GetEffectHandler(state.masterUnit).Concat(GetEffectHandler(state.clientUnit));
     
-        var buffEffects = invokeUnit.pet.buffs.Select(x => x.effects);
+        var buffEffects = invokeUnit.pet.buffs.Where(x => !x.ignore).Select(x => x.effects);
         var handler = new EffectHandler();
         
         if (state != null) {

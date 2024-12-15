@@ -4,6 +4,13 @@ using UnityEngine;
 
 public static class SecretSkillDescriptionHandler
 {
+    public static List<string> specialPetNameList = new List<string>() {
+        "特定精灵",
+        "迪兰特、休罗斯、拉奥叶",   
+        "笑笑葵",   
+        "战伊特、钢伊特",
+    };
+
     public static string GreaterThanLevel(this LearnSkillInfo secretSkillInfo) {
         return "等级达到" + secretSkillInfo.value + "级";
     }
@@ -45,12 +52,7 @@ public static class SecretSkillDescriptionHandler
     }
 
     public static string SpecialPet(this LearnSkillInfo secretSkillInfo) {
-        string pet = secretSkillInfo.value switch {
-            1 => "迪兰特、休罗斯、拉奥叶",
-            2 => "笑笑葵",
-            _ => string.Empty,    
-        };
-        return "背包中携带" + pet + "并获得胜利";
+        return "背包中携带" + specialPetNameList.Get(secretSkillInfo.value, "特定精灵") + "并获得胜利";
     }
 
     public static string Others(this LearnSkillInfo secretSkillInfo) {

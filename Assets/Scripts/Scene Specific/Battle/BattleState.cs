@@ -223,12 +223,12 @@ public class BattleState
         if (invokeUnit == null)
             return GetEffectHandler(masterUnit).Concat(GetEffectHandler(clientUnit));
 
-        var buffEffects = invokeUnit.pet.buffs.Select(x => x.effects);
+        var buffEffects = invokeUnit.pet.buffs.Where(x => !x.ignore).Select(x => x.effects);
         var handler = new EffectHandler();
 
         handler.AddEffects(invokeUnit, weatherBuff.effects);
 
-        var stateEffects = stateBuffs.Select(x => x.Value.effects);
+        var stateEffects = stateBuffs.Where(x => !x.Value.ignore).Select(x => x.Value.effects);
         foreach (var e in stateEffects)
             handler.AddEffects(invokeUnit, e);
 

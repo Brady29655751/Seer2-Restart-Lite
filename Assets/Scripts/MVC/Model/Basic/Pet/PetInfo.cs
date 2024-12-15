@@ -8,7 +8,7 @@ public class PetInfo
 {
     public int id => basic.id;
     public int baseId => basic.baseId;
-    public List<int> allEvolvePetIds => basic.allEvolvePetIds;
+    public List<int> allEvolvePetIds => PetExpSystem.GetEvolveChain(baseId, id);
     public string name => basic.name;
 
     public PetBasicInfo basic;

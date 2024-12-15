@@ -92,7 +92,7 @@ public class PetUIInfo
 
     public List<int> GetAllSkinList(PetUI currentPetUI) {
         var currentSkinId = currentPetUI.skinId;
-        var allEvovlePetIds = Pet.GetPetInfo(id).allEvolvePetIds;
+        var allEvovlePetIds = PetExpSystem.GetEvolveChain(baseId, id);
         var allDefaultSkinIds = allEvovlePetIds.Select(x => Pet.GetPetInfo(x).ui.defaultSkinId).Distinct().ToList();
         if (!allDefaultSkinIds.Contains(defaultSkinId))
             allDefaultSkinIds.Add(defaultSkinId);

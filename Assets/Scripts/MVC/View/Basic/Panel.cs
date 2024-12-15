@@ -65,6 +65,12 @@ public class Panel : UIModule
         return panel;
     }
 
+    public static void ClosePanel<T>() where T : Panel {
+        Panel panel = GameObject.FindFirstObjectByType<T>();
+        if (panel != null)
+            panel.ClosePanel();
+    }
+
     public static void Link(string linkId) {
         if (string.IsNullOrEmpty(linkId) || (linkId == "none"))
             return;

@@ -39,7 +39,7 @@ public class ItemShopPanel : Panel
         } },
         { ItemShopType.Sign, new List<int>() {
             500178, 500436, 500959, 500826, 500761,
-            500280,
+            500280, 500307,
         } },
     };
 

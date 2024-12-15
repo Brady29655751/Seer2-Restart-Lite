@@ -30,20 +30,24 @@ public class YiTeRogueChoice
         return choiceEvent.type switch
         {
             YiTeRogueEventType.Start        => GetStartChoiceList(choiceEvent),
+            YiTeRogueEventType.Heal         => GetStartChoiceList(choiceEvent),
             YiTeRogueEventType.BattleEasy   => GetBattleChoiceList(choiceEvent),
             YiTeRogueEventType.BattleHard   => GetBattleChoiceList(choiceEvent),
+            YiTeRogueEventType.Reward       => GetDialogChoiceList(choiceEvent),
+            YiTeRogueEventType.Dialog       => GetDialogChoiceList(choiceEvent),
             YiTeRogueEventType.End          => GetBattleChoiceList(choiceEvent),
             _ => new List<YiTeRogueChoice>() { YiTeRogueChoice.Default },
         };
     }
 
     private static List<YiTeRogueChoice> GetStartChoiceList(YiTeRogueEvent choiceEvent) {
+        var floor = YiTeRogueData.instance.floor;
         var petBag = YiTeRogueData.instance.petBag;
         var petIds = choiceEvent.GetData("pet")?.ToIntList('/');
         var petLevel = petBag.Min(x => x?.level ?? 60);
         if (petIds == null)
             return new List<YiTeRogueChoice>(){ YiTeRogueChoice.Default };
-        
+
         Pet GetStartPet(int id) 
         {
             var pet = new Pet(id, petLevel);
@@ -55,8 +59,12 @@ public class YiTeRogueChoice
         YiTeRogueChoice GetStartChoice(Pet pet) 
         {
             return new YiTeRogueChoice(pet.name, () => {
-                int index = YiTeRogueData.instance.petBag.IndexOf(null);
-                Player.instance.gameData.yiteRogueData.petBag[index] = pet;
+                int index = petBag.IndexOf(null);
+                YiTeRogueData.instance.petBag[index] = pet;
+                if (choiceEvent.type == YiTeRogueEventType.Heal)
+                    foreach (var pet in YiTeRogueData.instance.petBag)
+                        pet.currentStatus.hp = pet.normalStatus.hp;
+                SaveSystem.SaveData();
             }, "pet[" + pet.id + "]");
         }
         return petIds.Select(GetStartPet).Select(GetStartChoice).ToList();
@@ -84,7 +92,7 @@ public class YiTeRogueChoice
             case "win":
                 return reward.Select(id => {
                     var item = (id == 5) ? YiTeRogueData.instance.prize : new Item(id, 1);
-                    return new YiTeRogueChoice(item.name + "\n" + item.info.effectDescription, () => {
+                    return new YiTeRogueChoice(item.info.effectDescription, () => {
                         if (item.info.type == ItemType.Currency)
                             Item.Add(item);
                         else
@@ -97,8 +105,28 @@ public class YiTeRogueChoice
                 var endPrize = YiTeRogueData.instance.prize;
                 return new YiTeRogueChoice("领取奖励", () => {
                     Item.Add(endPrize);
-                    Item.OpenHintbox(endPrize).SetOptionCallback(() => TeleportHandler.Teleport(500));
+                    Item.OpenHintbox(endPrize).SetOptionCallback(Panel.ClosePanel<YiTeRoguePanel>);
                 }, "item[5]").SingleToList();
         }
+    }
+
+    private static List<YiTeRogueChoice> GetDialogChoiceList(YiTeRogueEvent choiceEvent) {
+        var dialogId = choiceEvent.GetData("dialog_id", "0");
+        var npc = Map.GetNpcInfo(Player.instance.currentMap, choiceEvent.npcId);
+        var replyHandler = npc?.dialogHandler?.Find(x => x.id == dialogId)?.replyHandler;
+        if (replyHandler == null)
+            return YiTeRogueChoice.Default.SingleToList();
+
+        var choiceList = new List<YiTeRogueChoice>();
+        var choice = YiTeRogueChoice.Default;
+        var options = replyHandler.FindAllIndex(x => x.typeId != "branch").Append(replyHandler.Count).ToList();
+
+        for (int i = 0; i < options.Count - 1; i++) {
+            int index = options[i], nextIndex = options[i+1];
+            var action = Enumerable.Range(index, nextIndex - index).Select(x => NpcHandler.GetNpcEntity(null, replyHandler[x], null)).ToList();
+            choiceList.Add(new YiTeRogueChoice(replyHandler[index].description, () => action?.ForEach(x => x?.Invoke())));
+        }
+
+        return choiceList;
     }
 }

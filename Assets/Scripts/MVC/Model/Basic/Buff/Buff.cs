@@ -20,6 +20,7 @@ public class Buff
         set => _value = Mathf.Clamp(value, info.minValue, info.maxValue);
     }
     public int turn;
+    public bool ignore;
     public List<Effect> effects = new List<Effect>();
     public Dictionary<string, string> options = new Dictionary<string, string>();
 
@@ -28,6 +29,7 @@ public class Buff
         id = _id;
         turn = (_turn == -1) ? info.turn : _turn;
         value = _value;
+        ignore = false;
         effects = info.effects.Select(x => new Effect(x)).ToList();
 
         foreach (var e in effects) {
@@ -39,6 +41,7 @@ public class Buff
         id = rhs.id;
         turn = rhs.turn;
         value = rhs.value;
+        ignore = rhs.ignore;
         effects = rhs.effects.Select(x => new Effect(x)).ToList();
         options = new Dictionary<string, string>(rhs.options);
         
@@ -166,6 +169,7 @@ public class Buff
             "type" => (float)info.type,
             "value" => value,
             "turn" => turn,
+            "ignore" => ignore ? 1 : 0,
             _ => float.MinValue,
         };
     }
@@ -184,6 +188,9 @@ public class Buff
                 return;
             case "turn":
                 turn = (int)num;
+                return;
+            case "ignore":
+                ignore = num != 0;
                 return;
         }
     }

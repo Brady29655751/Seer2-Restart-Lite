@@ -24,10 +24,11 @@ public class BattleInfo
     public List<NpcButtonHandler> loseHandler;
 
     public BattleInfo FixToYiTeRogue(YiTeRogueEvent rogueEvent) {
+        var petBag = YiTeRogueData.instance.petBag;
         settings.FixToYiTeRogue();
         playerInfo = null;
         enemyInfo.ForEach(x => {
-            x.level = 5;//YiTeRogueData.instance.petBag.Max(x => x?.level ?? int.MinValue) + 5;
+            x.level = petBag.Max(x => x?.level ?? 60);
             x.status = null;
             x.hasEmblem = true;
         });

@@ -94,9 +94,12 @@ public class PetBattleStatusController
         _maxAnger = rhs._maxAnger;
     } 
 
-    public Status GetCurrentStatus(bool ignorePowerup = false) {
-        var _powerupStatus = ignorePowerup ? Status.GetPowerUpBuff(powerup.neg) : Status.GetPowerUpBuff(powerup);
-        Status status = new Status(_initStatus * _powerupStatus * _multStatus + _addStatus);
+    public Status GetCurrentStatus(bool ignorePowerup = false, bool ignorePowerdown = false) {
+        var _powerupBuff = powerup;
+        _powerupBuff = ignorePowerup ? _powerupBuff.neg : _powerupBuff;
+        _powerupBuff = ignorePowerdown ? _powerupBuff.pos : _powerupBuff;
+        
+        Status status = new Status(_initStatus * Status.GetPowerUpBuff(_powerupBuff) * _multStatus + _addStatus);
         status.hp = hp;
         return status;
     }

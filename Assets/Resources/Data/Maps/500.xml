@@ -13,7 +13,7 @@
 					<content><![CDATA[我就是捣蛋鬼怎么样！没有朋友又怎么样！我就这么惹人厌！]]></content>
 					<functionHandler>
 						<func type="click">
-							<description><![CDATA[伊特大乱斗]]></description>
+							<description><![CDATA[伊特大乱斗（测试版）]]></description>
 							<action>openPanel</action>
 							<param>YiTeRogue</param>
 						</func>
@@ -25,7 +25,7 @@
 							<description><![CDATA[兑换奖励]]></description>
 							<action>openPanel</action>
 							<param>ItemShop</param>
-							<param>currency=5/2</param>
+							<param>currency=5/0</param>
 						</func>
 					</functionHandler>
 					<replyHandler>
@@ -43,6 +43,72 @@
 					<param>default</param>
 				</button>
 			</eventHandler>
+		</npc>
+		<npc id="50017" resId="Pets/pet/91.png" name="伊特大乱斗奖励事件" size="63,72" pos="600,50" active="false">
+			<dialog>
+				<branch id="1" name="巧遇参赛者" icon="Pets/pet/91.png" size="125,145" pos="10,25">
+					<content><![CDATA[你在伊特大乱斗之中遇到其他伊特参赛者，你决定...？]]></content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[亲切的和参赛者打招呼]]></description>
+							<action>setItem</action>
+							<param>add</param>
+							<param>5,20</param>
+						</reply>
+						<reply type="branch">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=20个伊特奖章已经放入背包</param>
+							<param>item_icon=item[5]</param>
+							<param>option_num=1</param>
+						</reply>
+						<reply type="click">
+							<description><![CDATA[无视参赛者并快速走过]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+						<reply type="click">
+							<description><![CDATA[先下手为强，掏出伊特饼干往参赛者脸上砸]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+					</replyHandler>
+				</branch>
+			</dialog>
+		</npc>
+		<npc id="50018" resId="Pets/pet/91.png" name="伊特大乱斗随机事件" size="63,72" pos="600,50" active="false">
+			<dialog>
+				<branch id="1" name="巧遇参赛者" icon="Pets/pet/91.png" size="125,145" pos="10,25">
+					<content><![CDATA[你在伊特大乱斗之中遇到其他伊特参赛者，你决定...？]]></content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[亲切的和参赛者打招呼]]></description>
+							<action>setItem</action>
+							<param>add</param>
+							<param>5,20</param>
+						</reply>
+						<reply type="branch">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=20个伊特奖章已经放入背包</param>
+							<param>item_icon=item[5]</param>
+							<param>option_num=1</param>
+						</reply>
+						<reply type="click">
+							<description><![CDATA[无视参赛者并快速走过]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+						<reply type="click">
+							<description><![CDATA[先下手为强，掏出伊特饼干往参赛者脸上砸]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+					</replyHandler>
+				</branch>
+			</dialog>
 		</npc>
         <!-- <teleport id="1" name="火幻氏族主城" pos="700,90" targetMapId="230"/> -->
 		<!-- <teleport id="2" name="灰烬岔口" pos="100,240" targetMapId="302"/> -->

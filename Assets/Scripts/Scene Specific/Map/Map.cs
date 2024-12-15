@@ -39,8 +39,12 @@ public class Map
        ResourceManager.instance.LoadMap(id, onSuccess, onFail);
     }
 
+    public static NpcInfo GetNpcInfo(Map map, int npcId) {
+        return map?.entities?.npcs?.Find(x => x.id == npcId);
+    }
+
     public static BattleInfo GetBattleInfo(Map map, int npcId, string battleId) {
-        return map?.entities?.npcs?.Find(x => x.id == npcId)?.battleHandler?.Find(x => x?.id == battleId);
+        return Map.GetNpcInfo(map, npcId)?.battleHandler?.Find(x => x?.id == battleId);
     }
 
     public static void TestBattle(int mapId, int npcId, string battleId, Pet[] petBag = null) {

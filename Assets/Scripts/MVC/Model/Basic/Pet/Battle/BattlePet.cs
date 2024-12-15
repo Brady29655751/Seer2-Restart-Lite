@@ -127,18 +127,14 @@ public class BattlePet : Pet
     }
 
     public static KeyValuePair<int, int> GetSkillTypeStatus(Skill skill, BattlePet lhs, BattlePet rhs) {
-        Status battleStatus = new Status(lhs.battleStatus.atk, lhs.battleStatus.mat, 
-            rhs.battleStatus.def, rhs.battleStatus.mdf, 0, 0);
-        battleStatus.spd = (battleStatus.atk + battleStatus.mat) / 2;
-        battleStatus.hp = (battleStatus.def + battleStatus.mdf) / 2;
+        Status ignoreLhsPowerdownStatus = lhs.statusController.GetCurrentStatus(ignorePowerdown: true);
+        Status ignoreRhsPowerupStatus = rhs.statusController.GetCurrentStatus(ignorePowerup: true);
+        var lhsStatus = skill.ignorePowerdown ? ignoreLhsPowerdownStatus : lhs.battleStatus;
+        var rhsStatus = skill.ignorePowerup ? ignoreRhsPowerupStatus : rhs.battleStatus;
 
-        Status ignorePowerupStatus = rhs.statusController.GetCurrentStatus(true);
-        Status initStatus = new Status(lhs.battleStatus.atk, lhs.battleStatus.mat,
-            ignorePowerupStatus.def, ignorePowerupStatus.mdf, 0, 0);
-        initStatus.spd = (initStatus.atk + initStatus.mat) / 2;
-        initStatus.hp = (initStatus.def + initStatus.mdf) / 2;
-
-        var status = skill.ignorePowerup ? initStatus : battleStatus;
+        Status status = new Status(lhsStatus.atk, lhsStatus.mat, rhsStatus.def, rhsStatus.mdf, 0, 0);
+        status.spd = (status.atk + status.mat) / 2;
+        status.hp = (status.def + status.mdf) / 2;
 
         if (skill.type == SkillType.物理) {
             return new KeyValuePair<int, int>((int)status.atk, (int)status.def);

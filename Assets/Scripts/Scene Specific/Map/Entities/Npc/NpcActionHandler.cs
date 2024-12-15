@@ -141,8 +141,10 @@ public static class NpcActionHandler
             return;
 
         Action<Item> itemFunc = handler.param[0] switch {
-            "add" => Item.Add,
-            "remove" => (x) => Item.Remove(x.id, x.num),
+            "add"               => Item.Add,
+            "remove"            => (x) => Item.Remove(x.id, x.num),
+            "add_to_yite"       => (x) => Item.AddTo(x, YiTeRogueData.instance.itemBag),
+            "remove_from_yite"  => (x) => Item.RemoveFrom(x.id, x.num, YiTeRogueData.instance.itemBag),
             _ => null
         };
         for (int i = 1; i < handler.param.Count; i++) {

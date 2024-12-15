@@ -34,8 +34,7 @@ public class Skill
     public float critical;
     public int combo, chain;
     public int priority;
-    public bool ignoreShield = false;
-    public bool ignorePowerup = false;
+    public bool ignoreShield = false, ignorePowerup = false, ignorePowerdown = false;
 
 
     /* Properties */
@@ -100,6 +99,7 @@ public class Skill
         priority = int.Parse(options.Get("priority", "0"));
         ignoreShield = bool.Parse(options.Get("ignore_shield", "false"));
         ignorePowerup = bool.Parse(options.Get("ignore_powerup", "false"));
+        ignorePowerdown = bool.Parse(options.Get("ignore_powerdown", "false"));
     }
 
     public Skill(Skill rhs) {
@@ -122,6 +122,7 @@ public class Skill
         priority = rhs.priority;
         ignoreShield = rhs.ignoreShield;
         ignorePowerup = rhs.ignorePowerup;
+        ignorePowerdown = rhs.ignorePowerdown;
     }
 
     protected Skill(SkillType specialType) {
@@ -133,13 +134,14 @@ public class Skill
 
     public string[] GetRawInfoStringArray() {
         string[] defaultOptionKeys = new string[] { "critical", "priority", "second_super",
-            "ignore_shield", "ignore_powerup", "ref_buff" };
+            "ignore_shield", "ignore_powerup", "ignore_powerdown", "ref_buff" };
 
         string rawOptionString = ((critical == 5) ? string.Empty : ("critical=" + critical + "&")) +
             ((priority == 0) ? string.Empty : ("priority=" + priority + "&")) + 
             (isSecondSuper ? ("second_super=true&") : string.Empty) +
             (ignoreShield ? ("ignore_shield=" + ignoreShield + "&") : string.Empty) + 
             (ignorePowerup ? ("ignore_powerup=" + ignorePowerup + "&") : string.Empty) + 
+            (ignorePowerdown ? ("ignore_powerdown=" + ignorePowerdown + "&") : string.Empty) + 
             (ListHelper.IsNullOrEmpty(referBuffList) ? string.Empty : ("ref_buff=" + referBuffList.ConcatToString("/")));
         
         string otherOptionString = options.Where(entry => !defaultOptionKeys.Contains(entry.Key)).Select(entry => entry.Key + "=" + entry.Value).ConcatToString("&");
@@ -355,6 +357,7 @@ public class Skill
             "chain" => chain,
             "ignoreShield" => ignoreShield ? 1 : 0,
             "ignorePowerup" => ignorePowerup ? 1 : 0,
+            "ignorePowerdown" => ignorePowerdown ? 1 : 0,
             "effect" => effects.Count,
             "isSelect" => IsSelect() ? 1 : 0,
             _ => float.MinValue,
@@ -408,6 +411,9 @@ public class Skill
                 return;
             case "ignorePowerup":
                 ignorePowerup = (value != 0);
+                return;
+            case "ignorePowerdown":
+                ignorePowerdown = (value != 0);
                 return;
             case "effect":
                 SetEffects((value == 0) ? new List<Effect>() : (Skill.GetSkill((int)value, false)?.effects.Select(x => new Effect(x)).ToList() ?? new List<Effect>()));

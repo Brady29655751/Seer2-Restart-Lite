@@ -6,6 +6,13 @@ using UnityEngine;
 
 public static class SecretSkillConditionHandler
 {
+    public static List<List<int>> specialPetIdList = new List<List<int>>() {
+        new List<int>(),
+        new List<int>(){ 3, 6, 9 },
+        new List<int>(){ 15 },
+        new List<int>(){ 100, 810 },
+    };
+
     public static bool GreaterThanLevel(this LearnSkillInfo secretSkillInfo, Pet pet, BattleState endState) {
         return pet.level >= secretSkillInfo.value;
     }
@@ -47,11 +54,7 @@ public static class SecretSkillConditionHandler
     }
 
     public static bool SpecialPet(this LearnSkillInfo secretSkillInfo, Pet pet, BattleState endState) {
-        List<int> petId = secretSkillInfo.value switch {
-            1 => new List<int>(){ 3, 6, 9 },
-            2 => new List<int>(){ 15 },
-            _ => new List<int>(),    
-        };
+        List<int> petId = specialPetIdList.Get(secretSkillInfo.value, new List<int>());
         return petId.Select(x => endState.myUnit.petSystem.petBag.Any(y => (y != null) && (y.id == x))).All(x => x);
     }
 

@@ -15,7 +15,7 @@ public class YiTeRoguePanel : Panel
     public override void Init() {
         Player.instance.currentNpcId = ROGUE_NPC_ID;
         if ((rogueData == null) || (rogueData.difficulty == YiTeRogueMode.None) || rogueData.isEnd)
-            YiTeRogueData.CreateRogue(YiTeRogueMode.Easy);
+            YiTeRogueData.CreateRogue(YiTeRogueMode.Test);
         
         rogueView.SetMap();
     }
