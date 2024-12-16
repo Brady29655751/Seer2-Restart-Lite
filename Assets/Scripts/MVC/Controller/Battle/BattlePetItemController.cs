@@ -31,8 +31,11 @@ public class BattlePetItemController : Module
         battle.SetSkill(Skill.GetItemSkill(item), true);
         if (battle.settings.isSimulate)
             return;
-            
-        Item.Remove(item.id, 1);
+        
+        if (battle.settings.mode == BattleMode.YiTeRogue)
+            Item.RemoveFrom(item.id, 1, YiTeRogueData.instance.itemBag);
+        else
+            Item.Remove(item.id, 1);
     }
 
     public void SetDescriptionBoxActive(bool active) {

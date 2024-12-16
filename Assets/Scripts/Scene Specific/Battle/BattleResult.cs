@@ -61,6 +61,18 @@ public class BattleResult
     public void ProcessResult(BattleState endState) {
         Random.InitState((int)DateTime.Now.Ticks);
         this.endState = new BattleState(endState);
+        if (endState.settings.mode == BattleMode.YiTeRogue) {
+            for (int i = 0; i < YiTeRogueData.instance.petBag.Length; i++) {
+                Pet pet = YiTeRogueData.instance.petBag[i];
+                if (pet == null)
+                    continue;
+
+                BattlePet battlePet = endState.myUnit.petSystem.petBag[i];
+                pet.currentStatus.hp = Mathf.Min(pet.normalStatus.hp, battlePet.hp);
+            }
+            return;
+        }
+
         if (endState.settings.isSimulate)
             return;
 

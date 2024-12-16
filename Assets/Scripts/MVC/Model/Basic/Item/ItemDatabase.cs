@@ -22,6 +22,8 @@ public static class ItemDatabase
         {"recipe", ItemType.Recipe},
         {"stuff", ItemType.Stuff},
         {"package", ItemType.Package},
+        {"plant", ItemType.Plant},
+        {"seed", ItemType.Seed},
     };
 
     public static Dictionary<ItemCategory, List<ItemType>> categoryDict = new Dictionary<ItemCategory, List<ItemType>>() {
@@ -31,6 +33,7 @@ public static class ItemDatabase
         { ItemCategory.Battle, new List<ItemType>() { ItemType.HpPotion } },
         { ItemCategory.Capture, new List<ItemType>() { ItemType.Capture } },
         { ItemCategory.Stuff, new List<ItemType>() { ItemType.Mine, ItemType.Stuff }},
+        { ItemCategory.Plant, new List<ItemType>() { ItemType.Plant, ItemType.Seed }},
 
         { ItemCategory.PetGrow, new List<ItemType>() { ItemType.Evolve, ItemType.EXP, ItemType.EV, ItemType.IV, ItemType.Personality } },
         { ItemCategory.PetEmblem, new List<ItemType>() { ItemType.Emblem } },
@@ -73,6 +76,8 @@ public enum ItemType {
     Recipe,
     Stuff,
     Package,
+    Plant,
+    Seed,
 }
 
 public enum ItemCategory {
@@ -86,4 +91,5 @@ public enum ItemCategory {
     PetEmblem,
     PetBattle,
     PetOthers,
+    Plant,
 }

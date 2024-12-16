@@ -13,6 +13,8 @@ public class ItemShopController : Module
 
     public event Action<Item> onItemSellEvent;
 
+    protected ItemShopMode shopMode = ItemShopMode.Buy;
+
     protected override void Awake()
     {
         base.Awake();
@@ -24,6 +26,11 @@ public class ItemShopController : Module
         itemController.onItemSelectEvent += (x) => OnItemNumChange(selectNumController.GetInputValue());
         selectNumController.onValueChangedEvent += OnItemNumChange;
     }   
+
+    public void SetShopMode(ItemShopMode shopMode) {
+        this.shopMode = shopMode;
+        playerInfoController.SetShopMode(shopMode);
+    }
 
     public void SetCurrencyType(int coinType, int diamondType) {
         playerInfoController.SetCurrencyType(coinType, diamondType);
@@ -56,10 +63,11 @@ public class ItemShopController : Module
         if (item == null)
             return;
 
+        var storage = (shopMode == ItemShopMode.BuyYiTe) ? YiTeRogueData.instance.itemBag : null;
         int num = selectNumController.GetInputValue();
         Action onAfterBuy = playerInfoController.ShowCurrency;
 
-        Item.Buy(item.id, num, onAfterBuy);
+        Item.Buy(item.id, num, onAfterBuy, storage);
     }
 
     public void OnSellItem() {
@@ -67,13 +75,14 @@ public class ItemShopController : Module
         if (item == null)
             return;
 
+        var storage = (shopMode == ItemShopMode.SellYiTe) ? YiTeRogueData.instance.itemBag : null;
         int num = selectNumController.GetInputValue();
         Action onAfterSell = () => {
             playerInfoController.ShowCurrency();
             onItemSellEvent?.Invoke(new Item(item.id, num));
         };
 
-        Item.Sell(item.id, num, onAfterSell);
+        Item.Sell(item.id, num, onAfterSell, storage);
     }
     
 }

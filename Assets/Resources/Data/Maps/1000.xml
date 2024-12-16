@@ -10,6 +10,16 @@
 			<dialog>
 				<branch id="default" name="多茨莫博士" icon="100001" size="100,120" pos="0,55">
 					<content><![CDATA[普兰特山麓有很多值得研究的珍惜植被。]]></content>
+					<functionHandler>
+						<func>
+							<description><![CDATA[出售作物]]></description>
+							<action>openPanel</action>
+							<param>ItemShop</param>
+							<param>type=plant</param>
+							<param>mode=sell</param>
+							<param>currency=1/2</param>
+						</func>
+					</functionHandler>
 					<replyHandler>
 						<reply type="click">
 							<description><![CDATA[还是不打扰教授的研究了]]></description>

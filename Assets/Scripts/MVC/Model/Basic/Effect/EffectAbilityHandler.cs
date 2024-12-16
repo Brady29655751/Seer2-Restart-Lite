@@ -312,6 +312,9 @@ public static class EffectAbilityHandler
             if (buffController.GetBuff(46) != null)
                 status = status.Select(x => x * (x < 0 ? 2 : 1));
 
+            if (buffController.GetBuff(94) != null)
+                status *= -1;
+
             pet.PowerUp(status, lhsUnit, state);    
         }
 
@@ -963,7 +966,9 @@ public static class EffectAbilityHandler
         return true;
     }
 
-    public static bool SetPlayer(this Effect effect, BattleState state) {
+    public static bool SetPlayer(this Effect effect, BattleState state, 
+        NpcController npc = null, NpcButtonHandler handler = null, 
+        Dictionary<int, NpcController> npcList = null) {
         string action = effect.abilityOptionDict.Get("action", "none");
         string value = effect.abilityOptionDict.Get("param_count", "0");
 
@@ -976,15 +981,15 @@ public static class EffectAbilityHandler
 
         List<string> paramList = new List<string>();
         for (int i = 0; i < count; i++)
-            paramList.Add(effect.abilityOptionDict.Get("param[" + i + "]")
+            paramList.Add(effect.abilityOptionDict.Get("param[" + i + "]").Replace("[ENDL]", "\n")
                 .Replace("，", ",").Replace("＝", "=").Replace("＆", "&").Replace("｜", "|"));
         
-        var handler = new NpcButtonHandler() {
+        handler ??= new NpcButtonHandler() {
             actionType = action,
             param = paramList,
         };
 
-        NpcHandler.GetNpcAction(null, handler, null)?.Invoke();
+        NpcHandler.GetNpcAction(npc, handler, npcList)?.Invoke();
         return true;
     }
 }

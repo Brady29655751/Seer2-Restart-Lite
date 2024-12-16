@@ -1,0 +1,76 @@
+<map name="灰烬山脉" category="4" id="304">
+	<fightMap>100004</fightMap>
+	<music category="4">
+		<bgm>BGM_303</bgm>
+		<fx>FX_115</fx>
+	</music>
+	<initialPoint>430,100</initialPoint>
+	<entities>
+		<npc id="30401" resId="Pets/pet/763" name="Lv60 迦拉特" size="168,111" pos="480,255" namePos="0,0">
+		    <description>似曾相识的精灵</description>
+		    <dialog>
+		        <branch id="default" name="迦拉特" icon="Pets/pet/763.png" size="168,111" pos="5,45">
+					<content>你先别急，我先急</content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[好眼熟阿]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+						<reply type="click">
+							<description><![CDATA[以静制动，以逸待劳]]></description>
+							<action>battle</action>
+							<param>default</param>
+						</reply>
+					</replyHandler>
+		        </branch>
+		    </dialog>
+			<battle>
+				<branch id="default">
+					<settings count="6"/>
+					<enemy>
+						<pet id="763" level="60">
+							<status>
+								<hp>3500</hp>
+							</status>
+							<initBuff>13,20</initBuff>
+							<headerSkill>11112</headerSkill>
+							<loopSkill>11114,11123,11123</loopSkill>
+							<superSkill>11126</superSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setItem</action>
+							<param>add</param>
+							<param>111126,1</param>
+							<condition>activity[20008].done=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=1个特别的技能学习书已经放入背包</param>
+							<param>item_icon=item[111126]</param>
+							<param>option_num=1</param>
+							<condition>activity[20008].done=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>20008</param>
+							<param>done=true</param>
+							<condition>activity[20008].done=[bool]false[default]false</condition>
+						</button>
+					</winHandler>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>openDialog</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+        <teleport id="1" name="灰烬之地" pos="850,130" targetMapId="301"/>
+	</entities>
+</map>

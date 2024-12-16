@@ -11,6 +11,10 @@ public class PlayerInfoController : Module
         SetCurrencyType(infoModel.coinType, infoModel.diamondType);
     }
 
+    public void SetShopMode(ItemShopMode shopMode) {
+        infoModel.SetShopMode(shopMode);
+    }
+
     public void SetCurrencyType(int coinType, int diamondType) {
         infoModel.SetCurrencyType(coinType, diamondType);
         infoView.SetCurrencyType(infoModel.coinType, infoModel.diamondType);
@@ -18,6 +22,10 @@ public class PlayerInfoController : Module
     }
 
     public void ShowCurrency() {
+        infoView.SetCurrency(infoModel.coin, infoModel.diamond);
+    }
+
+    public void ShowCurrency(int coin, int diamond) {
         infoView.SetCurrency(infoModel.coin, infoModel.diamond);
     }
 

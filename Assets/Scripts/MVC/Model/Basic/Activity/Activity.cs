@@ -16,6 +16,11 @@ public class Activity
     [XmlArray("data"), XmlArrayItem(typeof(IKeyValuePair<string, string>), ElementName = "entry")]
     public List<IKeyValuePair<string, string>> data = new List<IKeyValuePair<string, string>>();
 
+    public string this[string key] {
+        get => GetData(key);
+        set => SetData(key, value);
+    }
+
     public static ActivityInfo GetActivityInfo(string id) {
         return Database.instance.GetActivityInfo(id);
     }

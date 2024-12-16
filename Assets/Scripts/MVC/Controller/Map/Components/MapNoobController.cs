@@ -27,7 +27,7 @@ public class MapNoobController : UIModule
         Activity activity = Activity.Find("noob_reward");
         var lastSignedDate = DateTime.Parse(activity.GetData("lastSignedDate", DateTime.MinValue.Date.ToString())).Date;
         var signedDays = int.Parse(activity.GetData("signedDays", "0"));
-        if (Player.instance.gameData.IsNoob() || (signedDays > 7) || ((DateTime.Now.Date - lastSignedDate).Days < 1))
+        if (Player.instance.gameData.IsNoob() || (signedDays >= 7) || ((DateTime.Now.Date - lastSignedDate).Days < 1))
             return;
 
         Panel.OpenPanel<SignRewardPanel>();

@@ -28,7 +28,7 @@ public class BattleInfo
         settings.FixToYiTeRogue();
         playerInfo = null;
         enemyInfo.ForEach(x => {
-            x.level = petBag.Max(x => x?.level ?? 60);
+            x.level = petBag.Max(x => x?.level ?? 100);
             x.status = null;
             x.hasEmblem = true;
         });
@@ -41,8 +41,30 @@ public class BattleInfo
         rogueEvent.SetData("title", "战斗胜利");
         rogueEvent.SetData("content", "选择下列选项之一作为你的战利品！");
         rogueEvent.SetData("result", "win");
-        SaveSystem.SaveData();
+
+        foreach (var pet in YiTeRogueData.instance.petBag) {
+            if (pet == null)
+                continue;
+
+            // 升1級，恢復1/8最大體力
+            pet.GainExp(pet.levelUpExp, false);
+            pet.currentStatus.hp += (int)(pet.normalStatus.hp / 8);
+        }
+        // 獲得3個冰糖，每個冰糖能+10學習力
+        // 根據難度獲得餅乾，簡單+10、困難+20、Boss +40
+        var currencyNum = rogueEvent.type switch {
+            YiTeRogueEventType.BattleEasy   => 10,
+            YiTeRogueEventType.BattleHard   => 20,
+            YiTeRogueEventType.End          => 40,
+            _ => 0,
+        };
+        var currency = new Item(6, currencyNum);
+        var item = new Item(10232, 3);
+        Item.AddTo(currency, YiTeRogueData.instance.itemBag);
+        Item.AddTo(item, YiTeRogueData.instance.itemBag);
         Panel.OpenPanel<YiTeRoguePanel>().OpenChoicePanel(rogueEvent, false);
+        Item.OpenHintbox(item);
+        Item.OpenHintbox(currency);
     }
 
     private void OnYiTeRogueBattleLose(YiTeRogueEvent rogueEvent) {

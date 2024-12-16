@@ -71,15 +71,17 @@ public class PetUI
     {
     }
 
-    public PetUI(int id, int baseId)
+    public PetUI(int id, int baseId, List<int> specialSkinList = null)
     {
         this.id = id;
         this.baseId = baseId;
+        this.specialSkinList = specialSkinList ?? new List<int>();
     }
 
     public PetUI(PetUI rhs)
     {
         id = rhs.id;
         baseId = rhs.baseId;
+        specialSkinList = rhs.specialSkinList;
     }
 }

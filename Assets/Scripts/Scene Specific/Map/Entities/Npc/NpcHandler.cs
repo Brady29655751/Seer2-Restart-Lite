@@ -15,6 +15,13 @@ public static class NpcHandler
         npcList.Add(info.id, npc);
     }
 
+    public static void CreateFarm(NpcController npc, NpcInfo info, Dictionary<int, NpcController> npcList, InfoPrompt infoPrompt) {
+        npc.SetActive(info.active);
+        npc.SetNpcInfo(info);
+        npc.SetFarmAction(npcList, infoPrompt);
+        npcList.Add(info.id, npc);
+    }
+
     public static UnityEvent GetButtonEvent(IButton button, NpcButtonHandler handler) {
         return handler.type switch {
             ButtonEventType.OnPointerClick => button.onPointerClickEvent,
@@ -63,7 +70,7 @@ public static class NpcHandler
             NpcAction.SetActivity   => () => NpcActionHandler.SetActivity(handler),
             NpcAction.Battle        => () => NpcActionHandler.StartBattle(npcInfo, handler),
             NpcAction.Player        => () => NpcActionHandler.SetPlayer(handler),
-            NpcAction.SetMail          => () => NpcActionHandler.SetMail(handler),
+            NpcAction.SetMail       => () => NpcActionHandler.SetMail(handler),
             _ => () => handler.callback?.ForEach(x => x?.Invoke()),
         };
     }

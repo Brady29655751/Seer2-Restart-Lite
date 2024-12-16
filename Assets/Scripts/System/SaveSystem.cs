@@ -263,6 +263,14 @@ public static class SaveSystem
                 data.activityStorage.RemoveAll(x => ActivityInfo.IsMod(x.id));
                 data.itemStorage.RemoveAll(x => ItemInfo.IsMod(x.id));
 
+                // Clean farm
+                var farmActivity = data.activityStorage.Find(x => x.id == "farm");
+                if (farmActivity != null) {
+                    var modData = farmActivity.data.Where(entry => entry.key.TryTrimEnd(".plant", out _)
+                        && ItemInfo.IsMod(int.Parse(entry.value))).ToList();
+                    modData.ForEach(entry => farmActivity.SetData(entry.key, "none"));
+                }
+                
                 SaveData(data, id);
             }
         } catch (Exception) {

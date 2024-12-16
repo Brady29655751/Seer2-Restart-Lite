@@ -67,12 +67,13 @@ public class BattleOptionView : BattleBaseView
         var petBag = (parallelCount > 1) ? myBag.Take(parallelCount).Concat(Enumerable.Repeat(default(BattlePet), 6 - 2 * parallelCount))
             .Concat(opBag.Take(parallelCount).Reverse()).ToArray() : myBag;
         var parallelCursor = (parallelCount > 1) ? opUnit.petSystem.cursor : -1;
+        var itemBag = (currentState.settings.mode == BattleMode.YiTeRogue) ? YiTeRogueData.instance.itemBag : Player.instance.gameData.itemBag;
 
         skillView.SetPet(myUnit.pet);
         changeView.SetPetBag(petBag);
         changeView.SetChangeBlockChosen(myUnit.petSystem.cursor, parallelCursor);
-        captureController.SetItemBag(Player.instance.gameData.itemBag);
-        itemController.SetItemBag(Player.instance.gameData.itemBag);
+        captureController.SetItemBag(itemBag);
+        itemController.SetItemBag(itemBag);
 
         if (parallelCount > 1)
             for (int i = 0; i < parallelCount; i++)

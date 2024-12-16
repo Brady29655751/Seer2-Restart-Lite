@@ -6,6 +6,14 @@ using UnityEngine;
 
 namespace System {
     public static class StringHelper {
+        public static string Repeat(this string str, int repeat) {
+            var result = string.Empty;
+            for (int i = 0; i < repeat; i++)
+                result += str;
+
+            return result;
+        }
+
         public static string ConcatToString(this IEnumerable<string> stringList, string eachConcatWith) {
             string result = string.Empty;
             foreach (var str in stringList) {   

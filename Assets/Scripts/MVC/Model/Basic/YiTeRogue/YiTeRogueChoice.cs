@@ -31,6 +31,7 @@ public class YiTeRogueChoice
         {
             YiTeRogueEventType.Start        => GetStartChoiceList(choiceEvent),
             YiTeRogueEventType.Heal         => GetStartChoiceList(choiceEvent),
+            YiTeRogueEventType.Store        => GetStoreChoiceList(choiceEvent),
             YiTeRogueEventType.BattleEasy   => GetBattleChoiceList(choiceEvent),
             YiTeRogueEventType.BattleHard   => GetBattleChoiceList(choiceEvent),
             YiTeRogueEventType.Reward       => GetDialogChoiceList(choiceEvent),
@@ -44,7 +45,7 @@ public class YiTeRogueChoice
         var floor = YiTeRogueData.instance.floor;
         var petBag = YiTeRogueData.instance.petBag;
         var petIds = choiceEvent.GetData("pet")?.ToIntList('/');
-        var petLevel = petBag.Min(x => x?.level ?? 60);
+        var petLevel = petBag.Min(x => x?.level ?? 100);
         if (petIds == null)
             return new List<YiTeRogueChoice>(){ YiTeRogueChoice.Default };
 
@@ -62,13 +63,27 @@ public class YiTeRogueChoice
                 int index = petBag.IndexOf(null);
                 YiTeRogueData.instance.petBag[index] = pet;
                 if (choiceEvent.type == YiTeRogueEventType.Heal)
-                    foreach (var pet in YiTeRogueData.instance.petBag)
+                    foreach (var pet in YiTeRogueData.instance.petBag) {
+                        if (pet == null)
+                            continue;
                         pet.currentStatus.hp = pet.normalStatus.hp;
+                    }
                 SaveSystem.SaveData();
             }, "pet[" + pet.id + "]");
         }
         return petIds.Select(GetStartPet).Select(GetStartChoice).ToList();
     }   
+
+    private static List<YiTeRogueChoice> GetStoreChoiceList(YiTeRogueEvent choiceEvent) {
+        var itemList = choiceEvent.GetData("item", "none");
+        return new YiTeRogueChoice("神秘商店", () => {
+           var panel = Panel.OpenPanel<ItemShopPanel>();
+           panel.SetPanelIdentifier("title", "神秘商店"); 
+           panel.SetShopMode(ItemShopMode.BuyYiTe);
+           panel.SetPanelIdentifier("item", itemList);
+           panel.SetCurrencyType(6, 0);
+        }, "buff[" + choiceEvent.eventIconBuffId + "]").SingleToList();
+    }
 
     private static List<YiTeRogueChoice> GetBattleChoiceList(YiTeRogueEvent choiceEvent) {
         var mapId = int.Parse(choiceEvent.GetData("map_id", "84"));

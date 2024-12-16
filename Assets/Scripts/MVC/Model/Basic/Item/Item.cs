@@ -18,7 +18,12 @@ public class Item
         var type = y.abilityOptionDict.Get("type", "none");
         return !banned.Contains(type);
     })) ?? false).ToList();
-    
+    public static List<Item> plantItemDatabase => ItemInfo.database.Where(x => x.type == ItemType.Plant)
+        .Select(x => new Item(x.id, -1)).ToList();
+    public static List<Item> normalPlantItemDatabase => plantItemDatabase.Where(x => !bool.Parse(x.info.options.Get("rare", "false"))).ToList();
+    public static List<Item> skillBookItemDatabase => ItemInfo.database.Where(x => (x.id - 10_0000).IsWithin(GameManager.versionData.skillData.minSkillId,
+        GameManager.versionData.skillData.maxSkillId) && (x.currencyType == 6)).Select(x => new Item(x.id)).ToList();
+
     public static List<Item> itemStorage => Player.instance.gameData.itemStorage;
     public ItemInfo info => GetItemInfo(id);
     public string name => info.name;
@@ -89,8 +94,9 @@ public class Item
         throw new Exception("Item was not in bag originally.");
     }
 
-    public static Item Find(int id) {
-        return itemStorage.Find(x => x.id == id);
+    public static Item Find(int id, List<Item> toWhichStorage = null) {
+        toWhichStorage ??= itemStorage;
+        return toWhichStorage.Find(x => x.id == id);
     }
 
     public static void Add(Item item) {
@@ -118,7 +124,7 @@ public class Item
         throw new Exception("Item was not in bag originally.");
     }
 
-    public static void Buy(int id, int num, Action onAfterBuy = null) {
+    public static void Buy(int id, int num, Action onAfterBuy = null, List<Item> toWhichStorage = null) {
         ItemInfo info = GetItemInfo(id);
         ItemInfo currencyInfo = GetItemInfo(info.currencyType);
         int total = info.price * num;
@@ -126,7 +132,7 @@ public class Item
         Hintbox hintbox = Hintbox.OpenHintbox();
         hintbox.SetTitle("提示");
 
-        Item currency = Item.Find(info.currencyType);
+        Item currency = Item.Find(info.currencyType, toWhichStorage);
         if ((currency == null) || (currency.num < total)) {
             hintbox.SetContent(currencyInfo.name + "不足无法购买", 14, FontOption.Arial);
             hintbox.SetOptionNum(1);
@@ -136,12 +142,17 @@ public class Item
         Item item = new Item(id, num);
         hintbox.SetContent("确定要购买 " + num + " 个 " + info.name + " 吗", 14, FontOption.Arial);
         hintbox.SetOptionNum(2);
-        hintbox.SetOptionCallback(() => OnBuySuccess(price, item, onAfterBuy));
+        hintbox.SetOptionCallback(() => OnBuySuccess(price, item, onAfterBuy, toWhichStorage));
     }
 
-    private static void OnBuySuccess(Item price, Item item, Action callback) {
-        Item.Remove(price.id, price.num);
-        Item.Add(item);
+    private static void OnBuySuccess(Item price, Item item, Action callback, List<Item> toWhichStorage = null) {
+        if (toWhichStorage == null) {
+            Item.Remove(price.id, price.num);
+            Item.Add(item);
+        } else {
+            Item.RemoveFrom(price.id, price.num, toWhichStorage);
+            Item.AddTo(item, toWhichStorage);
+        }
 
         callback?.Invoke();
 
@@ -151,29 +162,33 @@ public class Item
         successHintbox.SetOptionNum(1);
     }
 
-    public static void Sell(int id, int num, Action onAfterSell = null) {
+    public static void Sell(int id, int num, Action onAfterSell = null, List<Item> toWhichStorage = null) {
         ItemInfo info = GetItemInfo(id);
         int total = info.price * num;
 
         Hintbox hintbox = Hintbox.OpenHintbox();
         hintbox.SetTitle("提示");
 
-        Item currency = Item.Find(info.currencyType);
-        Item item = Item.Find(id);
+        Item item = Item.Find(id, toWhichStorage);
         if ((item == null) || (item.num < num)) {
             hintbox.SetContent("物品不足无法出售", 14, FontOption.Arial);
             hintbox.SetOptionNum(1);
             return;
         }
-        Item price = new Item(currency.id, total);
+        Item price = new Item(info.currencyType, total);
         hintbox.SetContent("确定要出售 " + num + " 个 " + item.name + " 吗", 14, FontOption.Arial);
         hintbox.SetOptionNum(2);
-        hintbox.SetOptionCallback(() => OnSellSuccess(price, new Item(item.id, num), onAfterSell));
+        hintbox.SetOptionCallback(() => OnSellSuccess(price, new Item(item.id, num), onAfterSell, toWhichStorage));
     }
 
-    private static void OnSellSuccess(Item price, Item item, Action callback) {
-        Item.Remove(item.id, item.num);
-        Item.Add(price);
+    private static void OnSellSuccess(Item price, Item item, Action callback, List<Item> toWhichStorage = null) {
+        if (toWhichStorage == null) {
+            Item.Remove(item.id, item.num);
+            Item.Add(price);
+        } else {
+            Item.RemoveFrom(item.id, item.num, toWhichStorage);
+            Item.AddTo(price, toWhichStorage);
+        }
 
         callback?.Invoke();
 

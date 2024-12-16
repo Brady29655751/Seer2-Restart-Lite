@@ -174,7 +174,7 @@ public class Pet
         talent = new PetTalent(evolvePetId, originalPet.talent);
         skills = new PetSkill(evolvePetId, originalPet.level, originalPet.skills);
         record = new PetRecord(originalPet.record);
-        ui = new PetUI(info.ui.defaultSkinId, info.ui.baseId);
+        ui = new PetUI(info.ui.defaultSkinId, info.ui.baseId, originalPet.ui.specialSkinList);
 
         /* Status */
         currentStatus = new Status(normalStatus);
@@ -334,7 +334,7 @@ public class Pet
         }
     }
 
-    public Pet GainExp(uint gainExp) {
+    public Pet GainExp(uint gainExp, bool healWhenLevelUp = true) {
         bool isLevelUp = (gainExp >= levelUpExp);
         if (level >= maxLevel)
             return this;
@@ -347,7 +347,10 @@ public class Pet
             }
         }
         if (isLevelUp) {
+            var hp = currentStatus.hp;
             currentStatus = new Status(normalStatus);
+            if (!healWhenLevelUp)
+                currentStatus.hp = hp;
             skills.CheckNewSkill(level);
         }
         SaveSystem.SaveData();
@@ -394,9 +397,12 @@ public class Pet
         if (evolveId == 0)
             return null;
 
+        var specialSkills = skills.ownSkill.Where(x => !skills.skillList.Exists(y => y.id == x.id)).ToList();
         Pet evolvePet = new Pet(evolveId, this);
-        if (!keepSkill)
+        if (!keepSkill) {
             evolvePet.LevelDown(evolvePet.level);
+            specialSkills.ForEach(skill => evolvePet.skills.LearnNewSkill(skill));
+        }
 
         if (cursor.IsInRange(0, Player.instance.petBag.Length))
             Player.instance.petBag[cursor] = evolvePet;

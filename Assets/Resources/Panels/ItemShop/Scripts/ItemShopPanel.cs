@@ -18,16 +18,16 @@ public class ItemShopPanel : Panel
         { ItemShopType.Mine, "矿石回收商店" },
         { ItemShopType.Honor, "荣誉商店" },
         { ItemShopType.Sign, "签到商店" },
+        { ItemShopType.YiTe, "伊特商店" },
+        { ItemShopType.Plant, "农作物出售" },
     };
 
     protected Dictionary<ItemShopType, List<int>> shopItemIdDict = new Dictionary<ItemShopType, List<int>>() {
         { ItemShopType.None, new List<int>() },
         { ItemShopType.PetPotion, new List<int>() { 
-            10101, 10111, 10221, 10238, 10239, 20001,
-            10018, 20002, 10211, 21006, 21007, 21010, 
-            10011, 10012, 10013, 10014, 10015, 10016, 
-            10001, 10002, 10003, 10004, 10005,
-            110050, 
+            10101, 10111, 10221, 10238, 10239, 20001, 10018, 20002, 10211, 
+            21006, 21007, 21008, 21010, 10011, 10012, 10013, 10014, 10015, 
+            10016, 10001, 10002, 10003, 10004, 10005, 110050, 
         } },
         { ItemShopType.Mine, new List<int>() { 
             1001,   1002,   1003,   1004,
@@ -41,7 +41,23 @@ public class ItemShopPanel : Panel
             500178, 500436, 500959, 500826, 500761,
             500280, 500307,
         } },
+        { ItemShopType.YiTe, new List<int>() {
+            500091, 320100, 320810,
+        } },
+        { ItemShopType.Plant, Item.plantItemDatabase.Select(x => x.id).ToList() },
     };
+
+    public static bool IsBuy(ItemShopMode shopMode) {
+        return (shopMode == ItemShopMode.Buy) || (shopMode == ItemShopMode.BuyYiTe);
+    }
+
+    public static bool IsSell(ItemShopMode shopMode) {
+        return (shopMode == ItemShopMode.Sell) || (shopMode == ItemShopMode.SellYiTe);
+    }
+
+    public static bool IsYite(ItemShopMode shopMode) {
+        return (shopMode == ItemShopMode.BuyYiTe) || (shopMode == ItemShopMode.SellYiTe);
+    }
 
     protected override void Awake()
     {
@@ -69,6 +85,8 @@ public class ItemShopPanel : Panel
                 var mode = param switch {
                     "buy" => ItemShopMode.Buy,
                     "sell" => ItemShopMode.Sell,
+                    "buy_yite" => ItemShopMode.BuyYiTe,
+                    "sell_yite" => ItemShopMode.SellYiTe,
                     _ => ItemShopMode.Buy,
                 };
                 SetShopMode(mode);
@@ -76,10 +94,12 @@ public class ItemShopPanel : Panel
             case "type":
                 var type = param switch {
                     "pet_potion" => ItemShopType.PetPotion,
-                    "mine" => ItemShopType.Mine,
+                    "mine"  => ItemShopType.Mine,
                     "honor" => ItemShopType.Honor,
                     "sign"  => ItemShopType.Sign,
-                    "others" => ItemShopType.Others,
+                    "yite"  => ItemShopType.YiTe,
+                    "plant" => ItemShopType.Plant,
+                    "others"=> ItemShopType.Others,
                     _ => ItemShopType.None,
                 };
                 SetShopType(type);
@@ -98,8 +118,9 @@ public class ItemShopPanel : Panel
 
     public void SetShopMode(ItemShopMode shopMode) {
         this.shopMode = shopMode;
-        buyButton?.gameObject.SetActive(shopMode == ItemShopMode.Buy);
-        sellButton?.gameObject.SetActive(shopMode == ItemShopMode.Sell);
+        buyButton?.gameObject.SetActive(IsBuy(shopMode));
+        sellButton?.gameObject.SetActive(IsSell(shopMode));
+        shopController.SetShopMode(shopMode);
     }
 
     public void SetShopType(ItemShopType shopType) {
@@ -123,10 +144,8 @@ public class ItemShopPanel : Panel
     }
 
     private int GetStorageItemCount(int id) {
-        return shopMode switch {
-            ItemShopMode.Sell => Item.Find(id)?.num ?? 0,
-            _ => -1
-        };
+        var storage = IsYite(shopMode) ? YiTeRogueData.instance.itemBag : null;
+        return IsSell(shopMode) ? (Item.Find(id, storage)?.num ?? 0) : -1;
     }
 
 }
@@ -134,6 +153,8 @@ public class ItemShopPanel : Panel
 public enum ItemShopMode {
     Buy,
     Sell,
+    BuyYiTe,
+    SellYiTe,
 }
 
 public enum ItemShopType {
@@ -143,4 +164,6 @@ public enum ItemShopType {
     Mine = 2,
     Honor = 3,
     Sign = 4,
+    YiTe = 5,
+    Plant = 6,
 }

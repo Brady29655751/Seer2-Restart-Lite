@@ -70,6 +70,41 @@
 				</button>
 			</eventHandler>
 		</npc>
+		<npc id="20202" resId="Maps/mine/blue.png" name="青玉矿脉" size="62,78" pos="610,325">
+			<description>青玉矿脉</description>
+			<eventHandler>
+				<button type="click">
+					<action>openHintbox</action>
+					<param>type=Item</param>
+					<param>title=提示</param>
+					<param>content=矿脉需要合理开发，明天再来吧！</param>
+					<param>item_icon=item[1004]</param>
+					<param>option_num=1</param>
+					<condition>activity[mine].done[202]=[bool]true[default]false</condition>
+				</button>
+				<button type="click">
+					<action>setItem</action>
+					<param>add</param>
+					<param>1004,5</param>
+					<condition>activity[mine].done[202]=[bool]false[default]false</condition>
+				</button>
+				<button type="click">
+					<action>openHintbox</action>
+					<param>type=Item</param>
+					<param>title=提示</param>
+					<param>content=5个青玉石已经放入背包</param>
+					<param>item_icon=item[1004]</param>
+					<param>option_num=1</param>
+					<condition>activity[mine].done[202]=[bool]false[default]false</condition>
+				</button>
+				<button type="click">
+					<action>setActivity</action>
+					<param>mine</param>
+					<param>done[202]=true</param>
+					<condition>activity[mine].done[202]=[bool]false[default]false</condition>
+				</button>
+			</eventHandler>
+		</npc>
 		<teleport id="1" name="幻彩珊瑚" pos="130,230" targetMapId="203"/>
 		<teleport id="2" name="彩虹珊瑚湾" pos="815,355" targetMapId="201"/>
 	</entities>

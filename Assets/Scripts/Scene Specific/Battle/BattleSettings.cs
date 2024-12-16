@@ -85,7 +85,7 @@ public class BattleSettings
 
     public BattleSettings FixToYiTeRogue() {
         mode = BattleMode.YiTeRogue;
-        isSimulate = true;
+        isSimulate = false;
         isItemOK = true;
         petCount = 6;
         parallelCount = 1;

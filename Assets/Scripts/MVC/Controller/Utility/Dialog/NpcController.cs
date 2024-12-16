@@ -36,6 +36,10 @@ public class NpcController : Module
         npcView.SetAction(this, npcList, infoPrompt);
     }
 
+    public void SetFarmAction(Dictionary<int, NpcController> npcList, InfoPrompt infoPrompt) {
+        npcView.SetFarmAction(this, npcList, infoPrompt);
+    }
+
     public void SetBGM(string bgm)
     {
         ResourceManager.instance.GetLocalAddressables<AudioClip>("BGM/" + bgm, onSuccess: (audioClip) => {

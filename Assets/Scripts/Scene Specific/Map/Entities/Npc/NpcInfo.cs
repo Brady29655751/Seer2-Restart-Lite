@@ -53,6 +53,9 @@ public class NpcInfo
     }
 
     public static Sprite GetIcon(string resId) {
+        if (string.IsNullOrEmpty(resId) || (resId == "0") || (resId == "null") || (resId == "none")) 
+            return SpriteSet.Empty;
+            
         if (int.TryParse(resId, out _))
             return ResourceManager.instance.GetLocalAddressables<Sprite>("Npc/" + resId, IsMod(resId));
         

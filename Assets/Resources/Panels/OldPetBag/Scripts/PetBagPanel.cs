@@ -180,7 +180,7 @@ public class PetBagPanel : Panel
     }
 
     public void RefreshPetBag() {
-        RefreshPetBag(petBag);
+        RefreshPetBag((mode == PetBagMode.Normal) ? playerPetBag : petBag);
     }
 
     public void SetPetBag(Pet[] bag) {

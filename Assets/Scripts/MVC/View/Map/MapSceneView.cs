@@ -4,7 +4,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.Events;
 
 public class MapSceneView : UIModule
 {
@@ -15,6 +14,7 @@ public class MapSceneView : UIModule
 
     private Map map;
     private Dictionary<int, NpcController> npcDict = new Dictionary<int, NpcController>();
+    private Dictionary<int, NpcController> farmDict = new Dictionary<int, NpcController>();
     private Dictionary<int, GameObject> teleportDict = new Dictionary<int, GameObject>();
 
     public Vector2 GetCanvasSize() {
@@ -57,8 +57,12 @@ public class MapSceneView : UIModule
     #region  entites
 
     public void SetEntites(MapEntities entities) {
+        SetFarm(entities.farms);
         SetNpc(entities.npcs);
         SetTeleport(entities.teleports);
+
+        if (!ListHelper.IsNullOrEmpty(entities.farms))
+            StartCoroutine(CheckPlantRipeCoroutine());
     }
 
     public void SetNpc(List<NpcInfo> infos) {
@@ -74,6 +78,40 @@ public class MapSceneView : UIModule
             var autoActionList = npcInfo.eventHandler.Where(x => x.type == ButtonEventType.Auto)
                 .Select(x => NpcHandler.GetNpcEntity(npcDict.Get(npcInfo.id), x, npcDict)).ToList();
             autoActionList.ForEach(x => x?.Invoke());
+        }
+    }
+
+    public void SetFarm(List<NpcInfo> infos) {
+        if (ListHelper.IsNullOrEmpty(infos))
+            return;
+
+        foreach (var npcInfo in infos) {
+            var prefab = RM.GetPrefab("Map/Npc");
+            GameObject obj = Instantiate(prefab, transform);
+            NpcController npc = obj.GetComponent<NpcController>();
+            NpcHandler.CreateFarm(npc, npcInfo, npcDict, infoPrompt);
+            farmDict.Add(npcInfo.id, npc);
+        }
+    }
+
+    private IEnumerator CheckPlantRipeCoroutine() {
+        var activity = Activity.Find("farm");
+        while (true) {
+            foreach (var land in farmDict) {
+                var id = land.Key;
+                var npc = npcDict.Get(id + 100);
+                var plant = activity.GetData("land[" + id + "].plant", "none");
+                var isPlantGrowing = int.TryParse(plant, out var plantId);
+                if (isPlantGrowing) {
+                    var item = Item.GetItemInfo(plantId);
+                    var date = DateTime.Parse(activity.GetData("land[" + id + "].date[ripe]", DateTime.MaxValue.ToString()));
+                    var ripe = DateTime.Now >= date;
+                    var icon = ripe ? plantId : int.Parse(item.options.Get("seed", "600000"));
+                    npc.SetIcon("Items/" + icon);
+                }
+                npc.SetColor(isPlantGrowing ? Color.white : Color.clear);
+            }
+            yield return null;
         }
     }
 
