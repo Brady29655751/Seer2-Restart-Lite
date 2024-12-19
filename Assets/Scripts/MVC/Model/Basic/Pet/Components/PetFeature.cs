@@ -15,9 +15,6 @@ public class PetFeature
     [XmlIgnore] public Feature feature => Database.instance.GetFeatureInfo((featureId == 0) ? defaultInfo.baseId : featureId)?.feature;
     [XmlIgnore] public Emblem emblem => Database.instance.GetFeatureInfo((emblemId == 0) ? defaultInfo.baseId : emblemId)?.emblem;
     [XmlIgnore] public List<Buff> afterwardBuffs => afterwardBuffIds?.Select(x => new Buff(x)).ToList();
-    [XmlIgnore] public Status afterwardStatus => afterwardBuffIds?.Select(Buff.GetBuffInfo).Where(x => x != null)
-        .Select(x => new Status(x.options.Get("status", "0/0/0/0/0/0").ToFloatList('/')))
-        .Aggregate(Status.zero, (sum, next) => sum + next) ?? Status.zero;
 
     [XmlIgnore] public PetFeatureInfo info => new PetFeatureInfo(id, feature, emblem);
     [XmlIgnore] public PetFeatureInfo defaultInfo => Database.instance.GetPetInfo(id)?.feature;
@@ -41,5 +38,14 @@ public class PetFeature
         featureId = rhs.featureId;
         emblemId = rhs.emblemId;
         afterwardBuffIds = new List<int>(rhs.afterwardBuffIds);
+    }
+
+    public Status GetExtraStatus(Status normalStatus) {
+        var buffs = afterwardBuffIds?.Select(Buff.GetBuffInfo).Where(x => x != null);
+        var mult = buffs?.Select(x => new Status(x.options.Get("status_mult", "1/1/1/1/1/1").ToFloatList('/')))
+            .Aggregate(Status.one, (sum, next) => sum * next) ?? Status.one;
+        var add = buffs?.Select(x => new Status(x.options.Get("status", "0/0/0/0/0/0").ToFloatList('/')))
+            .Aggregate(Status.zero, (sum, next) => sum + next) ?? Status.zero;
+        return Status.FloorToInt((mult - Status.one) * normalStatus + add);
     }
 }

@@ -39,7 +39,11 @@ public class YiTeRogueData
     public int GetPrizeNum() {
         var prizeFloor = floor;
         var prizeStep = trace.Count;
-        if (Player.instance.currentBattle?.result.isOpWin ?? true) {
+
+        if ((prizeFloor == 0) && (trace.Count <= 1))
+            return 0;
+
+        if (prizeFloor <= YiTeRogueEvent.GetEndFloorByDifficulty(difficulty)) {
             prizeFloor -= (trace.Count == 0) ? 1 : 0;
             prizeStep = (trace.Count == 0) ? YiTeRogueEvent.GetEndStepByFloor(prizeFloor) : (prizeStep - 1);
         }
@@ -54,6 +58,9 @@ public class YiTeRogueData
         // 20到200HP各5瓶、350HP的2瓶、高級復活藥1瓶
         itemBag = Enumerable.Range(10011, 4).Select(x => new Item(x, 5))
             .Append(new Item(10016, 2)).Append(new Item(10018, 1)).ToList();
+            
+        // 随机1项普通初始Buff
+        buffIds = 440000.SingleToList();
     }
 
     public static YiTeRogueData CreateRogue(YiTeRogueMode difficulty) {

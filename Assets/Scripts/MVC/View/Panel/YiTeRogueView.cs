@@ -35,8 +35,10 @@ public class YiTeRogueView : UIModule
         var nextPos = YiTeRogueData.instance.nextPos;
         var floor = YiTeRogueData.instance.floor;
         var trace = YiTeRogueData.instance.trace;
+        var buffs = YiTeRogueData.instance.buffIds.Select(x => new Buff(x)).ToList();
         YiTeRogueEvent rogueEvent = eventMap[0];
 
+        buffView.SetBuff(buffs);
         rogueContentRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 120 + 120 * eventMap[eventMap.Count - 1].step);
         rogueScrollRect.horizontalNormalizedPosition = trace.Count * 1f / YiTeRogueEvent.GetEndStepByFloor(floor);
 

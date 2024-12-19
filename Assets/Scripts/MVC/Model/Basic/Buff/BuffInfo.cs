@@ -10,6 +10,8 @@ using UnityEngine.AddressableAssets;
 public class BuffInfo
 {
     public const int DATA_COL = 7;
+    public static List<BuffInfo> database => Database.instance.buffInfoDict.Select(x => x.Value).Where(x => x != null)
+        .OrderByDescending(x => x.id.GetSortPriority()).ToList();
 
     /* Basic Data */
     public int id { get; private set; }

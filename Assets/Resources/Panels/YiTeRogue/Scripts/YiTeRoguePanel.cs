@@ -20,6 +20,21 @@ public class YiTeRoguePanel : Panel
         rogueView.SetMap();
     }
 
+    public void Terminate() {
+        var hintbox = Hintbox.OpenHintbox();
+        hintbox.SetTitle("提示");
+        hintbox.SetContent("确定要放弃当前进度并结算吗？\n下次游玩将从零开始哦！", 16, FontOption.Arial);
+        hintbox.SetOptionNum(2);
+        hintbox.SetOptionCallback(() => {
+            var prize = YiTeRogueData.instance.prize;
+            Item.Add(prize);
+            Item.OpenHintbox(prize);
+            Player.instance.gameData.yiteRogueData = null;
+            SaveSystem.SaveData();
+            ClosePanel();
+        });
+    }
+
     public void OpenChoicePanel(YiTeRogueEvent rogueEvent, bool withStep = true) {
         rogueView.OpenChoicePanel(rogueEvent, withStep);
     }

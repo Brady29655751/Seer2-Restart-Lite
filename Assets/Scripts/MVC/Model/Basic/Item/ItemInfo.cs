@@ -11,6 +11,8 @@ using UnityEngine.AddressableAssets;
 public class ItemInfo
 {
     public const int DATA_COL = 7;
+    public static List<ItemInfo> database => Database.instance.itemInfoDict.Select(x => x.Value).Where(x => x != null)
+        .OrderByDescending(x => x.id.GetSortPriority()).ToList();
 
     public int id { get; private set; }
     public string resId { get; private set; }
@@ -29,8 +31,6 @@ public class ItemInfo
     public bool removable = true;
 
     public static bool IsMod(int id) => id < 0;
-    public static List<ItemInfo> database => Database.instance.itemInfoDict.Select(x => x.Value).Where(x => x != null)
-        .OrderByDescending(x => x.id.GetSortPriority()).ToList();
 
     public ItemInfo(string[] _data, int startIndex = 0) {
         string[] _slicedData = new string[DATA_COL];

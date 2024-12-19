@@ -75,7 +75,7 @@ public static class Identifier {
         if (id.TryTrimStart("item", out trimId)) {
             int itemId = int.Parse(trimId.TrimParentheses());
             string dataId = trimId.Substring(trimId.IndexOf('.') + 1);
-            Item item = Item.Find(itemId);
+            Item item = Item.Find(itemId, trimId.StartsWith("_yite") ? YiTeRogueData.instance.itemBag : null);
 
             return dataId switch {
                 _ => item?.num ?? 0,

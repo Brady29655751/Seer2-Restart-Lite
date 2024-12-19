@@ -65,7 +65,17 @@ public class ItemShopController : Module
 
         var storage = (shopMode == ItemShopMode.BuyYiTe) ? YiTeRogueData.instance.itemBag : null;
         int num = selectNumController.GetInputValue();
-        Action onAfterBuy = playerInfoController.ShowCurrency;
+        Action onAfterBuy = () => {
+            if (shopMode == ItemShopMode.BuyYiTe)  
+                itemController.Remove(item);
+                
+            playerInfoController.ShowCurrency();
+        };
+
+        if ((num > 1) && (shopMode == ItemShopMode.BuyYiTe)) {
+            Hintbox.OpenHintboxWithContent("别贪心，一次只能购买一个哟！", 16);
+            return;
+        }            
 
         Item.Buy(item.id, num, onAfterBuy, storage);
     }

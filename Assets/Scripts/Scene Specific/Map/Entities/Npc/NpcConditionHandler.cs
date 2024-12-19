@@ -36,7 +36,7 @@ public static class NpcConditionHandler
         if (key.TryTrimStart("item", out trimKey)) {
             int id = int.Parse(trimKey.TrimParentheses());
             string dataKey = trimKey.Substring(trimKey.IndexOf('.') + 1);
-            Item item = Item.Find(id);
+            Item item = Item.Find(id, trimKey.StartsWith("_yite") ? YiTeRogueData.instance.itemBag : null);
             return () => GetItem(item, op, dataKey, value);
         }
 

@@ -24,8 +24,7 @@ public class BattleOptionView : BattleBaseView
             options[i]?.gameObject.SetActive(i == 0);
         }
 
-        autoView?.gameObject.SetActive((battle.settings.mode != BattleMode.PVP) && 
-            (battle.settings.parallelCount <= 1));
+        autoView?.gameObject.SetActive(battle.settings.isAutoOK);
     }
 
     public void Select(int index) {

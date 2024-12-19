@@ -16,6 +16,7 @@ public class YiTeRogueEvent
 
     [XmlIgnore] public int eventIconBuffId => GetEventIconBuffId(type);
     [XmlIgnore] public int npcId => GetEventNpcId(type);
+    [XmlIgnore] public int battleDifficulty => GetBattleDifficulty(type);
     [XmlIgnore] public string title => GetData("title");
     [XmlIgnore] public string content => GetData("content");
     [XmlIgnore] public List<YiTeRogueChoice> choiceList => YiTeRogueChoice.GetChoiceList(this);
@@ -34,6 +35,12 @@ public class YiTeRogueEvent
 
     public static int GetEventIconBuffId(YiTeRogueEventType type) => -13 - ((int)type);
     public static int GetEventNpcId(YiTeRogueEventType type) => YiTeRoguePanel.ROGUE_NPC_ID - GetEventIconBuffId(type) - 1;
+    public static int GetBattleDifficulty(YiTeRogueEventType type) => type switch {
+        YiTeRogueEventType.BattleEasy => 0,
+        YiTeRogueEventType.BattleHard => 1,
+        YiTeRogueEventType.End => 2,
+        _ => -1,
+    };
 
     public static int GetEndFloorByDifficulty(YiTeRogueMode difficulty) {
         return difficulty switch {
@@ -45,9 +52,7 @@ public class YiTeRogueEvent
     }
 
     public static int GetEndStepByFloor(int floor) {
-        return floor switch {
-            _ => 8
-        };
+        return 10;
     }
 
     public static YiTeRogueEvent GetStartEvent() {
@@ -136,35 +141,45 @@ public class YiTeRogueEvent
                 break;
             case YiTeRogueEventType.Start:
             case YiTeRogueEventType.Heal:
-                var petId = GameManager.versionData.petData.petDictionary.GroupBy(x => x.basic.baseId).First()
-                    .Select(x => x.id.ToString()).ToList().Random(3, false).ConcatToString("/");
+                var petId = GameManager.versionData.petData.petDictionary.GroupBy(x => x.basic.baseId)
+                    .Select(group => group.Last().id.ToString()).ToList().Random(3, false).ConcatToString("/");
                 data.Add(new IKeyValuePair<string, string>("title", (floor == 0) ? "起始点" : "休息站"));
                 data.Add(new IKeyValuePair<string, string>("content", (floor == 0) ? "选择你的起始伊特吧！" : "回复体力并选择你的新伙伴吧！"));    
                 data.Add(new IKeyValuePair<string, string>("pet", (floor == 0) ? "100/810" : petId));
                 break;
             case YiTeRogueEventType.Store:
-                var randomSkill = Item.skillBookItemDatabase.Random(9, false).Select(x => x.id.ToString());
+                var randomGrow = Item.yiteGrowItemDatabse.Where(x => x.id % 5 < 4).ToList().Random(3, false).Select(x => x.id.ToString());
+                var randomSkill = Item.skillBookItemDatabase.Random(6, false).Select(x => x.id.ToString());
+                var storeItems = randomGrow.Concat(randomSkill).ConcatToString("/");
                 data.Add(new IKeyValuePair<string, string>("title", "神秘商店"));
                 data.Add(new IKeyValuePair<string, string>("content", "突然出现在你眼前的小摊位，看看有什么好东西吧！"));    
-                data.Add(new IKeyValuePair<string, string>("item", randomSkill.ConcatToString("/")));
+                data.Add(new IKeyValuePair<string, string>("item", storeItems));
                 break;
             case YiTeRogueEventType.BattleEasy:
+                var easyGrowReward = Item.yiteGrowItemDatabse.Where(x => x.id % 5 < 2).ToList().Random(1, false)
+                    .Select(x => "item[" + x.id + "]");
+                var easyBuffReward = Buff.yiteEasyBuffDatabse.Random(2, false).Select(x => "buff[" + x.id + "]");
+                var easyReward = easyGrowReward.Concat(easyBuffReward).ConcatToString("/");
                 data.Add(new IKeyValuePair<string, string>("title", "战斗（简单）"));
                 data.Add(new IKeyValuePair<string, string>("content", "点击下方选项进入战斗"));
                 data.Add(new IKeyValuePair<string, string>("map_id", battleMapId));
                 data.Add(new IKeyValuePair<string, string>("npc_id", battleMapId + "01"));
                 data.Add(new IKeyValuePair<string, string>("battle_id", randomFloor));
                 data.Add(new IKeyValuePair<string, string>("result", "none"));
-                data.Add(new IKeyValuePair<string, string>("reward", "10201/10221/10231"));
+                data.Add(new IKeyValuePair<string, string>("reward", easyReward));
                 break;
             case YiTeRogueEventType.BattleHard:
+                var hardGrowReward = Item.yiteGrowItemDatabse.Where(x => (x.id % 5).IsWithin(1, 3)).ToList()
+                    .Random(1, false).Select(x => "item[" + x.id + "]");
+                var hardBuffReward = Buff.yiteHardBuffDatabse.Random(2, false).Select(x => "buff[" + x.id + "]");
+                var hardReward = hardGrowReward.Concat(hardBuffReward).ConcatToString("/");
                 data.Add(new IKeyValuePair<string, string>("title", "战斗（困难）"));
                 data.Add(new IKeyValuePair<string, string>("content", "点击下方选项进入战斗"));
                 data.Add(new IKeyValuePair<string, string>("map_id", battleMapId));
                 data.Add(new IKeyValuePair<string, string>("npc_id", battleMapId + "02"));
                 data.Add(new IKeyValuePair<string, string>("battle_id", randomFloor));
                 data.Add(new IKeyValuePair<string, string>("result", "none"));
-                data.Add(new IKeyValuePair<string, string>("reward", "10205/10225/10235"));
+                data.Add(new IKeyValuePair<string, string>("reward", hardReward));
                 break;
             case YiTeRogueEventType.Reward:
             case YiTeRogueEventType.Dialog:
@@ -175,13 +190,17 @@ public class YiTeRogueEvent
                 data.Add(new IKeyValuePair<string, string>("dialog_id", dialog.id));
                 break;
             case YiTeRogueEventType.End:
+                var endGrowReward = Item.yiteGrowItemDatabse.Where(x => x.id % 5 == 4).ToList()
+                    .Random(1, false).Select(x => "item[" + x.id + "]");
+                var endBuffReward = Buff.yiteEndBuffDatabse.Random(2, false).Select(x => "buff[" + x.id + "]");
+                var endReward = endGrowReward.Concat(endBuffReward).ConcatToString("/");
                 data.Add(new IKeyValuePair<string, string>("title", "战斗（终极）"));
                 data.Add(new IKeyValuePair<string, string>("content", "点击下方选项进入战斗"));
                 data.Add(new IKeyValuePair<string, string>("map_id", battleMapId));
                 data.Add(new IKeyValuePair<string, string>("npc_id", battleMapId + "02"));
                 data.Add(new IKeyValuePair<string, string>("battle_id", randomBoss));
                 data.Add(new IKeyValuePair<string, string>("result", "none"));
-                data.Add(new IKeyValuePair<string, string>("reward", isEndRogue ? "5" : "2/3/4"));
+                data.Add(new IKeyValuePair<string, string>("reward", isEndRogue ? "5" : endReward));
                 break;
         };
         return data;

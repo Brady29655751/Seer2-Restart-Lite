@@ -23,6 +23,7 @@ public class Item
     public static List<Item> normalPlantItemDatabase => plantItemDatabase.Where(x => !bool.Parse(x.info.options.Get("rare", "false"))).ToList();
     public static List<Item> skillBookItemDatabase => ItemInfo.database.Where(x => (x.id - 10_0000).IsWithin(GameManager.versionData.skillData.minSkillId,
         GameManager.versionData.skillData.maxSkillId) && (x.currencyType == 6)).Select(x => new Item(x.id)).ToList();
+    public static List<Item> yiteGrowItemDatabse => ItemInfo.database.Where(x => x.id.IsInRange(9001, 9020)).Select(x => new Item(x.id)).ToList();
 
     public static List<Item> itemStorage => Player.instance.gameData.itemStorage;
     public ItemInfo info => GetItemInfo(id);
@@ -48,7 +49,7 @@ public class Item
         num = rhs.num;
     }
 
-    private List<Effect> GetEffects() {
+    public List<Effect> GetEffects() {
         var itemEffects = info.effects.Select(x => new Effect(x)).ToList();
         foreach (var e in itemEffects) {
             e.source = this;
@@ -208,22 +209,22 @@ public class Item
         
         EffectHandler handler = new EffectHandler();
         handler.AddEffects(invokeUnit, effects);
-        return (handler.Condition(state, false).Any(x => x)) && (GetMaxUseCount(invokeUnit, state) > 0);
+        return handler.Condition(state, state == null).Any(x => x) && (GetMaxUseCount(invokeUnit, state) > 0);
     }
 
-    public int Use(object invokeUnit, BattleState state, int useCount = 1, PetBagMode mode = PetBagMode.Normal) {
+    public int Use(object invokeUnit, BattleState state, int useCount = 1, PetBagMode petBagMode = PetBagMode.Normal) {
         int count = useCount;
 
         if ((info.type == ItemType.EXP) && (!effects.Exists(x => x.abilityOptionDict.ContainsKey("max_use"))))
             count = this.UseExp(invokeUnit, state, useCount);
         else
-            count = this.UseDefault(invokeUnit, state, useCount);
+            count = this.UseDefault(invokeUnit, state, useCount, petBagMode);
 
-        if ((mode != PetBagMode.Normal) && (mode != PetBagMode.YiTeRogue))
+        if ((petBagMode != PetBagMode.Normal) && (petBagMode != PetBagMode.YiTeRogue))
             return count;
 
         if (info.removable) {
-            if (mode == PetBagMode.Normal)
+            if (petBagMode == PetBagMode.Normal)
                 Item.Remove(id, count);
             else
                 Item.RemoveFrom(id, count, YiTeRogueData.instance.itemBag);

@@ -151,27 +151,36 @@ public class BattleManager : Manager<BattleManager>
     protected IEnumerator CheckAutoSkillCoroutine() 
     {
         // PVP和双打不适用自动战斗
-        systemView.SetAutoBattleActive(false);
-        if ((currentUIState.settings.mode == BattleMode.PVP) || (currentUIState.settings.parallelCount > 1))
+        if (!currentUIState.settings.isAutoOK)
             yield break;
 
+        systemView.SetAutoBattleActive(false);
         if (ListHelper.IsNullOrEmpty(battle.autoSkillOrder))
             yield break;
 
         var cursor = battle.autoSkillOrder.Get(battle.autoSkillCursor);
         var pet = currentUIState.myUnit.pet;
-        var skill = pet.normalSkill.Get(cursor - 1) ?? Skill.GetNoOpSkill();
 
         if (pet.isDead) {
             systemView.StopAutoBattle();
             yield break;
         }
 
-        if ((skill.anger > pet.anger) && (pet.buffController.GetBuff(61) == null))
+        var skill = pet.normalSkill.Get(cursor - 1) ?? Skill.GetNoOpSkill();
+        var superSkill = pet.superSkill;
+        var isAnySkillOK = pet.buffController.GetBuff(61) != null;
+        var isSuper = battle.isAutoSuperSkill && (superSkill != null)
+            && ((superSkill.anger <= pet.anger) || isAnySkillOK);
+
+        if (isSuper)
+            skill = superSkill;
+        else if ((skill.anger > pet.anger) && (!isAnySkillOK))
             skill = Skill.GetNoOpSkill();
 
         systemView.SetAutoBattleActive(true);
-        battle.autoSkillCursor = (battle.autoSkillCursor + 1) % battle.autoSkillOrder.Count;
+        if (!isSuper)
+            battle.autoSkillCursor = (battle.autoSkillCursor + 1) % battle.autoSkillOrder.Count;
+            
         battle.SetSkill(skill, true);
     }
 

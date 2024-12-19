@@ -26,8 +26,8 @@ public class ItemShopPanel : Panel
         { ItemShopType.None, new List<int>() },
         { ItemShopType.PetPotion, new List<int>() { 
             10101, 10111, 10221, 10238, 10239, 20001, 10018, 20002, 10211, 
-            21006, 21007, 21008, 21010, 10011, 10012, 10013, 10014, 10015, 
-            10016, 10001, 10002, 10003, 10004, 10005, 110050, 
+            21006, 21007, 21008, 21009, 21010, 10011, 10012, 10013, 10014, 
+            10015, 10016, 10001, 10002, 10003, 10004, 10005, 110050, 
         } },
         { ItemShopType.Mine, new List<int>() { 
             1001,   1002,   1003,   1004,
@@ -42,7 +42,7 @@ public class ItemShopPanel : Panel
             500280, 500307,
         } },
         { ItemShopType.YiTe, new List<int>() {
-            500091, 320100, 320810,
+            500091, 24000, 320100, 320810,
         } },
         { ItemShopType.Plant, Item.plantItemDatabase.Select(x => x.id).ToList() },
     };

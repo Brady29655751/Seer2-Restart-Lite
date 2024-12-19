@@ -24,11 +24,17 @@ public class BattleInfo
     public List<NpcButtonHandler> loseHandler;
 
     public BattleInfo FixToYiTeRogue(YiTeRogueEvent rogueEvent) {
+        var floor = YiTeRogueData.instance.floor;
+        var trace = YiTeRogueData.instance.trace.Count;
         var petBag = YiTeRogueData.instance.petBag;
+        var baseLevel = 90 + floor * YiTeRogueEvent.GetEndStepByFloor(floor);
+        var stepLevel = trace + rogueEvent.battleDifficulty * 5;
+        var extraLevel = (rogueEvent.type == YiTeRogueEventType.End) ? 5 : stepLevel;
+
         settings.FixToYiTeRogue();
         playerInfo = null;
         enemyInfo.ForEach(x => {
-            x.level = petBag.Max(x => x?.level ?? 100);
+            x.level =  baseLevel + extraLevel;
             x.status = null;
             x.hasEmblem = true;
         });
@@ -52,12 +58,7 @@ public class BattleInfo
         }
         // 獲得3個冰糖，每個冰糖能+10學習力
         // 根據難度獲得餅乾，簡單+10、困難+20、Boss +40
-        var currencyNum = rogueEvent.type switch {
-            YiTeRogueEventType.BattleEasy   => 10,
-            YiTeRogueEventType.BattleHard   => 20,
-            YiTeRogueEventType.End          => 40,
-            _ => 0,
-        };
+        var currencyNum = Mathf.Max(rogueEvent.battleDifficulty * 20, 10);
         var currency = new Item(6, currencyNum);
         var item = new Item(10232, 3);
         Item.AddTo(currency, YiTeRogueData.instance.itemBag);

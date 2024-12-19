@@ -729,82 +729,92 @@ public static class EffectAbilityHandler
         float oldValue, newValue;
 
         if (state == null) {
-            Pet pet = (Pet)effect.invokeUnit;
-
-            oldValue = pet.GetPetIdentifier(type);
-            newValue = pet.TryGetPetIdentifier(value, out var num) ? num : Identifier.GetNumIdentifier(value);
-
-            // Evolve pet.
-            if ((type == "id") && (op == "SET")) {
-                var evolveId = (int)newValue;
-                if (Pet.GetPetInfo(evolveId) == null)
-                    return false;
-
-                string keepSkillExpr = effect.abilityOptionDict.Get("keep_skill", "true");
-                if (!bool.TryParse(keepSkillExpr, out var keepSkill))
-                    return false;
-                    
-                pet.MegaEvolve(evolveId, keepSkill);
-                return true;
-            }
-
-            // Add Skin.
-            if ((type == "skinId") && (op == "+")) {
-                var newSkinId = value.ToIntList('/');
-                pet.ui.specialSkinList.AddRange(newSkinId.Where(id => Pet.GetPetInfo(id) != null));
-                SaveSystem.SaveData();
-                return true;
-            }
-
-            // Reset ev.
-            if (type == "evReset") {
-                pet.talent.ResetEV();
-                return true;
-            }
-
-            // Set personality.
-            if ((type == "personality") && (value == "-1")) {
-                var petBagController = GameObject.FindObjectOfType<PetBagController>();
-                if (petBagController == null)
-                    return false;
-
-                petBagController.SetPetPersonality();
-                return true;
-            }
-
-            // Learn skill.
-            if (type == "skill") {
-                if (!int.TryParse(value, out var skillId))
-                    return false;
-
-                var skill = Skill.GetSkill(skillId, false);
-                if (skill == null)
-                    return false;
-
-                if (op == "+") {
-                    if (!pet.skills.LearnNewSkill(skill))
-                        return false;
+            if (effect.target == EffectTarget.CurrentPetBag) {
+                var isSuccess = false;
+                var petBagMode = (PetBagMode)int.Parse(effect.abilityOptionDict.Get("pet_bag_mode", "0"));
+                IEnumerable<Pet> petBag = petBagMode switch {
+                    PetBagMode.Normal   => Player.instance.petBag,
+                    PetBagMode.YiTeRogue=> YiTeRogueData.instance.petBag,
+                    _ =>  ((Pet)effect.invokeUnit).SingleToList(),
+                };
+                foreach (var pet in petBag) {
+                    if (pet == null)
+                        continue;
+                        
+                    isSuccess |= ResidentSetPet(pet);
                 }
-                    
+
                 SaveSystem.SaveData();
+                return isSuccess;
+            }
+            return ResidentSetPet((Pet)effect.invokeUnit);
+            
+            bool ResidentSetPet(Pet pet) 
+            {
+                oldValue = pet.GetPetIdentifier(type);
+                newValue = pet.TryGetPetIdentifier(value, out var num) ? num : Identifier.GetNumIdentifier(value);
+                // Evolve pet.
+                if ((type == "id") && (op == "SET")) {
+                    var evolveId = (int)newValue;
+                    if (Pet.GetPetInfo(evolveId) == null)
+                        return false;
+                    string keepSkillExpr = effect.abilityOptionDict.Get("keep_skill", "true");
+                    if (!bool.TryParse(keepSkillExpr, out var keepSkill))
+                        return false;
+
+                    pet.MegaEvolve(evolveId, keepSkill);
+                    return true;
+                }
+                // Add Skin.
+                if ((type == "skinId") && (op == "+")) {
+                    var newSkinId = value.ToIntList('/');
+                    pet.ui.specialSkinList.AddRange(newSkinId.Where(id => Pet.GetPetInfo(id) != null));
+                    SaveSystem.SaveData();
+                    return true;
+                }
+                // Reset ev.
+                if (type == "evReset") {
+                    pet.talent.ResetEV();
+                    return true;
+                }
+                // Set personality.
+                if ((type == "personality") && (value == "-1")) {
+                    var petBagController = GameObject.FindObjectOfType<PetBagController>();
+                    if (petBagController == null)
+                        return false;
+                    petBagController.SetPetPersonality();
+                    return true;
+                }
+                // Learn skill.
+                if (type == "skill") {
+                    if (!int.TryParse(value, out var skillId))
+                        return false;
+                    var skill = Skill.GetSkill(skillId, false);
+                    if (skill == null)
+                        return false;
+                    if (op == "+") {
+                        if (!pet.skills.LearnNewSkill(skill))
+                            return false;
+                    }
+
+                    SaveSystem.SaveData();
+                    return true;
+                }
+                if (type == "buff") {
+                    if (!int.TryParse(value, out var buffId))
+                        return false;
+
+                    if (op == "+")
+                        pet.feature.afterwardBuffIds.Add(buffId);
+                    else
+                        pet.feature.afterwardBuffIds.Remove(buffId);
+
+                    SaveSystem.SaveData();
+                    return true;
+                }   
+                pet.SetPetIdentifier(type, Operator.Operate(op, oldValue, newValue));
                 return true;
             }
-
-            if (type == "buff") {
-                if (!int.TryParse(value, out var buffId))
-                    return false;
-                
-                if (op == "+")
-                    pet.feature.afterwardBuffIds.Add(buffId);
-                else
-                    pet.feature.afterwardBuffIds.Remove(buffId);
-                    
-                SaveSystem.SaveData();
-                return true;
-            }   
-
-            pet.SetPetIdentifier(type, Operator.Operate(op, oldValue, newValue));
-            return true;
         }
 
         Unit invokeUnit = (Unit)effect.invokeUnit;

@@ -24,7 +24,7 @@ public class Pet
     public Status currentStatus = new Status();   // 當前能力值
     public Status normalStatus => Status.GetPetNormalStatus(  // 正常狀態下的能力值
         level, info.basic.baseStatus, talent.iv, talent.ev, basic.personality);
-    public Status extraStatus => feature.afterwardStatus;   // 後天加成等額外的能力值
+    public Status extraStatus => feature.GetExtraStatus(normalStatus);   // 後天加成等額外的能力值
 
 
     #region properties
@@ -288,7 +288,7 @@ public class Pet
                 if (toLevel <= level)
                     LevelDown(toLevel);
                 else
-                    GainExp(exp.totalExp - PetExpSystem.GetTotalExp(Mathf.Min(toLevel, 100), exp.expType));
+                    GainExp(PetExpSystem.GetTotalExp(Mathf.Min(toLevel, exp.maxLevel), exp.expType) - exp.totalExp);
                 return;
             case "maxLevel":
                 exp.fixedMaxLevel = Mathf.Max((int)num, 0);

@@ -45,7 +45,7 @@ public class YiTeRogueChoice
         var floor = YiTeRogueData.instance.floor;
         var petBag = YiTeRogueData.instance.petBag;
         var petIds = choiceEvent.GetData("pet")?.ToIntList('/');
-        var petLevel = petBag.Min(x => x?.level ?? 100);
+        var petLevel = petBag.Where(x => x != null).DefaultIfEmpty(Pet.GetExamplePet(91)).Min(x => x.level);
         if (petIds == null)
             return new List<YiTeRogueChoice>(){ YiTeRogueChoice.Default };
 
@@ -90,10 +90,10 @@ public class YiTeRogueChoice
         var npcId = int.Parse(choiceEvent.GetData("npc_id", "8401"));
         var battleId = choiceEvent.GetData("battle_id", "21");
         var result = choiceEvent.GetData("result", "none");
-        var reward = choiceEvent.GetData("reward", "none").ToIntList('/');
+        var reward = choiceEvent.GetData("reward", "none").Split('/');
         switch (result) {
             default:
-                return new YiTeRogueChoice(npcId + ": " + battleId, () => Map.GetMap(mapId, map => {
+                return new YiTeRogueChoice("神秘的对手", () => Map.GetMap(mapId, map => {
                     var petBag = YiTeRogueData.instance.petBag;
                     var battleInfo = Map.GetBattleInfo(map, npcId, battleId)?.FixToYiTeRogue(choiceEvent);
                     if (battleInfo == null) {
@@ -105,15 +105,29 @@ public class YiTeRogueChoice
                 }, (error) => Hintbox.OpenHintboxWithContent(error, 16)), "buff[" + choiceEvent.eventIconBuffId + "]").SingleToList();
 
             case "win":
-                return reward.Select(id => {
-                    var item = (id == 5) ? YiTeRogueData.instance.prize : new Item(id, 1);
-                    return new YiTeRogueChoice(item.info.effectDescription, () => {
-                        if (item.info.type == ItemType.Currency)
-                            Item.Add(item);
-                        else
-                            Item.AddTo(item, YiTeRogueData.instance.itemBag);
-                        Item.OpenHintbox(item);
-                    }, "item[" + item.info.resId + "]");
+                return reward.Select(expr => {
+                    var type = expr.Substring(0, expr.IndexOf('['));
+                    var id = int.Parse(expr.TrimParentheses());
+                    switch (type) {
+                        default:
+                            return YiTeRogueChoice.Default;
+                        case "item":
+                            var item = (id == 5) ? YiTeRogueData.instance.prize : new Item(id, 1);
+                            return new YiTeRogueChoice(item.info.effectDescription, () => {
+                                if (item.info.type == ItemType.Currency)
+                                    Item.Add(item);
+                                else
+                                    Item.AddTo(item, YiTeRogueData.instance.itemBag);
+                                Item.OpenHintbox(item);
+                            }, "item[" + item.info.resId + "]");
+                        case "buff":
+                            var buff = new Buff(id);
+                            var endlId = buff.description.IndexOf("\n");
+                            var buffDesc = (endlId < 0) ? buff.description : buff.description.Substring(endlId + 1);
+                            return new YiTeRogueChoice(buffDesc, () => {
+                                YiTeRogueData.instance.buffIds.Add(id);
+                            }, "buff[" + buff.info.resId + "]");
+                    }
                 }).ToList();
 
             case "lose":

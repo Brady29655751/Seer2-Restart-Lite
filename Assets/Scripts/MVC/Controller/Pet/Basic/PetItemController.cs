@@ -42,6 +42,11 @@ public class PetItemController : Module
         onItemSelectEvent?.Invoke(itemModel.items[index]);
     }
 
+    public void Remove(Item item) {
+        itemModel.Remove(itemModel.items.IndexOf(item));
+        OnItemSetPage();
+    }
+
     public void OnItemButtonClick(int index) {
         Item item = itemModel.items[index];
 

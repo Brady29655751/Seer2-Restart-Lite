@@ -6,6 +6,10 @@ using UnityEngine;
 
 public class Buff
 {
+    public static List<Buff> yiteEndBuffDatabse => BuffInfo.database.Where(x => x.id.IsInRange(410000, 420000)).Select(x => new Buff(x.id)).ToList();
+    public static List<Buff> yiteHardBuffDatabse => BuffInfo.database.Where(x => x.id.IsInRange(440001, 450000) || x.id.IsInRange(400010, 400015)).Select(x => new Buff(x.id)).ToList();
+    public static List<Buff> yiteEasyBuffDatabse => BuffInfo.database.Where(x => x.id.IsInRange(420000, 440000) || x.id.IsInRange(400005, 400010)).Select(x => new Buff(x.id)).ToList();
+
     /* Basic Data */
     public BuffInfo info => GetBuffInfo(id);
     public int id;

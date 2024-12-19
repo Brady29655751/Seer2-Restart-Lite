@@ -17,6 +17,7 @@ public class Battle
     
     public int autoSkillCursor = 0;
     public List<int> autoSkillOrder = new List<int>();
+    public bool isAutoSuperSkill = false;
 
     public Battle(Pet[] myPetBag, Pet[] opPetBag, BattleSettings settings) {
         BattlePet[] player = myPetBag.Take(settings.petCount).Select(x => BattlePet.GetBattlePet(x)).ToArray();

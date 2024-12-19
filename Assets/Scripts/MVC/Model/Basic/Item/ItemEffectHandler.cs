@@ -4,12 +4,14 @@ using UnityEngine;
 
 public static class ItemEffectHandler
 {
-    public static int UseDefault(this Item item, object invokeUnit, BattleState state, int useCount = 1) {
+    public static int UseDefault(this Item item, object invokeUnit, BattleState state, int useCount = 1, PetBagMode petBagMode = PetBagMode.Normal) {
         int maxCount = item.GetMaxUseCount(invokeUnit, state);
         int count = Mathf.Min(item.num, useCount, maxCount);
         var handler = new EffectHandler();
         for (int i = 0; i < count; i++) {
-            handler.AddEffects(invokeUnit, item.effects);
+            var effects = item.GetEffects();
+            effects.ForEach(x => x.abilityOptionDict.Set("pet_bag_mode", ((int)petBagMode).ToString()));
+            handler.AddEffects(invokeUnit, effects);
         }
         handler.CheckAndApply(state);
         return count;
