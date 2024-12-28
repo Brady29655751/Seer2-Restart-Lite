@@ -123,7 +123,7 @@ public class UnitSkillSystem
             return damageType switch {
                 "item" => totalItemDamage,
                 "buff" => totalBuffDamage,
-                _ => damageDict[damageType],
+                _ => damageDict.Get(damageType, 0),
             };
         }
 

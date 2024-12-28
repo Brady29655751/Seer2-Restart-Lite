@@ -923,6 +923,10 @@ public static class EffectAbilityHandler
             }
 
             lhsUnit.pet.buffController.AddRangeBuff(buffs, lhsUnit, state);
+            if (lhsUnit.pet.buffController.GetBuff(-7) != null) {
+                lhsUnit.pet.maxHp = Mathf.Max(lhsUnit.pet.maxHp, battlePet.maxHp);
+                lhsUnit.pet.hp = lhsUnit.pet.maxHp;
+            }
 
             return true;
         }

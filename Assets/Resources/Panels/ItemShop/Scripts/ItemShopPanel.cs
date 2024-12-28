@@ -39,10 +39,11 @@ public class ItemShopPanel : Panel
         } },
         { ItemShopType.Sign, new List<int>() {
             500178, 500436, 500959, 500826, 500761,
-            500280, 500307,
+            500280, 500307, 500809,
         } },
         { ItemShopType.YiTe, new List<int>() {
-            500091, 24000, 320100, 320810,
+            500091, 24000, 320095, 320096, 320100,
+            320810,
         } },
         { ItemShopType.Plant, Item.plantItemDatabase.Select(x => x.id).ToList() },
     };

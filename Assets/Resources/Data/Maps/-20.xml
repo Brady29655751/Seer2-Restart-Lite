@@ -1,0 +1,64 @@
+<map name="实验室" category="1" id="-20" weather="0" switch="-1" pathId="-1">
+	<!-- <resource>10002</resource> -->
+	<fightMap>100011</fightMap>
+	<initialPoint>460,100</initialPoint>
+	<music category="1">
+		<bgm>MU_000</bgm>
+	</music>
+	<entities>
+		<npc id="-2000" resId="1001" name="" size="245,200" pos="545,310" color="0,0,0,0">
+			<description><![CDATA[传送室]]></description>
+			<eventHandler>
+				<button type="click">
+					<action>teleport</action>
+					<param>-70</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<npc id="-2001" resId="2001" name="博士伊娃" size="90,108" pos="180,300" namePos="0,-5">
+			<description><![CDATA[双精灵的对战！你能掌握吗？]]></description>
+			<dialog>
+				<branch id="default" name="博士伊娃" icon="2001" size="90,108" pos="0,50">
+					<content><![CDATA[金、木、水、火、土！最最厉害的精灵难道是杂交体不成？我得继续研究研究……]]></content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[对于它的信息少之甚少……]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+					</replyHandler>
+				</branch>
+			</dialog>
+			<eventHandler>
+				<button type="click">
+					<action>openDialog</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<npc id="-2003" resId="2003" name="" size="112,70" pos="310,370" color="0,0,0,0">
+			<description>胶囊药剂商店</description>
+			<eventHandler>
+				<button type="click">
+					<action>openPanel</action>
+					<param>ItemShop</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<npc id="-2004" resId="2004" name="" size="126,99" pos="735,280" color="0,0,0,0">
+			<description>性格修炼器（暂未开放）</description>
+			<eventHandler>
+			</eventHandler>
+		</npc>
+		<npc id="-2005" resId="2005" name="" size="240,142" pos="720,115" color="0,0,0,0">
+			<description>精灵融合仓（暂未开放）</description>
+			<eventHandler>
+			</eventHandler>
+		</npc>
+		<npc id="-2006" resId="2005" name="" size="140,142" pos="410,300" color="0,0,0,0">
+			<description>资质修炼器（暂未开放）</description>
+			<eventHandler>
+			</eventHandler>
+		</npc>
+	</entities>		
+</map>

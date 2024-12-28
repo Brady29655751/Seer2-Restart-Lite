@@ -11,12 +11,33 @@ public class YiTeRoguePanel : Panel
 
     public YiTeRogueData rogueData => YiTeRogueData.instance;
     public const int ROGUE_NPC_ID = 50001;
-    
+
     public override void Init() {
         Player.instance.currentNpcId = ROGUE_NPC_ID;
-        if ((rogueData == null) || (rogueData.difficulty == YiTeRogueMode.None) || rogueData.isEnd)
-            YiTeRogueData.CreateRogue(YiTeRogueMode.Test);
-        
+        SetMode(YiTeRogueData.instance?.difficulty ?? YiTeRogueMode.None);
+    }
+
+    public override void SetPanelIdentifier(string id, string param) {
+        switch (id) {
+            default:
+                base.SetPanelIdentifier(id, param);
+                return;
+            case "mode":
+                SetMode((YiTeRogueMode)int.Parse(param));
+                return;
+        }
+    }
+
+    public void SetMode(YiTeRogueMode mode) {
+        if ((rogueData == null) || rogueData.isEnd || (rogueData.difficulty <= YiTeRogueMode.None))
+            YiTeRogueData.CreateRogue(mode);
+        else if (rogueData.difficulty != mode) {
+            var currentModeName = YiTeRogueData.GetModeName(rogueData.difficulty);
+            var newModeName = YiTeRogueData.GetModeName(mode);
+            var hintbox = Hintbox.OpenHintboxWithContent("当前为<color=#ffbb33>【" + currentModeName + "】</color>模式\n" +
+                "想游玩<color=#ffbb33>【" + newModeName + "】</color>模式请先点击<color=red>【重新开始】</color>", 16);
+            hintbox.SetSize(420, 240);
+        }
         rogueView.SetMap();
     }
 
@@ -29,6 +50,7 @@ public class YiTeRoguePanel : Panel
             var prize = YiTeRogueData.instance.prize;
             Item.Add(prize);
             Item.OpenHintbox(prize);
+            Hintbox.OpenHintboxWithContent("你止步于第 " + (YiTeRogueData.instance.floor + 1) + " 层，下次继续努力吧！", 16);
             Player.instance.gameData.yiteRogueData = null;
             SaveSystem.SaveData();
             ClosePanel();

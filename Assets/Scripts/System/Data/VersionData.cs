@@ -76,6 +76,7 @@ public class VersionPetData {
 
     [XmlIgnore] public List<Pet> petAllWithMod => PetInfo.database.Select(x => Pet.GetExamplePet(x.id )).Where(x => x != null).ToList();
     [XmlIgnore] public List<Pet> petDictionary => petAllWithMod.Where(x => x.id.IsWithin(minPetId, maxPetId)).ToList();
+    [XmlIgnore] public List<Pet> petLastEvolveDictionary => petDictionary.GroupBy(x => x.basic.baseId).Select(group => group.Last()).ToList();
 
     [XmlIgnore] public List<Pet> petTopic => topicPetIds.Select(Pet.GetExamplePet).Where(x => (x != null)).ToList();
 }

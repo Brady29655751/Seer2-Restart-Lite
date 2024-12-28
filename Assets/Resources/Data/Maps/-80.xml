@@ -1,0 +1,19 @@
+<map name="游戏室" category="1" id="-80" weather="0" switch="-1" pathId="-1">
+	<!-- <resource>10008</resource> -->
+	<fightMap>100011</fightMap>
+	<initialPoint>460,100</initialPoint>
+	<music category="1">
+		<bgm>MU_000</bgm>
+	</music>
+	<entities>
+		<npc id="-8001" resId="1001" name="" size="245,200" pos="220,340" color="0,0,0,0">
+			<description><![CDATA[传送室]]></description>
+			<eventHandler>
+				<button type="click">
+					<action>teleport</action>
+					<param>-70</param>
+				</button>
+			</eventHandler>
+		</npc>
+	</entities>
+</map>

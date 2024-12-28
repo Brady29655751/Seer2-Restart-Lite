@@ -10,10 +10,15 @@ using Random = UnityEngine.Random;
 public class YiTeRogueData
 {
     [XmlIgnore] public static YiTeRogueData instance => Player.instance.gameData.yiteRogueData;
+    [XmlIgnore] public static Dictionary<YiTeRogueMode, string> modeNameDict = new Dictionary<YiTeRogueMode, string>() {
+        { YiTeRogueMode.Normal, "普通" },
+        { YiTeRogueMode.Endless,"无尽" },
+    };
 
     public int mode;
     public bool isEnd = false;
     public Pet[] petBag = new Pet[6];
+    public Status buffStatus = Status.zero;
     public List<int> buffIds = new List<int>();
     public List<Item> itemBag = new List<Item>();
     
@@ -24,8 +29,21 @@ public class YiTeRogueData
 
     [XmlIgnore] public YiTeRogueMode difficulty => (YiTeRogueMode)mode;
     [XmlIgnore] public BattlePet[] battlePetBag => petBag.Select(GetBattlePet).ToArray();
+    [XmlIgnore] public List<Buff> initBuffs => GetStatusBuffs().Concat(buffIds.Select(x => new Buff(x))).ToList();
     [XmlIgnore] public bool isNextPosLocked => nextPos.IsWithin(-2, 2);
     [XmlIgnore] public Item prize => new Item(5, GetPrizeNum());
+
+    public static string GetModeName(YiTeRogueMode mode) => modeNameDict.Get(mode, "未知");
+
+    public List<Buff> GetStatusBuffs() {
+        var statusBuffs = new List<Buff>();
+        for (int i = 0; i < 5; i++) {
+            var status = (int)buffStatus[i];
+            if (status != 0)
+                statusBuffs.Add(new Buff(400015 + i, -1, status));
+        }
+        return statusBuffs;
+    }
 
     public BattlePet GetBattlePet(Pet pet) {
         if (pet == null)
@@ -33,21 +51,27 @@ public class YiTeRogueData
     
         var copy = new Pet(pet);
         copy.feature.afterwardBuffIds.AddRange(buffIds);
-        return BattlePet.GetBattlePet(copy);
+        var battlePet = BattlePet.GetBattlePet(copy);
+        for (int i = 0; i < 5; i++) {
+            var status = (int)buffStatus[i];
+            if (status != 0)
+                battlePet.buffs.Add(new Buff(400015 + i, -1, status));
+        }
+        return battlePet;
     }
 
     public int GetPrizeNum() {
         var prizeFloor = floor;
         var prizeStep = trace.Count;
 
-        if ((prizeFloor == 0) && (trace.Count <= 1))
+        if (((prizeFloor == 0) && (trace.Count <= 2)) || (difficulty == YiTeRogueMode.Endless))
             return 0;
 
         if (prizeFloor <= YiTeRogueEvent.GetEndFloorByDifficulty(difficulty)) {
             prizeFloor -= (trace.Count == 0) ? 1 : 0;
             prizeStep = (trace.Count == 0) ? YiTeRogueEvent.GetEndStepByFloor(prizeFloor) : (prizeStep - 1);
         }
-        return prizeFloor * YiTeRogueEvent.GetEndStepByFloor(prizeFloor) * 2 + prizeStep + 2;
+        return Mathf.Max(2, prizeFloor * YiTeRogueEvent.GetEndStepByFloor(prizeFloor) * 2 + prizeStep - 4);
     }
 
     public YiTeRogueData(){}
@@ -57,7 +81,7 @@ public class YiTeRogueData
         floor = 0;
         // 20到200HP各5瓶、350HP的2瓶、高級復活藥1瓶
         itemBag = Enumerable.Range(10011, 4).Select(x => new Item(x, 5))
-            .Append(new Item(10016, 2)).Append(new Item(10018, 1)).ToList();
+            .Append(new Item(10016, 2)).Append(new Item(10018, 1)).Append(new Item(6, 50)).ToList();
             
         // 随机1项普通初始Buff
         buffIds = 440000.SingleToList();
@@ -129,11 +153,19 @@ public class YiTeRogueData
         CreateMap();
         return true;
     }
+
+    public float GetYiTeRogueIdentifier(string id) {
+        return id switch {
+            "mode"          => mode,
+            "difficulty"    => mode,
+            _               => 0,
+        };
+    }
 }
 
 public enum YiTeRogueMode {
     Test = -1,
     None = 0,
-    Easy = 1,
-    Hard = 2,
+    Normal = 1,
+    Endless = 2,
 }

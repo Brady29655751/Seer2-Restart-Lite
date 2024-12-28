@@ -24,20 +24,9 @@ public class BattleInfo
     public List<NpcButtonHandler> loseHandler;
 
     public BattleInfo FixToYiTeRogue(YiTeRogueEvent rogueEvent) {
-        var floor = YiTeRogueData.instance.floor;
-        var trace = YiTeRogueData.instance.trace.Count;
-        var petBag = YiTeRogueData.instance.petBag;
-        var baseLevel = 90 + floor * YiTeRogueEvent.GetEndStepByFloor(floor);
-        var stepLevel = trace + rogueEvent.battleDifficulty * 5;
-        var extraLevel = (rogueEvent.type == YiTeRogueEventType.End) ? 5 : stepLevel;
-
         settings.FixToYiTeRogue();
         playerInfo = null;
-        enemyInfo.ForEach(x => {
-            x.level =  baseLevel + extraLevel;
-            x.status = null;
-            x.hasEmblem = true;
-        });
+        enemyInfo.ForEach(x => x.FixToYiTeRogue(rogueEvent));
         winHandler = NpcButtonHandler.Callback(() => OnYiTeRogueBattleWin(rogueEvent)).SingleToList();
         loseHandler = NpcButtonHandler.Callback(() => OnYiTeRogueBattleLose(rogueEvent)).SingleToList();
         return this;
@@ -55,6 +44,7 @@ public class BattleInfo
             // 升1級，恢復1/8最大體力
             pet.GainExp(pet.levelUpExp, false);
             pet.currentStatus.hp += (int)(pet.normalStatus.hp / 8);
+            pet.currentStatus.hp = Mathf.Clamp(pet.currentStatus.hp, 0, pet.normalStatus.hp);
         }
         // 獲得3個冰糖，每個冰糖能+10學習力
         // 根據難度獲得餅乾，簡單+10、困難+20、Boss +40

@@ -4,10 +4,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using ExitGames.Client.Photon.StructWrapping;
 
 public class YiTeRogueView : UIModule
 {
     [SerializeField] private float eventBlockScale = 1.8f;
+    [SerializeField] private IText rogueModeText;
     [SerializeField] private ScrollRect rogueScrollRect;
     [SerializeField] private RectTransform rogueContentRect;
     [SerializeField] private BattlePetBuffView buffView;
@@ -35,15 +37,17 @@ public class YiTeRogueView : UIModule
         var nextPos = YiTeRogueData.instance.nextPos;
         var floor = YiTeRogueData.instance.floor;
         var trace = YiTeRogueData.instance.trace;
-        var buffs = YiTeRogueData.instance.buffIds.Select(x => new Buff(x)).ToList();
+        var buffs = YiTeRogueData.instance.initBuffs;
         YiTeRogueEvent rogueEvent = eventMap[0];
 
-        buffView.SetBuff(buffs);
+        rogueModeText?.SetText("【" + YiTeRogueData.GetModeName(YiTeRogueData.instance.difficulty) + " " + (floor + 1) + "层】");
         rogueContentRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 120 + 120 * eventMap[eventMap.Count - 1].step);
         rogueScrollRect.horizontalNormalizedPosition = trace.Count * 1f / YiTeRogueEvent.GetEndStepByFloor(floor);
+        buffView.SetBuff(buffs);
 
-        // Instantiate first block.
+        // Instantiate first block and the final block.
         InstantiateEventBlock(rogueEvent, trace);
+        InstantiateEventBlock(eventMap[eventMap.Count - 1], trace);
         if (trace.Count == 0)
             return;
 
@@ -85,9 +89,12 @@ public class YiTeRogueView : UIModule
                 if (trace.Count == rogueEvent.step) {
                     YiTeRogueData.instance.Click(rogueEvent.pos);
                     OpenChoicePanel(rogueEvent);
-                } else
-                    Hintbox.OpenHintboxWithContent("此事件已完成！", 16);
+                } else {
+                    var content = (rogueEvent.type == YiTeRogueEventType.End) ? "解决前面的事件，一步步靠近首领吧！" : "此事件已完成！";
+                    Hintbox.OpenHintboxWithContent(content, 16);
+                }
         });
+        blockView.SetSprite(rogueEvent.eventIcon);
         eventButtonList.Add(blockView);
     }
 
@@ -123,7 +130,7 @@ public class YiTeRogueView : UIModule
 
     public void ToggleBuffPanel() {
         var isBuffPanelActive = buffView.gameObject.activeSelf;
-        rogueScrollRect.gameObject.SetActive(isBuffPanelActive);
+        // rogueScrollRect.gameObject.SetActive(isBuffPanelActive);
         buffView.gameObject.SetActive(!isBuffPanelActive);
     }
 }

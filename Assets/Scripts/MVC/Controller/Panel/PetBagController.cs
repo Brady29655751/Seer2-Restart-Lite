@@ -36,7 +36,8 @@ public class PetBagController : Module
 
     private Pet[] GetPetBag() {
         return mode switch {
-            PetBagMode.Normal => Player.instance.gameData.petBag,
+            PetBagMode.Normal   => Player.instance.gameData.petBag,
+            PetBagMode.YiTeRogue=> YiTeRogueData.instance.petBag,
             _ => selectController.GetPetSelections(),
         };
     }

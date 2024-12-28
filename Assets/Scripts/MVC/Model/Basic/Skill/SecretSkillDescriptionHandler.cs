@@ -9,6 +9,7 @@ public static class SecretSkillDescriptionHandler
         "迪兰特、休罗斯、拉奥叶",   
         "笑笑葵",   
         "战伊特、钢伊特",
+        "光伊特、暗伊特",
     };
 
     public static string GreaterThanLevel(this LearnSkillInfo secretSkillInfo) {

@@ -261,6 +261,7 @@ public static class EffectConditionHandler
             return bool.Parse(condOptions.Get("default", "false"));
 
         Unit skillUnit = (who == "me") ? skillState.GetUnitById(invokeUnitId) : skillState.GetRhsUnitById(invokeUnitId);
+        Unit rhsUnit = skillState.GetRhsUnitById(skillUnit.id);
         var skillSystem = skillUnit.skillSystem;
 
         if (type == "none")
@@ -269,9 +270,7 @@ public static class EffectConditionHandler
         for (int i = 0; i < typeList.Length; i++) {
             string op = condOptions.Get(typeList[i] + "_op", "=");
             string cmpValue = condOptions.Get(typeList[i] + "_cmp", "0");
-            float value;
-            if (!float.TryParse(cmpValue, out value))
-                return false;
+            float value = Parser.ParseEffectOperation(cmpValue, effect, skillUnit, rhsUnit);
 
             if (!Operator.Condition(op, Identifier.GetSkillIdentifier(typeList[i], skillSystem), value))
                 return false;

@@ -13,7 +13,8 @@ public class PetBagModel : Module
 
     private Pet[] GetPetBag() {
         return mode switch {
-            PetBagMode.Normal => Player.instance.gameData.petBag,
+            PetBagMode.Normal   => Player.instance.gameData.petBag,
+            PetBagMode.YiTeRogue=> YiTeRogueData.instance.petBag,
             _ => selectModel.selections,
         };
     }
@@ -24,7 +25,7 @@ public class PetBagModel : Module
 
     public void SetPetSwap(int indexA, int indexB) {
         petBag.Swap(indexA, indexB);
-        if (mode == PetBagMode.Normal)
+        if ((mode == PetBagMode.Normal) || (mode == PetBagMode.YiTeRogue))
             SaveSystem.SaveData();
         else
             selectModel.SetPage(selectModel.page);

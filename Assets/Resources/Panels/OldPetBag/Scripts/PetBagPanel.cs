@@ -40,7 +40,7 @@ public class PetBagPanel : Panel
     {
         base.Init();
         itemController?.SetMode(mode);
-        StartCoroutine(PreloadPetAnimCoroutine((mode == PetBagMode.Normal) ? playerPetBag : petBag, InitMode));
+        StartCoroutine(PreloadPetAnimCoroutine(GetPetBag(), InitMode));
         
         void InitMode() 
         {
@@ -67,6 +67,7 @@ public class PetBagPanel : Panel
             yield break;
 
         int done = 0;
+        float timeout = 5;
         float[] progress = Enumerable.Repeat(0f, preloadPetBag.Length).ToArray();
         var loadingScreen = SceneLoader.instance.ShowLoadingScreen(-1, "正在加载精灵背包 (0/" + preloadPetBag.Length + ")");
 
@@ -79,9 +80,10 @@ public class PetBagPanel : Panel
                 pet.ui.PreloadPetAnimAsync(() => done++, p => progress[copy] = p);
         }
 
-        while (done < preloadPetBag.Length) {
+        while ((done < preloadPetBag.Length) && (timeout > 0)) {
             loadingScreen.ShowLoadingProgress(progress.Sum() / preloadPetBag.Length);
             loadingScreen.SetText("正在加载精灵背包 (" + done + "/" + preloadPetBag.Length + ")");
+            timeout -= Time.deltaTime;
             yield return null;
         }
 
@@ -173,6 +175,7 @@ public class PetBagPanel : Panel
     private void OnSetPersonalitySuccess(Personality personality) {
         RefreshPetBag(petBag);
     }
+
     private void RefreshPetBag(Pet[] bag) {
         int cursor = selectController.GetCursor().FirstOrDefault();
         SetPetBag(bag);
@@ -180,7 +183,15 @@ public class PetBagPanel : Panel
     }
 
     public void RefreshPetBag() {
-        RefreshPetBag((mode == PetBagMode.Normal) ? playerPetBag : petBag);
+        RefreshPetBag(GetPetBag());
+    }
+
+    public Pet[] GetPetBag() {
+        return mode switch {
+            PetBagMode.Normal    => playerPetBag,
+            PetBagMode.YiTeRogue => YiTeRogueData.instance.petBag,
+            _ => petBag,
+        };
     }
 
     public void SetPetBag(Pet[] bag) {

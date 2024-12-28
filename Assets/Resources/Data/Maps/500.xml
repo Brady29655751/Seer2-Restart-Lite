@@ -13,13 +13,9 @@
 					<content><![CDATA[我就是捣蛋鬼怎么样！没有朋友又怎么样！我就这么惹人厌！]]></content>
 					<functionHandler>
 						<func type="click">
-							<description><![CDATA[伊特大乱斗（测试版）]]></description>
-							<action>openPanel</action>
-							<param>YiTeRogue</param>
-						</func>
-						<func type="branch">
+							<description><![CDATA[伊特大乱斗]]></description>
 							<action>openDialog</action>
-							<param>null</param>
+							<param>choose_mode</param>
 						</func>
 						<func type="click">
 							<description><![CDATA[兑换奖励]]></description>
@@ -35,6 +31,36 @@
 							<action>openDialog</action>
 							<param>null</param>
 						</reply>
+					</replyHandler>
+				</branch>
+				<branch id="choose_mode" name="伊特" icon="Pets/pet/91.png" size="125,145" pos="10,25">
+					<content><![CDATA[哼！我准备好了，你要挑战什么模式？]]></content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[我还没想好]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+						<reply type="click">
+							<description><![CDATA[无尽模式（无奖励）]]></description>
+							<action>openPanel</action>
+							<param>YiTeRogue</param>
+							<param>mode=2</param>
+						</reply>
+						<reply type="branch">
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>	
+						<reply type="click">
+							<description><![CDATA[普通模式]]></description>
+							<action>openPanel</action>
+							<param>YiTeRogue</param>
+							<param>mode=1</param>
+						</reply>
+						<reply type="branch">
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>					
 					</replyHandler>
 				</branch>
 			</dialog>

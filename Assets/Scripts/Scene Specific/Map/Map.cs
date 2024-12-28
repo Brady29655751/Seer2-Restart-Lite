@@ -35,8 +35,17 @@ public class Map
     [XmlIgnore] public Vector2Int pathSize => resources.pathSize;
 
     public static bool IsMod(int id) => id < -50000;
-    public static void GetMap(int id, Action<Map> onSuccess = null, Action<string> onFail = null) {
-       ResourceManager.instance.LoadMap(id, onSuccess, onFail);
+
+    /// <summary>
+    /// Load the map async and return the cached map. <br/>
+    /// The cached map is useful when you only need the map data but not resources.
+    /// </summary>
+    /// <param name="id">The map id</param>
+    /// <param name="onSuccess">Callback when loading success</param>
+    /// <param name="onFail">Callback when loading failed</param>
+    /// <returns>The cached map that loaded last time.</returns>
+    public static Map GetMap(int id, Action<Map> onSuccess = null, Action<string> onFail = null) {
+        return Database.instance.GetMap(id, onSuccess, onFail);
     }
 
     public static NpcInfo GetNpcInfo(Map map, int npcId) {

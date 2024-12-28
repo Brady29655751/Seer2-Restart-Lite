@@ -40,6 +40,10 @@ public static class NpcConditionHandler
             return () => GetItem(item, op, dataKey, value);
         }
 
+        if (key.TryTrimStart("yite_rogue.", out trimKey)) {
+            return () => GetYiTeRogue(op, trimKey, value);
+        }
+
         return () => Operator.Condition(op, Parser.ParseOperation(key), Parser.ParseOperation(value));
     }
 
@@ -107,5 +111,13 @@ public static class NpcConditionHandler
         return key switch {
             _ => Operator.Condition(op, item?.num ?? 0, int.Parse(value)),
         };
+    }
+
+    public static bool GetYiTeRogue(string op, string key, string value) {
+        var rogue = YiTeRogueData.instance;
+        if (rogue == null)
+            return op != "=";
+
+        return Operator.Condition(op, YiTeRogueData.instance.GetYiTeRogueIdentifier(key), float.Parse(value));
     }
 }

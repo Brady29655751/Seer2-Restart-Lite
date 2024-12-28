@@ -46,8 +46,14 @@ public class YiTeRogueChoice
         var petBag = YiTeRogueData.instance.petBag;
         var petIds = choiceEvent.GetData("pet")?.ToIntList('/');
         var petLevel = petBag.Where(x => x != null).DefaultIfEmpty(Pet.GetExamplePet(91)).Min(x => x.level);
-        if (petIds == null)
-            return new List<YiTeRogueChoice>(){ YiTeRogueChoice.Default };
+        if (ListHelper.IsNullOrEmpty(petIds))
+            return new YiTeRogueChoice(choiceEvent.content, () => {
+                foreach (var pet in YiTeRogueData.instance.petBag) {
+                    if (pet == null)
+                        continue;
+                    pet.currentStatus.hp = pet.normalStatus.hp;
+                }
+            }, "buff[" + choiceEvent.eventIconBuffId + "]").SingleToList();
 
         Pet GetStartPet(int id) 
         {
@@ -68,6 +74,14 @@ public class YiTeRogueChoice
                             continue;
                         pet.currentStatus.hp = pet.normalStatus.hp;
                     }
+                else {
+                    var yiteActivity = Activity.Find("yite_rogue");
+                    var initSkillId = yiteActivity.GetData("init_skill[" + pet.id + "]", "none").ToIntList('/');
+                    if (!ListHelper.IsNullOrEmpty(initSkillId)) {
+                        pet.normalSkill = initSkillId.Take(4).Select(x => Skill.GetSkill(x, false)).ToArray();
+                        pet.superSkill = Skill.GetSkill(initSkillId.Last(), false);
+                    }
+                }
                 SaveSystem.SaveData();
             }, "pet[" + pet.id + "]");
         }
@@ -75,13 +89,21 @@ public class YiTeRogueChoice
     }   
 
     private static List<YiTeRogueChoice> GetStoreChoiceList(YiTeRogueEvent choiceEvent) {
+        var floor = YiTeRogueData.instance.floor;
+        var pet = YiTeRogueData.instance.petBag.First();
         var itemList = choiceEvent.GetData("item", "none");
         return new YiTeRogueChoice("神秘商店", () => {
-           var panel = Panel.OpenPanel<ItemShopPanel>();
-           panel.SetPanelIdentifier("title", "神秘商店"); 
-           panel.SetShopMode(ItemShopMode.BuyYiTe);
-           panel.SetPanelIdentifier("item", itemList);
-           panel.SetCurrencyType(6, 0);
+            var panel = Panel.OpenPanel<ItemShopPanel>();
+            panel.SetPanelIdentifier("title", "神秘商店"); 
+            panel.SetShopMode(ItemShopMode.BuyYiTe);
+            panel.SetPanelIdentifier("item", itemList);
+            panel.SetCurrencyType(6, 0);
+
+            // Record current yite skill. Auto load it next time.
+            if ((floor == 0) && (choiceEvent.step == 1)) {
+                Activity.Find("yite_rogue").SetData("init_skill[" + pet.id + "]", pet.skills.normalSkillId
+                    .Append(pet.skills.superSkillId).Select(x => x.ToString()).ConcatToString("/"));
+            }
         }, "buff[" + choiceEvent.eventIconBuffId + "]").SingleToList();
     }
 
@@ -89,20 +111,47 @@ public class YiTeRogueChoice
         var mapId = int.Parse(choiceEvent.GetData("map_id", "84"));
         var npcId = int.Parse(choiceEvent.GetData("npc_id", "8401"));
         var battleId = choiceEvent.GetData("battle_id", "21");
+        var battleNum = int.Parse(battleId);
         var result = choiceEvent.GetData("result", "none");
         var reward = choiceEvent.GetData("reward", "none").Split('/');
+
+        BattleInfo GetBattleInfo(Map map) {
+            var normalEnemyList = GameManager.versionData.petData.petLastEvolveDictionary.Where(x => x.element != Element.精灵王).ToList();
+            if (mapId == 82) {
+                var bossId = battleNum switch {
+                    7   => 990,
+                    14  => 1990,
+                    21  => 989,
+                    _   => normalEnemyList.Random().id,
+                };
+                var randomEnemyInfo = BossInfo.GetRandomEnemyInfo(bossId.SingleToList());
+                return new BattleInfo(){ enemyInfo = randomEnemyInfo.SingleToList() };
+            }
+            if (mapId >= 85) {
+                var bossId = (battleNum % 7 == 0) ? new List<int>(){ 990, 1990, 989, 990, 1990, 989 } 
+                    : normalEnemyList.Random(6, false).Select(x => x.id).ToList();
+                var randomEnemyInfo = bossId.Select(x => BossInfo.GetRandomEnemyInfo(x.SingleToList())).ToList();
+                return new BattleInfo(){ enemyInfo = randomEnemyInfo };
+            }
+            return Map.GetBattleInfo(map, npcId, battleId);
+        }
+
         switch (result) {
             default:
-                return new YiTeRogueChoice("神秘的对手", () => Map.GetMap(mapId, map => {
-                    var petBag = YiTeRogueData.instance.petBag;
-                    var battleInfo = Map.GetBattleInfo(map, npcId, battleId)?.FixToYiTeRogue(choiceEvent);
+                var map = Map.GetMap(mapId);
+                var battleInfo = GetBattleInfo(map)?.FixToYiTeRogue(choiceEvent);
+                var enemyId = battleInfo?.enemyInfo?.FirstOrDefault()?.petId;
+                var description = ((enemyId == null) || ((mapId == 82) && (battleNum % 7 != 0))) ? "随机的对手" : 
+                    battleInfo.enemyInfo.Select(x => Pet.GetPetInfo(x.petId)?.name).ConcatToString("、");
+                var icon = (enemyId == null) ? ("buff[" + choiceEvent.eventIconBuffId + "]") : ("pet[" + enemyId + "]");
+                return new YiTeRogueChoice(description, () => {
                     if (battleInfo == null) {
                         Hintbox.OpenHintboxWithContent("NPC战斗信息为空", 16);
                         return;
                     }
                     Battle battle = new Battle(battleInfo);
                     SceneLoader.instance.ChangeScene(SceneId.Battle);
-                }, (error) => Hintbox.OpenHintboxWithContent(error, 16)), "buff[" + choiceEvent.eventIconBuffId + "]").SingleToList();
+                }, icon).SingleToList();
 
             case "win":
                 return reward.Select(expr => {
@@ -118,14 +167,28 @@ public class YiTeRogueChoice
                                     Item.Add(item);
                                 else
                                     Item.AddTo(item, YiTeRogueData.instance.itemBag);
+
                                 Item.OpenHintbox(item);
+                                if (id == 5)
+                                    Hintbox.OpenHintboxWithContent("恭喜你通过第 " + YiTeRogueData.instance.floor + " 层，完成挑战！", 16);
                             }, "item[" + item.info.resId + "]");
                         case "buff":
                             var buff = new Buff(id);
                             var endlId = buff.description.IndexOf("\n");
                             var buffDesc = (endlId < 0) ? buff.description : buff.description.Substring(endlId + 1);
                             return new YiTeRogueChoice(buffDesc, () => {
-                                YiTeRogueData.instance.buffIds.Add(id);
+                                if (buff.IsYiTeMedicineItem()) {
+                                    var statusId = id - 400000;
+                                    YiTeRogueData.instance.buffStatus[statusId % 5] += statusId / 5 * 50;
+                                } else
+                                    YiTeRogueData.instance.buffIds.Add(id);
+                                var nextEventList = choiceEvent.nextEventList?.Where(x => x.battleDifficulty >= 0).ToList();
+                                if (ListHelper.IsNullOrEmpty(nextEventList))
+                                    return;
+
+                                nextEventList.ForEach(x => x.SetData("reward", YiTeRogueEvent.GetYiTeRogueEventData(x.type)
+                                    ?.Find(x => x.key == "reward")?.value ?? x.GetData("reward")));
+                                SaveSystem.SaveData();
                             }, "buff[" + buff.info.resId + "]");
                     }
                 }).ToList();

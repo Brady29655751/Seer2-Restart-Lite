@@ -55,9 +55,8 @@ public class PetBattleSkillController
     }
 
     public List<Skill> GetAvailableSkills(int anger, bool withSuper = true) {
-        var availableSkills = (((normalSkills?.Count ?? 0) > 0) ?
-            normalSkills.Where(x => (x != null) && (x.anger <= anger)) : loopSkills)
-            .Where(x => !x.isSelect).ToList();
+        var availableSkills = (((normalSkills?.Count ?? 0) > 0) ? normalSkills : loopSkills)
+            .Where(x => (x != null) && (x.anger <= anger) && (!x.isSelect)).ToList();
 
         if (withSuper && (superSkill != null) && (superSkill.anger <= anger) && (!superSkill.isSelect))
             availableSkills.Add(superSkill);

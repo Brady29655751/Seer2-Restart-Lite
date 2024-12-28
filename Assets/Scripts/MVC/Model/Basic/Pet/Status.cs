@@ -311,10 +311,12 @@ public class BattleStatus : Status {
         angrec = 100;
     }
 
-    public BattleStatus(Status normalStatus, Status extraStatus) {
-        for(int i = 0; i < status.Length; i++) {
-            status[i] = normalStatus[i];
-        } 
+    public BattleStatus(Status normalStatus) : base(normalStatus) {
+        rec = 100;
+        angrec = 100;
+    }
+
+    public BattleStatus(Status normalStatus, Status extraStatus) : base(normalStatus) {
         for(int i = 0; i < hiddenStatus.Length; i++) {
             hiddenStatus[i] = extraStatus[i];
         }

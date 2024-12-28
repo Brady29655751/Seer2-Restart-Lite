@@ -11,13 +11,13 @@ public class Item
 {
     public const int COIN_ID = 1, DIAMOND_ID = 2;
 
-    public static List<Item> petItemDatabase => ItemInfo.database.Where(x => (x.effects?.All(y => y.ability == EffectAbility.SetPet) ?? false) &&
-        (x.id == x.getId)).Select(x => new Item(x.id, 9999)).ToList();
-    public static List<Item> pvpItemDatabase => petItemDatabase.Where(x => (x.effects?.All(y => {
+    public static List<Item> petItemDatabase => ItemInfo.database.Where(x => (!skillBookItemDatabase.Select(x => x.id).Contains(x.id)) && 
+        (x.effects?.All(y => y.ability == EffectAbility.SetPet) ?? false) && (x.id == x.getId)).Select(x => new Item(x.id, 9999)).ToList();
+    public static List<Item> pvpItemDatabase => petItemDatabase.Where(x => (!skillBookItemDatabase.Select(x => x.id).Contains(x.id)) && ((x.effects?.All(y => {
         var banned = new List<string>(){ "exp", "level", "skinId", "iv", "emblem" };
         var type = y.abilityOptionDict.Get("type", "none");
-        return !banned.Contains(type);
-    })) ?? false).ToList();
+        return (!banned.Contains(type));
+    })) ?? false)).ToList();
     public static List<Item> plantItemDatabase => ItemInfo.database.Where(x => x.type == ItemType.Plant)
         .Select(x => new Item(x.id, -1)).ToList();
     public static List<Item> normalPlantItemDatabase => plantItemDatabase.Where(x => !bool.Parse(x.info.options.Get("rare", "false"))).ToList();

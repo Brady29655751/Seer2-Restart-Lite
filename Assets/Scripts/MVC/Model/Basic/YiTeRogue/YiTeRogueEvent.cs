@@ -14,12 +14,15 @@ public class YiTeRogueEvent
     public List<int> next;
     public List<IKeyValuePair<string, string>> data;
 
-    [XmlIgnore] public int eventIconBuffId => GetEventIconBuffId(type);
+    [XmlIgnore] public Sprite eventIcon => GetEventIcon();
+    [XmlIgnore] public int eventIconBuffId => GetEventTypeIconId(type);
     [XmlIgnore] public int npcId => GetEventNpcId(type);
     [XmlIgnore] public int battleDifficulty => GetBattleDifficulty(type);
     [XmlIgnore] public string title => GetData("title");
     [XmlIgnore] public string content => GetData("content");
     [XmlIgnore] public List<YiTeRogueChoice> choiceList => YiTeRogueChoice.GetChoiceList(this);
+    [XmlIgnore] public List<YiTeRogueEvent> nextEventList => YiTeRogueData.instance?.eventMap
+        .FindAll(x => (x.step == step + 1) && (next?.Exists(y => x.pos == pos + y) ?? false));
 
     public string GetData(string key, string defaultReturn = null) {
         return data.Find(x => x.key == key)?.value ?? defaultReturn;
@@ -33,8 +36,14 @@ public class YiTeRogueEvent
         dataToSet.value = value;
     }
 
-    public static int GetEventIconBuffId(YiTeRogueEventType type) => -13 - ((int)type);
-    public static int GetEventNpcId(YiTeRogueEventType type) => YiTeRoguePanel.ROGUE_NPC_ID - GetEventIconBuffId(type) - 1;
+    public Sprite GetEventIcon() {
+        return (type == YiTeRogueEventType.End)
+        ? choiceList.FirstOrDefault()?.icon 
+        : SpriteSet.GetIconSprite("buff[" + eventIconBuffId + "]");
+    }
+
+    public static int GetEventTypeIconId(YiTeRogueEventType type) => -13 - ((int)type);
+    public static int GetEventNpcId(YiTeRogueEventType type) => YiTeRoguePanel.ROGUE_NPC_ID - GetEventTypeIconId(type) - 1;
     public static int GetBattleDifficulty(YiTeRogueEventType type) => type switch {
         YiTeRogueEventType.BattleEasy => 0,
         YiTeRogueEventType.BattleHard => 1,
@@ -45,14 +54,20 @@ public class YiTeRogueEvent
     public static int GetEndFloorByDifficulty(YiTeRogueMode difficulty) {
         return difficulty switch {
             YiTeRogueMode.Test => 2,
-            YiTeRogueMode.Easy => 2,
-            YiTeRogueMode.Hard => 4,
+            YiTeRogueMode.Normal => 2,
+            YiTeRogueMode.Endless => int.MaxValue,
             _ => 0,
         };
     }
 
     public static int GetEndStepByFloor(int floor) {
-        return 10;
+        if (floor >= 3)
+            return 20;
+
+        if (floor == 2)
+            return 17;
+
+        return (floor == 0) ? 10 : 13;
     }
 
     public static YiTeRogueEvent GetStartEvent() {
@@ -65,8 +80,8 @@ public class YiTeRogueEvent
             pos = 0,
             step = 0,
             next = nextCount switch {
-                1 => new List<int>() { -1, 1 },
-                2 => new List<int>() { -1, 0, 1 },
+                // 1 => new List<int>() { -1, 1 },
+                // 2 => new List<int>() { -1, 0, 1 },
                 _ => new List<int>() { 0 }, 
             },
             data = GetYiTeRogueEventData(type),
@@ -98,7 +113,7 @@ public class YiTeRogueEvent
         for (int i = 0; i < previousEvent.next.Count; i++) {
             var nextEvent = new YiTeRogueEvent();
 
-            nextEvent.type =  (YiTeRogueEventType)Identifier.GetNumIdentifier("random[2~5|-2]");
+            nextEvent.type = GetNextEventType(previousEvent, endStep);
             nextEvent.pos = previousEvent.pos + previousEvent.next[i];
             nextEvent.step = previousEvent.step + 1;
             nextEvent.data = GetYiTeRogueEventData(nextEvent.type);
@@ -126,12 +141,23 @@ public class YiTeRogueEvent
         return nextEventList;
     }
 
-    private static List<IKeyValuePair<string, string>> GetYiTeRogueEventData(YiTeRogueEventType type) {
+    public static YiTeRogueEventType GetNextEventType(YiTeRogueEvent previousEvent, int endStep) {
+        var previousStep = previousEvent.step;
+        if (previousStep % 5 == 0)
+            return YiTeRogueEventType.Store;
+
+        var hardRatio = Mathf.Min(previousStep / 5, 3);
+        return (Random.Range(0, hardRatio + 2) == 0) ? YiTeRogueEventType.BattleEasy : YiTeRogueEventType.BattleHard;
+    }   
+
+    public static List<IKeyValuePair<string, string>> GetYiTeRogueEventData(YiTeRogueEventType type) {
         var data = new List<IKeyValuePair<string, string>>();
+        var petBag = YiTeRogueData.instance.petBag;
         var difficulty = YiTeRogueData.instance.difficulty;
         var floor = YiTeRogueData.instance.floor;
         var isEndRogue = floor == YiTeRogueEvent.GetEndFloorByDifficulty(difficulty);
-        var battleMapId = (floor < 2) ? "83" : "84";
+
+        var battleMapId = (82 + Mathf.Min(floor, YiTeRogueEvent.GetEndFloorByDifficulty(YiTeRogueMode.Normal) + 1)).ToString();
         var randomFloor = Identifier.GetNumIdentifier("random[1~6|8~13|15~20]").ToString();
         var randomBoss = (Random.Range(1, 4) * 7).ToString();
         var randomDialog = type == YiTeRogueEventType.Dialog ? 1.ToString() : 1.ToString();
@@ -141,11 +167,15 @@ public class YiTeRogueEvent
                 break;
             case YiTeRogueEventType.Start:
             case YiTeRogueEventType.Heal:
-                var petId = GameManager.versionData.petData.petDictionary.GroupBy(x => x.basic.baseId)
-                    .Select(group => group.Last().id.ToString()).ToList().Random(3, false).ConcatToString("/");
-                data.Add(new IKeyValuePair<string, string>("title", (floor == 0) ? "起始点" : "休息站"));
-                data.Add(new IKeyValuePair<string, string>("content", (floor == 0) ? "选择你的起始伊特吧！" : "回复体力并选择你的新伙伴吧！"));    
-                data.Add(new IKeyValuePair<string, string>("pet", (floor == 0) ? "100/810" : petId));
+                var petDict = GameManager.versionData.petData.petLastEvolveDictionary;
+                var petId = petDict.Where(x => x.basic.id != 91).Select(x => x.id.ToString()).ToList();
+                var yiteId = Pet.GetPetInfo(91).exp.evolvePetIds.Select(x => x.ToString()).ToList();
+                var title = (floor == 0) ? "起始点" : "休息站";
+                var content = petBag.All(x => x != null) ? "回复体力吧！" : ((floor == 0) ? "选择你的起始伊特吧！" : "回复体力并选择你的新伙伴吧！");
+                var pet = petBag.All(x => x != null) ? "none" : ((floor == 0) ? yiteId : petId).Random(3, false).ConcatToString("/");
+                data.Add(new IKeyValuePair<string, string>("title", title));
+                data.Add(new IKeyValuePair<string, string>("content", content));    
+                data.Add(new IKeyValuePair<string, string>("pet", pet));
                 break;
             case YiTeRogueEventType.Store:
                 var randomGrow = Item.yiteGrowItemDatabse.Where(x => x.id % 5 < 4).ToList().Random(3, false).Select(x => x.id.ToString());
@@ -156,9 +186,10 @@ public class YiTeRogueEvent
                 data.Add(new IKeyValuePair<string, string>("item", storeItems));
                 break;
             case YiTeRogueEventType.BattleEasy:
-                var easyGrowReward = Item.yiteGrowItemDatabse.Where(x => x.id % 5 < 2).ToList().Random(1, false)
-                    .Select(x => "item[" + x.id + "]");
-                var easyBuffReward = Buff.yiteEasyBuffDatabse.Random(2, false).Select(x => "buff[" + x.id + "]");
+                var easyGrowReward = Item.yiteGrowItemDatabse.Where(x => x.id % 5 < 2).ToList()
+                    .Random(1, false).Select(x => "item[" + x.id + "]");
+                var easyBuffReward = Buff.yiteEasyBuffDatabse.Where(x => (x.info.copyHandleType == CopyHandleType.New) || (!YiTeRogueData.instance.buffIds.Contains(x.id))).ToList()
+                    .Random(2, false).Select(x => "buff[" + x.id + "]");
                 var easyReward = easyGrowReward.Concat(easyBuffReward).ConcatToString("/");
                 data.Add(new IKeyValuePair<string, string>("title", "战斗（简单）"));
                 data.Add(new IKeyValuePair<string, string>("content", "点击下方选项进入战斗"));
@@ -171,7 +202,8 @@ public class YiTeRogueEvent
             case YiTeRogueEventType.BattleHard:
                 var hardGrowReward = Item.yiteGrowItemDatabse.Where(x => (x.id % 5).IsWithin(1, 3)).ToList()
                     .Random(1, false).Select(x => "item[" + x.id + "]");
-                var hardBuffReward = Buff.yiteHardBuffDatabse.Random(2, false).Select(x => "buff[" + x.id + "]");
+                var hardBuffReward = Buff.yiteHardBuffDatabse.Where(x => (x.info.copyHandleType == CopyHandleType.New) || (!YiTeRogueData.instance.buffIds.Contains(x.id))).ToList()
+                    .Random(2, false).Select(x => "buff[" + x.id + "]");
                 var hardReward = hardGrowReward.Concat(hardBuffReward).ConcatToString("/");
                 data.Add(new IKeyValuePair<string, string>("title", "战斗（困难）"));
                 data.Add(new IKeyValuePair<string, string>("content", "点击下方选项进入战斗"));
@@ -192,7 +224,8 @@ public class YiTeRogueEvent
             case YiTeRogueEventType.End:
                 var endGrowReward = Item.yiteGrowItemDatabse.Where(x => x.id % 5 == 4).ToList()
                     .Random(1, false).Select(x => "item[" + x.id + "]");
-                var endBuffReward = Buff.yiteEndBuffDatabse.Random(2, false).Select(x => "buff[" + x.id + "]");
+                var endBuffReward = Buff.yiteEndBuffDatabse.Where(x => (x.info.copyHandleType == CopyHandleType.New) || (!YiTeRogueData.instance.buffIds.Contains(x.id))).ToList()
+                    .Random(2, false).Select(x => "buff[" + x.id + "]");
                 var endReward = endGrowReward.Concat(endBuffReward).ConcatToString("/");
                 data.Add(new IKeyValuePair<string, string>("title", "战斗（终极）"));
                 data.Add(new IKeyValuePair<string, string>("content", "点击下方选项进入战斗"));
@@ -200,7 +233,7 @@ public class YiTeRogueEvent
                 data.Add(new IKeyValuePair<string, string>("npc_id", battleMapId + "02"));
                 data.Add(new IKeyValuePair<string, string>("battle_id", randomBoss));
                 data.Add(new IKeyValuePair<string, string>("result", "none"));
-                data.Add(new IKeyValuePair<string, string>("reward", isEndRogue ? "5" : endReward));
+                data.Add(new IKeyValuePair<string, string>("reward", isEndRogue ? "item[5]" : endReward));
                 break;
         };
         return data;

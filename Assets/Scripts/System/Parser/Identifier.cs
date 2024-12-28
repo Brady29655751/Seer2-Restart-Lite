@@ -82,6 +82,11 @@ public static class Identifier {
             };
         }
 
+        if (id.TryTrimStart("yite_rogue.", out trimId)) {
+            var rogue = YiTeRogueData.instance;
+            return rogue?.GetYiTeRogueIdentifier(trimId) ?? float.MinValue;
+        }
+
         return GetNumIdentifier(id);
     }
 

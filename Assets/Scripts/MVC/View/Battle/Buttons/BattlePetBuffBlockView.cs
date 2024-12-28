@@ -26,6 +26,10 @@ public class BattlePetBuffBlockView : Module
         button.SetSprite(buff?.info?.icon ?? SpriteSet.GetDefaultIconSprite(true));
     }
 
+    public void SetSprite(Sprite sprite) {
+        button.SetSprite(sprite ?? SpriteSet.GetDefaultIconSprite(true));
+    }
+
     public void SetValue() {
         var value = buff?.value ?? 0;
         valueText.gameObject.SetActive(value != 0);

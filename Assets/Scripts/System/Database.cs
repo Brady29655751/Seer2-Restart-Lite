@@ -9,6 +9,7 @@ public class Database : Singleton<Database>
 {
     private ResourceManager RM => ResourceManager.instance;
 
+    public Dictionary<int, Map> mapDict = new Dictionary<int, Map>();
     public Dictionary<int, Skill> skillDict = new Dictionary<int, Skill>();
     public Dictionary<int, PetFeatureInfo> featureInfoDict = new Dictionary<int, PetFeatureInfo>();
     public Dictionary<int, PetHitInfo> hitInfoDict = new Dictionary<int, PetHitInfo>();
@@ -42,6 +43,8 @@ public class Database : Singleton<Database>
             activityInfos = activityInfoDict.Select(entry => entry.Value)
                 .OrderByDescending(x => ActivityInfo.IsMod(x.id) ? 1 : 0).ThenByDescending(x => x.releaseDate).ToList();
         });
+        for (int id = 81; id <= 89; id++)
+            RM.LoadMap(id, map => mapDict.Set(id, map));
     }
 
     public bool VerifyData(out string error)
@@ -98,9 +101,16 @@ public class Database : Singleton<Database>
         return true;
     }
 
-    public void GetMap(int id, Action<Map> onSuccess = null, Action<string> onFail = null)
+    public Map GetMap(int id, Action<Map> onSuccess = null, Action<string> onFail = null)
     {
-        RM.LoadMap(id, onSuccess, onFail);
+        var map = mapDict.Get(id);
+        RM.LoadMap(id, (map) => {
+            if (!Map.IsMod(id))
+                mapDict.Set(id, map);
+
+            onSuccess?.Invoke(map);
+        }, onFail);
+        return map;
     }
 
     public Skill GetSkill(int id)
