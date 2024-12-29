@@ -70,16 +70,7 @@ public class BossInfo
 
         // 技能和印记
         if (floor >= 3) {
-            var endlessBuffs = new List<int>(){ 13, 14, 3022, -3022 };
-            if (floor >= 6)
-                endlessBuffs.Add(-3030);
-            if (floor >= 10)
-                endlessBuffs.Add(60);
-            if (floor >= 15)
-                endlessBuffs.Add(-3028);
-            if (floor >= 21)
-                endlessBuffs.Add(-4);
-
+            var endlessBuffs = new List<int>(){ 13, 14, -3022, -3030 };
             initBuffIds = initBuffIds.ToIntList().Concat(endlessBuffs).Select(x => x.ToString()).ConcatToString(",");
             loopSkillIds = loopSkills.TakeLast(5).Append(loopSkills.Get(3, loopSkills.First())).Select(x => x.id.ToString()).ConcatToString(",");
             status.hit = 50;
