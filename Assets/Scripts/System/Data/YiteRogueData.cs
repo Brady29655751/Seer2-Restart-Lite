@@ -71,7 +71,11 @@ public class YiTeRogueData
             prizeFloor -= (trace.Count == 0) ? 1 : 0;
             prizeStep = (trace.Count == 0) ? YiTeRogueEvent.GetEndStepByFloor(prizeFloor) : (prizeStep - 1);
         }
-        return Mathf.Max(2, prizeFloor * YiTeRogueEvent.GetEndStepByFloor(prizeFloor) * 2 + prizeStep - 4);
+        // Floor 0: 20 + step
+        // Floor 1: 44 + step
+        // Floor 2: 81 + step
+        // Floor 3: 125 + step
+        return (prizeFloor + 1) * YiTeRogueEvent.GetEndStepByFloor(prizeFloor) * 3 / 2 + prizeStep + 5;
     }
 
     public YiTeRogueData(){}

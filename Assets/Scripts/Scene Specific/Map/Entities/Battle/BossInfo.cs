@@ -52,7 +52,7 @@ public class BossInfo
     public BossInfo FixToYiTeRogue(YiTeRogueEvent rogueEvent) {
         var floor = YiTeRogueData.instance.floor;
         var trace = YiTeRogueData.instance.trace.Count;
-        var baseLevel = 85 + floor * YiTeRogueEvent.GetEndStepByFloor(floor) + (Mathf.Max(floor - 3, 0) * 5);
+        var baseLevel = 80 + floor * YiTeRogueEvent.GetEndStepByFloor(floor) + (Mathf.Max(floor - 3, 0) * 5);
         var stepLevel = trace + rogueEvent.battleDifficulty * 5;
         var extraLevel = (rogueEvent.type == YiTeRogueEventType.End) ? 10 : stepLevel;
         var enemyLevel = baseLevel + extraLevel;
@@ -65,15 +65,18 @@ public class BossInfo
         hasEmblem = true;
         
         // 剔除煩人的特殊印記
-        initBuffIds = initBuffIds.ToIntList().Where(x => (x != -4) && (x > -3000) && (!x.IsInRange(21, 55)))
+        initBuffIds = initBuffIds.ToIntList().Update(13, 71).Update(14, 72)
+            .Where(x => (x != -4) && (x > -3000) && (!x.IsInRange(21, 55)))
             .Append(-7).Select(x => x.ToString()).ConcatToString(",");
 
         // 技能和印记
         if (floor >= 3) {
-            var endlessBuffs = new List<int>(){ 13, 14, -3022, -3030 };
-            initBuffIds = initBuffIds.ToIntList().Concat(endlessBuffs).Select(x => x.ToString()).ConcatToString(",");
+            var endlessBuffs = new List<int>(){ 71, 72, -3022 };
+            initBuffIds = initBuffIds.ToIntList().Union(endlessBuffs).Select(x => x.ToString()).ConcatToString(",");
             loopSkillIds = loopSkills.TakeLast(5).Append(loopSkills.Get(3, loopSkills.First())).Select(x => x.id.ToString()).ConcatToString(",");
             status.hit = 50;
+        } else if (pet.element == Element.精灵王) {
+            initBuffIds = initBuffIds.ToIntList().Append(3070).Select(x => x.ToString()).ConcatToString(",");
         }
         return this;
     }

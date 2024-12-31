@@ -17,6 +17,7 @@ public class BeforeAttackPhase : BattlePhase
         if (!IsAttackLegal())
             return;
         
+        OnChainStart();
         base.DoWork();
         CheckAccuracy();
     }
@@ -30,6 +31,10 @@ public class BeforeAttackPhase : BattlePhase
             return new DamageCalculatePhase();
 
         return new AttackPhase();
+    }
+
+    private void OnChainStart() {
+        state.atkUnit.OnChainStart();
     }
 
     private void CheckAccuracy() {

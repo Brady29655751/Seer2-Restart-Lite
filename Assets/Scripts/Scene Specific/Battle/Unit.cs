@@ -104,6 +104,11 @@ public class Unit
         skillSystem.skill = (_skill == null) ? null : new Skill(_skill);
     }
 
+    public void OnChainStart() 
+    {
+        skillSystem.OnChainStart();
+    }
+
     public bool CalculateAccuracy(Unit rhs)
     {
         return skillSystem.CalculateAccuracy(pet, rhs.pet);

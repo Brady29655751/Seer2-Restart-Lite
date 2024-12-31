@@ -7,6 +7,8 @@ using Random = UnityEngine.Random;
 
 public class UnitSkillSystem
 {   
+    public static string[] normalHpType => new string[] { "skill", "item", "buff" };
+
     public Skill skill = null;
     public float level;
     public float atk;
@@ -57,6 +59,10 @@ public class UnitSkillSystem
         itemHeal = rhs.itemHeal;
     }
 
+    public void EnsureSkillNotNull() {
+        skill ??= Skill.GetNoOpSkill();
+    }
+
     public void OnTurnStart() {
         skill = null;
 
@@ -71,8 +77,14 @@ public class UnitSkillSystem
         skillHeal = itemHeal = buffHeal = 0;
     }
 
-    public void EnsureSkillNotNull() {
-        skill ??= Skill.GetNoOpSkill();
+    public void OnChainStart() {
+        level = atk = def = 0;
+        weatherBuff = sameElementBuff = elementRelation = 1f;
+        isHit = true;
+        isCritical = false;
+        
+        skillDamage = skillHeal = 0;
+        damageDict = damageDict.Where(x => !x.Key.StartsWith("skill")).ToDictionary(x => x.Key, x => x.Value);
     }
 
     public bool CalculateAccuracy(BattlePet atkPet, BattlePet defPet) {
@@ -95,8 +107,6 @@ public class UnitSkillSystem
     }
 
     public int CalculateDamage(BattlePet atkPet, BattlePet defPet) {
-        skillDamage = 0;
-
         if (skill == null) {
             return skillDamage;
         }

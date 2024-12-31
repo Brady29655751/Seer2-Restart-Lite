@@ -112,10 +112,10 @@ public static class ListHelper {
     }
 
     public static IList<T> Update<T>(this IList<T> list, T oldItem, T newItem) {
-        return list.Update(list.IndexOf(oldItem), newItem);
+        return list.UpdateAt(list.IndexOf(oldItem), newItem);
     }
 
-    public static IList<T> Update<T>(this IList<T> list, int oldIndex, T newItem) {
+    public static IList<T> UpdateAt<T>(this IList<T> list, int oldIndex, T newItem) {
         if (!oldIndex.IsInRange(0, list.Count))
             return list;
         

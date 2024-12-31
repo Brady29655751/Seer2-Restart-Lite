@@ -114,6 +114,7 @@ public class YiTeRogueChoice
         var battleNum = int.Parse(battleId);
         var result = choiceEvent.GetData("result", "none");
         var reward = choiceEvent.GetData("reward", "none").Split('/');
+        var difficulty = YiTeRogueData.instance.difficulty;
 
         BattleInfo GetBattleInfo(Map map) {
             var normalEnemyList = GameManager.versionData.petData.petLastEvolveDictionary.Where(x => x.element != Element.精灵王).ToList();
@@ -170,7 +171,7 @@ public class YiTeRogueChoice
 
                                 Item.OpenHintbox(item);
                                 if (id == 5)
-                                    Hintbox.OpenHintboxWithContent("恭喜你通过第 " + YiTeRogueData.instance.floor + " 层，完成挑战！", 16);
+                                    Hintbox.OpenHintboxWithContent("恭喜你通过第 " + YiTeRogueEvent.GetEndFloorByDifficulty(difficulty) + " 层，完成挑战！", 16);
                             }, "item[" + item.info.resId + "]");
                         case "buff":
                             var buff = new Buff(id);
@@ -182,6 +183,7 @@ public class YiTeRogueChoice
                                     YiTeRogueData.instance.buffStatus[statusId % 5] += statusId / 5 * 50;
                                 } else
                                     YiTeRogueData.instance.buffIds.Add(id);
+                                
                                 var nextEventList = choiceEvent.nextEventList?.Where(x => x.battleDifficulty >= 0).ToList();
                                 if (ListHelper.IsNullOrEmpty(nextEventList))
                                     return;

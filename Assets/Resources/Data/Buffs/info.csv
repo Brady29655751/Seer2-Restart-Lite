@@ -76,6 +76,8 @@ id,name,type,copyType,turn,options,description
 68,随机数固定,mark,replace,-1,none,我方条件类随机数固定为[value]
 69,反馈不良,mark,replace,-1,res=13,反馈不良状态（此印记不免疫不良状态）
 70,反馈異常,mark,replace,-1,none,反馈異常状态（此印记不免疫異常状态）
+71,免疫百分比不良,mark,replace,-1,res=125,免疫不良状态造成的百分比体力流失
+72,免疫持续异常,mark,replace,-1,res=126,回合结束时若自身无法行动则会获得5回合免疫异常
 94,能力反转,mark,replace,-1,none,获得的能力变化效果相反
 95,至尊光环,mark,replace,-1,none,自身弱化不超过[value]级，对手强化不超过[value]级
 96,限伤,mark,replace,-1,none,受到的伤害不超过最大体力的1/[value]
@@ -272,7 +274,7 @@ id,name,type,copyType,turn,options,description
 3159,战之领域,mark,replace,-1,none,造成的伤害增加10%
 3160,战斗领域,mark,replace,-1,none,造成的伤害增加20%
 3161,气态化,mark,replace,-1,none,先出手时造成的伤害增加25%[ENDL]后出手时当回合对手命中率降低25%
-3162,汽化热,chance,replace,-1,auto_remove=true,对手攻击技能必中-2[ENDL]若自身闪避失败则清除对手所有怒气[ENDL]当前剩余[value】次
+3162,汽化热,chance,replace,-1,auto_remove=true,对手攻击技能必中-2[ENDL]若自身闪避失败则清除对手所有怒气[ENDL]当前剩余[value]次
 3163,理想气体,turn,block,3,inherit=true,属性相克系数和本系加成固定为1
 3164,光辉之影,mark,replace,-1,keep=false,后制-1
 3165,光之领域,mark,replace,-1,none,体力回复率增加15%

@@ -1169,4 +1169,4 @@ id,timing,priority,target,condition,cond_option,effect,effect_option
 11158,on_after_attack\on_after_attack,-1\-1,pet\pet,none\buff,none\id=3152,add_buff\add_buff,id=3169\id=3170
 11159,on_before_attack\on_after_attack,-1\-1,skill\pet,buff\buff,id=3169&own=true\id=3170&own=true,set_skill\powerup,type=power&op=*&value=2\atk=1&mat=1
 11160,on_after_attack,-1,pet,none,none,powerup,who=op&def=-1&mdf=-1
-99999,on_after_attack\on_after_attack,-1\-1,pet\pet,none\none,none\none,set_pet\set_pet,type=normalSkill[1]&op=SET&value=shift[-3]\type=superSkill&op=SET&value=-1001
+99999,on_turn_ready\on_attack,-1\-1,skill\pet,none\pet,none\type=chain&chain_cmp=0,set_skill\heal,type=chain&op=SET&value=3\add=1

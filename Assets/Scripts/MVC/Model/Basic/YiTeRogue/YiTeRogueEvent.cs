@@ -168,7 +168,7 @@ public class YiTeRogueEvent
             case YiTeRogueEventType.Start:
             case YiTeRogueEventType.Heal:
                 var petDict = GameManager.versionData.petData.petLastEvolveDictionary;
-                var petId = petDict.Where(x => x.basic.id != 91).Select(x => x.id.ToString()).ToList();
+                var petId = petDict.Where(x => x.basic.baseId != 91).Select(x => x.id.ToString()).ToList();
                 var yiteId = Pet.GetPetInfo(91).exp.evolvePetIds.Select(x => x.ToString()).ToList();
                 var title = (floor == 0) ? "起始点" : "休息站";
                 var content = petBag.All(x => x != null) ? "回复体力吧！" : ((floor == 0) ? "选择你的起始伊特吧！" : "回复体力并选择你的新伙伴吧！");

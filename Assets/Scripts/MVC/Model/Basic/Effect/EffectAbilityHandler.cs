@@ -4,7 +4,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
-using System.Runtime.InteropServices;
 
 public static class EffectAbilityHandler
 {
@@ -650,7 +649,7 @@ public static class EffectAbilityHandler
             damage = Parser.ParseEffectOperation(value, effect, lhsUnit, rhsUnit);
         }
 
-        if (state.phase == EffectTiming.OnTurnEnd) {
+        if ((state.phase == EffectTiming.OnTurnEnd) && UnitSkillSystem.normalHpType.Contains(type)) {
             skillSystem.buffDamage = (int)Operator.Operate(op, skillSystem.buffDamage, damage);
         } else if (type == "skill") {
             skillSystem.skillDamage = (int)Operator.Operate(op, skillSystem.skillDamage, damage);
@@ -975,7 +974,7 @@ public static class EffectAbilityHandler
             if (trimNormalSkill.TryTrimParentheses(out var skillIndexExpr)
                 && int.TryParse(skillIndexExpr, out var skillIndex)) {
                 var newSkill = normalSkills.Get(skillIndex, normalSkills.FirstOrDefault());
-                battlePet.normalSkill = battlePet.normalSkill.Update(skillIndex, newSkill).ToArray();
+                battlePet.normalSkill = battlePet.normalSkill.UpdateAt(skillIndex, newSkill).ToArray();
                 return true;
             }
             battlePet.normalSkill = normalSkills;
