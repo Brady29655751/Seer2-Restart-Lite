@@ -283,6 +283,9 @@ id,name,type,copyType,turn,options,description
 3168,暗影之光,chance,replace,-1,keep=false,下一次攻击伤害减少25%
 3169,暗之领域,mark,replace,-1,none,怒气回复率增加15%
 3170,暗影领域,mark,replace,-1,none,怒气回复率增加25%
+3171,记恨,mark,replace,-1,none,本回合攻击伤害低于对手则下回合暴击率增加35%
+3172,暴击率提升,mark,replace,-1,res=27,暴击率增加[value]%
+3173,诋毁,mark,replace,-1,inherit=true,主动换场失去90点体力
 3279,蜂纹,mark,stack,-1,auto_remove=true&max_val=3,每一层使中毒造成的伤害增加30，最多叠加3层。[ENDL]当前为[value]层
 3280,青蜂之舞,turn,replace,3,res=18,闪避率增加50%
 100001,终结,feature,replace,-1,none,体力低于1/4时，消耗弱点记号的技能伤害增加25%，且使水泡必中并附加30点伤害
@@ -336,6 +339,7 @@ id,name,type,copyType,turn,options,description
 100326,虚无,feature,replace,-1,none,普通系技能对自身的命中率减少35%
 100329,堕落,feature,replace,-1,none,对手具有弱化时，自身每次攻击能恢复30体力
 100332,怒视,feature,replace,-1,none,对手使用属性技能时自身获得10点怒气
+100335,嫉妒,feature,replace,-1,none,若对手能力值总和高于自身，则自身受到的伤害减少10%
 100350,极热,feature,replace,-1,none,使用属性技能时50%使对手烧伤
 100388,指引,feature,replace,-1,none,以星的指引伤害增加10%
 100436,甲骨,feature,replace,-1,none,首次出场时获得不屈状态
@@ -413,6 +417,7 @@ id,name,type,copyType,turn,options,description
 200326,契约,emblem,replace,-1,none,魔鬼契约可额外提升自身50点特防值
 200329,刻死,emblem,replace,-1,none,自身战败时会随机弱化对手能力1级
 200332,理智,emblem,replace,-1,none,首次出场时获得100点怒气传递状态
+200335,阴暗,emblem,replace,-1,none,本回合技能未命中则下回合受到伤害减少75%
 200350,熔石,emblem,replace,-1,none,对手烧伤时火系技能致命率增加15%
 200388,星的,emblem,replace,-1,none,首次出场时自带星的指引
 200436,棒骨,emblem,replace,-1,none,棒骨的反弹效果和反弹上限增加10%

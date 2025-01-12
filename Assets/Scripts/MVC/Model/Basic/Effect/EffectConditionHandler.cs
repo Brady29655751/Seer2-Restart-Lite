@@ -169,10 +169,6 @@ public static class EffectConditionHandler
             string op = condOptions.Get(typeList[i] + "_op", "=");
             string cmpValue = condOptions.Get(typeList[i] + "_cmp", "0");
             float value = Parser.ParseEffectOperation(cmpValue, effect, lhsUnit, rhsUnit);
-            if (typeList[i] == "chain") {
-                Debug.Log(Identifier.GetPetIdentifier(typeList[i], lhsUnit.petSystem) + " " + value);
-                Debug.Log(Operator.Condition(op, Identifier.GetPetIdentifier(typeList[i], lhsUnit.petSystem), value));
-            }
             if (!Operator.Condition(op, Identifier.GetPetIdentifier(typeList[i], lhsUnit.petSystem), value))
                 return false;
         }

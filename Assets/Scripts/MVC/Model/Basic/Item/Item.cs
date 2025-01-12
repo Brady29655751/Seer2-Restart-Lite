@@ -14,7 +14,7 @@ public class Item
     public static List<Item> petItemDatabase => ItemInfo.database.Where(x => (!skillBookItemDatabase.Select(x => x.id).Contains(x.id)) && 
         (x.effects?.All(y => y.ability == EffectAbility.SetPet) ?? false) && (x.id == x.getId)).Select(x => new Item(x.id, 9999)).ToList();
     public static List<Item> pvpItemDatabase => petItemDatabase.Where(x => (!skillBookItemDatabase.Select(x => x.id).Contains(x.id)) && ((x.effects?.All(y => {
-        var banned = new List<string>(){ "exp", "level", "skinId", "iv", "emblem" };
+        var banned = new List<string>(){ "exp", "level", "skinId", "iv", "emblem", "evolve" };
         var type = y.abilityOptionDict.Get("type", "none");
         return (!banned.Contains(type));
     })) ?? false)).ToList();

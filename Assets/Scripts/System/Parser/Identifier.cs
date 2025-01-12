@@ -187,7 +187,7 @@ public static class Identifier {
                     Identifier.GetPetIdentifier(options[0], petSystem, x),
                     Identifier.GetPetIdentifier(options[1], petSystem, x))
                 );
-                trimId.TrimStart("(" + trimExpr + ")");
+                trimId = trimId.TrimStart("(" + trimExpr + ")");
             }
 
             trimId = trimId.TrimStart(".");

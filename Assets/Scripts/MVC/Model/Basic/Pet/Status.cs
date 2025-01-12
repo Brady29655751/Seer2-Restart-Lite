@@ -279,7 +279,11 @@ public class BattleStatus : Status {
     }
 
     public override float Get(string type) {
-        int idx = battleTypeNames.IndexOf(type.ToLower());
+        var typeLow = type.ToLower();
+        if (typeLow == "sum")
+            return sum;
+
+        int idx = battleTypeNames.IndexOf(typeLow);
         if (idx == -1)
             return 0;
 

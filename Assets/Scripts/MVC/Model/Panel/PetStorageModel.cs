@@ -3,6 +3,7 @@ using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
 
 public class PetStorageModel : Module
 {
@@ -28,7 +29,12 @@ public class PetStorageModel : Module
 
         if (!petBag.Contains(null))
             return false;
-
+        
+        if (mode == PetBagMode.PVP) {
+            var petCount = (int)PhotonNetwork.CurrentRoom.CustomProperties["count"];
+            if (petBag.Count(x => x != null) == petCount)
+                return false;
+        }
         SetPetTake(null);
         return true;
     }
