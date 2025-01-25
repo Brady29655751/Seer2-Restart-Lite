@@ -270,6 +270,10 @@ public static class SaveSystem
                         && ItemInfo.IsMod(int.Parse(entry.value))).ToList();
                     modData.ForEach(entry => farmActivity.SetData(entry.key, "none"));
                 }
+
+                // Clean yite rogue
+                if ((data.yiteRogueData != null) && (data.yiteRogueData.difficulty == YiTeRogueMode.Mod))
+                    data.yiteRogueData = null;
                 
                 SaveData(data, id);
             }

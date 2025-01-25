@@ -13,6 +13,7 @@ public class YiTeRogueData
     [XmlIgnore] public static Dictionary<YiTeRogueMode, string> modeNameDict = new Dictionary<YiTeRogueMode, string>() {
         { YiTeRogueMode.Normal, "普通" },
         { YiTeRogueMode.Endless,"无尽" },
+        { YiTeRogueMode.Mod,    "Mod" },
     };
 
     public int mode;
@@ -64,7 +65,7 @@ public class YiTeRogueData
         var prizeFloor = floor;
         var prizeStep = trace.Count;
 
-        if (((prizeFloor == 0) && (trace.Count <= 2)) || (difficulty == YiTeRogueMode.Endless))
+        if (((prizeFloor == 0) && (trace.Count <= 2)) || (difficulty != YiTeRogueMode.Normal))
             return 0;
 
         if (prizeFloor <= YiTeRogueEvent.GetEndFloorByDifficulty(difficulty)) {
@@ -172,4 +173,5 @@ public enum YiTeRogueMode {
     None = 0,
     Normal = 1,
     Endless = 2,
+    Mod = 3,
 }

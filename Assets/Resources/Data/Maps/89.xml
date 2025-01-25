@@ -1,0 +1,175 @@
+<map name="VIP乐园" category="1" id="89" weather="0">
+	<!-- <resource>10008</resource> -->
+	<fightMap>100011</fightMap>
+	<initialPoint>460,100</initialPoint>
+	<music category="1">
+		<bgm>MU_005</bgm>
+	</music>
+	<entities>
+		<npc id="8901" resId="Pets/pet/354" name="娜娜" size="114,111" pos="220,70" namePos="0,0">
+			<description>2025蛇年新春挑战</description>
+			<dialog>
+				<branch id="default" name="娜娜" icon="Pets/pet/354" size="114,111" pos="0,55">
+					<content><![CDATA[恭喜发财！欢迎挑战！挑战2v2可以获得灯笼兑换奖励哦！]]></content>
+					<functionHandler>
+						<func type="click">
+							<description><![CDATA[新春挑战（2v2）]]></description>
+							<action>battle</action>
+							<param>2v2</param>
+						</func>
+						<func type="click">
+							<description><![CDATA[新春挑战（6v6）]]></description>
+							<action>battle</action>
+							<param>6v6</param>
+						</func>
+						<func type="click">
+							<description><![CDATA[纪念商店]]></description>
+							<action>openPanel</action>
+							<param>Cook</param>
+							<param>recipe=210001/210002/210003/210004/210005/210006/210007/210008/210009/210010/210011</param>
+							<param>title=纪念商店</param>
+						</func>
+					</functionHandler>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[新年快乐！]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+					</replyHandler>
+				</branch>
+			</dialog>
+			<battle>
+				<branch id="2v2">
+					<settings count="2" parallel="2"/>
+					<enemy>
+						<pet id="357" level="60">
+							<status>
+								<hp>2025</hp>
+							</status>
+							<initBuff>71,72</initBuff>
+							<loopSkill>11177,11178,11188,11183</loopSkill>
+							<superSkill>11186</superSkill>
+						</pet>
+						<pet id="809" level="60">
+							<status>
+								<hp>2025</hp>
+							</status>
+							<initBuff>71,72</initBuff>
+							<loopSkill>11127,11130,11127,11131</loopSkill>
+							<superSkill>11135</superSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setItem</action>
+							<param>add</param>
+							<param>400010,1</param>
+							<condition>random[old]&lt;25</condition>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=1个恭字红灯笼已经放入背包</param>
+							<param>item_icon=item[400010]</param>
+							<param>option_num=1</param>
+							<condition>random[old]&lt;25</condition>
+						</button>
+						<button type="auto">
+							<action>setItem</action>
+							<param>add</param>
+							<param>400011,1</param>
+							<condition>random[old]GTE25</condition>
+							<condition>random[old]&lt;50</condition>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=1个贺字红灯笼已经放入背包</param>
+							<param>item_icon=item[400011]</param>
+							<param>option_num=1</param>
+							<condition>random[old]GTE25</condition>
+							<condition>random[old]&lt;50</condition>
+						</button>
+						<button type="auto">
+							<action>setItem</action>
+							<param>add</param>
+							<param>400012,1</param>
+							<condition>random[old]GTE50</condition>
+							<condition>random[old]&lt;75</condition>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=1个新字红灯笼已经放入背包</param>
+							<param>item_icon=item[400012]</param>
+							<param>option_num=1</param>
+							<condition>random[old]GTE50</condition>
+							<condition>random[old]&lt;75</condition>
+						</button>
+						<button type="auto">
+							<action>setItem</action>
+							<param>add</param>
+							<param>400013,1</param>
+							<condition>random[old]GTE75</condition>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=1个禧字红灯笼已经放入背包</param>
+							<param>item_icon=item[400013]</param>
+							<param>option_num=1</param>
+							<condition>random[old]GTE75</condition>
+						</button>
+					</winHandler>
+				</branch>
+				<branch id="6v6">
+					<settings count="6"/>
+					<enemy>
+						<pet id="355" level="105">
+							<status>
+								<hp>20250000</hp>
+							</status>
+							<initBuff>71,72,97,-3031</initBuff>
+							<loopSkill>11195,11194,11197,11196</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setItem</action>
+							<param>add</param>
+							<param>4,3</param>
+							<condition>activity[2025].done[6v6]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=3个时空包裹已经放入背包</param>
+							<param>item_icon=item[4]</param>
+							<param>option_num=1</param>
+							<condition>activity[2025].done[6v6]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>2025</param>
+							<param>done[6v6]=true</param>
+							<condition>activity[2025].done[6v6]=[bool]false[default]false</condition>
+						</button>
+					</winHandler>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>openDialog</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<teleport id="1" name="观星台" pos="70,70" targetMapId="1"/> 
+	</entities>
+</map>

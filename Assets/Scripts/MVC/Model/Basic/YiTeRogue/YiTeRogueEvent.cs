@@ -56,6 +56,7 @@ public class YiTeRogueEvent
             YiTeRogueMode.Test => 2,
             YiTeRogueMode.Normal => 2,
             YiTeRogueMode.Endless => int.MaxValue,
+            YiTeRogueMode.Mod => int.MaxValue,
             _ => 0,
         };
     }
@@ -157,21 +158,24 @@ public class YiTeRogueEvent
         var floor = YiTeRogueData.instance.floor;
         var isEndRogue = floor == YiTeRogueEvent.GetEndFloorByDifficulty(difficulty);
 
-        var battleMapId = (82 + Mathf.Min(floor, YiTeRogueEvent.GetEndFloorByDifficulty(YiTeRogueMode.Normal) + 1)).ToString();
+        var extraFloor = (difficulty == YiTeRogueMode.Mod) ? 0 : Mathf.Min(floor, YiTeRogueEvent.GetEndFloorByDifficulty(YiTeRogueMode.Normal) + 1);
+        var battleMapId = (82 + extraFloor).ToString();
         var randomFloor = Identifier.GetNumIdentifier("random[1~6|8~13|15~20]").ToString();
         var randomBoss = (Random.Range(1, 4) * 7).ToString();
         var randomDialog = type == YiTeRogueEventType.Dialog ? 1.ToString() : 1.ToString();
+
+        var petData = GameManager.versionData.petData;
 
         switch (type) {
             default:
                 break;
             case YiTeRogueEventType.Start:
             case YiTeRogueEventType.Heal:
-                var petDict = GameManager.versionData.petData.petLastEvolveDictionary;
+                var petDict = (difficulty == YiTeRogueMode.Mod) ? petData.petModLastEvolveDictionary : petData.petLastEvolveDictionary;
                 var petId = petDict.Where(x => x.basic.baseId != 91).Select(x => x.id.ToString()).ToList();
-                var yiteId = Pet.GetPetInfo(91).exp.evolvePetIds.Select(x => x.ToString()).ToList();
+                var yiteId = (difficulty == YiTeRogueMode.Mod) ? petId : Pet.GetPetInfo(91).exp.evolvePetIds.Select(x => x.ToString()).ToList();
                 var title = (floor == 0) ? "起始点" : "休息站";
-                var content = petBag.All(x => x != null) ? "回复体力吧！" : ((floor == 0) ? "选择你的起始伊特吧！" : "回复体力并选择你的新伙伴吧！");
+                var content = petBag.All(x => x != null) ? "回复体力吧！" : ((floor == 0) ? "选择你的起始精灵吧！" : "回复体力并选择你的新伙伴吧！");
                 var pet = petBag.All(x => x != null) ? "none" : ((floor == 0) ? yiteId : petId).Random(3, false).ConcatToString("/");
                 data.Add(new IKeyValuePair<string, string>("title", title));
                 data.Add(new IKeyValuePair<string, string>("content", content));    

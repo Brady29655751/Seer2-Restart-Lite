@@ -67,7 +67,7 @@ public class BattlePhase
         if (state != null) {
             handler.AddEffects(invokeUnit, state.weatherBuff.effects);
 
-            var stateEffects = state.stateBuffs.Select(x => x.Value.effects);
+            var stateEffects = state.stateBuffs.Where(x => !x.Value.ignore).Select(x => x.Value.effects);
             foreach (var e in stateEffects)
                 handler.AddEffects(invokeUnit, e);
         }

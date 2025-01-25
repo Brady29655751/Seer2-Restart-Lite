@@ -100,7 +100,7 @@ public class YiTeRogueChoice
             panel.SetCurrencyType(6, 0);
 
             // Record current yite skill. Auto load it next time.
-            if ((floor == 0) && (choiceEvent.step == 1)) {
+            if ((floor == 0) && (choiceEvent.step == 1) && (pet.basic.baseId == 91)) {
                 Activity.Find("yite_rogue").SetData("init_skill[" + pet.id + "]", pet.skills.normalSkillId
                     .Append(pet.skills.superSkillId).Select(x => x.ToString()).ConcatToString("/"));
             }
@@ -116,8 +116,11 @@ public class YiTeRogueChoice
         var reward = choiceEvent.GetData("reward", "none").Split('/');
         var difficulty = YiTeRogueData.instance.difficulty;
 
+        var petData = GameManager.versionData.petData;
+        var petDict = (difficulty == YiTeRogueMode.Mod) ? petData.petModLastEvolveDictionary : petData.petLastEvolveDictionary;
+
         BattleInfo GetBattleInfo(Map map) {
-            var normalEnemyList = GameManager.versionData.petData.petLastEvolveDictionary.Where(x => x.element != Element.精灵王).ToList();
+            var normalEnemyList = petDict.Where(x => x.element != Element.精灵王).ToList();
             if (mapId == 82) {
                 var bossId = battleNum switch {
                     7   => 990,

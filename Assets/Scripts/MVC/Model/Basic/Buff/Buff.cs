@@ -56,7 +56,7 @@ public class Buff
 
     public bool IsType(BuffType type) {
         return type switch {
-            BuffType.All        => true,
+            BuffType.All        => !IsPower(),
             BuffType.TurnBased  => (turn > 0) && (!IsUnhealthy()) && (!IsAbnormal()),
             _                   => info.type == type,
         };

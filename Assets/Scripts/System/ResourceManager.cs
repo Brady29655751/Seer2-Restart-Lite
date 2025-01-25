@@ -46,6 +46,7 @@ public class ResourceManager : Singleton<ResourceManager>
         InitUIResources();
         InitGameResources();
         SaveSystem.TryLoadElementMod(out var error);
+        Player.SetSceneData("is_mod_exist", SaveSystem.IsModExists() ? 1 : 0);
     }
 
     private void InitUIResources()
@@ -495,19 +496,23 @@ public class ResourceManager : Singleton<ResourceManager>
                 Debug.LogError("Effect id parsing failure.");
                 return effectLists;
             }
-
-            string[][] effectData = new string[dataCol - 1][];
-            for (int j = 1; j < dataCol; j++)
+            try 
             {
-                effectData[j - 1] =
-                    data[cur + j].Split(new char[] { '\\' }, System.StringSplitOptions.RemoveEmptyEntries);
-            }
+                string[][] effectData = new string[dataCol - 1][];
+                for (int j = 1; j < dataCol; j++)
+                {
+                    effectData[j - 1] =
+                        data[cur + j].Split(new char[] { '\\' }, System.StringSplitOptions.RemoveEmptyEntries);
+                }
 
-            for (int j = 0; j < effectData[0].Length; j++)
-            {
-                Effect effect = new Effect(effectData[0][j], effectData[1][j], effectData[2][j],
-                    effectData[3][j], effectData[4][j], effectData[5][j], effectData[6][j]);
-                effectLists[i - 1].Add(effect);
+                for (int j = 0; j < effectData[0].Length; j++)
+                {
+                    Effect effect = new Effect(effectData[0][j], effectData[1][j], effectData[2][j],
+                        effectData[3][j], effectData[4][j], effectData[5][j], effectData[6][j]);
+                    effectLists[i - 1].Add(effect);
+                }
+            } catch (Exception) {
+                Hintbox.OpenHintboxWithContent("加载效果失败（ID：" + effectId + "）", 16);
             }
         }
 

@@ -30,8 +30,10 @@ public class BossInfo
     public static BossInfo GetRandomEnemyInfo(int level = 100, Func<Pet, bool> bannedPetFunc = null)
     {
         bannedPetFunc ??= (p) => false;
-        var petIdList = GameManager.versionData.petData.petLastEvolveDictionary
-            .Where(x => !bannedPetFunc(x)).Select(x => x.id).ToList().Random(1);
+        var difficulty = YiTeRogueData.instance.difficulty;
+        var petData = GameManager.versionData.petData;
+        var petDict = petData.petLastEvolveDictionary;
+        var petIdList = petDict.Where(x => !bannedPetFunc(x)).Select(x => x.id).ToList().Random(1);
         return GetRandomEnemyInfo(petIdList, level);
     }
 
@@ -59,7 +61,7 @@ public class BossInfo
         var pet = Pet.GetExamplePet(petId, enemyLevel);
 
         level = enemyLevel;
-        status = new BattleStatus(pet.normalStatus * (1 + Mathf.Max(0, floor - 2) / 2f)){ 
+        status = new BattleStatus(pet.normalStatus * (1 + Mathf.Max(0, floor - 2) / 5f)){ 
             hp = pet.normalStatus.hp * (floor + 1) 
         };
         hasEmblem = true;

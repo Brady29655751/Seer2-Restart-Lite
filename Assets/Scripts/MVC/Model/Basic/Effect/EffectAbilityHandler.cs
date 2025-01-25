@@ -155,8 +155,12 @@ public static class EffectAbilityHandler
 
         for (int i = 0; i < targetList.Count; i++) {
             var heal = Parser.ParseEffectOperation(add, effect, lhsUnit, rhsUnit, targetList[i]);
-            int healAdd = (int)(heal * ((heal > 0) ? (targetList[i].battleStatus.rec / 100f) : 1));
+            bool lostToGain = (heal < 0) && (targetList[i].buffController.GetBuff(93) != null);
+            bool gainToLost = (heal > 0) && (targetList[i].buffController.GetBuff(1020) != null);
+            if (lostToGain || gainToLost)
+                heal *= -1;
 
+            int healAdd = (int)(heal * ((heal > 0) ? (targetList[i].battleStatus.rec / 100f) : 1));
             var setHp = (set == "none") ? 0 : (int)Parser.ParseEffectOperation(set, effect, lhsUnit, rhsUnit, targetList[i]);
             var maxHp = (max == "none") ? 0 : (int)Parser.ParseEffectOperation(max, effect, lhsUnit, rhsUnit, targetList[i]);
 

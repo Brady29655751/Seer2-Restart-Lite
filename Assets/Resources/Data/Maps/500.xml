@@ -42,7 +42,24 @@
 							<param>null</param>
 						</reply>
 						<reply type="click">
-							<description><![CDATA[无尽模式（无奖励）]]></description>
+							<description><![CDATA[Mod模式]]></description>
+							<action>openPanel</action>
+							<param>YiTeRogue</param>
+							<param>mode=3</param>
+							<condition>data.is_mod_exist&gt;0</condition>
+						</reply>
+						<reply type="branch">
+							<action>openDialog</action>
+							<param>null</param>
+							<condition>data.is_mod_exist&gt;0</condition>
+						</reply>
+						<reply type="branch">
+							<action>openDialog</action>
+							<param>mod_not_exist</param>
+							<condition>data.is_mod_existLTE0</condition>
+						</reply>
+						<reply type="click">
+							<description><![CDATA[无尽模式]]></description>
 							<action>openPanel</action>
 							<param>YiTeRogue</param>
 							<param>mode=2</param>
@@ -50,7 +67,7 @@
 						<reply type="branch">
 							<action>openDialog</action>
 							<param>null</param>
-						</reply>	
+						</reply>
 						<reply type="click">
 							<description><![CDATA[普通模式]]></description>
 							<action>openPanel</action>
@@ -61,6 +78,16 @@
 							<action>openDialog</action>
 							<param>null</param>
 						</reply>					
+					</replyHandler>
+				</branch>
+				<branch id="mod_not_exist" name="伊特" icon="Pets/pet/91.png" size="125,145" pos="10,25">
+					<content><![CDATA[没有加载Mod不能游玩Mod模式！]]></content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[啊……]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
 					</replyHandler>
 				</branch>
 			</dialog>
