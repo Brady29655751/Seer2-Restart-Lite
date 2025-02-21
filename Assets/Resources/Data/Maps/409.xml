@@ -1,0 +1,58 @@
+<map name="雪之湖泊"  category="5"  id="409"  weather="0">
+	<!-- <resource>10011</resource> -->
+	<initialPoint>350,90</initialPoint>
+	<music category="11">
+		<bgm>BGM_093</bgm>
+	</music>
+	<entities>
+
+
+		<npc id="1" resId="Pets/pet/119.png" name="Lv12 豚豚" size="36,38" pos="350,150" namePos="0,0">
+			<battle>
+				<branch id="default">
+					<settings count="6" capture="true">
+						<weather>1</weather>
+					</settings>
+					<enemy>
+						<pet id="119" level="12">
+							<loopSkill>10050</loopSkill>
+						</pet>
+					</enemy>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>battle</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<npc id="2" resId="Pets/pet/119.png" name="Lv21 豚豚" size="36,38" pos="600,200" namePos="0,0">
+			<battle>
+				<branch id="default">
+					<settings count="6" capture="true">
+						<weather>1</weather>
+					</settings>
+					<enemy>
+						<pet id="119" level="21">
+							<loopSkill>10050</loopSkill>
+						</pet>
+					</enemy>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>battle</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+			<teleport id="1" name="原始雪森林" pos="300,100" targetMapId="408"/>
+			<teleport id="2" name="雪之溶洞" pos="630,200" targetMapId="410"/>
+
+
+	</entities>
+
+
+</map>
+
