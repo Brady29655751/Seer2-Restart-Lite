@@ -1,0 +1,60 @@
+<map name="冰沁宫殿"  category="5"  id="405"  weather="0">
+	<!-- <resource>10011</resource> -->
+	<initialPoint>350,90</initialPoint>
+	<music category="11">
+		<bgm>BGM_028</bgm>
+	</music>
+	<entities>
+		
+		   <npc id="1" resId="Pets/pet/128.png" name="Lv12 波利" size="36,38" pos="350,150" namePos="0,0">
+			<battle>
+				<branch id="default">
+					<settings count="6" capture="true">
+						<weather>1</weather>
+					</settings>
+					<enemy>
+						<pet id="128" level="12">
+							<loopSkill>10001</loopSkill>
+						</pet>
+					</enemy>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>battle</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<npc id="2" resId="Pets/pet/128.png" name="Lv21 波利" size="36,38" pos="600,200" namePos="0,0">
+			<battle>
+				<branch id="default">
+					<settings count="6" capture="true">
+						<weather>1</weather>
+					</settings>
+					<enemy>
+						<pet id="128" level="21">
+							<loopSkill>10001</loopSkill>
+						</pet>
+					</enemy>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>battle</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+
+			<teleport id="1" name="原始雪森林" pos="400,160" targetMapId="408"/>
+			<teleport id="2" name="冰之谷" pos="260,70" targetMapId="401"/>
+			<teleport id="3" name="冰沁神殿" pos="450,60" targetMapId="406"/>
+
+
+
+	</entities>
+
+
+</map>
+

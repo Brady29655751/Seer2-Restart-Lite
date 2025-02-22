@@ -1,0 +1,57 @@
+<map name="冰之谷"  category="5"  id="401" weather="0">
+	<!-- <resource>10011</resource> -->
+	<initialPoint>530,150</initialPoint>
+	<music category="11">
+		<bgm>BGM_025</bgm>
+	</music>
+	<entities>
+
+		<npc id="1" resId="Pets/pet/122.png" name="Lv16 冻气龟" size="36,38" pos="350,230" namePos="0,0">
+			<battle>
+				<branch id="default">
+					<settings count="6" capture="true">
+						<weather>1</weather>
+					</settings>
+					<enemy>
+						<pet id="122" level="16">
+							<loopSkill>10050</loopSkill>
+						</pet>
+					</enemy>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>battle</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<npc id="2" resId="Pets/pet/122.png" name="Lv20 冻气龟" size="36,38" pos="420,120" namePos="0,0">
+			<battle>
+				<branch id="default">
+					<settings count="6" capture="true">
+						<weather>1</weather>
+					</settings>
+					<enemy>
+						<pet id="122" level="20">
+							<loopSkill>10050</loopSkill>
+						</pet>
+					</enemy>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>battle</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+			<teleport id="1" name="冰脊山脉" pos="230,300" targetMapId="402"/>
+			<teleport id="2" name="冰之监狱" pos="570,240" targetMapId="407"/>
+			<teleport id="3" name="冰沁宫殿" pos="800,180" targetMapId="405"/>
+			<teleport id="4" name="冰晶矿场" pos="270,70" targetMapId="404"/>
+	</entities>
+
+
+</map>
+
