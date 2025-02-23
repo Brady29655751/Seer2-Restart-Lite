@@ -1,12 +1,49 @@
 <map name="原始雪森林"  category="5"  id="408"  weather="0">
 	<!-- <resource>10011</resource> -->
 	<initialPoint>350,90</initialPoint>
-	<music category="11">
+	<music category="5">
 		<bgm>BGM_093</bgm>
 	</music>
 	<entities>
 		
-		
+		<npc id="40801" resId="Pets/pet/138.png" name="Lv70 多利" size="38,45" pos="400,220" namePos="0,0">
+			<battle>
+				<branch id="default">
+					<settings count="6" capture="true"/>
+					<enemy>
+						<pet id="138" level="70">
+							<loopSkill>10050</loopSkill>
+						</pet>
+					</enemy>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>battle</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<!--
+		<npc id="40802" resId="Pets/pet/138.png" name="Lv70 多利" size="38,45" pos="600,120" namePos="0,0">
+			<battle>
+				<branch id="default">
+					<settings count="6" capture="true"/>
+					<enemy>
+						<pet id="138" level="14">
+							<loopSkill>10050</loopSkill>
+						</pet>
+					</enemy>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>battle</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		-->
 			<teleport id="1" name="冰沁宫殿" pos="800,240" targetMapId="405"/>
 			<teleport id="2" name="雪之湖泊" pos="300,80" targetMapId="409"/>
 

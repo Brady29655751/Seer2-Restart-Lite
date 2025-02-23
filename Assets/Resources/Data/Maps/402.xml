@@ -1,19 +1,17 @@
 <map name="冰脊山脉"  category="5"  id="402"  weather="0">
 	<!-- <resource>10011</resource> -->
 	<initialPoint>350,90</initialPoint>
-	<music category="11">
+	<music category="5">
 		<bgm>BGM_045</bgm>
 	</music>
 	<entities>
 
-		   <npc id="1" resId="Pets/pet/228.png" name="Lv8 米诺" size="36,38" pos="300,120" namePos="0,0">
+		<npc id="40201" resId="Pets/pet/228.png" name="Lv63 米诺" size="32,48" pos="300,120" namePos="0,0">
 			<battle>
 				<branch id="default">
-					<settings count="6" capture="true">
-						<weather>1</weather>
-					</settings>
+					<settings count="6" capture="true"/>
 					<enemy>
-						<pet id="228" level="8">
+						<pet id="228" level="63">
 							<loopSkill>10050</loopSkill>
 						</pet>
 					</enemy>
@@ -26,14 +24,12 @@
 				</button>
 			</eventHandler>
 		</npc>
-		<npc id="2" resId="Pets/pet/228.png" name="Lv13 米诺" size="36,38" pos="500,120" namePos="0,0">
+		<npc id="40202" resId="Pets/pet/228.png" name="Lv62 米诺" size="32,48" pos="500,120" namePos="0,0">
 			<battle>
 				<branch id="default">
-					<settings count="6" capture="true">
-						<weather>1</weather>
-					</settings>
+					<settings count="6" capture="true"/>
 					<enemy>
-						<pet id="228" level="13">
+						<pet id="228" level="62">
 							<loopSkill>10050</loopSkill>
 						</pet>
 					</enemy>
@@ -47,7 +43,7 @@
 			</eventHandler>
 		</npc>
 		
-			<teleport id="1" name="冰脊之巅" pos="170,350" targetMapId="403"/>
+			<teleport id="1" name="冰脊之巅" pos="130,390" targetMapId="403"/>
 			<teleport id="2" name="冰之谷" pos="700,200" targetMapId="401"/>
 
 	</entities>

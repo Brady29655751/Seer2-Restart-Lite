@@ -174,7 +174,7 @@ public class YiTeRogueChoice
 
                                 Item.OpenHintbox(item);
                                 if (id == 5)
-                                    Hintbox.OpenHintboxWithContent("恭喜你通过第 " + YiTeRogueEvent.GetEndFloorByDifficulty(difficulty) + " 层，完成挑战！", 16);
+                                    Hintbox.OpenHintboxWithContent("恭喜你通过第 " + (YiTeRogueEvent.GetEndFloorByDifficulty(difficulty) + 1) + " 层，完成挑战！", 16);
                             }, "item[" + item.info.resId + "]");
                         case "buff":
                             var buff = new Buff(id);

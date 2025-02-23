@@ -1,13 +1,307 @@
-<map name="冰晶矿场"  category="5"  id="404"  weather="0">
+<map name="冰晶矿场"  category="5"  id="404"  weather="4">
 	<!-- <resource>10011</resource> -->
 	<initialPoint>350,90</initialPoint>
-	<music category="11">
+	<music category="5">
 		<bgm>BGM_026</bgm>
 	</music>
 	<entities>
-         
-			<teleport id="1" name="冰之谷" pos="350,150" targetMapId="401"/>
-
+        <npc id="40401" resId="Pets/pet/127.png" name="Lv 70 卡尼娅" size="110,133" pos="455,300">
+			<description>SPT</description>
+			<dialog>
+				<branch id="default" name="卡尼娅" icon="Pets/pet/127.png" size="110,133" pos="10,35">
+					<content><![CDATA[暴风雪将永无止境，如同汝等的贪婪一般]]></content>
+					<functionHandler>
+						<func type="click">
+							<description><![CDATA[普通挑战]]></description>
+							<action>battle</action>
+							<param>default</param>
+						</func>
+						<func type="click">
+							<description><![CDATA[挑战1]]></description>
+							<action>battle</action>
+							<param>challenge_1</param>
+							<condition>firstPet.baseId=126</condition>
+						</func>
+						<func type="branch">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=把卡尼娅设为首发之后再来挑战吧</param>
+							<param>option_num=1</param>
+							<param>item_icon=pet[127]</param>
+							<condition>firstPet.baseIdNOT126</condition>
+						</func>
+						<func type="click">
+							<description><![CDATA[挑战2]]></description>
+							<action>battle</action>
+							<param>challenge_2</param>
+						</func>
+						<!--
+						<func type="click">
+							<description><![CDATA[超进化挑战]]></description>
+							<action>battle</action>
+							<param>evolve</param>
+							<condition>firstPet.id=127</condition>
+						</func>
+						<func type="branch">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=把卡尼娅设为首发之后再来挑战吧</param>
+							<param>option_num=1</param>
+							<param>item_icon=pet[127]</param>
+							<condition>firstPet.idNOT126</condition>
+						</func>
+						-->
+					</functionHandler>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[我不畏风雪，奋勇前行]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+					</replyHandler>
+				</branch>
+				<branch id="default_lose" name="卡尼娅" icon="Pets/pet/127.png" size="110,133" pos="10,35">
+					<content><![CDATA[贪婪者皆走旁门左道，行巧取豪夺之事]]></content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[她似乎不免疫不良状态？]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+					</replyHandler>
+				</branch>
+			</dialog>
+			<battle>
+				<branch id="default">
+					<settings count="6" simulate="true" item="false">
+						<mode>3</mode>
+						<weather>4</weather>
+					</settings>
+					<player>
+						<pet id="123" level="60">
+							<normalSkill>11234,11235,11236,11240</normalSkill>
+							<superSkill>11244</superSkill>
+						</pet>
+						<pet id="230" level="62">
+							<normalSkill>11318,11323,11326,11328</normalSkill>
+							<superSkill>11324</superSkill>
+						</pet>
+						<pet id="129" level="64">
+							<normalSkill>11287,11292,11295,11297</normalSkill>
+							<superSkill>11294</superSkill>
+						</pet>
+						<pet id="125" level="66">
+							<normalSkill>11269,11273,11276,11277</normalSkill>
+							<superSkill>11279</superSkill>
+						</pet>
+						<pet id="121" level="68">
+							<normalSkill>11223,11228,11231,11232</normalSkill>
+							<superSkill>11229</superSkill>
+						</pet>
+						<pet id="139" level="70">
+							<normalSkill>11309,11304,11300,11302</normalSkill>
+							<superSkill>11308</superSkill>
+						</pet>
+					</player>
+					<enemy>
+						<pet id="126" level="20">
+							<status>
+								<hp>200</hp>
+							</status>
+							<initBuff>-3036</initBuff>
+							<loopSkill>11250,11251,11253,11257</loopSkill>
+						</pet>
+						<pet id="126" level="30">
+							<status>
+								<hp>400</hp>
+							</status>
+							<initBuff>-3035</initBuff>
+							<loopSkill>11250,11251,11253,11257</loopSkill>
+						</pet>
+						<pet id="126" level="40">
+							<status>
+								<hp>800</hp>
+							</status>
+							<initBuff>-3034</initBuff>
+							<loopSkill>11250,11251,11253,11257</loopSkill>
+						</pet>
+						<pet id="126" level="50">
+							<status>
+								<hp>1000</hp>
+							</status>
+							<initBuff>-3033</initBuff>
+							<loopSkill>11250,11251,11253,11257</loopSkill>
+						</pet>
+						<pet id="126" level="55">
+							<status>
+								<hp>1200</hp>
+							</status>
+							<initBuff>-3032</initBuff>
+							<loopSkill>11250,11251,11253,11257</loopSkill>
+						</pet>
+						<pet id="127" level="70">
+							<status>
+								<hp>2000</hp>
+							</status>
+							<loopSkill>11250,11251,11253,11257</loopSkill>
+							<superSkill>11259</superSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>getPet</action>
+							<param>126,10,0</param>
+							<condition>activity[spt].done[north][7][default]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=【尼娅】已经放入精灵仓库</param>
+							<param>item_icon=pet[126]</param>
+							<param>option_num=1</param>
+							<condition>activity[spt].done[north][7][default]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>spt</param>
+							<param>done[north][7][default]=true</param>
+							<condition>activity[spt].done[north][7][default]=[bool]false[default]false</condition>
+						</button>
+					</winHandler>
+					<loseHandler>
+						<button type="auto">
+							<action>openDialog</action>
+							<param>default_lose</param>
+						</button>
+					</loseHandler>
+				</branch>
+				<branch id="challenge_1">
+					<settings count="1">
+						<mode>3</mode>
+						<weather>4</weather>
+					</settings>
+					<enemy>
+						<pet id="127" level="100">
+							<status>
+								<hp>2000</hp>
+							</status>
+							<loopSkill>11250,11251,11253,11257</loopSkill>
+							<superSkill>11259</superSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setPet</action>
+							<param>emblem=1</param>
+							<condition>activity[spt].done[north][7][challenge_1]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=【卡尼娅】获得了【安抚】纹章</param>
+							<param>item_icon=emblem[126]</param>
+							<param>option_num=1</param>
+							<condition>activity[spt].done[north][7][challenge_1]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>spt</param>
+							<param>done[north][7][challenge_1]=true</param>
+							<condition>activity[spt].done[north][7][challenge_1]=[bool]false[default]false</condition>
+						</button>
+					</winHandler>
+				</branch>
+				<branch id="challenge_2">
+					<settings count="6">
+						<mode>3</mode>
+						<weather>4</weather>
+					</settings>
+					<enemy>
+						<pet id="127" level="100">
+							<status>
+								<hp>20000</hp>
+							</status>
+							<initBuff>71,72,-3018,-3032,-3033,-3034,-3035,-3036</initBuff>
+							<loopSkill>11250,11251,11253,11257</loopSkill>
+							<superSkill>11259</superSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setItem</action>
+							<param>add</param>
+							<param>2,50</param>
+							<condition>activity[spt].done[north][7][challenge_2]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=50 星钻已经放入背包</param>
+							<param>item_icon=item[2]</param>
+							<param>option_num=1</param>
+							<condition>activity[spt].done[north][7][challenge_2]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>spt</param>
+							<param>done[north][7][challenge_2]=true</param>
+							<condition>activity[spt].done[north][7][challenge_2]=[bool]false[default]false</condition>
+						</button>
+					</winHandler>
+				</branch>
+				<!--
+				<branch id="evolve">
+					<settings count="1">
+						<mode>3</mode>
+						<weather>2</weather>
+					</settings>
+					<enemy>
+						<pet id="692" level="105">
+							<status>
+								<hp>2000</hp>
+							</status>
+							<initBuff>20</initBuff>
+							<loopSkill>10429,10430,10428,10426,10432</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>evolvePet</action>
+							<param>692</param>
+							<condition>activity[spt].done[north][7][evolve]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=阿卡纳斯已成功超进化</param>
+							<param>item_icon=pet[692]</param>
+							<param>option_num=1</param>
+							<condition>activity[spt].done[north][7][evolve]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>spt</param>
+							<param>done[north][7][evolve]=true</param>
+							<condition>activity[spt].done[north][7][evolve]=[bool]false[default]false</condition>
+						</button>
+					</winHandler>
+				</branch>
+				-->
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>openDialog</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<teleport id="1" name="冰之谷" pos="350,150" targetMapId="401"/>
 
 	</entities>
 
