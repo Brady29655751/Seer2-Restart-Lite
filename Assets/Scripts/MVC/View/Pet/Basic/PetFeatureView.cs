@@ -6,10 +6,15 @@ using UnityEngine;
 
 public class PetFeatureView : Module
 {
+    private PetBagMode petBagMode;
     private Pet currentPet;
     private Action<Buff> onRemoveCallback = null;
     [SerializeField] private BattlePetBuffView defaultBuffView, afterwardBuffView;
     
+    public void SetMode(PetBagMode mode) {
+        petBagMode = mode;
+    }
+
     public void SetPet(Pet pet) {
         currentPet = pet;
         SetDefaultBuffs((pet == null) ? new List<Buff>() : (new List<Buff>(){ Buff.GetFeatureBuff(pet), Buff.GetEmblemBuff(pet) }).Concat(pet.info.ui.defaultBuffs).ToList());
@@ -45,7 +50,9 @@ public class PetFeatureView : Module
         // handler.CheckAndApply(null, false);
 
         currentPet.feature.afterwardBuffIds.Remove(buff.id);
-        Item.Add(item);
+
+        if (petBagMode == PetBagMode.Normal)
+            Item.Add(item);
 
         SaveSystem.SaveData();
 

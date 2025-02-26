@@ -9,6 +9,7 @@ public class BattlePetSkillView : BattleBaseView
 {
     private BattlePet pet;
     private bool interactable;
+    private bool superSkillClickable = false;
 
     [SerializeField] private IButton noOpSkillButton, superSkillButton;
     [SerializeField] private Image[] superSkillButtonBackground = new Image[3];
@@ -51,7 +52,8 @@ public class BattlePetSkillView : BattleBaseView
 
     private void SetSuperSkillInteractable(int petAnger) {
         bool interactable = (pet.superSkill != null) && (petAnger >= pet.superSkill.anger);
-        superSkillButton.SetInteractable(interactable);
+        superSkillClickable = interactable;
+        superSkillButton.SetInteractable(true);
         superSkillButtonBackground[1].gameObject.SetActive(interactable);
         superSkillButtonBackground[2].gameObject.SetActive(interactable);
     }
@@ -79,6 +81,9 @@ public class BattlePetSkillView : BattleBaseView
 
     public void SelectSuperSkill() {
         if (pet.superSkill == null)
+            return;
+
+        if (!superSkillClickable)
             return;
 
         var skill = new Skill(pet.superSkill);

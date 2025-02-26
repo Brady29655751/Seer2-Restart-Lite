@@ -15,7 +15,7 @@ public class CookPanel : Panel
         if (isSpecialRecipe)
             return;
 
-        cookController.SetCookItemStorage(Database.instance.itemInfoDict.Keys.Where(x => x.IsInRange(200000, 300000)).Select(x => new Item(x, -1)).ToList());
+        cookController.SetCookItemStorage(Database.instance.itemInfoDict.Keys.Where(x => x.IsInRange(200000, 210000)).Select(x => new Item(x, -1)).ToList());
     }
 
     public override void SetPanelIdentifier(string id, string param) {

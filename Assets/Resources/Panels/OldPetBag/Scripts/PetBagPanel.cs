@@ -40,6 +40,7 @@ public class PetBagPanel : Panel
     {
         base.Init();
         itemController?.SetMode(mode);
+        featureController?.SetMode(mode);
         StartCoroutine(PreloadPetAnimCoroutine(GetPetBag(), InitMode));
         
         void InitMode() 

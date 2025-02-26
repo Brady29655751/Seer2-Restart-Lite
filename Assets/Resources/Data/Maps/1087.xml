@@ -1,0 +1,199 @@
+<map name="傲慢大厅" category="10" id="1087">
+	<music category="10">
+		<bgm>BGM_1087</bgm>
+	</music>
+	<initialPoint>845,175</initialPoint>
+	<entities>
+		<npc id="108701" resId="Pets/pet/340" name="伊利丹" size="249,219" pos="300,300" namePos="10,-40">
+			<description>炼狱第七层</description>
+			<dialog>
+				<branch id="default" name="伊利丹" icon="Pets/pet/340" size="125,110" pos="0,45">
+					<content><![CDATA[没有人比我更懂战斗]]></content>
+					<functionHandler>
+						<func type="click">
+							<description><![CDATA[剧情模式]]></description>
+							<action>battle</action>
+							<param>story</param>
+						</func>
+						<func type="click">
+							<description><![CDATA[挑战模式]]></description>
+							<action>openDialog</action>
+							<param>challenge</param>
+						</func>
+						<func type="click">
+							<description><![CDATA[炼狱模式（暂未开放）]]></description>
+							<action>battle</action>
+							<param>hell</param>
+						</func>
+					</functionHandler>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[懂懂懂]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+					</replyHandler>
+				</branch>
+				<branch id="challenge" name="S思念体" icon="108001" size="69,111" pos="10,45">
+					<content><![CDATA[伊利丹非常傲慢，如果你的能力强化等级没有比他高，他就会一直回满体力！]]></content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[让我准备一下]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+						<reply type="click">
+							<description><![CDATA[我知道了，开始战斗吧！]]></description>
+							<action>battle</action>
+							<param>challenge</param>
+						</reply>
+					</replyHandler>
+				</branch>
+				<branch id="lose" name="S思念体" icon="108001" size="69,111" pos="10,45">
+					<content><![CDATA[强化和恢复是伊利丹的两大优势，针对这两项制定策略吧！]]></content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[让我准备一下]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+						<reply type="click">
+							<description><![CDATA[再次战斗]]></description>
+							<action>battle</action>
+							<param>challenge</param>
+						</reply>
+					</replyHandler>
+				</branch>
+			</dialog>
+			<battle>
+				<branch id="story">
+					<settings count="6" simulate="true">
+						<mode>3</mode>
+					</settings>
+					<player>
+						<pet id="331" level="100">
+							<status>
+								<atk>2000</atk>
+								<mat>2000</mat>
+								<spd>600</spd>
+								<hp>1250</hp>
+							</status>
+							<initBuff>17</initBuff>
+							<normalSkill>10839,10829,10831,10841</normalSkill>
+							<superSkill>10838</superSkill>
+						</pet>
+						<pet id="334" level="100">
+							<status>
+								<atk>5000</atk>
+								<mat>5000</mat>
+								<spd>600</spd>
+								<hp>1500</hp>
+							</status>
+							<initBuff>17</initBuff>
+							<normalSkill>10971,10975,10979,10984</normalSkill>
+							<superSkill>10980</superSkill>
+						</pet>
+						<pet id="337" level="100">
+							<status>
+								<atk>1500</atk>
+								<mat>1500</mat>
+								<spd>600</spd>
+								<hp>1750</hp>
+							</status>
+							<initBuff>17</initBuff>
+							<normalSkill>11162,11167,11173,11165</normalSkill>
+							<superSkill>11171</superSkill>
+						</pet>
+					</player>
+					<enemy>
+						<pet id="340" level="100">
+							<status>
+								<atk>1000</atk>
+								<mat>1000</mat>
+								<spd>500</spd>
+								<hp>40000</hp>
+							</status>
+							<headerSkill>11330</headerSkill>
+							<loopSkill>11341,11340,11342,11343</loopSkill>
+							<superSkill>11339</superSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>getPet</action>
+							<param>338,10,0</param>
+							<condition>activity[hell].done[7][story]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=【伊利】已经放入精灵仓库</param>
+							<param>item_icon=pet[338]</param>
+							<param>option_num=1</param>
+							<condition>activity[hell].done[7][story]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>hell</param>
+							<param>done[7][story]=true</param>
+							<condition>activity[hell].done[7][story]=[bool]false[default]false</condition>
+						</button>
+					</winHandler>
+				</branch>
+				<branch id="challenge">
+					<settings count="6">
+						<mode>3</mode>
+					</settings>
+					<enemy>
+						<pet id="340" level="100">
+							<status>
+								<hp>40000</hp>
+							</status>
+							<initBuff>12,71,72,-3032,-3033,-3034,-3035,-3036,-3037</initBuff>
+							<loopSkill>11338,11341,11329,11340,11342</loopSkill>
+							<superSkill>11339</superSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setItem</action>
+							<param>add</param>
+							<param>300338,1</param>
+							<condition>activity[hell].done[7][challenge]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=恐怖纹章已经放入精灵背包</param>
+							<param>item_icon=item[300338]</param>
+							<param>option_num=1</param>
+							<condition>activity[hell].done[7][challenge]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>hell</param>
+							<param>done[7][challenge]=true</param>
+							<condition>activity[hell].done[7][challenge]=[bool]false[default]false</condition>
+						</button>
+					</winHandler>
+					<loseHandler>
+						<button type="auto">
+							<action>openDialog</action>
+							<param>lose</param>
+						</button>
+					</loseHandler>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>openDialog</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<teleport id="1" name="妒忌回廊" pos="670,50" targetMapId="1086"/>
+		<!-- <teleport id="2" name="虚弱大厅" pos="110,70" targetMapId="1084"/> -->
+	</entities>
+</map>

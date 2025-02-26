@@ -40,6 +40,7 @@ public class ItemShopPanel : Panel
         { ItemShopType.Sign, new List<int>() {
             500000, 500178, 500436, 500959, 500826, 
             500761, 500280, 500307, 500809, 500179,
+            500538,
         } },
         { ItemShopType.YiTe, new List<int>() {
             500091, 24000, 320095, 320096, 320100,

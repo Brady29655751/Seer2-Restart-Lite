@@ -14,6 +14,10 @@ public class PetFeatureController : Module
         featureView.SetOnRemoveCallback(buff => onRemoveBuffEvent?.Invoke(buff));
     }
 
+    public void SetMode(PetBagMode mode) {
+        featureView.SetMode(mode);
+    }
+
     public void SetPet(Pet pet) {
         featureModel.SetPet(pet);
         featureView.SetPet(pet);

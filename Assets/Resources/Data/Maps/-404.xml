@@ -1,0 +1,158 @@
+<map name="冰晶矿场"  category="5"  id="-404"  weather="4" switch="-1">
+	<!-- <resource>10011</resource> -->
+	<initialPoint>350,90</initialPoint>
+	<music category="5">
+		<bgm>BGM_026</bgm>
+	</music>
+	<entities>
+		<npc id="-40401" resId="Pets/pet/126.png" name="尼娅" size="39,64" pos="500,290" namePos="0,0">
+			<description><![CDATA[长大后绝不能像贪婪的人类一样]]></description>
+			<dialog>
+				<branch id="default" name="妮娅" icon="Pets/pet/126" size="78,128" pos="0,45">
+					<content><![CDATA[不可以靠近冰晶棱柱！]]></content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[我是来挖矿的]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+					</replyHandler>
+				</branch>
+				<branch id="mine" name="妮娅" icon="Pets/pet/126" size="78,128" pos="0,45">
+					<content><![CDATA[不可以靠近冰晶棱柱！]]></content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[我是来帮忙挖矿的]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+						<reply type="click">
+							<description><![CDATA[我是来将挖到的矿石交给你的]]></description>
+							<action>openDialog</action>
+							<param>reward</param>
+							<condition>item[1003].numGTE7</condition>
+						</reply>
+						<reply type="branch">
+							<action>openDialog</action>
+							<param>not_enough</param>
+							<condition>item[1003].num&lt;7</condition>
+						</reply>
+					</replyHandler>
+				</branch>
+				<branch id="reward" name="妮娅" icon="Pets/pet/126" size="78,128" pos="0,45">
+					<content><![CDATA[......你和他们不一样。下次见面时我会准备回礼]]></content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[举手之劳，不必在意]]></description>
+							<action>setActivity</action>
+							<param>20009</param>
+							<param>done[-404]=true</param>
+						</reply>
+						<reply type="branch">
+							<action>setItem</action>
+							<param>remove</param>
+							<param>1003,7</param>
+						</reply>
+						<reply type="branch">
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+					</replyHandler>
+				</branch>
+				<branch id="reward" name="妮娅" icon="Pets/pet/126" size="78,128" pos="0,45">
+					<content><![CDATA[可恶的骗子！根本没有矿石！]]></content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[哎呀，不好意思]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+					</replyHandler>
+				</branch>
+				<branch id="wait" name="妮娅" icon="Pets/pet/126" size="78,128" pos="0,45">
+					<content><![CDATA[......下次见面时我会准备回礼]]></content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[举手之劳，不必在意]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+					</replyHandler>
+				</branch>
+			</dialog>
+			<eventHandler>
+				<button type="click">
+					<action>openDialog</action>
+					<param>default</param>
+					<condition>activity[20009].done[404]=[bool]true[default]false</condition>
+				</button>
+				<button type="click">
+					<action>openDialog</action>
+					<param>default</param>
+					<condition>activity[mine].done[-404]=[bool]false[default]false</condition>
+					<condition>activity[20009].done[-404]=[bool]false[default]false</condition>
+					<condition>activity[20009].done[404]=[bool]false[default]false</condition>
+				</button>
+				<button type="click">
+					<action>openDialog</action>
+					<param>wait</param>
+					<condition>activity[20009].done[-404]=[bool]true[default]false</condition>
+					<condition>activity[20009].done[404]=[bool]false[default]false</condition>
+				</button>
+				<button type="click">
+					<action>openDialog</action>
+					<param>mine</param>
+					<condition>activity[mine].done[-404]=[bool]true[default]false</condition>
+					<condition>activity[20009].done[-404]=[bool]false[default]false</condition>
+					<condition>activity[20009].done[404]=[bool]false[default]false</condition>
+				</button>
+			</eventHandler>
+		</npc>
+		<npc id="-40402" resId="Maps/mine/green.png" name="绿碧矿脉" size="100,72" pos="525,145">
+			<description>绿碧矿脉</description>
+			<eventHandler>
+				<button type="auto">
+					<action>setNpcParam</action>
+					<param>-40402</param>
+					<param>active=false</param>
+					<condition>activity[20009].done[404]=[bool]true[default]false</condition>
+				</button>
+				<button type="click">
+					<action>openHintbox</action>
+					<param>type=Item</param>
+					<param>title=提示</param>
+					<param>content=矿脉需要合理开发，明天再来吧！</param>
+					<param>item_icon=item[1003]</param>
+					<param>option_num=1</param>
+					<condition>activity[mine].done[-404]=[bool]true[default]false</condition>
+				</button>
+				<button type="click">
+					<action>setItem</action>
+					<param>add</param>
+					<param>1003,7</param>
+					<condition>activity[mine].done[-404]=[bool]false[default]false</condition>
+				</button>
+				<button type="click">
+					<action>openHintbox</action>
+					<param>type=Item</param>
+					<param>title=提示</param>
+					<param>content=7个绿碧石已经放入背包</param>
+					<param>item_icon=item[1003]</param>
+					<param>option_num=1</param>
+					<condition>activity[mine].done[-404]=[bool]false[default]false</condition>
+				</button>
+				<button type="click">
+					<action>setActivity</action>
+					<param>mine</param>
+					<param>done[-404]=true</param>
+					<condition>activity[mine].done[-404]=[bool]false[default]false</condition>
+				</button>
+			</eventHandler>
+		</npc>
+		<teleport id="1" name="冰之谷" pos="350,150" targetMapId="-401"/>
+
+	</entities>
+
+
+</map>
+

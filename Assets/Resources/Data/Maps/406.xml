@@ -5,45 +5,8 @@
 		<bgm>BGM_041</bgm>
 	</music>
 	<entities>
-
-		<npc id="40601" resId="Pets/pet/124.png" name="Lv67 伊露" size="47,49" pos="350,150" namePos="0,0">
-			<battle>
-				<branch id="default">
-					<settings count="6" capture="true"/>
-					<enemy>
-						<pet id="124" level="67">
-							<loopSkill>11266</loopSkill>
-						</pet>
-					</enemy>
-				</branch>
-			</battle>
-			<eventHandler>
-				<button type="click">
-					<action>battle</action>
-					<param>default</param>
-				</button>
-			</eventHandler>
-		</npc>
-		<npc id="40602" resId="Pets/pet/124.png" name="Lv66 伊露" size="47,49" pos="600,200" namePos="0,0">
-			<battle>
-				<branch id="default">
-					<settings count="6" capture="true"/>
-					<enemy>
-						<pet id="124" level="66">
-							<loopSkill>11266</loopSkill>
-						</pet>
-					</enemy>
-				</branch>
-			</battle>
-			<eventHandler>
-				<button type="click">
-					<action>battle</action>
-					<param>default</param>
-				</button>
-			</eventHandler>
-		</npc>
 		
-			<teleport id="1" name="冰沁宫殿" pos="480,60" targetMapId="405"/>
+		<teleport id="1" name="冰沁宫殿" pos="480,60" targetMapId="405"/>
 
 	</entities>
 

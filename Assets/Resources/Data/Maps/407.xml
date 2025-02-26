@@ -5,9 +5,44 @@
 		<bgm>BGM_JY</bgm>
 	</music>
 	<entities>
-		
-			<teleport id="1" name="冰之谷" pos="420,240" targetMapId="401"/>
-			<teleport id="2" name="实验禁地" pos="620,60" targetMapId="500"/>
+		<npc id="40701" resId="Pets/pet/228.png" name="Lv63 米诺" size="32,48" pos="300,120" namePos="0,0">
+			<battle>
+				<branch id="default">
+					<settings count="6" capture="true"/>
+					<enemy>
+						<pet id="228" level="63">
+							<loopSkill>10050</loopSkill>
+						</pet>
+					</enemy>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>battle</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<npc id="40702" resId="Pets/pet/228.png" name="Lv62 米诺" size="32,48" pos="500,120" namePos="0,0">
+			<battle>
+				<branch id="default">
+					<settings count="6" capture="true"/>
+					<enemy>
+						<pet id="228" level="62">
+							<loopSkill>10050</loopSkill>
+						</pet>
+					</enemy>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>battle</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<teleport id="1" name="冰室" pos="420,240" targetMapId="411"/>
+		<teleport id="2" name="冰之谷" pos="620,60" targetMapId="401"/>
 
 	</entities>
 

@@ -37,12 +37,20 @@ public class BattleInfo
         rogueEvent.SetData("content", "选择下列选项之一作为你的战利品！");
         rogueEvent.SetData("result", "win");
 
+        var gainIV = YiTeRogueData.instance.buffIds.Contains(410012);
+
         foreach (var pet in YiTeRogueData.instance.petBag) {
             if (pet == null)
                 continue;
 
+            if (gainIV)
+                pet.talent.iv += 5;
+
             // 升1級，恢復1/8最大體力
             pet.GainExp(pet.levelUpExp, false);
+            if (pet.currentStatus.hp == 0)
+                continue;
+
             pet.currentStatus.hp += (int)(pet.normalStatus.hp / 8);
             pet.currentStatus.hp = Mathf.Clamp(pet.currentStatus.hp, 0, pet.normalStatus.hp);
         }

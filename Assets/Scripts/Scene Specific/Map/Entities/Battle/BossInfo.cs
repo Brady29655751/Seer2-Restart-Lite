@@ -61,7 +61,7 @@ public class BossInfo
         var pet = Pet.GetExamplePet(petId, enemyLevel);
 
         level = enemyLevel;
-        status = new BattleStatus(pet.normalStatus * (1 + Mathf.Max(0, floor - 2) / 5f)){ 
+        status = new BattleStatus(pet.normalStatus * (1 + Mathf.Max(0, floor - 2) / 4f)){ 
             hp = pet.normalStatus.hp * (floor + 1) 
         };
         hasEmblem = true;
