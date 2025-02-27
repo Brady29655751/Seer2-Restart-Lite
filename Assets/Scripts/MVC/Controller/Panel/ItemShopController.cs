@@ -69,7 +69,7 @@ public class ItemShopController : Module
             if (shopMode == ItemShopMode.BuyYiTe) {
                 itemController.Remove(item);
                 if (YiTeRogueData.instance.buffIds.Contains(430000))
-                    storage.Add(new Item(item.id, 2));
+                    Item.AddTo(new Item(item.id, 2), storage);
             }  
                 
             playerInfoController.ShowCurrency();

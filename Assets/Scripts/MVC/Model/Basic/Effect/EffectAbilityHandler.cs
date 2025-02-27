@@ -432,11 +432,10 @@ public static class EffectAbilityHandler
                     return false;
                 buffId = buffIdList.Random();
             } else {
-                buffId = id switch {
-                    "random[unhealthy]" => Database.instance.buffInfoDict.Where(entry => entry.Value.type == BuffType.Unhealthy).Select(entry => entry.Key).ToList().Random(), 
-                    "random[abnormal]"  => Database.instance.buffInfoDict.Where(entry => entry.Value.type == BuffType.Abnormal).Select(entry => entry.Key).ToList().Random(),
-                    _ => (int)Parser.ParseEffectOperation(id, effect, lhsUnit, rhsUnit),
-                };
+                if (id.TryTrimStart("random", out trimId) && trimId.TryTrimParentheses(out var buffType) && (buffType.ToBuffType() != BuffType.None))
+                    buffId = Database.instance.buffInfoDict.Where(entry => entry.Value.type == buffType.ToBuffType()).Select(entry => entry.Key).ToList().Random();
+                else
+                    buffId = (int)Parser.ParseEffectOperation(id, effect, lhsUnit, rhsUnit);
             }
             var newBuffInfo = Buff.GetBuffInfo(buffId);
             if (string.IsNullOrEmpty(key) && (newBuffInfo == null))

@@ -303,10 +303,10 @@ id,name,type,copyType,turn,options,description
 3283,反射龟壳,turn,replace,3,none,受到伤害时反弹（最大体力-600）点伤害，结束时使自身获得冻气附体
 3284,凝聚冻气,mark,max,-1,res=19,每回合回复1/8体力
 3285,反射,mark,replace,-1,res=47,反弹受到伤害[value]%的伤害，最高不超过10*[value]点
-3286,寒冰护甲,shield,max,-1,none,抵挡自身（最大体力-500）的2倍的伤害护盾，结束时使自身获得冻气附体
+3286,寒冰护甲,shield,max,-1,auto_remove=true,抵挡自身（最大体力-500）的2倍的伤害护盾，结束时使自身获得冻气附体
 3287,安抚,turn,replace,5,none,无法强化
 3288,心灵制约,turn,replace,3,none,回合结束减少15点怒气
-3289,雪之外衣,mark,replace,-1,none,最多抵挡120点伤害并恢复受到伤害1/2的体力 不超过80点
+3289,雪之外衣,mark,replace,-1,res=31,最多抵挡120点伤害并恢复受到伤害1/2的体力 不超过80点
 3290,冰封记忆用与否,turn,stack,1,max_val=1&hide=true,记录本回合冰封记忆操作
 3291,冰封记忆,mark,replace,-1,none,记录当前强化等级，下次使用消耗并恢复
 3292,冰封记忆物攻,mark,replace,-1,max_val=6&hide=true,记录物攻强化
@@ -451,12 +451,11 @@ id,name,type,copyType,turn,options,description
 200096,光辉,emblem,replace,-1,none,每回合恢复自身20点体力
 200100,斗魂,emblem,replace,-1,none,使斗战之魂消耗怒气附加的固定伤害翻倍
 200119,坚韧,emblem,replace,-1,none,具有寒冰坚韧时受到伤害减少20点
-200126,安抚,emblem,replace,-1,none,对手具有安抚时攻击威力增加10点
-200124,化身,emblem,replace,-1,none,化冰/化雾/化雪威力增加5点
 200122,冻气,emblem,replace,-1,none,具有冻气附体时暴击率增加5%
+200124,化身,emblem,replace,-1,none,化冰/化雾/化雪威力增加5点
+200126,安抚,emblem,replace,-1,none,对手具有安抚时攻击威力增加10点
 200128,怪笑,emblem,replace,-1,none,后出手时必中
 200138,保暖,emblem,replace,-1,none,保暖20%效果2倍
-200228,陷阱,emblem,replace,-1,none,陷阱生效时时恢复在场精灵15点怒气
 200140,感应,emblem,replace,-1,none,具有虚空感应时造成的伤害增加10%
 200146,吸取,emblem,replace,-1,none,攻击技能未命中时吸取对手10怒气
 200149,麻痹,emblem,replace,-1,none,使技能所附带的麻痹几率提高10%
@@ -469,6 +468,7 @@ id,name,type,copyType,turn,options,description
 200214,光武,emblem,replace,-1,none,使用光系技能恢复5点怒气
 200220,联防,emblem,replace,-1,none,非首发时受到的伤害减少10%
 200224,安魂,emblem,replace,-1,none,霜后安魂曲造成的伤害增加10%
+200228,陷阱,emblem,replace,-1,none,陷阱生效时时恢复在场精灵15点怒气
 200234,阳炎,emblem,replace,-1,none,在炎热环境下所有技能必中
 200235,羽刃,emblem,replace,-1,none,对手的物攻技能命中时会使其损失50点体力
 200241,深海,emblem,replace,-1,none,深海场地下受到的伤害减少10%
@@ -573,7 +573,7 @@ id,name,type,copyType,turn,options,description
 420004,披风碎片,item,replace,-1,item=22004&group=exclude,[ffbb33]【随身物品】[-][ENDL]免疫中毒和流血状态，青峰携带时额外使对手攻击技能命中降低25%
 420005,树根巨锤,item,replace,-1,item=22005&group=exclude,[ffbb33]【随身物品】[-][ENDL]体重增加50kg，布鲁托携带时额外使自身每回合获得1层增重
 420006,小木块,item,replace,-1,item=22006&group=exclude,[ffbb33]【随身物品】[-][ENDL]对手受到的流血伤害翻倍，树根使者携带时额外使受到的伤害减少15%
-420007,池塘树叶,item,replace,-1,item=22007&group=exclude,[ffbb33]【随身物品】[-][ENDL]使用技能25%随机弱化对手1项能力1级，库奇鲁携带时随机行动1~3次
+420007,池塘树叶,item,replace,-1,item=22007&group=exclude,[ffbb33]【随身物品】[-][ENDL]使用技能35%随机弱化对手1项能力1级，库奇鲁携带时行动2次
 420008,雪花,item,replace,-1,item=22008&group=exclude,[ffbb33]【随身物品】[-][ENDL]对手所有能力皆无法强化时造成的伤害增加25%，卡尼娅携带时额外使安抚之触清除对手强化
 430000,商城礼券,item,replace,-1,none,伊特大乱斗途中的商店买一送二
 430001,蘑菇果实,item,replace,-1,item=23001&group=exclude,[ffbb33]【随身物品】[-][ENDL]威力低于自身体重的技能连击数+1，但会有25%概率使自身在出手前陷入昏迷1回合
