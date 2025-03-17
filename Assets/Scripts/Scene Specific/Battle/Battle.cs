@@ -63,12 +63,14 @@ public class Battle
         Random.InitState((int)roomHash["seed"]);
 
         var petCount = (int)roomHash["count"];
+        var buffList = (int[])roomHash["buff"];
+        var iv = buffList.Contains(Buff.BUFFID_PVP_IV_120) ? 120 : 31;
         var roomSettings = new BattleSettings() {
             mode = BattleMode.PVP,
             petCount = petCount,
             parallelCount = (petCount == 2) ? 2 : 1,
             time = (int)roomHash["time"],
-            initBuffs = ((int[])roomHash["buff"]).Select((x, i) => new KeyValuePair<string, Buff>("rule[" + i + "]", new Buff(x))).ToList(),
+            initBuffs = buffList.Select((x, i) => new KeyValuePair<string, Buff>("rule[" + i + "]", new Buff(x))).ToList(),
             weather = 0,
             isSimulate = true,
             isEscapeOK = true,
@@ -76,8 +78,8 @@ public class Battle
             isCaptureOK = false,
         };
             
-        var myPetBag = BattlePet.GetBattlePetBag(myHash, roomSettings.petCount);
-        var opPetBag = BattlePet.GetBattlePetBag(opHash, roomSettings.petCount);
+        var myPetBag = BattlePet.GetBattlePetBag(myHash, roomSettings.petCount, iv);
+        var opPetBag = BattlePet.GetBattlePetBag(opHash, roomSettings.petCount, iv);
         if (PhotonNetwork.IsMasterClient) {
             Init(myPetBag, opPetBag, roomSettings);
         } else {

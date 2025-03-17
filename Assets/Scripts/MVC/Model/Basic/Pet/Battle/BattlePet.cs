@@ -95,8 +95,8 @@ public class BattlePet : Pet
     /// Get battle pet for PVP mode.
     /// This automatically heal the pet to prevent player forgot it.
     /// </summary>
-    public static BattlePet GetBattlePet(int id, int personality, int feature, int emblem, int[] buff, float[] ev, int[] normalSkill, int superSkill) {
-        Pet pet = Pet.GetExamplePet(id);
+    public static BattlePet GetBattlePet(int id, int personality, int feature, int emblem, int[] buff, int iv, float[] ev, int[] normalSkill, int superSkill) {
+        Pet pet = Pet.GetExamplePet(id, iv: iv);
         if (pet == null)
             return null;
 
@@ -111,7 +111,7 @@ public class BattlePet : Pet
         return new BattlePet(pet);
     }
 
-    public static BattlePet[] GetBattlePetBag(Hashtable hash, int petCount) {
+    public static BattlePet[] GetBattlePetBag(Hashtable hash, int petCount, int iv) {
         var id = (int[])hash["pet"];
         var personality = (int[])hash["char"];
         var feature = (int[])hash["feature"];
@@ -122,7 +122,7 @@ public class BattlePet : Pet
         var superSkill = (int[])hash["super"];
 
         return Enumerable.Range(0, petCount).Select(i => (i >= id.Length) ? null :
-            BattlePet.GetBattlePet(id[i], personality[i], feature[i], emblem[i], buff[i], ev[i], normalSkill[i], superSkill[i]
+            BattlePet.GetBattlePet(id[i], personality[i], feature[i], emblem[i], buff[i], iv, ev[i], normalSkill[i], superSkill[i]
         )).ToArray();
     }
 
@@ -182,6 +182,14 @@ public class BattlePet : Pet
                 return;
             case "stayTurn":
                 stayTurn = (int)value;
+                return;
+            case "level":
+            case "iv":
+                var oldStatus = normalStatus;
+                base.SetPetIdentifier(id, value);
+                var addStatus = normalStatus - oldStatus;
+                statusController.AddInitStatus(addStatus);
+                maxHp += (int)addStatus.hp;
                 return;
         }
     }

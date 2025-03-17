@@ -195,7 +195,7 @@ public class BattleState
     public virtual bool IsGoFirst(Unit lhsUnit) {
         int unitId = lhsUnit.id;
         if (settings.parallelCount <= 1)
-            return actionOrder.FirstOrDefault() == unitId;
+            return Mathf.Sign(actionOrder.FirstOrDefault()) == unitId;
 
         Unit rhsUnit = GetRhsUnitById(unitId);
         var lhsCursor = actionOrder.IndexOf((int)Mathf.Sign(lhsUnit.id) * (lhsUnit.petSystem.cursor + 1));

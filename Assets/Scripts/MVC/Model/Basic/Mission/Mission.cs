@@ -82,10 +82,11 @@ public class Mission
             }   
         }
 
-        var sideMissions = Database.instance.missionInfos.FindAll(x => x.type == MissionType.Side);
-        for (int i = 0; i < sideMissions.Count; i++) {
-            Mission.Start(sideMissions[i].id);
-        }
+        var sideMissions = Database.instance.missionInfos.FindAll(x => 
+            ((x.type == MissionType.Side) || (x.type == MissionType.Event)) && (Mission.Find(x.id) == null));
+
+        foreach (var mission in sideMissions)
+            Mission.Start(mission.id);
     }
 
     public static void DailyLogin() {

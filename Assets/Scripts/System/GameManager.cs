@@ -80,6 +80,7 @@ public class GameManager : Singleton<GameManager>
             Mail.VersionUpdate();
             Mission.VersionUpdate();
             Pet.VersionUpdate();
+            BattleRecord.VersionUpdate();
         }
         gameData.version = versionData.gameVersion;
 

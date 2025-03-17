@@ -149,6 +149,10 @@ public class PetBattleStatusController
         SetPowerUp(type, newPowerup);
     }
 
+    public void AddInitStatus(Status status) {
+        _initStatus += status;
+    }
+
     public void AddBattleStatus(int type, int addAmount) {
         int basicTypeLength = Status.typeNames.Length;
         if (type < basicTypeLength) {

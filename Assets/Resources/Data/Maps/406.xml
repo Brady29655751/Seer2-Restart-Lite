@@ -5,7 +5,71 @@
 		<bgm>BGM_041</bgm>
 	</music>
 	<entities>
-		
+		<npc id="40601" resId="Pets/pet/984" name="Lv 105 沁灵兽" size="280,209" pos="280,140" namePos="30,0">
+			<description><![CDATA[沁灵兽]]></description>
+			<dialog>
+				<branch id="default" name="沁灵兽" icon="Pets/pet/984" size="140,105" pos="0,55">
+					<content><![CDATA[我是精灵王之心脏，冰沁氏族不朽的守护者]]></content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[沁灵兽居然不是那位狐狸]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+						<reply type="click">
+							<description><![CDATA[挑战沁灵兽]]></description>
+							<action>battle</action>
+							<param>default</param>
+						</reply>
+					</replyHandler>
+				</branch>
+			</dialog>
+			<battle>
+				<branch id="default">
+					<settings count="6">
+						<weather>4</weather>
+					</settings>
+					<enemy>
+						<pet id="984" level="105">
+							<status>
+								<hp>25000</hp>
+							</status>
+							<initBuff>14,17,20,-3038</initBuff>
+							<loopSkill>11368,11366,11362,11373</loopSkill>
+							<superSkill>11371</superSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>getPet</action>
+							<param>984,100</param>
+							<condition>activity[soul].done[north][4]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=【沁灵兽】已经放入精灵仓库</param>
+							<param>item_icon=pet[984]</param>
+							<param>option_num=1</param>
+							<condition>activity[soul].done[north][4]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>soul</param>
+							<param>done[north][4]=true</param>
+							<condition>activity[soul].done[north][4]=[bool]false[default]false</condition>
+						</button>
+					</winHandler>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>openDialog</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
 		<teleport id="1" name="冰沁宫殿" pos="480,60" targetMapId="405"/>
 
 	</entities>

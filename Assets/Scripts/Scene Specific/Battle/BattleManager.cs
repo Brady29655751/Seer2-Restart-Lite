@@ -15,6 +15,7 @@ public class BattleManager : Manager<BattleManager>
 
     public bool isDone => playerView.isDone && enemyView.isDone;
     public bool isSkillSelectMode { get; protected set; } = false;
+    public BattleState currentState => (currentUIState == null) ? null : new BattleState(currentUIState);
     protected BattleState currentUIState = null;
     protected Queue<BattleState> queue = new Queue<BattleState>();
 

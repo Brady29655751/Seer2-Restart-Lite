@@ -100,9 +100,47 @@ public class BattlePetChangeView : BattleBaseView
             return;
 
         var pet = petBag[index];
+        var opPet = UI.currentState.opUnit.pet;
+        
         string header = "<size=4>\n</size><size=16><color=#52e5f9>  " + pet.name + "</color></size><size=6>\n\n</size>";
-        string content = "<size=16>  Lv " + pet.level + "\n  HP " + pet.hp + " / " + pet.maxHp + "</size>";
-        descriptionBox.SetBoxSize(new Vector2(170, 150));
+        string content = "<size=16>HP " + pet.hp + " / " + pet.maxHp + "</size><size=4>\n\n</size>";
+
+        float attack = PetElementSystem.GetElementRelation(pet.battleElementId, opPet);
+        float subAttack = PetElementSystem.GetElementRelation(pet.subBattleElementId, opPet);
+        float defense = PetElementSystem.GetElementRelation(opPet.battleElementId, pet);
+        float subDefense = PetElementSystem.GetElementRelation(opPet.subBattleElementId, pet);
+
+        var attackElement = pet.battleElement;
+        var subAttackElement = pet.subBattleElement;
+        var defenseElement = opPet.battleElement;
+        var subDefenseElement = opPet.subBattleElement;
+
+        var maxLength = Mathf.Max(attackElement.GetElementName().Length, defenseElement.GetElementName().Length,
+            (subAttackElement == Element.普通) ? 0 : subAttackElement.GetElementName().Length,
+            (subDefenseElement == Element.普通) ? 0 : subDefenseElement.GetElementName().Length);
+        
+        if (battle.settings.parallelCount <= 1) 
+        {
+            content += "我方 <b><color=#ffbb33>" + attackElement.GetElementName(maxLength) + "系</color></b> <color=#" 
+                + ColorUtility.ToHtmlStringRGB(PetElementSystem.GetElementRelationColor(attack)) + ">" 
+                + PetElementSystem.GetElementRelationNote(attack) + " >> " + "</color>对方";
+
+            if (subAttackElement != Element.普通)
+                content += "\n我方 <b><color=#ffbb33>" + subAttackElement.GetElementName(maxLength) + "系</color></b> <color=#" 
+                    + ColorUtility.ToHtmlStringRGB(PetElementSystem.GetElementRelationColor(subAttack)) + ">" 
+                    + PetElementSystem.GetElementRelationNote(subAttack) + " >> " + "</color>对方";
+
+            content += "\n敌方 <b><color=#ffbb33>" + defenseElement.GetElementName(maxLength) + "系</color></b> <color=#" 
+                + ColorUtility.ToHtmlStringRGB(PetElementSystem.GetElementRelationColor(defense)) + ">" 
+                + PetElementSystem.GetElementRelationNote(defense) + " << " + "</color>我方";
+
+            if (subDefenseElement != Element.普通)
+                content += "\n敌方 <b><color=#ffbb33>" + subDefenseElement.GetElementName(maxLength) + "系</color></b> <color=#" 
+                    + ColorUtility.ToHtmlStringRGB(PetElementSystem.GetElementRelationColor(subDefense)) + ">" 
+                    + PetElementSystem.GetElementRelationNote(subDefense) + " << " + "</color>我方";
+        }
+
+        descriptionBox.SetBoxSize(new Vector2(190, 160));
         descriptionBox.SetBoxPosition(new Vector2(100 + index * 110, 109));
         descriptionBox.SetText(header + content);
     }

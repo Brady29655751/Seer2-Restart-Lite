@@ -62,7 +62,7 @@ public static class SaveSystem
 
     public static T LoadXML<T>(string path) {
         string XmlPath = Application.persistentDataPath + "/" + path + ".xml";
-        if (!File.Exists(XmlPath))
+        if (!FileBrowserHelpers.FileExists(XmlPath))
             return default(T);
         
         using (StreamReader reader = new StreamReader(XmlPath)) {
@@ -267,7 +267,7 @@ public static class SaveSystem
                 var farmActivity = data.activityStorage.Find(x => x.id == "farm");
                 if (farmActivity != null) {
                     var modData = farmActivity.data.Where(entry => entry.key.TryTrimEnd(".plant", out _)
-                        && ItemInfo.IsMod(int.Parse(entry.value))).ToList();
+                        && int.TryParse(entry.value, out var plantId) && ItemInfo.IsMod(plantId)).ToList();
                     modData.ForEach(entry => farmActivity.SetData(entry.key, "none"));
                 }
 
@@ -277,7 +277,8 @@ public static class SaveSystem
                 
                 SaveData(data, id);
             }
-        } catch (Exception) {
+        } catch (Exception e) {
+            Debug.Log(e.ToString());
             return false;
         }
         return true;

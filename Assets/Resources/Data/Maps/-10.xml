@@ -38,6 +38,99 @@
 			</eventHandler>
 		</npc>
 		-->
+		<npc id="-1004" resId="Pets/pet/250" name="帕拉丁" size="82,131" pos="440,300" namePos="5,-5">
+			<description><![CDATA[光之守卫]]></description>
+			<dialog>
+				<branch id="default" name="帕拉丁" icon="Pets/pet/250" size="82,131" pos="0,55">
+					<content><![CDATA[帕拉丁家族世代生长在飞船上，作为辛迪船长御用的圣骑士军团而存在]]></content>
+					<functionHandler>
+						<func type="click">
+							<description><![CDATA[1周年争霸赛]]></description>
+							<action>battle</action>
+							<param>anniversary_1</param>
+						</func>
+						<func type="click">
+							<description><![CDATA[兑换奖励]]></description>
+							<action>openPanel</action>
+							<param>ItemShop</param>
+							<param>mode=buy</param>
+							<param>currency=7/2</param>
+							<param>item=300249/301220/300237/8000</param>
+							<param>title=争霸赛商店</param>
+						</func>
+					</functionHandler>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[总觉得在精灵背包中看过你的名字......]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+					</replyHandler>
+				</branch>
+				<branch id="default_lose" name="帕拉丁" icon="Pets/pet/250" size="82,131" pos="0,55">
+					<content><![CDATA[帕拉丁家族的实力可远远不止于此！]]></content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[我要获得精灵王争霸赛冠军！]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+					</replyHandler>
+				</branch>
+			</dialog>
+			<battle>
+				<branch id="anniversary_1">
+					<settings count="1">
+						<weather>1</weather>
+					</settings>
+					<enemy>
+						<pet id="250" level="95">
+							<status>
+								<hp>2000</hp>
+							</status>
+							<initBuff>-4</initBuff>
+							<headerSkill>11377</headerSkill>
+							<loopSkill>11383,11380,11388,11385</loopSkill>
+							<superSkill>11386</superSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>getPet</action>
+							<param>249,10,0</param>
+							<condition>activity[anniversary_1].done[250]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=【帕帕】已经放入精灵仓库</param>
+							<param>item_icon=pet[249]</param>
+							<param>option_num=1</param>
+							<condition>activity[anniversary_1].done[250]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>anniversary_1</param>
+							<param>done[250]=true</param>
+							<condition>activity[anniversary_1].done[250]=[bool]false[default]false</condition>
+						</button>
+					</winHandler>
+					<loseHandler>
+						<button type="auto">
+							<action>openDialog</action>
+							<param>default_lose</param>
+						</button>
+					</loseHandler>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>openDialog</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
 		<npc id="-1002" resId="1002" name="船长辛迪" size="100,125" pos="563,236">
 			<description><![CDATA[欢迎来到约瑟传说！]]></description>
 			<dialog>

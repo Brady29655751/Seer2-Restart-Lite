@@ -599,34 +599,46 @@ public static class EffectAbilityHandler
 
     public static bool SetBuff(this Effect effect, BattleState state) {
         string key = effect.abilityOptionDict.Get("key", string.Empty);
+        string filterList = effect.abilityOptionDict.Get("filter", "none");
         string who = effect.abilityOptionDict.Get("who", "me");
         string id = effect.abilityOptionDict.Get("id", "0");
         string type = effect.abilityOptionDict.Get("type", "value");
         string op = effect.abilityOptionDict.Get("op", "+");
         string value = effect.abilityOptionDict.Get("value", "0");
 
-        int buffId;
-        if (!int.TryParse(id, out buffId))
+        if (!int.TryParse(id, out var buffId))
             return false;
 
         Unit invokeUnit = (Unit)effect.invokeUnit;
         Unit lhsUnit = (who == "me") ? state.GetUnitById(invokeUnit.id) : state.GetRhsUnitById(invokeUnit.id);
         Unit rhsUnit = state.GetRhsUnitById(lhsUnit.id);
-        var buff = string.IsNullOrEmpty(key) ? lhsUnit.pet.buffController.GetBuff(buffId) : state.stateBuffs.Find(x => x.Key == key).Value;
-        if (buff == null)
-            return false;
 
-        float oldValue = buff.GetBuffIdentifier(type);
-        float newValue = Parser.ParseEffectOperation(value, effect, lhsUnit, rhsUnit);
-        buff.SetBuffIdentifier(type, Operator.Operate(op, oldValue, newValue));
+        var filter = Parser.ParseConditionFilter<Buff>(filterList, (id, buff) => {
+            if (buff == null)
+                return float.MinValue;
 
-        if (buff.info.autoRemove && buff.value <= 0) {
-            if (string.IsNullOrEmpty(key))
-                lhsUnit.pet.buffController.RemoveBuff(buff, lhsUnit, state);
-            else
-                state.stateBuffs.RemoveAll(x => x.Value == buff);
+            return Parser.ParseEffectOperation(id, effect, lhsUnit, rhsUnit, buff, false);
+        });
+        var buffList = string.IsNullOrEmpty(key) ? lhsUnit.pet.buffController.GetRangeBuff(x => filter(x) && ((x.id == buffId) || (buffId == 0))) 
+            :  state.stateBuffs.FindAll(x => x.Key == key).Select(x => x.Value).ToList();
+            
+        var success = false;
+        foreach (var buff in buffList) {
+            if (buff == null)
+                continue;
+            
+            float oldValue = buff.GetBuffIdentifier(type);
+            float newValue = Parser.ParseEffectOperation(value, effect, lhsUnit, rhsUnit);
+            buff.SetBuffIdentifier(type, Operator.Operate(op, oldValue, newValue));
+            if (buff.info.autoRemove && buff.value <= 0) {
+                if (string.IsNullOrEmpty(key))
+                    lhsUnit.pet.buffController.RemoveBuff(buff, lhsUnit, state);
+                else
+                    state.stateBuffs.RemoveAll(x => x.Value == buff);
+            }
+            success = true;
         }
-        return true;
+        return success;
     }
 
     public static bool SetDamage(this Effect effect, BattleState state) {
@@ -683,6 +695,7 @@ public static class EffectAbilityHandler
 
             Skill newSkill = new Skill(value switch {
                 "-1" => Skill.GetNoOpSkill(),
+                "-3" => Skill.GetPetChangeSkillWithTiming(lhsUnit.skill, EffectTiming.OnTurnEnd),
                 "-4" => Skill.GetEscapeSkill(),
                 "random" => Skill.GetRandomSkill(),
                 "random[available]" => lhsUnit.pet.skillController.GetAvailableSkills(lhsUnit.pet.anger).Random(),

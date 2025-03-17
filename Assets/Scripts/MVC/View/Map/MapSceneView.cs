@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 public class MapSceneView : UIModule
 {
@@ -147,11 +148,12 @@ public class MapSceneView : UIModule
         if (result.isMyWin) { 
             actionList = battleInfo.winHandler.Select(x => NpcHandler.GetNpcEntity(npc, x, npcDict)).ToList();
 
-            /*
-            // 主寵訓練營特殊活動
-            if ((map.id == 60) && ((npc?.GetInfo()?.id ?? 0) >= 6000))
-                actionList.AddRange(actionList);
-            */
+            // 1周年争霸赛特殊活動
+            if ((map.id.IsInRange(81, 90)) && ((npc?.GetInfo()?.id ?? 0) >= 8100)) {
+                var item = new Item(7, Random.Range(1, 5));
+                Item.Add(item);
+                Item.OpenHintbox(item);
+            }
             
         } else if (result.isOpWin) {
             actionList = battleInfo.loseHandler.Select(x => NpcHandler.GetNpcEntity(npc, x, npcDict)).ToList();

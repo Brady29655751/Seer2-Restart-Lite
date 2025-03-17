@@ -78,6 +78,8 @@ id,name,type,copyType,turn,options,description
 70,反馈異常,mark,replace,-1,none,反馈異常状态（此印记不免疫異常状态）
 71,免疫百分比不良,mark,replace,-1,res=125,免疫不良状态造成的百分比体力流失
 72,免疫持续异常,mark,replace,-1,res=126,回合结束时若自身无法行动则会获得5回合免疫异常
+73,格挡,mark,max,-1,res=15,受到的物理伤害减少[value]点
+74,招架,mark,max,-1,res=16,受到的特殊伤害减少[value]点
 93,血液反噬,mark,replace,-1,none,体力流失（不显示伤害的）变为恢复体力
 94,能力反转,mark,replace,-1,none,获得的能力变化效果相反
 95,至尊光环,mark,replace,-1,none,自身弱化不超过[value]级，对手强化不超过[value]级
@@ -255,7 +257,7 @@ id,name,type,copyType,turn,options,description
 3138,宴会终结,turn,replace,3,none,恢复自身最大体力的1/8，受到攻击时获得1个幽灵
 3139,不谐暗光,turn,replace,3,none,受到光系技能伤害减半
 3140,幽灵效果触发,turn,replace,1,hide=true,攻击后添加对应层数的幽灵
-3141,液态化,mark,replace,-1,none,受到攻击后回复自身1/16体力
+3141,液态化,mark,replace,-1,none,受到攻击后回复自身1/12体力
 3142,融化,turn,replace,3,keep=false&inherit=true,受到攻击时随机弱化对手1项能力1级
 3143,焦点腐蚀,mark,replace,-1,none,特定攻击技能造成伤害的1/4将恢复自身体力
 3144,疾火,turn,replace,3,none,每回合回复自身10点怒气
@@ -281,7 +283,7 @@ id,name,type,copyType,turn,options,description
 3164,光辉之影,mark,replace,-1,keep=false,后制-1
 3165,光之领域,mark,replace,-1,none,体力回复率增加15%
 3166,光辉领域,mark,replace,-1,none,体力回复率增加25%
-3167,恐惧之念,mark,stack,-1,auto_remove=true&max_val=3&inherit=true,每层使命中率降低15%，回合开始时若达到3层则会消耗2层并陷入恐惧状态2回合[ENDL]当前为[value]层
+3167,恐惧之念,mark,stack,-1,auto_remove=true&max_val=3&keep=false&inherit=true&legacy=true,每层使命中率降低10%，回合开始时若达到3层则会消耗2层并陷入恐惧状态2回合[ENDL]当前为[value]层
 3168,暗影之光,chance,replace,-1,keep=false,下一次攻击伤害减少25%
 3169,暗之领域,mark,replace,-1,none,怒气回复率增加15%
 3170,暗影领域,mark,replace,-1,none,怒气回复率增加25%
@@ -289,13 +291,28 @@ id,name,type,copyType,turn,options,description
 3172,暴击率提升,mark,replace,-1,res=27,暴击率增加[value]%
 3173,诋毁,mark,replace,-1,inherit=true,主动换场失去90点体力
 3174,毒牙,mark,replace,-1,none,受到的伤害增加25%
-3175,冰棱镜,turn,replace,5,res=47,反射攻击的1/4伤害，最高不超过自身最大体力的1/4[ENDL]结束时回复1/4体力
+3175,冰棱镜,turn,replace,4,res=47,反射攻击的1/4伤害，最高不超过自身最大体力的1/4[ENDL]结束时回复1/4体力
 3176,冰凌甲,turn,replace,3,none,受到的伤害减少15%。每回合吸取对手10点怒气
-3177,寒冰蜕变,mark,block,-1,none,受到攻击时50%概率随机使对手的1项能力下降1级。每回合开始时获得50点护盾
+3177,寒冰蜕变,mark,block,-1,none,受到攻击时随机使对手的2项能力下降1级。每回合开始时获得50点护盾
 3178,暗物质,mark,stack,-1,auto_remove=true&max_val=3,每一层使自身命中率增加5%且对手命中率减少5%，最多叠加3层[ENDL]当前为[value]层
 3179,猎魔血印,mark,replace,-1,none,每回合损失20点体力。每层能力强化会额外提高20点。
 3180,破甲,mark,stack,-1,res=3012&max_val=400,使用攻击技能会叠加技能威力的破甲值。每10点破甲值忽视对手1%当前物防值，最多忽视40%[ENDL]当前破甲值为[value]点
 3181,战意屏障,turn,replace,5,res=47,反射物理攻击伤害的25%，最高不超过自身最大体力的25%
+3182,霜灵,mark,replace,-1,none,所有技能必中且暴击率提升35%
+3183,寒霜领域,mark,replace,-1,inherit=true,体力低于1/2时暴击伤害增加15%
+3184,圣光,mark,replace,-1,none,每回合回复1/16体力
+3185,征伐之火,turn,replace,4,none,造成的伤害提升35%，回复造成伤害35%的体力
+3186,救赎之火,chance,replace,-1,none,回合结束时若自身体力低于1/8会回复100点体力并移除此印记
+3187,歃血,mark,replace,-1,none,每回合损失1/16体力，击败对手时回复全部体力
+3188,仇视,mark,replace,-1,none,速度值提升50点，物理攻击附带50点伤害
+3189,嫉恶,mark,replace,-1,none,速度值提升50点，特殊攻击伤害增加50%
+3190,处决之火,chance,replace,-1,none,任何一方体力低于1/4时，自身攻击附带100点伤害并移除此印记
+3191,噩梦,mark,replace,-1,none,速度下降50点
+3192,沉默游戏,turn,replace,3,none,使用属性技能会损失100点体力
+3193,逆转游戏,turn,replace,3,none,回合结束时若处于异常状态会回复100点体力
+3194,禁怒游戏,turn,replace,3,none,回合结束时损失15怒气
+3195,极限游戏,turn,replace,3,none,若决定使用威力高于100的技能则会无法行动
+3196,噩梦马戏团,turn,replace,4,none,物理攻击伤害增加35%
 3279,蜂纹,mark,stack,-1,auto_remove=true&max_val=3,每一层使中毒造成的伤害增加30，最多叠加3层。[ENDL]当前为[value]层
 3280,青蜂之舞,turn,replace,3,res=18,闪避率增加50%
 3281,寒冰坚韧,shield,replace,-1,none,受到伤害减少25%
@@ -381,7 +398,9 @@ id,name,type,copyType,turn,options,description
 100228,谋划,feature,replace,-1,none,首次类技能首次使用必中
 100234,炎帝,feature,replace,-1,none,怒气永不低于25，且回合开始时怒气高于50会免疫异常1回合
 100235,羽刃,feature,replace,-1,max_val=32,攻击时已累积三十二式会增加30固伤[ENDL]当前累积[value]式
+100237,噩梦,feature,replace,-1,none,对手具有噩梦时，自身命中率提升15%
 100241,幻斑,feature,replace,-1,none,攻击时10%使对手昏迷2回合
+100249,神圣,feature,replace,-1,none,自身具有圣光时对手暴击-1
 100280,狂欢,feature,replace,-1,none,狂欢状态下所有技能必中
 100301,森林,feature,replace,-1,none,自身具有森林祝福时受到的伤害减少10%
 100302,红球,feature,replace,-1,none,当仅有红色水球时，水系技能伤害增加20%
@@ -418,9 +437,11 @@ id,name,type,copyType,turn,options,description
 100981,灵目,feature,replace,-1,none,免疫不良状态，对手攻击时若自身体力低于1/8会恢复1/8体力
 100982,灵脉,feature,replace,-1,none,免疫不良状态，回合结束时体力为1会怒气回满，血衣状态下对手暴击-1
 100983,灵幻,feature,replace,-1,none,免疫不良状态，怒气上限提升为200点
+100984,灵沁,feature,replace,-1,none,免疫不良状态，暴击时回复10点怒气
 100988,灵影,feature,replace,-1,none,免疫不良状态，被对手技能命中时生成1枚影钩
 100989,最强,feature,replace,-1,none,全能力值提升100点
 100990,王者,feature,replace,-1,none,免疫不良状态，怒气不低于30
+101220,歃血,feature,replace,-1,none,每损失1%体力提升1%暴击率
 101990,王者,feature,replace,-1,none,免疫异常状态，怒气不低于30
 200001,追击,emblem,replace,-1,none,命中率和闪避率提高10%
 200004,怒火,emblem,replace,-1,none,怒气回复率提高20%（攻击命中与回合结束回复的怒气除外）
@@ -471,7 +492,9 @@ id,name,type,copyType,turn,options,description
 200228,陷阱,emblem,replace,-1,none,陷阱生效时时恢复在场精灵15点怒气
 200234,阳炎,emblem,replace,-1,none,在炎热环境下所有技能必中
 200235,羽刃,emblem,replace,-1,none,对手的物攻技能命中时会使其损失50点体力
+200237,游戏,emblem,replace,-1,none,使游戏类技能先制+1
 200241,深海,emblem,replace,-1,none,深海场地下受到的伤害减少10%
+200249,拯救,emblem,replace,-1,none,使拯救之火也会回复自身100体力
 200280,召唤,emblem,replace,-1,none,回合结束时若自身具有幽灵则会增加1层
 200301,祝福,emblem,replace,-1,none,使森林祝福提升的体力回复率提高5%
 200302,蓝球,emblem,replace,-1,none,每消耗1个蓝色水球时增加自身10点怒气
@@ -508,9 +531,11 @@ id,name,type,copyType,turn,options,description
 200981,复苏,emblem,replace,-1,none,首次出场时附带复苏领域
 200982,潮汐,emblem,replace,-1,none,首次出场时附带潮汐领域
 200983,烈火,emblem,replace,-1,none,首次出场时附带烈火领域
+200984,寒霜,emblem,replace,-1,none,首次出场时附带寒霜领域
 200988,幻视,emblem,replace,-1,none,首次出场时附带幻视领域
 200989,王者,emblem,replace,-1,none,首次出场时附带王者体质
 200990,王权,emblem,replace,-1,hide=true,首次出场时附带王权领域
+201220,浴血,emblem,replace,-1,none,使用浴血之火会使对手损失35点怒气
 201990,王罚,emblem,replace,-1,hide=true,首次出场时附带王罚领域
 300354,海牙,emblem,replace,-1,none,冰系技能暴击率提升25%，超能系技能暴击伤害提升15%
 900001,骇浪,feature,replace,-1,none,雨天环境下使用攻击技能恢复自身5怒气
@@ -575,6 +600,8 @@ id,name,type,copyType,turn,options,description
 420006,小木块,item,replace,-1,item=22006&group=exclude,[ffbb33]【随身物品】[-][ENDL]对手受到的流血伤害翻倍，树根使者携带时额外使受到的伤害减少15%
 420007,池塘树叶,item,replace,-1,item=22007&group=exclude,[ffbb33]【随身物品】[-][ENDL]使用技能35%随机弱化对手1项能力1级，库奇鲁携带时行动2次
 420008,雪花,item,replace,-1,item=22008&group=exclude,[ffbb33]【随身物品】[-][ENDL]对手所有能力皆无法强化时造成的伤害增加25%，卡尼娅携带时额外使安抚之触清除对手强化
+420009,藤蔓花子,item,replace,-1,item=22009&group=exclude,[ffbb33]【随身物品】[-][ENDL]对手受到的慢性毒药伤害为2倍，古加罗斯携带时会恢复与之等量的体力且每回合开始时使对手获得1层慢性毒药
+420010,咕噜气泡,item,replace,-1,item=22010&group=exclude,[ffbb33]【随身物品】[-][ENDL]免疫窒息和溺水状态，安迷亚携带时空气储量会在回合开始时填满
 430000,商城礼券,item,replace,-1,none,伊特大乱斗途中的商店买一送二
 430001,蘑菇果实,item,replace,-1,item=23001&group=exclude,[ffbb33]【随身物品】[-][ENDL]威力低于自身体重的技能连击数+1，但会有25%概率使自身在出手前陷入昏迷1回合
 430002,伊萨晶石,item,replace,-1,item=23002&group=exclude,[ffbb33]【随身物品】[-][ENDL]每回合恢复双方1/12体力
@@ -584,6 +611,7 @@ id,name,type,copyType,turn,options,description
 440000,大乱斗邀请函,item,replace,-1,item=24000&group=exclude,[ffbb33]【随身物品】[-][ENDL]首次登场时获得[ffbb33]【伊特领域】[-]
 600002,深海,mark,replace,-1,none,双方受到攻击时25%概率溺水
 600008,影触,mark,replace,-1,none,每回合随机弱化双方1项能力1级
+610000,PVP极品资质120,mark,replace,-1,none,[ffbb33]【PVP对战规则】[-][ENDL]双方精灵资质为120
 -11,商店,mark,blcok,-1,none,可以购买各式道具和加成
 -12,战斗（终极）,mark,block,-1,none,本层的最终战斗！
 -13,起始点,mark,block,-1,none,选择你的伊特吧！
@@ -630,3 +658,4 @@ id,name,type,copyType,turn,options,description
 -3035,特防强化,mark,replace,-1,hide=true,初始特防强化6级
 -3036,速度强化,mark,replace,-1,hide=true,初始速度强化6级
 -3037,傲慢大厅,mark,replace,-1,res=19,回合结束时若能力强化不低于对手则会回复全部体力
+-3038,冰封,mark,replace,-1,min_val=-273,初始温度为0度，每回合温度会降低5度，若达到[ffbb33]零下273度[-]则获胜[ENDL]对手出手前若低于[ffbb33]零下100度[-]会陷入冻伤状态，若低于[ffbb33]零下200度[-]会额外陷入冰冻状态[ENDL][ENDL]当前温度为 [value] 度

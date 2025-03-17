@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Photon.Pun;
 
 public class PetStoragePanel : Panel
 {
@@ -31,10 +32,20 @@ public class PetStoragePanel : Panel
     }
 
     public static List<Pet> GetDefaultPetStorage(PetBagMode mode) {
-        return mode switch {
-            PetBagMode.PVP  => GameManager.versionData.petData.petAllWithMod,
-            _               => Player.instance.gameData.petStorage,
-        };
+
+        if (mode == PetBagMode.PVP) {
+            var petList = GameManager.versionData.petData.petAllWithMod;
+            var room = PhotonNetwork.CurrentRoom.CustomProperties;
+            if (room == null)
+                return petList;
+
+            var buffList = (int[])(room["buff"]);
+            if (buffList.Contains(Buff.BUFFID_PVP_IV_120))
+                petList.ForEach(x => x.SetPetIdentifier("iv", 120));
+                
+            return petList;
+        }
+        return Player.instance.gameData.petStorage;
     }
 
     public void SetPetStorage(List<Pet> storage) {

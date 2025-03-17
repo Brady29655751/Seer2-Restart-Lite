@@ -60,6 +60,21 @@
 							<param>done[north][1]=true</param>
 							<condition>activity[soul].done[north][1]=[bool]false[default]false</condition>
 						</button>
+						<button type="auto">
+							<action>setItem</action>
+							<param>add</param>
+							<param>23004,1</param>
+							<condition>random[old]&lt;10</condition>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=1个草目璞玉已经放入背包</param>
+							<param>item_icon=buff[430004]</param>
+							<param>option_num=1</param>
+							<condition>random[old]&lt;10</condition>
+						</button>
 					</winHandler>
 				</branch>
 			</battle>

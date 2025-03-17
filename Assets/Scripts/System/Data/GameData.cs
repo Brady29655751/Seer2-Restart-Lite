@@ -47,6 +47,7 @@ public class GameData
     public List<Mail> mailStorage = new List<Mail>();
     public List<Mission> missionStorage = new List<Mission>();
     public List<Activity> activityStorage = new List<Activity>();
+    public List<BattleRecord> battleRecordStorage = new List<BattleRecord>();
 
     public SettingsData settingsData;
     public YiTeRogueData yiteRogueData;
@@ -78,6 +79,7 @@ public class GameData
         mailStorage = new List<Mail>();
         missionStorage = new List<Mission>();
         activityStorage = new List<Activity>();
+        battleRecordStorage = new List<BattleRecord>();
 
         settingsData = new SettingsData();
         yiteRogueData = new YiTeRogueData();

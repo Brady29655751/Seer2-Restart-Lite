@@ -15,5 +15,96 @@
 				</button>
 			</eventHandler>
 		</npc>
+		<npc id="-8002" resId="Pets/pet/238" name="卡拉尔" size="110,128" pos="435,230" namePos="0,0">
+			<description><![CDATA[神秘精灵]]></description>
+			<dialog>
+				<branch id="default" name="卡拉尔" icon="Pets/pet/238" size="110,128" pos="0,55">
+					<content><![CDATA[阿卡迪亚，重新启动！]]></content>
+					<functionHandler>
+						<func type="click">
+							<description><![CDATA[1周年争霸赛]]></description>
+							<action>battle</action>
+							<param>anniversary_1</param>
+						</func>
+						<func type="click">
+							<description><![CDATA[兑换奖励]]></description>
+							<action>openPanel</action>
+							<param>ItemShop</param>
+							<param>mode=buy</param>
+							<param>currency=7/2</param>
+							<param>item=300249/301220/300237/8000</param>
+							<param>title=争霸赛商店</param>
+						</func>
+					</functionHandler>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[唉，手机版]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+					</replyHandler>
+				</branch>
+				<branch id="default_lose" name="卡拉尔" icon="Pets/pet/238" size="110,128" pos="0,55">
+					<content><![CDATA[真是太极限了！]]></content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[光之守卫队员怎么被萨伦改造成了这样]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+					</replyHandler>
+				</branch>
+			</dialog>
+			<battle>
+				<branch id="anniversary_1">
+					<settings count="1">
+						<weather>9</weather>
+					</settings>
+					<enemy>
+						<pet id="238" level="95">
+							<status>
+								<hp>5000</hp>
+							</status>
+							<initBuff>13,14,17,20,44,99,-3022</initBuff>
+							<loopSkill>11417,11416,11409</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>getPet</action>
+							<param>237,10,0</param>
+							<condition>activity[anniversary_1].done[238]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=【卡拉】已经放入精灵仓库</param>
+							<param>item_icon=pet[237]</param>
+							<param>option_num=1</param>
+							<condition>activity[anniversary_1].done[238]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>anniversary_1</param>
+							<param>done[238]=true</param>
+							<condition>activity[anniversary_1].done[238]=[bool]false[default]false</condition>
+						</button>
+					</winHandler>
+					<loseHandler>
+						<button type="auto">
+							<action>openDialog</action>
+							<param>default_lose</param>
+						</button>
+					</loseHandler>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>openDialog</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
 	</entities>
 </map>

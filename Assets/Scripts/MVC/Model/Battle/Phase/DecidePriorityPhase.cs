@@ -32,6 +32,11 @@ public class DecidePriorityPhase : BattlePhase
         return new BeforeAttackPhase();
     }
 
+    /// <summary>
+    /// Get action order list of all pets on field.
+    /// </summary>
+    /// <param name="priorityUnits">(Belonged unit, Used skill, Pet, Cursor of pet in the bag)</param>
+    /// <returns>An action order list where each item represents (cursor + 1) of the pet and the sign represents which unit</returns>
     private List<int> GetActionOrder(List<(Unit, Skill, BattlePet, int)> priorityUnits)
     {
         return priorityUnits.OrderByDescending(p => ((p.Item2 == null) || (p.Item3 == null)) ? -1 : 0)

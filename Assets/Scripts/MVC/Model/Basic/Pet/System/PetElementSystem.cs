@@ -57,9 +57,39 @@ public static class PetElementSystem {
 
     public static bool IsMod() => isMod;
 
-    public static string GetElementName(this Element element) {
+    public static string GetElementName(this Element element, int totalLength = -1) {
         int id = (int)element;
-        return (id < 0) ? "全部" : elementNameList.Get(id, "未知");
+        var elementName = (id < 0) ? "全部" : elementNameList.Get(id, "未知");
+        if (totalLength <= elementName.Length)
+            return elementName;
+
+        return new string('　', totalLength - elementName.Length) + elementName;
+    }
+
+    public static Color GetElementRelationColor(float relation) {
+        if (relation == 0)
+            return Color.gray;
+
+        if (relation > 1)
+            return Color.red;
+
+        if (relation < 1)
+            return Color.cyan;
+
+        return Color.white;
+    }
+
+    public static string GetElementRelationNote(float relation) {
+        if (relation == 0)
+            return "无效";
+
+        if (relation > 1)
+            return "克制";
+
+        if (relation < 1)
+            return "微弱";
+
+        return "普通";
     }
 
     public static float GetElementRelation(int elementId, BattlePet rhs) {

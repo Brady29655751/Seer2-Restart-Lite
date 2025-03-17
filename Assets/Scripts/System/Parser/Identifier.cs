@@ -115,7 +115,7 @@ public static class Identifier {
             var battle = Player.instance.currentBattle;
             var state = battle.currentState;
 
-            if (trimId.StartsWith("last.")) {
+            if (trimId.TryTrimStart("last.", out trimId)) {
                 state = state.lastTurnState;
                 if (state == null)
                     return 0;
@@ -289,11 +289,12 @@ public static class Identifier {
 
             // Parse success => buffIdExpr is buffId.
             Buff buff = buffs.Find(x => x.id == buffId) ?? new Buff(-1);
+            Buff testBuff = new Buff(buffId);
 
             return id switch {
                 "count" => buffs.Count(x => x.id == buffId),
-                "block" => buffController.IsBuffIdBlocked(buffId) ? 1 : 0,
-                "copy"  => buffController.IsBuffIdCopied(buffId) ? 1 : 0,
+                "block" => buffController.IsBuffBlocked(testBuff) ? 1 : 0,
+                "copy"  => buffController.IsBuffCopied(testBuff) ? 1 : 0,
                 _ => buff.TryGetBuffIdentifier(id, out float num) ? num : GetNumIdentifier(id),
             };
         }

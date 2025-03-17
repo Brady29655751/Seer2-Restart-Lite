@@ -44,6 +44,7 @@ public class RoomManager : Manager<RoomManager>
         int seed = Random.Range(int.MinValue, int.MaxValue);
         int petCount = (int)(room["count"]);
         bool isItemOK = (bool)(room["item"]);
+        int[] buffs = (int[])(room["buff"]);
 
         if (PhotonNetwork.IsMasterClient) {
             room["seed"] = seed;
@@ -76,7 +77,7 @@ public class RoomManager : Manager<RoomManager>
                 x.talent.SetEVStorage(510);
             }
             return x;
-        }).Select(x => (x == null) ? null : Pet.ToBestPet(new Pet(x)));
+        }).Select(x => (x == null) ? null : Pet.ToBestPet(new Pet(x), buffs.Contains(Buff.BUFFID_PVP_IV_120) ? 120 : 31));
         
         petBagPanel.SetPetBag(myPets.ToArray());
         petBagPanel.SetItemBag(isItemOK ? Item.pvpItemDatabase : new List<Item>(){ new Item(10239, 9999) });

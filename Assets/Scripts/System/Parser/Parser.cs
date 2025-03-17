@@ -142,10 +142,6 @@ public static class Parser {
                 }
                 var ids = idConverter.Invoke(options, value);
                 var condition = Operator.Condition(op, ids[0], ids[1]);
-                if (typeof(T) == typeof(Buff)) {
-                    Debug.Log(options[0] + " " + options[1]);
-                    Debug.Log(op + " " + ids[0] + " " + ids[1]);
-                }
                 if (!condition)
                     return false;
             }

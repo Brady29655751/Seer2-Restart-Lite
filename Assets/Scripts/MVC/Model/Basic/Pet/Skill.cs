@@ -234,6 +234,21 @@ public class Skill
         return skill;
     }
 
+    public static Skill GetPetChangeSkillWithTiming(Skill petChangeSkill, EffectTiming timing) {
+        if (petChangeSkill == null)
+            return null;
+
+        if (petChangeSkill.type != SkillType.換场)
+            return petChangeSkill;
+
+        var skill = new Skill(petChangeSkill);
+        var effectList = skill.effects.Where(x => (x != null) && (x.ability == EffectAbility.PetChange)).ToList();
+        foreach (var e in effectList)
+            e.SetTiming(timing);
+
+        return skill;
+    }
+
     public static Skill GetItemSkill(Item item) {
         Skill skill = new Skill(SkillType.道具);
         skill.name = "道具";

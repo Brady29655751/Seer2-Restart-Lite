@@ -27,9 +27,9 @@ public class UnitSkillSystem
     public int itemDamage = 0, itemHeal = 0;
     public int buffDamage = 0, buffHeal = 0;
 
-    public int totalSkillDamage => skillDamage + damageDict.Where(entry => entry.Key.StartsWith("skill")).Sum(entry => entry.Value);
-    public int totalItemDamage => itemDamage + damageDict.Where(entry => entry.Key.StartsWith("item")).Sum(entry => entry.Value);
-    public int totalBuffDamage => buffDamage + damageDict.Where(entry => entry.Key.StartsWith("buff")).Sum(entry => entry.Value);
+    public int totalSkillDamage => Mathf.Max(skillDamage + damageDict.Where(entry => entry.Key.StartsWith("skill")).Sum(entry => entry.Value), 0);
+    public int totalItemDamage => Mathf.Max(itemDamage + damageDict.Where(entry => entry.Key.StartsWith("item")).Sum(entry => entry.Value), 0);
+    public int totalBuffDamage => Mathf.Max(buffDamage + damageDict.Where(entry => entry.Key.StartsWith("buff")).Sum(entry => entry.Value), 0);
     public int damage => totalSkillDamage + totalItemDamage;
     public int heal => skillHeal + itemHeal;
 

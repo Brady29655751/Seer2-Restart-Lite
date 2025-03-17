@@ -117,6 +117,10 @@ public class Effect {
         return new Effect(phase, -1, EffectTarget.CurrentPet, EffectCondition.None, null, EffectAbility.PetChange, ability_option);
     }
 
+    public void SetTiming(EffectTiming timing) {
+        this.timing = timing;
+    }
+
     public bool IsSelect() {
         return targetType.Contains("index");
     }

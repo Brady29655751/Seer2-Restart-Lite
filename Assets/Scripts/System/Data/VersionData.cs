@@ -79,7 +79,7 @@ public class VersionPetData {
     [XmlIgnore] public List<Pet> petLastEvolveDictionary => petDictionary.GroupBy(x => x.basic.baseId).Select(group => group.Last()).ToList();
     [XmlIgnore] public List<Pet> petModLastEvolveDictionary => petMod.Where(x => (!x.info.ui.hide) && (!ListHelper.IsNullOrEmpty(x.ownSkill))).GroupBy(x => x.basic.baseId).Select(group => group.Last()).ToList();
 
-    [XmlIgnore] public List<Pet> petTopic => topicPetIds.Select(Pet.GetExamplePet).Where(x => (x != null)).ToList();
+    [XmlIgnore] public List<Pet> petTopic => topicPetIds.Select(x => Pet.GetExamplePet(x)).Where(x => (x != null)).ToList();
     [XmlIgnore] public List<Pet> petMod => petAllWithMod.Where(x => PetInfo.IsMod(x.id)).ToList();
 
 }

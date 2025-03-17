@@ -75,7 +75,7 @@ public class Pet
         return petInfoDict.Select(entry => entry.Value).ToList().Random();
     }
 
-    public static Pet GetExamplePet(int id, int level = 100) {
+    public static Pet GetExamplePet(int id, int level = 100, int iv = 31) {
         PetInfo info = GetPetInfo(id);
         if (info == null)
             return null;
@@ -92,7 +92,7 @@ public class Pet
         pet.feature.hasEmblem = true;
 
         pet.talent.AddEVStorage(510);
-        pet.talent.iv = 31;
+        pet.talent.iv = iv;
 
         pet.skills.LearnAllSkill();
 
@@ -101,14 +101,14 @@ public class Pet
         return pet;
     }
 
-    public static Pet ToBestPet(Pet pet) {
+    public static Pet ToBestPet(Pet pet, int iv = 31) {
         Pet bestPet = (pet.level < 100) ? pet.GainExp(pet.maxExp) : pet;
         PetInfo info = bestPet.info;
 
         bestPet.feature.hasEmblem = true;
 
         bestPet.talent.AddEVStorage(510);
-        bestPet.talent.iv = 31;
+        bestPet.talent.iv = iv;
 
         var unlearnedSkills = info.skills.skillList.Where(x => !bestPet.skills.ownSkillId.Contains(x.id));
         foreach (var skill in unlearnedSkills) {

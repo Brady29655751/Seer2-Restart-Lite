@@ -52,6 +52,121 @@
 			<eventHandler>
 			</eventHandler>
 		</npc>
+		<npc id="2007" resId="Pets/pet/1220" name="加尼隆" size="93,142" pos="125,130" namePos="10,-5">
+			<description><![CDATA[奇怪的光之守卫]]></description>
+			<dialog>
+				<branch id="default" name="加尼隆" icon="Pets/pet/1220" size="93,142" pos="0,45">
+					<content><![CDATA[邪恶必须消灭。正义必须执行！]]></content>
+					<functionHandler>
+						<func type="click">
+							<description><![CDATA[1周年争霸赛]]></description>
+							<action>openDialog</action>
+							<param>anniversary_1</param>
+						</func>
+						<func type="click">
+							<description><![CDATA[兑换奖励]]></description>
+							<action>openPanel</action>
+							<param>ItemShop</param>
+							<param>mode=buy</param>
+							<param>currency=7/2</param>
+							<param>item=300249/301220/300237/8000</param>
+							<param>title=争霸赛商店</param>
+						</func>
+					</functionHandler>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[你也是帕拉丁家族的一员！？]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+					</replyHandler>
+				</branch>
+				<branch id="anniversary_1" name="加尼隆" icon="Pets/pet/1220" size="93,142" pos="0,45">
+					<content><![CDATA[你必须坚持10个回合之后击败我，我才会认可你的毅力]]></content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[我先准备一下]]></description>
+							<action>openDialog</action>
+							<param>anniversary_1</param>
+						</reply>
+						<reply type="click">
+							<description><![CDATA[我一定可以！]]></description>
+							<action>battle</action>
+							<param>anniversary_1</param>
+						</reply>
+					</replyHandler>
+				</branch>
+				<branch id="default_lose" name="加尼隆" icon="Pets/pet/1220" size="93,142" pos="0,45">
+					<content><![CDATA[你必须坚持10个回合之后击败我，我才会认可你的毅力！]]></content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[坚持10个回合...？（汗）]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+					</replyHandler>
+				</branch>
+			</dialog>
+			<battle>
+				<branch id="anniversary_1">
+					<settings count="1">
+						<weather>1</weather>
+					</settings>
+					<enemy>
+						<pet id="1220" level="95">
+							<status>
+								<hp>800</hp>
+							</status>
+							<initBuff>14,17,99</initBuff>
+							<loopSkill>11392,11403</loopSkill>
+							<superSkill>11401</superSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>getPet</action>
+							<param>1220,10,0</param>
+							<condition>activity[anniversary_1].done[1220]=[bool]false[default]false</condition>
+							<condition>battle.turn&gt;10</condition>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=【加尼隆】已经放入精灵仓库</param>
+							<param>item_icon=pet[1220]</param>
+							<param>option_num=1</param>
+							<condition>activity[anniversary_1].done[1220]=[bool]false[default]false</condition>
+							<condition>battle.turn&gt;10</condition>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>anniversary_1</param>
+							<param>done[1220]=true</param>
+							<condition>activity[anniversary_1].done[1220]=[bool]false[default]false</condition>
+							<condition>battle.turn&gt;10</condition>
+						</button>
+						<button type="auto">
+							<action>openDialog</action>
+							<param>default_lose</param>
+							<condition>battle.turnLTE10</condition>
+						</button>
+					</winHandler>
+					<loseHandler>
+						<button type="auto">
+							<action>openDialog</action>
+							<param>default_lose</param>
+						</button>
+					</loseHandler>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>openDialog</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
 		<teleport id="1" name="资料室" pos="90,270" targetMapId="30"/>
 	</entities>		
 </map>

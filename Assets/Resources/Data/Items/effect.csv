@@ -5,10 +5,12 @@ id,timing,priority,target,condition,cond_option,effect,effect_option
 4,none,-1,none,none,none,none,none
 5,none,-1,none,none,none,none,none
 6,none,-1,none,none,none,none,max_use=0
+7,none,-1,none,none,none,none,max_use=0
 1001,none,-1,none,none,none,none,none
 1002,none,-1,none,none,none,none,none
 1003,none,-1,none,none,none,none,none
 1004,none,-1,none,none,none,none,none
+8000,none,-1,none,none,none,none,none
 8001,resident,-1,pet,pet,type=level&level_op=<&level_cmp=maxLevel,set_pet,type=exp&op=+&value=50000
 8002,resident,-1,pet,pet,type=iv&iv_op=<&iv_cmp=31,set_pet,type=iv&op=+&value=1
 8003,resident,-1,pet,none,none,set_pet,type=evStorage&op=+&value=510
@@ -99,6 +101,8 @@ id,timing,priority,target,condition,cond_option,effect,effect_option
 22006,resident,-1,pet,pet,type=buff[group:exclude]&buff[group:exclude]_cmp=0,set_pet,type=buff&op=+&value=420006
 22007,resident,-1,pet,pet,type=buff[group:exclude]&buff[group:exclude]_cmp=0,set_pet,type=buff&op=+&value=420007
 22008,resident,-1,pet,pet,type=buff[group:exclude]&buff[group:exclude]_cmp=0,set_pet,type=buff&op=+&value=420008
+22009,resident,-1,pet,pet,type=buff[group:exclude]&buff[group:exclude]_cmp=0,set_pet,type=buff&op=+&value=420009
+22010,resident,-1,pet,pet,type=buff[group:exclude]&buff[group:exclude]_cmp=0,set_pet,type=buff&op=+&value=420010
 23001,resident,-1,pet,pet,type=buff[group:exclude]&buff[group:exclude]_cmp=0,set_pet,type=buff&op=+&value=430001
 23002,resident,-1,pet,pet,type=buff[group:exclude]&buff[group:exclude]_cmp=0,set_pet,type=buff&op=+&value=430002
 23003,resident,-1,pet,pet,type=buff[group:exclude]&buff[group:exclude]_cmp=0,set_pet,type=buff&op=+&value=430003
@@ -132,6 +136,8 @@ id,timing,priority,target,condition,cond_option,effect,effect_option
 300224,resident,-1,pet,pet,type=baseId/emblem&baseId_cmp=224&emblem_cmp=0,set_pet,type=emblem&op=SET&value=1
 300234,resident,-1,pet,pet,type=baseId/emblem&baseId_cmp=234&emblem_cmp=0,set_pet,type=emblem&op=SET&value=1
 300235,resident,-1,pet,pet,type=baseId/emblem&baseId_cmp=235&emblem_cmp=0,set_pet,type=emblem&op=SET&value=1
+300237,resident,-1,pet,pet,type=baseId/emblem&baseId_cmp=237&emblem_cmp=0,set_pet,type=emblem&op=SET&value=1
+300249,resident,-1,pet,pet,type=baseId/emblem&baseId_cmp=249&emblem_cmp=0,set_pet,type=emblem&op=SET&value=1
 300320,resident,-1,pet,pet,type=baseId/emblem&baseId_cmp=320&emblem_cmp=0,set_pet,type=emblem&op=SET&value=1
 300323,resident,-1,pet,pet,type=baseId/emblem&baseId_cmp=323&emblem_cmp=0,set_pet,type=emblem&op=SET&value=1
 300326,resident,-1,pet,pet,type=baseId/emblem&baseId_cmp=326&emblem_cmp=0,set_pet,type=emblem&op=SET&value=1
@@ -140,6 +146,7 @@ id,timing,priority,target,condition,cond_option,effect,effect_option
 300335,resident,-1,pet,pet,type=baseId/emblem&baseId_cmp=335&emblem_cmp=0,set_pet,type=emblem&op=SET&value=1
 300338,resident,-1,pet,pet,type=baseId/emblem&baseId_cmp=338&emblem_cmp=0,set_pet,type=emblem&op=SET&value=1
 300845,resident,-1,pet,pet,type=baseId/emblem&baseId_cmp=845&emblem_cmp=0,set_pet,type=emblem&op=SET&value=1
+301220,resident,-1,pet,pet,type=baseId/emblem&baseId_cmp=1220&emblem_cmp=0,set_pet,type=emblem&op=SET&value=1
 310970,resident,-1,pet,pet,type=baseId&baseId_cmp=970,set_pet,type=featureType&op=+&value=1
 320095,resident,-1,pet,pet,type=id/level&id_cmp=91&level_op=GTE&level_cmp=25,set_pet,type=id&op=SET&value=95
 320096,resident,-1,pet,pet,type=id/level&id_cmp=91&level_op=GTE&level_cmp=25,set_pet,type=id&op=SET&value=96

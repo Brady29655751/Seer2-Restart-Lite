@@ -258,6 +258,42 @@
 				</button>
 			</eventHandler>
 		</npc>
+		<npc id="14203" resId="Buffs/420005" name="" size="70,70" pos="655,300">
+			<description>奇怪的东西</description>
+			<eventHandler>
+				<button type="auto">
+					<action>setNpcParam</action>
+					<param>14203</param>
+					<param>active=false</param>
+					<condition>activity[20009].done[142]=[bool]true[default]false</condition>
+				</button>
+				<button type="click">
+					<action>setNpcParam</action>
+					<param>14203</param>
+					<param>active=false</param>
+					<condition>activity[20009].done[142]=[bool]false[default]false</condition>
+				</button>
+				<button type="click">
+					<action>openHintbox</action>
+					<param>type=Item</param>
+					<param>title=提示</param>
+					<param>content=你找到了藏起来的【树根巨锤】！</param>
+					<param>item_icon=buff[420005]</param>
+					<param>option_num=1</param>
+				</button>
+				<button type="click">
+					<action>setItem</action>
+					<param>add</param>
+					<param>22005,1</param>
+				</button>
+				<button type="click">
+					<action>setActivity</action>
+					<param>20009</param>
+					<param>done[142]=true</param>
+					<condition>activity[20009].done[142]=[bool]false[default]false</condition>
+				</button>
+			</eventHandler>
+		</npc>
 		<npc id="14202" resId="Maps/mine/green.png" name="绿碧矿脉" size="100,72" pos="640,300">
 			<description>绿碧矿脉</description>
 			<eventHandler>
@@ -269,6 +305,13 @@
 					<param>item_icon=item[1003]</param>
 					<param>option_num=1</param>
 					<condition>activity[mine].done[142]=[bool]true[default]false</condition>
+				</button>
+				<button type="click">
+					<action>setNpcParam</action>
+					<param>14202</param>
+					<param>active=false</param>
+					<condition>activity[mine].done[142]=[bool]true[default]false</condition>
+					<condition>activity[20009].done[142]=[bool]false[default]false</condition>
 				</button>
 				<button type="click">
 					<action>setItem</action>

@@ -9,9 +9,9 @@ public class PetSecretSkillView : Module
     [SerializeField] private List<IText> learnConditionTexts;
 
     public void SetSecretSkillInfo(LearnSkillInfo[] secretSkillInfos) {
-        for (int i = 0; i < Mathf.Min(secretSkillInfos.Length, 4); i++) {
-            skillBlockViews[i]?.SetSkill(secretSkillInfos[i]);
-            learnConditionTexts[i]?.SetText(secretSkillInfos[i].learnDescription);
+        for (int i = 0; i < 4; i++) {
+            skillBlockViews[i]?.SetSkill((i < secretSkillInfos.Length) ? secretSkillInfos[i] : null);
+            learnConditionTexts[i]?.SetText((i < secretSkillInfos.Length) ? secretSkillInfos[i].learnDescription : null);
         }
     }
 

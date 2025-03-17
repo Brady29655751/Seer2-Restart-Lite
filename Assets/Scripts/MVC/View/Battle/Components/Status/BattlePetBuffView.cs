@@ -120,7 +120,8 @@ public class BattlePetBuffView : BattleBaseView
 
     private void OnPointerOver(int index) {
         var buff = buffList[index];
-        string header = "<size=18><color=#52e5f9>" + buff.name + "</color></size><size=4>\n\n</size>";
+        var ignoreHint = buff.ignore ? "（失效中）" : string.Empty;
+        string header = "<size=18><color=#52e5f9>" + buff.name + ignoreHint + "</color></size><size=4>\n\n</size>";
         string text = buff.description;
         Vector2 size = text.GetPreferredSize(15, 14, 21, 21 + 40);
         Vector2 fixPos = anchoredAtLeft ? new Vector2(12, -size.y + 24) : new Vector2(-size.x - 2, -size.y + 24);
