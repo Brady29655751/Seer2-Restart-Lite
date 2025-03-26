@@ -73,10 +73,13 @@ public class BattlePetSkillView : BattleBaseView
         if (!index.IsInRange(0, skillBlockViews.Length))
             return;
 
-        float boxSizeY = Mathf.Max(150, (pet?.normalSkill[index] != null) ? pet.normalSkill[index].description.GetPreferredSize(12, 12, 21, 35).y : 150);
-        descriptionBox.SetBoxSize(new Vector2(170, boxSizeY));
-        descriptionBox.SetBoxPosition(new Vector2(80 + 175 * index, 109));
+        float boxSizeY = Mathf.Max(150, pet?.normalSkill[index]?.description.GetPreferredSize(12, 12, 21, 35).y ?? 0);
+        float boxSizeYMedium = Mathf.Max(150, pet?.normalSkill[index]?.description.GetPreferredSize(15, 12, 21, 35).y ?? 0);
+        float boxSizeYLarge = Mathf.Max(150, pet?.normalSkill[index]?.description.GetPreferredSize(24, 12, 21, 35).y ?? 0);
+        var boxSize = (boxSizeY > 250) ? ((boxSizeYMedium > 300) ? new Vector2(300, boxSizeYLarge) : new Vector2(200, boxSizeYMedium)) : new Vector2(170, boxSizeY);
+        descriptionBox.SetBoxSize(boxSize);
         descriptionBox.SetText(pet?.normalSkill[index].description);
+        descriptionBox.SetBoxPosition(new Vector2(80 + 175 * index, 109));
     }
 
     public void SelectSuperSkill() {
@@ -94,10 +97,13 @@ public class BattlePetSkillView : BattleBaseView
     }
 
     public void ShowSuperSkillInfo() {
-        float boxSizeY = Mathf.Max(150, (pet?.superSkill != null) ? pet.superSkill.description.GetPreferredSize(12, 14).y : 150);
-        descriptionBox.SetBoxSize(new Vector2(170, boxSizeY));
-        descriptionBox.SetBoxPosition(new Vector2(5, 115));
+        float boxSizeY = Mathf.Max(150, pet?.superSkill?.description.GetPreferredSize(12, 14).y ?? 0);
+        float boxSizeYMedium = Mathf.Max(150, pet?.superSkill?.description.GetPreferredSize(15, 14).y ?? 0);
+        float boxSizeYLarge = Mathf.Max(150, pet?.superSkill?.description.GetPreferredSize(24, 14).y ?? 0);
+        var boxSize = (boxSizeY > 250) ? ((boxSizeYMedium > 300) ? new Vector2(300, boxSizeYLarge) : new Vector2(200, boxSizeYMedium)) : new Vector2(170, boxSizeY);
+        descriptionBox.SetBoxSize(boxSize);
         descriptionBox.SetText((pet?.superSkill != null) ? pet.superSkill.description : "尚未习得必杀技");
+        descriptionBox.SetBoxPosition(new Vector2(5, 115));
     }
 
     public void SetNoOpSkillInteractable(int petAnger) {

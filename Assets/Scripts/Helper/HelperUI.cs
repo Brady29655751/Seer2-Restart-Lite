@@ -277,6 +277,20 @@ namespace UnityEngine
         public static Color32 green => new Color32(119, 226, 12, 255);
         public static Color32 secretSkill => new Color32(252, 237, 105, 255);
         public static Color32 normalSkill => new Color32(82, 229, 249, 255);
+
+        public static Color32 GetStarColor(int star)
+        {
+            return star switch
+            {
+                6 => ColorHelper.red,
+                5 => ColorHelper.gold,
+                4 => Color.magenta,
+                3 => Color.cyan,
+                2 => Color.green,
+                1 => Color.white,
+                _ => Color.clear,
+            };
+        }
     }
 
     public static class EventHelper

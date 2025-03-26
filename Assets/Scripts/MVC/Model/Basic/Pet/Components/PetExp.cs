@@ -29,6 +29,7 @@ public class PetExp
     public PetExp(PetExp rhs) {
         id = rhs.id;
         level = rhs.level;
+        fixedMaxLevel = rhs.fixedMaxLevel;
         totalExp = rhs.totalExp;
     }
 

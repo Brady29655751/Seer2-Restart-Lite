@@ -5,8 +5,8 @@ using UnityEngine;
 
 public class WorkshopPetBasicModel : Module
 {
-    [SerializeField] private IInputField idInputField, nameInputField;
-    [SerializeField] private IDropdown elementDropdown, subElementDropdown, genderDropdown;
+    [SerializeField] private IInputField idInputField, nameInputField, genderInputField;
+    [SerializeField] private IDropdown elementDropdown, subElementDropdown;
     [SerializeField] private IInputField heightInputField, weightInputField;
     [SerializeField] private List<IInputField> baseStatusInputFieldList;
     [SerializeField] private IInputField descriptionInputField;
@@ -15,7 +15,7 @@ public class WorkshopPetBasicModel : Module
     public string petName => nameInputField.inputString;
     public Element element => (Element)(elementDropdown.value);
     public Element subElement => (Element)(subElementDropdown.value);
-    public int gender => genderDropdown.value - 1;
+    public string gender => genderInputField.inputString;
     public int height => int.Parse(heightInputField.inputString);
     public int weight => int.Parse(weightInputField.inputString);
     public Status baseStatus => new Status(baseStatusInputFieldList.Select(x => float.Parse(x.inputString)));
@@ -41,7 +41,7 @@ public class WorkshopPetBasicModel : Module
 
         elementDropdown.value = (int)basicInfo.element;
         subElementDropdown.value = (int)basicInfo.subElement;
-        genderDropdown.value = basicInfo.gender + 1;
+        genderInputField.SetInputString(basicInfo.rawGender);
 
         heightInputField.SetInputString(basicInfo.baseHeight.ToString());
         weightInputField.SetInputString(basicInfo.baseWeight.ToString());
@@ -59,6 +59,9 @@ public class WorkshopPetBasicModel : Module
             return false;
 
         if (!VerifyName(out error))
+            return false;
+
+        if (!VerifyGender(out error))
             return false;
 
         if (!VerifyHeightAndWeight(out error))
@@ -126,6 +129,22 @@ public class WorkshopPetBasicModel : Module
 
         if (nameInputField.inputString.Contains(',')) {
             error = "名字不能有半形逗号";
+            return false;
+        }
+
+        return true;
+    }
+
+    private bool VerifyGender(out string error) {
+        error = string.Empty;
+
+        if (string.IsNullOrEmpty(genderInputField.inputString)) {
+            error = "性别不能为空！";
+            return false;
+        }
+
+        if (!PetBasicInfo.TryParseGender(genderInputField.inputString, out _, out _)) {
+            error = "性别格式错误！";
             return false;
         }
 

@@ -17,7 +17,7 @@ public class PetSortingModel : Module
         
         return sortingType switch {
             PetSortingType.Storage => (PetSortingOptions)(dropdown.value + 1),
-            PetSortingType.Dict => (PetSortingOptions)(-dropdown.value - 1),
+            PetSortingType.Dict => (PetSortingOptions)((dropdown.value + 1) * Mathf.Sign(dropdown.value - 2)),
             _ => PetSortingOptions.None
         };
     }
@@ -36,6 +36,8 @@ public class PetSortingModel : Module
                 return (Pet x) => x.basic.getPetDate;
             case PetSortingOptions.Level:
                 return (Pet x) => x.level;
+            case PetSortingOptions.Star:
+                return (Pet x) => x.info.star;
         }
     }
 }
@@ -46,6 +48,7 @@ public enum PetSortingOptions {
     None = 0,
     Date = 1,
     Level = 2,
+    Star = 3,
 }
 
 public enum PetSortingType {

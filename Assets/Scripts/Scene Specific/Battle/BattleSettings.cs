@@ -4,9 +4,11 @@ using System.Xml.Serialization;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class BattleSettings
 {
+    public int seed = 0;
     [XmlAttribute("mod")] public bool isMod = false;
     [XmlAttribute("simulate")] public bool isSimulate = false;
     [XmlAttribute("escape")] public bool isEscapeOK = true;
@@ -31,9 +33,13 @@ public class BattleSettings
         set => initBuffExpr = value.Select(x => "(" + x.Key + ":" + (x.Value?.id ?? 0) + ")").ConcatToString(string.Empty);
     }
 
-    public BattleSettings() {}
+    public BattleSettings() {
+        seed = (int)DateTime.Now.Ticks;
+    }
 
     public BattleSettings(BattleMode _mode, int _petCount = 6, int _weather = 0, bool _isEscapeOK = true, bool _isSimulate = false, bool _isCapture = false, bool _isItem = true, bool _isMod = false) {
+        seed = (int)DateTime.Now.Ticks;
+        
         isMod = _isMod;
         isSimulate = _isSimulate;
         isEscapeOK = _isEscapeOK;
@@ -46,6 +52,8 @@ public class BattleSettings
     }
 
     public BattleSettings(BattleSettings rhs) {
+        seed = rhs.seed;
+
         isMod = rhs.isMod;
         isSimulate = rhs.isSimulate;
         isEscapeOK = rhs.isEscapeOK;
@@ -95,6 +103,7 @@ public class BattleSettings
 }
 
 public enum BattleMode {
+    Record = -1,
     Normal = 0,
     SelfSimulation = 1,
     PVP = 2,

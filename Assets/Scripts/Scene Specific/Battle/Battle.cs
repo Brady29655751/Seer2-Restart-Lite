@@ -1,7 +1,9 @@
+using System;
 using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 using Photon.Pun;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
 using ExitGames.Client.Photon.StructWrapping;
@@ -49,7 +51,7 @@ public class Battle
             myPetBag = player.Take(info.settings.petCount).Select(x => BattlePet.GetBattlePet(x));
 
         BattlePet[] opPetBag = enemy.Select(x => BattlePet.GetBattlePet(x)).ToArray();
-        
+
         Init(myPetBag.ToArray(), opPetBag, info.settings);
     }
 
@@ -60,12 +62,13 @@ public class Battle
     /// <param name="myHash">Local Player properties</param>
     /// <param name="opHash">Opponent properties</param>
     public Battle(Hashtable roomHash, Hashtable myHash, Hashtable opHash) {
-        Random.InitState((int)roomHash["seed"]);
-
+        var seed = (int)roomHash["seed"];
         var petCount = (int)roomHash["count"];
         var buffList = (int[])roomHash["buff"];
         var iv = buffList.Contains(Buff.BUFFID_PVP_IV_120) ? 120 : 31;
+
         var roomSettings = new BattleSettings() {
+            seed = seed,
             mode = BattleMode.PVP,
             petCount = petCount,
             parallelCount = (petCount == 2) ? 2 : 1,
@@ -80,21 +83,37 @@ public class Battle
             
         var myPetBag = BattlePet.GetBattlePetBag(myHash, roomSettings.petCount, iv);
         var opPetBag = BattlePet.GetBattlePetBag(opHash, roomSettings.petCount, iv);
-        if (PhotonNetwork.IsMasterClient) {
-            Init(myPetBag, opPetBag, roomSettings);
-        } else {
-            Init(opPetBag, myPetBag, roomSettings);
-        }
+        var masterPetBag = PhotonNetwork.IsMasterClient ? myPetBag : opPetBag;
+        var clientPetBag = PhotonNetwork.IsMasterClient ? opPetBag : myPetBag;
+        Init(masterPetBag, clientPetBag, roomSettings);
+        RecordBattle(masterPetBag.Select(x => (x == null) ? null : new Pet(x)).ToArray(), 
+            clientPetBag.Select(x => (x == null) ? null : new Pet(x)).ToArray(), roomSettings, PhotonNetwork.IsMasterClient);
     }
 
     private void Init(BattlePet[] masterPetBag, BattlePet[] clientPetBag, BattleSettings settings) {
         Player.instance.currentBattle = this;
+        Random.InitState(settings.seed);
 
         this.lastState = null;
         Unit masterTurn = new Unit(masterPetBag, 1, settings);
         Unit clientTurn = new Unit(clientPetBag, -1, settings);
         this.currentState = new BattleState(settings, masterTurn, clientTurn);
         this.currentPhase = new BattleStartPhase();
+    }
+
+    private void RecordBattle(Pet[] masterPetBag, Pet[] clientPetBag, BattleSettings settings, bool isMaster) {
+        BattleRecord record = new BattleRecord() {
+            isMaster = isMaster,
+            settings = new BattleSettings(settings){ mode = BattleMode.Record },
+            masterPetBag = masterPetBag,
+            clientPetBag = clientPetBag,
+            date = DateTime.Now,
+        };
+        Player.instance.gameData.battleRecordStorage.Add(record);
+        if (Player.instance.gameData.battleRecordStorage.Count > BattleRecord.MAX_RECORD_STORAGE_NUM)
+            Player.instance.gameData.battleRecordStorage.RemoveAt(0);
+
+        SaveSystem.SaveData();        
     }
 
     private void NextPhase() {
@@ -108,6 +127,19 @@ public class Battle
 
     public void OnBattleStart() {
         NextPhase();
+        if (settings.mode == BattleMode.Record)
+            UI.StartCoroutine(PlayRecordCoroutine());
+    }
+
+    private IEnumerator PlayRecordCoroutine() {
+        var actionList = Player.instance.currentBattleRecord.actionList;
+        var speed = Player.instance.gameData.settingsData.battleAnimSpeed;
+        for (int i = 0; i < actionList.Count; i++) {
+            var action = actionList[i];
+            SetSkill(Skill.ParseRPCData(action.key), action.value);
+            //yield return new WaitForSeconds(3.5f / speed);
+            yield return null;
+        }
     }
 
     public void SetSkill(Skill skill, bool isMe) {
@@ -149,7 +181,8 @@ public class Battle
             UI.SetSkillSelectMode(false);
             UI.SetBottomBarInteractable(false);
             UI.PVPSetSkillToOthers(skill);
-        }
+        } else if (settings.mode == BattleMode.PVP)
+            Player.instance.gameData.battleRecordStorage?.LastOrDefault()?.AddAction(skill.ToRPCData(settings), false);
 
         if ((settings.parallelCount <= 1) && (currentState.isAnyPetDead)) {
             unit.SetSkill(null);
@@ -163,9 +196,8 @@ public class Battle
             return;
         }
 
-        if ((settings.mode != BattleMode.PVP) && (opUnit.skill == null)) {
+        if ((settings.mode != BattleMode.PVP) && (settings.mode != BattleMode.Record) && (opUnit.skill == null)) {
             var parallelCount = Mathf.Min(settings.parallelCount, opUnit.petSystem.alivePetNum);
-            var randomCursor = Random.Range(0, parallelCount);
             for (int i = 0; i < parallelCount; i++) {
                 var cursor = opUnit.petSystem.cursor;
                 var nextCursor = opUnit.petSystem.GetNextCursorCircular();

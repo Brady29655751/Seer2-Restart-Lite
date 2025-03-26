@@ -274,6 +274,9 @@ public static class SaveSystem
                 // Clean yite rogue
                 if ((data.yiteRogueData != null) && (data.yiteRogueData.difficulty == YiTeRogueMode.Mod))
                     data.yiteRogueData = null;
+
+                // Clean battle record
+                data.battleRecordStorage.RemoveAll(x => x.masterPetBag.Any(y => PetInfo.IsMod(y?.id ?? 0)) || x.clientPetBag.Any(y => PetInfo.IsMod(y?.id ?? 0)));
                 
                 SaveData(data, id);
             }

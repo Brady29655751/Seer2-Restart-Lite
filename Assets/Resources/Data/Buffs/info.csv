@@ -168,8 +168,8 @@ id,name,type,copyType,turn,options,description
 3049,剧毒身体,turn,replace,3,none,受到攻击时50%使对手中毒
 3050,蓄电,turn,replace,3,none,使自身电系技能伤害增加70%
 3051,星尘幻盾,shield,max,-1,none,受到的伤害不超过400且每回合刷新并记录上一次受到的伤害值
-3052,蓝色水球,mark,max,-1,auto_remove=true,使特攻技能附加效果
-3053,红色水球,mark,max,-1,auto_remove=true,使物攻技能附加效果
+3052,蓝色水球,mark,max,-1,auto_remove=true,使特攻技能附加效果并以双攻之中较高的一项作为攻击力
+3053,红色水球,mark,max,-1,auto_remove=true,使物攻技能附加效果并以双攻之中较高的一项作为攻击力
 3054,涟漪盾,turn,replace,5,res=16&keep=false,受到的水系攻击伤害减半
 3055,光武神通,chance,block,-1,none,在承受到一次伤害后记录此次伤害值的一半，使自身下个技能伤害附加记录值
 3056,光武灵通,chance,block,-1,none,在承受到一次伤害后记录此次伤害值的一半，使自身生成一个记录值的护盾
@@ -257,7 +257,7 @@ id,name,type,copyType,turn,options,description
 3138,宴会终结,turn,replace,3,none,恢复自身最大体力的1/8，受到攻击时获得1个幽灵
 3139,不谐暗光,turn,replace,3,none,受到光系技能伤害减半
 3140,幽灵效果触发,turn,replace,1,hide=true,攻击后添加对应层数的幽灵
-3141,液态化,mark,replace,-1,none,受到攻击后回复自身1/12体力
+3141,液态化,mark,replace,-1,none,受到攻击后回复自身1/16体力
 3142,融化,turn,replace,3,keep=false&inherit=true,受到攻击时随机弱化对手1项能力1级
 3143,焦点腐蚀,mark,replace,-1,none,特定攻击技能造成伤害的1/4将恢复自身体力
 3144,疾火,turn,replace,3,none,每回合回复自身10点怒气
@@ -412,7 +412,7 @@ id,name,type,copyType,turn,options,description
 100332,怒视,feature,replace,-1,none,对手使用属性技能时自身获得10点怒气
 100335,嫉妒,feature,replace,-1,none,若对手能力值总和高于自身，则自身受到的伤害减少10%
 100338,傲气,feature,replace,-1,none,当自身强化大于对手时自身受到的伤害减少10%
-100350,极热,feature,replace,-1,none,使用属性技能时50%使对手烧伤
+100350,极热,feature,replace,-1,none,决定使用属性技能时50%使对手烧伤
 100354,幻化,feature,replace,-1,none,自身攻击力视为双攻较高的一项，对手防御力视为双防较低的一项
 100356,毒牙,feature,replace,-1,none,对手具有毒牙时自身技能威力增加10点
 100388,指引,feature,replace,-1,none,以星的指引伤害增加10%
@@ -497,7 +497,7 @@ id,name,type,copyType,turn,options,description
 200249,拯救,emblem,replace,-1,none,使拯救之火也会回复自身100体力
 200280,召唤,emblem,replace,-1,none,回合结束时若自身具有幽灵则会增加1层
 200301,祝福,emblem,replace,-1,none,使森林祝福提升的体力回复率提高5%
-200302,蓝球,emblem,replace,-1,none,每消耗1个蓝色水球时增加自身10点怒气
+200302,蓝球,emblem,replace,-1,none,每消耗1个蓝色水球增加自身10点怒气
 200307,天道,emblem,replace,-1,none,免疫干裂状态
 200320,影子,emblem,replace,-1,none,首次出场时获得1个影子
 200323,贪食,emblem,replace,-1,none,食类技能命中后能解除自身不良
@@ -612,6 +612,7 @@ id,name,type,copyType,turn,options,description
 600002,深海,mark,replace,-1,none,双方受到攻击时25%概率溺水
 600008,影触,mark,replace,-1,none,每回合随机弱化双方1项能力1级
 610000,PVP极品资质120,mark,replace,-1,none,[ffbb33]【PVP对战规则】[-][ENDL]双方精灵资质为120
+610001,PVP无禽12星,mark,replace,-1,none,[ffbb33]【PVP对战规则】[-][ENDL]背包必须带满6只精灵，且星数总和不能超过12[ENDL]不能携带4星以上精灵，且3星精灵最多携带2只
 -11,商店,mark,blcok,-1,none,可以购买各式道具和加成
 -12,战斗（终极）,mark,block,-1,none,本层的最终战斗！
 -13,起始点,mark,block,-1,none,选择你的伊特吧！

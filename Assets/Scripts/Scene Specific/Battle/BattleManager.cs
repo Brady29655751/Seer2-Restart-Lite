@@ -80,6 +80,9 @@ public class BattleManager : Manager<BattleManager>
     {
         if (queue.Count <= 0)
         {
+            if (currentUIState == null)
+                return;
+
             SetBottomBarInteractable(true);
             SelectOption(currentUIState.myUnit.pet.isDead ? 1 : 0);
             SetOptionActive(2, currentUIState.settings.isCaptureOK);
@@ -138,6 +141,9 @@ public class BattleManager : Manager<BattleManager>
         {
             yield return new WaitForSeconds(0.2f);
         }
+
+        if (newState.settings.mode == BattleMode.Record)
+            yield return new WaitForSeconds(1f);
 
         ProcessQuery();
     }
@@ -236,5 +242,6 @@ public class BattleManager : Manager<BattleManager>
 
         var photonView = masterView.IsMine ? masterView : clientView;
         photonView.RPC("RPCSetSkill", RpcTarget.Others, (object)skill.ToRPCData(battle.settings));
+        Player.instance.gameData.battleRecordStorage?.LastOrDefault()?.AddAction(skill.ToRPCData(battle.settings), true);
     }
 }

@@ -1,6 +1,9 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public static class EffectConditionHandler
 {
@@ -214,8 +217,7 @@ public static class EffectConditionHandler
         string type = condOptions.Get("type", "none");
         string[] typeList = type.Split('/');
 
-        int buffId; bool ownBuff; BuffType buffType;
-        if (!bool.TryParse(own, out ownBuff))
+        if (!bool.TryParse(own, out bool ownBuff))
             return false;
 
         var invokeUnitId = ((Unit)effect.invokeUnit).id;
@@ -223,13 +225,17 @@ public static class EffectConditionHandler
         Unit rhsUnit = state.GetRhsUnitById(buffUnit.id);
         var pet = buffUnit.pet;
 
-        if (!int.TryParse(id, out buffId)) {
+        BuffType buffType;
+        if (!int.TryParse(id, out int buffId)) {
             buffType = id.ToBuffType();
             if (buffType == BuffType.None)
                 return false;
 
             return ownBuff != ListHelper.IsNullOrEmpty(pet.buffController.GetRangeBuff(x => x.IsType(buffType)));
         }
+
+        if (string.IsNullOrEmpty(key) && (buffId == 0))
+            return true;
 
         var buff = string.IsNullOrEmpty(key) ? pet.buffController.GetBuff(buffId) : state.stateBuffs.Find(x => x.Key == key).Value;
         bool isOwnCorrect = (ownBuff == (buff != null));

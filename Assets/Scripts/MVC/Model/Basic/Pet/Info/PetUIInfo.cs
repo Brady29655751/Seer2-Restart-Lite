@@ -8,7 +8,7 @@ using System.Linq;
 public class PetUIInfo
 {
     public const int DATA_COL = 4;
-    public int id, baseId;
+    public int id, baseId, star;
 
     public int defaultId, defaultAnimId;
 
@@ -70,6 +70,7 @@ public class PetUIInfo
         defaultBuffIds = options.Get("default_buff", "none").ToIntList('/');
 
         hide = bool.Parse(options.Get("hide", "false"));
+        star = int.Parse(options.Get("star", "0"));
     }
 
     public string[] GetRawInfoStringArray() {

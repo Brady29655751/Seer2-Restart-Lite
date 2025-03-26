@@ -21,7 +21,7 @@ public class PetInfoView : Module
         if (pet == null)
             return;
             
-        SetID(pet.id);
+        SetID(pet.id, pet.info.star);
         SetLevel(pet.level);
         SetEvolveLevel(pet.info.exp.evolveLevel);
         SetLevelUpExp((pet.level >= pet.maxLevel) ? 0 : pet.levelUpExp);
@@ -30,8 +30,8 @@ public class PetInfoView : Module
         SetGetPetDate(pet.basic.getPetDate);
     }
 
-    public void SetID(int id) {
-        idText?.SetText(id.ToString());
+    public void SetID(int id, int star) {
+        idText?.SetText(id + " <color=#ffbb33>(★<size=4> </size>" + star + "<size=4> </size>)</color>");
     }
 
     public void SetLevel(int level) {

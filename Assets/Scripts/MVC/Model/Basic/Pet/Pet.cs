@@ -82,6 +82,7 @@ public class Pet
 
         Pet pet = new Pet(id);
 
+        pet.basic.gender = info.basic.gender;
         pet.basic.height = info.basic.baseHeight + 5;
         pet.basic.weight = info.basic.baseWeight + 5;
         pet.basic.ToBestPersonality();
@@ -164,7 +165,7 @@ public class Pet
         /* Basic */
         id = evolvePetId;
 
-        basic = new PetBasic(evolvePetId, (int)originalPet.basic.personality)
+        basic = new PetBasic(evolvePetId, (int)originalPet.basic.personality, originalPet.basic.gender)
         {
             getPetDate = originalPet.basic.getPetDate,
         };
@@ -239,7 +240,7 @@ public class Pet
             "skinId" => ui.skinId,
             "element" => elementId,
             "subElement" => subElementId,
-            "gender" => (float)info.basic.gender,
+            "gender" => (float)basic.gender,
             "personality" => (float)basic.personality,
             "height" => basic.height,
             "weight" => basic.weight,
@@ -419,6 +420,14 @@ public class Pet
                 pet.ui = new PetUI(pet.id, pet.basic.baseId);
             }
             petDataVersion = "beta_0.1";
+        }
+
+        if (VersionData.Compare(petDataVersion, "lite_2.8") < 0) {
+            var allPets = gameData.petBag.Concat(gameData.petStorage);
+            foreach (var pet in allPets)
+                pet.basic.gender = pet.info.basic.gender;
+            
+            petDataVersion = "lite_2.8";
         }
     }
 

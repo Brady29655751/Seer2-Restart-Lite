@@ -41,7 +41,7 @@ public class RoomManager : Manager<RoomManager>
 
         var room = PhotonNetwork.CurrentRoom.CustomProperties;
         var player = PhotonNetwork.LocalPlayer.CustomProperties;
-        int seed = Random.Range(int.MinValue, int.MaxValue);
+        int seed = Random.Range(1, int.MaxValue);
         int petCount = (int)(room["count"]);
         bool isItemOK = (bool)(room["item"]);
         int[] buffs = (int[])(room["buff"]);
@@ -147,6 +147,28 @@ public class RoomManager : Manager<RoomManager>
     }
 
     public void SetMyReady(bool isReady) {
+        var room = PhotonNetwork.CurrentRoom.CustomProperties;
+        var buffs = (int[])room["buff"];
+        if (isReady && buffs.Contains(610001)) {
+            // Check rule.
+            var pets = petBagPanel.petBag.Where(x => x != null);
+            if (pets.Count() < 6) {
+                Hintbox.OpenHintboxWithContent("【无禽12星限制】\n必须带满6只精灵", 16);
+                return;
+            }
+            if (pets.Any(x => x.info.star >= 4)) {
+                Hintbox.OpenHintboxWithContent("【无禽12星限制】\n不能使用4星以上的精灵", 16);
+                return;
+            }
+            if (pets.Count(x => x.info.star == 3) > 2) {
+                Hintbox.OpenHintboxWithContent("【无禽12星限制】\n3星精灵最多携带2只", 16);
+                return;
+            }
+            if (pets.Sum(x => x.info.star) > 12) {
+                Hintbox.OpenHintboxWithContent("【无禽12星限制】\n精灵星数总和不能超过12", 16);
+                return;
+            }
+        }
         roomSettingsView.SetReady(() => SetMyReadyProperty(isReady), isReady, true);
     }
 

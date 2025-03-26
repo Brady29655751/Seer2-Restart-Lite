@@ -15,6 +15,7 @@ public class RoomSettingsView : Module
     [SerializeField] private IButton startButton, petBagButton;
     [SerializeField] private Text myNameText, opNameText;
     [SerializeField] private List<PetSelectBlockView> myPets, opPets;
+    [SerializeField] private List<Image> myPetStarFrames, opPetStarFrames;
     [SerializeField] private GameObject stateVSObject, myConfirmObject, myCancelObject, opCoverObject;
     [SerializeField] private Text opStatusText;
 
@@ -52,8 +53,11 @@ public class RoomSettingsView : Module
 
     public void SetPet(List<Pet> pets, bool isMe) {
         var petBlocks = isMe ? myPets : opPets;
+        var starFrames = isMe ? myPetStarFrames : opPetStarFrames;
         for (int i = 0; i < petBlocks.Count; i++) {
-            petBlocks[i]?.SetPet(((pets != null) && (i < pets.Count)) ? pets[i] : null);
+            var pet = ((pets != null) && (i < pets.Count)) ? pets[i] : null;
+            petBlocks[i]?.SetPet(pet);
+            starFrames[i].color = ColorHelper.GetStarColor(pet?.info?.star ?? 0);
         }
     }
 

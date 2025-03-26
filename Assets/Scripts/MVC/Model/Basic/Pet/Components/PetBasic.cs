@@ -4,12 +4,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
+using System.Linq;
 
 public class PetBasic
 {
     public int baseId => info.baseId;
 
     [XmlAttribute] public int id;
+    public int gender;
     public Personality personality;
     public int height, weight;
     public DateTime getPetDate;
@@ -20,9 +22,10 @@ public class PetBasic
     {
     }
 
-    public PetBasic(int _id, int p = -1)
+    public PetBasic(int _id, int p = -1, int g = int.MinValue)
     {
         id = _id;
+        gender = info.genderList.Contains(g) ? g : info.genderList.Random(info.genderDistribution);
         personality = (Personality)((p == -1) ? Random.Range(0, 25) : p);
         height = info.baseHeight + Random.Range(0, 6);
         weight = info.baseWeight + Random.Range(0, 6);
@@ -32,6 +35,7 @@ public class PetBasic
     public PetBasic(PetBasic rhs)
     {
         id = rhs.id;
+        gender = rhs.gender;
         personality = rhs.personality;
         height = rhs.height;
         weight = rhs.weight;

@@ -74,6 +74,13 @@ public class BattleResult
             return;
         }
 
+        if (endState.settings.mode == BattleMode.PVP)
+        {
+            var battleRecord = Player.instance.gameData.battleRecordStorage?.LastOrDefault();
+            if (battleRecord != null)
+                battleRecord.originalResultState = Player.instance.currentBattle.result.state;
+        }
+
         if (endState.settings.isSimulate)
             return;
 

@@ -12,9 +12,12 @@ public class DescriptionBox : MonoBehaviour
         boxRect.anchoredPosition = pos;
     }
 
-    public void SetBoxSize(Vector2 size) {
-        boxRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, size.x);
-        boxRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, size.y);
+    public void SetBoxSize(Vector2 size, bool preferredSizeX = false, bool preferredSizeY = false) 
+    {   
+        var x = Mathf.Max(size.x, preferredSizeX ? (contentText.preferredWidth + 10) : 0);
+        var y = Mathf.Max(size.y, preferredSizeY ? (contentText.preferredHeight + 10) : 0);
+        boxRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, x);
+        boxRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, y);
     }
 
     public void SetText(string _content) {

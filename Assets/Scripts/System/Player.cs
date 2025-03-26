@@ -22,6 +22,7 @@ public class Player : Singleton<Player>
 
     public int random = -1;
     public Battle currentBattle = null;
+    public BattleRecord currentBattleRecord = null;
     private static Dictionary<string, object> sceneData = new Dictionary<string, object>();
 
     private void Start() {

@@ -32,7 +32,7 @@ public class PetDictInfoView : Module
             return;
         }
 
-        SetID(info.id);
+        SetID(info.id, info.star);
         SetHeightAndWeight(info.basic.baseHeight, info.basic.baseWeight);
         SetHabitat(info.basic.habitat, info.basic.linkId);
         SetDescription(info.basic.description);
@@ -49,8 +49,8 @@ public class PetDictInfoView : Module
 
     }
 
-    public void SetID(int id) {
-        idText?.SetText(id.ToString());
+    public void SetID(int id, int star) {
+        idText?.SetText(id  + " <color=#52e5f9>(★<size=4> </size>" + star + "<size=4> </size>)</color>");
     }
 
     public void SetHeightAndWeight(int baseHeight, int baseWeight) {

@@ -46,7 +46,7 @@ public class PetDemoView : Module
         SetName(pet.name);
         SetElement(pet.element, pet.subElement);
         SetFeature(pet.feature.feature);
-        SetGender(pet.info.basic.gender);
+        SetGender(pet.basic.gender);
         SetEmblem(pet.hasEmblem, pet.feature.emblem);
         SetIVRank(pet.talent.IVRank);
         SetAnimation(pet, animMode);

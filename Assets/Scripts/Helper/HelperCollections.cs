@@ -2,7 +2,6 @@ using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Rendering;
 
 namespace System.Collections.Generic {
 
@@ -66,18 +65,30 @@ public static class ListHelper {
         return list[index];
     }
 
-    public static T Random<T>(this List<T> values) {
-        int index = UnityEngine.Random.Range(0, values.Count);
-        return values[index];
+    public static T Random<T>(this List<T> values, List<int> weights = null) {
+        if (weights == null) {
+            int index = UnityEngine.Random.Range(0, values.Count);
+            return values[index];
+        }
+
+        var w = weights.Take(values.Count).ToList();
+        var p = UnityEngine.Random.Range(0, w.Sum());
+        for (int i = 0; i < w.Count; i++) {
+            if (p < w[i])
+                return values[i];
+
+            p -= w[i];
+        }
+        return values.LastOrDefault();
     }
 
-    public static List<T> Random<T>(this List<T> values, int count, bool repeat = true) {
+    public static List<T> Random<T>(this List<T> values, int count, bool repeat = true, List<int> weights = null) {
         List<T> result = new List<T>();
         if ((!repeat) && (count >= values.Count))
             return values.ToList();
 
         while (result.Count != count) {
-            T rng = values.Random();
+            T rng = values.Random(weights);
             if (!repeat && result.Contains(rng))
                 continue;
 

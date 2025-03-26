@@ -32,7 +32,7 @@ public class PetFeatureInfo
     }
 
     public string[] GetRawInfoStringArray() {
-        return new string[] { baseId.ToString(), feature.name, feature.description, emblem.name, emblem.description };
+        return new string[] { baseId.ToString(), feature.name, feature.rawDescription, emblem.name, emblem.rawDescription };
     }
 
 }

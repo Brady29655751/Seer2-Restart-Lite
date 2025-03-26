@@ -3,11 +3,13 @@ using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class CookPanel : Panel
 {
     [SerializeField] private CookController cookController;
     [SerializeField] private IText titleText;
+    [SerializeField] private Text cookText;
     private bool isSpecialRecipe = false;
     
 
@@ -29,6 +31,9 @@ public class CookPanel : Panel
                 return;
             case "title":
                 titleText?.SetText(param);
+                return;
+            case "cookText":
+                cookText?.SetText(param);
                 return;
         }
     }

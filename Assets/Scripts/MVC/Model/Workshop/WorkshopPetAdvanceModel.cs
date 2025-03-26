@@ -27,13 +27,13 @@ public class WorkshopPetAdvanceModel : Module
     public PetFeatureInfo GetPetFeatureInfo(int id) {
         Feature petFeature = new Feature() {
             baseId = id,
-            name = feature.ReplaceSpecialWhiteSpaceCharacters(string.Empty),
-            rawDescription = featureDescription.ReplaceSpecialWhiteSpaceCharacters(string.Empty),
+            name = feature.Replace("\n", "[ENDL]").ReplaceSpecialWhiteSpaceCharacters(string.Empty),
+            rawDescription = featureDescription.Replace("\n", "[ENDL]").ReplaceSpecialWhiteSpaceCharacters(string.Empty),
         };
         Emblem petEmblem = new Emblem() {
             baseId = id,
-            name = emblem.ReplaceSpecialWhiteSpaceCharacters(string.Empty),
-            rawDescription = emblemDescription.ReplaceSpecialWhiteSpaceCharacters(string.Empty),
+            name = emblem.Replace("\n", "[ENDL]").ReplaceSpecialWhiteSpaceCharacters(string.Empty),
+            rawDescription = emblemDescription.Replace("\n", "[ENDL]").ReplaceSpecialWhiteSpaceCharacters(string.Empty),
         };
         return new PetFeatureInfo(id, petFeature, petEmblem);
     }
