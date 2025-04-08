@@ -813,12 +813,25 @@ public static class EffectAbilityHandler
                 if (type == "skill") {
                     if (!int.TryParse(value, out var skillId))
                         return false;
+
                     var skill = Skill.GetSkill(skillId, false);
                     if (skill == null)
                         return false;
+
                     if (op == "+") {
                         if (!pet.skills.LearnNewSkill(skill))
                             return false;
+                    } else if (op == "-") {
+                        if (!pet.skills.ownSkillId.Contains(skill.id))
+                            return false;
+
+                        var backupSuperSkill = pet.backupSuperSkill;
+                        pet.skills.ownSkill = pet.ownSkill.Where(x => x.id != skill.id).ToList();
+                        if (pet.normalSkill.Any(x => x.id == skill.id))
+                            pet.skills.normalSkillId.Update(skill.id, pet.backupNormalSkill.FirstOrDefault()?.id ?? 0);
+
+                        if ((pet.superSkill != null) && (pet.superSkill.id == skill.id))
+                            pet.superSkill = backupSuperSkill;
                     }
 
                     SaveSystem.SaveData();

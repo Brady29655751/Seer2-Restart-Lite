@@ -234,6 +234,12 @@ public class Pet
             float.TryParse(trimRecordValueExpr, out var trimRecordValue))
             return trimRecordValue;
 
+        if (id.TryTrimStart("skin", out var trimSkin) &&
+            (trimSkin.TryTrimParentheses(out var skinIdExpr)) && 
+            (int.TryParse(skinIdExpr, out var skinId))) {
+            return (info.ui.GetAllSkinList(ui).Contains(skinId) || ui.specialSkinList.Contains(skinId)) ? 1 : 0;
+        } 
+
         return id switch {
             "id" => info.ui.defaultId,
             "baseId" => basic.baseId,
