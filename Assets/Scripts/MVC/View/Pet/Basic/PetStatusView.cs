@@ -22,6 +22,7 @@ public class PetStatusView : Module
         SetStatus(pet.normalStatus);
         SetEV(pet.talent.ev);
         SetEVButtonsActive(false);
+        SetPersonality(pet.basic.personality);
     }
 
     public void OnBeforeSetEV(Status status, Status ev) {
@@ -73,5 +74,11 @@ public class PetStatusView : Module
     public void SetMaxEVBoxActive(bool active) {
         normalEVBox?.SetActive(!active);
         maxEVBox?.SetActive(active);
+    }
+
+    public void SetPersonality(Personality p) {
+        var buff = Status.GetPersonalityBuff(p) - Status.one;
+        for (int i = 0; i < 6; i++)
+            statusBlockViews[i].SetPersonalityBuff(buff[i]);
     }
 }

@@ -123,21 +123,21 @@ public class BattlePetChangeView : BattleBaseView
         {
             content += "我方 <b><color=#ffbb33>" + attackElement.GetElementName(maxLength) + "系</color></b> <color=#" 
                 + ColorUtility.ToHtmlStringRGB(PetElementSystem.GetElementRelationColor(attack)) + ">" 
-                + PetElementSystem.GetElementRelationNote(attack) + " >> " + "</color>对方";
+                + PetElementSystem.GetElementRelationNote(attack) + " >> " + "</color>对方  <color=#ffbb33>" + attack.ToString() + "</color>";
 
             if (subAttackElement != Element.普通)
                 content += "\n我方 <b><color=#ffbb33>" + subAttackElement.GetElementName(maxLength) + "系</color></b> <color=#" 
                     + ColorUtility.ToHtmlStringRGB(PetElementSystem.GetElementRelationColor(subAttack)) + ">" 
-                    + PetElementSystem.GetElementRelationNote(subAttack) + " >> " + "</color>对方";
+                    + PetElementSystem.GetElementRelationNote(subAttack) + " >> " + "</color>对方  <color=#ffbb33>" + subAttack.ToString() + "</color>";
 
             content += "\n敌方 <b><color=#ffbb33>" + defenseElement.GetElementName(maxLength) + "系</color></b> <color=#" 
                 + ColorUtility.ToHtmlStringRGB(PetElementSystem.GetElementRelationColor(defense)) + ">" 
-                + PetElementSystem.GetElementRelationNote(defense) + " << " + "</color>我方";
+                + PetElementSystem.GetElementRelationNote(defense) + " << " + "</color>我方  <color=#ffbb33>" + defense.ToString() + "</color>";
 
             if (subDefenseElement != Element.普通)
                 content += "\n敌方 <b><color=#ffbb33>" + subDefenseElement.GetElementName(maxLength) + "系</color></b> <color=#" 
                     + ColorUtility.ToHtmlStringRGB(PetElementSystem.GetElementRelationColor(subDefense)) + ">" 
-                    + PetElementSystem.GetElementRelationNote(subDefense) + " << " + "</color>我方";
+                    + PetElementSystem.GetElementRelationNote(subDefense) + " << " + "</color>我方  <color=#ffbb33>" + subDefense.ToString() + "</color>";
         }
 
         descriptionBox.SetBoxSize(new Vector2(190, 160));

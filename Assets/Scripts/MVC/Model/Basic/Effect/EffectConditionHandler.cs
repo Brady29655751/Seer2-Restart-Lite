@@ -282,4 +282,58 @@ public static class EffectConditionHandler
         }
         return true;
     }
+
+    public static bool PokerCondition(this Effect effect, BattleState state, Dictionary<string, string> condOptions) {
+        string who = condOptions.Get("who", "me");
+        var type = condOptions.Get("type", "none");
+        string[] typeList = type.Split('/');
+        var invokeUnitId = ((Unit)effect.invokeUnit).id;
+
+        Unit pokerUnit = (who == "me") ? state.GetUnitById(invokeUnitId) :state.GetRhsUnitById(invokeUnitId);
+        Unit rhsUnit = state.GetRhsUnitById(pokerUnit.id);
+        var cards = pokerUnit.pet.buffController.GetRangeBuff(x => x.info.options.Get("group") == "poker");
+        
+        if (type == "none")
+            return true;
+
+        float GetPokerIdentifier(string code) {
+            if (code.TryTrimStart("straight", out _) && code.TryTrimParentheses(out var countExpr) 
+                && int.TryParse(countExpr, out var count)) 
+            {
+                var sortByPoint = cards.Select(x => x.value).Distinct().OrderBy(x => x).ToList();
+                int goal = 1;
+                for (int i = 1; i < sortByPoint.Count; i++) {
+                    if (sortByPoint[i] - sortByPoint[i - 1] == 1)
+                        goal++;
+                    else
+                        goal = 1;
+
+                    if (goal >= count)
+                        return 1;
+                }
+                return 0;
+            }
+
+            switch (code) {
+                default:
+                    return 0;
+                case "count":
+                    return cards.Count;
+                case "color.same.max.count":
+                    return cards.GroupBy(x => x.id).Max(x => x.Count());
+                case "point.same.max.count":
+                    return cards.GroupBy(x => x.value).Max(x => x.Count());
+            }
+        }
+
+        for (int i = 0; i < typeList.Length; i++) {
+            string op = condOptions.Get(typeList[i] + "_op", "=");
+            string cmpValue = condOptions.Get(typeList[i] + "_cmp", "0");
+            float value = Parser.ParseEffectOperation(cmpValue, effect, pokerUnit, rhsUnit);
+            if (!Operator.Condition(op, GetPokerIdentifier(typeList[i]), value))
+                return false;
+        }
+
+        return true;
+    }
 }

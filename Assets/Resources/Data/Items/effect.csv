@@ -78,6 +78,7 @@ id,timing,priority,target,condition,cond_option,effect,effect_option
 10237,resident,-1,pet,none,none,set_pet,type=evReset&op=SET&value=0
 10238,resident,-1,pet,none,none,set_pet,type=personality&op=SET&value=random[0~24]
 10239,resident,-1,pet,none,none,set_pet,type=personality&op=SET&value=-1
+10240,resident,-1,pet,none,none,set_pet,type=personality&op=SET&value=random[25~54]
 10301,resident\resident,-1\-1,state\state,none\none,none\none,set_player\set_player,param_count=2&action=setItem&param[0]=add&param[1]=1，2000\param_count=5&action=openHintbox&param[0]=type＝Item&param[1]=title＝提示&param[2]=content＝获得了 2000 赛尔豆！&param[3]=item_icon＝item[1]&param[4]=option_num＝1
 20001,resident,-1,pet,pet,type=buff[400003]&buff[400003]_cmp=0,set_pet,type=buff&op=+&value=400003
 20002,resident\resident\on_remove_buff,-1\-1\-1,pet\pet\pet,pet\pet\none,type=buff[400004]&buff[400004]_cmp=0\type=buff[400004]&buff[400004]_cmp=0\none,set_pet\set_pet\set_pet,type=buff&op=+&value=400004\type=record[evolveBan]&op=SET&value=1\type=record[evolveBan]&op=SET&value=0
@@ -103,6 +104,8 @@ id,timing,priority,target,condition,cond_option,effect,effect_option
 22008,resident,-1,pet,pet,type=buff[group:exclude]&buff[group:exclude]_cmp=0,set_pet,type=buff&op=+&value=420008
 22009,resident,-1,pet,pet,type=buff[group:exclude]&buff[group:exclude]_cmp=0,set_pet,type=buff&op=+&value=420009
 22010,resident,-1,pet,pet,type=buff[group:exclude]&buff[group:exclude]_cmp=0,set_pet,type=buff&op=+&value=420010
+22011,resident,-1,pet,pet,type=buff[group:exclude]&buff[group:exclude]_cmp=0,set_pet,type=buff&op=+&value=420011
+22012,resident,-1,pet,pet,type=buff[group:exclude]&buff[group:exclude]_cmp=0,set_pet,type=buff&op=+&value=420012
 23001,resident,-1,pet,pet,type=buff[group:exclude]&buff[group:exclude]_cmp=0,set_pet,type=buff&op=+&value=430001
 23002,resident,-1,pet,pet,type=buff[group:exclude]&buff[group:exclude]_cmp=0,set_pet,type=buff&op=+&value=430002
 23003,resident,-1,pet,pet,type=buff[group:exclude]&buff[group:exclude]_cmp=0,set_pet,type=buff&op=+&value=430003
@@ -181,6 +184,8 @@ id,timing,priority,target,condition,cond_option,effect,effect_option
 500809,resident\resident,-1\-1,state\state,none\none,none\none,set_player\set_player,param_count=1&action=getPet&param[0]=809\param_count=5&action=openHintbox&param[0]=type＝Item&param[1]=title＝提示&param[2]=content＝【蛇诗曼】已经放入精灵仓库&param[3]=item_icon＝pet[809]&param[4]=option_num＝1
 500826,resident\resident,-1\-1,state\state,none\none,none\none,set_player\set_player,param_count=1&action=getPet&param[0]=826\param_count=5&action=openHintbox&param[0]=type＝Item&param[1]=title＝提示&param[2]=content＝【萌萌大月饼】已经放入精灵仓库&param[3]=item_icon＝pet[826]&param[4]=option_num＝1
 500959,resident\resident,-1\-1,state\state,none\none,none\none,set_player\set_player,param_count=1&action=getPet&param[0]=959\param_count=5&action=openHintbox&param[0]=type＝Item&param[1]=title＝提示&param[2]=content＝【洛基】已经放入精灵仓库&param[3]=item_icon＝pet[959]&param[4]=option_num＝1
+501261,resident\resident,-1\-1,state\state,none\none,none\none,set_player\set_player,param_count=1&action=getPet&param[0]=1261\param_count=5&action=openHintbox&param[0]=type＝Item&param[1]=title＝提示&param[2]=content＝【黑桃扑克】已经放入精灵仓库&param[3]=item_icon＝pet[1261]&param[4]=option_num＝1
+501262,resident\resident,-1\-1,state\state,none\none,none\none,set_player\set_player,param_count=1&action=getPet&param[0]=1262\param_count=5&action=openHintbox&param[0]=type＝Item&param[1]=title＝提示&param[2]=content＝【方块扑克】已经放入精灵仓库&param[3]=item_icon＝pet[1262]&param[4]=option_num＝1
 600000,none,-1,none,none,none,none,none
 600001,none,-1,none,none,none,none,none
 600002,none,-1,none,none,none,none,none

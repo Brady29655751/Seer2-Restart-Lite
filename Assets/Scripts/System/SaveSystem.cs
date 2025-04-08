@@ -216,7 +216,8 @@ public static class SaveSystem
             }
 
             FileBrowserHelpers.CopyDirectory(importPath, modPath);   
-        } catch (Exception) {
+        } catch (Exception e) {
+            Hintbox.OpenHintboxWithContent("加载Mod失败，具体错误：\n" + e.ToString(), 14).SetSize(720, 360);
             return false;
         }
         return true;
@@ -227,7 +228,8 @@ public static class SaveSystem
             var modPath = Application.persistentDataPath + "/Mod";
             var dirPath = FileBrowserHelpers.CreateFolderInDirectory(exportPath, "Mod");  
             FileBrowserHelpers.CopyDirectory(modPath, dirPath);  
-        } catch (Exception) {
+        } catch (Exception e) {
+            Hintbox.OpenHintboxWithContent("导出Mod失败，具体错误：\n" + e.ToString(), 14).SetSize(720, 360);
             return false;
         }
         return true;
@@ -246,15 +248,21 @@ public static class SaveSystem
                 var data = LoadData(id);
 
                 // Clean pet storage
-                data.petStorage.RemoveAll(x => PetInfo.IsMod(x?.id ?? 0));
-                data.petStorage.ForEach(x => x.feature.afterwardBuffIds.RemoveAll(BuffInfo.IsMod));
+                data.petStorage.RemoveAll(x => (x != null) && PetInfo.IsMod(x.id));
+                data.petStorage.ForEach(x => x?.feature?.afterwardBuffIds?.RemoveAll(BuffInfo.IsMod));
 
                 // Clean pet bag
-                var petBag = data.petBag.Where(x => !PetInfo.IsMod(x?.id ?? 0));
+                var petBag = data.petBag.Where(x => (x != null) && (!PetInfo.IsMod(x.id)));
                 foreach (var p in petBag)
-                    p.feature.afterwardBuffIds.RemoveAll(BuffInfo.IsMod);
+                    p?.feature?.afterwardBuffIds?.RemoveAll(BuffInfo.IsMod);
+
                 data.petBag = petBag.ToArray();
                 Array.Resize(ref data.petBag, 6);
+
+                if (ListHelper.IsNullOrEmpty(data.petBag) && (!ListHelper.IsNullOrEmpty(data.petStorage))) {
+                    data.petBag[0] = data.petStorage.FirstOrDefault();
+                    data.petStorage.RemoveAt(0);
+                }
 
                 // Clean pvp team
                 data.pvpPetTeam.RemoveAll(x => x.value.Any(y => PetInfo.IsMod(y?.id ?? 0) || ((y?.feature.afterwardBuffIds.Exists(BuffInfo.IsMod)) ?? false)));
@@ -276,12 +284,12 @@ public static class SaveSystem
                     data.yiteRogueData = null;
 
                 // Clean battle record
-                data.battleRecordStorage.RemoveAll(x => x.masterPetBag.Any(y => PetInfo.IsMod(y?.id ?? 0)) || x.clientPetBag.Any(y => PetInfo.IsMod(y?.id ?? 0)));
+                data.battleRecordStorage?.RemoveAll(x => (x?.masterPetBag?.Any(y => (y != null) && PetInfo.IsMod(y.id)) ?? false) || (x?.clientPetBag?.Any(y => (y != null) && PetInfo.IsMod(y.id)) ?? false));
                 
                 SaveData(data, id);
             }
         } catch (Exception e) {
-            Debug.Log(e.ToString());
+            Hintbox.OpenHintboxWithContent("删除Mod失败，具体错误：\n" + e.ToString(), 14).SetSize(720, 360);
             return false;
         }
         return true;
@@ -500,6 +508,7 @@ public static class SaveSystem
                 data.petBag = data.petBag.Where(x => (x?.id ?? 0) != info.id).ToArray();
                 Array.Resize(ref data.petBag, 6);
                 data.pvpPetTeam.RemoveAll(x => x.value.Any(y => (y?.id ?? 0) == info.id));
+                data.battleRecordStorage?.RemoveAll(x => x.masterPetBag.Any(y => (y?.id ?? 0) == info.id) || x.clientPetBag.Any(y => (y?.id ?? 0) == info.id));
                 SaveData(data, id);
 
                 if (id == Player.instance.gameDataId)

@@ -149,7 +149,15 @@ public class Buff
 
         referenceBuff ??= new Buff(-1, 0, 0);
 
-        desc = desc.Replace("[value]", referenceBuff.value.ToString()).Replace("[ENDL]", "\n");
+        var pokerValue = referenceBuff.value switch {
+            11  => "J",
+            12  => "Q",
+            13  => "K",
+            1   => "A",
+            _   => referenceBuff.value.ToString()
+        };
+
+        desc = desc.Replace("[value]", referenceBuff.value.ToString()).Replace("[poker]", pokerValue).Replace("[ENDL]", "\n");
         desc = desc.Replace("[-]", "</color>").Replace("[", "<color=#").Replace("]", ">");
         return desc;
     }

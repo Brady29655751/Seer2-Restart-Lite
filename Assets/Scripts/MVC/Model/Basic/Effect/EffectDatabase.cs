@@ -49,6 +49,7 @@ public static class EffectDatabase {
         {"buff", EffectCondition.CurrentBuff},
         {"skill", EffectCondition.CurrentSkill},
         {"last_skill", EffectCondition.LastSkill},
+        {"poker", EffectCondition.Poker},
     };
 
     private static Dictionary<string, EffectAbility> typeConvDict = new Dictionary<string, EffectAbility>() {
@@ -71,6 +72,7 @@ public static class EffectDatabase {
         {"set_pet", EffectAbility.SetPet},
         {"set_weather", EffectAbility.SetWeather},
         {"set_player", EffectAbility.SetPlayer},
+        {"poker", EffectAbility.Poker},
     };
 
     public static EffectTiming ToEffectTiming(this string timing) {
@@ -135,6 +137,7 @@ public enum EffectCondition {
     CurrentSkill,
     CurrentBuff,
     LastSkill,
+    Poker,
 }
 
 public enum EffectAbility {
@@ -157,4 +160,5 @@ public enum EffectAbility {
     SetPet,
     SetWeather,
     SetPlayer,
+    Poker,
 }

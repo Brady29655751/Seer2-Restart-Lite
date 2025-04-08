@@ -68,7 +68,7 @@ public class PetBasicInfo
 
     public string[] GetRawInfoStringArray() {
         return new string[] { id.ToString(), baseId.ToString(), name, elementId.ToString() + ((subElementId == 0) ? string.Empty : ("/" + subElementId)),
-            baseStatus.ToString("/"), gender.ToString(), baseHeight + "/" + baseWeight,
+            baseStatus.ToString("/"), rawGender, baseHeight + "/" + baseWeight,
             description, habitat, linkId
         };
     }

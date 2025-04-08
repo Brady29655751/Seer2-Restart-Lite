@@ -412,6 +412,7 @@ public static class EffectAbilityHandler
         Unit lhsUnit = (who == "me") ? state.GetUnitById(invokeUnit.id) : state.GetRhsUnitById(invokeUnit.id);
         Unit rhsUnit = state.GetRhsUnitById(lhsUnit.id);
         List<BattlePet> targetList = Parser.GetBattlePetTargetList(state, effect, lhsUnit, rhsUnit);
+        bool isFieldLocked = (lhsUnit.pet.buffController.GetBuff(92) != null) || (rhsUnit.pet.buffController.GetBuff(92) != null);
 
         bool isSuccess = false;
 
@@ -443,7 +444,10 @@ public static class EffectAbilityHandler
 
             // The key prefix "rule" is reserved for pvp rules.
             Buff newBuff = (newBuffInfo == null) ? null : new Buff(buffId, buffTurn, buffValue);
-            if ((!string.IsNullOrEmpty(key)) && (!key.TryTrimStart("rule", out _))) {
+            if (!string.IsNullOrEmpty(key)) {
+                if ((isFieldLocked && (key == "field")) || key.StartsWith("rule"))
+                    return false;
+
                 state.stateBuffs.RemoveAll(x => x.Key == key);
                 if (newBuff != null)
                     state.stateBuffs.Add(new KeyValuePair<string, Buff>(key, newBuff));
@@ -464,7 +468,7 @@ public static class EffectAbilityHandler
         string filterList = effect.abilityOptionDict.Get("filter", "none");
 
         // The key prefix "rule" is reserved for pvp rules.
-        string[] keyRange = keyList.Split('/').Where(x => !x.TryTrimStart("rule", out _)).ToArray();
+        string[] keyRange = keyList.Split('/').Where(x => !x.StartsWith("rule")).ToArray();
         List<int> idRange = idList.ToIntList('/');
         string[] typeRange = typeList.Split('/');
 
@@ -484,8 +488,11 @@ public static class EffectAbilityHandler
             return Parser.ParseEffectOperation(id, effect, lhsUnit, rhsUnit, buff, false);
         });
 
-        if (isKey)
-            return state.stateBuffs.RemoveAll(x => keyRange.Contains(x.Key) && filter(x.Value)) > 0;
+        if (isKey) {
+            bool isFieldLocked = (lhsUnit.pet.buffController.GetBuff(92) != null) || (rhsUnit.pet.buffController.GetBuff(92) != null);
+            Func<string, bool> fieldLockFilter = (key) => !(isFieldLocked && (key == "field"));
+            return state.stateBuffs.RemoveAll(x => keyRange.Contains(x.Key) && filter(x.Value) && fieldLockFilter(x.Key)) > 0;
+        }
 
         if (isType) {
             var isSuccess = false;
@@ -762,7 +769,9 @@ public static class EffectAbilityHandler
                 SaveSystem.SaveData();
                 return isSuccess;
             }
-            return ResidentSetPet((Pet)effect.invokeUnit);
+            var result = ResidentSetPet((Pet)effect.invokeUnit);
+            SaveSystem.SaveData();
+            return result;
             
             bool ResidentSetPet(Pet pet) 
             {
@@ -1047,5 +1056,45 @@ public static class EffectAbilityHandler
 
         NpcHandler.GetNpcAction(npc, handler, npcList)?.Invoke();
         return true;
+    }
+
+    public static bool Poker(this Effect effect, BattleState state) {
+        var who = effect.abilityOptionDict.Get("who", "me");
+        var type = effect.abilityOptionDict.Get("type", "get");
+        Unit invokeUnit = (Unit)effect.invokeUnit;
+        Unit lhsUnit = (who == "me") ? state.GetUnitById(invokeUnit.id) : state.GetRhsUnitById(invokeUnit.id);
+        Unit rhsUnit = state.GetRhsUnitById(lhsUnit.id);
+        BattlePet battlePet = lhsUnit.pet;
+        var buffController = battlePet.buffController;
+        var cards = buffController.GetRangeBuff(x => (x.info.options.Get("group") == "poker") && (x.turn < 0));
+        var count = cards.Count;
+
+        bool GetCard() {
+            if (cards.Count >= 52)
+                return false;
+                
+            var color = 3200 + Random.Range(0, 4);
+            var point = Random.Range(1, 14);
+            while (!ListHelper.IsNullOrEmpty(buffController.GetRangeBuff(x => (x.id == color) && (x.value == point) && (x.turn < 0)))) {
+                color = 3200 + Random.Range(0, 4);
+                point = Random.Range(1, 14);
+            }
+            var buff = new Buff(color, -1, point);
+            return buffController.AddBuff(buff, lhsUnit, state);
+        }
+
+        bool isSuccess = true;
+        switch (type) {
+            default:
+                return false;
+            case "get":
+                return GetCard();
+            case "refresh":
+                isSuccess &= buffController.RemoveRangeBuff(x => (x.info.options.Get("group") == "poker") && (x.turn < 0), lhsUnit, state); 
+                for (int i = 0; i < count; i++)
+                    isSuccess &= GetCard();
+                
+                return isSuccess;
+        }
     }
 }

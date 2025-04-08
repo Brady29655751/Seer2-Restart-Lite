@@ -55,20 +55,20 @@ public class BattlePet : Pet
         skillController = new PetBattleSkillController(normalSkill.ToList(), superSkill);
     }
 
-    public BattlePet(BossInfo info) : base(info.petId, info.level, info.hasEmblem) {
-        Status basicStatus = (info.status == null) ? normalStatus : info.status.GetBasicStatus().Select((x, i) => (x == 0) ? normalStatus[i] : x);
-        Status hiddenStatus = (info.status == null) ? new Status(0, 0, 0, 0, 100, 100) : info.status.GetHiddenStatus();
+    public BattlePet(BossInfo bossInfo) : base(GetPetInfo(bossInfo.petId).id, bossInfo.level, bossInfo.hasEmblem) {
+        Status basicStatus = (bossInfo.status == null) ? normalStatus : bossInfo.status.GetBasicStatus().Select((x, i) => (x == 0) ? normalStatus[i] : x);
+        Status hiddenStatus = (bossInfo.status == null) ? new Status(0, 0, 0, 0, 100, 100) : bossInfo.status.GetHiddenStatus();
         BattleStatus status = new BattleStatus(basicStatus, hiddenStatus);
 
         stayTurn = 0;
         chain = 0;
 
         statusController = new PetBattleStatusController(status);
-        buffController = new PetBattleBuffController(element, subElement, info.initBuffs);
-        skillController = new PetBattleSkillController(info.loopSkills, info.headerSkills, info.superSkill);
+        buffController = new PetBattleBuffController(element, subElement, bossInfo.initBuffs);
+        skillController = new PetBattleSkillController(bossInfo.loopSkills, bossInfo.headerSkills, bossInfo.superSkill);
 
-        normalSkill = info.normalSkills;
-        superSkill = info.superSkill;
+        normalSkill = bossInfo.normalSkills;
+        superSkill = bossInfo.superSkill;
     }
 
     public BattlePet(BattlePet rhs) : base(rhs) {
@@ -184,12 +184,15 @@ public class BattlePet : Pet
                 stayTurn = (int)value;
                 return;
             case "level":
+            case "maxLevel":
             case "iv":
                 var oldStatus = normalStatus;
                 base.SetPetIdentifier(id, value);
                 var addStatus = normalStatus - oldStatus;
-                statusController.AddInitStatus(addStatus);
                 maxHp += (int)addStatus.hp;
+                statusController.AddInitStatus(new Status(addStatus){ hp = 0 });
+                normalSkill = skillController.normalSkills?.ToArray();
+                superSkill = skillController.superSkill;
                 return;
         }
     }

@@ -1,0 +1,163 @@
+<map name="冰封之轴"  category="5"  id="412"  weather="4">
+	<!-- <resource>10011</resource> -->
+	<initialPoint>420,60</initialPoint>
+	<music category="5">
+		<bgm>BGM_027</bgm>
+		<fx>FX_137</fx>
+	</music>
+	<entities>
+		<npc id="41203" resId="Pets/pet/279" name="Lv100 卡里亚" size="103,125" pos="350,115" namePos="0,-30">
+			<description>解封或是修复，仅在一念之间</description>
+			<dialog>
+				<branch id="default" name="卡里亚" icon="Pets/pet/279" size="103,125" pos="0,50">
+					<content><![CDATA[只有借助沁灵兽的力量，才能控制住冰封之轴]]></content>
+					<functionHandler>
+						<func type="click">
+							<description><![CDATA[自我训练]]></description>
+							<action>battle</action>
+							<param>train</param>
+						</func>
+						<func type="click">
+							<description><![CDATA[修复冰封之轴]]></description>
+							<action>battle</action>
+							<param>default</param>
+						</func>
+					</functionHandler>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[解封之后会冻住整个北半球吗？]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+					</replyHandler>
+				</branch>
+				<branch id="done" name="卡里亚" icon="Pets/pet/279" size="75,104" pos="0,45">
+					<content><![CDATA[冰封之轴修复完成，我的任务也结束了]]></content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[和我一起走吧！]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+						<reply type="branch">
+							<action>getPet</action>
+							<param>278</param>
+						</reply>
+						<reply type="branch">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=【卡里】已经放入精灵仓库</param>
+							<param>item_icon=pet[278]</param>
+							<param>option_num=1</param>
+						</reply>
+						<reply type="branch">
+							<action>setActivity</action>
+							<param>10004</param>
+							<param>done=true</param>
+						</reply>
+					</replyHandler>
+				</branch>
+			</dialog>
+			<battle>
+				<branch id="train">
+					<settings count="6">
+						<weather>4</weather>
+					</settings>
+					<enemy>
+						<pet id="123" level="60">
+							<loopSkill>11234,11235,11236,11240</loopSkill>
+							<superSkill>11244</superSkill>
+						</pet>
+						<pet id="230" level="62">
+							<loopSkill>11318,11323,11326,11328</loopSkill>
+							<superSkill>11324</superSkill>
+						</pet>
+						<pet id="129" level="64">
+							<loopSkill>11287,11292,11295,11297</loopSkill>
+							<superSkill>11294</superSkill>
+						</pet>
+						<pet id="125" level="66">
+							<loopSkill>11269,11273,11276,11277</loopSkill>
+							<superSkill>11279</superSkill>
+						</pet>
+						<pet id="121" level="68">
+							<loopSkill>11223,11228,11231,11232</loopSkill>
+							<superSkill>11229</superSkill>
+						</pet>
+						<pet id="139" level="70">
+							<loopSkill>11309,11304,11300,11302</loopSkill>
+							<superSkill>11308</superSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setItem</action>
+							<param>add</param>
+							<param>10201,3</param>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=3个砂糖甜饼已经放入背包</param>
+							<param>item_icon=item[10201]</param>
+							<param>option_num=1</param>
+						</button>
+					</winHandler>
+				</branch>
+				<branch id="default">
+					<settings count="1" simulate="true">
+						<weather>4</weather>
+					</settings>
+					<player>
+						<pet id="984" level="105">
+							<status>
+								<atk>2500</atk>
+								<mat>2500</mat>
+								<spd>600</spd>
+								<hp>25000</hp>
+							</status>
+							<initBuff>14,17,20</initBuff>
+							<normalSkill>11368,11370,11365,11373</normalSkill>
+							<superSkill>11371</superSkill>
+						</pet>
+					</player>
+					<enemy>
+						<pet id="279" level="100">
+							<status>
+								<atk>125000</atk>
+								<mat>125000</mat>
+								<def>2500</def>
+								<mdf>2500</mdf>
+								<spd>500</spd>
+								<hp>10000</hp>
+							</status>
+							<initBuff>13,14,17,20,-3040</initBuff>
+							<loopSkill>11468,11475,11466,11472</loopSkill>
+							<superSkill>11473</superSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>openDialog</action>
+							<param>done</param>
+							<condition>activity[10004].done=[bool]false[default]false</condition>
+						</button>
+					</winHandler>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>openDialog</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<teleport id="1" name="冰之谷" pos="810,230" targetMapId="401"/>
+
+	</entities>
+
+
+</map>
+

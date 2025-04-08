@@ -67,7 +67,7 @@ id,name,type,copyType,turn,options,description
 59,连击数降低,mark,replace,-1,none,所有技能连击数-2（连击数为2以下的技能不会造成伤害）
 60,连击数提升,mark,replace,-1,none,所有技能连击数+2
 61,血脉逆流,mark,replace,-1,none,即使怒气不足仍可使用技能，但会损失相应体力，1点怒气对应[value]点体力
-62,血怒通流,mark,replace,-1,res=61,回合结束时使所有怒气转换成体力，1点怒气对应[value]点体力
+62,血怒通流,mark,replace,-1,res=61,回合结束时根据怒气回复体力，1点怒气对应[value]点体力
 63,怒气传递,mark,replace,-1,none,替换下场只会使下一只精灵保留[value]%的怒气
 64,怒气接受,mark,replace,-1,res=63,替换上场只会保留上一只精灵传递折损后的[value]%怒气
 65,多段行动,mark,replace,-1,none,1回合中可以行动[value]次
@@ -80,6 +80,7 @@ id,name,type,copyType,turn,options,description
 72,免疫持续异常,mark,replace,-1,res=126,回合结束时若自身无法行动则会获得5回合免疫异常
 73,格挡,mark,max,-1,res=15,受到的物理伤害减少[value]点
 74,招架,mark,max,-1,res=16,受到的特殊伤害减少[value]点
+92,场地锁定,mark,replace,-1,none,锁定场地效果
 93,血液反噬,mark,replace,-1,none,体力流失（不显示伤害的）变为恢复体力
 94,能力反转,mark,replace,-1,none,获得的能力变化效果相反
 95,至尊光环,mark,replace,-1,none,自身弱化不超过[value]级，对手强化不超过[value]级
@@ -311,8 +312,24 @@ id,name,type,copyType,turn,options,description
 3192,沉默游戏,turn,replace,3,none,使用属性技能会损失100点体力
 3193,逆转游戏,turn,replace,3,none,回合结束时若处于异常状态会回复100点体力
 3194,禁怒游戏,turn,replace,3,none,回合结束时损失15怒气
-3195,极限游戏,turn,replace,3,none,若决定使用威力高于100的技能则会无法行动
+3195,极限游戏,turn,replace,3,none,若决定使用威力高于100的技能则会无法行动并清除相应怒气
 3196,噩梦马戏团,turn,replace,4,none,物理攻击伤害增加35%
+3197,尾巴,mark,stack,-1,auto_remove=true&max_val=9,每条尾巴会提升自身等级5级，最多获得9条[ENDL]当前为[value]条
+3198,极地冰封,turn,replace,1,res=32,吸收对手75%攻击伤害
+3199,引诱,turn,replace,3,none,攻击九尾冰狐以外的精灵伤害减少75%
+3200,黑桃,mark,new,-1,keep=false&inherit=true&legacy=true&group=poker,扑克牌。点数是 [ffbb33]黑桃[-] [poker][ENDL]
+3201,红心,mark,new,-1,keep=false&inherit=true&legacy=true&group=poker,扑克牌。点数是 [ff0000]红心[-] [poker][ENDL]
+3202,方块,mark,new,-1,keep=false&inherit=true&legacy=true&group=poker,扑克牌。点数是 [ff0000]方块[-] [poker][ENDL]
+3203,梅花,mark,new,-1,keep=false&inherit=true&legacy=true&group=poker,扑克牌。点数是 [ffbb33]梅花[-] [poker][ENDL]
+3204,暴击,chance,replace,-1,res=27,下一次攻击必定暴击
+3205,一级冰妖,turn,replace,2,none,物攻伤害增加10%
+3206,二级冰妖,turn,replace,2,none,物攻伤害增加15%
+3207,三级冰妖,mark,replace,-1,none,物攻伤害增加20%
+3208,寒气爆发,chance,replace,-1,keep=false&inherit=true,下次冰系伤害增加100%
+3209,冰魔,turn,replace,4,none,暴击伤害增加25%并无视对手防御类强化
+3210,坏蛋观察期,mark,replace,-1,none,造成伤害不超过100点。若造成伤害高于99则转变为坏蛋
+3211,坏蛋,mark,replace,-1,none,脱离坏蛋观察期，受到伤害增加20%，闪避率减少100%
+3212,好人卡,mark,replace,-1,none,你是个好人，造成的伤害为0
 3279,蜂纹,mark,stack,-1,auto_remove=true&max_val=3,每一层使中毒造成的伤害增加30，最多叠加3层。[ENDL]当前为[value]层
 3280,青蜂之舞,turn,replace,3,res=18,闪避率增加50%
 3281,寒冰坚韧,shield,replace,-1,none,受到伤害减少25%
@@ -395,12 +412,14 @@ id,name,type,copyType,turn,options,description
 100214,神光,feature,replace,-1,none,出手前体力高于1/2时免疫不良，低于1/2时光系技能必中
 100220,联动,feature,replace,-1,none,物攻技能使自身特攻值增加25点，特攻技能使自身物防值增加25点，可叠加3次
 100224,孤高,feature,replace,-1,none,被攻击性技能命中时，使对手失去15怒气
+100226,除恶,feature,replace,-1,none,对手是坏蛋时自身受到伤害减少15%
 100228,谋划,feature,replace,-1,none,首次类技能首次使用必中
 100234,炎帝,feature,replace,-1,none,怒气永不低于25，且回合开始时怒气高于50会免疫异常1回合
 100235,羽刃,feature,replace,-1,max_val=32,攻击时已累积三十二式会增加30固伤[ENDL]当前累积[value]式
 100237,噩梦,feature,replace,-1,none,对手具有噩梦时，自身命中率提升15%
 100241,幻斑,feature,replace,-1,none,攻击时10%使对手昏迷2回合
 100249,神圣,feature,replace,-1,none,自身具有圣光时对手暴击-1
+100278,冰妖,feature,replace,-1,none,具有冰妖时每2回合使冰妖提升1级
 100280,狂欢,feature,replace,-1,none,狂欢状态下所有技能必中
 100301,森林,feature,replace,-1,none,自身具有森林祝福时受到的伤害减少10%
 100302,红球,feature,replace,-1,none,当仅有红色水球时，水系技能伤害增加20%
@@ -415,6 +434,7 @@ id,name,type,copyType,turn,options,description
 100350,极热,feature,replace,-1,none,决定使用属性技能时50%使对手烧伤
 100354,幻化,feature,replace,-1,none,自身攻击力视为双攻较高的一项，对手防御力视为双防较低的一项
 100356,毒牙,feature,replace,-1,none,对手具有毒牙时自身技能威力增加10点
+100387,寒光,feature,replace,-1,none,受到暴击时恢复自身1/6体力
 100388,指引,feature,replace,-1,none,以星的指引伤害增加10%
 100436,甲骨,feature,replace,-1,none,首次出场时获得不屈状态
 100495,战神,feature,replace,-1,none,古战场时每回合回复1/16体力
@@ -442,7 +462,13 @@ id,name,type,copyType,turn,options,description
 100989,最强,feature,replace,-1,none,全能力值提升100点
 100990,王者,feature,replace,-1,none,免疫不良状态，怒气不低于30
 101220,歃血,feature,replace,-1,none,每损失1%体力提升1%暴击率
+101261,黑桃,feature,replace,-1,none,拥有黑桃花色时造成的伤害增加10%
+101262,方块,feature,replace,-1,none,拥有方块花色时受到的伤害减少10%
 101990,王者,feature,replace,-1,none,免疫异常状态，怒气不低于30
+110010,猛禽,feature,replace,-1,none,体力低于1/4时，飞行系技能先制+1
+110301,飞叶,feature,replace,-1,none,晴天环境下受到的暴击伤害减半
+110304,骇浪,feature,replace,-1,none,雨天环境下造成的伤害增加15%
+110307,魔焰,feature,replace,-1,none,炎热环境下暴击率增加15%
 200001,追击,emblem,replace,-1,none,命中率和闪避率提高10%
 200004,怒火,emblem,replace,-1,none,怒气回复率提高20%（攻击命中与回合结束回复的怒气除外）
 200007,治愈,emblem,replace,-1,none,体力回复率提高20%
@@ -489,12 +515,14 @@ id,name,type,copyType,turn,options,description
 200214,光武,emblem,replace,-1,none,使用光系技能恢复5点怒气
 200220,联防,emblem,replace,-1,none,非首发时受到的伤害减少10%
 200224,安魂,emblem,replace,-1,none,霜后安魂曲造成的伤害增加10%
+200226,希望,emblem,replace,-1,none,氏族的希望增加10点威力
 200228,陷阱,emblem,replace,-1,none,陷阱生效时时恢复在场精灵15点怒气
 200234,阳炎,emblem,replace,-1,none,在炎热环境下所有技能必中
 200235,羽刃,emblem,replace,-1,none,对手的物攻技能命中时会使其损失50点体力
 200237,游戏,emblem,replace,-1,none,使游戏类技能先制+1
 200241,深海,emblem,replace,-1,none,深海场地下受到的伤害减少10%
 200249,拯救,emblem,replace,-1,none,使拯救之火也会回复自身100体力
+200278,冰魔,emblem,replace,-1,none,具有冰魔时击败对手会刷新冰魔
 200280,召唤,emblem,replace,-1,none,回合结束时若自身具有幽灵则会增加1层
 200301,祝福,emblem,replace,-1,none,使森林祝福提升的体力回复率提高5%
 200302,蓝球,emblem,replace,-1,none,每消耗1个蓝色水球增加自身10点怒气
@@ -509,6 +537,7 @@ id,name,type,copyType,turn,options,description
 200350,熔石,emblem,replace,-1,none,对手烧伤时火系技能致命率增加15%
 200354,蜕变,emblem,replace,-1,none,体力低于1/4时，寒冰蜕变技能先制+1
 200356,蛇行,emblem,replace,-1,none,具有速度强化时命中率增加10%
+200387,极光,emblem,replace,-1,none,使用九妖灵动会使场地转变为极地
 200388,星的,emblem,replace,-1,none,首次出场时自带星的指引
 200436,棒骨,emblem,replace,-1,none,棒骨的反弹效果和反弹上限增加10%
 200495,怒战,emblem,replace,-1,none,古战场时攻击附带35点伤害
@@ -536,16 +565,14 @@ id,name,type,copyType,turn,options,description
 200989,王者,emblem,replace,-1,none,首次出场时附带王者体质
 200990,王权,emblem,replace,-1,hide=true,首次出场时附带王权领域
 201220,浴血,emblem,replace,-1,none,使用浴血之火会使对手损失35点怒气
+201261,扑克,emblem,replace,-1,none,首次出场时随机获得1张扑克牌
+201262,地主,emblem,replace,-1,none,使用王炸会回复15点怒气
 201990,王罚,emblem,replace,-1,hide=true,首次出场时附带王罚领域
+210010,红韵,emblem,replace,-1,none,体力低于1/4时，使用红韵有35%几率闪避下一次攻击
+210301,花舞,emblem,replace,-1,none,对手被花粉影响时，自身的物理技能附带35点固定伤害
+210304,龙牙,emblem,replace,-1,none,使用龙系技能同样适用本系加成
+210307,火拳,emblem,replace,-1,none,对手怒气高于50时，自身技能威力增加15
 300354,海牙,emblem,replace,-1,none,冰系技能暴击率提升25%，超能系技能暴击伤害提升15%
-900001,骇浪,feature,replace,-1,none,雨天环境下使用攻击技能恢复自身5怒气
-900004,魔焰,feature,replace,-1,none,炎热环境下暴击率增加15%
-900007,飞叶,feature,replace,-1,none,晴天环境下受到的暴击伤害减少25%
-900010,猛禽,feature,replace,-1,none,体力低于1/4时，飞行系技能先制+1
-800001,龙牙,emblem,replace,-1,none,使用龙系技能同样适用本系加成
-800004,火拳,emblem,replace,-1,none,对手怒气高于50时，自身技能威力增加15
-800007,花舞,emblem,replace,-1,none,对手被花粉影响时，自身的物理技能附带35点固定伤害
-800010,红韵,emblem,replace,-1,none,体力低于1/4时，使用红韵有35%几率闪避下一次攻击
 500000,无,weather,replace,-1,none,无天气或环境效果
 500001,晴天,weather,replace,-1,none,草系和光系技能伤害+35%
 500002,雨天,weather,replace,-1,none,水系技能伤害+35%
@@ -602,6 +629,8 @@ id,name,type,copyType,turn,options,description
 420008,雪花,item,replace,-1,item=22008&group=exclude,[ffbb33]【随身物品】[-][ENDL]对手所有能力皆无法强化时造成的伤害增加25%，卡尼娅携带时额外使安抚之触清除对手强化
 420009,藤蔓花子,item,replace,-1,item=22009&group=exclude,[ffbb33]【随身物品】[-][ENDL]对手受到的慢性毒药伤害为2倍，古加罗斯携带时会恢复与之等量的体力且每回合开始时使对手获得1层慢性毒药
 420010,咕噜气泡,item,replace,-1,item=22010&group=exclude,[ffbb33]【随身物品】[-][ENDL]免疫窒息和溺水状态，安迷亚携带时空气储量会在回合开始时填满
+420011,星币,item,replace,-1,item=22011&group=exclude,[ffbb33]【随身物品】[-][ENDL]普通系伤害增加25%，蓝虎鲸携带时首次出场会获得星之尾状态
+420012,水珠,item,replace,-1,item=22012&group=exclude,[ffbb33]【随身物品】[-][ENDL]雨天时暴击伤害增加15%，阿卡纳斯携带时首次出场会获得水纹状态
 430000,商城礼券,item,replace,-1,none,伊特大乱斗途中的商店买一送二
 430001,蘑菇果实,item,replace,-1,item=23001&group=exclude,[ffbb33]【随身物品】[-][ENDL]威力低于自身体重的技能连击数+1，但会有25%概率使自身在出手前陷入昏迷1回合
 430002,伊萨晶石,item,replace,-1,item=23002&group=exclude,[ffbb33]【随身物品】[-][ENDL]每回合恢复双方1/12体力
@@ -610,7 +639,9 @@ id,name,type,copyType,turn,options,description
 430005,茶叶包,item,replace,-1,item=23005&group=exclude,[ffbb33]【随身物品】[-][ENDL]回合开始时若自身为满体力则使对手当回合【禁疗】
 440000,大乱斗邀请函,item,replace,-1,item=24000&group=exclude,[ffbb33]【随身物品】[-][ENDL]首次登场时获得[ffbb33]【伊特领域】[-]
 600002,深海,mark,replace,-1,none,双方受到攻击时25%概率溺水
+600004,极地,mark,replace,-1,none,双方暴击率提升15%，击败对手时会强化双攻1级
 600008,影触,mark,replace,-1,none,每回合随机弱化双方1项能力1级
+600009,冰封之轴,mark,replace,-1,none,冰封之轴拥有狂暴的冰冻能量，能够冻住整个北半球！
 610000,PVP极品资质120,mark,replace,-1,none,[ffbb33]【PVP对战规则】[-][ENDL]双方精灵资质为120
 610001,PVP无禽12星,mark,replace,-1,none,[ffbb33]【PVP对战规则】[-][ENDL]背包必须带满6只精灵，且星数总和不能超过12[ENDL]不能携带4星以上精灵，且3星精灵最多携带2只
 -11,商店,mark,blcok,-1,none,可以购买各式道具和加成
@@ -628,7 +659,7 @@ id,name,type,copyType,turn,options,description
 -3004,圣光惩戒,mark,replace,-1,hide=true,对手强化超过2级时消强化
 -3005,麦麦迪挑战2,mark,replace,-1,hide=true,没有不屈状态时获得0伤盾
 -3006,星之躯影,mark,replace,-1,hide=true,储存超过400伤害时使用星尘裁决
--3007,充电身躯,mark,replace,-1,hide=true,受到攻击使对手[ffbb33]【麻痹】[-]
+-3007,冰冻身躯,mark,replace,-1,hide=true,受到攻击使对手[ffbb33]【冻伤】[-]
 -3008,剥夺,mark,replace,-1,hide=true,对方不处于无力状态时使用剥夺
 -3009,雷神之力,mark,replace,-1,none,物攻伤害100倍，必杀技伤害10倍
 -3010,凯萨之力,mark,replace,-1,none,特攻伤害100倍，必杀技伤害10倍
@@ -647,7 +678,7 @@ id,name,type,copyType,turn,options,description
 -3023,狂暴回廊,mark,replace,-1,res=63,怒气上限提升至500点
 -3024,液态迦拉特,mark,replace,-1,hide=true,死亡变身固态迦拉特並保留2000体力
 -3025,固态迦拉特,mark,replace,-1,hide=true,固态迦拉特的技能和恒久光辉
--3026,爆炎,mark,max,-1,min_val=50&max_val=100,爆炎值最低50。对手使用攻击技能-10，属性技能+10，换场+20。达到100时秒杀对手且爆炎值再也不会降低[ENDL]当前爆炎值为[value]
+-3026,爆炎,mark,max,-1,min_val=50&max_val=100,爆炎值最低50。对手使用攻击技能-10，属性技能+10，换场+20。达到100时附带高额伤害并秒杀对手，且爆炎值再也不会降低[ENDL]当前爆炎值为[value]
 -3027,焚火天躯,mark,replace,-1,hide=true,200怒以上使用焚火天躯且伤害不低于200
 -3028,BOSS禁疗,mark,replace,-1,hide=true,使用技能后使对手[ffbb33]【禁疗】[-]
 -3029,火元素,mark,replace,-1,hide=true,使用技能后使对手[ffbb33]【烫伤】[-]
@@ -660,3 +691,6 @@ id,name,type,copyType,turn,options,description
 -3036,速度强化,mark,replace,-1,hide=true,初始速度强化6级
 -3037,傲慢大厅,mark,replace,-1,res=19,回合结束时若能力强化不低于对手则会回复全部体力
 -3038,冰封,mark,replace,-1,min_val=-273,初始温度为0度，每回合温度会降低5度，若达到[ffbb33]零下273度[-]则获胜[ENDL]对手出手前若低于[ffbb33]零下100度[-]会陷入冻伤状态，若低于[ffbb33]零下200度[-]会额外陷入冰冻状态[ENDL][ENDL]当前温度为 [value] 度
+-3039,冰封(-150),mark,replace,-1,hide=true,初始冰封温度零下150度
+-3040,冰封卡里亚,mark,replace,-1,hide=true,首次出场时使场地变为冰封之轴并锁定场地。冰封之轴失效时会降低90%全能力
+-3041,你是坏蛋,mark,replace,-1,hide=true,回合开始时使对手变为坏蛋

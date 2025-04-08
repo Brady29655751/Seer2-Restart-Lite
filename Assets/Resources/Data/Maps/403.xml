@@ -4,9 +4,142 @@
 		<bgm>BGM_045</bgm>
 	</music>
 	<entities>
-		
-		
-			<teleport id="1" name="冰脊山脉" pos="600,50" targetMapId="402"/>
+		<npc id="40301" resId="Pets/pet/387" name="Lv105 九尾冰狐" size="360,300" pos="100,200" color="0,0,0,0" namePos="20,-50">
+    		<description>被冰封的精灵</description>
+    		<dialog>
+    		    <branch id="default" name="九尾冰狐" icon="Pets/pet/387" size="120,100" pos="5,45">
+					<content>（被冰封在冰块中）</content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[这位精灵和沁灵兽是什么关系？]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+						<reply type="click">
+							<description><![CDATA[我来帮助你]]></description>
+							<action>openDialog</action>
+							<param>note</param>
+						</reply>
+					</replyHandler>
+    		    </branch>
+				<branch id="note" name="沁灵兽" icon="Pets/pet/984" size="140,105" pos="0,55">
+					<content>她拥有9条尾巴，战斗非常困难和漫长，只有实力极其强大的挑战者能够控制住她！</content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[让我准备一下]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+						<reply type="click">
+							<description><![CDATA[我不畏艰险]]></description>
+							<action>battle</action>
+							<param>default</param>
+						</reply>
+					</replyHandler>
+				</branch>
+    		</dialog>
+			<battle>
+				<branch id="default">
+					<settings count="6">
+						<weather>4</weather>
+					</settings>
+					<enemy>
+						<pet id="387" level="105">
+							<status>
+								<hp>10000</hp>
+							</status>
+							<initBuff>13,14,17,20,43,99</initBuff>
+							<loopSkill>11420,11424,11429,11427,11432,11431</loopSkill>
+						</pet>
+						<pet id="387" level="110">
+							<status>
+								<hp>15000</hp>
+							</status>
+							<initBuff>13,17,20,44,99</initBuff>
+							<loopSkill>11420,11424,11429,11427,11432,11431</loopSkill>
+						</pet>
+						<pet id="387" level="115">
+							<status>
+								<hp>20000</hp>
+							</status>
+							<initBuff>12,14,17,20,48,99</initBuff>
+							<loopSkill>11420,11424,11429,11427,11432,11431</loopSkill>
+						</pet>
+						<pet id="387" level="120">
+							<status>
+								<hp>25000</hp>
+							</status>
+							<initBuff>11,13,14,17,19,20,99</initBuff>
+							<loopSkill>11420,11424,11429,11427,11432,11431</loopSkill>
+						</pet>
+						<pet id="387" level="125">
+							<status>
+								<hp>30000</hp>
+							</status>
+							<initBuff>11,-3022,13,14,17,20,99,3177</initBuff>
+							<loopSkill>11420,11424,11429,11427,11432,11431</loopSkill>
+						</pet>
+						<pet id="387" level="130">
+							<status>
+								<hp>35000</hp>
+							</status>
+							<initBuff>11,-3022,13,14,17,20,55,56,99</initBuff>
+							<loopSkill>11420,11424,11429,11427,11432,11431</loopSkill>
+						</pet>
+						<pet id="387" level="135">
+							<status>
+								<hp>40000</hp>
+							</status>
+							<initBuff>11,13,14,17,20,-3030,99</initBuff>
+							<loopSkill>11420,11424,11429,11427,11432,11431</loopSkill>
+						</pet>
+						<pet id="387" level="140">
+							<status>
+								<hp>45000</hp>
+							</status>
+							<initBuff>11,13,14,17,20,99,-7,-3031</initBuff>
+							<loopSkill>11420,11424,11429,11427,11432,11431</loopSkill>
+						</pet>
+						<pet id="387" level="145">
+							<status>
+								<hp>50000</hp>
+							</status>
+							<initBuff>-3039</initBuff>
+							<loopSkill>11420,11424,11426,11427,11432,11431</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>getPet</action>
+							<param>387,10</param>
+							<condition>activity[11005].done=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=【九尾冰狐】已经放入精灵仓库</param>
+							<param>item_icon=pet[387]</param>
+							<param>option_num=1</param>
+							<condition>activity[11005].done=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>11005</param>
+							<param>done=true</param>
+							<condition>activity[11005].done=[bool]false[default]false</condition>
+						</button>
+					</winHandler>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>openDialog</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<teleport id="1" name="冰脊山脉" pos="600,50" targetMapId="402"/>
 	</entities>
 
 

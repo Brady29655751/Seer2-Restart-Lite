@@ -5,7 +5,8 @@ using UnityEngine.UI;
 
 public class PetStatusBlockView : Module
 {
-    [SerializeField] private Image statusTypeImage;
+    [SerializeField] private Sprite personalityUpSprite, personalityDownSprite;
+    [SerializeField] private Image statusTypeImage, personalityBuffImage;
     [SerializeField] private Text statusText;
     [SerializeField] private Text evText;
     [SerializeField] private IButton addButton;
@@ -23,7 +24,6 @@ public class PetStatusBlockView : Module
         button.holdThreshold = (threshold == -1) ? button.holdThreshold : threshold;
         button.holdSecondsDelta = (delta == -1) ? button.holdSecondsDelta : delta;
     }
-
 
     public void SetStatus(float status, int type) {
         statusTypeImage.SetSprite(Status.typeSprites[type]);
@@ -44,5 +44,9 @@ public class PetStatusBlockView : Module
         IButton button = positive ? addButton : minusButton;
         button?.gameObject.SetActive(active);
     }
-    
+
+    public void SetPersonalityBuff(float status) {
+        personalityBuffImage?.gameObject.SetActive(status != 0);
+        personalityBuffImage?.SetSprite((status >= 0) ? personalityUpSprite : personalityDownSprite);
+    }
 }

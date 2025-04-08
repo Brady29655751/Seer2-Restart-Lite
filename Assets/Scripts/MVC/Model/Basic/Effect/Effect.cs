@@ -155,6 +155,7 @@ public class Effect {
             EffectCondition.CurrentBuff => ((x) => this.BuffCondition(state, x)),
             EffectCondition.CurrentSkill => ((x) => this.SkillCondition(state, x)),
             EffectCondition.LastSkill => ((x) => this.SkillCondition(state, x)),
+            EffectCondition.Poker => ((x) => this.PokerCondition(state, x)),
             _ => ((x) => true)
         };
 
@@ -200,6 +201,7 @@ public class Effect {
                 EffectAbility.SetPet => this.SetPet(state),
                 EffectAbility.SetWeather => this.SetWeather(state),
                 EffectAbility.SetPlayer => this.SetPlayer(state),
+                EffectAbility.Poker => this.Poker(state),
                 _ => true
             });
         }

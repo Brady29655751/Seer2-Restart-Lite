@@ -49,7 +49,7 @@ public class PetInfoView : Module
     public void SetPersonality(Personality personality) {
         var desc = Status.GetPersonalityBuffDescription(personality, " ", string.Empty);
         var detail = showPersonalityDetail ? (" <color=#ffbb33>(" + desc + ")</color>") : string.Empty;
-        personalityText?.SetText(personality.ToString() + detail);
+        personalityText?.SetText(personality.ToString());
     }
 
     public void SetHeightAndWeight(int height, int weight) {
@@ -58,7 +58,7 @@ public class PetInfoView : Module
     }
 
     public void SetGetPetDate(DateTime getPetDate) {
-        getPetDateText?.SetText(getPetDate.ToString("yyyy年MM月dd日"));
+        getPetDateText?.SetText(getPetDate.ToString("yyyy/MM/dd"));
     }
 
 }

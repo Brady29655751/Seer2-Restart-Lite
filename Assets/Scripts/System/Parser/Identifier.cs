@@ -289,7 +289,7 @@ public static class Identifier {
 
             // Parse success => buffIdExpr is buffId.
             Buff buff = buffs.Find(x => x.id == buffId) ?? new Buff(-1);
-            Buff testBuff = new Buff(buffId);
+            Buff testBuff = (Buff.GetBuffInfo(buffId) == null) ? null : new Buff(buffId);
 
             return id switch {
                 "count" => buffs.Count(x => x.id == buffId),

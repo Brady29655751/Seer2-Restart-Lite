@@ -237,6 +237,7 @@ public class Pet
         return id switch {
             "id" => info.ui.defaultId,
             "baseId" => basic.baseId,
+            "star" => info.ui.star,
             "skinId" => ui.skinId,
             "element" => elementId,
             "subElement" => subElementId,
@@ -279,6 +280,9 @@ public class Pet
                 return;
             case "skill":
                 skills.LearnNewSkill(Skill.GetSkill((int)num, false));
+                return;
+            case "gender":
+                basic.gender = (int)num;
                 return;
             case "personality":
                 basic.personality = (Personality)num;
@@ -415,7 +419,7 @@ public class Pet
         GameData gameData = Player.instance.gameData;
         string petDataVersion = gameData.version;
         if (VersionData.Compare(petDataVersion, "beta_0.1") < 0) {
-            var allPets = gameData.petBag.Concat(gameData.petStorage);
+            var allPets = gameData.petBag.Concat(gameData.petStorage).Where(x => x != null);
             foreach (var pet in allPets) {
                 pet.ui = new PetUI(pet.id, pet.basic.baseId);
             }
@@ -423,11 +427,31 @@ public class Pet
         }
 
         if (VersionData.Compare(petDataVersion, "lite_2.8") < 0) {
-            var allPets = gameData.petBag.Concat(gameData.petStorage);
+            var allPets = gameData.petBag.Concat(gameData.petStorage).Where(x => x != null);
             foreach (var pet in allPets)
                 pet.basic.gender = pet.info.basic.gender;
             
             petDataVersion = "lite_2.8";
+        }
+
+        if (VersionData.Compare(petDataVersion, "lite_2.9") < 0) {
+            gameData.petStorage.ForEach(x => {
+                if ((x == null) || (!x.id.IsWithin(-1, -12)))
+                    return;
+
+                int newId = Pet.GetPetInfo(x.id)?.id ?? 0;
+
+                x.id = newId;
+                x.basic.id = newId;
+                x.exp.id = newId;
+                x.feature.id = newId;
+                x.talent.id = newId;
+                x.skills.id = newId;
+                x.ui.id = newId;
+                x.ui.baseId = x.basic.baseId;
+            });
+
+            petDataVersion = "lite_2.9";
         }
     }
 

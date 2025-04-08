@@ -125,7 +125,22 @@ public class Database : Singleton<Database>
 
     public PetInfo GetPetInfo(int id)
     {
-        return (id == 0) ? null : petInfoDict.Get(id);
+        if (id == 0)
+            return null;
+
+        if (id.IsWithin(-1, -12)) {
+            var newId = id;
+            if (id.IsWithin(-1, -6))
+                newId = 10303 - id;
+            else if (id.IsWithin(-7, -9))
+                newId = 10294 - id;
+            else
+                newId = 10000 - id;
+
+            return GetPetInfo(newId);
+        }
+
+        return petInfoDict.Get(id);
     }
 
     public ItemInfo GetItemInfo(int id)

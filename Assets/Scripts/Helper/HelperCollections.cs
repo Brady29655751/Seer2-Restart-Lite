@@ -55,6 +55,17 @@ public static class ListHelper {
     }
 
     public static List<T> SingleToList<T>(this T item) => new List<T>(){ item };
+
+    public static void ForEach<T>(this IList<T> list, Action<T, int> action) {
+        if (action == null)
+            return;
+
+        for (int i = 0; i < list.Count; i++) {
+            int copy = i;
+            action.Invoke(list[copy], copy);
+        }
+    }
+
     public static T Get<T>(this IList<T> list, int index, T defaultValue = default(T)) {
         if (ListHelper.IsNullOrEmpty(list))
             return defaultValue;

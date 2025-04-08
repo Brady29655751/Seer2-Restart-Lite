@@ -5,13 +5,166 @@
 		<bgm>BGM_025</bgm>
 	</music>
 	<entities>
-			<teleport id="1" name="冰脊山脉" pos="160,300" targetMapId="402"/>
-			<teleport id="2" name="冰之监狱" pos="570,240" targetMapId="407"/>
-			<teleport id="3" name="冰沁宫殿" pos="830,160" targetMapId="405"/>
-			<teleport id="4" name="冰晶矿场" pos="320,60" targetMapId="-404"/>
-			<teleport id="5" name="实验禁地" pos="350,310" targetMapId="500"/>
+		<npc id="-40101" resId="Pets/pet/227" name="詹姆斯" size="162,120" pos="400,220" namePos="0,-10">
+		    <description>汪汪汪</description>
+		    <dialog>
+		        <branch id="default" name="詹姆斯" icon="Pets/pet/227.png" size="162,120" pos="0,45">
+		            <content><![CDATA[汪汪汪汪汪汪！]]></content>
+					<functionHandler>
+						<func type="click">
+							<description><![CDATA[挑战一]]></description>
+							<action>battle</action>
+							<param>challenge_1</param>
+						</func>
+						<func type="click">
+							<description><![CDATA[挑战二]]></description>
+							<action>battle</action>
+							<param>challenge_2</param>
+							<condition>firstPet.id=227</condition>
+						</func>
+						<func type="branch">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=把詹姆斯设为首发之后再来挑战吧</param>
+							<param>option_num=1</param>
+							<param>item_icon=pet[227]</param>
+							<condition>firstPet.idNOT227</condition>
+						</func>
+						<func type="click">
+							<description><![CDATA[挑战三]]></description>
+							<action>battle</action>
+							<param>challenge_3</param>
+						</func>
+					</functionHandler>
+		            <replyHandler>
+		            	<reply type="click">
+		            		<description><![CDATA[（......听不懂啊）]]></description>
+		            		<action>openDialog</action>
+		            		<param>null</param>
+		            	</reply>
+		            </replyHandler>
+		        </branch>
+		    </dialog>
+			<battle>
+				<branch id="challenge_1">
+					<settings count="1"/>
+					<enemy>
+						<pet id="227" level="60">
+							<status>
+								<hp>5000</hp>
+							</status>
+							<initBuff>-4,20</initBuff>
+							<loopSkill>11479,11483,11487,11489,11490</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>getPet</action>
+							<param>227,10,0</param>
+							<condition>activity[11006].done[1]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=【詹姆斯】已经放入精灵仓库</param>
+							<param>item_icon=pet[227]</param>
+							<param>option_num=1</param>
+							<condition>activity[11006].done[1]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>11006</param>
+							<param>done[1]=true</param>
+							<condition>activity[11006].done[1]=[bool]false[default]false</condition>
+						</button>
+					</winHandler>
+				</branch>
+				<branch id="challenge_2">
+					<settings count="1"/>
+					<enemy>
+						<pet id="227" level="60">
+							<status>
+								<hp>5000</hp>
+							</status>
+							<initBuff>17,20</initBuff>
+							<loopSkill>11483,11489,11490,11487</loopSkill>
+							<superSkill>11488</superSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setPet</action>
+							<param>emblem=1</param>
+							<condition>activity[11006].done[2]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=【詹姆斯】获得了【希望】纹章</param>
+							<param>item_icon=emblem[226]</param>
+							<param>option_num=1</param>
+							<condition>activity[11006].done[2]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>11006</param>
+							<param>done[2]=true</param>
+							<condition>activity[11006].done[2]=[bool]false[default]false</condition>
+						</button>
+					</winHandler>
+				</branch>
+				<branch id="challenge_3">
+					<settings count="6"/>
+					<enemy>
+						<pet id="227" level="60">
+							<status>
+								<hp>5000</hp>
+							</status>
+							<initBuff>13,14,17,20,27,61,99,-3022,-3041</initBuff>
+							<loopSkill>11488</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setItem</action>
+							<param>add</param>
+							<param>2,100</param>
+							<condition>activity[11006].done[3]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=100 星钻已经放入背包</param>
+							<param>item_icon=item[2]</param>
+							<param>option_num=1</param>
+							<condition>activity[11006].done[3]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>11006</param>
+							<param>done[3]=true</param>
+							<condition>activity[11006].done[3]=[bool]false[default]false</condition>
+						</button>
+					</winHandler>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>openDialog</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<teleport id="1" name="冰脊山脉" pos="160,300" targetMapId="402"/>
+		<teleport id="2" name="冰之监狱" pos="570,240" targetMapId="407"/>
+		<teleport id="3" name="冰沁宫殿" pos="830,160" targetMapId="405"/>
+		<teleport id="4" name="冰晶矿场" pos="320,60" targetMapId="-404"/>
+		<teleport id="5" name="实验禁地" pos="350,310" targetMapId="500"/>
+		<teleport id="6" name="冰封之轴" pos="490,50" targetMapId="412"/>
 	</entities>
-
-
 </map>
 

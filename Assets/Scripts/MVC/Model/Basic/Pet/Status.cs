@@ -195,21 +195,74 @@ public class Status
 
     #endregion
 
+    public static Personality Add(Personality lhs, Personality rhs) {
+        var lhsBuff = GetPersonalityBuff(lhs) - Status.one;
+        var rhsBuff = GetPersonalityBuff(rhs) - Status.one;
+        
+        for (int i = 0; i < Status.typeNames.Length; i++) {
+            if ((lhsBuff[i] == rhsBuff[i]) && (lhsBuff[i] != 0))
+                return lhs;
+        }
+
+        var buff = lhsBuff + rhsBuff;
+        for (int i = 0; i < 55; i++) {
+            var p = (Personality)i;
+            if (GetPersonalityBuff(p) == buff)
+                return p;
+        }
+
+        return Personality.实干;
+    }
+
     public static Status GetPersonalityBuff(Personality p) {
         int id = (int)p;
-        int up = id / 5;
-        int down = id % 5;
         Status buff = Status.one;
-        buff.status[up] += 0.1f;
-        buff.status[down] -= 0.1f;
+
+        if (id >= 55)
+            return buff;
+
+        if (id < 25) {
+            int up = id / 5;
+            int down = id % 5;
+            buff.status[up] += 0.1f;
+            buff.status[down] -= 0.1f;
+            return buff;
+        }
+
+        id -= 25;
+        List<int> upIndex = (id / 3) switch
+        {
+            0 => new List<int>(){0, 1},
+            1 => new List<int>(){0, 2},
+            2 => new List<int>(){0, 3},
+            3 => new List<int>(){0, 4},
+            4 => new List<int>(){1, 2},
+            5 => new List<int>(){1, 3},
+            6 => new List<int>(){1, 4},
+            7 => new List<int>(){2, 3},
+            8 => new List<int>(){2, 4},
+            _ => new List<int>(){3, 4},
+        };
+        List<int> downIndex = Enumerable.Range(0, 5).Where(x => !upIndex.Contains(x)).ToList();
+      
+        upIndex.ForEach(x => buff.status[x] += 0.1f);
+        downIndex.ForEach((x, i) => buff.status[x] -= (id % 3 == i) ? 0 : 0.1f);
         return buff;
     }
 
     public static string GetPersonalityBuffDescription(Personality p, string delim = "\n", string amount = "10%") {
         int id = (int)p;
-        int up = id / 5;
-        int down = id % 5;
-        return (up == down) ? "平衡发展" : (typeNamesChinese[up] + "+" + amount + delim + typeNamesChinese[down] + "-" + amount);
+        var buff = GetPersonalityBuff(p) - Status.one;
+        string desc = string.Empty;            
+
+        int[] up = buff.status.FindAllIndex(x => x > 0);
+        int[] down = buff.status.FindAllIndex(x => x < 0);
+
+        if (up.Length + down.Length == 0)
+            return "平衡发展";
+
+        return up.Select(x => typeNamesChinese[x]).ConcatToString(string.Empty) + "+" + amount + delim
+            + down.Select(x => typeNamesChinese[x]).ConcatToString(string.Empty) + "-" + amount;
     }
 
     public static Status GetPowerUpBuff(Status powerup) {
