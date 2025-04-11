@@ -242,6 +242,7 @@ public class Pet
 
         return id switch {
             "id" => info.ui.defaultId,
+            "subId" => info.ui.subId,
             "baseId" => basic.baseId,
             "star" => info.ui.star,
             "skinId" => ui.skinId,
@@ -403,7 +404,7 @@ public class Pet
         return evolvePet;
     }
 
-    public Pet MegaEvolve(int evolveId, bool keepSkill = true) {
+    public Pet EvolveTo(int evolveId, bool keepSkill = true) {
         int cursor = Player.instance.petBag.AllIndexOf(this).FirstOrDefault();
         if (evolveId == 0)
             return null;
@@ -458,6 +459,14 @@ public class Pet
             });
 
             petDataVersion = "lite_2.9";
+        }
+
+        if (VersionData.Compare(petDataVersion, "lite_2.9.1") < 0) {
+            var allPets = gameData.petBag.Concat(gameData.petStorage).Where(x => (x != null) && (x.id == 946));
+            foreach (var pet in allPets)
+                pet.skills.LearnNewSkill(Skill.GetSkill(11493, false));
+
+            petDataVersion = "lite_2.9.1";
         }
     }
 

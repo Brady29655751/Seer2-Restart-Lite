@@ -80,6 +80,8 @@ id,timing,priority,target,condition,cond_option,effect,effect_option
 72,on_turn_end,1000,pet,pet,type=movable&movable_cmp=0,add_buff,id=14&turn=5
 73,on_final_dmg_cal,900,skill,skill,whos_turn=op&who=op&type=type&type_cmp=1,set_damage,who=op&op=-&value=value
 74,on_final_dmg_cal,900,skill,skill,whos_turn=op&who=op&type=type&type_cmp=2,set_damage,who=op&op=-&value=value
+90,on_before_attack\on_before_attack\on_add_buff\on_remove_buff,-1\-1\-1\-1,skill\skill\pet\pet,none\none\none\none,none\whos_turn=op\none\none,set_skill\set_skill\add_status\add_status,type=critical&op=+&value=15\who=op&type=accuracy&op=-&value=15\type=4&add=300\type=0/1/2/3/4&add=-300
+91,on_add_buff\on_remove_buff,-1\-1,pet\pet,none\none,none\none,add_status\add_status,type=0/1/2/3/4&add=100\type=0/1/2/3/4&add=-100
 92,none,-1,none,none,none,none,none
 93,none,-1,none,none,none,none,none
 94,none,-1,none,none,none,none,none
@@ -102,6 +104,9 @@ id,timing,priority,target,condition,cond_option,effect,effect_option
 114,on_before_attack,-1,skill,skill,type=type&type_cmp=0,set_skill,type=accuracy&op=-&value=100
 115,on_before_attack,-1,skill,skill,type=type&type_cmp=1,set_skill,type=accuracy&op=-&value=100
 116,on_before_attack,-1,skill,skill,type=type&type_cmp=2,set_skill,type=accuracy&op=-&value=100
+117,on_before_attack,-1,skill,skill,random_cmp=value&type=type&type_cmp=0,set_skill,type=effect&op=SET&value=0
+118,on_before_attack,-1,skill,skill,random_cmp=value&type=type&type_cmp=1,set_skill,type=effect&op=SET&value=0
+119,on_before_attack,-1,skill,skill,random_cmp=value&type=type&type_cmp=2,set_skill,type=effect&op=SET&value=0
 120,on_turn_ready\on_before_attack,-1000\-1000,skill\skill,unit\unit,type=me.skill.type/me.pet.dead&type[0].cmp=-3&type[1].cmp=0\type=me.skill.type/me.pet.dead&type[0].cmp=-3&type[1].cmp=0,set_skill\set_skill,type=effect&op=SET&value=0\type=effect&op=SET&value=0
 123,none,-1,none,none,none,none,none
 1000,on_add_buff\on_remove_buff\on_turn_end,-1\-1\100,pet\pet\pet,none\none\none,none\none\none,add_status\add_status\set_damage,type=6&add=-10\type=6&add=10\type=buff_percentage_unhealthy&op=+&value=me.pet.status.maxHp*1/8
@@ -269,7 +274,7 @@ id,timing,priority,target,condition,cond_option,effect,effect_option
 3149,on_after_dmg_cal,-1,skill,skill,type=element&element_cmp=3,set_damage,op=*&value=1.5
 3150,on_after_attack,-1,pet,skill,who=op&whos_turn=op&whos_attack=op&type=type&type_op=>&type_cmp=0,heal,who=op&add=-35
 3151,on_final_dmg_cal\on_after_attack,900\-1,skill\pet,skill\skill,type=type&type_op=>&type_cmp=0\type=type&type_op=>&type_cmp=0,set_damage\remove_buff,op=+&value=100\id=3151
-3152,on_before_attack,-1,skill,none,none,set_skill,type=critical&op=+&value=10
+3152,on_before_attack,-1,skill,unit,type=me.pet.baseId&type[0].cmp=91|type=me.pet.buff[440000].count&type[0].op=>&type[0].cmp=0,set_skill,type=critical&op=+&value=10
 3153,on_turn_ready\on_turn_ready,-1\-1000,skill\skill,unit\unit,type=state.turn%10/me.skill.type&type[0].op=<&type[0].cmp=5&type[1].op=>&type[1].cmp=0\type=state.turn%10/me.skill.type&type[0].op=<&type[0].cmp=5&type[1].op=>&type[1].cmp=0,set_skill\set_skill,type=power&op=*&value=0.5\type=chain&op=SET&value=2
 3154,on_turn_end,100,pet,none,none,heal,type=buff&add=me.pet.status.maxHp*1/6
 3155,on_turn_start\on_turn_start,-1\-1,pet\pet,none\none,random_cmp=25\random_cmp=25,powerup\powerup,atk=1\def=1
@@ -330,6 +335,9 @@ id,timing,priority,target,condition,cond_option,effect,effect_option
 3210,on_final_dmg_cal\on_attack\on_after_attack,-100\-1\-1,skill\pet\pet,skill\skill\skill,type=type&type_op=>&type_cmp=0\type=damage&damage_op=>&damage_cmp=99\type=damage&damage_op=>&damage_cmp=99,set_damage\add_buff\remove_buff,op=[MIN]&value=100&name=最多100点\id=3211&name=伤害＞99\id=3210&name=移除
 3211,on_after_dmg_cal\on_add_buff\on_remove_buff\on_add_buff\on_remove_buff,-1\-1\-1\-1\-1,skill\pet\pet\pet\pet,none\none\none\none\none,whos_turn=op\none\none\none\none,set_damage\add_status\add_status\block_buff\block_buff,who=op&op=*&value=1.2&name=受伤1.2\type=8&add=-100&name=闪避减少100%\type=8&add=100&name=移除\op=+&id_list=3210&name=免疫坏蛋否\op=-&id_list=3210&name=移除免疫
 3212,on_after_dmg_cal\on_after_attack,-1\-1,skill\pet,skill\skill,type=type&type_op=>&type_cmp=0\type=type&type_op=>&type_cmp=0,set_damage\remove_buff,op=*&value=0&name=伤害归0\id=3212&name=移除
+3213,on_final_dmg_cal\on_after_attack\on_turn_end,-100\-1\-1,skill\pet\pet,skill\skill\none,who=op&whos_turn=op&type=damage&damage_op=>&damage_cmp=300\who=op&whos_turn=op&whos_attack=op&type=type&type_op=>&type_cmp=0\none,set_damage\rage\heal,who=op&op=SET&value=0\who=op&add=-20\type=buff&add=me.pet.status.maxHp/3
+3214,on_after_attack,-1,pet,none,none,heal,add=me.skill.damage/2
+3215,on_after_dmg_cal,-1,skill,none,whos_turn=op,set_damage,op=*&value=2
 3279,on_turn_end,100,pet,buff,id=1003,set_damage,type=buff&op=+&value=30*value
 3280,on_add_buff\on_remove_buff,-1\-1,pet\pet,none\none,none\none,add_status\add_status,type=8&add=50\type=8&add=-50
 3281,on_after_dmg_cal,-1,skill,none,whos_turn=op,set_damage,who=op&op=*&value=0.75
@@ -446,6 +454,7 @@ id,timing,priority,target,condition,cond_option,effect,effect_option
 100810,on_after_dmg_cal,-1,skill,pet,type=powerup.atk&powerup.atk_op=>&powerup.atk_cmp=0,set_damage,op=*&value=1.1
 100826,on_after_attack,-1,pet,skill,random_cmp=10*me.pet.buff[200826].value+15&type=type&type_cmp=0,heal,add=me.pet.status.maxHp/6
 100845,on_add_buff\on_add_buff\on_after_attack\on_after_attack,-1\-1\-1\-1,pet\pet\pet\pet,none\none\skill\skill,none\none\type=type&type_cmp=2\type=type&type_cmp=1,add_buff\add_buff\add_buff\add_buff,id=3121\id=3122\id=3121&value=1\id=3122&value=1
+100946,on_turn_ready,-1,pet,unit,type=me.skill.evolve/me.pet.buff[3036].count&type[0].cmp=1&type[1].op=>&type[1].cmp=0,set_pet,on_success=-7&type=id&op=SET&value=947&inherit=buff/anger&normal_skill=11494/11495/11496/11497&super_skill=11498
 100959,on_turn_end,-1,pet,status,status_type=hp&op=<&cmp_value=1/8,powerup,spd=1
 100961,on_before_attack,-1,skill,none,weather=12,set_skill,type=accuracy&op=+&value=50
 100962,on_after_dmg_cal,-1,skill,none,whos_turn=op&weather=12,set_damage,who=op&op=*&value=0.9

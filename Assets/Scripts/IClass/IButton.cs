@@ -178,4 +178,8 @@ public class IButton : IMonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     public virtual void SetBGM(AudioClip bgm) {
         AudioSystem.instance.PlayMusic(bgm);
     }
+
+    public virtual void SetMaterial(Material material) {
+        image?.SetMaterial(material);
+    }
 }

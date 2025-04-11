@@ -15,11 +15,18 @@ public class FilterModel<T> : Module
         if (IsIDFilter())
             return FilterType.ID;
 
+        if (IsParanthesesFilter())
+            return FilterType.Parentheses;
+
         return FilterType.Name;
     }
 
     public virtual bool IsIDFilter() {
         return int.TryParse(inputString, out _);
+    }
+
+    public virtual bool IsParanthesesFilter() {
+        return inputString?.TryTrimParentheses(out _, '(', ')') ?? false;
     }
 
     public virtual Func<T, bool> GetFilter() {
@@ -30,4 +37,5 @@ public class FilterModel<T> : Module
 public enum FilterType {
     Name = 0,
     ID = 1,
+    Parentheses = 2,
 }

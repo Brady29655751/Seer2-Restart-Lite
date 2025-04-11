@@ -31,9 +31,10 @@ public class BuffInfo
     public Dictionary<string, string> options { get; private set; } = new Dictionary<string, string>();
     
     public int minValue = int.MinValue, maxValue = int.MaxValue;
-    public int sortPriority { get => GetSortPriority(); }
+    public int sortPriority => GetSortPriority();
+    public string position => options.Get("position", "none");
     public List<Effect> effects { get; private set; }
-    public Sprite icon { get => GetIcon(); }
+    public Sprite icon => GetIcon();
 
     public static bool IsMod(int id) {
         return id.IsWithin(51_0001, 59_9999) || id.IsWithin(80_0013, 89_9999) || id.IsWithin(90_0013, 99_9999) || (id < -10_0000);

@@ -155,6 +155,14 @@ namespace UnityEngine.UI
             image.sprite = sprite;
         }
 
+        public static void SetMaterial(this Image image, Material material)
+        {
+            if (image == null)
+                return;
+
+            image.material = material;
+        }
+
         /// <summary>
         /// Get icon according to the special pattern. <br/>
         /// Eg. pet[60] returns the icon of the pet with id 60. <br/>

@@ -8,7 +8,7 @@ using System.Linq;
 public class PetUIInfo
 {
     public const int DATA_COL = 4;
-    public int id, baseId, star;
+    public int id, subId, baseId, star;
 
     public int defaultId, defaultAnimId;
 
@@ -47,6 +47,7 @@ public class PetUIInfo
 
     public PetUIInfo(int petId, int petBaseId) {
         id = petId;
+        subId = 0;
         baseId = petBaseId;
         defaultId = petId;
         defaultSkinId = petId;
@@ -63,7 +64,7 @@ public class PetUIInfo
         specialSkinList = _slicedData[2].ToIntList('/');
         options.ParseOptions(_slicedData[3]);
 
-        defaultId = int.Parse(options.Get("default_id", id.ToString()));
+        ParseDefaultId(options.Get("default_id", id.ToString()));
         defaultSkinId = int.Parse(options.Get("default_skin", id.ToString()));
         defaultAnimId = int.Parse(options.Get("default_anim", defaultSkinId.ToString()));
         defaultFeatureList = options.Get("default_feature", baseId.ToString()).ToIntList('/');
@@ -71,6 +72,17 @@ public class PetUIInfo
 
         hide = bool.Parse(options.Get("hide", "false"));
         star = int.Parse(options.Get("star", "0"));
+    }
+
+    private void ParseDefaultId(string idStr) {
+        var split = idStr.Split('.');
+        defaultId = int.Parse(split[0]);
+        if (split.Length == 1) {    
+            subId = 0;
+            return;
+        }
+
+        subId = int.Parse(split[1]);
     }
 
     public string[] GetRawInfoStringArray() {

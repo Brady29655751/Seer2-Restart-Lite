@@ -11,8 +11,8 @@ using UnityEngine.AddressableAssets;
 public class ItemInfo
 {
     public const int DATA_COL = 7;
-    public static List<ItemInfo> database => Database.instance.itemInfoDict.Select(x => x.Value).Where(x => x != null)
-        .OrderByDescending(x => x.id.GetSortPriority()).ToList();
+    public static List<ItemInfo> database => Database.instance?.itemInfoDict.Values.Where(x => x != null)
+        .OrderByDescending(x => x.id.GetSortPriority()).ToList() ?? new List<ItemInfo>();
 
     public int id { get; private set; }
     public string resId { get; private set; }
@@ -28,6 +28,8 @@ public class ItemInfo
 
     public Sprite icon => GetIcon(resId);
     public ItemInfo currencyInfo => Item.GetItemInfo(currencyType);
+    public string habitat => options.Get("habitat", (linkId == "Workshop") ? "点击领取" : "-");
+    public string linkId => options.Get("linkId", "none");
     public bool removable = true;
 
     public static bool IsMod(int id) => id < 0;
@@ -117,4 +119,23 @@ public class ItemInfo
         
         return ResourceManager.instance.GetLocalAddressables<Sprite>(resId, true);    
     }
+
+    public float GetItemInfoIdentifier(string id) {
+        return id switch {
+            "id"        => this.id,
+            "getId"     => getId,
+            "type"      => (int)type,
+            "price"     => price,
+            "currency"  => currencyType,
+            "removable" => removable ? 1 : 0,
+            _       => float.MinValue,
+        };
+    }
+
+    public bool TryGetItemInfoIdentifier(string id, out float value) {
+        value = GetItemInfoIdentifier(id);
+        return value != float.MinValue;
+    }
+
+
 }

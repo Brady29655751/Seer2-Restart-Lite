@@ -224,7 +224,7 @@ public static class NpcActionHandler
         }
 
         int evolveId = (int)Identifier.GetNumIdentifier(handler.param[paramOffset]);
-        Player.instance.gameData.petBag[index].MegaEvolve(evolveId);
+        Player.instance.gameData.petBag[index].EvolveTo(evolveId);
         SaveSystem.SaveData();
     }
 

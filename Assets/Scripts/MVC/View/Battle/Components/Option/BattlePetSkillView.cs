@@ -7,19 +7,22 @@ using UnityEngine.UI;
 
 public class BattlePetSkillView : BattleBaseView
 {
-    private BattlePet pet;
+    private UnitPetSystem petSystem;
+    private BattlePet pet => petSystem?.pet;
     private bool interactable;
     private bool superSkillClickable = false;
+    private bool evolve = false;
 
-    [SerializeField] private IButton noOpSkillButton, superSkillButton;
+    [SerializeField] private Material shiningMaterial;
+    [SerializeField] private IButton noOpSkillButton, superSkillButton, evolveSkillButton;
     [SerializeField] private Image[] superSkillButtonBackground = new Image[3];
     [SerializeField] private BattlePetSkillBlockView[] skillBlockViews = new BattlePetSkillBlockView[4];
 
-    public void SetPet(BattlePet pet) {
-        if (pet == null)
+    public void SetPetSystem(UnitPetSystem petSystem) {
+        if (petSystem?.pet == null)
             return;
             
-        this.pet = pet;
+        this.petSystem = petSystem;
         SetNormalSkill();
         SetInteractable(interactable);
     }
@@ -33,6 +36,7 @@ public class BattlePetSkillView : BattleBaseView
         SetNormalSkillInteractable(anger);
         SetSuperSkillInteractable(anger);
         SetNoOpSkillInteractable((anger == -1) ? int.MaxValue : anger);
+        SetEvolveSkillInteractable(interactable && (petSystem.specialChance > 0));
 
         this.interactable = interactable;
     }
@@ -54,8 +58,15 @@ public class BattlePetSkillView : BattleBaseView
         bool interactable = (pet.superSkill != null) && (petAnger >= pet.superSkill.anger);
         superSkillClickable = interactable;
         superSkillButton.SetInteractable(true);
-        superSkillButtonBackground[1].gameObject.SetActive(interactable);
-        superSkillButtonBackground[2].gameObject.SetActive(interactable);
+        superSkillButtonBackground[0].SetMaterial(interactable ? shiningMaterial : null);
+        // superSkillButtonBackground[1].gameObject.SetActive(interactable);
+        // superSkillButtonBackground[2].gameObject.SetActive(interactable);
+    }
+
+    private void SetEvolveSkillInteractable(bool interactable) {
+        evolveSkillButton?.SetInteractable(interactable);
+        if (!interactable)
+            evolveSkillButton?.SetMaterial(null);
     }
 
     public void SelectNormalSkill(int index) {
@@ -65,6 +76,11 @@ public class BattlePetSkillView : BattleBaseView
         var skill = new Skill(pet.normalSkill[index]);
         if (battle.settings.parallelCount > 1)
             skill.SetParallelIndex(battle.currentState.myUnit.petSystem.cursor, battle.currentState.opUnit.petSystem.cursor);
+
+        if (evolve) {
+            skill.options.Set("evolve", "1");
+            evolve = false;
+        }
 
         battle.SetSkill(skill, true);
     }
@@ -93,6 +109,11 @@ public class BattlePetSkillView : BattleBaseView
         if (battle.settings.parallelCount > 1)
             skill.SetParallelIndex(battle.currentState.myUnit.petSystem.cursor, battle.currentState.opUnit.petSystem.cursor);
 
+        if (evolve) {
+            skill.options.Set("evolve", "1");
+            evolve = false;
+        }
+
         battle.SetSkill(skill, true);
     }
 
@@ -119,6 +140,23 @@ public class BattlePetSkillView : BattleBaseView
 
     public void ShowNoOpSkillInfo() {
         infoPrompt.SetSkill(Skill.GetNoOpSkill(), false);
+    }
+
+    public void SelectEvolveSkill() {
+        if (petSystem.specialChance <= 0)
+            return;
+        
+        evolve = !evolve;
+        evolveSkillButton?.SetMaterial(evolve ? shiningMaterial : null);
+    }
+
+    public void ShowEvolveSkillInfo() {
+        infoPrompt.SetSkill(new Skill(){ 
+            name = "专属动作" + (evolve ? "（正在使用）" : string.Empty),
+            critical = 5,
+            accuracy = 100,
+            rawDescription = "手动点击使用当前精灵的专属动作[ENDL][ffbb33]【神迹觉醒】[-]全队共用1次[ENDL][ffbb33]【暴走】[-]消耗道具但不消耗次数"
+        });
     }
 
 }

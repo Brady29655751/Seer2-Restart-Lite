@@ -208,7 +208,21 @@ public class Effect {
 
         // Post Process
         var postSkills = abilityOptionDict.Get("on_" + (result ? "success" : "fail")).ToIntList('/');
-        var postEffects = postSkills?.Select(skillId => Skill.GetSkill(skillId, false)?.effects).ToList();
+        var postEffects = postSkills?.Select(skillId => {
+            // Get Post Effects
+            var effects = Skill.GetSkill(skillId, false)?.effects;
+            if (effects == null)
+                return effects;
+
+            // Fix timing
+            foreach (var e in effects) {
+                if (e.timing == EffectTiming.None)
+                    e.SetTiming(timing);
+            }
+            
+            return effects;
+        }).ToList();
+
         var effectHandler = new EffectHandler();
 
         postEffects?.ForEach(e => effectHandler.AddEffects(invokeUnit, e));

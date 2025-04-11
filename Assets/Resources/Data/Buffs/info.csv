@@ -80,6 +80,8 @@ id,name,type,copyType,turn,options,description
 72,免疫持续异常,mark,replace,-1,res=126,回合结束时若自身无法行动则会获得5回合免疫异常
 73,格挡,mark,max,-1,res=15,受到的物理伤害减少[value]点
 74,招架,mark,max,-1,res=16,受到的特殊伤害减少[value]点
+90,暴走,mark,replace,-1,none,暴击率和闪避率提升15%，速度提升300点
+91,神迹,mark,replace,-1,none,全能力值提升100点
 92,场地锁定,mark,replace,-1,none,锁定场地效果
 93,血液反噬,mark,replace,-1,none,体力流失（不显示伤害的）变为恢复体力
 94,能力反转,mark,replace,-1,none,获得的能力变化效果相反
@@ -102,6 +104,9 @@ id,name,type,copyType,turn,options,description
 114,沉默,abnormal,replace,2,movable=true,属性技能命中率下降100%
 115,禁锢,abnormal,replace,2,movable=true,物攻技能命中率下降100%
 116,术牢,abnormal,replace,2,movable=true,特攻技能命中率下降100%
+117,失神,abnormal,replace,2,res=114&movable=true,属性技能[value]%几率失效
+118,禁闭,abnormal,replace,2,res=115&movable=true,物攻技能[value]%几率失效
+119,魔狱,abnormal,replace,2,res=116&movable=true,特攻技能[value]%几率失效
 120,停滞,abnormal,replace,1,movable=true,自身的主动换场会失效
 123,疲惫,abnormal,replace,2,none,非常疲惫，无法行动
 1000,溺水,unhealthy,replace,3,none,每回合损失1/8体力，且命中率降低10%（对水系无效）
@@ -269,7 +274,7 @@ id,name,type,copyType,turn,options,description
 3149,火焰仆从,turn,replace,5,none,火系技能伤害增加50%
 3150,噬体烈焰,turn,replace,5,none,受到攻击后使对手损失35点体力
 3151,烈焰之子,chance,replace,-1,none,下次攻击额外附加100点伤害
-3152,伊特领域,mark,replace,-1,none,暴击率增加10%
+3152,伊特领域,mark,replace,-1,inherit=true,伊特家族暴击率增加10%
 3153,双凫,mark,replace,-1,none,决定技能时若当前回合数尾数小于5，则使攻击技能威力减半并行动两次
 3154,化羽,turn,replace,3,none,每回合回复1/6体力
 3155,钢之领域,mark,replace,-1,none,回合开始时25%强化自身物攻1级，25%强化自身物防1级
@@ -330,6 +335,9 @@ id,name,type,copyType,turn,options,description
 3210,坏蛋观察期,mark,replace,-1,none,造成伤害不超过100点。若造成伤害高于99则转变为坏蛋
 3211,坏蛋,mark,replace,-1,none,脱离坏蛋观察期，受到伤害增加20%，闪避率减少100%
 3212,好人卡,mark,replace,-1,none,你是个好人，造成的伤害为0
+3213,永不放弃,turn,replace,4,res=32,免疫高于300的攻击伤害[ENDL]每回合恢复1/3体力[ENDL]受到攻击时减少对手20点怒气
+3214,心眼,turn,replace,3,res=19,恢复攻击伤害1/2的体力
+3215,易伤,mark,replace,-1,res=3001,受到的伤害增加100%
 3279,蜂纹,mark,stack,-1,auto_remove=true&max_val=3,每一层使中毒造成的伤害增加30，最多叠加3层。[ENDL]当前为[value]层
 3280,青蜂之舞,turn,replace,3,res=18,闪避率增加50%
 3281,寒冰坚韧,shield,replace,-1,none,受到伤害减少25%
@@ -446,6 +454,7 @@ id,name,type,copyType,turn,options,description
 100810,武钢,feature,replace,-1,none,具有物攻强化时暴击率增加15%
 100826,五味,feature,replace,-1,none,属性技能命中后有15%几率恢复1/6体力
 100845,割裂,feature,replace,-1,none,特攻技能使自身物攻值增加25点，物攻技能使自身特防值增加25点，可叠加3次[ENDL]（这只精灵视为埃鲁达克的对应型态）
+100946,神迹,feature,replace,-1,none,[ffbb33]【专属动作】[-]神迹觉醒[ENDL][ffbb33]【条件】[-]具有致胜约束状态
 100959,逻辑,feature,replace,-1,none,回合结束时自身体力低于1/8会强化1级速度
 100961,首星,feature,replace,-1,none,星移环境下命中率增加50%
 100962,躯星,feature,replace,-1,none,星移环境下受到的伤害减少10%
@@ -637,7 +646,7 @@ id,name,type,copyType,turn,options,description
 430003,黑水结晶,item,replace,-1,item=23003&group=exclude,[ffbb33]【随身物品】[-][ENDL]每回合恢复10点怒气，但是受到的伤害增加15%
 430004,草目璞玉,item,replace,-1,item=23004&group=exclude,[ffbb33]【随身物品】[-][ENDL]技能暴击时使天气转变为晴天
 430005,茶叶包,item,replace,-1,item=23005&group=exclude,[ffbb33]【随身物品】[-][ENDL]回合开始时若自身为满体力则使对手当回合【禁疗】
-440000,大乱斗邀请函,item,replace,-1,item=24000&group=exclude,[ffbb33]【随身物品】[-][ENDL]首次登场时获得[ffbb33]【伊特领域】[-]
+440000,大乱斗邀请函,item,replace,-1,item=24000&group=exclude,[ffbb33]【随身物品】[-][ENDL]首次登场时获得【伊特领域】，伊特家族以外的精灵携带时仍可以享有该领域的效果
 600002,深海,mark,replace,-1,none,双方受到攻击时25%概率溺水
 600004,极地,mark,replace,-1,none,双方暴击率提升15%，击败对手时会强化双攻1级
 600008,影触,mark,replace,-1,none,每回合随机弱化双方1项能力1级

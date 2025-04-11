@@ -9,7 +9,7 @@
 2. 玩家可以透过游戏内的【创意工坊】或本地编辑文件来添加专属游戏内容，实装新精灵、道具、地图等，也可以和其他玩家分享这些专属内容  
 
 ## 如何游玩？
-游戏本体分为以下两种，需要能连上Dropbox
+游戏本体分为以下两种，需要能连上Dropbox  
 [Windows版本](https://www.dropbox.com/scl/fi/2vvyvtkvzw6lah9frxe2y/Seer2-Restart-Lite.zip?rlkey=ru85f7y050ntgfj50eny9hxy0&st=12yzyimz&dl=0)  
 [Android版本](https://www.dropbox.com/scl/fi/8yt7abrdpjdtmjdvs9bh0/Seer2-Restart-Lite.Apk?rlkey=os61hdxoj9raqd7pydj4jgdsv&st=39vlzza1&dl=0)  
 

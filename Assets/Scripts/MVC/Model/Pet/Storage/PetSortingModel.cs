@@ -26,12 +26,16 @@ public class PetSortingModel : Module
         if (!isWorking)
             return null;
 
-        switch (sortingOption) {
+        return GetSorter(sortingOption);
+    }
+
+    public static Func<Pet, object> GetSorter(PetSortingOptions option) {
+        switch (option) {
             default:
             case PetSortingOptions.PositiveId:
-                return (Pet x) => (x.id > 0) ? (int.MaxValue - x.id) : (x.id);
+                return (Pet x) => (x.GetPetIdentifier("id") > 0) ? (int.MaxValue - x.GetPetIdentifier("id"), -x.GetPetIdentifier("subId")) : (x.GetPetIdentifier("id"), -x.GetPetIdentifier("subId"));
             case PetSortingOptions.NegativeId:
-                return (Pet x) => (x.id > 0) ? (-x.id) : (int.MaxValue + x.id);
+                return (Pet x) => (x.GetPetIdentifier("id") > 0) ? (-x.GetPetIdentifier("id"), -x.GetPetIdentifier("subId")) : (int.MaxValue + x.GetPetIdentifier("id"), -x.GetPetIdentifier("subId"));
             case PetSortingOptions.Date:
                 return (Pet x) => x.basic.getPetDate;
             case PetSortingOptions.Level:

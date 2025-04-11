@@ -82,16 +82,27 @@ public class PetBagController : Module
         RefreshPetBag();
     }
 
-    public void SetPetPersonality() {
+    public void SetPetPersonality(int value) {
+        Func<Personality, bool> filter = value switch {
+            -1 => (p) => ((int)p).IsInRange(0, 25),
+            -2 => (p) => ((int)p).IsInRange(25, 55),
+            _ => (p) => true,
+        };
+
         personalityController.onSelectPersonalityEvent += ToPersonalityPet;
-        personalityController.SetActive(true);
+        personalityController.SetActive(true, () => personalityController.Filter(filter));
     }
 
     public void ToPersonalityPet(Personality personality) {
         personalityController.onSelectPersonalityEvent -= ToPersonalityPet;
         personalityController.SetActive(false);
-        
+
         RefreshPetBag();
+
+        if ((mode == PetBagMode.PVP) || (mode == PetBagMode.Dictionary))
+            return;
+            
+        SaveSystem.SaveData();
     }
 
     public void SetPetHome() {

@@ -19,6 +19,13 @@ public class PetNameFilterModel : FilterModel<Pet>
             case FilterType.ID:
                 int id = int.Parse(input);
                 return x => x.id == id;
+            case FilterType.Parentheses:
+                return Parser.ParseConditionFilter<Pet>(inputString, (id, pet) => {
+                    if (pet == null)
+                        return float.MinValue;
+
+                    return pet.TryGetPetIdentifier(id, out var value) ? value : Identifier.GetNumIdentifier(id);
+                });
         }
     }
 }

@@ -1,4 +1,5 @@
 id,timing,priority,target,condition,cond_option,effect,effect_option
+-7,none,-1,pet,none,none,set_pet,type=specialChance&op=-&value=1
 -4,on_before_attack,-1,pet,none,none,escape,none
 -1,none,-1,none,none,none,none,none
 -1008,on_after_attack,-1,pet,none,none,add_buff,who=op&id=random[abnormal]
@@ -215,9 +216,9 @@ id,timing,priority,target,condition,cond_option,effect,effect_option
 10204,on_after_attack,-1,pet,none,none,add_buff,id=3017
 10205,on_decide_pri,-1,skill,buff,id=3028,set_skill,type=priority&op=+&value=1
 10206,on_after_attack,-1,pet,none,none,remove_buff,who=op&id=1/3/5/7/9
-10207,on_after_attack,-1,pet,none,none,add_buff,id=40&turn=1
+10207,on_after_attack\on_after_attack,-1\-1,pet\pet,none\unit,none\type=state.me.order&type[0].cmp=2,add_buff\rage,id=40&turn=1\add=30
 10208,on_attack,-1,pet,none,none,add_buff,id=3036
-10209,on_after_attack,-1,pet,none,none,copy_buff,id=2/4/6/8/10&source=me&target=me&reverse=true
+10209,on_after_attack\on_after_attack,-1\0,pet\pet,pet\none,type=powerup.negCount&type[0].cmp=0\none,powerup\copy_buff,mat=1&spd=1\id=2/4/6/8/10&source=me&target=me&reverse=true
 10210,on_after_attack,-1,state,none,none,set_weather,weather=10
 10211,on_after_attack,-1,pet,none,none,powerup,def=1
 10212,on_after_attack,-1,pet,none,none,add_buff,id=3037
@@ -1501,4 +1502,12 @@ id,timing,priority,target,condition,cond_option,effect,effect_option
 11490,on_final_dmg_cal\on_final_dmg_cal,900\900,skill\skill,pet\pet,type=height&height_op=<&height_cmp=op.pet.height\type=height&height_op=GTE&height_cmp=op.pet.height,set_damage\set_damage,op=+&value=op.pet.height&name=身高＜对手\op=+&value=me.pet.height&name=身高≥对手
 11491,on_before_attack,-1,skill,buff,who=op&id=3211,set_skill,type=power&op=+&value=50&name=威力+50
 11492,on_attack,-1,pet,buff,random_cmp=50&who=op&id=3211,add_buff,who=op&id=109&name=冰冻
+11493,on_after_attack\on_after_attack\on_after_attack,-1\-1\-1,pet\pet\pet,none\none\none,none\none\none,rage\rage\add_buff,who=op&add=-20\add=20\id=31&value=150
+11494,on_after_attack\on_after_attack,-1\-1,pet\pet,none\none,none\none,add_buff\remove_buff,who=op&id=117&value=50\on_success=11499&who=op&id=1/3/5/7/9
+11495,on_after_attack\on_after_attack\on_after_attack,-1\-1\-1,pet\pet\pet,none\none\none,none\none\none,powerup\add_buff\add_buff,mat=1&def=1&mdf=1&spd=1\id=12&turn=5\id=14&turn=5
+11496,on_after_attack,-1,pet,none,none,add_buff,id=3213&turn=4
+11497,on_after_attack\on_after_attack\on_after_attack,-1\-1\-1,pet\pet\pet,none\none\none,none\none\none,powerup\add_buff\add_buff,who=op&mdf=-1\who=op&id=21\id=3214&turn=4
+11498,on_attack\on_after_attack\on_after_attack\on_after_attack,-1\-1\-1\-1,pet\pet\pet\pet,status\status\status\none,who=op&status_type=hp&op=<&cmp_value=300\status_type=hp&op=GTE&cmp_value=1/2\status_type=hp&op=<&cmp_value=1/2\none,heal\heal\heal\remove_buff,who=op&set=0\add=300\add=600\on_success=11500&who=op&type=turn
+11499,on_after_attack,-1,pet,none,none,add_buff,who=op&id=1006
+11500,on_after_attack,-1,pet,none,none,add_buff,who=op&id=3215&turn=2
 99999,on_turn_ready\on_attack,-1\-1,skill\pet,none\unit,none\type=me.pet.bag(id:1990).count&type[0].cmp=1,set_skill\heal,type=chain&op=SET&value=1\set=0

@@ -26,6 +26,27 @@ public static class ItemDatabase
         {"seed", ItemType.Seed},
     };
 
+    public static Dictionary<ItemType, string> typeNameDict = new Dictionary<ItemType, string>() {
+        {ItemType.None, "无"},
+        {ItemType.Currency, "货币"},
+        {ItemType.HpPotion, "药剂"},
+        {ItemType.Capture, "胶囊"},
+        {ItemType.Evolve, "进化"},
+        {ItemType.Emblem, "纹章"},
+        {ItemType.EXP, "经验"},
+        {ItemType.EV, "学习力"},
+        {ItemType.IV, "资质"},
+        {ItemType.Personality, "性格"},
+        {ItemType.Skill, "技能"},
+        {ItemType.Buff, "印记"},
+        {ItemType.Mine, "矿石"},
+        {ItemType.Recipe, "菜谱"},
+        {ItemType.Stuff, "搜集品"},
+        {ItemType.Package, "礼包"},
+        {ItemType.Plant, "植物"},
+        {ItemType.Seed, "种子"},
+    };
+
     public static Dictionary<ItemCategory, List<ItemType>> categoryDict = new Dictionary<ItemCategory, List<ItemType>>() {
         { ItemCategory.Currency, new List<ItemType>() { ItemType.Currency } },
         { ItemCategory.Pet, new List<ItemType>() { ItemType.HpPotion, ItemType.Evolve, ItemType.Emblem, ItemType.EXP, ItemType.EV,
@@ -47,6 +68,10 @@ public static class ItemDatabase
 
     public static string ToRawString(this ItemType type) {
         return typeConvDict.ContainsValue(type) ? typeConvDict.First(x => x.Value == type).Key : "none";
+    }
+
+    public static string ToTypeName(this ItemType type) {
+        return typeNameDict.Get(type, "无");
     }
 
     public static bool IsInCategory(this ItemType type, ItemCategory category) {

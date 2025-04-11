@@ -2,11 +2,12 @@ using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class PetDictionaryController : Module
 {
     public VersionPetData petData => GameManager.versionData.petData;
-    public List<Pet> petDictionary => petData.petAllWithMod.Where(x => !x.info.ui.hide).ToList();
+    public List<Pet> petDictionary => petData.petAllWithMod.Where(x => !x.info.ui.hide).OrderByDescending(PetSortingModel.GetSorter(PetSortingOptions.PositiveId)).ToList();
     public List<Pet> petTopic => petData.petTopic;
     public List<Pet> petWorkshop = new List<Pet>();
 

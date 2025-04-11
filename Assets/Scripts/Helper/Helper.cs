@@ -70,6 +70,9 @@ namespace System {
 
             while (str.TryTrimParentheses(out var trimStr, leftPar, rightPar)) {
                 result.Add(trimStr);
+                if (!str.StartsWith('('))
+                    str = str.Substring(str.IndexOf(leftPar));
+
                 str = str.TrimStart(leftPar + trimStr + rightPar);
             }
 

@@ -218,7 +218,7 @@ public class Status
         int id = (int)p;
         Status buff = Status.one;
 
-        if (id >= 55)
+        if (!id.IsInRange(0, 55))
             return buff;
 
         if (id < 25) {

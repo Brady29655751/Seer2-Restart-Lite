@@ -17,16 +17,16 @@ public class WorkshopAllView : Module
         checkModObjectList.ForEach(x => x.SetActive(true));
     }
     
-    public void OpenAllSkillPanel() {
-        allSkillPanel.SetActive(true);
-    }
-    
-    public void OpenAllBuffPanel() {
-        allBuffPanel.SetActive(true);
+    public void SetAllSkillPanelActive(bool active) {
+        allSkillPanel.SetActive(active);
     }
 
-    public void OpenAllItemPanel() {
-        allItemPanel.SetActive(true);
+    public void SetAllBuffPanelActive(bool active) {
+        allBuffPanel.SetActive(active);
+    }
+
+    public void SetAllItemPanelActive(bool active) {
+        allItemPanel.SetActive(active);
     }
     
     

@@ -8,6 +8,7 @@ public class UnitPetSystem
 {
     public BattlePet[] petBag = new BattlePet[6];
     public int cursor = 0;
+    public int specialChance = 1;
     public BattlePet pet => petBag[cursor];
     public int petNum => petBag.Count(x => x != null);
     public int alivePetNum => petBag.Count(x => (x != null) && (!x.isDead));
@@ -17,11 +18,13 @@ public class UnitPetSystem
         petBag = new BattlePet[originalPetBag.Length];
         Array.Copy(originalPetBag, petBag, originalPetBag.Length);
         cursor = 0;
+        specialChance = 1;
     }
 
     public UnitPetSystem(UnitPetSystem rhs) {
         petBag = rhs.petBag.Select(x => (x == null) ? null : new BattlePet(x)).ToArray();
         cursor = rhs.cursor;
+        specialChance = rhs.specialChance;
     }
 
     public void OnTurnStart(Unit thisUnit, BattleState state) {
@@ -87,6 +90,7 @@ public class UnitPetSystem
             "cursor" => cursor,
             "aliveNum" => alivePetNum,
             "deadNum" => deadPetNum,
+            "specialChance" => specialChance,
             _ => float.MinValue,
         };
     }

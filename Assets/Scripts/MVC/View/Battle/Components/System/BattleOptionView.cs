@@ -68,7 +68,7 @@ public class BattleOptionView : BattleBaseView
         var parallelCursor = (parallelCount > 1) ? opUnit.petSystem.cursor : -1;
         var itemBag = (currentState.settings.mode == BattleMode.YiTeRogue) ? YiTeRogueData.instance.itemBag : Player.instance.gameData.itemBag;
 
-        skillView.SetPet(myUnit.pet);
+        skillView.SetPetSystem(myUnit.petSystem);
         changeView.SetPetBag(petBag);
         changeView.SetChangeBlockChosen(myUnit.petSystem.cursor, parallelCursor);
         captureController.SetItemBag(itemBag);

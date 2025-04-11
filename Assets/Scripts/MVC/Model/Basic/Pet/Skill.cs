@@ -9,6 +9,7 @@ using Random = UnityEngine.Random;
 public class Skill
 {
     public const int DATA_COL = 9;
+    public static List<Skill> database => Database.instance?.skillDict.Values.Where(x => x != null).ToList() ?? new List<Skill>();
 
     public int id;
     public string name;
@@ -175,6 +176,8 @@ public class Skill
         if (!skill.isAction)
             skill.options.Set("target_index", data[1]);
 
+        skill.options.Set("evolve", data[2]);
+
         var parallelSourceIndex = int.TryParse(data.Get(len - 2, "0"), out var num) ? num : 0;
         var parallelTargetIndex = int.TryParse(data.Get(len - 1, "0"), out num) ? num : 0;
         skill.SetParallelIndex(parallelSourceIndex, parallelTargetIndex);
@@ -188,7 +191,7 @@ public class Skill
             (int)SkillType.道具 => new string[] { id.ToString(), options.Get("item_id", "0") },
             (int)SkillType.換场 => new string[] { id.ToString(), options.Get("source_index", "0"), options.Get("target_index", "0"), options.Get("passive", "false") },
             (int)SkillType.逃跑 => new string[] { id.ToString() },
-            _ => new string[] { id.ToString(), options.Get("target_index", "-1") }
+            _ => new string[] { id.ToString(), options.Get("target_index", "-1"), options.Get("evolve", "0") }
         };
 
         if (settings.parallelCount > 1)
@@ -375,6 +378,7 @@ public class Skill
             "ignorePowerdown" => ignorePowerdown ? 1 : 0,
             "effect" => effects.Count,
             "isSelect" => IsSelect() ? 1 : 0,
+            "evolve" => GetSkillIdentifier("option[evolve]"),
             _ => float.MinValue,
         };
     }

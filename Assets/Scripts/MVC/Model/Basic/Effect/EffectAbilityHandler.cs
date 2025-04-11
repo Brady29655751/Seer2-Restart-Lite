@@ -786,7 +786,7 @@ public static class EffectAbilityHandler
                     if (!bool.TryParse(keepSkillExpr, out var keepSkill))
                         return false;
 
-                    pet.MegaEvolve(evolveId, keepSkill);
+                    pet.EvolveTo(evolveId, keepSkill);
                     return true;
                 }
                 // Add Skin.
@@ -802,11 +802,12 @@ public static class EffectAbilityHandler
                     return true;
                 }
                 // Set personality.
-                if ((type == "personality") && (value == "-1")) {
+                if ((type == "personality") && ((value == "-1") || (value == "-2"))) {
                     var petBagController = GameObject.FindObjectOfType<PetBagController>();
                     if (petBagController == null)
                         return false;
-                    petBagController.SetPetPersonality();
+
+                    petBagController.SetPetPersonality(int.Parse(value));
                     return true;
                 }
                 // Learn skill.
@@ -948,6 +949,9 @@ public static class EffectAbilityHandler
             if (inheritList.Contains("hp"))
                 lhsUnit.petSystem.petBag[cursor].hp = battlePet.hp;
 
+            if (inheritList.Contains("anger"))
+                lhsUnit.petSystem.petBag[cursor].anger = battlePet.anger;
+
             lhsUnit.petSystem.petBag[cursor].skillController.loopSkills = lhsUnit.pet.skillController.normalSkills.Where(x => x != null).ToList();
             lhsUnit.petSystem.petBag[cursor].PowerUp(battlePet.statusController.powerup, lhsUnit, state);
 
@@ -1022,6 +1026,11 @@ public static class EffectAbilityHandler
         if (type == "superSkill") {
             TryGetShiftedSkills(battlePet, out var normalSkills, out var superSkill, superSkillKey: "value");
             battlePet.superSkill = superSkill;
+            return true;
+        }
+
+        if (type == "specialChance") {
+            lhsUnit.petSystem.specialChance = (int)Operator.Operate(op, lhsUnit.petSystem.specialChance, newValue);
             return true;
         }
 

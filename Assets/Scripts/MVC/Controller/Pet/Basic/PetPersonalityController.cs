@@ -1,30 +1,37 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class PetPersonalityController : Module
 {
-    [SerializeField] private bool defaultSelect = true;
+    private List<Personality> personalityList => Enumerable.Range(0, Enum.GetNames(typeof(Personality)).Length).Select(x => (Personality)x).ToList();
+
     [SerializeField] private PetPersonalityModel personalityModel;
     [SerializeField] private PetPersonalityView personalityView;
 
     public event Action<Personality> onSelectPersonalityEvent;
+    private Action onInitCallback;
 
     public override void Init()
     {
         base.Init();
-        if (defaultSelect)
-            Select(0);
+        personalityView.CreatePersonalityList(personalityList, (p) => Select((int)p), onInitCallback);
     }
 
-    public void SetActive(bool active) {
+    public void SetActive(bool active, Action onInitCallback = null) {
+        this.onInitCallback = onInitCallback;
         gameObject.SetActive(active);
     }
 
     public void SetPet(Pet pet) {
         personalityModel.SetPet(pet);
         SetPersonality(personalityModel.personality);
+    }
+
+    public void Filter(Func<Personality, bool> filter) {
+        personalityView.SetPersonalityList(personalityList.Where(filter).ToList());
     }
 
     public void Select(int personalityId) {

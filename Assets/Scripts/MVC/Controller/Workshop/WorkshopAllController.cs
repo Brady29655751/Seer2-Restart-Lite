@@ -57,15 +57,15 @@ public class WorkshopAllController : Module
     }
 
     public void OpenAllSkillPanel() {
-        allView.OpenAllSkillPanel();
+        allView.SetAllSkillPanelActive(true);
     }
 
     public void OpenAllBuffPanel() {
-        allView.OpenAllBuffPanel();
+        allView.SetAllBuffPanelActive(true);
     }
 
     public void OpenAllItemPanel() {
-        allView.OpenAllItemPanel();
+        allView.SetAllItemPanelActive(true);
     }
 
     public void OnEditPet(PetInfo petInfo) {
@@ -86,6 +86,15 @@ public class WorkshopAllController : Module
         skillController.SetSkill(allModel.currentSkill);
     }
 
+    public void OnEditSkill(Skill skill) {
+        if (skill == null)
+            return;
+
+        optionSelectController.Select(2);
+        skillController.SetSkill(skill);
+        allView.SetAllSkillPanelActive(false);
+    }
+
     public void OnEditBuff() {
         if (allModel.currentBuffInfo == null)
             return;
@@ -100,6 +109,15 @@ public class WorkshopAllController : Module
 
         optionSelectController.Select(4);
         itemController.SetItemInfo(allModel.currentItemInfo);
+    }
+
+    public void OnEditItem(ItemInfo itemInfo) {
+        if (itemInfo == null)
+            return;
+
+        optionSelectController.Select(4);
+        itemController.SetItemInfo(itemInfo);
+        allView.SetAllItemPanelActive(false);
     }
     
     public void OnImportMod() {
