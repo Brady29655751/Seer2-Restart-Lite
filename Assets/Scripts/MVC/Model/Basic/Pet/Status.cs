@@ -31,6 +31,8 @@ public class Status
     }
 
     public float sum => status.Sum();
+    public float max => status.Max();
+    public float min => status.Min();
     public Status sign => Status.Sign(this);
     public Status abs => Status.Abs(this);
     public Status pos => this.Select(x => Mathf.Max(x, 0));

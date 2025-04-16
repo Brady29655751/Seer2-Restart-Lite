@@ -19,6 +19,10 @@ public class BattleManager : Manager<BattleManager>
     protected BattleState currentUIState = null;
     protected Queue<BattleState> queue = new Queue<BattleState>();
 
+    // For battle record
+    protected int recordActionIndex = 0;
+    protected List<int> recordActionSteps = new List<int>();
+
     protected override void Awake()
     {
         base.Awake();
@@ -94,6 +98,17 @@ public class BattleManager : Manager<BattleManager>
             }
 
             CheckAutoSkill();
+
+            if (battle.settings.mode == BattleMode.Record) {
+                var actionList = Player.instance.currentBattleRecord.actionList;
+                while (recordActionIndex < actionList.Count) {
+                    var action = actionList[recordActionIndex++];
+                    var skill = Skill.ParseRPCData(action.key);
+                    if (battle.SetSkill(skill, action.value))
+                        break;
+                }
+            }
+            
             return;
         }
 
@@ -142,8 +157,8 @@ public class BattleManager : Manager<BattleManager>
             yield return new WaitForSeconds(0.2f);
         }
 
-        if (newState.settings.mode == BattleMode.Record)
-            yield return new WaitForSeconds(1f);
+        // if (newState.settings.mode == BattleMode.Record)
+        //     yield return new WaitForSeconds(1f);
 
         ProcessQuery();
     }

@@ -173,10 +173,10 @@ public class Skill
             _ => Skill.GetSkill(id)
         };
 
-        if (!skill.isAction)
+        if (!skill.isAction) {
             skill.options.Set("target_index", data[1]);
-
-        skill.options.Set("evolve", data[2]);
+            skill.options.Set("evolve", data[2]);
+        }
 
         var parallelSourceIndex = int.TryParse(data.Get(len - 2, "0"), out var num) ? num : 0;
         var parallelTargetIndex = int.TryParse(data.Get(len - 1, "0"), out num) ? num : 0;
@@ -216,6 +216,8 @@ public class Skill
         Skill skill = new Skill(SkillType.空过);
         skill.name = "空过";
         skill.rawDescription = "跳过自己的回合";
+        skill.critical = 5;
+        skill.accuracy = 100;
         return skill;
     }
 
@@ -377,6 +379,7 @@ public class Skill
             "ignorePowerup" => ignorePowerup ? 1 : 0,
             "ignorePowerdown" => ignorePowerdown ? 1 : 0,
             "effect" => effects.Count,
+            "parallelTargetIndex" => GetSkillIdentifier("option[parallel_target_index]"),
             "isSelect" => IsSelect() ? 1 : 0,
             "evolve" => GetSkillIdentifier("option[evolve]"),
             _ => float.MinValue,
@@ -436,6 +439,12 @@ public class Skill
                 return;
             case "effect":
                 SetEffects((value == 0) ? new List<Effect>() : (Skill.GetSkill((int)value, false)?.effects.Select(x => new Effect(x)).ToList() ?? new List<Effect>()));
+                return;
+            case "evolve":
+                SetSkillIdentifier("option[evolve]", value);
+                return;
+            case "parallelTargetIndex":
+                SetParallelIndex(int.Parse(options.Get("parallel_source_index", "0")), (int)value);
                 return;
         }
     }   

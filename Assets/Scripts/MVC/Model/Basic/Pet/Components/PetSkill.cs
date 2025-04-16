@@ -99,6 +99,10 @@ public class PetSkill
     public void CheckNewSkill(int level) {
         var newSkillId = info.learnInfoList.Where(x => !ownSkillId.Contains(x.skill.id)).Where(x => x.secretType == SecretType.GreaterThanLevel)
             .Where(x => level >= x.value).Select(x => x.skill.id);
+
+        if (ListHelper.IsNullOrEmpty(newSkillId))
+            return;
+
         ownSkillId = ownSkillId.Concat(newSkillId).Where(x => x != 0).ToArray();
         superSkill = superSkill ?? ownSkill?.FirstOrDefault(x => (x?.type ?? SkillType.属性) == SkillType.必杀);
 

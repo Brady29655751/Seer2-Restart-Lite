@@ -9,7 +9,7 @@ public class CreateRoomView : Module
 {
     [SerializeField] private Hintbox hintbox;
     [SerializeField] private BattlePetBuffView buffView;
-    [SerializeField] private Image petCountBackground, turnTimeBackground, itemBagBackground;
+    [SerializeField] private Image petCountBackground, turnTimeBackground, itemBagBackground, revealBackground;
 
     public void SetPetCount(int count) {
         int[] countList = new int[] { 1, 6, 2 };
@@ -30,6 +30,11 @@ public class CreateRoomView : Module
     public void SetItemBagApproval(bool approved) {
         int posX = 200 + (approved ? 0 : 1) * 105;
         itemBagBackground.rectTransform.anchoredPosition = new Vector2(posX, 0);
+    }
+    
+    public void SetTeamReveal(bool reveal) {
+        int posX = 200 + (reveal ? 0 : 1) * 105;
+        revealBackground.rectTransform.anchoredPosition = new Vector2(posX, 0);
     }
 
     public void CreateRoom() {

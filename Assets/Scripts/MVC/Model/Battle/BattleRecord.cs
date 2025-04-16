@@ -57,6 +57,7 @@ public class BattleRecord
 
     public void AddAction(string[] action, bool isMe) {
         actionList.Add(new IKeyValuePair<string[], bool>(action, isMe));
+        SaveSystem.SaveData();
     }
 
 }

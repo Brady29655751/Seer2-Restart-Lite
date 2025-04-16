@@ -56,6 +56,14 @@ public class Map
         return Map.GetNpcInfo(map, npcId)?.battleHandler?.Find(x => x?.id == battleId);
     }
 
+    public static void TestBattle(BossInfo bossInfo, Pet[] petBag) {
+        var enemy = BattlePet.GetBattlePet(bossInfo).SingleToList().ToArray();
+        var player = petBag.Select(BattlePet.GetBattlePet).ToArray();
+        var settings = new BattleSettings(){ isSimulate = true, isCaptureOK = false };
+        var battle = new Battle(player, enemy, settings);
+        SceneLoader.instance.ChangeScene(SceneId.Battle);
+    }
+
     public static void TestBattle(int mapId, int npcId, string battleId, Pet[] petBag = null) {
         Map.GetMap(mapId, (map) => Map.OnLoadTestBattleMapSuccess(map, npcId, battleId, petBag), 
             (error) => Hintbox.OpenHintboxWithContent(error, 16));
@@ -76,6 +84,9 @@ public class Map
             Hintbox.OpenHintboxWithContent("测试的NPC战斗信息为空", 16);
             return;
         }
+
+        battleInfo.winHandler?.Clear();
+        battleInfo.loseHandler?.Clear();
 
         var player = ((petBag?.Select(BattlePet.GetBattlePet)) ?? (battleInfo.playerInfo?.Select(BattlePet.GetBattlePet))).ToArray();
         var enemy = battleInfo.enemyInfo?.Select(BattlePet.GetBattlePet).ToArray();

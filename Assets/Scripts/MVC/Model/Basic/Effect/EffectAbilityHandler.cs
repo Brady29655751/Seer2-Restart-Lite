@@ -176,6 +176,9 @@ public static class EffectAbilityHandler
                 if ((maxHp <= 0) && (targetList[i].buffController.GetBuff(99) != null))
                     continue;
 
+                if ((maxHp < targetList[i].maxHp) && (targetList[i].buffController.GetBuff(-7) != null))
+                    continue;
+
                 targetList[i].maxHp = maxHp;
                 continue;
             }
@@ -976,6 +979,10 @@ public static class EffectAbilityHandler
             if (lhsUnit.pet.buffController.GetBuff(-7) != null) {
                 lhsUnit.pet.maxHp = Mathf.Max(lhsUnit.pet.maxHp, battlePet.maxHp);
                 lhsUnit.pet.hp = lhsUnit.pet.maxHp;
+                if (!ListHelper.IsNullOrEmpty(battlePet.skillController.loopSkills)) {
+                    lhsUnit.pet.skillController.loopSkills = battlePet.skillController.loopSkills;
+                    lhsUnit.pet.skillController.superSkill = battlePet.skillController.superSkill;
+                }
             }
 
             return true;

@@ -10,6 +10,7 @@ using Random = UnityEngine.Random;
 
 public class RoomSettingsView : Module
 {
+    [SerializeField] private Timer timer;
     [SerializeField] private Text roomNumText, turnTimeText;
     [SerializeField] private BattlePetBuffView stateBuffView;
     [SerializeField] private IButton startButton, petBagButton;
@@ -29,15 +30,16 @@ public class RoomSettingsView : Module
         var hash = PhotonNetwork.CurrentRoom.CustomProperties;
         var otherPlayers = PhotonNetwork.PlayerListOthers;
         var buffs = ((int[])hash["buff"]).Select(x => new Buff(x)).ToList();
+        var reveal = (bool)hash["reveal"];
         roomNumText?.SetText(PhotonNetwork.CurrentRoom.Name);
         turnTimeText?.SetText("【" + hash["time"] + " 秒】");
         stateBuffView?.SetBuff(buffs);
         stateBuffView?.gameObject?.SetActive(buffs.Count > 0);
         stateVSObject?.SetActive(buffs.Count <= 0);
+        opCoverObject?.SetActive(!reveal);
         SetName(PhotonNetwork.LocalPlayer.NickName, true);
         SetName((otherPlayers.Length == 0) ? null : otherPlayers[0].NickName, false);
         SetBGM();
-        // SetPet(Enumerable.Repeat(Pet.GetExamplePet(3), (int)hash["count"]).ToList(), true);
     }
 
     public void SetBGM() {
@@ -57,7 +59,7 @@ public class RoomSettingsView : Module
         for (int i = 0; i < petBlocks.Count; i++) {
             var pet = ((pets != null) && (i < pets.Count)) ? pets[i] : null;
             petBlocks[i]?.SetPet(pet);
-            starFrames[i].color = ColorHelper.GetStarColor(pet?.info?.star ?? 0);
+            starFrames[i]?.SetColor(ColorHelper.GetStarColor(pet?.info?.star ?? 0));
         }
     }
 
@@ -95,10 +97,16 @@ public class RoomSettingsView : Module
         callback?.Invoke();
     }
 
-    public void OnAllReady(bool isAllReady) {
-        opCoverObject?.SetActive(!isAllReady);
-        startButton?.gameObject.SetActive(PhotonNetwork.IsMasterClient);
-        startButton?.SetInteractable(isAllReady);
+    public void OnAllReady(Action callback) {
+        var hash = PhotonNetwork.CurrentRoom.CustomProperties;
+        var reveal = (bool)hash["reveal"];
+
+        if (!reveal) {
+            callback?.Invoke();
+            return;
+        }
         
+        timer.onDoneEvent += (leftSeconds) => callback?.Invoke();
+        timer.SetTimer(10);
     }
 }

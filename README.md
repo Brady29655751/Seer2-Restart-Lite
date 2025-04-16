@@ -10,13 +10,16 @@
 
 ## 如何游玩？
 游戏本体分为以下两种，需要能连上Dropbox  
-[Windows版本](https://www.dropbox.com/scl/fi/2vvyvtkvzw6lah9frxe2y/Seer2-Restart-Lite.zip?rlkey=ru85f7y050ntgfj50eny9hxy0&st=12yzyimz&dl=0)  
-[Android版本](https://www.dropbox.com/scl/fi/8yt7abrdpjdtmjdvs9bh0/Seer2-Restart-Lite.Apk?rlkey=os61hdxoj9raqd7pydj4jgdsv&st=39vlzza1&dl=0)  
+[Windows 版本](https://www.dropbox.com/scl/fi/2vvyvtkvzw6lah9frxe2y/Seer2-Restart-Lite.zip?rlkey=ru85f7y050ntgfj50eny9hxy0&st=12yzyimz&dl=0)  
+[Android 版本](https://www.dropbox.com/scl/fi/8yt7abrdpjdtmjdvs9bh0/Seer2-Restart-Lite.Apk?rlkey=os61hdxoj9raqd7pydj4jgdsv&st=39vlzza1&dl=0)  
 
 除此之外需要额外下载资源包，但是能连上Dropbox的话，游戏内选择 **【联网更新】** 就可以了  
 
 ## 我想自己开发游戏内容和代码，如何部署？
 [参考 Issue #4](https://github.com/Brady29655751/Seer2-Restart-Lite/issues/4)  
+
+运行中可能会报错 Failed to read data for the AssetBundle 'pfa_XXX'，是正常现象。
+部分精灵没有实装动画，并不影响游戏运行。若有自动暂停情形，可以在Unity的Console或Preference选项禁用Error Pause
 
 ## 目录说明
 

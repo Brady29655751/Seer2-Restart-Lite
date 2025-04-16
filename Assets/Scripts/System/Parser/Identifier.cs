@@ -240,10 +240,13 @@ public static class Identifier {
         if (id.TryTrimStart("powerup.", out trimId)) {
             Status powerup = statusController.powerup;
             return trimId switch {
+                "count" => powerup.Count(x => x != 0),
                 "posCount" => powerup.Count(x => x > 0),
                 "negCount" => powerup.Count(x => x < 0),
+                "sum" => powerup.sum,
                 "posSum" => powerup.Select(x => Mathf.Max(0, x)).sum,
                 "negSum" => powerup.Select(x => Mathf.Min(0, x)).sum,
+                "max" => powerup.max,
                 "posMax" => powerup.posMax,
                 "negMax" => powerup.negMax,
                 _ => powerup[trimId],

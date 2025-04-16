@@ -82,6 +82,7 @@ public class RoomManager : Manager<RoomManager>
         petBagPanel.SetPetBag(myPets.ToArray());
         petBagPanel.SetItemBag(isItemOK ? Item.pvpItemDatabase : new List<Item>(){ new Item(10239, 9999) });
         roomSettingsView.SetPet(myPets.ToList(), true);
+        roomSettingsView.SetPet(Enumerable.Repeat(Pet.GetExamplePet(0), petCount).ToList(), false);
     }
 
     public void LeaveRoom() {
@@ -95,12 +96,10 @@ public class RoomManager : Manager<RoomManager>
 
     private void OnOtherPlayerJoin(Photon.Realtime.Player player) {
         roomSettingsView.SetName(player.NickName, false);
-        // roomSettingsView.SetPet(((int[])player.CustomProperties["pet"])?.Select(x => Pet.GetExamplePet(x)).ToList(), false);
     }
 
     private void OnOtherPlayerLeft(Photon.Realtime.Player player) {
         roomSettingsView.SetName(string.Empty, false);
-        // roomSettingsView.SetPet(null, false);
     }
 
     private void OnPlayerReady(Photon.Realtime.Player player) {
@@ -109,17 +108,19 @@ public class RoomManager : Manager<RoomManager>
         var hash = player.CustomProperties;
         if ((!player.IsLocal) && (bool)hash["ready"]) {
             roomSettingsView.SetReady(null, true, false);
-            // roomSettingsView.SetPet(((int[])hash["pet"]).Select(x => Pet.GetExamplePet(x)).ToList(), false);
         }
 
         bool isAllReady = (allPlayers.Length > 1) && allPlayers.All(x => (bool)x.CustomProperties["ready"]);
         if (isAllReady) {
-            Battle battle = new Battle(
-                PhotonNetwork.CurrentRoom.CustomProperties,
-                PhotonNetwork.LocalPlayer.CustomProperties,
-                otherPlayer[0].CustomProperties
-            );
-            StartBattle();
+            roomSettingsView.SetPet(((int[])otherPlayer[0].CustomProperties["pet"]).Select(x => Pet.GetExamplePet(x)).ToList(), false);
+            roomSettingsView.OnAllReady(() => {
+                Battle battle = new Battle(
+                    PhotonNetwork.CurrentRoom.CustomProperties,
+                    PhotonNetwork.LocalPlayer.CustomProperties,
+                    otherPlayer[0].CustomProperties
+                );
+                StartBattle();
+            });
         }
     }
 

@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Drawing;
 using UnityEngine;
 using RM = ResourceManager;
 
@@ -298,6 +299,11 @@ namespace UnityEngine
                 1 => Color.white,
                 _ => Color.clear,
             };
+        }
+
+        public static void SetColor(this UI.Image image, Color color) {
+            if (image != null)
+                image.color = color;
         }
     }
 

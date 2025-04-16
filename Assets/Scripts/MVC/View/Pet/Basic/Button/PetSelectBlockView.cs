@@ -38,8 +38,8 @@ public class PetSelectBlockView : Module
     }
 
     private void SetIcon() {
-        icon.gameObject.SetActive(!isNull);
-        icon.sprite = isNull ? null : currentPet.ui.icon;
+        // icon.gameObject.SetActive(true);
+        icon.SetSprite(isNull ? notChosenFrameSprite : currentPet.ui.icon);
     }
 
     private void SetLevel() {

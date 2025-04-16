@@ -50,8 +50,8 @@ public class PetDictInfoView : Module
     }
 
     public void SetID(int id, int subId, int star) {
-        // var sub = (subId == 0) ? string.Empty : ("." + subId);
-        idText?.SetText(id + " <color=#52e5f9>(★<size=4> </size>" + star + "<size=4> </size>)</color>");
+        var subIdText = (subId == 0) ? string.Empty : ("-" + subId);
+        idText?.SetText(id + subIdText + " <color=#52e5f9>(★<size=4> </size>" + star + "<size=4> </size>)</color>");
     }
 
     public void SetHeightAndWeight(int baseHeight, int baseWeight) {

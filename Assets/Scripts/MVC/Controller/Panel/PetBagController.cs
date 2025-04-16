@@ -17,6 +17,7 @@ public class PetBagController : Module
     [SerializeField] private PetDemoController demoController;
     [SerializeField] private PetFeatureController featureController;
     [SerializeField] private PetSkinController skinController;
+    [SerializeField] private PetBattleTestController battleTestController;
 
     protected override void Awake()
     {
@@ -121,13 +122,28 @@ public class PetBagController : Module
         buttonView.TogglePetItemPanel();
     }
 
-    public void TestBattle(int mapId) {
+    public void OpenBattleTestPanel() {
         if (Activity.Noob.GetData("battle") != "done") {
             Hintbox.OpenHintboxWithContent("完成新手战斗教学后解锁", 16);
             return;
         }
+        battleTestController?.gameObject.SetActive(true);
+    }
 
-        Map.TestBattle(mapId, selectController?.GetPetSelections());
+    public void TestBattle(int mapId) {
+        var pets = selectController?.GetPetSelections();
+        switch (mapId) {
+            default:
+                battleTestController?.TestBattle(pets);
+                break;
+            case 2:
+            case -2:
+                Map.TestBattle(mapId, pets);
+                break;
+            case 124:
+                Map.TestBattle(124, 12402, "default", pets);
+                break;
+        }
     }
 
 }

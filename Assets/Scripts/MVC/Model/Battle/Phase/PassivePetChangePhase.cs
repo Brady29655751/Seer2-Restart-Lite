@@ -81,6 +81,12 @@ public class PassivePetChangePhase : BattlePhase
                 UI.ProcessQuery(true);
                 UI.SetBottomBarInteractable(GetPassiveChance(myUnit.id) > 0);
                 UI.SetOptionActive(2, UIState.settings.isCaptureOK);
+
+                if ((!UIState.settings.isItemOK) || (UIState.myUnit.pet.isDead))
+                {
+                    UI.SetOptionActive(2, false);
+                    UI.SetOptionActive(3, false);
+                }
             }
         }
 

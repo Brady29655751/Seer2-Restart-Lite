@@ -210,6 +210,11 @@ public class Pet
             return currentStatus[trimStatus];
         }
 
+        if (id.TryTrimStart("ev.", out trimStatus)) {
+            trimStatus = trimStatus.ToLower();
+            return talent.ev[trimStatus];
+        }
+
         if ((id.TryTrimStart("skill", out var trimSkill)) && 
             (trimSkill.TryTrimParentheses(out var skillIdExpr)) &&
             (int.TryParse(skillIdExpr, out var skillId))) {
@@ -425,18 +430,19 @@ public class Pet
     public static void VersionUpdate() {
         GameData gameData = Player.instance.gameData;
         string petDataVersion = gameData.version;
+
+        IEnumerable<Pet> allPets = gameData.petBag.Concat(gameData.petStorage).Where(x => x != null);
+
         if (VersionData.Compare(petDataVersion, "beta_0.1") < 0) {
-            var allPets = gameData.petBag.Concat(gameData.petStorage).Where(x => x != null);
-            foreach (var pet in allPets) {
+            foreach (var pet in allPets)
                 pet.ui = new PetUI(pet.id, pet.basic.baseId);
-            }
+
             petDataVersion = "beta_0.1";
         }
 
         if (VersionData.Compare(petDataVersion, "lite_2.8") < 0) {
-            var allPets = gameData.petBag.Concat(gameData.petStorage).Where(x => x != null);
             foreach (var pet in allPets)
-                pet.basic.gender = pet.info.basic.gender;
+                pet.basic.gender = pet.info?.basic.gender ?? 0;
             
             petDataVersion = "lite_2.8";
         }
@@ -461,13 +467,9 @@ public class Pet
             petDataVersion = "lite_2.9";
         }
 
-        if (VersionData.Compare(petDataVersion, "lite_2.9.1") < 0) {
-            var allPets = gameData.petBag.Concat(gameData.petStorage).Where(x => (x != null) && (x.id == 946));
-            foreach (var pet in allPets)
-                pet.skills.LearnNewSkill(Skill.GetSkill(11493, false));
-
-            petDataVersion = "lite_2.9.1";
-        }
+        // Check New Skill
+        foreach (var pet in allPets)
+            pet?.skills?.CheckNewSkill(pet?.level ?? 0);
     }
 
 }

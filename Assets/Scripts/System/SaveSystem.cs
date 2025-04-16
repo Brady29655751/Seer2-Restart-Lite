@@ -215,6 +215,10 @@ public static class SaveSystem
                 TryCreateMod(out _);
             }
 
+            // Import empty directory
+            if (string.IsNullOrEmpty(importPath))
+                return true;
+
             FileBrowserHelpers.CopyDirectory(importPath, modPath);   
         } catch (Exception e) {
             Hintbox.OpenHintboxWithContent("加载Mod失败，具体错误：\n" + e.ToString(), 14).SetSize(720, 360);

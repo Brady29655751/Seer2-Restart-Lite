@@ -119,6 +119,9 @@ public class Battle
     private void NextPhase() {
         while (currentPhase != null) {
             currentPhase.DoWork();
+            if (currentPhase == null)
+                break;
+                
             lastState = new BattleState(currentState);
             currentState = currentPhase.state;   
             currentPhase = currentPhase.GetNextPhase();
@@ -127,24 +130,12 @@ public class Battle
 
     public void OnBattleStart() {
         NextPhase();
-        if (settings.mode == BattleMode.Record)
-            UI.StartCoroutine(PlayRecordCoroutine());
     }
 
-    private IEnumerator PlayRecordCoroutine() {
-        var actionList = Player.instance.currentBattleRecord.actionList;
-        var speed = Player.instance.gameData.settingsData.battleAnimSpeed;
-        for (int i = 0; i < actionList.Count; i++) {
-            var action = actionList[i];
-            SetSkill(Skill.ParseRPCData(action.key), action.value);
-            //yield return new WaitForSeconds(3.5f / speed);
-            yield return null;
-        }
-    }
-
-    public void SetSkill(Skill skill, bool isMe) {
+    /// <returns>whether all units are ready or not</returns>
+    public bool SetSkill(Skill skill, bool isMe) {
         if (currentState == null)
-            return;
+            return false;
 
         Unit myUnit = currentState.myUnit;
         Unit opUnit = currentState.opUnit;
@@ -161,7 +152,7 @@ public class Battle
             if (!skill.IsSelectReady()) {
                 UI.SetSkillSelectMode(true);
                 UI.SelectOption(1);
-                return;
+                return false;
             }
 
             if (settings.parallelCount > 1) {
@@ -174,7 +165,7 @@ public class Battle
                         UI.SetState(null, currentState);
                         UI.ProcessQuery(true);
                     }
-                    return;
+                    return false;
                 }
             }
 
@@ -193,7 +184,7 @@ public class Battle
             if (currentPhase.phase != EffectTiming.OnPassivePetChange)
                 NextPhase();
 
-            return;
+            return false;
         }
 
         if ((settings.mode != BattleMode.PVP) && (settings.mode != BattleMode.Record) && (opUnit.skill == null)) {
@@ -220,8 +211,10 @@ public class Battle
             opUnit.parallelSkillSystems.ForEach(x => x.EnsureSkillNotNull());
             currentPhase = new TurnReadyPhase();
             NextPhase();
-            return;
+            return true;
         }
+
+        return false;
     }
 
     public virtual float GetBattleIdentifier(string id) {

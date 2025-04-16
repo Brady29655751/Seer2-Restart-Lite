@@ -35,17 +35,17 @@ public class BattlePhase
     protected virtual void ApplySkillsAndBuffs() {
         var parallelCount = state.settings.parallelCount;
         if ((parallelCount > 1) && (state.whosTurn == 0)) {
-            void ParallelApply(Unit unit, List<BattlePet> petBag) {
-                for (int i = 0; i < petBag.Count; i++) {
-                    unit.petSystem.cursor = unit.petSystem.petBag.IndexOf(petBag[i]);
+            void ParallelApply(Unit unit, List<int> petBagCursor) {
+                for (int i = 0; i < petBagCursor.Count; i++) {
+                    unit.petSystem.cursor = petBagCursor[i];
                     GetEffectHandler(unit, i == 0).CheckAndApply(state);
                 }
-                unit.petSystem.cursor = unit.petSystem.petBag.IndexOf(petBag[0]);
+                unit.petSystem.cursor = petBagCursor[0];
             }
-            var masterPetBag = state.masterUnit.petSystem.GetParallelPetBag(parallelCount);
-            var clientPetBag = state.clientUnit.petSystem.GetParallelPetBag(parallelCount);
-            ParallelApply(state.masterUnit, masterPetBag);
-            ParallelApply(state.clientUnit, clientPetBag);
+            var masterPetBagCursor = state.masterUnit.petSystem.GetParallelPetBagCursor(parallelCount);
+            var clientPetBagCursor = state.clientUnit.petSystem.GetParallelPetBagCursor(parallelCount);
+            ParallelApply(state.masterUnit, masterPetBagCursor);
+            ParallelApply(state.clientUnit, clientPetBagCursor);
             return;
         }
 

@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class CreateRoomModel : Module
 {
+    private bool isTeamReveal = false;
     private BattleSettings settings = new BattleSettings() {
         mode = BattleMode.PVP,
         isSimulate = true,
@@ -44,6 +45,10 @@ public class CreateRoomModel : Module
         settings.isItemOK = approved;
     }
 
+    public void SetTeamReveal(bool reveal) {
+        this.isTeamReveal = reveal;
+    }
+
     public void CreateRoom() {
         NetworkData networkData = new NetworkData() {
             networkAction = NetworkAction.Create,
@@ -53,6 +58,7 @@ public class CreateRoomModel : Module
         networkData.roomProperty["time"] = settings.time;
         networkData.roomProperty["item"] = settings.isItemOK;
         networkData.roomProperty["buff"] = settings.initBuffs.Select(x => x.Value?.id ?? 0).ToArray();
+        networkData.roomProperty["reveal"] = isTeamReveal;
         NetworkManager.instance.StartNetworkAction(networkData);
     }
 }

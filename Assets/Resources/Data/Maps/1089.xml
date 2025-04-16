@@ -1,0 +1,99 @@
+<map name="炼狱秘境" category="10" id="1089">
+	<music category="10">
+		<bgm>BGM_1088</bgm>
+	</music>
+	<initialPoint>230,175</initialPoint>
+	<entities>
+		<npc id="108901" resId="Pets/pet/395" name="奥黛丽" size="222,154" pos="250,315" namePos="20,-20" target="false"/>
+		<npc id="108902" resId="Pets/pet/412" name="赫本" size="168,150" pos="560,316" namePos="-10,-15" target="false" rotation="0,180,0"/>
+		<npc id="108903" resId="Pets/pet/496" name="" size="470,200" pos="260,300" color="0,0,0,0">
+			<description>神秘的精灵</description>
+			<dialog>
+				<branch id="default" name="奥黛丽" icon="Pets/pet/395" size="148,102" pos="0,45">
+					<content><![CDATA[我们将伴随撒旦左右！]]></content>
+					<functionHandler>
+						<func type="click">
+							<description><![CDATA[双打挑战]]></description>
+							<action>battle</action>
+							<param>default</param>
+						</func>
+					</functionHandler>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[我们将伴随撒旦上下！]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+					</replyHandler>
+				</branch>
+			</dialog>
+			<battle>
+				<branch id="default">
+					<settings count="2" parallel="2">
+						<mode>3</mode>
+						<weather>10</weather>
+					</settings>
+					<enemy>
+						<pet id="395" level="100">
+							<status>
+								<hp>130000</hp>
+							</status>
+							<initBuff>13,14,22,25,57,98,99</initBuff>
+							<loopSkill>11522,11529,11528,11529</loopSkill>
+						</pet>
+						<pet id="412" level="100">
+							<status>
+								<hp>130000</hp>
+							</status>
+							<initBuff>13,14,22,26,57,98,99</initBuff>
+							<loopSkill>11543,11541,11549,11544</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>getPet</action>
+							<param>395,1</param>
+							<condition>activity[hell].done[9][story]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=【奥黛丽】已经放入精灵仓库</param>
+							<param>item_icon=pet[395]</param>
+							<param>option_num=1</param>
+							<condition>activity[hell].done[9][story]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>getPet</action>
+							<param>412,1</param>
+							<condition>activity[hell].done[9][story]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=【赫本】已经放入精灵仓库</param>
+							<param>item_icon=pet[412]</param>
+							<param>option_num=1</param>
+							<condition>activity[hell].done[9][story]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>hell</param>
+							<param>done[9][story]=true</param>
+							<condition>activity[hell].done[9][story]=[bool]false[default]false</condition>
+						</button>
+					</winHandler>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>openDialog</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<teleport id="1" name="忏悔殿宗" pos="110,70" targetMapId="1088"/>
+	</entities>
+</map>

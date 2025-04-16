@@ -29,6 +29,11 @@ public class CreateRoomController : Module
         createView.SetItemBagApproval(approved);
     }
 
+    public void SetTeamReveal(bool reveal) {
+        createModel.SetTeamReveal(reveal);
+        createView.SetTeamReveal(reveal);
+    }
+
     public void AddRule(int buffId) {
         createModel.AddRule(buffId);
         createView.SetRules(createModel.rules);

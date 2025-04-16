@@ -44,7 +44,7 @@ public class PetTeamController : Module
 
         else if ((name != "默认队伍") && (!Player.instance.gameData.pvpPetTeam.Exists(x => x.key == name))) {
             var team = selectController.GetPetSelections()?.Select(x => (x == null) ? null : new Pet(x)).ToArray();
-            Player.instance.gameData.pvpPetTeam.Add(new IKeyValuePair<string, Pet[]>(name, team));
+            Player.instance.gameData.pvpPetTeam.Insert(0, new IKeyValuePair<string, Pet[]>(name, team));
             SetStorage(Player.instance.gameData.pvpPetTeam);
             SaveSystem.SaveData();
 

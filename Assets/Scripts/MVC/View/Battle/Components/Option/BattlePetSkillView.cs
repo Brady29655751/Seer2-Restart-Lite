@@ -36,7 +36,7 @@ public class BattlePetSkillView : BattleBaseView
         SetNormalSkillInteractable(anger);
         SetSuperSkillInteractable(anger);
         SetNoOpSkillInteractable((anger == -1) ? int.MaxValue : anger);
-        SetEvolveSkillInteractable(interactable && (petSystem.specialChance > 0));
+        SetEvolveSkillInteractable(interactable);
 
         this.interactable = interactable;
     }
@@ -63,6 +63,11 @@ public class BattlePetSkillView : BattleBaseView
         // superSkillButtonBackground[2].gameObject.SetActive(interactable);
     }
 
+    private void SetEvolveSkill(bool evolve) {
+        this.evolve = evolve;
+        evolveSkillButton?.SetMaterial(evolve ? shiningMaterial : null);
+    }
+
     private void SetEvolveSkillInteractable(bool interactable) {
         evolveSkillButton?.SetInteractable(interactable);
         if (!interactable)
@@ -79,7 +84,7 @@ public class BattlePetSkillView : BattleBaseView
 
         if (evolve) {
             skill.options.Set("evolve", "1");
-            evolve = false;
+            SetEvolveSkill(false);
         }
 
         battle.SetSkill(skill, true);
@@ -111,7 +116,7 @@ public class BattlePetSkillView : BattleBaseView
 
         if (evolve) {
             skill.options.Set("evolve", "1");
-            evolve = false;
+            SetEvolveSkill(false);
         }
 
         battle.SetSkill(skill, true);
@@ -143,11 +148,7 @@ public class BattlePetSkillView : BattleBaseView
     }
 
     public void SelectEvolveSkill() {
-        if (petSystem.specialChance <= 0)
-            return;
-        
-        evolve = !evolve;
-        evolveSkillButton?.SetMaterial(evolve ? shiningMaterial : null);
+        SetEvolveSkill(!evolve);
     }
 
     public void ShowEvolveSkillInfo() {
@@ -155,7 +156,8 @@ public class BattlePetSkillView : BattleBaseView
             name = "专属动作" + (evolve ? "（正在使用）" : string.Empty),
             critical = 5,
             accuracy = 100,
-            rawDescription = "手动点击使用当前精灵的专属动作[ENDL][ffbb33]【神迹觉醒】[-]全队共用1次[ENDL][ffbb33]【暴走】[-]消耗道具但不消耗次数"
+            rawDescription = "手动点击使用当前精灵的专属动作[ENDL]次数全队共用（当前剩余 [ffbb33]" + petSystem.specialChance + "[-] 次）[ENDL][ENDL]"
+                + "[ffbb33]【神迹觉醒】[-]消耗1次[ENDL][ffbb33]【暴走】[-]不消耗次数，需要特殊道具"
         });
     }
 

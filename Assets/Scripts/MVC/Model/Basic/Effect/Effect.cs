@@ -159,11 +159,13 @@ public class Effect {
             _ => ((x) => true)
         };
 
-        return condOptionDictList.Select(x => {
+        var result = condOptionDictList.Select(x => {
             return ((!checkTurn) || this.IsCorrectTurn(state, x)) && 
                 this.IsCorrectWeather(state, x) && this.IsAttackAndHit(state, x) && 
                 this.RandomNumber(state, x) && ConditionFunc.Invoke(x);
         }).Any(x => x);
+
+        return result;
     }
 
     public bool Apply(object invokeUnit, BattleState state = null) {
