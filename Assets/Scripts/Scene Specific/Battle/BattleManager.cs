@@ -220,7 +220,11 @@ public class BattleManager : Manager<BattleManager>
 
     public void SetBattleEscape()
     {
-        battle.SetSkill(Skill.GetEscapeSkill(), true);
+        var skill = Skill.GetEscapeSkill();
+        if (battle.settings.parallelCount > 1)
+            skill.SetParallelIndex(currentUIState.myUnit.petSystem.cursor, currentUIState.opUnit.petSystem.cursor);
+
+        battle.SetSkill(skill, true);
     }
 
     protected void OpenDisconnectHintbox(string message)

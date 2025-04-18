@@ -28,7 +28,11 @@ public class BattlePetItemController : Module
             hintbox.SetOptionNum(1);
             return;
         }
-        battle.SetSkill(Skill.GetItemSkill(item), true);
+        var skill = Skill.GetItemSkill(item);
+        if (battle.settings.parallelCount > 1)
+            skill.SetParallelIndex(state.myUnit.petSystem.cursor, state.opUnit.petSystem.cursor);
+
+        battle.SetSkill(skill, true);
         if (battle.settings.isSimulate)
             return;
         

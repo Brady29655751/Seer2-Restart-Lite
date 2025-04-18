@@ -20,7 +20,7 @@ public class WorkshopItemListView : Module
 
     private IEnumerator CreateItemInfoListCoroutine(List<ItemInfo> itemInfos, Action<ItemInfo> callback = null) {
         var loadingScreen = SceneLoader.instance.ShowLoadingScreen(-1, "正在加载道具");
-        var itemInfosCreatedEachTime = Mathf.Max(100, Mathf.FloorToInt(itemInfos.Count * 0.01f));
+        var itemInfosCreatedEachTime = Mathf.Max(400, Mathf.FloorToInt(itemInfos.Count * 0.05f));
         for (int i = 0; i < itemInfos.Count; i += itemInfosCreatedEachTime) {
             float progress = i * 1f / itemInfos.Count;
             itemInfoCellList?.AddRange(itemInfos.GetRange(i, Mathf.Min(itemInfosCreatedEachTime, itemInfos.Count - i)).Select(x => CreateItemInfoCell(x, callback)));

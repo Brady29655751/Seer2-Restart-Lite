@@ -743,6 +743,10 @@ public static class EffectAbilityHandler
         float oldValue = Identifier.GetSkillIdentifier(type, skill);
         float newValue = Parser.ParseEffectOperation(value, effect, lhsUnit, rhsUnit);
         skill.SetSkillSystemIdentifier(type, Operator.Operate(op, oldValue, newValue));
+
+        if ((battle.settings.parallelCount > 1) && (type == "parallelTargetIndex"))
+            rhsUnit.petSystem.cursor = (int)(skill.skill?.GetSkillIdentifier("parallelTargetIndex") ?? 0);
+            
         return true;
     }
 

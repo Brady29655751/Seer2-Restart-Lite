@@ -20,7 +20,7 @@ public class WorkshopSkillListView : Module
 
     private IEnumerator CreateSkillListCoroutine(List<Skill> skills, Action<Skill> callback = null) {
         var loadingScreen = SceneLoader.instance.ShowLoadingScreen(-1, "正在加载技能");
-        var skillsCreatedEachTime = Mathf.Max(100, Mathf.FloorToInt(skills.Count * 0.01f));
+        var skillsCreatedEachTime = Mathf.Max(400, Mathf.FloorToInt(skills.Count * 0.05f));
         for (int i = 0; i < skills.Count; i += skillsCreatedEachTime) {
             float progress = i * 1f / skills.Count;
             skillCellList?.AddRange(skills.GetRange(i, Mathf.Min(skillsCreatedEachTime, skills.Count - i)).Select(x => CreateSkillCell(x, callback)));

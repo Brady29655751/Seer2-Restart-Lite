@@ -68,6 +68,13 @@ public class WorkshopAllController : Module
         allView.SetAllItemPanelActive(true);
     }
 
+    public void OpenSkillListPanel() {
+        allView.SetSkillListPanelActive(true);
+    }
+    public void OpenItemListPanel() {
+        allView.SetItemListPanelActive(true);
+    }
+
     public void OnEditPet(PetInfo petInfo) {
         optionSelectController.Select(1);
         petController.SetPetInfo(petInfo);
@@ -92,7 +99,7 @@ public class WorkshopAllController : Module
 
         optionSelectController.Select(2);
         skillController.SetSkill(skill);
-        allView.SetAllSkillPanelActive(false);
+        allView.SetSkillListPanelActive(false);
     }
 
     public void OnEditBuff() {
@@ -117,7 +124,7 @@ public class WorkshopAllController : Module
 
         optionSelectController.Select(4);
         itemController.SetItemInfo(itemInfo);
-        allView.SetAllItemPanelActive(false);
+        allView.SetItemListPanelActive(false);
     }
     
     public void OnImportMod() {

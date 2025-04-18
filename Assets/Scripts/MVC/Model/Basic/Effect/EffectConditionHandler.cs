@@ -101,12 +101,8 @@ public static class EffectConditionHandler
             random = (type == "rng") ? Random.Range(0, 100) : lhsUnit.random;
             random *= (lhsUnit.pet.buffController.GetBuff(75)?.value ?? 100f) / 100f;
             random += lhsUnit.pet.buffController.GetBuff(67)?.value ?? 0;
-            if (lhsUnit.pet.buffController.GetBuff(75) != null)
-                Debug.Log(random);
             random *= (lhsUnit.pet.buffController.GetBuff(76)?.value ?? 100f) / 100f;
             random = lhsUnit.pet.buffController.GetBuff(68)?.value ?? random;
-            if (lhsUnit.pet.buffController.GetBuff(75) != null)
-                Debug.Log(random);
         }
 
         if (op == "IN") {

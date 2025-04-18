@@ -38,7 +38,7 @@ public class BattlePhase
             void ParallelApply(Unit unit, List<int> petBagCursor) {
                 for (int i = 0; i < petBagCursor.Count; i++) {
                     unit.petSystem.cursor = petBagCursor[i];
-                    GetEffectHandler(unit, i == 0).CheckAndApply(state);
+                    GetEffectHandler(unit).CheckAndApply(state);
                 }
                 unit.petSystem.cursor = petBagCursor[0];
             }

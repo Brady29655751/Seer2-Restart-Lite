@@ -95,7 +95,7 @@ public static class ListHelper {
 
     public static List<T> Random<T>(this List<T> values, int count, bool repeat = true, List<int> weights = null) {
         List<T> result = new List<T>();
-        if ((!repeat) && (count >= values.Count))
+        if ((!repeat) && (count > values.Count))
             return values.ToList();
 
         while (result.Count != count) {

@@ -63,7 +63,7 @@ id,name,type,copyType,turn,options,description
 55,星刃解封,mark,replace,-1,none,使物攻伤害不低于150
 56,星辉解封,mark,replace,-1,res=55,使特攻伤害不低于150
 57,禁疗,mark,replace,-1,none,无法恢复体力
-58,镇静,mark,replace,-1,res=57,无法恢复怒气（攻击命中与回合结束回复的怒气除外）
+58,镇静,mark,replace,-1,none,无法恢复怒气（攻击命中与回合结束回复的怒气除外）
 59,连击数降低,mark,replace,-1,none,所有技能连击数-2（连击数为2以下的技能不会造成伤害）
 60,连击数提升,mark,replace,-1,none,所有技能连击数+2
 61,血脉逆流,mark,replace,-1,none,即使怒气不足仍可使用技能，但会损失相应体力，1点怒气对应[value]点体力
@@ -669,6 +669,7 @@ id,name,type,copyType,turn,options,description
 600009,冰封之轴,mark,replace,-1,none,冰封之轴拥有狂暴的冰冻能量，能够冻住整个北半球！
 610000,PVP极品资质120,mark,replace,-1,none,[ffbb33]【PVP对战规则】[-][ENDL]双方精灵资质为120
 610001,PVP无禽12星,mark,replace,-1,none,[ffbb33]【PVP对战规则】[-][ENDL]背包必须带满6只精灵，且星数总和不能超过12[ENDL]不能携带4星以上精灵，且3星精灵最多携带2只
+620000,精灵大乱斗,mark,replace,-1,res=-18,[ffbb33]【特殊规则】[-][ENDL]双方精灵随机交换使用，PVP对战时背包必须且只能携带3只精灵
 -11,商店,mark,blcok,-1,none,可以购买各式道具和加成
 -12,战斗（终极）,mark,block,-1,none,本层的最终战斗！
 -13,起始点,mark,block,-1,none,选择你的伊特吧！
@@ -719,9 +720,9 @@ id,name,type,copyType,turn,options,description
 -3039,冰封(-150),mark,replace,-1,hide=true,初始冰封温度零下150度
 -3040,冰封卡里亚,mark,replace,-1,hide=true,首次出场时使场地变为冰封之轴并锁定场地。冰封之轴失效时会降低90%全能力
 -3041,你是坏蛋,mark,replace,-1,hide=true,回合开始时使对手变为坏蛋
--3042,冥王觉醒,turn,replace,8,none,冥王觉醒，每回合依序获得一项七宗罪系列印记，结束时变身为正常撒旦
+-3042,冥王觉醒,turn,replace,8,none,冥王觉醒，每回合依序获得一种七宗罪印记，结束时变身为正常撒旦
 -3043,欲望之翼,mark,replace,-1,none,攻击使对手陷入魅惑2回合
--3044,暴食之心,mark,replace,-1,none,攻击恢复自身1/4体力并使对手流失相应体力
+-3044,暴食之心,mark,replace,-1,none,攻击技能会恢复自身1/4最大体力，并使对手流失相应体力
 -3045,贪婪之翼,mark,replace,-1,none,攻击威力提升100点并吸取对手的能力强化
 -3046,怠惰之翼,mark,replace,-1,none,攻击使对手获得[ffbb33]【虚弱】[-](全能力值降低100点)
 -3047,愤怒之翼,mark,replace,-1,none,攻击必定暴击且回满怒气

@@ -72,7 +72,8 @@ public class DecidePriorityPhase : BattlePhase
         var cursor = masterPetCursor.Concat(clientPetCursor).ToList();
         var skill = masterSkill.Concat(clientSkill).ToList();
         var priorityUnits = petBag.Select((x, i) => ((i < masterPetBag.Count) ? masterUnit : clientUnit, 
-            skill[i], petBag[i], cursor[i])).Where(x => (x.Item3 != null) && (!x.Item3.isDead)).ToList();
+            skill[i], petBag[i], cursor[i])).Where(x => (x.Item2 != null) && (x.Item3 != null) && (x.Item2.type != SkillType.空过) &&
+                ((!x.Item3.isDead) || (x.Item2.isAction))).ToList();
         
         state.actionOrder = GetActionOrder(priorityUnits);
     }

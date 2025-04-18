@@ -94,6 +94,14 @@ public class Battle
         Player.instance.currentBattle = this;
         Random.InitState(settings.seed);
 
+        if (settings.initBuffs.Exists(x => (x.Value != null) && (x.Value.id == Buff.BUFFID_PET_EXCHANGE))) {
+            var allPetBag = masterPetBag.Concat(clientPetBag).Where(x => x != null).ToList();
+            var randomPetBag = allPetBag.Random(allPetBag.Count, false);
+
+            masterPetBag = randomPetBag.Take(allPetBag.Count / 2).ToArray();
+            clientPetBag = randomPetBag.Skip(allPetBag.Count / 2).ToArray();
+        }
+
         this.lastState = null;
         Unit masterTurn = new Unit(masterPetBag, 1, settings);
         Unit clientTurn = new Unit(clientPetBag, -1, settings);
