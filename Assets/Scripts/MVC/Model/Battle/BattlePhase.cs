@@ -61,6 +61,7 @@ public class BattlePhase
         if (invokeUnit == null)
             return GetEffectHandler(state.masterUnit).Concat(GetEffectHandler(state.clientUnit));
     
+        var unitEffects = invokeUnit.unitBuffs.Where(x => !x.ignore).Select(x => x.effects);
         var buffEffects = invokeUnit.pet.buffs.Where(x => !x.ignore).Select(x => x.effects);
         var handler = new EffectHandler();
         
@@ -74,6 +75,9 @@ public class BattlePhase
 
         if (addSkillEffect && (invokeUnit.skill != null))
             handler.AddEffects(invokeUnit, invokeUnit.skill.effects);
+
+        foreach (var e in unitEffects)
+            handler.AddEffects(invokeUnit, e);
         
         foreach (var e in buffEffects)
             handler.AddEffects(invokeUnit, e);

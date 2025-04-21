@@ -82,6 +82,7 @@ using UnityEngine.UI;
                 animationController.Play("LeftRight");
             }
             playerNameText.rectTransform.localScale = this.playerRect.localScale;
+            achievementText.rectTransform.localScale = this.playerRect.localScale;
             playerImage.SetNativeSize();
 
             lastDirection = dir;

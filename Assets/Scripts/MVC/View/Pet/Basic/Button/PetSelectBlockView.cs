@@ -9,6 +9,7 @@ public class PetSelectBlockView : Module
     private Pet currentPet = null;
     private bool isNull => (currentPet == null);
     private float initHpBarLength;
+    [SerializeField] private bool interactableWhenNull = false;
     [SerializeField] private IButton button;
     [SerializeField] private Sprite chosenFrameSprite;
     [SerializeField] private Sprite notChosenFrameSprite;
@@ -26,11 +27,15 @@ public class PetSelectBlockView : Module
 
     public void SetPet(Pet p) {
         currentPet = p;
-        button.SetInteractable(!isNull);
+        button.SetInteractable(interactableWhenNull || (!isNull));
         SetIcon();
         SetLevel();
         SetName();
         SetHp();
+    }
+
+    public void SetInteractable(bool interactable) {
+        button.SetInteractable(interactable);
     }
 
     public void SetChosen(bool chosen) {

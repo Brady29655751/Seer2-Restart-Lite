@@ -9,6 +9,7 @@ public class BattleUnitView : BattleBaseView
     [SerializeField] protected BattleStatusView statusView;
     [SerializeField] protected BattlePetNumView petNumView;
     [SerializeField] protected BattleAnimView animView;
+    [SerializeField] protected BattlePetBuffView buffView;
 
     public bool isDone => statusView.isDone && animView.isDone;
 
@@ -22,6 +23,9 @@ public class BattleUnitView : BattleBaseView
         statusView.SetPet(lastUnit?.pet, currentUnit?.pet);
         petNumView.SetPetBag(currentUnit.petSystem.petBag);
         animView.SetUnit(lastUnit, currentUnit);
+
+        if (currentUnit != null)
+            buffView.SetBuff(currentUnit.unitBuffs);
     }
 
     [PunRPC]

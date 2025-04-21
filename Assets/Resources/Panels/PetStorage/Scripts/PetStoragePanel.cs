@@ -34,7 +34,7 @@ public class PetStoragePanel : Panel
     public static List<Pet> GetDefaultPetStorage(PetBagMode mode) {
 
         if (mode == PetBagMode.PVP) {
-            var petList = GameManager.versionData.petData.petAllWithMod;
+            var petList = GameManager.versionData.petData.petAllWithMod.Where(x => !x.info.ui.hide).ToList();
             var room = PhotonNetwork.CurrentRoom.CustomProperties;
             if (room == null)
                 return petList;

@@ -266,7 +266,7 @@ public class TitleManager : Manager<TitleManager>
     public void OnExportMod() {
         var hintbox = Hintbox.OpenHintboxWithContent("导出mod会在选择的资料夹里面自动产生或覆盖一个名为Mod的资料夹，后续导入时选择该资料夹即可", 16);
         hintbox.SetOptionCallback(() => {
-            FileBrowser.ShowSaveDialog(OnExportModSuccess, OnCancel, FileBrowser.PickMode.Files, initialFilename: "Mod.zip", title: "选择要导出的位置（手机端请先点击左边的Browse才能浏览）");
+            FileBrowser.ShowSaveDialog(OnExportModSuccess, OnCancel, FileBrowser.PickMode.Folders, title: "选择要导出的位置（手机端请先点击左边的Browse才能浏览）");
         });
     }
 

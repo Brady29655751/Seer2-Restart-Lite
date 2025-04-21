@@ -33,6 +33,7 @@ public class GameData
     }
     public DateTime firstLoginDate;
     public DateTime lastLoginDate;
+    public int achievement;
 
     public Pet[] petBag = new Pet[6];
     public List<Pet> petStorage = new List<Pet>();
@@ -69,6 +70,7 @@ public class GameData
         version = string.Empty;
         firstLoginDate = DateTime.Now;
         lastLoginDate = DateTime.Now;
+        achievement = 0;
 
         gender = false;
         nickname = string.Empty;

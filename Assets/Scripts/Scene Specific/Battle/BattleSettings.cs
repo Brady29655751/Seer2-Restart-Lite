@@ -70,7 +70,7 @@ public class BattleSettings
 
     public float GetSettingsIdentifier(string id) {
         return id switch {
-            "mode" => modeId,
+            "mode" => (mode == BattleMode.Record) ? (int)BattleMode.PVP : modeId,
             "petCount" => petCount,
             "parallelCount" => parallelCount,
             "time" => time,

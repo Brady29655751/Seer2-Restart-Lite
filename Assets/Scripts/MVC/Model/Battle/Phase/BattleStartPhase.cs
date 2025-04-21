@@ -25,6 +25,20 @@ public class BattleStartPhase : BattlePhase
     public void SetInitBuffs() {
         SetInitBuffs(state.masterUnit);
         SetInitBuffs(state.clientUnit);
+        SetAchievement();
+    }
+
+    private void SetAchievement() {
+        if ((battle.settings.mode == BattleMode.PVP) || (battle.settings.mode == BattleMode.Record))
+            return;
+
+        var item = Item.GetItemInfo(Player.instance.gameData.achievement);
+        if (item == null)
+            return;
+
+        var handler = new EffectHandler();
+        handler.AddEffects(state.masterUnit, item.effects);
+        handler.CheckAndApply(state);
     }
 
     private void SetInitBuffs(Unit thisUnit) {

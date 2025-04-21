@@ -187,7 +187,11 @@ public class BattlePet : Pet
             case "maxLevel":
             case "iv":
                 var oldStatus = normalStatus;
-                base.SetPetIdentifier(id, value);
+                if (id == "level")
+                    exp.level = (int)value;
+                else
+                    base.SetPetIdentifier(id, value);
+
                 var addStatus = normalStatus - oldStatus;
                 maxHp += (int)addStatus.hp;
                 statusController.AddInitStatus(new Status(addStatus){ hp = 0 });

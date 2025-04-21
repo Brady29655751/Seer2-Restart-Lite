@@ -20,6 +20,7 @@ public class ItemShopPanel : Panel
         { ItemShopType.Sign, "签到商店" },
         { ItemShopType.YiTe, "伊特商店" },
         { ItemShopType.Plant, "农作物出售" },
+        { ItemShopType.Achievement, "称号商店" },
     };
 
     protected Dictionary<ItemShopType, List<int>> shopItemIdDict = new Dictionary<ItemShopType, List<int>>() {
@@ -47,6 +48,7 @@ public class ItemShopPanel : Panel
             320810,
         } },
         { ItemShopType.Plant, Item.plantItemDatabase.Select(x => x.id).ToList() },
+        { ItemShopType.Achievement, Item.achievementItemDatabase.Select(x => x.id).ToList() },
     };
 
     public static bool IsBuy(ItemShopMode shopMode) {
@@ -101,6 +103,7 @@ public class ItemShopPanel : Panel
                     "sign"  => ItemShopType.Sign,
                     "yite"  => ItemShopType.YiTe,
                     "plant" => ItemShopType.Plant,
+                    "achievement" => ItemShopType.Achievement,
                     "others"=> ItemShopType.Others,
                     _ => ItemShopType.None,
                 };
@@ -168,4 +171,5 @@ public enum ItemShopType {
     Sign = 4,
     YiTe = 5,
     Plant = 6,
+    Achievement = 7,
 }

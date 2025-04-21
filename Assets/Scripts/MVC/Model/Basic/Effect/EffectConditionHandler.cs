@@ -239,7 +239,14 @@ public static class EffectConditionHandler
         if (string.IsNullOrEmpty(key) && (buffId == 0))
             return true;
 
-        var buff = string.IsNullOrEmpty(key) ? pet.buffController.GetBuff(buffId) : state.stateBuffs.Find(x => x.Key == key).Value;
+        Buff buff = null;
+        if (key == "unit")
+            buff = buffUnit.unitBuffs.Find(x => x.id == buffId);
+        else if (!string.IsNullOrEmpty(key))
+            buff = state.stateBuffs.Find(x => x.Key == key).Value;
+        else
+            buff = pet.buffController.GetBuff(buffId);
+
         bool isOwnCorrect = (ownBuff == (buff != null));
 
         if ((!ownBuff) || (!isOwnCorrect) || (type == "none"))

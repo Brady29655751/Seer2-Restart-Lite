@@ -18,12 +18,12 @@ public class Item
         var type = y.abilityOptionDict.Get("type", "none");
         return (!banned.Contains(type));
     })) ?? false)).ToList();
-    public static List<Item> plantItemDatabase => ItemInfo.database.Where(x => x.type == ItemType.Plant)
-        .Select(x => new Item(x.id, -1)).ToList();
+    public static List<Item> plantItemDatabase => ItemInfo.database.Where(x => x.type == ItemType.Plant).Select(x => new Item(x.id, -1)).ToList();
     public static List<Item> normalPlantItemDatabase => plantItemDatabase.Where(x => !bool.Parse(x.info.options.Get("rare", "false"))).ToList();
     public static List<Item> skillBookItemDatabase => ItemInfo.database.Where(x => (x.id - 10_0000).IsWithin(GameManager.versionData.skillData.minSkillId,
         GameManager.versionData.skillData.maxSkillId) && (x.currencyType == 6)).Select(x => new Item(x.id)).ToList();
     public static List<Item> yiteGrowItemDatabse => ItemInfo.database.Where(x => x.id.IsInRange(9001, 9020)).Select(x => new Item(x.id)).ToList();
+    public static List<Item> achievementItemDatabase => ItemInfo.database.Where(x => x.type == ItemType.Achievement).Select(x => new Item(x.id, -1)).ToList();
 
     public static List<Item> itemStorage => Player.instance.gameData.itemStorage;
     public ItemInfo info => GetItemInfo(id);

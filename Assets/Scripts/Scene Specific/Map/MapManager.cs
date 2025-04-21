@@ -32,6 +32,7 @@ public class MapManager : Manager<MapManager>
 
     private void LoadPlayer() {
         playerController.SetPlayerName(Player.instance.nickname);
+        playerController.SetPlayerAchievement(Item.GetItemInfo(Player.instance.gameData.achievement)?.name ?? string.Empty);
 
         Vector2 initPos = (Vector2)Player.GetSceneData("mapInitPos", map.initPoint);
         playerController.SetPlayerPosition(initPos);

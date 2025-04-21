@@ -9,10 +9,14 @@ public class ChangeNameController : Module
     [SerializeField] private ChangeNameView changeNameView;
 
     public event Action onChangeNameEmptyEvent;
-    public event Action<string> onChangeNameSuccessEvent;
+    public event Action<string> onChangeNameSuccessEvent, onChangeAchievementSuccessEvent;
 
     public void InitName(string nickname) {
         changeNameView.SetNameText(nickname);
+    }
+
+    public void InitAchievement(int value) {
+        changeNameModel.SetAchievement(value);
     }
 
     public void OnChangeName() {
@@ -27,5 +31,10 @@ public class ChangeNameController : Module
         }
         changeNameModel.OnAfterChangeName();
         changeNameView.OnAfterChangeName(changeNameModel.isDone);
+    }
+
+    public void OnChangeAchievement(int value) {
+        changeNameModel.OnAfterChangeAchievement(value);
+        onChangeAchievementSuccessEvent?.Invoke((value == 0) ? string.Empty : changeNameModel.achievement);
     }
 }

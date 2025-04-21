@@ -7,6 +7,7 @@ using UnityEngine;
 public class BattlePetBuffView : BattleBaseView
 {
     [SerializeField] private bool anchoredAtLeft;
+    [SerializeField] private bool postionTranspose = false;
     [SerializeField] private bool isExtendMode = true;   // "Currently" buffs are extended or not.
     [SerializeField] private int numInOneRow = 7;
     [SerializeField] private int numLimitExtend = 7;
@@ -69,7 +70,9 @@ public class BattlePetBuffView : BattleBaseView
         int deltaY = -buffBlockSize;
         int col = index / numInOneRow;
         int row = index % numInOneRow;
-        return new Vector2(0 + deltaX * row, 0 + deltaY * col);
+        var posX = postionTranspose ? col : row;
+        var posY = postionTranspose ? row : col;
+        return new Vector2(0 + deltaX * posX, 0 + deltaY * posY);
     }
 
     private void AddBuffBlocks(int num) {
@@ -78,12 +81,14 @@ public class BattlePetBuffView : BattleBaseView
         for (int i = 0; i < num; i++) {
             int col = (buffList.Count + i) / numInOneRow;
             int row = (buffList.Count + i) % numInOneRow;
+            var posX = postionTranspose ? col : row;
+            var posY = postionTranspose ? row : col;
             GameObject buffBlock = Instantiate(buffButtonPrefab, buffPanel.transform);
             BattlePetBuffBlockView blockView = buffBlock.GetComponent<BattlePetBuffBlockView>();
             RectTransform rect = buffBlock.GetComponent<RectTransform>();
             rect.SetAsLastSibling();
             rect.anchorMin = rect.anchorMax = rect.pivot = anchoredAtLeft ? Vector2.up : Vector2.one; 
-            rect.anchoredPosition = new Vector2(0 + deltaX * row, 0 + deltaY * col);
+            rect.anchoredPosition = new Vector2(0 + deltaX * posX, 0 + deltaY * posY);
             rect.localScale = (buffBlockSize / 32f) * Vector3.one;
             buffButtonList.Add(blockView);
         }

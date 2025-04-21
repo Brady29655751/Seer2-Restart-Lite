@@ -9,7 +9,7 @@ public class PlayerView : Module
     [SerializeField] protected RectTransform playerRect;
     [SerializeField] protected IButton playerButton;
     [SerializeField] protected Sprite[] playerDirectionSprite = new Sprite[4];
-    [SerializeField] protected Text playerNameText;
+    [SerializeField] protected Text playerNameText, achievementText;
 
     protected Vector2 lastDirection = Vector2.zero;
 
@@ -43,6 +43,10 @@ public class PlayerView : Module
 
     public void SetPlayerName(string value) {
         playerNameText.text = value;
+    }
+
+    public void SetPlayerAchievement(string value) {
+        achievementText.text = value;
     }
 
     public PlayerInfoPanel OpenPlayerInfoPanel() {

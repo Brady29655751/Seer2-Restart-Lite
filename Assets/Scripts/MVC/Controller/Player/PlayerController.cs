@@ -54,6 +54,10 @@ public class PlayerController : Manager<PlayerController>
         playerView.SetPlayerName(newName);
     }
 
+    public void SetPlayerAchievement(string newAchievement) {
+        playerView.SetPlayerAchievement(newAchievement);
+    }
+
     public void OpenPlayerInfoPanel() {
         playerView.OpenPlayerInfoPanel();
     }

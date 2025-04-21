@@ -20,12 +20,12 @@ public class Unit
     public UnitHudSystem hudSystem;
 
     public BattlePet pet => petSystem.pet;
-
     public Skill skill
     {
         get => skillSystem.skill;
         set => SetSkill(value);
     }
+    public List<Buff> unitBuffs = new List<Buff>();
 
     /* Turn */
     public bool isReady => IsReady();
@@ -40,6 +40,7 @@ public class Unit
         parallelSkillSystems = Enumerable.Range(0, (parallelCount <= 1) ? 1 : petBag.Length).Select(x => new UnitSkillSystem()).ToList();
         // skillSystem = new UnitSkillSystem();
         hudSystem = new UnitHudSystem();
+        unitBuffs = new List<Buff>();
     }
 
     public Unit(Unit rhs)
@@ -52,6 +53,7 @@ public class Unit
         parallelSkillSystems = rhs.parallelSkillSystems.Select(x => new UnitSkillSystem(x)).ToList();
         // skillSystem = new UnitSkillSystem(rhs.skillSystem);
         hudSystem = new UnitHudSystem(rhs.hudSystem);
+        unitBuffs = rhs.unitBuffs.Select(x => new Buff(x)).ToList();
     }
 
     public virtual void OnTurnStart(BattleState state)
@@ -60,8 +62,11 @@ public class Unit
         random = Random.Range(0, 100);
         petSystem.OnTurnStart(this, state);
         parallelSkillSystems.ForEach(x => x.OnTurnStart());
-        // skillSystem.OnTurnStart();
         hudSystem.OnTurnStart(this.pet);
+        for (int i = 0; i < unitBuffs.Count; i++) {
+            if (unitBuffs[i].turn > 0)
+                unitBuffs[i].turn--;
+        }
     }
 
     public bool IsReady()
@@ -102,6 +107,61 @@ public class Unit
     public void SetSkill(Skill _skill)
     {
         skillSystem.skill = (_skill == null) ? null : new Skill(_skill);
+    }
+
+    public bool AddBuff(Buff newBuff) 
+    {
+        if (newBuff == null)
+            return false;
+
+        var oldBuff = unitBuffs.Find(x => x.id == newBuff.id);
+        if (oldBuff == null) {
+            unitBuffs.Add(newBuff);
+            return true;
+        }
+
+        switch (newBuff.info.copyHandleType) {
+            default:
+            case CopyHandleType.New:
+                unitBuffs.Add(newBuff);
+                return true;
+            case CopyHandleType.Block:
+                return false;
+            case CopyHandleType.Replace:
+                int oldBuffTurn = (oldBuff.turn == -1) ? int.MaxValue : oldBuff.turn;
+                int newBuffTurn = (newBuff.turn == -1) ? int.MaxValue : newBuff.turn;
+                if (oldBuffTurn <= newBuffTurn) {
+                    unitBuffs.Remove(oldBuff);
+                    unitBuffs.Add(newBuff);
+                    return true;
+                }
+                return false;
+            case CopyHandleType.Stack:
+                if (oldBuff.value < oldBuff.info.maxValue) {
+                    oldBuff.value += newBuff.value;
+                    return true;
+                }
+                return false;
+            case CopyHandleType.Max:
+                if (newBuff.value > oldBuff.value) {
+                    unitBuffs.Remove(oldBuff);
+                    unitBuffs.Add(newBuff);
+                    return true;
+                }
+                return false;
+            case CopyHandleType.Min:
+                if (newBuff.value < oldBuff.value) {
+                    unitBuffs.Remove(oldBuff);
+                    unitBuffs.Add(newBuff);
+                    return true;
+                }
+                return false;
+        }
+    }
+
+    public bool RemoveBuff(Predicate<Buff> predicate)
+    {
+        return unitBuffs.RemoveAll(predicate) > 0;
     }
 
     public void OnChainStart() 

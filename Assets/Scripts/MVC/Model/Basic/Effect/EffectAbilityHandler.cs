@@ -451,6 +451,9 @@ public static class EffectAbilityHandler
                 if ((isFieldLocked && (key == "field")) || key.StartsWith("rule"))
                     return false;
 
+                if (key == "unit")
+                    return lhsUnit.AddBuff(newBuff);
+
                 state.stateBuffs.RemoveAll(x => x.Key == key);
                 if (newBuff != null)
                     state.stateBuffs.Add(new KeyValuePair<string, Buff>(key, newBuff));
@@ -492,6 +495,21 @@ public static class EffectAbilityHandler
         });
 
         if (isKey) {
+            // Unit Buffs
+            if (keyList == "unit") {
+                bool isSuccess = false;
+                if (isType) {
+                    foreach (var type in typeRange)
+                        isSuccess |= lhsUnit.RemoveBuff(x => (!x.IsUneffectable()) && x.IsType(type.ToBuffType()) && filter(x));
+
+                    return isSuccess;
+                }
+                if (isId)
+                    return lhsUnit.RemoveBuff(x => idRange.Contains(x.id) && filter(x));
+                    
+                return false;
+            }
+            // State Buffs
             bool isFieldLocked = (lhsUnit.pet.buffController.GetBuff(92) != null) || (rhsUnit.pet.buffController.GetBuff(92) != null);
             Func<string, bool> fieldLockFilter = (key) => !(isFieldLocked && (key == "field"));
             return state.stateBuffs.RemoveAll(x => keyRange.Contains(x.Key) && filter(x.Value) && fieldLockFilter(x.Key)) > 0;

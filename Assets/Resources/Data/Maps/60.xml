@@ -86,13 +86,16 @@
 							<description><![CDATA[主宠训练营]]></description>
 							<action>openDialog</action>
 							<param>train</param>
-							<condition>firstPet.baseId=1</condition>
+							<condition>firstPet.id=1|firstPet.id=2|firstPet.id=3|firstPet.id=632</condition>
 							<condition>activity[10000].done[1]=[bool]false[default]false</condition>
 						</reply>
 						<reply type="branch">
 							<action>openDialog</action>
 							<param>wrong_pet</param>
-							<condition>firstPet.baseIdNOT1</condition>
+							<condition>firstPet.idNOT1</condition>
+							<condition>firstPet.idNOT2</condition>
+							<condition>firstPet.idNOT3</condition>
+							<condition>firstPet.idNOT632</condition>
 							<condition>activity[10000].done[1]=[bool]false[default]false</condition>
 						</reply>
 						<reply type="branch">
@@ -501,13 +504,16 @@
 							<description><![CDATA[主宠训练营]]></description>
 							<action>openDialog</action>
 							<param>train</param>
-							<condition>firstPet.baseId=4</condition>
+							<condition>firstPet.id=4|firstPet.id=5|firstPet.id=6|firstPet.id=640</condition>
 							<condition>activity[10000].done[2]=[bool]false[default]false</condition>
 						</reply>
 						<reply type="branch">
 							<action>openDialog</action>
 							<param>wrong_pet</param>
-							<condition>firstPet.baseIdNOT4</condition>
+							<condition>firstPet.idNOT4</condition>
+							<condition>firstPet.idNOT5</condition>
+							<condition>firstPet.idNOT6</condition>
+							<condition>firstPet.idNOT640</condition>
 							<condition>activity[10000].done[2]=[bool]false[default]false</condition>
 						</reply>
 						<reply type="branch">
@@ -888,13 +894,16 @@
 							<description><![CDATA[主宠训练营]]></description>
 							<action>openDialog</action>
 							<param>train</param>
-							<condition>firstPet.baseId=7</condition>
+							<condition>firstPet.id=7|firstPet.id=8|firstPet.id=9|firstPet.id=618</condition>
 							<condition>activity[10000].done[3]=[bool]false[default]false</condition>
 						</reply>
 						<reply type="branch">
 							<action>openDialog</action>
 							<param>wrong_pet</param>
-							<condition>firstPet.baseIdNOT7</condition>
+							<condition>firstPet.idNOT7</condition>
+							<condition>firstPet.idNOT8</condition>
+							<condition>firstPet.idNOT9</condition>
+							<condition>firstPet.idNOT618</condition>
 							<condition>activity[10000].done[3]=[bool]false[default]false</condition>
 						</reply>
 						<reply type="branch">

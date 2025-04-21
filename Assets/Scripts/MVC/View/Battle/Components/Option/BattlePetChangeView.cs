@@ -140,7 +140,7 @@ public class BattlePetChangeView : BattleBaseView
                     + PetElementSystem.GetElementRelationNote(subDefense) + " << " + "</color>我方  <color=#ffbb33>" + subDefense.ToString() + "</color>";
         }
 
-        descriptionBox.SetBoxSize(new Vector2(190, 160));
+        descriptionBox.SetBoxSize(new Vector2(220, 160));
         descriptionBox.SetBoxPosition(new Vector2(100 + index * 110, 109));
         descriptionBox.SetText(header + content);
     }

@@ -24,6 +24,7 @@ public static class ItemDatabase
         {"package", ItemType.Package},
         {"plant", ItemType.Plant},
         {"seed", ItemType.Seed},
+        {"achievement", ItemType.Achievement},
     };
 
     public static Dictionary<ItemType, string> typeNameDict = new Dictionary<ItemType, string>() {
@@ -45,6 +46,7 @@ public static class ItemDatabase
         {ItemType.Package, "礼包"},
         {ItemType.Plant, "植物"},
         {ItemType.Seed, "种子"},
+        {ItemType.Achievement, "称号"},
     };
 
     public static Dictionary<ItemCategory, List<ItemType>> categoryDict = new Dictionary<ItemCategory, List<ItemType>>() {
@@ -103,6 +105,7 @@ public enum ItemType {
     Package,
     Plant,
     Seed,
+    Achievement,
 }
 
 public enum ItemCategory {

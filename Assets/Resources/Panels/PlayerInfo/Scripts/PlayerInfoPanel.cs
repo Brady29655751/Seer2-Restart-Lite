@@ -25,6 +25,7 @@ public class PlayerInfoPanel : Panel
 
     private void InitPlayerData() {
         changeNameController.InitName(data.nickname);
+        changeNameController.InitAchievement(data.achievement);
         infoController.ShowCurrency();
         SetPlayerSprite();
     }
@@ -36,6 +37,7 @@ public class PlayerInfoPanel : Panel
         //! Lazy check
         if (PlayerController.instance != null) {
             changeNameController.onChangeNameSuccessEvent += PlayerController.instance.SetPlayerName;
+            changeNameController.onChangeAchievementSuccessEvent += PlayerController.instance.SetPlayerAchievement;
         }
     }
 

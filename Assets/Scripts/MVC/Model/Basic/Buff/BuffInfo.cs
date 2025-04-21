@@ -119,6 +119,9 @@ public class BuffInfo
         int _type = id / mod;
         int _pet = id % mod;
 
+        if (options.Get("group") == "achievement")
+            return int.MinValue + Mathf.Abs(id);
+
         if ((id == -5) || (id == -6))
             return int.MaxValue;
 
