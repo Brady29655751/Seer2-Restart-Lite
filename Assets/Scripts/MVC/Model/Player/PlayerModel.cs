@@ -19,6 +19,10 @@ public class PlayerModel : Module
         this.map = map;
     }
 
+    public Vector2 GetCanvasPosByMousePos(Vector2 destination) {
+        return map.GetCanvasPixelByMousePos(destination, canvasSize);
+    }
+
     // MousePos: anchored at bottom-left.
     public void SetDestinationByMousePos(Vector2 destination, Action onArrive) {
         if (!map.IsPathAvailableByMousePos(destination)) {

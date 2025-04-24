@@ -47,6 +47,7 @@ public class FusionPanel : Panel
         var pet = new Pet(resultPetId);
         pet.talent.iv = Mathf.Clamp(fusionModel.mainPet.talent.iv * 2 / 3 + fusionModel.subPet.talent.iv * 1 / 3 + 2, 0, 31);
         pet.basic.personality = Status.Add(fusionModel.mainPet.basic.personality, fusionModel.subPet.basic.personality);
+        pet.feature.SetTrait();
         Pet.Add(pet);
         SaveSystem.SaveData();
         Hintbox.OpenHintboxWithContent("获得了" + pet.name + "！", 16);;

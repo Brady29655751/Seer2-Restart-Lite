@@ -31,6 +31,7 @@ public class MapManager : Manager<MapManager>
     }
 
     private void LoadPlayer() {
+        Player.instance.isShootMode = false;
         playerController.SetPlayerName(Player.instance.nickname);
         playerController.SetPlayerAchievement(Item.GetItemInfo(Player.instance.gameData.achievement)?.name ?? string.Empty);
 

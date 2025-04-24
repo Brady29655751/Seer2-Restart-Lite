@@ -10,6 +10,8 @@ id,timing,priority,target,condition,cond_option,effect,effect_option
 1002,none,-1,none,none,none,none,none
 1003,none,-1,none,none,none,none,none
 1004,none,-1,none,none,none,none,none
+7002,none,-1,none,none,none,none,shootSize=76/38&resId=0
+7003,none,-1,none,none,none,none,shootSize=59/37&resId=Maps/shoot/7003&size=50/50&offset=-27.5/-10
 8000,none,-1,none,none,none,none,none
 8001,resident,-1,pet,pet,type=level&level_op=<&level_cmp=maxLevel,set_pet,type=exp&op=+&value=50000
 8002,resident,-1,pet,pet,type=iv&iv_op=<&iv_cmp=31,set_pet,type=iv&op=+&value=1
@@ -79,6 +81,8 @@ id,timing,priority,target,condition,cond_option,effect,effect_option
 10238,resident,-1,pet,none,none,set_pet,type=personality&op=SET&value=random[0~24]
 10239,resident,-1,pet,none,none,set_pet,type=personality&op=SET&value=-1
 10240,resident,-1,pet,none,none,set_pet,type=personality&op=SET&value=-2
+10241,resident,-1,pet,pet,type=buff[group:trait]&buff[group:trait]_cmp=0,set_pet,type=trait&op=SET&value=0
+10242,resident,-1,pet,pet,type=buff[group:trait]&buff[group:trait]_op=NOT&buff[group:trait]_cmp=0,set_pet,type=trait&op=SET&value=0
 10301,resident\resident,-1\-1,state\state,none\none,none\none,set_player\set_player,param_count=2&action=setItem&param[0]=add&param[1]=1，2000\param_count=5&action=openHintbox&param[0]=type＝Item&param[1]=title＝提示&param[2]=content＝获得了 2000 赛尔豆！&param[3]=item_icon＝item[1]&param[4]=option_num＝1
 20001,resident,-1,pet,pet,type=buff[400003]&buff[400003]_cmp=0,set_pet,type=buff&op=+&value=400003
 20002,resident\resident\on_remove_buff,-1\-1\-1,pet\pet\pet,pet\pet\none,type=buff[400004]&buff[400004]_cmp=0\type=buff[400004]&buff[400004]_cmp=0\none,set_pet\set_pet\set_pet,type=buff&op=+&value=400004\type=record[evolveBan]&op=SET&value=1\type=record[evolveBan]&op=SET&value=0

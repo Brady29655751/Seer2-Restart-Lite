@@ -1,0 +1,120 @@
+<map name="勇者之塔神秘领域" category="200" id="10083" weather="0">
+	<fightMap>100011</fightMap>
+	<initialPoint>640,230</initialPoint>
+	<music category="200">
+		<bgm>BGM_1</bgm>
+	</music>
+	<entities>
+		<npc id="1008301" resId="Pets/pet/10300" name="Lv 105 谱尼" size="122,160" pos="375,300" namePos="10,-20">
+			<description>谱尼真身</description>
+			<battle>
+				<branch id="default">
+					<settings count="6">
+						<mode>3</mode>
+					</settings>
+					<enemy>
+						<pet id="10300" level="105">
+							<status>
+								<hp>7000</hp>
+							</status>
+							<initBuff>17,20,-3052</initBuff>
+							<loopSkill>11620,11623,11621,11622</loopSkill>
+							<superSkill>11619</superSkill>
+						</pet>
+						<pet id="10300" level="105">
+							<status>
+								<hp>8000</hp>
+							</status>
+							<initBuff>17,20,-3053</initBuff>
+							<loopSkill>11620,11623,11621,11622</loopSkill>
+							<superSkill>11619</superSkill>
+						</pet>
+						<pet id="10300" level="105">
+							<status>
+								<hp>9000</hp>
+							</status>
+							<initBuff>17,20,-3054</initBuff>
+							<loopSkill>11620,11623,11621,11622</loopSkill>
+							<superSkill>11619</superSkill>
+						</pet>
+						<pet id="10300" level="105">
+							<status>
+								<hp>10000</hp>
+							</status>
+							<initBuff>17,20,-3055</initBuff>
+							<loopSkill>11620,11623,11621,11622</loopSkill>
+							<superSkill>11619</superSkill>
+						</pet>
+						<pet id="10300" level="105">
+							<status>
+								<hp>20000</hp>
+							</status>
+							<initBuff>13,14,17,20,99,-3052,-3056,-3057</initBuff>
+							<loopSkill>11620,11623,11621,11622</loopSkill>
+							<superSkill>11619</superSkill>
+						</pet>
+						<pet id="10300" level="105">
+							<status>
+								<hp>65000</hp>
+							</status>
+							<initBuff>13,14,17,20,99,-3056,-3058</initBuff>
+							<loopSkill>11620,11623,11621,11622</loopSkill>
+							<superSkill>11619</superSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>getPet</action>
+							<param>10300,105</param>
+							<condition>activity[new_pony].done[story]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=【谱尼】已经放入精灵仓库</param>
+							<param>item_icon=pet[10300]</param>
+							<param>option_num=1</param>
+							<condition>activity[new_pony].done[story]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>new_pony</param>
+							<param>done[story]=true</param>
+							<condition>activity[new_pony].done]story=[bool]false[default]false</condition>
+						</button>
+					</winHandler>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>battle</action>
+					<param>default</param>
+					<condition>petBag[0].star&lt;5</condition>
+					<condition>petBag[1].star&lt;5</condition>
+					<condition>petBag[2].star&lt;5</condition>
+					<condition>petBag[3].star&lt;5</condition>
+					<condition>petBag[4].star&lt;5</condition>
+					<condition>petBag[5].star&lt;5</condition>
+				</button>
+				<button type="click">
+					<action>openHintbox</action>
+					<param>title=提示</param>
+					<param>content=不能携带超过4星的精灵进行挑战哦！</param>
+					<param>option_num=1</param>
+					<condition>petBag[0].star&gt;4|petBag[1].star&gt;4|petBag[2].star&gt;4|petBag[3].star&gt;4|petBag[4].star&gt;4|petBag[5].star&gt;4</condition>
+				</button>
+			</eventHandler>
+		</npc>
+		<npc id="1008302" resId="Pets/pet/10300" name="" size="64,48" pos="520,165" rotation="0,0,-2" color="0,0,0,0">
+			<description>精灵背包</description>
+			<eventHandler>
+				<button type="click">
+					<action>openPanel</action>
+					<param>PetBag</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<teleport id="1" name="太空站左翼" pos="800,80" targetMapId="10082"/>
+	</entities>		
+</map>

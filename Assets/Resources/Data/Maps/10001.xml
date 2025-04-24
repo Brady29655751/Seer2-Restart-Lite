@@ -1,0 +1,40 @@
+<map name="传送仓" category="101" id="10001" weather="0">
+	<fightMapColor>64,64,64,255</fightMapColor>
+	<initialPoint>445,140</initialPoint>
+	<music category="101">
+		<bgm>BGM_1</bgm>
+	</music>
+	<entities>
+		<npc id="1000101" resId="1000101" size="106,214" pos="690,330" rotation="0,0,-10" color="0,0,0,0">
+			<description>太空站</description>
+			<transport>675,245</transport>
+			<eventHandler>
+				<button type="click">
+					<action>teleport</action>
+					<param>10081</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<npc id="1000102" resId="1000101" size="106,214" pos="550,330" rotation="0,0,-5" color="0,0,0,0">
+			<description>超时空通道（暂未开放）</description>
+			<transport>570,265</transport>
+		</npc>
+		<npc id="1000103" resId="1000101" size="106,214" pos="430,330" rotation="0,0,5" color="0,0,0,0">
+			<description>SPT（暂未开放）</description>
+			<transport>455,275</transport>
+		</npc>
+		<npc id="1000104" resId="1000101" size="106,214" pos="280,320" rotation="0,0,10" color="0,0,0,0">
+			<description>克洛斯星（暂未开放）</description>
+			<transport>335,255</transport>
+			<!--
+			<eventHandler>
+				<button type="click">
+					<action>teleport</action>
+					<param>10036</param>
+				</button>
+			</eventHandler>
+			-->
+		</npc>
+		<!-- <teleport id="1" name="传送室" pos="100,80" targetMapId="70"/> -->
+	</entities>		
+</map>

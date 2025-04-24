@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class PlayerController : Manager<PlayerController>
@@ -18,11 +19,35 @@ public class PlayerController : Manager<PlayerController>
             playerView.SetDirection(new Vector2(0, 0));
     }
 
+    public void OnClickMap(BaseEventData bed) {
+        var ped = (PointerEventData)bed;
+        switch (ped.pointerId) {
+            default:
+                if (Player.instance.isShootMode)
+                    Shoot();
+                else
+                    SetDestinationByMousePos();
+                return;
+            case -2:
+                Player.instance.isShootMode = !Player.instance.isShootMode;
+                return;
+        }
+    }
+
     public void SetMap(Map map) {
         playerModel.SetMap(map);
         nonoView.gameObject.SetActive(!playerModel.useRobot);
         robotView.gameObject.SetActive(playerModel.useRobot);
         playerView = playerModel.useRobot ? robotView : nonoView;
+    }
+
+    public void Shoot(List<Action> callbacks = null) {
+        if (!Player.instance.isShootMode)
+            return;
+
+        var item = Player.instance.gameData.achievement;
+        var pos = playerModel.GetCanvasPosByMousePos(Input.mousePosition);
+        playerView.Shoot((item == 0) ? 1 : item, pos, callbacks);
     }
 
     public void SetDestinationByMousePos() { 
@@ -62,7 +87,6 @@ public class PlayerController : Manager<PlayerController>
         playerView.OpenPlayerInfoPanel();
     }
     
-   
     public void SetPlayerSprite(string spriteName)
     {
         // 直接透過 NpcInfo.GetIcon 自動加載對應 Npc 資源

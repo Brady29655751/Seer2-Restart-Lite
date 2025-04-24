@@ -48,7 +48,7 @@ public static class Identifier {
 
         if (id.TryTrimStart("petBag", out trimId) && trimId.TryTrimParentheses(out var indexExpr)) {
             var index = (int)GetIdentifier(indexExpr);
-            return Player.instance.petBag[index].GetPetIdentifier(trimId.TrimStart("[" + indexExpr + "]."));
+            return Player.instance.petBag[index]?.GetPetIdentifier(trimId.TrimStart("[" + indexExpr + "].")) ?? 0;
         }
 
         if (id.TryTrimStart("activity", out trimId)) {
@@ -240,6 +240,7 @@ public static class Identifier {
         if (id.TryTrimStart("powerup.", out trimId)) {
             Status powerup = statusController.powerup;
             return trimId switch {
+                "hit" => powerup.hp,
                 "count" => powerup.Count(x => x != 0),
                 "posCount" => powerup.Count(x => x > 0),
                 "negCount" => powerup.Count(x => x < 0),
@@ -284,6 +285,7 @@ public static class Identifier {
 
                 return id switch {
                     "count" => buffs.Count(x => x.IsType(buffType)),
+                    "own" => buffs.Exists(x => x.IsType(buffType)) ? 1 : 0,
                     "block" => buffController.IsBuffTypeBlocked(buffType) ? 1 : 0,
                     "copy"  => buffController.IsBuffTypeCopied(buffType) ? 1 : 0,
                     _ => 0,
@@ -296,6 +298,7 @@ public static class Identifier {
 
             return id switch {
                 "count" => buffs.Count(x => x.id == buffId),
+                "own" => buffs.Exists(x => x.id == buffId) ? 1 : 0,
                 "block" => buffController.IsBuffBlocked(testBuff) ? 1 : 0,
                 "copy"  => buffController.IsBuffCopied(testBuff) ? 1 : 0,
                 _ => buff.TryGetBuffIdentifier(id, out float num) ? num : GetNumIdentifier(id),

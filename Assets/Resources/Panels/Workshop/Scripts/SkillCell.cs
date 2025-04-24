@@ -34,11 +34,20 @@ public class SkillCell : UIModule
         infoPrompt = prompt;
     }
 
-    public void SetCallback(Action<Skill> callback) {
-        button?.onPointerClickEvent?.SetListener(() => {
+    public void SetCallback(Action<Skill> callback, string which = null) {
+        Action skillCallback = () => {
             callback?.Invoke(currentSkill);
             SetInfoPromptActive(false);
-        });
+        };
+
+        switch (which) {
+            default:
+                button?.onPointerClickEvent?.SetListener(skillCallback.Invoke);
+                return;
+            case "id":
+                idCell?.SetCallback(skillCallback);
+                return;
+        }
     }
 
     public void ShowSkillInfo() {

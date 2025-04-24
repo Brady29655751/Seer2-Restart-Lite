@@ -80,8 +80,13 @@ public static class NpcHandler
         Func<bool> condition = GetNpcCondition(npc, handler, npcList);
         Action action = GetNpcAction(npc, handler, npcList); 
         return () => {  
-            if (condition.Invoke())
-                action?.Invoke();
+            if (Player.instance.isShootMode ^ (handler.typeId == "shoot"))
+                return;
+                
+            if (!condition.Invoke())
+                return;
+
+            action?.Invoke();
         };
     }
 }

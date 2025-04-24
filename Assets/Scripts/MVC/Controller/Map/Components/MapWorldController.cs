@@ -15,7 +15,9 @@ public class MapWorldController : UIModule
             return;
         }
 
-        Panel.OpenPanel<WorldMapPanel>();
+        var worldId = (Player.instance.currentMap.categoryId - 1) / 100;
+        var panel = Panel.OpenPanel<WorldMapPanel>();
+        panel.SetPanelIdentifier("world", worldId.ToString());
     }
 
     public void OpenMiniMapPanel() {

@@ -37,7 +37,7 @@ public class WorkshopItemListView : Module
 
         cell?.SetInfoPrompt(infoPrompt);
         cell?.SetItemInfo(itemInfo);
-        cell?.SetCallback(callback);
+        cell?.SetCallback(callback, "id");
         return cell;
     }
 

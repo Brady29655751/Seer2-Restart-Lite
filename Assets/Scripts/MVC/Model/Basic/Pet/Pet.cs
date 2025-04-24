@@ -215,6 +215,15 @@ public class Pet
             return talent.ev[trimStatus];
         }
 
+        if (id.TryTrimStart("normalSkill", out var trimNormalSkill) &&
+            trimNormalSkill.TryTrimParentheses(out var skillIndexExpr) && 
+            int.TryParse(skillIndexExpr, out var skillIndex)) {
+            return normalSkill[skillIndex]?.id ?? 0;
+        }
+
+        if (id == "superSkill")
+            return superSkill?.id ?? 0;
+
         if ((id.TryTrimStart("skill", out var trimSkill)) && 
             (trimSkill.TryTrimParentheses(out var skillIdExpr)) &&
             (int.TryParse(skillIdExpr, out var skillId))) {
@@ -255,6 +264,7 @@ public class Pet
             "subElement" => subElementId,
             "gender" => (float)basic.gender,
             "personality" => (float)basic.personality,
+            "trait" => feature.afterwardBuffs.Find(x => x.info.options.Get("group") == "trait")?.id ?? 0,
             "height" => basic.height,
             "weight" => basic.weight,
             "level" => level,
@@ -299,6 +309,9 @@ public class Pet
             case "personality":
                 basic.personality = (Personality)num;
                 currentStatus = new Status(normalStatus){ hp = currentStatus.hp };
+                return;
+            case "trait":
+                feature.SetTrait((int)num);
                 return;
             case "level":
                 int toLevel = (int)num;

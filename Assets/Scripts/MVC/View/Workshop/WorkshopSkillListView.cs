@@ -37,7 +37,7 @@ public class WorkshopSkillListView : Module
 
         cell?.SetInfoPrompt(infoPrompt);
         cell?.SetSkill(skill);
-        cell?.SetCallback(callback);
+        cell?.SetCallback(callback, "id");
         return cell;
     }
 

@@ -194,8 +194,8 @@ namespace System {
         /// Parse the given string to Vector2. <br/>
         /// We expect input to be "xxx,yyy"
         /// </summary>
-        public static Vector2 ToVector2(this string pos, Vector2 defaultValue = default(Vector2)) {
-            var list = pos.ToFloatList();
+        public static Vector2 ToVector2(this string pos, Vector2 defaultValue = default(Vector2), char delimeter = ',') {
+            var list = pos.ToFloatList(delimeter);
             return ((list == null) || (list.Count != 2)) ? defaultValue : new Vector2(list[0], list[1]);
         }
 

@@ -53,4 +53,8 @@ public class PlayerInfoPanel : Panel
         SaveSystem.SaveData();
     }
 
+    public void ChangeShootMode() {
+        Player.instance.isShootMode = !Player.instance.isShootMode;
+    }
+
 }

@@ -31,6 +31,9 @@ public class NpcView : Module
         button.image.raycastTarget = isRaycastTarget;
     }
 
+    public void SetPosition(Vector2 pos) => rect.anchoredPosition = pos;
+    public void SetRotation(Vector3 rotation) => button.rect.rotation = Quaternion.Euler(rotation);
+
     public void SetRect(Vector2 pos, Vector2 size, Quaternion rotation) {
         rect.SetAsLastSibling();
         rect.anchoredPosition = pos;
@@ -57,6 +60,10 @@ public class NpcView : Module
 
     public void SetIcon(string resId) {
         button.SetSprite(  NpcInfo.GetIcon(resId));
+    }
+
+    public void SetSprite(Sprite sprite) {
+        button.SetSprite(sprite);
     }
 
     public void SetBGM(AudioClip bgm) {

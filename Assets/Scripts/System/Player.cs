@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Player : Singleton<Player>
 {
@@ -25,6 +26,11 @@ public class Player : Singleton<Player>
     public BattleRecord currentBattleRecord = null;
     private static Dictionary<string, object> sceneData = new Dictionary<string, object>();
 
+    public bool isShootMode {
+        get => (bool)GetSceneData("shootMode", false);
+        set => SetShootMode(value);
+    }
+
     private void Start() {
         gameDataId = -1;
         random = Random.Range(0, 100);
@@ -46,6 +52,16 @@ public class Player : Singleton<Player>
 
     public static void RemoveSceneData(string key) {
         sceneData.Remove(key);
+    }
+
+    public void SetShootMode(bool shootMode) {
+        if ((currentMapId == 990) && shootMode)
+            return;
+            
+        var texture = shootMode ? SpriteSet.Aim : null;
+        var hotspot = shootMode ? (texture.GetTextureSize() / 2) : Vector2.zero;
+        Cursor.SetCursor(texture, hotspot, CursorMode.Auto);
+        SetSceneData("shootMode", shootMode);
     }
 
 }

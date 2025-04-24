@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class NpcController : Module
 {
@@ -22,6 +24,22 @@ public class NpcController : Module
 
     public void SetIcon(string resId) {
         npcView.SetIcon(resId);
+    }
+
+    public void SetSprite(Sprite sprite) {
+        npcView.SetSprite(sprite);
+    }
+
+    public void SetPosition(Vector2 pos) {
+        npcView.SetPosition(pos);
+    }
+
+    public void SetRotation(Vector3 rotation) {
+        npcView.SetRotation(rotation);
+    }
+
+    public void SetRect(Vector2 pos, Vector2 size, Quaternion rotation) {
+        npcView.SetRect(pos, size, rotation);
     }
 
     public void SetColor(Color color) {
@@ -46,5 +64,16 @@ public class NpcController : Module
             if (audioClip != null)
                 npcView.SetBGM(audioClip);
         });
+    }
+
+    public void Shoot() {
+        if (!Player.instance.isShootMode)
+            return;
+
+        if (PlayerController.instance == null)
+            return;
+
+        PlayerController.instance.Shoot(GetInfo()?.eventHandler?.Where(x => x.typeId == "shoot").Select(x =>
+            NpcHandler.GetNpcEntity(this, x, (Dictionary<int, NpcController>)Player.GetSceneData("mapNpcList"))).ToList());
     }
 }

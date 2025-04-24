@@ -119,7 +119,7 @@ public class IButton : IMonoBehaviour, IPointerEnterHandler, IPointerExitHandler
         if (!button.interactable)
             return;
 
-        if ((button.interactable) && (totalHoldSeconds < holdThreshold)) {
+        if ((button.interactable) && (totalHoldSeconds < holdThreshold) && (eventData.pointerId == -1)) {
             OnPointerClick();
         }
         isHold = false;

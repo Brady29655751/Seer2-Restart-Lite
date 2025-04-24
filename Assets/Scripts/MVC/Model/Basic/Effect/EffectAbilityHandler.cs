@@ -232,7 +232,7 @@ public static class EffectAbilityHandler
     //! Note that currently block powerup/down should be together with clear powerup/down
     public static bool Powerup(this Effect effect, BattleState state) {
         Status status = new Status();
-        string[] typeNames = Status.typeNames;
+        string[] typeNames = Status.typeNames.Update("hp", "hit").ToArray();
 
         string who = effect.abilityOptionDict.Get("who", "me");
         string random = effect.abilityOptionDict.Get("random", "false");
@@ -255,7 +255,7 @@ public static class EffectAbilityHandler
             var buffController = pet.buffController;
 
             // Prepare Powerup Status
-            for (int type = 0; type < typeNames.Length - 1; type++) {
+            for (int type = 0; type < typeNames.Length; type++) {
                 string add = effect.abilityOptionDict.Get(typeNames[type], "0");
                 status[type] = Parser.ParseEffectOperation(add, effect, lhsUnit, rhsUnit, pet);
             }
@@ -271,7 +271,7 @@ public static class EffectAbilityHandler
                 } else if (pdf == "uniform") {
                     // Uniformly random can have 2 or more different types powerup.
                     var typeList = Enumerable.Range(0, count).ToList().Random(randomTypeCount, false);
-                    for (int i = 0, index = 0; i < typeNames.Length - 1; i++) {
+                    for (int i = 0, index = 0; i < typeNames.Length; i++) {
                         if (status[i] == 0)
                             continue;
 
@@ -818,7 +818,6 @@ public static class EffectAbilityHandler
                 if ((type == "skinId") && (op == "+")) {
                     var newSkinId = value.ToIntList('/');
                     pet.ui.specialSkinList.AddRange(newSkinId.Where(id => Pet.GetPetInfo(id) != null));
-                    SaveSystem.SaveData();
                     return true;
                 }
                 // Reset ev.
@@ -859,8 +858,6 @@ public static class EffectAbilityHandler
                         if ((pet.superSkill != null) && (pet.superSkill.id == skill.id))
                             pet.superSkill = backupSuperSkill;
                     }
-
-                    SaveSystem.SaveData();
                     return true;
                 }
                 if (type == "buff") {
@@ -872,7 +869,6 @@ public static class EffectAbilityHandler
                     else
                         pet.feature.afterwardBuffIds.Remove(buffId);
 
-                    SaveSystem.SaveData();
                     return true;
                 }   
                 pet.SetPetIdentifier(type, Operator.Operate(op, oldValue, newValue));

@@ -48,4 +48,12 @@ public class PetFeature
             .Aggregate(Status.zero, (sum, next) => sum + next) ?? Status.zero;
         return Status.FloorToInt((mult - Status.one) * normalStatus + add);
     }
+
+    public int SetTrait(int traitId = 0) {
+        afterwardBuffIds.RemoveAll(x => Buff.GetBuffInfo(x)?.options.Get("group") == "trait");
+        if (traitId == 0)
+            traitId = BuffInfo.database.Where(x => x.options.Get("group") == "trait").Select(x => x.id).ToList().Random();
+        afterwardBuffIds.Add(traitId);
+        return traitId;
+    }
 }

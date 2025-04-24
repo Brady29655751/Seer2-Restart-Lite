@@ -69,21 +69,21 @@ public class Buff
     }
 
     public bool IsPower() {
-        return id.IsWithin(1, 10);
+        return id.IsWithin(1, 10) || id.IsWithin(-9, -10);
     }
     public bool IsPowerUp() {
         for (int i = 1; i <= 9; i += 2) {
             if (id == i)
                 return true;
         }
-        return false;
+        return id == -9;
     }
     public bool IsPowerDown() {
         for (int i = 2; i <= 10; i += 2) {
             if (id == i)
                 return true;
         }
-        return false;
+        return id == -10;
     }
     public bool IsAbnormal() {
         return info.type == BuffType.Abnormal;
@@ -117,6 +117,9 @@ public class Buff
     public static int GetPowerUpBuffId(int type, int powerup) {
         if (powerup == 0)
             return 0;
+
+        if (type == 5)
+            return(powerup > 0) ? -9 : -10;
 
         return 2 * type + (powerup > 0 ? 1 : 2);
     }

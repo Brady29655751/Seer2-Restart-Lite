@@ -15,7 +15,7 @@ public class BattleSettings
     [XmlAttribute("capture")] public bool isCaptureOK = false;
     [XmlAttribute("item")] public bool isItemOK = true;
     [XmlElement("captureLevel")] public int captureLevel = 1;
-    [XmlIgnore] public bool isAutoOK => (mode != BattleMode.PVP) && (parallelCount <= 1);
+    [XmlIgnore] public bool isAutoOK => (mode != BattleMode.PVP) && (mode != BattleMode.Record) && (parallelCount <= 1);
 
 
     [XmlAttribute("count")] public int petCount = 6;

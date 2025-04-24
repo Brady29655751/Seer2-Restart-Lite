@@ -77,7 +77,7 @@ namespace UnityEngine.UI
             return GetResizedWidth(sprite.texture, newWidth);
         }
 
-        public static KeyValuePair<RectTransform.Axis, float> GetResizedSize(this Texture2D texture, Vector2 size,
+        public static KeyValuePair<RectTransform.Axis, float> GetResizedAnchorAndLength(this Texture2D texture, Vector2 size,
             bool shrink = true)
         {
             if (size == Vector2.zero)
@@ -106,8 +106,19 @@ namespace UnityEngine.UI
             return (width >= size.x) ? resizeX : resizeY;
         }
 
-        public static KeyValuePair<RectTransform.Axis, float> GetResizedSize(this Sprite sprite, Vector2 size,
+        public static KeyValuePair<RectTransform.Axis, float> GetResizedAnchorAndLength(this Sprite sprite, Vector2 size,
             bool shrink = true)
+        {
+            return GetResizedAnchorAndLength(sprite.texture, size, shrink);
+        }
+
+        public static Vector2 GetResizedSize(this Texture2D texture, Vector2 size, bool shrink = true) 
+        {
+            var result = GetResizedAnchorAndLength(texture, size, shrink);
+            return (result.Key == RectTransform.Axis.Horizontal) ? new Vector2(result.Value, size.y) : new Vector2(size.x, result.Value);
+        }
+
+        public static Vector2 GetResizedSize(this Sprite sprite, Vector2 size, bool shrink = true) 
         {
             return GetResizedSize(sprite.texture, size, shrink);
         }
@@ -128,6 +139,7 @@ namespace UnityEngine.UI
     {
         public static Sprite Empty => RM.instance.Get<Sprite>("Sprites/Empty");
         public static Sprite Question => RM.instance.Get<Sprite>("Sprites/Question");
+        public static Texture2D Aim => RM.instance.Get<Texture2D>("Sprites/Aim");
         public static Sprite GetDefaultIconSprite(bool bold = false) =>
             RM.instance.Get<Sprite>("Panels/OldPetBag/Sprites/" + (bold ? 87 : 85));
 

@@ -35,11 +35,20 @@ public class ItemCell : UIModule
         infoPrompt = prompt;
     }
 
-    public void SetCallback(Action<ItemInfo> callback) {
-        button?.onPointerClickEvent?.SetListener(() => {
+    public void SetCallback(Action<ItemInfo> callback, string which = null) {
+        Action itemCallback = () => {
             callback?.Invoke(currentItemInfo);
             SetInfoPromptActive(false);
-        });
+        };
+
+        switch (which) {
+            default:
+                button?.onPointerClickEvent?.SetListener(itemCallback.Invoke);
+                return;
+            case "id":
+                idCell?.SetCallback(itemCallback);
+                return;
+        }
     }
 
     public void ShowItemInfo() {

@@ -125,13 +125,23 @@ public class BuffInfo
         if ((id == -5) || (id == -6))
             return int.MaxValue;
 
+        if ((id == -9) || (id == -10))
+            return Mathf.Abs(id);
+
         if (type == BuffType.Feature) {
             return (-2 * mod) + (_pet - mod);
         }
         if (type == BuffType.Emblem) {
             return (-1 * mod) + (_pet - mod);
         }
-        return ((id < 0) ? 10 : 0) * mod + id;
+            
+        if (id < 0)
+            return 10 * mod + id;
+
+        if (id <= 10)
+            return id - 2;
+
+        return id;
     }
 
     public Sprite GetIcon() {

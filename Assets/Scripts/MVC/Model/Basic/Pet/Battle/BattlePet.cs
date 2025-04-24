@@ -210,7 +210,7 @@ public class BattlePet : Pet
 
         buffController.RemoveRangeBuff(x => x.IsPower(), lhsUnit, state);
 
-        for (int type = 0; type < Status.typeNames.Length - 1; type++) {
+        for (int type = 0; type < Status.typeNames.Length; type++) {
             var powerup = (int)status[type];
             var id = Buff.GetPowerUpBuffId(type, powerup);
 
