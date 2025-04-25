@@ -33,6 +33,15 @@ public static class Identifier {
 
         string trimId = id;
 
+        if (id.TryTrimStart("player.", out trimId)) {
+            var gameData = Player.instance.gameData;
+            return trimId switch {
+                "shoot" => gameData.achievement,
+                "achievement" => gameData.achievement,
+                _ => GetNumIdentifier(trimId),
+            };
+        }
+
         if (id.TryTrimStart("data.", out trimId)) {
             var dotIndex = trimId.IndexOf('.');
             var key = (dotIndex < 0) ? trimId : trimId.Substring(0, dotIndex);

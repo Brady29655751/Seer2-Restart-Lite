@@ -324,4 +324,30 @@ public static class NpcActionHandler
         }
         Mail.Add(mail);
     }
+
+    public static void Fish() {
+        int itemId;
+        List<int> probability;
+        
+        switch (Player.instance.currentMap.categoryId)
+        {
+            default:
+                if (Player.instance.gameData.achievement != 7004)
+                    return;
+                    
+                probability = new List<int>() { 25, 40, 15, 10, 7, 3 };
+                itemId = Enumerable.Range(1005, 6).ToList().Random(probability);
+                break;
+            case 4:
+                if (Player.instance.gameData.achievement != 7005)
+                    goto default;
+
+                probability = new List<int>() { 25, 40, 15, 10, 7, 3 };
+                itemId = Enumerable.Range(1011, 6).ToList().Random(probability);
+                break;
+        }
+        var fish = new Item(itemId, 1);
+        Item.Add(fish);
+        Item.OpenHintbox(fish);
+    }
 }

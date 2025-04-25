@@ -19,6 +19,7 @@ public class Map
     
     [XmlAttribute("category")] public int categoryId;
     public MapCategory category => (MapCategory)categoryId;
+    public int worldId => Map.IsMod(id) ? 0 : ((categoryId - 1) / 100);
     [XmlAttribute("switch")] public int dayNightSwitch;
     [XmlAttribute("dream")] public bool dream;
 

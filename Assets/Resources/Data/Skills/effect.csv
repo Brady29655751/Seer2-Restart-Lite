@@ -1628,7 +1628,7 @@ id,timing,priority,target,condition,cond_option,effect,effect_option
 11616,on_after_attack,-1,pet,none,none,remove_buff,who=op&id=1/3/5/7/9/-9
 11617,on_after_attack,-1,pet,none,none,add_buff,id=86
 11618,on_turn_ready\on_after_attack\on_after_attack,-1\-1\0,pet\pet\pet,none\none\none,none\whos_turn=op&whos_attack=op\none,remove_buff\remove_buff\add_buff,type=unhealthy/abnormal\type=unhealthy/abnormal\id=87&turn=5
-11619,on_final_dmg_cal,-1,skill,none,none,set_damage,type=skill_real&op=+&add=me.pet.status.maxHp[MIN]op.pet.status.maxHp*1/8
+11619,on_final_dmg_cal,900,skill,none,none,set_damage,type=skill_real&op=+&value=me.pet.status.maxHp[MIN]op.pet.status.maxHp*1/8
 11620,on_before_attack,-1,pet,none,none,remove_buff,who=op&type=chance
 11621,on_after_attack,-1,pet,none,none,add_buff,who=op&id=79
 11622,on_after_attack,-1,pet,none,none,remove_buff,id=2/4/6/8/10/-10

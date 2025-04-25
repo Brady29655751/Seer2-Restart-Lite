@@ -1,0 +1,192 @@
+<map name="克洛斯星草原" category="102" id="10036" weather="0">
+	<initialPoint>640,230</initialPoint>
+	<music category="102">
+		<bgm>BGM_36</bgm>
+	</music>
+	<entities>
+		<npc id="1003601" resId="Pets/pet/10010" name="Lv1 皮皮" size="56,42" pos="420,200" namePos="0,0">
+			<battle>
+				<branch id="default">
+					<settings count="6" capture="true"/>
+					<enemy>
+						<pet id="10010" level="1">
+							<loopSkill>10050</loopSkill>
+						</pet>
+					</enemy>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>battle</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<npc id="1003602" resId="Pets/pet/10010" name="Lv2 皮皮" size="56,42" pos="265,140" namePos="0,0">
+			<battle>
+				<branch id="default">
+					<settings count="6" capture="true"/>
+					<enemy>
+						<pet id="10010" level="2">
+							<loopSkill>10050</loopSkill>
+						</pet>
+					</enemy>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>battle</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<npc id="1003603" resId="Pets/pet/10012" name="波克尔" size="110,103" pos="515,70" namePos="0,0">
+			<description>波克尔</description>
+			<dialog>
+				<branch id="default" name="波克尔" icon="Pets/pet/10012" size="110,103" pos="10,35">
+					<content><![CDATA[消耗20个黄晶矿可以使波克尔超进化哦！]]></content>
+					<functionHandler>
+						<func type="click">
+							<description><![CDATA[波克尔超进化]]></description>
+							<action>openDialog</action>
+							<param>pet</param>
+							<condition>firstPet.idNOT10012</condition>
+						</func>
+						<func type="branch">
+							<action>openDialog</action>
+							<param>mine</param>
+							<condition>item[1101].num&lt;19</condition>
+						</func>
+						<func type="branch">
+							<action>setItem</action>
+							<param>remove</param>
+							<param>1101,20</param>
+							<condition>firstPet.id=10012</condition>
+							<condition>item[1101].numGTE20</condition>
+						</func>
+						<func type="branch">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=成功进化成【波斯蒂加】</param>
+							<param>item_icon=pet[11836]</param>
+							<param>option_num=1</param>
+							<condition>firstPet.id=10012</condition>
+							<condition>item[1101].numGTE20</condition>
+						</func>
+						<func type="branch">
+							<action>openDialog</action>
+							<param>null</param>
+							<condition>firstPet.id=10012</condition>
+							<condition>item[1101].numGTE20</condition>
+						</func>
+						<func type="branch">
+							<action>evolvePet</action>
+							<param>11836</param>
+							<condition>firstPet.id=10012</condition>
+							<condition>item[1101].numGTE20</condition>
+						</func>
+					</functionHandler>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[我这就去找黄晶矿]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+					</replyHandler>
+				</branch>
+				<branch id="pet" name="波克尔" icon="Pets/pet/10012" size="110,103" pos="10,35">
+					<content><![CDATA[把波克尔设为首发再来吧！]]></content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[我这就去]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+					</replyHandler>
+				</branch>
+				<branch id="mine" name="波克尔" icon="Pets/pet/10012" size="110,103" pos="10,35">
+					<content><![CDATA[找到20个黄晶矿再来吧！]]></content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[我这就去]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+					</replyHandler>
+				</branch>
+			</dialog>
+			<eventHandler>
+				<!--
+				<button type="click">
+					<action>openDialog</action>
+					<param>default</param>
+				</button>
+				-->
+			</eventHandler>
+		</npc>
+		<npc id="1003604" resId="Items/1101" name="黄晶矿" size="150,100" pos="150,390" namePos="0,10010" color="0,0,0,0">
+			<description>黄晶矿</description>
+			<eventHandler>
+				<button type="click">
+					<action>openHintbox</action>
+					<param>type=Item</param>
+					<param>title=提示</param>
+					<param>content=矿脉需要合理开发，明天再来吧！</param>
+					<param>item_icon=item[1101]</param>
+					<param>option_num=1</param>
+					<condition>activity[mine].done[10036]=[bool]true[default]false</condition>
+				</button>
+				<button type="click">
+					<action>setItem</action>
+					<param>add</param>
+					<param>1101,10</param>
+					<condition>activity[mine].done[10036]=[bool]false[default]false</condition>
+				</button>
+				<button type="click">
+					<action>openHintbox</action>
+					<param>type=Item</param>
+					<param>title=提示</param>
+					<param>content=10个黄晶矿已经放入背包</param>
+					<param>item_icon=item[1101]</param>
+					<param>option_num=1</param>
+					<condition>activity[mine].done[10036]=[bool]false[default]false</condition>
+				</button>
+				<button type="click">
+					<action>setActivity</action>
+					<param>mine</param>
+					<param>done[10036]=true</param>
+					<condition>activity[mine].done[10036]=[bool]false[default]false</condition>
+				</button>
+			</eventHandler>
+		</npc>
+		<npc id="1003605" resId="Pets/pet/10164" name="Lv1 闪光皮皮" size="56,56" pos="365,400" namePos="0,0" active="false">
+			<description>稀有精灵</description>
+			<battle>
+				<branch id="default">
+					<settings count="6" capture="true"/>
+					<enemy>
+						<pet id="10164" level="1">
+							<loopSkill>10050</loopSkill>
+						</pet>
+					</enemy>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="auto">
+					<action>setNpcParam</action>
+					<param>1003605</param>
+					<param>active=true</param>
+					<condition>random[new]LTE1</condition>
+					<condition>random[new]LTE2</condition>
+				</button>
+				<button type="click">
+					<action>battle</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<teleport id="1" name="传送室" pos="760,420" targetMapId="10001"/>
+		<!-- <teleport id="2" name="克洛斯林间" pos="120,80" targetMapId="10037"/> -->
+	</entities>		
+</map>

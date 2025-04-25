@@ -81,6 +81,7 @@ public class GameManager : Singleton<GameManager>
             Mission.VersionUpdate();
             Pet.VersionUpdate();
             BattleRecord.VersionUpdate();
+            Activity.VersionUpdate();
         }
         gameData.version = versionData.gameVersion;
 

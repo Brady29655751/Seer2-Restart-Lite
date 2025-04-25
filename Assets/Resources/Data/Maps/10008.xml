@@ -4,6 +4,19 @@
 		<bgm>BGM_2</bgm>
 	</music>
 	<entities>
+		<npc id="1000801" resId="none" name="领取套装" size="370,300" pos="0,0" namePos="65,-90" color="0,0,0,0">
+			<description>领取特殊装备</description>
+			<eventHandler>
+				<button type="click">
+					<action>openPanel</action>
+					<param>ItemShop</param>
+					<param>mode=buy</param>
+					<param>currency=1/2</param>
+					<param>item=7001/7002/7003</param>
+					<param>title=装备购买</param>
+				</button>
+			</eventHandler>
+		</npc>
 		<teleport id="1" name="传送室" pos="450,400" targetMapId="10001"/>
 	</entities>		
 </map>

@@ -281,7 +281,56 @@
         		</button>
         	</eventHandler>
         </npc>
-        <npc id="15202" resId="Pets/battle/14.png" name="" size="320,180" pos="605,200" rotation="0,180,0" target="false"/>
+		<npc id="15202" resId="Pets/battle/14.png" name="" size="320,180" pos="605,200" rotation="0,180,0" target="false"/>
+		<npc id="15203" resId="15203" name="钓鱼大师" size="87,107" pos="325,95" namePos="0,-5">
+			<description>钓鱼佬永不空军！</description>
+			<dialog>
+				<branch id="default" name="钓鱼大师" icon="15203" size="87,107" pos="0,55">
+					<content><![CDATA[我既喜欢精灵，又喜欢钓鱼，所以我的人生有双倍的乐趣。想钓鱼就向水塘射击鱼饵吧！]]></content>
+					<functionHandler>
+						<func type="click">
+							<description><![CDATA[钓鱼商店]]></description>
+							<action>openPanel</action>
+							<param>ItemShop</param>
+							<param>mode=buy</param>
+							<param>currency=1/2</param>
+							<param>item=7004/7005</param>
+							<param>title=钓鱼商店</param>
+						</func>
+						<func type="click">
+							<description><![CDATA[出售鱼类]]></description>
+							<action>openPanel</action>
+							<param>ItemShop</param>
+							<param>mode=sell</param>
+							<param>currency=1/2</param>
+							<param>item=1005/1006/1007/1008/1009/1010/1011/1012/1013/1014/1015/1016/1017/1018/1019/1020/1021/1022/1023/1024/1025</param>
+							<param>title=鱼类出售</param>
+						</func>
+					</functionHandler>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[哇哦！听起来就很不错呢！]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+					</replyHandler>
+				</branch>
+			</dialog>
+			<eventHandler>
+				<button type="click">
+					<action>openDialog</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<npc id="15204" resId="15203" name="" size="320,180" pos="400,50" color="0,0,0,0">
+			<description>池塘</description>
+			<eventHandler>
+				<button type="shoot">
+					<action>fish</action>
+				</button>
+			</eventHandler>
+		</npc>
 		<teleport id="1" name="水仙草界" pos="240,250" targetMapId="151"/>
 	</entities>
 </map>

@@ -180,8 +180,35 @@
 						</reply>
 					</replyHandler>
 				</branch>
+				<branch id="surprise" name="奥比休斯" icon="Pets/pet/965" size="102,92" pos="10,55">
+					<content><![CDATA[我本来想大声斥责的，但你给的实在是太多了。我有个小建议：换成星钻更好！]]></content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[那你会变成蘑菇形象吗？]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+					</replyHandler>
+				</branch>
 			</dialog>
 			<eventHandler>
+				<button type="auto">
+					<action>setActivity</action>
+					<param>hell</param>
+					<param>surprise[4]=0</param>
+				</button>
+				<button type="shoot">
+					<action>setActivity</action>
+					<param>hell</param>
+					<param>surprise[4]=[expr]activity[hell].surprise[4]+1</param>
+					<condition>player.shoot=0</condition>
+				</button>
+				<button type="shoot">
+					<action>openDialog</action>
+					<param>surprise</param>
+					<condition>player.shoot=0</condition>
+					<condition>activity[hell].surprise[4]=[int]10[default]0</condition>
+				</button>
 				<button type="click">
 					<action>openDialog</action>
 					<param>default</param>

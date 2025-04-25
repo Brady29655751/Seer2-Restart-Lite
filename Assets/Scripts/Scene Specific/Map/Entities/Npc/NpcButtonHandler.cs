@@ -65,6 +65,7 @@ public static class NpcActionDatabase {
         { "battle", NpcAction.Battle },
         { "player", NpcAction.Player },
         { "mail", NpcAction.SetMail },
+        { "fish", NpcAction.Fish },
     };
 
     private static List<NpcAction> petActionList = new List<NpcAction>() {
@@ -106,4 +107,5 @@ public enum NpcAction {
     Battle,
     Player,
     SetMail,
+    Fish,
 }

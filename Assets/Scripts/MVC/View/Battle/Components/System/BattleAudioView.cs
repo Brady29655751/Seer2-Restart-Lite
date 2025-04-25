@@ -27,8 +27,13 @@ public class BattleAudioView : BattleBaseView
         }
         */
 
-        ResourceManager.instance.GetLocalAddressables<AudioClip>("BGM/fight/BGM_" + GetBattleBGMId(battle.settings.mode) + ".mp3", battle.settings.isMod,
+        ResourceManager.instance.GetLocalAddressables<AudioClip>("BGM/fight/BGM_" + GetWorldId() + GetBattleBGMId(battle.settings.mode) + ".mp3", battle.settings.isMod,
             (bgm) => AudioSystem.instance.PlayMusic(bgm, AudioVolumeType.BattleBGM));
+    }
+
+    private string GetWorldId() {
+        var worldId = Player.instance.currentMap.worldId;
+        return (worldId == 0) ? string.Empty : (worldId + "_");
     }
 
     private int GetBattleBGMId(BattleMode mode) {

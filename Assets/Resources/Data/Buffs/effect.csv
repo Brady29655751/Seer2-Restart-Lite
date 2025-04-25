@@ -750,6 +750,7 @@ id,timing,priority,target,condition,cond_option,effect,effect_option
 430005,on_turn_start,-1,pet,pet,type=status.lostHp&status.lostHp_cmp=0,add_buff,who=op&id=57&turn=1
 440000,on_add_buff,-1,pet,none,none,add_buff,id=3152
 440001,on_after_attack\on_before_attack,-1\-1,pet\skill,skill\unit,type=type&type_cmp=0\type=me.pet.baseId/me.skill.type&type[0].cmp=10&type[1].cmp=0,rage\set_skill,add=5\type=accuracy&op=+&value=25
+440002,on_turn_end\on_before_attack,-1\-1,pet\skill,none\pet,weather=1\type=baseId&baseId_cmp=13,rage\set_skill,add=5\type=power&op=+&value=10
 600002,on_after_attack,-1,pet,skill,random_cmp=25&who=op&whos_turn=op&whos_attack=op&type=type&type_op=>&type_cmp=0,add_buff,id=1000
 600004,on_before_attack\on_after_attack,-1\-1000,skill\pet,none\pet,none\who=op&type=dead&dead_cmp=1,set_skill\powerup,type=critical&op=+&value=15\atk=1&mat=1
 600008,on_turn_end,-1,pet,none,none,powerup,random=true&atk=-1&mat=-1&def=-1&mdf=-1&spd=-1&hit=-1&random_pdf=uniform

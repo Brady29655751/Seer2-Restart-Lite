@@ -71,6 +71,7 @@ public static class NpcHandler
             NpcAction.Battle        => () => NpcActionHandler.StartBattle(npcInfo, handler),
             NpcAction.Player        => () => NpcActionHandler.SetPlayer(handler),
             NpcAction.SetMail       => () => NpcActionHandler.SetMail(handler),
+            NpcAction.Fish          => () => NpcActionHandler.Fish(),
             _ => () => handler.callback?.ForEach(x => x?.Invoke()),
         };
     }

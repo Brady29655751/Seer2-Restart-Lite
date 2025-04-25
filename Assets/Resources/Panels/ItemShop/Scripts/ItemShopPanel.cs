@@ -30,9 +30,7 @@ public class ItemShopPanel : Panel
             21006, 21007, 21008, 21009, 21010, 10011, 10012, 10013, 10014, 
             10015, 10016, 10001, 10002, 10003, 10004, 10005, 110050, 
         } },
-        { ItemShopType.Mine, new List<int>() { 
-            1001,   1002,   1003,   1004,
-        } },
+        { ItemShopType.Mine, ItemInfo.database.Where(x => x.type == ItemType.Mine).Select(x => x.id).ToList() },
         { ItemShopType.Honor, new List<int>() { 
             8001,   8002,   8003,   8004,   8005,
             8006,   8007,

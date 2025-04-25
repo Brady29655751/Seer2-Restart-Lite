@@ -118,8 +118,8 @@ public class IButton : IMonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     public virtual void OnPointerUp(PointerEventData eventData) {
         if (!button.interactable)
             return;
-
-        if ((button.interactable) && (totalHoldSeconds < holdThreshold) && (eventData.pointerId == -1)) {
+        
+        if ((button.interactable) && (totalHoldSeconds < holdThreshold) && (eventData.pointerId >= -1)) {
             OnPointerClick();
         }
         isHold = false;

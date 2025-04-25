@@ -52,6 +52,16 @@ public class Activity
         activityStorage.RemoveAll(x => (x?.info != null) && (x.info.type == ActivityType.Daily));
     }
 
+    public static void VersionUpdate() {
+        GameData gameData = Player.instance.gameData;
+        string activityDataVersion = gameData.version;
+        
+        if (VersionData.Compare(activityDataVersion, "lite_2.9.2") < 0) {
+            gameData.activityStorage.RemoveAll(x => x.id == "noob_reward");
+            activityDataVersion = "lite_2.9.2";
+        }
+    }
+
     public Activity() {}
     public Activity(string id) {
         this.id = id;

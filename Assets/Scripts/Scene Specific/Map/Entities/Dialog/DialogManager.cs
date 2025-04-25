@@ -27,6 +27,9 @@ public class DialogManager : Manager<DialogManager>
     }
 
     public void OpenDialog(DialogInfo info) {
+        Player.instance.isShootMode = false;
+        dialogLayer.SetAsLastSibling();
+        
         if (info == null) {
             CloseDialog();
             return;
