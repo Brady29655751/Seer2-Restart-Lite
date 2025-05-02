@@ -529,12 +529,12 @@ public static class EffectAbilityHandler
                 if ((!buff.IsPower()) || (!filter(buff)))
                     continue;
 
-                int buffId = (id - 1) / 2;
+                int buffId = id.IsWithin(-9, -10) ? 5 : ((id - 1) / 2);
 
                 // id % 2 == 1 => want to clear powerup
                 // powerup < 0 => current is powerdown
                 // ^ is xor operator, which returns false when both true or both false
-                if ((id % 2 == 1) ^ (statusController.powerup[buffId] < 0))
+                if ((Mathf.Abs(id) % 2 == 1) ^ (statusController.powerup[buffId] < 0))
                     statusController.SetPowerUp(buffId, 0);
             }
             return buffController.RemoveRangeBuff(x => idRange.Contains(x.id) && filter(x), lhsUnit, state);
@@ -605,7 +605,7 @@ public static class EffectAbilityHandler
                     continue;
                 }
                 
-                int type = (buff.id - 1) / 2;
+                int type = buff.id.IsWithin(-9, -10) ? 5 : (buff.id - 1) / 2;
                 status[type] = (isReverse ? -1 : 1) * powerup[type];
 
                 if (isTransfer || isReverse) {
@@ -622,7 +622,7 @@ public static class EffectAbilityHandler
         if (isTransfer) {
             lhsBuffController.RemoveRangeBuff(buffs, lhsUnit, state);
         }
-        return true;
+        return ListHelper.IsNullOrEmpty(buffs);
     }
 
     public static bool SetBuff(this Effect effect, BattleState state) {

@@ -1,0 +1,138 @@
+<map name="克洛斯星秘境" category="102" id="10943" weather="0">
+	<initialPoint>390,90</initialPoint>
+	<music category="102">
+		<bgm>BGM_189</bgm>
+	</music>
+	<entities>
+		<npc id="1094301" resId="Pets/pet/12197" name="Lv100 闪光波斯蒂加" size="184,172" pos="400,200" namePos="-10,-10">
+			<description>皮皮超进化！</description>
+			<dialog>
+				<branch id="default" name="闪光波斯蒂加" icon="Pets/pet/12197" size="122,114" pos="10,45">
+					<content><![CDATA[先把100级的波克尔或闪光波克尔放入背包再挑战哦！]]></content>
+					<functionHandler>
+						<func type="click">
+							<description><![CDATA[波克尔超进化]]></description>
+							<action>battle</action>
+							<param>default</param>
+						</func>
+					</functionHandler>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[速度好快啊]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+					</replyHandler>
+				</branch>
+			</dialog>
+			<battle>
+				<branch id="default">
+					<settings count="1" star="4"/>
+					<enemy>
+						<pet id="12197" level="100">
+							<status>
+								<spd>1000</spd>
+								<hp>2000</hp>
+							</status>
+							<initBuff>13,17,20,77,993,999,-3000,-3059,-3060</initBuff>
+							<loopSkill>11652,11649,11650,11655,11651,11649,11657,11655</loopSkill>
+							<superSkill>11653</superSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=PetSelect</param>
+						    <param>title=选择波克尔或闪光波克尔</param>
+						    <param>option_num=2</param>
+						    <param>callback=evolve</param>
+						</button>
+					</winHandler>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>openDialog</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+			<callbackHandler>
+				<button type="choose">
+					<action>openHintbox</action>
+					<param>type=PetSelect</param>
+				    <param>title=选择波克尔或闪光波克尔</param>
+				    <param>option_num=2</param>
+					<param>callback=evolve</param>
+				    <condition>data.PetSelect.uidNOT10012|data.PetSelect.level&lt;100</condition>
+				    <condition>data.PetSelect.uidNOT10166|data.PetSelect.level&lt;100</condition>
+				</button>
+			    <button type="evolve">
+			        <action>openHintbox</action>
+			        <param>type=Item</param>
+			        <param>title=提示</param>
+			        <param>content=必须选择等级100的波克尔或闪光波克尔！</param>
+			        <param>item_icon=pet[10012]</param>
+			        <param>option_num=1</param>
+					<param>callback=choose</param>
+			        <condition>data.PetSelect.uidNOT10012|data.PetSelect.level&lt;100</condition>
+					<condition>data.PetSelect.uidNOT10166|data.PetSelect.level&lt;100</condition>
+			    </button>
+			    <button type="evolve">
+			        <action>openHintbox</action>
+			        <param>type=Item</param>
+			        <param>title=提示</param>
+			        <param>content=波克尔已成功超进化</param>
+			        <param>item_icon=pet[11836]</param>
+			        <param>option_num=1</param>
+			        <condition>data.PetSelect.uid=10012</condition>
+			        <condition>data.PetSelect.levelGTE100</condition>
+			    </button>
+			    <button type="evolve">
+			        <action>evolvePet</action>
+			        <param>index=data.PetSelectIndex</param>
+			        <param>11836</param>
+			        <condition>data.PetSelect.uid=10012</condition>
+			        <condition>data.PetSelect.levelGTE100</condition>
+			    </button>
+			    <button type="evolve">
+			        <action>setPet</action>
+			        <param>index=data.PetSelectIndex</param>
+			        <param>skill=11654</param>
+			        <param>skill=11655</param>
+			        <param>skill=11656</param>
+			        <param>skill=11657</param>
+			        <condition>data.PetSelect.uid=10012</condition>
+			        <condition>data.PetSelect.levelGTE100</condition>
+			    </button>
+				<button type="evolve">
+				    <action>openHintbox</action>
+				    <param>type=Item</param>
+				    <param>title=提示</param>
+				    <param>content=闪光波克尔已成功超进化</param>
+				    <param>item_icon=pet[12197]</param>
+				    <param>option_num=1</param>
+				    <condition>data.PetSelect.uid=10166</condition>
+				    <condition>data.PetSelect.levelGTE100</condition>
+				</button>
+				<button type="evolve">
+				    <action>evolvePet</action>
+				    <param>index=data.PetSelectIndex</param>
+				    <param>12197</param>
+				    <condition>data.PetSelect.uid=10166</condition>
+				    <condition>data.PetSelect.levelGTE100</condition>
+				</button>
+				<button type="evolve">
+				    <action>setPet</action>
+				    <param>index=data.PetSelectIndex</param>
+				    <param>skill=11654</param>
+				    <param>skill=11655</param>
+				    <param>skill=11656</param>
+				    <param>skill=11657</param>
+				    <condition>data.PetSelect.uid=10166</condition>
+				    <condition>data.PetSelect.levelGTE100</condition>
+				</button>
+			</callbackHandler>
+		</npc>
+		<teleport id="1" name="克洛斯星草原" pos="80,100" targetMapId="10036"/>
+	</entities>		
+</map>

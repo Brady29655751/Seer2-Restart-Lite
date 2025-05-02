@@ -50,6 +50,18 @@ public class FusionPanel : Panel
         pet.feature.SetTrait();
         Pet.Add(pet);
         SaveSystem.SaveData();
-        Hintbox.OpenHintboxWithContent("获得了" + pet.name + "！", 16);;
+
+        var hintbox = Hintbox.OpenHintbox<ItemHintbox>();
+        hintbox.SetContent("获得了" + pet.name + "！", 14, FontOption.Arial);
+        hintbox.SetOptionNum(1);
+        hintbox.SetIcon(pet.ui.icon);
+    }
+
+    public void ShowItemInfo(int index) {
+        var item = fusionModel.fusionItems.ElementAtOrDefault(index);
+        if (item == null)
+            return;
+
+        infoPrompt.SetItem(item);
     }
 }

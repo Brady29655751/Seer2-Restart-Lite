@@ -241,6 +241,30 @@
 					<action>openDialog</action>
 					<param>default</param>
 				</button>
+				<button type="shoot">
+					<action>setItem</action>
+					<param>add</param>
+					<param>22012,1</param>
+					<condition>activity[20009].done[193]=[bool]false[default]false</condition>
+					<condition>player.shoot=7002</condition>
+				</button>
+				<button type="shoot">
+					<action>openHintbox</action>
+					<param>type=Item</param>
+					<param>title=提示</param>
+					<param>content=1个水珠已经放入背包</param>
+					<param>item_icon=buff[420012]</param>
+					<param>option_num=1</param>
+					<condition>activity[20009].done[193]=[bool]false[default]false</condition>
+					<condition>player.shoot=7002</condition>
+				</button>
+				<button type="shoot">
+					<action>setActivity</action>
+					<param>20009</param>
+					<param>done[193]=true</param>
+					<condition>activity[20009].done[193]=[bool]false[default]false</condition>
+					<condition>player.shoot=7002</condition>
+				</button>
 			</eventHandler>
 		</npc>
 		<npc id="19302" resId="Maps/mine/green.png" name="绿碧矿脉" size="100,72" pos="140,280">

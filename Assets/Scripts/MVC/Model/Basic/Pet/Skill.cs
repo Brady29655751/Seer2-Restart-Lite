@@ -131,6 +131,7 @@ public class Skill
         type = specialType;
         power = anger = 0;
         accuracy = 100;
+        combo = chain = 1;
     }
 
     public string[] GetRawInfoStringArray() {

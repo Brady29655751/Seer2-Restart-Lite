@@ -9,7 +9,7 @@
 			<description>谱尼真身</description>
 			<battle>
 				<branch id="default">
-					<settings count="6">
+					<settings count="6" star="4">
 						<mode>3</mode>
 					</settings>
 					<enemy>
@@ -90,19 +90,6 @@
 				<button type="click">
 					<action>battle</action>
 					<param>default</param>
-					<condition>petBag[0].star&lt;5</condition>
-					<condition>petBag[1].star&lt;5</condition>
-					<condition>petBag[2].star&lt;5</condition>
-					<condition>petBag[3].star&lt;5</condition>
-					<condition>petBag[4].star&lt;5</condition>
-					<condition>petBag[5].star&lt;5</condition>
-				</button>
-				<button type="click">
-					<action>openHintbox</action>
-					<param>title=提示</param>
-					<param>content=不能携带超过4星的精灵进行挑战哦！</param>
-					<param>option_num=1</param>
-					<condition>petBag[0].star&gt;4|petBag[1].star&gt;4|petBag[2].star&gt;4|petBag[3].star&gt;4|petBag[4].star&gt;4|petBag[5].star&gt;4</condition>
 				</button>
 			</eventHandler>
 		</npc>

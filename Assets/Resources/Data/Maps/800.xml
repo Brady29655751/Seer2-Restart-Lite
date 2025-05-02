@@ -1,0 +1,121 @@
+<map name="视界原野" category="9" id="800">
+	<fightMap>100002</fightMap>
+	<music category="9">
+		<bgm>BGM_800</bgm>
+	</music>
+	<initialPoint>375,100</initialPoint>
+	<entities>
+		<npc id="80001" resId="Pets/pet/189" name="Lv 90 费德提克" size="172,165" pos="425,150" namePos="10,-10">
+			<description>费德提克</description>
+			<dialog>
+				<branch id="default" name="费德提克" icon="Pets/pet/189" size="117,110" pos="0,55">
+					<content><![CDATA[哟呵呵呵——没有乌鸦可以逃过我的法眼！哟呵呵呵——]]></content>
+					<functionHandler>
+						<func type="click">
+							<description><![CDATA[挑战费德提克]]></description>
+							<action>battle</action>
+							<param>default</param>
+						</func>
+						<func type="click">
+							<description><![CDATA[获取残破的书页]]></description>
+							<action>battle</action>
+							<param>book</param>
+						</func>
+						<func type="click">
+							<description><![CDATA[兑换道具]]></description>
+							<action>openPanel</action>
+							<param>ItemShop</param>
+							<param>mode=buy</param>
+							<param>currency=400014/2</param>
+							<param>item=300188/400014</param>
+							<param>title=兑换道具</param>
+						</func>
+					</functionHandler>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[我不是乌鸦，再见！]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+					</replyHandler>
+				</branch>
+			</dialog>
+			<battle>
+				<branch id="default">
+					<settings count="1">
+						<mode>3</mode>
+					</settings>
+					<enemy>
+						<pet id="189" level="90">
+							<status>
+								<hp>2000</hp>
+							</status>
+							<initBuff>13,17,20</initBuff>
+							<loopSkill>11663,11664,11668</loopSkill>
+							<superSkill>11669</superSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>getPet</action>
+							<param>188,10,0</param>
+							<condition>activity[20006].done[1]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=【费德】已经放入精灵仓库</param>
+							<param>item_icon=pet[188]</param>
+							<param>option_num=1</param>
+							<condition>activity[20006].done[1]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>20006</param>
+							<param>done[1]=true</param>
+							<condition>activity[20006].done[1]=[bool]false[default]false</condition>
+						</button>
+					</winHandler>
+				</branch>
+				<branch id="book">
+					<settings count="1">
+						<mode>3</mode>
+					</settings>
+					<enemy>
+						<pet id="189" level="90">
+							<status>
+								<hp>2000</hp>
+							</status>
+							<initBuff>61,97,991,996,-3022</initBuff>
+							<loopSkill>11669</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setItem</action>
+							<param>add</param>
+							<param>400014,1</param>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=1 页残破的书页已经放入背包</param>
+							<param>item_icon=item[400014]</param>
+							<param>option_num=1</param>
+						</button>
+					</winHandler>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>openDialog</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<teleport id="1" name="微光湖畔" pos="200,140" targetMapId="790"/>
+		<teleport id="2" name="脉流之瀑" pos="700,140" targetMapId="810"/>
+	</entities>
+</map>

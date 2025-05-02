@@ -175,6 +175,50 @@
 				</button>
 			</eventHandler>
 		</npc>
+		<npc id="12107" resId="Pets/pet/100010.png" name="Lv1 法拉★" size="30,40" pos="335,180" namePos="0,0" active="false">
+			<description>稀有精灵</description>
+			<battle>
+				<branch id="default">
+					<settings count="6" capture="true">
+						<weather>1</weather>
+					</settings>
+					<enemy>
+						<pet id="100010" level="1">
+							<loopSkill>10050</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setItem</action>
+							<param>add</param>
+							<param>400000,1</param>
+							<condition>battle.result.state=1</condition>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=1个陨石碎片已经放入背包</param>
+							<param>item_icon=item[400000]</param>
+							<param>option_num=1</param>
+							<condition>battle.result.state=1</condition>
+						</button>
+					</winHandler>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>battle</action>
+					<param>default</param>
+				</button>
+				<button type="auto">
+					<action>setNpcParam</action>
+					<param>12107</param>
+					<param>active=true</param>
+					<condition>random[0~4096]&lt;1</condition>
+				</button>
+			</eventHandler>
+		</npc>
 		<teleport id="1" name="草系主城" pos="680,60" targetMapId="90"/>
 		<teleport id="2" name="朽木桥" pos="450,220" targetMapId="122"/>
 	</entities>

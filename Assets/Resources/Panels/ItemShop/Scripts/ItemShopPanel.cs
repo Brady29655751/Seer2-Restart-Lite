@@ -27,8 +27,8 @@ public class ItemShopPanel : Panel
         { ItemShopType.None, new List<int>() },
         { ItemShopType.PetPotion, new List<int>() { 
             10101, 10111, 10221, 10238, 10239, 20001, 10018, 20002, 10211, 
-            21006, 21007, 21008, 21009, 21010, 10011, 10012, 10013, 10014, 
-            10015, 10016, 10001, 10002, 10003, 10004, 10005, 110050, 
+            10242, 21006, 21007, 21008, 21009, 21010, 10011, 10012, 10013, 
+            10014, 10015, 10016, 10001, 10002, 10003, 10004, 10005, 110050, 
         } },
         { ItemShopType.Mine, ItemInfo.database.Where(x => x.type == ItemType.Mine).Select(x => x.id).ToList() },
         { ItemShopType.Honor, new List<int>() { 

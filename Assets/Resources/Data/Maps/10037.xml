@@ -1,0 +1,140 @@
+<map name="克洛斯星林间" category="102" id="10037" weather="1">
+	<initialPoint>520,280</initialPoint>
+	<music category="102">
+		<bgm>BGM_36</bgm>
+	</music>
+	<entities>
+		<npc id="1003701" resId="Pets/pet/10016" name="Lv3 仙人球" size="45,80" pos="460,100" namePos="0,-10">
+			<battle>
+				<branch id="default">
+					<settings count="6" capture="true">
+						<weather>1</weather>
+					</settings>
+					<enemy>
+						<pet id="10016" level="3">
+							<loopSkill>10050</loopSkill>
+						</pet>
+					</enemy>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>battle</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<npc id="1003702" resId="Pets/pet/10016" name="Lv4 仙人球" size="45,80" pos="600,70" namePos="0,-10">
+			<battle>
+				<branch id="default">
+					<settings count="6" capture="true">
+						<weather>1</weather>
+					</settings>
+					<enemy>
+						<pet id="10016" level="4">
+							<loopSkill>10050</loopSkill>
+						</pet>
+					</enemy>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>battle</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<npc id="1003703" resId="Pets/pet/10027" name="Lv5 小豆芽" size="71,90" pos="600,310" namePos="0,-5" active="false">
+			<description>神秘的精灵</description>
+			<dialog>
+				<branch id="default" name="小豆芽" icon="Pets/pet/10027" size="106,135" pos="10,35">
+					<content><![CDATA[呼噜噜噜噜！]]></content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[看起来很喜欢吃矿石？]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+						<reply type="click">
+							<description><![CDATA[尝试引诱]]></description>
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>content=先去找些矿石再来尝试吧</param>
+							<param>option_num=1</param>
+							<param>item_icon=item[1101]</param>
+							<condition>item[1101].num=0</condition>
+						</reply>
+						<reply type="branch">
+							<action>battle</action>
+							<param>default</param>
+							<condition>item[1101].numNOT0</condition>
+						</reply>
+					</replyHandler>
+				</branch>
+			</dialog>
+			<battle>
+				<branch id="default">
+					<settings count="6" capture="true">
+						<weather>1</weather>
+					</settings>			
+					<enemy>
+						<pet id="10027" level="5">
+							<initBuff>-2</initBuff>
+							<loopSkill>10278,10050,10278,10050,10278,-4</loopSkill>
+						</pet>
+					</enemy>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="auto">
+					<action>setNpcParam</action>
+					<param>1003703</param>
+					<param>active=true</param>
+					<condition>random[new]LTE5</condition>
+				</button>
+				<button type="click">
+					<action>openDialog</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<npc id="1003704" resId="Pets/pet/12009" name="Lv5 闪光仙人球" size="57,66" pos="330,60" namePos="0,-5" active="false">
+			<description>稀有精灵</description>
+			<battle>
+				<branch id="default">
+					<settings count="6" capture="true">
+						<weather>1</weather>
+					</settings>
+					<enemy>
+						<pet id="12009" level="5">
+							<initBuff>-2</initBuff>
+							<loopSkill>10050,10050,10050,10050,10050,-4</loopSkill>
+						</pet>
+					</enemy>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="auto">
+					<action>setNpcParam</action>
+					<param>1003704</param>
+					<param>active=true</param>
+					<condition>random[0~1024]&lt;1</condition>
+				</button>
+				<button type="click">
+					<action>battle</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<npc id="1003705" resId="1001" name="" size="180,200" pos="780,170" namePos="0,0" color="0,0,0,0">
+			<description>克洛斯星草原</description>
+			<transport>850,270</transport>
+			<eventHandler>
+				<button type="click">
+					<action>teleport</action>
+					<param>10036</param>
+				</button>
+			</eventHandler>
+		</npc>
+	</entities>		
+</map>

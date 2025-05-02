@@ -20,6 +20,7 @@ public class BattleSettings
 
     [XmlAttribute("count")] public int petCount = 6;
     [XmlAttribute("parallel")] public int parallelCount = 1;
+    [XmlAttribute("star")] public int starLimit = 0;
     [XmlAttribute("time")] public int time = 10;
     [XmlElement("mode")] public int modeId = 0;
     [XmlIgnore] public BattleMode mode {
@@ -64,6 +65,7 @@ public class BattleSettings
         weather = rhs.weather;
         petCount = rhs.petCount;
         parallelCount = rhs.parallelCount;
+        starLimit = rhs.starLimit;
         time = rhs.time;
         initBuffExpr = rhs.initBuffExpr;
     }
@@ -73,6 +75,7 @@ public class BattleSettings
             "mode" => (mode == BattleMode.Record) ? (int)BattleMode.PVP : modeId,
             "petCount" => petCount,
             "parallelCount" => parallelCount,
+            "starLimit" => starLimit,
             "time" => time,
             "weather" => weather,
             "mod" => isMod ? 1 : 0,

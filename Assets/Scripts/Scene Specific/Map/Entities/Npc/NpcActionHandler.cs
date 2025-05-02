@@ -287,6 +287,12 @@ public static class NpcActionHandler
             hintbox.SetOptionNum(1);
             return;
         }
+
+        if ((battleInfo.settings.starLimit > 0) && Player.instance.petBag.Any(x => (x != null) && (x.info.star > battleInfo.settings.starLimit))) {
+            Hintbox.OpenHintboxWithContent("不能携带超过" + battleInfo.settings.starLimit + "星的精灵进行挑战哦", 16);
+            return;
+        }
+        
         Battle battle = new Battle(battleInfo);
         SceneLoader.instance.ChangeScene(SceneId.Battle);
     }

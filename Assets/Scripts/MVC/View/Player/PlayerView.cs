@@ -117,7 +117,7 @@ public class PlayerView : Module
         } else
             Destroy(npc.gameObject);
 
-        if (item.type == ItemType.Shoot)
+        if ((item.type == ItemType.Shoot) && item.removable)
             Item.Remove(item.id, 1);
 
         callbacks?.ForEach(x => x?.Invoke());

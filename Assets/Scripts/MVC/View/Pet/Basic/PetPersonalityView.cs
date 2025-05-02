@@ -18,6 +18,7 @@ public class PetPersonalityView : Module
     [SerializeField] private RectTransform contentRect;
 
     private List<PersonalityCell> personalityCellList = new List<PersonalityCell>();
+    public bool isReady => !ListHelper.IsNullOrEmpty(personalityCellList);
 
     public void CreatePersonalityList(List<Personality> personalitys, Action<Personality> callback = null, Action onFinishCreateCallback = null) {
         StartCoroutine(CreatePersonalityListCoroutine(personalitys, callback, onFinishCreateCallback));

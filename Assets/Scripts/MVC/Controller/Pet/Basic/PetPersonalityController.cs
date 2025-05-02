@@ -17,12 +17,16 @@ public class PetPersonalityController : Module
     public override void Init()
     {
         base.Init();
-        personalityView.CreatePersonalityList(personalityList, (p) => Select((int)p), onInitCallback);
+        if (!personalityView.isReady)
+            personalityView.CreatePersonalityList(personalityList, (p) => Select((int)p), onInitCallback);
+        else
+            onInitCallback?.Invoke();
     }
 
     public void SetActive(bool active, Action onInitCallback = null) {
         this.onInitCallback = onInitCallback;
         gameObject.SetActive(active);
+        Init();
     }
 
     public void SetPet(Pet pet) {

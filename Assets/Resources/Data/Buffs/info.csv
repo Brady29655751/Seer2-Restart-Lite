@@ -84,6 +84,8 @@ id,name,type,copyType,turn,options,description
 74,招架,mark,max,-1,res=16,受到的特殊伤害减少[value]点
 75,随机数乘算,mark,replace,-1,res=67,我方条件类随机数乘算[value]%（先乘算后提升）
 76,随机数乘算,mark,replace,-1,res=67,我方条件类随机数乘算[value]%（先提升后乘算）
+77,先制,mark,replace,-1,res=23,先制+1
+78,后制,mark,replace,-1,res=24,后制-1
 79,旋灭裂空阵,turn,replace,5,none,每回合损失30点体力
 80,圣光气,chance,max,-1,auto_remove=true,下[value]次攻击必定暴击
 81,虚无,mark,replace,-1,none,闪避率提升100%
@@ -398,7 +400,7 @@ id,name,type,copyType,turn,options,description
 3208,寒气爆发,chance,replace,-1,keep=false&inherit=true,下次冰系伤害增加100%
 3209,冰魔,turn,replace,4,none,暴击伤害增加25%并无视对手防御类强化
 3210,坏蛋观察期,mark,replace,-1,none,造成伤害不超过100点。若造成伤害高于99则转变为坏蛋
-3211,坏蛋,mark,replace,-1,none,脱离坏蛋观察期，受到伤害增加20%，闪避率减少100%
+3211,坏蛋,mark,replace,-1,none,脱离坏蛋观察期，受到伤害增加20%，闪避率减少50%
 3212,好人卡,mark,replace,-1,none,你是个好人，造成的伤害为0
 3213,永不放弃,turn,replace,4,res=32,免疫高于300的攻击伤害[ENDL]每回合恢复1/3体力[ENDL]受到攻击时减少对手20点怒气
 3214,心眼,turn,replace,3,res=19,恢复攻击伤害1/2的体力
@@ -419,6 +421,15 @@ id,name,type,copyType,turn,options,description
 3229,风之领域,mark,replace,-1,none,风系伤害增加10%
 3230,风暴领域,mark,replace,-1,none,风系伤害增加20%
 3231,气流涌动,chance,replace,-1,none,下次造成伤害增加100%[ENDL]未造成伤害时不消耗且恢复15点怒气
+3232,尖刺武装,mark,replace,-1,none,受到攻击时使对手流失[value]点体力
+3233,左顾,mark,replace,-1,none,使右盼威力增加35点
+3234,右盼,mark,replace,-1,none,使左顾威力增加35点
+3235,瞻前,mark,replace,-1,none,使仰后必中
+3236,仰后,mark,replace,-1,none,使瞻前必中
+3237,狂欢曲,turn,block,2,keep=false,结束时失去对手最大体力1/2的体力，若提前结束则弱化双防1级
+3238,等着瞧吧,mark,block,-1,none,对手的命中率降低30%，对手的技能未命中时移除此印记并恢复100怒气
+3239,顺流,mark,stack,-1,max_val=2,每层使速度增加25点，最多叠加2层
+3240,逆流,mark,stack,-1,max_val=2,每层使受到伤害减少25点，最多叠加2层
 3279,蜂纹,mark,stack,-1,auto_remove=true&max_val=3,每一层使中毒造成的伤害增加30，最多叠加3层。[ENDL]当前为[value]层
 3280,青蜂之舞,turn,replace,3,res=18,闪避率增加50%
 3281,寒冰坚韧,shield,replace,-1,none,受到伤害减少25%
@@ -499,9 +510,11 @@ id,name,type,copyType,turn,options,description
 100154,紫电,feature,replace,-1,none,特攻技能伤害增加10%，物攻技能命中率增加10%
 100178,潜能,feature,replace,-1,none,攻击附带自身个体值的伤害
 100179,夜行,feature,replace,-1,none,战斗开始时环境转变为夜幕
+100188,胆怯,feature,replace,-1,none,伤害增加10%但每回合失去5点怒气
 100192,炽热,feature,replace,-1,none,炎热时每回合使对手失去1/16体力，最高不超过自身最大体力的1/16
 100200,毒粉,feature,replace,-1,none,自身具有花粉弥漫时，每回合使对手失去25点体力
 100214,神光,feature,replace,-1,none,出手前体力高于1/2时免疫不良，低于1/2时光系技能必中
+100218,流转,feature,replace,-1,none,物攻使自身获得1层顺流，特攻使自身获得1层逆流，两者不共存
 100220,联动,feature,replace,-1,none,物攻技能使自身特攻值增加25点，特攻技能使自身物防值增加25点，可叠加3次
 100224,孤高,feature,replace,-1,none,被攻击性技能命中时，使对手失去15怒气
 100226,除恶,feature,replace,-1,none,对手是坏蛋时自身受到伤害减少15%
@@ -565,6 +578,8 @@ id,name,type,copyType,turn,options,description
 110004,泡沫,feature,replace,-1,none,攻击技能30%使对手冻伤
 110007,烈焰,feature,replace,-1,none,自身攻击力视为双攻较高的一项
 110010,猛禽,feature,replace,-1,none,体力低于1/4时，飞行系技能先制+1
+110016,烈阳,feature,replace,-1,none,晴天时受到的伤害减少10%，炎热时造成的伤害增加35%
+110027,能量,feature,replace,-1,none,对手处于不良状态或异常状态时造成的伤害增加10%
 110300,谱尼,feature,replace,-1,none,封印类技能命中后会吸取对手5点怒气
 110301,飞叶,feature,replace,-1,none,晴天环境下受到的暴击伤害减半
 110304,骇浪,feature,replace,-1,none,雨天环境下造成的伤害增加15%
@@ -613,9 +628,11 @@ id,name,type,copyType,turn,options,description
 200154,挑衅,emblem,replace,-1,none,挑衅也增加自身20点怒气
 200178,必杀,emblem,replace,-1,none,必杀技的属性相克系数不会低于1
 200179,灯芯,emblem,replace,-1,none,每次出场时获得不谐暗光1回合
+200188,灵魂,emblem,replace,-1,none,若决定使用攻击技能(必杀技除外)，该回合结束时50%几率造成和技能威力相等的伤害
 200192,高热,emblem,replace,-1,none,对手烧伤或免疫烧伤时伤害增加10%
 200200,荧光,emblem,replace,-1,none,对手具有荧光花粉时，每回合恢复自身25点体力
 200214,光武,emblem,replace,-1,none,使用光系技能恢复5点怒气
+200218,川流,emblem,replace,-1,none,顺流时每回合恢复5点怒气，逆流时伤害增加10%
 200220,联防,emblem,replace,-1,none,非首发时受到的伤害减少10%
 200224,安魂,emblem,replace,-1,none,霜后安魂曲造成的伤害增加10%
 200226,希望,emblem,replace,-1,none,氏族的希望增加10点威力
@@ -678,6 +695,8 @@ id,name,type,copyType,turn,options,description
 210004,海浪,emblem,replace,-1,none,对手体力低于1/2时，自身造成的伤害增加10%
 210007,燃烧,emblem,replace,-1,none,普通系技能命中会使对手燃烧1回合
 210010,红韵,emblem,replace,-1,none,体力低于1/4时，使用红韵有35%几率闪避下一次攻击
+210016,刺甲,emblem,replace,-1,none,受到攻击时使对手流失35点体力
+210027,消化,emblem,replace,-1,none,使用道具时行动次数+1
 210300,圣灵,emblem,replace,-1,none,圣灵系技能伤害提高10%
 210301,花舞,emblem,replace,-1,none,对手被花粉影响时，自身的物理技能附带35点固定伤害
 210304,龙牙,emblem,replace,-1,none,使用龙系技能同样适用本系加成
@@ -825,3 +844,5 @@ id,name,type,copyType,turn,options,description
 -3056,轮回,mark,block,-1,res=85,所有技能连击数+1
 -3057,永恒,mark,block,-1,res=86,受到的伤害降低为原本的一半
 -3058,圣洁,mark,block,-1,res=87,体力低于1000时回复所有体力
+-3059,限伤1/8,mark,replace,-1,hide=true,首次出场时获得限伤1/8
+-3060,免疫害怕,mark,replace,-1,res=999,免疫害怕状态

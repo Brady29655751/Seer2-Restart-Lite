@@ -666,6 +666,9 @@ public class ResourceManager : Singleton<ResourceManager>
         for (int i = 1; i < dataRow; i++)
         {
             int cur = dataCol * i;
+            if (data[cur].StartsWith("#"))
+                continue;
+                
             PetBasicInfo info = new PetBasicInfo(data, cur);
             petBasicInfos.Add(info);
         }

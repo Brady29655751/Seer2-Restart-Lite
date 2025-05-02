@@ -60,6 +60,7 @@ public static class NpcConditionHandler
 
         var range = key.TrimParentheses().ToIntList('~');
         int rng = Random.Range(range[0], range[1]);
+        Debug.Log(rng + " " + float.Parse(value));
         return Operator.Condition(op, rng, float.Parse(value));
     }
 

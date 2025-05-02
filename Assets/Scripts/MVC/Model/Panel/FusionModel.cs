@@ -6,14 +6,36 @@ using System;
 
 public class FusionModel : Module
 {
+    private static string[] fusionRecipeKeys => new string[] { "pet", "base", "item", "result" };
+    public List<ItemInfo> fusionRecipeInfos => ItemInfo.database.Where(x => (x.type == ItemType.Recipe) && fusionRecipeKeys.All(key => x.effects.Exists(y => y.abilityOptionDict.ContainsKey(key)))).ToList();
+    public int recipeIndex = 0;
+
     private bool isRecipeExist => !ListHelper.IsNullOrEmpty(resultPets);
     private int mainPetIndex, subPetIndex;
     public Pet mainPet, subPet;
+    public (int, int) fusionPetId, fusionBaseId;
     public List<Item> fusionItems = new List<Item>(){ null, null, null, null };
     public List<int> resultPets = new List<int>();
     public List<int> resultWeights = new List<int>();
 
+    public bool TryGetRecipe(ItemInfo recipe) {
+        var e = recipe.effects;
+        for (int j = 0; j < e.Count; j++) {
+            if (!TryParseRecipe(e[j], out (int, int) petId, out (int, int) baseId, out List<Item> itemsRequired, out List<(int, int)> resultPetPdf))
+                continue;
+
+            fusionPetId = petId;
+            fusionBaseId = baseId;
+            fusionItems = itemsRequired;
+            resultPets = resultPetPdf.Select(x => x.Item1).ToList();
+            resultWeights = resultPetPdf.Select(x => x.Item2).ToList();
+            return true;         
+        }
+        return false;
+    }
+
     private bool TrySetRecipe() {
+        recipeIndex = 0;
         fusionItems = new List<Item>(){ null, null, null, null };
         resultPets = new List<int>();
         resultWeights = new List<int>();
@@ -21,47 +43,45 @@ public class FusionModel : Module
         if (mainPet == null || subPet == null)
             return false;
 
-        var recipeInfos = ItemInfo.database.Where(x => x.type == ItemType.Recipe).ToList();
-        if (recipeInfos.Count == 0)
+        if (fusionRecipeInfos.Count == 0)
             return false;
 
-        for (int i = 0; i < recipeInfos.Count; i++) {
-            var e = recipeInfos[i].effects;
+        for (int i = 0; i < fusionRecipeInfos.Count; i++) {
+            var e = fusionRecipeInfos[i].effects;
             for (int j = 0; j < e.Count; j++) {
-                if (!TryParseRecipe(e[j], out int mainPetId, out int subPetId, out List<Item> itemsRequired, out List<(int, int)> resultPetPdf))
+                if (!TryParseRecipe(e[j], out (int, int) petId, out (int, int) baseId, out List<Item> itemsRequired, out List<(int, int)> resultPetPdf))
                     continue;
 
-                if ((mainPetId != mainPet.id) || (subPetId != subPet.id))
-                    continue;
-
-                fusionItems = itemsRequired;
-                resultPets = resultPetPdf.Select(x => x.Item1).ToList();
-                resultWeights = resultPetPdf.Select(x => x.Item2).ToList();
-                return true;
+                if (((baseId.Item1 == mainPet.basic.baseId) && (baseId.Item2 == subPet.basic.baseId)) || 
+                    ((baseId.Item1 == subPet.basic.baseId) && (baseId.Item2 == mainPet.basic.baseId))) 
+                {
+                    fusionPetId = petId;
+                    fusionBaseId = baseId;
+                    fusionItems = itemsRequired;
+                    resultPets = resultPetPdf.Select(x => x.Item1).ToList();
+                    resultWeights = resultPetPdf.Select(x => x.Item2).ToList();
+                    return true;
+                }
             }
         }
 
         return false;
     }
 
-    private bool TryParseRecipe(Effect recipe, out int mainPetId, out int subPetId, out List<Item> itemsRequired, out List<(int, int)> resultPetPdf) {
-        mainPetId = subPetId = 0;
+    public bool TryParseRecipe(Effect recipe, out (int, int) petId, out (int, int) baseId, out List<Item> itemsRequired, out List<(int, int)> resultPetPdf) {
+        petId = (0, 0);
+        baseId = (0, 0);
         itemsRequired = new List<Item>();
         resultPetPdf = new List<(int, int)>();
 
         var options = recipe.abilityOptionDict;
-        var pet = options.Get("pet");
-        var item = options.Get("item");
-        var result = options.Get("result");
-        if (pet == null || item == null || result == null)
-            return false;
+        var petIdList = options.Get("pet").ToIntList('/');
+        var baseIdList = options.Get("base").ToIntList('/');
+        var itemList = options.Get("item").Split('/');
+        var resultPdf = options.Get("result").Split('/');
 
-        var petId = pet.ToIntList('/');
-        var itemList = item.Split('/');
-        var resultPdf = result.Split('/');
-
-        mainPetId = petId[0];
-        subPetId = petId[1];
+        petId = (petIdList[0], petIdList[1]);
+        baseId = (baseIdList[0], baseIdList[1]);
 
         for (int i = 0; i < itemList.Length; i++) {
             var index = itemList[i].IndexOf('[');
@@ -106,6 +126,23 @@ public class FusionModel : Module
 
         if (!isRecipeExist) {
             Hintbox.OpenHintboxWithContent("这两个精灵的元神不相容哦！", 16);
+            return false;
+        }
+
+        if ((fusionBaseId.Item1 != fusionBaseId.Item2) && (fusionBaseId.Item1 == subPet.basic.baseId) && (fusionBaseId.Item2 == mainPet.basic.baseId)) {
+            Hintbox.OpenHintboxWithContent("主副精灵放反了哦！", 16);
+            return false;
+        }
+
+        var mainChainCount = PetExpSystem.GetEvolveChain(fusionPetId.Item1, mainPet.id)?.Count ?? 0;
+        if (mainChainCount == 0) {
+            Hintbox.OpenHintboxWithContent("主精灵未达到可融合形态哦！", 16);
+            return false;
+        }
+
+        var subChainCount = PetExpSystem.GetEvolveChain(fusionPetId.Item2, subPet.id)?.Count ?? 0;
+        if (subChainCount == 0) {
+            Hintbox.OpenHintboxWithContent("副精灵未达到可融合形态哦！", 16);
             return false;
         }
 

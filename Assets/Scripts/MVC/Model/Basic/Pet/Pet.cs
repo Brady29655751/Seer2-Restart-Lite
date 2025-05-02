@@ -255,6 +255,7 @@ public class Pet
         } 
 
         return id switch {
+            "uid" => this.id,
             "id" => info.ui.defaultId,
             "subId" => info.ui.subId,
             "baseId" => basic.baseId,

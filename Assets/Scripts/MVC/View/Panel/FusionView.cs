@@ -7,9 +7,9 @@ public class FusionView : Module
     [SerializeField] private PetSelectBlockView mainPetBlockView, subPetBlockView;
     [SerializeField] private List<PetItemBlockView> petItemBlockViews = new List<PetItemBlockView>();
 
-    public override void Init()
+    protected override void Awake()
     {
-        base.Init();
+        base.Awake();
         mainPetBlockView.SetPet(null);
         subPetBlockView.SetPet(null);
         petItemBlockViews.ForEach(x => x.SetItem(null));
