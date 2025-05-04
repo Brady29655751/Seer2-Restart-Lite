@@ -4,7 +4,16 @@
 		<bgm>BGM_2</bgm>
 	</music>
 	<entities>
-		<teleport id="1" name="精灵太空站" pos="685,290" targetMapId="10081"/>
+		<npc id="1008201" resId="1001" name="" size="250,180" pos="710,290" namePos="0,0" color="0,0,0,0">
+			<description>精灵太空站</description>
+			<transport>850,360</transport>
+			<eventHandler>
+				<button type="click">
+					<action>teleport</action>
+					<param>10081</param>
+				</button>
+			</eventHandler>
+		</npc>
 		<teleport id="2" name="勇者之塔神秘领域" pos="410,425" targetMapId="10083"/>
 	</entities>		
 </map>

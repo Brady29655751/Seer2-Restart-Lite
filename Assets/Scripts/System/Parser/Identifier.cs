@@ -209,6 +209,7 @@ public static class Identifier {
                 return float.MinValue;
 
             pet = petBag.First();
+            id = trimId;
         }
 
         if (id == "movable")

@@ -42,20 +42,23 @@ public class BattlePetSkillView : BattleBaseView
     }
 
     private void SetNormalSkill() {
-        for (int i = 0; i < pet.normalSkill.Length; i++) {
-            skillBlockViews[i].SetSkill(pet.normalSkill[i]);
+        var normalSkills = pet.skillController.normalSkills;
+        for (int i = 0; i < normalSkills.Count; i++) {
+            skillBlockViews[i].SetSkill(normalSkills[i]);
         }
     }
 
     private void SetNormalSkillInteractable(int petAnger) {
-        for (int i = 0; i < pet.normalSkill.Length; i++) {
-            bool interactable = (pet.normalSkill[i] == null) ? false : (petAnger >= pet.normalSkill[i].anger);
+        var normalSkills = pet.skillController.normalSkills;
+        for (int i = 0; i < normalSkills.Count; i++) {
+            bool interactable = (normalSkills[i] == null) ? false : (petAnger >= normalSkills[i].anger);
             skillBlockViews[i].SetInteractable(interactable);
         }
     }
 
     private void SetSuperSkillInteractable(int petAnger) {
-        bool interactable = (pet.superSkill != null) && (petAnger >= pet.superSkill.anger);
+        var superSkill = pet.skillController.superSkill;
+        bool interactable = (superSkill != null) && (petAnger >= superSkill.anger);
         superSkillClickable = interactable;
         superSkillButton.SetInteractable(true);
         superSkillButtonBackground[0].SetMaterial(interactable ? shiningMaterial : null);
@@ -78,7 +81,7 @@ public class BattlePetSkillView : BattleBaseView
         if (!index.IsInRange(0, skillBlockViews.Length))
             return;
 
-        var skill = new Skill(pet.normalSkill[index]);
+        var skill = new Skill(pet.skillController.normalSkills[index]);
         if (battle.settings.parallelCount > 1)
             skill.SetParallelIndex(battle.currentState.myUnit.petSystem.cursor, battle.currentState.opUnit.petSystem.cursor);
 
@@ -94,23 +97,25 @@ public class BattlePetSkillView : BattleBaseView
         if (!index.IsInRange(0, skillBlockViews.Length))
             return;
 
-        float boxSizeY = Mathf.Max(150, pet?.normalSkill[index]?.description.GetPreferredSize(12, 12, 21, 35).y ?? 0);
-        float boxSizeYMedium = Mathf.Max(150, pet?.normalSkill[index]?.description.GetPreferredSize(15, 12, 21, 35).y ?? 0);
-        float boxSizeYLarge = Mathf.Max(150, pet?.normalSkill[index]?.description.GetPreferredSize(24, 12, 21, 35).y ?? 0);
+        var normalSkill = pet?.skillController?.normalSkills[index];
+
+        float boxSizeY = Mathf.Max(150, normalSkill?.description.GetPreferredSize(12, 12, 21, 35).y ?? 0);
+        float boxSizeYMedium = Mathf.Max(150, normalSkill?.description.GetPreferredSize(15, 12, 21, 35).y ?? 0);
+        float boxSizeYLarge = Mathf.Max(150, normalSkill?.description.GetPreferredSize(24, 12, 21, 35).y ?? 0);
         var boxSize = (boxSizeY > 250) ? ((boxSizeYMedium > 300) ? new Vector2(300, boxSizeYLarge) : new Vector2(200, boxSizeYMedium)) : new Vector2(170, boxSizeY);
         descriptionBox.SetBoxSize(boxSize);
-        descriptionBox.SetText(pet?.normalSkill[index].description);
+        descriptionBox.SetText(normalSkill?.description);
         descriptionBox.SetBoxPosition(new Vector2(80 + 175 * index, 109));
     }
 
     public void SelectSuperSkill() {
-        if (pet.superSkill == null)
+        if (pet.skillController.superSkill == null)
             return;
 
         if (!superSkillClickable)
             return;
 
-        var skill = new Skill(pet.superSkill);
+        var skill = new Skill(pet.skillController.superSkill);
         if (battle.settings.parallelCount > 1)
             skill.SetParallelIndex(battle.currentState.myUnit.petSystem.cursor, battle.currentState.opUnit.petSystem.cursor);
 
@@ -123,18 +128,20 @@ public class BattlePetSkillView : BattleBaseView
     }
 
     public void ShowSuperSkillInfo() {
-        float boxSizeY = Mathf.Max(150, pet?.superSkill?.description.GetPreferredSize(12, 14).y ?? 0);
-        float boxSizeYMedium = Mathf.Max(150, pet?.superSkill?.description.GetPreferredSize(15, 14).y ?? 0);
-        float boxSizeYLarge = Mathf.Max(150, pet?.superSkill?.description.GetPreferredSize(24, 14).y ?? 0);
+        var superSkill = pet?.skillController?.superSkill;
+
+        float boxSizeY = Mathf.Max(150, superSkill?.description.GetPreferredSize(12, 14).y ?? 0);
+        float boxSizeYMedium = Mathf.Max(150, superSkill?.description.GetPreferredSize(15, 14).y ?? 0);
+        float boxSizeYLarge = Mathf.Max(150, superSkill?.description.GetPreferredSize(24, 14).y ?? 0);
         var boxSize = (boxSizeY > 250) ? ((boxSizeYMedium > 300) ? new Vector2(300, boxSizeYLarge) : new Vector2(200, boxSizeYMedium)) : new Vector2(170, boxSizeY);
         descriptionBox.SetBoxSize(boxSize);
-        descriptionBox.SetText((pet?.superSkill != null) ? pet.superSkill.description : "尚未习得必杀技");
+        descriptionBox.SetText(superSkill?.description ?? "尚未习得必杀技");
         descriptionBox.SetBoxPosition(new Vector2(5, 115));
     }
 
     public void SetNoOpSkillInteractable(int petAnger) {
-        bool isNormalSkillUsable = pet.normalSkill.Where(x => x != null).Any(x => petAnger >= x.anger);
-        bool isSuperSkillUsable = (pet.superSkill != null) && (petAnger >= pet.superSkill.anger);
+        bool isNormalSkillUsable = pet.skillController.normalSkills.Where(x => x != null).Any(x => petAnger >= x.anger);
+        bool isSuperSkillUsable = (pet.skillController.superSkill != null) && (petAnger >= pet.skillController.superSkill.anger);
         bool isAnySkillUsable = isNormalSkillUsable || isSuperSkillUsable;
         noOpSkillButton.SetInteractable(!isAnySkillUsable);
     }

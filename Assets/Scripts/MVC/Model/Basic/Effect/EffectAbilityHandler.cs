@@ -165,7 +165,7 @@ public static class EffectAbilityHandler
             var maxHp = (max == "none") ? 0 : (int)Parser.ParseEffectOperation(max, effect, lhsUnit, rhsUnit, targetList[i]);
 
             if (set != "none") {
-                if ((setHp <= 0) && (targetList[i].buffController.GetBuff(99) != null))
+                if ((setHp <= 0) && (!ListHelper.IsNullOrEmpty(targetList[i].buffController.GetRangeBuff(x => (x.id == 99) || (x.id == -8)))))
                     continue;
 
                 targetList[i].hp = setHp;
@@ -173,10 +173,10 @@ public static class EffectAbilityHandler
             }
 
             if (max != "none") {
-                if ((maxHp <= 0) && (targetList[i].buffController.GetBuff(99) != null))
+                if ((maxHp <= 0) && (!ListHelper.IsNullOrEmpty(targetList[i].buffController.GetRangeBuff(x => (x.id == 99) || (x.id == -8)))))
                     continue;
 
-                if ((maxHp < targetList[i].maxHp) && (targetList[i].buffController.GetBuff(-7) != null))
+                if ((maxHp < targetList[i].maxHp) && (!ListHelper.IsNullOrEmpty(targetList[i].buffController.GetRangeBuff(x => (x.id == -7) || (x.id == -8)))))
                     continue;
 
                 targetList[i].maxHp = maxHp;
@@ -410,6 +410,7 @@ public static class EffectAbilityHandler
         string id = effect.abilityOptionDict.Get("id", "0");
         string turn = effect.abilityOptionDict.Get("turn", "-1");
         string value = effect.abilityOptionDict.Get("value", "0");
+        string option = effect.abilityOptionDict.Get("option", string.Empty);
 
         Unit invokeUnit = (Unit)effect.invokeUnit;
         Unit lhsUnit = (who == "me") ? state.GetUnitById(invokeUnit.id) : state.GetRhsUnitById(invokeUnit.id);
@@ -447,6 +448,12 @@ public static class EffectAbilityHandler
 
             // The key prefix "rule" is reserved for pvp rules.
             Buff newBuff = (newBuffInfo == null) ? null : new Buff(buffId, buffTurn, buffValue);
+            if (!string.IsNullOrEmpty(option)) {
+                var optionList = option.TrimParenthesesLoop('(', ')');
+                foreach (var op in optionList)
+                    newBuff.options.Set(op.Split(':')[0], op.Split(':')[1]);
+            }
+
             if (!string.IsNullOrEmpty(key)) {
                 if ((isFieldLocked && (key == "field")) || key.StartsWith("rule"))
                     return false;
@@ -622,7 +629,7 @@ public static class EffectAbilityHandler
         if (isTransfer) {
             lhsBuffController.RemoveRangeBuff(buffs, lhsUnit, state);
         }
-        return ListHelper.IsNullOrEmpty(buffs);
+        return !ListHelper.IsNullOrEmpty(buffs);
     }
 
     public static bool SetBuff(this Effect effect, BattleState state) {
@@ -647,8 +654,14 @@ public static class EffectAbilityHandler
 
             return Parser.ParseEffectOperation(id, effect, lhsUnit, rhsUnit, buff, false);
         });
-        var buffList = string.IsNullOrEmpty(key) ? lhsUnit.pet.buffController.GetRangeBuff(x => filter(x) && ((x.id == buffId) || (buffId == 0))) 
-            :  state.stateBuffs.FindAll(x => x.Key == key).Select(x => x.Value).ToList();
+
+        var buffList = new List<Buff>();
+        if (string.IsNullOrEmpty(key))
+            buffList = lhsUnit.pet.buffController.GetRangeBuff(x => filter(x) && ((x.id == buffId) || (buffId == 0)));
+        else if (key == "unit")
+            buffList = lhsUnit.unitBuffs.FindAll(x => filter(x) && (x.id == buffId));
+        else
+            buffList = state.stateBuffs.FindAll(x => x.Key == key).Select(x => x.Value).ToList();
             
         var success = false;
         foreach (var buff in buffList) {
@@ -661,6 +674,8 @@ public static class EffectAbilityHandler
             if (buff.info.autoRemove && buff.value <= 0) {
                 if (string.IsNullOrEmpty(key))
                     lhsUnit.pet.buffController.RemoveBuff(buff, lhsUnit, state);
+                else if (key == "unit")
+                    lhsUnit.unitBuffs.RemoveAll(x => x == buff);
                 else
                     state.stateBuffs.RemoveAll(x => x.Value == buff);
             }
@@ -906,7 +921,7 @@ public static class EffectAbilityHandler
                 } else if (normalSkillExpr.TryTrimStart("shift", out var normalTrim) &&
                     normalTrim.TryTrimParentheses(out var normalShift) &&
                     int.TryParse(normalShift, out var normalShiftCount)) {
-                    normalSkills = (ListHelper.IsNullOrEmpty(battlePet.skillController.normalSkills) ? battlePet.skillController.loopSkills : battlePet.skillController.normalSkills)
+                    normalSkills = (ListHelper.IsNullOrEmpty(pet.skillController.normalSkills) ? pet.skillController.loopSkills : pet.skillController.normalSkills)
                         .Where(x => x != null).Select(x => Skill.GetSkill(x.id + normalShiftCount, false)).Take(4).ToArray();
                 } else {
                     normalSkills = normalSkillExpr.ToIntList('/').Take(4).Select(id => Skill.GetSkill(id, false)).ToArray();
@@ -919,7 +934,7 @@ public static class EffectAbilityHandler
                 } else if (superSkillExpr.TryTrimStart("shift", out var superTrim) &&
                     superTrim.TryTrimParentheses(out var superShift) &&
                     int.TryParse(superShift, out var superShiftCount)) {
-                    superSkill = (battlePet.superSkill == null) ? null : (Skill.GetSkill(battlePet.superSkill.id + superShiftCount, false));
+                    superSkill = (pet.skillController.superSkill == null) ? null : (Skill.GetSkill(pet.skillController.superSkill.id + superShiftCount, false));
                 } else {
                     var superSkillId = (int)Parser.ParseEffectOperation(superSkillExpr, effect, lhsUnit, rhsUnit);
                     superSkill = Skill.GetSkill(superSkillId, false);
@@ -1006,51 +1021,82 @@ public static class EffectAbilityHandler
             return true;
         }
 
-        // Switch skill.
-        if (type.TryTrimStart("skill", out var trimType) &&
-            trimType.TryTrimParentheses(out var trimSkillExpr)) {
-            int trimSkillId = (int)Parser.ParseEffectOperation(trimSkillExpr, effect, lhsUnit, rhsUnit);
-            bool isSuperSkill = ((lhsUnit.pet.superSkill?.id ?? 0) == trimSkillId);
-            int normalSkillIndex = lhsUnit.pet.normalSkill.FindIndex(x => (x?.id ?? 0) == trimSkillId);
+        // Set pet skill.
+        if (type.TryTrimStart("skill", out var trimType)) 
+        {
+            var isSuccess = false;
+            var skillController = lhsUnit.pet.skillController;
+            var filter = Parser.ParseConditionFilter<Skill>(effect.abilityOptionDict.Get("filter"), 
+                (expr, skill) => skill.TryGetSkillIdentifier(expr, out var num) ? num : Identifier.GetNumIdentifier(expr));    
+            var skillList = (skillController.normalSkills ?? new List<Skill>()).Append(skillController.superSkill).Where(x => (x != null) && filter(x)).ToList();
 
-            Skill newSkill = value switch {
-                "-1" => Skill.GetNoOpSkill(),
-                "-4" => Skill.GetEscapeSkill(),
-                "random" => Skill.GetRandomSkill(),
-                _ => Skill.GetSkill((int)newValue, false),
-            };
-            newSkill = (newSkill == null) ? null : new Skill(newSkill);
-
-            if (isSuperSkill) {
-                lhsUnit.pet.superSkill = newSkill;
-                return true;
-            }
-            
-            if (normalSkillIndex >= 0) {
-                var normalSkill = lhsUnit.pet.normalSkill.ToArray();
-                normalSkill[normalSkillIndex] = newSkill;
-                lhsUnit.pet.normalSkill = normalSkill;
-                return true;
+            if (trimType.TryTrimParentheses(out var trimSkillExpr)) {
+                int trimSkillId = (int)Parser.ParseEffectOperation(trimSkillExpr, effect, lhsUnit, rhsUnit);
+                skillList = skillList.Where(x => x.id == trimSkillId).ToList();
+                trimType = trimType.TrimStart("[" + trimSkillExpr + "]");
             }
 
-            return false;
+            if (string.IsNullOrEmpty(trimType))
+                trimType = ".id";
+
+            trimType = trimType.TrimStart('.');
+
+            for (int i = 0; i < skillList.Count; i++) {
+                bool isSuperSkill = ((skillController.superSkill?.id ?? 0) == skillList[i].id);
+                int normalSkillIndex = skillController.normalSkills.FindIndex(x => (x?.id ?? 0) == skillList[i].id);
+                Skill newSkill = value switch {
+                    "-1" => Skill.GetNoOpSkill(),
+                    "-4" => Skill.GetEscapeSkill(),
+                    "random" => Skill.GetRandomSkill(),
+                    _ => Skill.GetSkill((int)newValue, false),
+                };
+
+                newSkill = (newSkill == null) ? null : new Skill(newSkill);
+
+                if (isSuperSkill) {
+                    if (trimType == "id")
+                        skillController.superSkill = newSkill;
+                    else {
+                        oldValue = skillController.superSkill.GetSkillIdentifier(trimType);
+                        skillController.superSkill.SetSkillIdentifier(trimType, Operator.Operate(op, oldValue, newValue));
+                    }   
+
+                    isSuccess = true;
+                    continue;
+                }
+                
+                if (normalSkillIndex >= 0) {
+                    if (trimType == "id")
+                        skillController.normalSkills[normalSkillIndex] = newSkill;
+                    else {
+                        oldValue = skillController.normalSkills[normalSkillIndex].GetSkillIdentifier(trimType);
+                        skillController.normalSkills[normalSkillIndex].SetSkillIdentifier(trimType, Operator.Operate(op, oldValue, newValue));
+                    }
+                    
+                    isSuccess = true;
+                    continue;
+                }
+            }
+
+            return isSuccess;
         }
 
         if (type.TryTrimStart("normalSkill", out var trimNormalSkill)) {
             TryGetShiftedSkills(battlePet, out var normalSkills, out var superSkill, normalSkillKey: "value");
             if (trimNormalSkill.TryTrimParentheses(out var skillIndexExpr)
-                && int.TryParse(skillIndexExpr, out var skillIndex)) {
+                && int.TryParse(skillIndexExpr, out var skillIndex)) 
+            {
                 var newSkill = normalSkills.Get(skillIndex, normalSkills.FirstOrDefault());
-                battlePet.normalSkill = battlePet.normalSkill.UpdateAt(skillIndex, newSkill).ToArray();
+                battlePet.skillController.normalSkills.Set(skillIndex, newSkill);
                 return true;
             }
-            battlePet.normalSkill = normalSkills;
+            battlePet.skillController.normalSkills = normalSkills.ToList();
             return true;
         }
 
         if (type == "superSkill") {
             TryGetShiftedSkills(battlePet, out var normalSkills, out var superSkill, superSkillKey: "value");
-            battlePet.superSkill = superSkill;
+            battlePet.skillController.superSkill = superSkill;
             return true;
         }
 

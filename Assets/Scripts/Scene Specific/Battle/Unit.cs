@@ -65,8 +65,9 @@ public class Unit
         hudSystem.OnTurnStart(this.pet);
         for (int i = 0; i < unitBuffs.Count; i++) {
             if (unitBuffs[i].turn > 0)
-                unitBuffs[i].turn--;
+                unitBuffs[i].turn--;            
         }
+        unitBuffs.RemoveAll(x => x.turn == 0);
     }
 
     public bool IsReady()

@@ -206,10 +206,10 @@ public class Status
                 return lhs;
         }
 
-        var buff = lhsBuff + rhsBuff;
+        var buff = lhsBuff + rhsBuff + Status.one;
         for (int i = 0; i < 55; i++) {
             var p = (Personality)i;
-            if (GetPersonalityBuff(p) == buff)
+            if ((GetPersonalityBuff(p) - buff).status.All(x => x == 0))
                 return p;
         }
 

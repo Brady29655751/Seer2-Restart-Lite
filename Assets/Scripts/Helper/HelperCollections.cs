@@ -76,6 +76,18 @@ public static class ListHelper {
         return list[index];
     }
 
+    public static void Set<T>(this IList<T> list, int index, T value) {
+        if (list == null)
+            return;
+            
+        if (!index.IsInRange(0, list.Count)) {
+            list.Add(value);
+            return;
+        }
+            
+        list[index] = value;
+    }
+
     public static T Random<T>(this List<T> values, List<int> weights = null) {
         if (weights == null) {
             int index = UnityEngine.Random.Range(0, values.Count);

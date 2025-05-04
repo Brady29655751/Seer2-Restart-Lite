@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -52,6 +53,7 @@ public static class NpcConditionHandler
 
         if (key == "[old]")
             return result;
+            
 
         if (key == "[new]") {
             Player.instance.random = Random.Range(0, 100);
@@ -60,7 +62,10 @@ public static class NpcConditionHandler
 
         var range = key.TrimParentheses().ToIntList('~');
         int rng = Random.Range(range[0], range[1]);
-        Debug.Log(rng + " " + float.Parse(value));
+        
+        if (Player.instance.petBag.Any(x => (x != null) && ((Buff.GetEmblemBuff(x)?.id ?? 0) == 20_0051)))
+            rng /= 4;
+
         return Operator.Condition(op, rng, float.Parse(value));
     }
 

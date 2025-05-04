@@ -1,0 +1,231 @@
+<map name="克洛斯星林间" category="102" id="10038" weather="1">
+	<initialPoint>390,265</initialPoint>
+	<music category="102">
+		<bgm>BGM_36</bgm>
+	</music>
+	<entities>
+		<npc id="1003801" resId="Pets/pet/10047" name="Lv100 蘑菇怪" size="128,140" pos="520,120" namePos="0,0">
+			<description>SPT</description>
+			<dialog>
+				<branch id="default" name="蘑菇怪" icon="Pets/pet/10047" size="115,126" pos="10,35">
+					<content><![CDATA[Rua!!!!]]></content>
+					<functionHandler>
+						<func type="click">
+							<description><![CDATA[挑战蘑菇怪]]></description>
+							<action>battle</action>
+							<param>default</param>
+						</func>
+						<func type="click">
+							<description><![CDATA[超进化]]></description>
+							<action>battle</action>
+							<param>evolve</param>
+						</func>
+						<func type="click">
+							<description><![CDATA[神迹觉醒]]></description>
+							<action>battle</action>
+							<param>miracle</param>
+						</func>
+					</functionHandler>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[奥佬好可爱！]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+					</replyHandler>
+				</branch>
+				<branch id="shoot" name="蘑菇怪" icon="Pets/pet/10047" size="115,126" pos="10,35">
+					<content><![CDATA[（似乎被透明的防护罩包围着）]]></content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[看来需要能击穿防护罩的火力]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+					</replyHandler>
+				</branch>
+			</dialog>
+			<battle>
+				<branch id="default">
+					<settings count="1">
+						<mode>3</mode>
+						<weather>1</weather>
+					</settings>
+					<enemy>
+						<pet id="10047" level="100">
+							<status>
+								<hp>5000</hp>
+							</status>
+							<initBuff>13,14,17,20,-3000,-3061</initBuff>
+							<loopSkill>-1011,11709,11704,11708</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>getPet</action>
+							<param>10046,1</param>
+							<condition>activity[spt].done[new][1][default]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=【小蘑菇】已经放入精灵仓库</param>
+							<param>item_icon=pet[10046]</param>
+							<param>option_num=1</param>
+							<condition>activity[spt].done[new][1][default]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>spt</param>
+							<param>done[new][1][default]=true</param>
+							<condition>activity[spt].done[new][1][default]=[bool]false[default]false</condition>
+						</button>
+					</winHandler>
+				</branch>
+				<branch id="evolve">
+					<settings count="6">
+						<mode>3</mode>
+						<weather>1</weather>
+					</settings>
+					<enemy>
+						<pet id="11192" level="100">
+							<status>
+								<hp>10000</hp>
+							</status>
+							<initBuff>13,14,17,20,61,-3000</initBuff>
+							<loopSkill>11721,11708,11708</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=PetSelect</param>
+						    <param>title=选择要进化的蘑菇怪</param>
+						    <param>option_num=2</param>
+						    <param>callback=evolve</param>
+						</button>
+					</winHandler>
+				</branch>
+				<branch id="miracle">
+					<settings count="6">
+						<mode>4</mode>
+						<weather>1</weather>
+					</settings>
+					<enemy>
+						<pet id="114693" level="105">
+							<status>
+								<hp>20000</hp>
+							</status>
+							<initBuff>-8,23,991,996,17,20</initBuff>
+							<loopSkill>11717,11729,11732</loopSkill>
+							<superSkill>11733</superSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=PetSelect</param>
+						    <param>title=选择要进化的巨蘑怪</param>
+						    <param>option_num=2</param>
+						    <param>callback=miracle</param>
+						</button>
+					</winHandler>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>openDialog</action>
+					<param>shoot</param>
+				</button>
+				<button type="shoot">
+					<action>openDialog</action>
+					<param>default</param>
+					<condition>player.shoot=7003</condition>
+				</button>
+			</eventHandler>
+			<callbackHandler>
+				<button type="choose">
+					<action>openHintbox</action>
+					<param>type=PetSelect</param>
+				    <param>title=选择要进化的蘑菇怪</param>
+				    <param>option_num=2</param>
+					<param>callback=evolve</param>
+				    <condition>data.PetSelect.uidNOT10047|data.PetSelect.level&lt;100</condition>
+				</button>
+				<button type="evolve">
+				    <action>openHintbox</action>
+				    <param>type=Item</param>
+				    <param>title=提示</param>
+				    <param>content=必须选择等级100的蘑菇怪！</param>
+				    <param>item_icon=pet[10047]</param>
+				    <param>option_num=1</param>
+					<param>callback=choose</param>
+				    <condition>data.PetSelect.uidNOT10047|data.PetSelect.level&lt;100</condition>
+				</button>
+				<button type="evolve">
+				    <action>openHintbox</action>
+				    <param>type=Item</param>
+				    <param>title=提示</param>
+				    <param>content=蘑菇怪已成功超进化</param>
+				    <param>item_icon=pet[11192]</param>
+				    <param>option_num=1</param>
+				    <condition>data.PetSelect.uid=10047</condition>
+				    <condition>data.PetSelect.levelGTE100</condition>
+				</button>
+				<button type="evolve">
+				    <action>evolvePet</action>
+				    <param>index=data.PetSelectIndex</param>
+				    <param>11192</param>
+				    <condition>data.PetSelect.uid=10047</condition>
+				    <condition>data.PetSelect.levelGTE100</condition>
+				</button>
+				<button type="miracle_choose">
+					<action>openHintbox</action>
+					<param>type=PetSelect</param>
+				    <param>title=选择要进化的巨蘑怪</param>
+				    <param>option_num=2</param>
+					<param>callback=miracle</param>
+				    <condition>data.PetSelect.uidNOT11192|data.PetSelect.level&lt;100</condition>
+				</button>
+				<button type="miracle">
+				    <action>openHintbox</action>
+				    <param>type=Item</param>
+				    <param>title=提示</param>
+				    <param>content=必须选择等级100的巨蘑怪！</param>
+				    <param>item_icon=pet[11192]</param>
+				    <param>option_num=1</param>
+					<param>callback=miracle_choose</param>
+				    <condition>data.PetSelect.uidNOT11192|data.PetSelect.level&lt;100</condition>
+				</button>
+				<button type="miracle">
+				    <action>openHintbox</action>
+				    <param>type=Item</param>
+				    <param>title=提示</param>
+				    <param>content=巨蘑怪已成功超进化</param>
+				    <param>item_icon=pet[14693]</param>
+				    <param>option_num=1</param>
+				    <condition>data.PetSelect.uid=11192</condition>
+				    <condition>data.PetSelect.levelGTE100</condition>
+				</button>
+				<button type="miracle">
+				    <action>evolvePet</action>
+				    <param>index=data.PetSelectIndex</param>
+				    <param>14693</param>
+				    <condition>data.PetSelect.uid=11192</condition>
+				    <condition>data.PetSelect.levelGTE100</condition>
+				</button>
+			</callbackHandler>
+		</npc>
+		<npc id="1003802" resId="1001" name="" size="250,180" pos="710,360" namePos="0,0" color="0,0,0,0">
+			<description>克洛斯星沼泽</description>
+			<transport>850,400</transport>
+			<eventHandler>
+				<button type="click">
+					<action>teleport</action>
+					<param>10037</param>
+				</button>
+			</eventHandler>
+		</npc>
+	</entities>		
+</map>

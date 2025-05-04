@@ -4,6 +4,33 @@
 		<bgm>BGM_2</bgm>
 	</music>
 	<entities>
-		<teleport id="1" name="太空站左翼" pos="200,180" targetMapId="10082"/>
+		<npc id="1008101" resId="8103" name="" size="240,180" pos="300,295" namePos="0,0" color="0,0,0,0">
+			<description>PVP对战</description>
+			<eventHandler>
+				<button type="click">
+					<action>openPanel</action>
+					<param>CreateRoom</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<npc id="1008102" resId="8103" name="" size="198,180" pos="625,360" namePos="0,0" color="0,0,0,0">
+			<description>PVP对战</description>
+			<eventHandler>
+				<button type="click">
+					<action>openPanel</action>
+					<param>CreateRoom</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<npc id="1008103" resId="1001" name="" size="250,180" pos="0,50" namePos="0,0" color="0,0,0,0">
+			<description>太空站左翼</description>
+			<transport>120,150</transport>
+			<eventHandler>
+				<button type="click">
+					<action>teleport</action>
+					<param>10082</param>
+				</button>
+			</eventHandler>
+		</npc>
 	</entities>		
 </map>

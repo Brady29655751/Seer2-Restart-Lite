@@ -1,0 +1,92 @@
+<map name="克洛斯星神域" category="102" id="11725" weather="0">
+	<initialPoint>390,90</initialPoint>
+	<music category="102">
+		<bgm>BGM_849</bgm>
+	</music>
+	<entities>
+		<npc id="1172501" resId="Pets/pet/114732" name="Lv105 神迹闪光波克尔" size="254,316" pos="370,110" namePos="0,-10">
+			<description>皮皮神迹觉醒！</description>
+			<dialog>
+				<branch id="default" name="神迹闪光波克尔" icon="Pets/pet/114732" size="127,158" pos="10,35">
+					<content><![CDATA[需要满级波斯蒂加才能神迹觉醒哦！记得带进背包！]]></content>
+					<functionHandler>
+						<func type="click">
+							<description><![CDATA[神迹觉醒]]></description>
+							<action>battle</action>
+							<param>default</param>
+						</func>
+					</functionHandler>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[怎么会变成这个样子]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+						<reply type="click">
+							<description><![CDATA[我先去获得波斯蒂加]]></description>
+							<action>teleport</action>
+							<param>10943</param>
+						</reply>
+					</replyHandler>
+				</branch>
+			</dialog>
+			<battle>
+				<branch id="default">
+					<settings count="6">
+						<mode>4</mode>
+					</settings>
+					<enemy>
+						<pet id="114732" level="105">
+							<status>
+								<hp>10000</hp>
+							</status>
+							<initBuff>77,214732</initBuff>
+							<loopSkill>11696,11697,11699</loopSkill>
+							<superSkill>11700</superSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setItem</action>
+							<param>add</param>
+							<param>334731,1</param>
+							<param>334732,1</param>
+							<condition>activity[new_evolve_11836].done=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=1片神羽已经放入背包</param>
+							<param>item_icon=pet[14731]</param>
+							<param>option_num=1</param>
+							<condition>activity[new_evolve_11836].done=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=1片闪光神羽已经放入背包</param>
+							<param>item_icon=pet[14732]</param>
+							<param>option_num=1</param>
+							<condition>activity[new_evolve_11836].done=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>new_evolve_11836</param>
+							<param>done=true</param>
+							<condition>activity[new_evolve_11836].done=[bool]false[default]false</condition>
+						</button>
+					</winHandler>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>openDialog</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<teleport id="1" name="克洛斯星秘境" pos="90,60" targetMapId="10943"/>
+	</entities>		
+</map>

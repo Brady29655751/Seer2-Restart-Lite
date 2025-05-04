@@ -1,6 +1,7 @@
 id,name,type,copyType,turn,options,description
 -10,命中弱化,mark,stack,-1,none,命中弱化[value]級
 -9,命中强化,mark,stack,-1,none,命中强化[value]級
+-8,神之体质,mark,replace,-1,none,免疫异常、不良、能力下降状态[ENDL]免疫秒杀和减少最大体力的效果[ENDL]所有技能必中[ENDL]怒气值不低于30点
 -7,最大体力锁定,mark,none,-1,none,免疫减少最大体力的效果[ENDL]自身变身时保留循环技能和最大体力并回满体力
 -6,展开／收起印记,mark,block,-1,none,展开／收起印记的按钮
 -5,展开／收起印记,mark,block,-1,none,展开／收起印记的按钮
@@ -78,8 +79,8 @@ id,name,type,copyType,turn,options,description
 68,随机数固定,mark,replace,-1,none,我方条件类随机数固定为[value]
 69,反馈不良,mark,replace,-1,res=13,反馈不良状态（此印记不免疫不良状态）
 70,反馈異常,mark,replace,-1,none,反馈異常状态（此印记不免疫異常状态）
-71,免疫百分比不良,mark,replace,-1,res=125,免疫不良状态造成的百分比体力流失
-72,免疫持续异常,mark,replace,-1,res=126,回合结束时若自身无法行动则会获得5回合免疫异常
+71,免疫百分比不良,mark,replace,-1,none,免疫不良状态造成的百分比体力流失
+72,免疫持续异常,mark,replace,-1,none,回合结束时若自身无法行动则会获得5回合免疫异常
 73,格挡,mark,max,-1,res=15,受到的物理伤害减少[value]点
 74,招架,mark,max,-1,res=16,受到的特殊伤害减少[value]点
 75,随机数乘算,mark,replace,-1,res=67,我方条件类随机数乘算[value]%（先乘算后提升）
@@ -107,6 +108,7 @@ id,name,type,copyType,turn,options,description
 97,暴怒,mark,replace,-1,hide=true,锁定100怒气
 98,环境锁定,mark,replace,-1,none,锁定环境效果
 99,王者体质,mark,replace,-1,none,免疫秒杀效果
+100,至尊体质,mark,replace,-1,none,敬请期待
 101,魅惑,abnormal,replace,2,none,受到魅惑，无法行动
 102,害怕,abnormal,replace,2,none,害怕对手，无法行动
 103,瘫痪,abnormal,replace,2,none,无法行动，被攻击会复原
@@ -117,6 +119,7 @@ id,name,type,copyType,turn,options,description
 108,窒息,abnormal,replace,2,none,窒息中，无法行动
 109,冰冻,abnormal,replace,2,none,受到冰冻，无法行动[ENDL]受到暴击伤害提升20%，且受到暴击会解冻
 110,恐惧,abnormal,replace,2,movable=true,决定技能时随机在可用技能中出招，受到超过100点伤害会清醒
+111,感染,abnormal,replace,2,none,无法行动，结束时会转化为中毒并降低双攻1级
 113,混乱,abnormal,replace,-1,movable=true,下次造成的攻击伤害将转为作用于自身
 114,沉默,abnormal,replace,2,movable=true,属性技能命中率下降100%
 115,禁锢,abnormal,replace,2,movable=true,物攻技能命中率下降100%
@@ -189,6 +192,26 @@ id,name,type,copyType,turn,options,description
 1013,燃烧,unhealthy,replace,-1,none,每回合损失30点体力
 1014,干裂,unhealthy,replace,3,none,每回合损失1/8体力，且受到的怒气回复效果降低20%（对风系无效）
 1020,药剂反噬,unhealthy,replace,-1,none,恢复体力变为失去体力（此状态为不良状态）
+2001,先制,mark,replace,-1,res=23,先制+[value]
+2002,后制,mark,replace,-1,res=24,后制-[value]
+2003,必定暴击,chance,replace,-1,res=27&auto_remove=true,下[value]次攻击必定暴击
+2004,暴击提升,mark,replace,-1,res=27,暴击率提升[value]%
+2005,伤害提升,chance,replace,-1,auto_remove=true,下[value]次攻击伤害提升[option[value]]%
+2006,伤害提升,mark,replace,-1,res=2005,攻击伤害提升[value]%
+2007,受伤减少,chance,replace,-1,auto_remove=true,下[value]次受到伤害减少[option[value]]%
+2008,受伤减少,mark,replace,-1,res=2007,受到伤害减少[value]%
+2009,受伤减少,chance,replace,-1,res=2007&auto_remove=true,下[value]次受到伤害减少[option[value]]点
+2010,受伤减少,mark,replace,-1,res=2007,受到伤害减少[value]点
+2011,伤害转化,chance,replace,-1,auto_remove=true,吸收下[value]次伤害并转化为体力
+2012,伤害转化,mark,replace,-1,res=2011,吸收伤害并转化为体力
+2013,伤害减少,chance,replace,-1,auto_remove=true,下[value]次攻击伤害减少[option[value]]%
+2014,伤害减少,mark,replace,-1,res=2013,攻击伤害减少[value]%
+2015,吸取体力,unhealthy,replace,-1,res=1007,每回合损失自身最大体力的1/[value]恢复对手，恢复量不超过对手最大体力的1/[value][ENDL](此状态为不良状态)
+2016,吸取体力,unhealthy,replace,-1,res=1007,每回合损失自身[value]点体力恢复对手(此状态为不良状态)
+2017,恢复固伤,mark,replace,-1,none,每回合恢复自身1/[value]体力并给予对手等量伤害
+2018,恢复固伤,mark,replace,-1,res=2017,每回合恢复自身[value]点体力并给予对手等量伤害
+2019,恢复固伤,mark,replace,-1,res=2017,每回合恢复自身1/[value]体力并给予对手等量伤害，体力低于1/[option[value]]时效果2倍
+2020,恢复固伤,mark,replace,-1,res=2017,每回合恢复自身[value]点体力并给予对手等量伤害，体力低于1/[option[value]]时效果2倍
 3000,弱点记号,mark,stack,-1,inherit=true&legacy=true&auto_remove=true&max_val=2,每1个记号使速度下降25点，最多叠加2个。[ENDL]当前为[value]个
 3001,易伤,mark,replace,-1,none,受到的伤害增加50%
 3002,寄生炸弹,turn,replace,3,keep=false,爆炸时损失300点体力
@@ -272,7 +295,7 @@ id,name,type,copyType,turn,options,description
 3080,弱化状态,turn,replace,5,none,使自身技能威力-50
 3081,回归之约,mark,max,-1,none,纪录当前体力值
 3082,星坠预言,turn,block,-1,res=3002&keep=false,爆炸时损失300点体力
-3083,摄动,turn,replace,5,none,特质系技能转变为暗影系
+3083,摄动,mark,block,-1,none,摄动已使用
 3084,命中低下,turn,replace,1,res=21,必中-2
 3085,影钩,mark,stack,-1,auto_remove=true&max_val=16,攻击时每枚影钩有5%概率使对手恐惧，最多叠加16枚[ENDL]当前为[value]枚
 3086,幻视领域,mark,replace,-1,inherit=true,回合结束时若自身体力低于1/2会使对方随机1项能力下降1级
@@ -325,7 +348,7 @@ id,name,type,copyType,turn,options,description
 3133,怒瞳,turn,replace,5,none,受到伤害的10%回复自身怒气
 3134,火环之心,mark,stack,-1,max_val=10&auto_remove=true,每层伤害增加6%，最多叠加10层[ENDL]当前为[value]层
 3135,火苗,turn,stack,2,max_val=100,每回合损失[value]点体力，最高100点
-3136,幽灵,mark,stack,-1,max_val=11&auto_remove=true, 11层时转变为狂欢，最多叠加11层[ENDL]当前为[value]层
+3136,幽灵,mark,stack,-1,max_val=11&auto_remove=true,11层时转变为狂欢，最多叠加11层[ENDL]当前为[value]层
 3137,狂欢,turn,replace,2,none,免疫幽灵状态。闪避率增加100%。必杀技以外的所有技能先制+1、克制系数不低于1且攻击时不消耗怒气
 3138,宴会终结,turn,replace,3,none,恢复自身最大体力的1/8，受到攻击时获得1个幽灵
 3139,不谐暗光,turn,replace,3,none,受到光系技能伤害减半
@@ -430,6 +453,14 @@ id,name,type,copyType,turn,options,description
 3238,等着瞧吧,mark,block,-1,none,对手的命中率降低30%，对手的技能未命中时移除此印记并恢复100怒气
 3239,顺流,mark,stack,-1,max_val=2,每层使速度增加25点，最多叠加2层
 3240,逆流,mark,stack,-1,max_val=2,每层使受到伤害减少25点，最多叠加2层
+3241,神音,mark,replace,-1,none,提前结束时使对手下2回合攻击伤害减少50%
+3242,神羽,mark,stack,-1,max_val=7&auto_remove=true,回合结束时若自身体力低于1/2且低于[ffbb33]神迹波克尔[-]（闪光视同），则消耗1片[ffbb33]【神羽】[-]使其体力转变为与[ffbb33]神迹波克尔[-]相等[ENDL](若背包中有多个神迹波克尔，则以体力最高者计算)
+3243,孢子破碎,mark,replace,-1,none,出手时若自身处于能力强化状态则80%使对手感染
+3244,始源灭碎,mark,replace,-1,keep=false&inherit=true&legacy=true,下一个上场的精灵携带的所有常规技能怒气消耗增加15点
+3245,生财,mark,stack,-1,max_val=10&auto_remove=true,每回合结束获得5赛尔豆[ENDL]层数高于4时伤害增加5%，高于8时伤害增加10%，最多10层[ENDL]当前[value]层
+3246,招财,turn,replace,6,none,伤害增加25%（不与进宝共存）
+3247,进宝,turn,replace,6,none,受伤减少25%（不与招财共存）
+3248,招财进宝,turn,replace,4,none,视为同时拥有招财与进宝（此时招财和进宝无效）
 3279,蜂纹,mark,stack,-1,auto_remove=true&max_val=3,每一层使中毒造成的伤害增加30，最多叠加3层。[ENDL]当前为[value]层
 3280,青蜂之舞,turn,replace,3,res=18,闪避率增加50%
 3281,寒冰坚韧,shield,replace,-1,none,受到伤害减少25%
@@ -484,6 +515,7 @@ id,name,type,copyType,turn,options,description
 100039,抢攻,feature,replace,-1,none,先出手时造成的伤害增加10%
 100041,光滑,feature,replace,-1,none,闪避率提高10%
 100046,偏斜,feature,replace,-1,none,受到物理伤害减少30%，受到特殊伤害增加15%
+100051,财宝,feature,replace,-1,none,造成或受到伤害时获得1层生财
 100055,连攻,feature,replace,-1,none,非首发时造成的伤害增加10%
 100058,高瞻,feature,replace,-1,none,身高100公分以上时命中率增加10%
 100061,有爱,feature,replace,-1,none,以爱的名义伤害增加10%
@@ -554,7 +586,7 @@ id,name,type,copyType,turn,options,description
 100810,武钢,feature,replace,-1,none,具有物攻强化时暴击率增加15%
 100826,五味,feature,replace,-1,none,属性技能命中后有15%几率恢复1/6体力
 100845,割裂,feature,replace,-1,none,特攻技能使自身物攻值增加25点，物攻技能使自身特防值增加25点，可叠加3次[ENDL]（这只精灵视为埃鲁达克的对应型态）
-100946,神迹,feature,replace,-1,none,[ffbb33]【专属动作】[-]神迹觉醒[ENDL][ffbb33]【条件】[-]具有致胜约束状态
+100946,神兔,feature,replace,-1,none,[ffbb33]【专属动作】[-]神迹觉醒[ENDL][ffbb33]【时点】[-]决定技能时[ENDL][ffbb33]【条件】[-]具有致胜约束状态
 100959,逻辑,feature,replace,-1,none,回合结束时自身体力低于1/8会强化1级速度
 100961,首星,feature,replace,-1,none,星移环境下命中率增加50%
 100962,躯星,feature,replace,-1,none,星移环境下受到的伤害减少10%
@@ -580,10 +612,14 @@ id,name,type,copyType,turn,options,description
 110010,猛禽,feature,replace,-1,none,体力低于1/4时，飞行系技能先制+1
 110016,烈阳,feature,replace,-1,none,晴天时受到的伤害减少10%，炎热时造成的伤害增加35%
 110027,能量,feature,replace,-1,none,对手处于不良状态或异常状态时造成的伤害增加10%
+110046,蘑菇,feature,replace,-1,none,属性技能命中后30%概率使对手中毒
 110300,谱尼,feature,replace,-1,none,封印类技能命中后会吸取对手5点怒气
 110301,飞叶,feature,replace,-1,none,晴天环境下受到的暴击伤害减半
 110304,骇浪,feature,replace,-1,none,雨天环境下造成的伤害增加15%
 110307,魔焰,feature,replace,-1,none,炎热环境下暴击率增加15%
+114693,蘑神,feature,replace,-1,none,[ffbb33]【专属动作】[-]神迹觉醒[ENDL][ffbb33]【时点】[-]决定技能时[ENDL][ffbb33]【条件】[-]任意一方处于中毒状态
+114731,皮神,feature,replace,-1,none,[ffbb33]【专属动作】[-]神迹觉醒[ENDL][ffbb33]【时点】[-]攻击后[ENDL][ffbb33]【条件】[-]本回合攻击暴击
+114732,皮神,feature,replace,-1,none,[ffbb33]【专属动作】[-]神迹觉醒[ENDL][ffbb33]【时点】[-]攻击后[ENDL][ffbb33]【条件】[-]本回合攻击暴击
 200001,追击,emblem,replace,-1,none,命中率和闪避率提高10%
 200004,怒火,emblem,replace,-1,none,怒气回复率提高20%（攻击命中与回合结束回复的怒气除外）
 200007,治愈,emblem,replace,-1,none,体力回复率提高20%
@@ -602,6 +638,7 @@ id,name,type,copyType,turn,options,description
 200039,焰火,emblem,replace,-1,none,增加1回合焰火的效果回合数
 200041,虚弱,emblem,replace,-1,none,对手处于能力下降状态时自身伤害增加10%
 200046,辉之,emblem,replace,-1,none,出场自带星之辉状态
+200051,摇铃,emblem,replace,-1,none,非战斗时的事件触发概率变为4倍
 200055,针灸,emblem,replace,-1,none,增加2回合针灸的持续时间
 200058,拳之,emblem,replace,-1,none,拳类技能伤害增加10%
 200061,爱的,emblem,replace,-1,none,首次出场时自带爱的名义
@@ -672,6 +709,7 @@ id,name,type,copyType,turn,options,description
 200810,装甲,emblem,replace,-1,none,具有物防强化时受到的暴击伤害降低25%
 200826,萌月,emblem,replace,-1,none,使五味特性触发恢复体力的几率增加10%
 200845,联攻,emblem,replace,-1,none,非首发时造成的伤害增加10%
+200947,晓月,emblem,block,-1,none,首次登场时提升自身等级5级并免疫不良状态[ENDL]攻击技能附带200点固定伤害并使自身当回合受到伤害减少30%[ENDL]属性技能先制+2且命中后随机吸取对手2项能力1级
 200959,专注,emblem,replace,-1,none,击败对手时清除自身异常状态
 200961,首魅,emblem,replace,-1,none,使幻魅之眼的魅惑效果延长1回合
 200962,躯徽,emblem,replace,-1,none,使星尘幻盾回复自身120点体力
@@ -697,10 +735,14 @@ id,name,type,copyType,turn,options,description
 210010,红韵,emblem,replace,-1,none,体力低于1/4时，使用红韵有35%几率闪避下一次攻击
 210016,刺甲,emblem,replace,-1,none,受到攻击时使对手流失35点体力
 210027,消化,emblem,replace,-1,none,使用道具时行动次数+1
+210046,孢子,emblem,replace,-1,none,攻击技能命中后15%概率使对手被寄生
 210300,圣灵,emblem,replace,-1,none,圣灵系技能伤害提高10%
 210301,花舞,emblem,replace,-1,none,对手被花粉影响时，自身的物理技能附带35点固定伤害
 210304,龙牙,emblem,replace,-1,none,使用龙系技能同样适用本系加成
 210307,火拳,emblem,replace,-1,none,对手怒气高于50时，自身技能威力增加15
+214693,护罩,emblem,stack,-1,max_val=500,首次登场时获得吸收状态[ENDL]回合开始时若对手处于不良状态则使自身当回合受到的伤害减少33%[ENDL]回合开始时若自身处于异常状态则使对手陷入中毒、寄生、感染中的随机1种，失败时或自身不处于异常状态时增加100点体力上限，最多500点
+214731,创世,emblem,replace,-1,none,自己每存活1只精灵使受到的伤害减少5%、攻击伤害提升5%、造成伤害的5%恢复自身体力。若存活的精灵为[ffbb33]波克尔[-]（闪光视同），则上述效果提升为12%[ENDL]首次登场时全队获得7片[ffbb33]【神羽】[-][ENDL]首次登场时自身获得[ffbb33]【神之体质】[-](PVP无效)
+214732,创世,emblem,replace,-1,none,自己每存活1只精灵使受到的伤害减少5%、攻击伤害提升5%、造成伤害的5%恢复自身体力。若存活的精灵为[ffbb33]波克尔[-]（闪光视同），则上述效果提升为12%[ENDL]首次登场时全队获得7片[ffbb33]【神羽】[-][ENDL]首次登场时自身获得[ffbb33]【神之体质】[-](PVP无效)
 300354,海牙,emblem,replace,-1,none,冰系技能暴击率提升25%，超能系技能暴击伤害提升15%
 500000,无,weather,replace,-1,none,无天气或环境效果
 500001,晴天,weather,replace,-1,none,草系和光系技能伤害+35%
@@ -770,6 +812,9 @@ id,name,type,copyType,turn,options,description
 440000,大乱斗邀请函,item,replace,-1,item=24000&group=exclude,[ffbb33]【随身物品】[-][ENDL]首次登场时获得【伊特领域】，伊特家族以外的精灵携带时仍可以享有该领域的效果
 440001,魅魔之王,item,block,-1,item=24001&group=achievement,使用属性技能会恢复5点怒气，法伊娜的属性技能命中提升25%
 440002,笑口常开,item,block,-1,item=24002&group=achievement,晴天时每回合恢复5点怒气，笑笑葵携带时额外使技能威力增加10点（不论天气）
+484693,神迹蘑菇怪专属全能刻印,item,new,-1,group=Cm&Cm_type=0&item=484639&status=0/40/45/45/25/120,特攻 40，物防 45，特防 45，速度 25，体力 120
+484731,神迹波克尔专属全能刻印,item,new,-1,group=Cm&Cm_type=0&item=484731&status=70/0/40/40/35/90,物攻 70，物防 40，特防 40，速度 35，体力 90
+490947,神迹拂晓兔专属全能刻印,item,new,-1,group=Cm&Cm_type=0&item=490497&status=0/60/35/35/30/115,特攻 60，物防 35，特防 35，速度 30，体力 115
 600002,深海,mark,replace,-1,none,双方受到攻击时25%概率溺水
 600004,极地,mark,replace,-1,none,双方暴击率提升15%，击败对手时会强化双攻1级
 600008,影触,mark,replace,-1,none,每回合随机弱化双方1项能力1级
@@ -846,3 +891,4 @@ id,name,type,copyType,turn,options,description
 -3058,圣洁,mark,block,-1,res=87,体力低于1000时回复所有体力
 -3059,限伤1/8,mark,replace,-1,hide=true,首次出场时获得限伤1/8
 -3060,免疫害怕,mark,replace,-1,res=999,免疫害怕状态
+-3061,免疫非火系伤害,shield,replace,-1,hide=true,免疫非火系伤害

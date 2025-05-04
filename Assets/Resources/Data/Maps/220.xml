@@ -1,0 +1,40 @@
+<map name="幽静浅滩" category="3" id="220" weather="0">
+    <fightMap>100003</fightMap>
+    <initialPoint>350,140</initialPoint>
+    <music category="3">
+    	<bgm>BGM_210</bgm>
+    	<fx>FX_120</fx>
+    </music>
+	<entities>
+		<npc id="22001" resId="Pets/pet/52.png" name="" size="200,120" pos="745,125" namePos="0,0" color="0,0,0,0">
+			<description>感觉这里曾经摆着存钱罐</description>
+			<battle>
+				<branch id="default">
+					<settings count="6" capture="true"/>
+					<enemy>
+						<pet id="52" level="30">
+							<initBuff>-2</initBuff>
+							<loopSkill>11739,11739,11739,11739,11739,-4</loopSkill>
+						</pet>
+					</enemy>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="shoot">
+					<action>battle</action>
+					<param>default</param>
+					<condition>player.shoot=0</condition>
+				</button>
+			</eventHandler>
+		</npc>
+		<npc id="22002" resId="15203" name="" size="300,150" pos="260,280" color="0,0,0,0">
+			<description>海边</description>
+			<eventHandler>
+				<button type="shoot">
+					<action>fish</action>
+				</button>
+			</eventHandler>
+		</npc>
+		<teleport id="1" name="漩涡谷地" pos="35,275" targetMapId="211"/>
+	</entities>
+</map>

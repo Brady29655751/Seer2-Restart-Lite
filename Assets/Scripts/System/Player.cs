@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -21,7 +22,10 @@ public class Player : Singleton<Player>
     public int currentNpcId = 0;
     public int currentMissionId = 0;
 
-    public int random = -1;
+    public int random {
+        get => (int)GetSceneData("random", 0) / (petBag.Any(x => (x != null) && ((Buff.GetEmblemBuff(x)?.id ?? 0) == 20_0051)) ? 4 : 1);
+        set => SetSceneData("random", value);
+    }
     public Battle currentBattle = null;
     public BattleRecord currentBattleRecord = null;
     private static Dictionary<string, object> sceneData = new Dictionary<string, object>();

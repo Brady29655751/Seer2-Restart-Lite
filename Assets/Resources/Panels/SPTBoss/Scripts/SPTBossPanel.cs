@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class SPTBossPanel : Panel
 {
+    [SerializeField] private List<GameObject> bossPages = new List<GameObject>();
+
     [SerializeField] private List<int> bossId;
     [SerializeField] private List<int> mapId;
     [SerializeField] private List<IButton> bossButtonList;
@@ -23,6 +25,25 @@ public class SPTBossPanel : Panel
             bossButtonList[i]?.onPointerOverEvent.SetListener(() => ShowBossInfo(info.name));
             bossButtonList[i]?.onPointerClickEvent.SetListener(() => GoToMap(mapId[copy]));
         }
+    }
+
+    public override void SetPanelIdentifier(string id, string param)
+    {
+        switch (id) 
+        {
+            default:
+                base.SetPanelIdentifier(id, param);
+                return;
+            case "page":
+                SetPage(int.Parse(param));
+                return;
+        }
+        
+    }
+
+    public void SetPage(int page) {
+        for (int i = 0; i < bossPages.Count; i++)
+            bossPages[i].SetActive(i == page);
     }
 
     public void ShowBossInfo(string bossName) {

@@ -1,4 +1,4 @@
-<map name="克洛斯星林间" category="102" id="10037" weather="1">
+<map name="克洛斯星沼泽" category="102" id="10037" weather="1">
 	<initialPoint>520,280</initialPoint>
 	<music category="102">
 		<bgm>BGM_36</bgm>
@@ -118,7 +118,7 @@
 					<action>setNpcParam</action>
 					<param>1003704</param>
 					<param>active=true</param>
-					<condition>random[0~1024]&lt;1</condition>
+					<condition>random[0~128]&lt;1</condition>
 				</button>
 				<button type="click">
 					<action>battle</action>
@@ -133,6 +133,16 @@
 				<button type="click">
 					<action>teleport</action>
 					<param>10036</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<npc id="1003706" resId="1001" name="" size="220,250" pos="0,120" namePos="0,0" color="0,0,0,0">
+			<description>克洛斯星林间</description>
+			<transport>120,160</transport>
+			<eventHandler>
+				<button type="click">
+					<action>teleport</action>
+					<param>10038</param>
 				</button>
 			</eventHandler>
 		</npc>

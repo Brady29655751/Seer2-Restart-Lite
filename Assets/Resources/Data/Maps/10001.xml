@@ -20,8 +20,14 @@
 			<transport>570,265</transport>
 		</npc>
 		<npc id="1000103" resId="1000101" size="106,214" pos="430,330" rotation="0,0,5" color="0,0,0,0">
-			<description>SPT（暂未开放）</description>
+			<description>SPT</description>
 			<transport>455,275</transport>
+			<eventHandler>
+				<button type="click">
+					<action>openPanel</action>
+					<param>SPTBoss[page=1]</param>
+				</button>
+			</eventHandler>
 		</npc>
 		<npc id="1000104" resId="1000101" size="106,214" pos="280,320" rotation="0,0,10" color="0,0,0,0">
 			<description>克洛斯星</description>

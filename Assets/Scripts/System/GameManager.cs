@@ -94,7 +94,8 @@ public class GameManager : Singleton<GameManager>
 
         if (debugMode) {
             Player.instance.gameData.petStorage = Database.instance.petInfoDict.Select(entry => Pet.GetExamplePet(entry.Key)).ToList();
-            Player.instance.gameData.itemStorage = Database.instance.itemInfoDict.Select(entry => new Item(entry.Key, 99999)).ToList();
+            Player.instance.gameData.itemStorage = Item.pvpItemDatabase.Concat(ItemInfo.database.Where(x => (x.type == ItemType.HpPotion) || (x.type == ItemType.Achievement) || (x.type == ItemType.Capture))
+                .Select(x => new Item(x.id, 9999))).Where(x => x.info.type != ItemType.Evolve).ToList();
             Player.instance.gameData.coin = (int)2e7;
             Player.instance.gameData.diamond = (int)2e7;
         }

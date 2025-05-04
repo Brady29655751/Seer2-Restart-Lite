@@ -481,6 +481,14 @@ public class Pet
             petDataVersion = "lite_2.9";
         }
 
+        if (VersionData.Compare(petDataVersion, "lite_2.9.4") < 0) {
+            foreach (var pet in allPets)
+                if (!ListHelper.IsNullOrEmpty(PetExpSystem.GetEvolveChain(685, pet.id)))
+                    Enumerable.Range(11748, 4).Select(x => Skill.GetSkill(x, false)).ToList().ForEach(x => pet.skills.LearnNewSkill(x));
+
+            petDataVersion = "lite_2.9.4";
+        }
+
         // Check New Skill
         foreach (var pet in allPets)
             pet?.skills?.CheckNewSkill(pet?.level ?? 0);

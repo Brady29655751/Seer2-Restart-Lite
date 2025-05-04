@@ -6,6 +6,7 @@ id,timing,priority,target,condition,cond_option,effect,effect_option
 5,none,-1,none,none,none,none,none
 6,none,-1,none,none,none,none,max_use=0
 7,none,-1,none,none,none,none,max_use=0
+8,none,-1,none,none,none,none,none
 1001,none,-1,none,none,none,none,none
 1002,none,-1,none,none,none,none,none
 1003,none,-1,none,none,none,none,none
@@ -195,6 +196,8 @@ id,timing,priority,target,condition,cond_option,effect,effect_option
 320761,resident\resident\resident,-1\-1\-1,pet\pet\pet,pet\pet\pet,type=id&id_cmp=761\type=id&id_cmp=762\type=id&id_cmp=763,set_pet\set_pet\set_pet,type=id&op=SET&value=762&keep_skill=false\type=id&op=SET&value=763&keep_skill=false\type=id&op=SET&value=761&keep_skill=false
 320810,resident,-1,pet,pet,type=id/level&id_cmp=91&level_op=GTE&level_cmp=25,set_pet,type=id&op=SET&value=810
 320970,resident,-1,pet,pet,type=baseId/maxLevel&baseId_cmp=970&maxLevel_op=<&maxLevel_cmp=105,set_pet,type=maxLevel&op=SET&value=105
+334731,resident,-1,pet,pet,type=uid/level&uid_cmp=11836&level_op=GTE&level_cmp=100,set_pet,type=id&op=SET&value=14731
+334732,resident,-1,pet,pet,type=uid/level&uid_cmp=12197&level_op=GTE&level_cmp=100,set_pet,type=id&op=SET&value=14732
 400000,none,-1,none,none,none,none,none
 400001,none,-1,none,none,none,none,none
 400002,none,-1,none,none,none,none,none
@@ -211,6 +214,9 @@ id,timing,priority,target,condition,cond_option,effect,effect_option
 400013,none,-1,none,none,none,none,none
 400014,none,-1,none,none,none,none,none
 400015,none,-1,none,none,none,none,none
+484693,resident,-1,pet,pet,type=id/level/buff[group:Cm]/buff[Cm_type:0]&id_cmp=14693&level_op=>&level_cmp=99&buff[group:Cm]_op=<&buff[group:Cm]_cmp=3&buff[Cm_type:0]_op=<&buff[Cm_type:0]_cmp=1|type=id/level/buff[group:Cm]/buff[Cm_type:0]&id_cmp=114693&level_op=>&level_cmp=99&buff[group:Cm]_op=<&buff[group:Cm]_cmp=3&buff[Cm_type:0]_op=<&buff[Cm_type:0]_cmp=1,set_pet,type=buff&op=+&value=484693
+484731,resident,-1,pet,pet,type=id/level/buff[group:Cm]/buff[Cm_type:0]&id_cmp=14731&level_op=>&level_cmp=99&buff[group:Cm]_op=<&buff[group:Cm]_cmp=3&buff[Cm_type:0]_op=<&buff[Cm_type:0]_cmp=1|type=id/level/buff[group:Cm]/buff[Cm_type:0]&id_cmp=114731&level_op=>&level_cmp=99&buff[group:Cm]_op=<&buff[group:Cm]_cmp=3&buff[Cm_type:0]_op=<&buff[Cm_type:0]_cmp=1,set_pet,type=buff&op=+&value=484731
+490947,resident,-1,pet,pet,type=id/level/buff[group:Cm]/buff[Cm_type:0]&id_cmp=946&level_op=>&level_cmp=99&buff[group:Cm]_op=<&buff[group:Cm]_cmp=3&buff[Cm_type:0]_op=<&buff[Cm_type:0]_cmp=1|type=id/level/buff[group:Cm]/buff[Cm_type:0]&id_cmp=947&level_op=>&level_cmp=99&buff[group:Cm]_op=<&buff[group:Cm]_cmp=3&buff[Cm_type:0]_op=<&buff[Cm_type:0]_cmp=1,set_pet,type=buff&op=+&value=490947
 500000,resident\resident,-1\-1,state\state,none\none,none\none,set_player\set_player,param_count=2&action=setItem&param[0]=add&param[1]=2，50\param_count=5&action=openHintbox&param[0]=type＝Item&param[1]=title＝提示&param[2]=content＝50星钻已经放入背包&param[3]=item_icon＝item[2]&param[4]=option_num＝1
 500091,resident\resident,-1\-1,state\state,none\none,none\none,set_player\set_player,param_count=1&action=getPet&param[0]=91\param_count=5&action=openHintbox&param[0]=type＝Item&param[1]=title＝提示&param[2]=content＝【伊特】已经放入精灵仓库&param[3]=item_icon＝pet[91]&param[4]=option_num＝1
 500178,resident\resident,-1\-1,state\state,none\none,none\none,set_player\set_player,param_count=1&action=getPet&param[0]=178\param_count=5&action=openHintbox&param[0]=type＝Item&param[1]=title＝提示&param[2]=content＝【米咔】已经放入精灵仓库&param[3]=item_icon＝pet[178]&param[4]=option_num＝1

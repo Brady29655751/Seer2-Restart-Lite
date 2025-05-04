@@ -126,7 +126,7 @@ public static class EffectConditionHandler
         string who = condOptions.Get("who", "me");
         string type = condOptions.Get("type", "none");
         string[] typeList = type.Split('/');
-        
+
         var invokeUnitId = ((Unit)effect.invokeUnit).id;
         Unit lhsUnit = (who == "me") ? state.GetUnitById(invokeUnitId) : state.GetRhsUnitById(invokeUnitId);
         Unit rhsUnit = state.GetRhsUnitById(lhsUnit.id);

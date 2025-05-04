@@ -124,6 +124,7 @@ public class Skill
         ignoreShield = rhs.ignoreShield;
         ignorePowerup = rhs.ignorePowerup;
         ignorePowerdown = rhs.ignorePowerdown;
+        referBuffList = rhs.referBuffList?.ToList();
     }
 
     protected Skill(SkillType specialType) {
@@ -282,10 +283,15 @@ public class Skill
         }
         if (!ListHelper.IsNullOrEmpty(referBuffList)) {
             for (int i = 0; i < referBuffList.Count; i++) {
-                bool isWithValue = referBuffList[i].TryTrimParentheses(out var value);
+                var buffValueList = referBuffList[i].TrimParenthesesLoop(); 
+                bool isWithValue = !ListHelper.IsNullOrEmpty(buffValueList);
                 var buffId = int.Parse(isWithValue ? referBuffList[i].Substring(0, referBuffList[i].IndexOf('[')) : referBuffList[i]);
-                var buffValue = isWithValue ? int.Parse(value) : 0;
+                var buffValue = isWithValue ? int.Parse(buffValueList.FirstOrDefault(x => !x.Contains(":"))) : 0;
                 var buff = new Buff(buffId, -2, buffValue);
+
+                buffValueList?.RemoveAll(x => !x.Contains(":"));
+                buffValueList?.ForEach(x => buff.options.Set(x.Split(':')[0], x.Split(':')[1]));
+
                 desc += ("[ENDL][ENDL][ffbb33]【" + buff.name + "】[-]：" + buff.description);
             }
         }
