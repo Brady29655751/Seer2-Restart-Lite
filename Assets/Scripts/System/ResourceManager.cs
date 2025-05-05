@@ -200,7 +200,50 @@ public class ResourceManager : Singleton<ResourceManager>
         }
     }
 
-    private readonly Dictionary<int, AssetBundle> assetBundleDictionary = new Dictionary<int, AssetBundle>();
+    private readonly Dictionary<int, AssetBundle> mapAssetBundleDictionary = new Dictionary<int, AssetBundle>();
+    private readonly List<int> loadingMapAnimAssetBundles = new List<int>();
+
+    public GameObject GetMapAnimInstance(int mapID, string fileName)
+    {
+        try
+        {
+            AssetBundle assetBundle = null;
+            if (this.mapAssetBundleDictionary.TryGetValue(mapID, out var value1))
+            {
+                assetBundle = value1; //缓存中有已经加载的AssetBundle,含有该地图的所有动画
+            }
+            else
+            {
+                var platformPath = (Application.platform == RuntimePlatform.Android) ? "android" : "windows";
+                var folderPath = Map.IsMod(mapID) ? ("/Mod/Maps/anim/" + platformPath) : "/Resources/Maps/anim";
+        
+                loadingPetAnimAssetBundles.Add(mapID);
+                assetBundle = AssetBundle.LoadFromFile(Application.persistentDataPath + folderPath + "/map_" + mapID);
+                loadingPetAnimAssetBundles.Remove(mapID);
+        
+                if (assetBundle == null) //说明地图的所有动画都没有
+                {
+                    return null;
+                }
+        
+                this.mapAssetBundleDictionary[mapID] = assetBundle;
+            }
+        
+            GameObject prefab = assetBundle.LoadAsset<GameObject>(fileName); //获取地图的某个特定动画
+            if (prefab == null) //说明地图的某个特定动画没有
+            {
+                return null;
+            }
+        
+            return prefab;
+        }
+        catch (Exception)
+        {
+            return null;
+        }
+    }
+
+    private readonly Dictionary<int, AssetBundle> petAssetBundleDictionary = new Dictionary<int, AssetBundle>();
     private readonly List<int> loadingPetAnimAssetBundles = new List<int>();
 
     public GameObject GetPetAnimInstance(int petID, string fileName)
@@ -213,7 +256,7 @@ public class ResourceManager : Singleton<ResourceManager>
         try
         {
             AssetBundle assetBundle = null;
-            if (this.assetBundleDictionary.TryGetValue(petID, out var value1))
+            if (this.petAssetBundleDictionary.TryGetValue(petID, out var value1))
             {
                 assetBundle = value1; //缓存中有已经加载的AssetBundle,含有该精灵的所有动画
             }
@@ -231,7 +274,7 @@ public class ResourceManager : Singleton<ResourceManager>
                     return null;
                 }
 
-                this.assetBundleDictionary[petID] = assetBundle;
+                this.petAssetBundleDictionary[petID] = assetBundle;
             }
 
             GameObject prefab = assetBundle.LoadAsset<GameObject>(fileName); //获取精灵的某个特定动画
@@ -282,7 +325,7 @@ public class ResourceManager : Singleton<ResourceManager>
     private IEnumerator GetPetAnimAssetBundleCoroutine(int petID, Action<AssetBundle> onSuccess, Action<float> onProgress = null) {
         AssetBundle assetBundle = null;
 
-        if (this.assetBundleDictionary.TryGetValue(petID, out var value1))
+        if (this.petAssetBundleDictionary.TryGetValue(petID, out var value1))
         {
             onSuccess?.Invoke(value1);
             yield break;
@@ -323,7 +366,7 @@ public class ResourceManager : Singleton<ResourceManager>
             yield break;
         }
 
-        this.assetBundleDictionary[petID] = assetBundle;
+        this.petAssetBundleDictionary[petID] = assetBundle;
         onSuccess?.Invoke(assetBundle);
     }
 
@@ -475,7 +518,10 @@ public class ResourceManager : Singleton<ResourceManager>
             yield break;
         }
 
-        MapResources mapResources = new MapResources(bg, pathSprite, bgm, fx);
+        var anim = GetMapAnimInstance(resId, resId + "-idle");
+
+        MapResources mapResources = new MapResources(bg, pathSprite, bgm, fx, anim);
+        mapResources.anim = anim;
         map.SetResources(mapResources);
         onSuccess?.Invoke(map);
     }

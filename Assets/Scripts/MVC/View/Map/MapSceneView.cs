@@ -45,8 +45,17 @@ public class MapSceneView : UIModule
     }
 
     public void SetBackground(MapResources resources) {
-        background.sprite = resources.bg;
-        background.color = map.dream ? Color.gray : map.backgroundColor;
+        var prefab = resources.anim;
+        if (prefab == null) {
+            background.sprite = resources.bg;
+            background.color = map.dream ? Color.gray : map.backgroundColor;
+            return;
+        }
+
+        var anim = Instantiate(prefab, Camera.main.transform);
+        anim.transform.localScale = map.anim.animScale;
+        anim.transform.localPosition = map.anim.animPos;
+        background.color = Color.clear;
     }
 
     public void SetPathMask(MapResources resources) {

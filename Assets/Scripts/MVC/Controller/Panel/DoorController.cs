@@ -29,14 +29,18 @@ public class DoorController : Module
 
     public void RefreshView() {
         doorView.SetMode(doorModel.mode);
-        doorView.SetFloor(doorModel.floor);
+        doorView.SetFloor(Mathf.Min(doorModel.floorNum, 21).ToString());
         
         optionSelectController.Select(doorModel.doorIndex);
         
         playerController.SetStorage(playerController.GetPetSelections().Take(doorModel.petNum).ToList());
         playerController.Select(0);
 
-        enemyController.SetStorage(doorModel.battleInfo.enemyInfo.Select(x => new Pet(x.petId, x.level)).ToList());
+        if ((doorModel.door == "competition") && (doorModel.floorNum < 21) && (doorModel.floorNum % 7 != 0))
+            enemyController.SetStorage(new List<Pet>());
+        else
+            enemyController.SetStorage(doorModel.battleInfo.enemyInfo.Select(x => new Pet(x.petId, x.level)).ToList());
+
         enemyController.Select(0);
     }
 

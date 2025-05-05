@@ -102,6 +102,17 @@ public class Battle
             clientPetBag = randomPetBag.Skip(allPetBag.Count / 2).ToArray();
         }
 
+        if (!settings.isPVP) 
+        {
+            masterPetBag.ForEach((x, i) => {
+                if (x == null)
+                    return;
+                    
+                x.skillController.loopSkills = null;
+                x.buffController.buffs.RemoveAll(buff => buff.id == -3);
+            });
+        }
+
         this.lastState = null;
         Unit masterTurn = new Unit(masterPetBag, 1, settings);
         Unit clientTurn = new Unit(clientPetBag, -1, settings);

@@ -1,5 +1,6 @@
 <map name="异蘑世界" category="2" id="121" weather="1">
 	<!-- <resource>10012_1</resource> -->
+	<anim pos="-8,-0.7" scale="1.5,1.53"/>
 	<fightMap>100002</fightMap>
 	<initialPoint>450,150</initialPoint>
 	<music category="2">
@@ -8,7 +9,7 @@
 	</music>
 	<entities>
 		<npc id="12101" resId="12101" name="" size="107,121" pos="560,120" target="false"/>
-		<npc id="12102" resId="Pets/pet/10.png" name="Lv2 法拉" size="30,40" pos="480,50" namePos="0,0">
+		<npc id="12102" resId="Pets/pet/10.png" name="Lv2 法拉" size="45,60" pos="480,50" namePos="0,-5" color="0,0,0,0">
 			<battle>
 				<branch id="default">
 					<settings count="6" capture="true">
@@ -45,7 +46,7 @@
 				</button>
 			</eventHandler>
 		</npc>
-		<npc id="12103" resId="Pets/pet/10.png" name="Lv3 法拉" size="30,40" pos="350,100" namePos="0,0">
+		<npc id="12103" resId="Pets/pet/10.png" name="Lv3 法拉" size="45,60" pos="348,87" namePos="0,-5" color="0,0,0,0">
 			<battle>
 				<branch id="default">
 					<settings count="6" capture="true">
@@ -82,7 +83,7 @@
 				</button>
 			</eventHandler>
 		</npc>
-		<npc id="12104" resId="Pets/pet/10.png" name="Lv4 法拉" size="30,40" pos="410,200" namePos="0,0">
+		<npc id="12104" resId="Pets/pet/10.png" name="Lv4 法拉" size="45,60" pos="415,190" namePos="0,-5" color="0,0,0,0">
 			<battle>
 				<branch id="default">
 					<settings count="6" capture="true">
@@ -154,6 +155,7 @@
 				</button>
 			</eventHandler>
 		</npc>
+		<!--
 		<npc id="12106" resId="12106" name="油民" size="77,88" pos="540,100">
 			<description><![CDATA[悲催！悲催！太悲催了！]]></description>
 			<dialog>
@@ -175,6 +177,7 @@
 				</button>
 			</eventHandler>
 		</npc>
+		-->
 		<npc id="12107" resId="Pets/pet/100010.png" name="Lv1 法拉★" size="30,40" pos="335,180" namePos="0,0" active="false">
 			<description>稀有精灵</description>
 			<battle>
@@ -215,7 +218,7 @@
 					<action>setNpcParam</action>
 					<param>12107</param>
 					<param>active=true</param>
-					<condition>random[0~1024]&lt;1</condition>
+					<condition>random[0~4096]&lt;1</condition>
 				</button>
 			</eventHandler>
 		</npc>

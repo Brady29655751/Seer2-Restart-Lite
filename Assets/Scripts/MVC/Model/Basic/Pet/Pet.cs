@@ -254,6 +254,12 @@ public class Pet
             return (info.ui.GetAllSkinList(ui).Contains(skinId) || ui.specialSkinList.Contains(skinId)) ? 1 : 0;
         } 
 
+        if (id.TryTrimStart("baseId", out var trimBase) && 
+            (trimBase.TryTrimParentheses(out var trimBaseExpr)) &&
+            int.TryParse(trimBaseExpr, out var baseId)) {
+            return ListHelper.IsNullOrEmpty(PetExpSystem.GetEvolveChain(baseId, info.ui.defaultId)) ? 0 : 1;
+        }
+
         return id switch {
             "uid" => this.id,
             "id" => info.ui.defaultId,

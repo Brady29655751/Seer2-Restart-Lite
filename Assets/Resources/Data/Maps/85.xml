@@ -1,0 +1,418 @@
+<map name="竞技之门" category="100" id="85" pathId="83">
+	<fightMap>100011</fightMap>
+	<music category="100">
+		<bgm>BGM_113</bgm>
+	</music>
+	<initialPoint>650,110</initialPoint>
+	<entities>
+		<npc id="8501" resId="8501" name="六番队长" size="94,104" pos="250,240" namePos="0,0">
+			<description>竞技之门简单模式</description>
+			<dialog>
+				<branch id="default" name="六番队长" icon="8501" size="94,104" pos="0,55">
+					<content><![CDATA[这里是竞技之门简单模式，去迎接各种挑战吧！]]></content>
+					<functionHandler>
+						<func type="click">
+							<description><![CDATA[竞技之门(简单)]]></description>
+							<action>openPanel</action>
+							<param>Door</param>
+							<param>door=competition</param>
+							<param>mode=easy</param>
+						</func>
+						<func type="click">
+							<description><![CDATA[荣誉兑换]]></description>
+							<action>openPanel</action>
+							<param>ItemShop</param>
+							<param>type=honor</param>
+							<param>currency=3/0</param>
+						</func>
+					</functionHandler>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[好的]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+					</replyHandler>
+				</branch>
+			</dialog>
+			<battle>
+				<branch id="7">
+					<settings count="3">
+						<mode>1</mode>
+					</settings>
+					<enemy>
+						<pet id="387" level="100">
+							<headerSkill>11420,11432</headerSkill>
+							<loopSkill>11424,11426</loopSkill>
+							<superSkill>11430</superSkill>
+						</pet>
+						<pet id="984" level="100">
+							<loopSkill>11368,11374,11366,11365</loopSkill>
+							<superSkill>11375</superSkill>
+						</pet>
+						<pet id="496" level="100">
+							<loopSkill>11509</loopSkill>
+							<superSkill>11513</superSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setItem</action>
+							<param>add</param>
+							<param>2,50</param>
+							<condition>activity[door].competition[easy][max]=[int]6[default]0</condition>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=50 星钻已经放入背包</param>
+							<param>option_num=1</param>
+							<param>item_icon=item[2]</param>
+							<condition>activity[door].competition[easy][max]=[int]6[default]0</condition>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>door</param>
+							<param>competition[easy][floor]=8</param>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>door</param>
+							<param>competition[easy][max]=7</param>
+							<condition>activity[door].competition[easy][max]=[int]6[default]0</condition>
+						</button>
+					</winHandler>
+				</branch>
+				<branch id="14">
+					<settings count="3">
+						<mode>1</mode>
+					</settings>
+					<enemy>
+						<pet id="12197" level="100">
+							<loopSkill>11652,11649,11650,11655,11651,11649,11657,11655</loopSkill>
+							<superSkill>11653</superSkill>
+						</pet>
+						<pet id="11192" level="100">
+							<initBuff>61</initBuff>
+							<loopSkill>11721,11708,11708</loopSkill>
+						</pet>
+						<pet id="685" level="100">
+							<loopSkill>10178,10202,10202,10202,10202</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setItem</action>
+							<param>add</param>
+							<param>3,20</param>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=20 荣誉点已经放入背包</param>
+							<param>option_num=1</param>
+							<param>item_icon=item[3]</param>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>door</param>
+							<param>competition[easy][floor]=15</param>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>door</param>
+							<param>competition[easy][max]=14</param>
+							<condition>activity[door].competition[easy][max]=[int]13[default]0</condition>
+						</button>
+					</winHandler>
+				</branch>
+				<branch id="21">
+					<settings count="3">
+						<mode>1</mode>
+					</settings>
+					<enemy>
+						<pet id="48" level="100">
+							<headerSkill>10468</headerSkill>
+							<loopSkill>10462,10467,10458,10466</loopSkill>
+							<superSkill>10464</superSkill>
+						</pet>
+				        <pet id="60" level="100">
+				        	<loopSkill>10926,10928,10919,10923</loopSkill>
+							<superSkill>10924</superSkill>
+				        </pet>
+						<pet id="78" level="100">
+							<initBuff>965</initBuff>
+							<loopSkill>11765</loopSkill>
+							<superSkill>11763</superSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>getPet</action>
+							<param>78,60,0</param>
+							<condition>activity[door].competition[easy][max]=[int]20[default]0</condition>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=【呆目齿轮鹰】已经放入精灵仓库</param>
+							<param>option_num=1</param>
+							<param>item_icon=pet[78]</param>
+							<condition>activity[door].competition[easy][max]=[int]20[default]0</condition>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>door</param>
+							<param>competition[easy][floor]=22</param>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>door</param>
+							<param>competition[easy][max]=21</param>
+							<condition>activity[door].competition[easy][max]=[int]20[default]0</condition>
+						</button>
+					</winHandler>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>openDialog</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<npc id="8502" resId="8101" name="上尉门罗" size="125,100" pos="620,250" namePos="0,0">
+			<description>竞技之门困难模式</description>
+			<dialog>
+				<branch id="default" name="上尉门罗" icon="8101" size="119,91" pos="0,55">
+					<content><![CDATA[这里是竞技之门困难模式，去迎接各种挑战吧！]]></content>
+					<functionHandler>
+						<func type="click">
+							<description><![CDATA[竞技之门(困难)]]></description>
+							<action>openPanel</action>
+							<param>Door</param>
+							<param>door=competition</param>
+							<param>mode=hard</param>
+							<condition>activity[door].competition[easy][max]GTE[int]21[default]0</condition>
+							</func>
+						<func type="branch">
+							<action>openDialog</action>
+							<param>lock</param>
+							<condition>activity[door].competition[easy][max]&lt;[int]21[default]0</condition>
+						</func>
+						<func type="click">
+							<description><![CDATA[荣誉兑换]]></description>
+							<action>openPanel</action>
+							<param>ItemShop</param>
+							<param>type=honor</param>
+							<param>currency=3/0</param>
+						</func>
+					</functionHandler>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[好的]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+					</replyHandler>
+				</branch>
+				<branch id="lock" name="上尉门罗" icon="8101" size="119,91" pos="0,55">
+					<content><![CDATA[通过左方的简单模式再来挑战吧！]]></content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[好的]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+					</replyHandler>
+				</branch>
+			</dialog>
+			<battle>
+				<branch id="7">
+					<settings count="3">
+						<mode>1</mode>
+					</settings>
+					<enemy>
+						<pet id="387" level="100">
+							<status>
+								<hp>1000</hp>
+							</status>
+							<initBuff>-3062</initBuff>
+							<headerSkill>11420,11432</headerSkill>
+							<loopSkill>11424,11426</loopSkill>
+							<superSkill>11430</superSkill>
+						</pet>
+						<pet id="984" level="100">
+							<status>
+								<hp>1000</hp>
+							</status>
+							<initBuff>-3062</initBuff>
+							<loopSkill>11368,11374,11366,11365</loopSkill>
+							<superSkill>11375</superSkill>
+						</pet>
+						<pet id="496" level="100">
+							<status>
+								<hp>1000</hp>
+							</status>
+							<initBuff>23,61,-3062</initBuff>
+							<loopSkill>11509</loopSkill>
+							<superSkill>11513</superSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setItem</action>
+							<param>add</param>
+							<param>3,40</param>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=40 荣誉点已经放入背包</param>
+							<param>option_num=1</param>
+							<param>item_icon=item[3]</param>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>door</param>
+							<param>competition[hard][floor]=8</param>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>door</param>
+							<param>competition[hard][max]=7</param>
+							<condition>activity[door].competition[hard][max]=[int]6[default]0</condition>
+						</button>
+					</winHandler>
+				</branch>
+				<branch id="14">
+					<settings count="3">
+						<mode>1</mode>
+					</settings>
+					<enemy>
+						<pet id="947" level="105">
+							<initBuff>-8,490946</initBuff>
+							<loopSkill>11494,11496,11497</loopSkill>
+							<superSkill>11498</superSkill>
+						</pet>
+						<pet id="114693" level="105">
+							<initBuff>-8,484693</initBuff>
+							<loopSkill>11730,11729,11732</loopSkill>
+							<superSkill>11733</superSkill>
+						</pet>
+						<pet id="114732" level="105">
+							<initBuff>484731</initBuff>
+							<loopSkill>11696,11697,11699</loopSkill>
+							<superSkill>11700</superSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setItem</action>
+							<param>add</param>
+							<param>3,40</param>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=40 荣誉点已经放入背包</param>
+							<param>option_num=1</param>
+							<param>item_icon=item[3]</param>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>door</param>
+							<param>competition[hard][floor]=15</param>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>door</param>
+							<param>competition[hard][max]=14</param>
+							<condition>activity[door].competition[hard][max]=[int]13[default]0</condition>
+						</button>
+					</winHandler>
+				</branch>
+				<branch id="21">
+					<settings count="3">
+						<mode>1</mode>
+					</settings>
+					<enemy>
+						<pet id="48" level="105">
+							<status>
+								<def>600</def>
+								<mdf>600</mdf>
+								<hp>600</hp>
+							</status>
+							<initBuff>14,17,20,3022</initBuff>
+							<loopSkill>10462,10467,10462,10466</loopSkill>
+							<superSkill>10464</superSkill>
+						</pet>
+						<pet id="60" level="105">
+							<initBuff>17,20,60,-3012</initBuff>
+							<loopSkill>10926,10928,10919,10923</loopSkill>
+							<superSkill>10924</superSkill>
+						</pet>
+						<pet id="78" level="100">
+							<status>
+								<def>600</def>
+								<mdf>600</mdf>
+								<hp>600</hp>
+							</status>
+							<initBuff>17,20,23,-3062</initBuff>
+							<loopSkill>11766</loopSkill>
+							<superSkill>11763</superSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setItem</action>
+							<param>add</param>
+							<param>3,40</param>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=40 荣誉点已经放入背包</param>
+							<param>option_num=1</param>
+							<param>item_icon=item[3]</param>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>door</param>
+							<param>competition[hard][floor]=22</param>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>door</param>
+							<param>competition[hard][max]=21</param>
+							<condition>activity[door].competition[hard][max]=[int]20[default]0</condition>
+						</button>
+					</winHandler>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>openDialog</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<npc id="8500" resId="8102" name="" size="107,59" pos="426,148" color="255,255,255,255">
+			<description>要塞通道</description>
+			<transport>426,148</transport>
+			<eventHandler>
+				<button type="click">
+					<action>openPanel</action>
+					<param>MiniMap100</param>
+				</button>
+			</eventHandler>
+		</npc>
+        <!-- <teleport id="1" name="英格瓦要塞" pos="250,75" targetMapId="81"/> -->
+	</entities>
+</map>

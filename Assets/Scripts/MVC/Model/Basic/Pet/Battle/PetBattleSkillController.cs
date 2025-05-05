@@ -17,10 +17,11 @@ public class PetBattleSkillController
         this.superSkill = superSkill;
     }
 
-    public PetBattleSkillController(List<Skill> loopSkills, List<Skill> headerSkills = null, Skill superSkill = null) {
+    public PetBattleSkillController(List<Skill> loopSkills, List<Skill> headerSkills = null, Skill superSkill = null, List<Skill> normalSkills = null) {
         this.headerSkills = headerSkills;
         this.loopSkills = loopSkills;
         this.superSkill = superSkill;
+        this.normalSkills = normalSkills;
     }
 
     public PetBattleSkillController(PetBattleSkillController rhs) {

@@ -101,6 +101,50 @@
 				</button>
 			</eventHandler>
 		</npc>
+		<npc id="13104" resId="Pets/pet/100013.png" name="Lv5 小小葵★" size="34,38" pos="240,70" namePos="0,0" active="false">
+			<description>稀有精灵</description>
+			<battle>
+				<branch id="default">
+					<settings count="6" capture="true">
+						<weather>1</weather>
+					</settings>
+					<enemy>
+						<pet id="100013" level="5">
+							<loopSkill>10154</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setItem</action>
+							<param>add</param>
+							<param>400000,1</param>
+							<condition>battle.result.state=1</condition>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=1个陨石碎片已经放入背包</param>
+							<param>item_icon=item[400000]</param>
+							<param>option_num=1</param>
+							<condition>battle.result.state=1</condition>
+						</button>
+					</winHandler>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>battle</action>
+					<param>default</param>
+				</button>
+				<button type="auto">
+					<action>setNpcParam</action>
+					<param>13104</param>
+					<param>active=true</param>
+					<condition>random[0~1024]&lt;1</condition>
+				</button>
+			</eventHandler>
+		</npc>
 		<teleport id="1" name="草系主城" pos="350,60" targetMapId="90"/>
 		<teleport id="2" name="荆棘小徑" pos="150,150" targetMapId="132"/>
 		<teleport id="3" name="幻影崖" pos="650,90" targetMapId="141"/>

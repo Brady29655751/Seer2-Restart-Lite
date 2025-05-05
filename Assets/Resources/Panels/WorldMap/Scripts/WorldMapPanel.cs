@@ -35,7 +35,7 @@ public class WorldMapPanel : Panel
         worldId = world;
         worldNameText?.SetText(worldNames[world]);
         worldObjects.ForEach((x, i) => x?.SetActive(i == world));
-        pageView.SetPage(worldId, 1);
+        pageView?.SetPage(worldId, 1);
     }
 
     public void PrevPage() {

@@ -461,6 +461,8 @@ id,name,type,copyType,turn,options,description
 3246,招财,turn,replace,6,none,伤害增加25%（不与进宝共存）
 3247,进宝,turn,replace,6,none,受伤减少25%（不与招财共存）
 3248,招财进宝,turn,replace,4,none,视为同时拥有招财与进宝（此时招财和进宝无效）
+3249,轻装急袭,turn,replace,6,res=23,先制+1，附加30点固伤[ENDL]不与蓄势待发共存
+3250,蓄势待发,turn,replace,6,res=24,后制-1，攻击增加10点威力[ENDL]不与轻装急袭共存
 3279,蜂纹,mark,stack,-1,auto_remove=true&max_val=3,每一层使中毒造成的伤害增加30，最多叠加3层。[ENDL]当前为[value]层
 3280,青蜂之舞,turn,replace,3,res=18,闪避率增加50%
 3281,寒冰坚韧,shield,replace,-1,none,受到伤害减少25%
@@ -521,6 +523,7 @@ id,name,type,copyType,turn,options,description
 100061,有爱,feature,replace,-1,none,以爱的名义伤害增加10%
 100072,蓄水,feature,replace,-1,none,水量充足时伤害增加5%，水量饱和时伤害增加10%
 100074,火环,feature,replace,-1,none,回合结束时若自身具有火环之心则会增加1层
+100077,鹰眼,feature,replace,-1,none,先出手时伤害增加10%，后出手时受到伤害减少10%
 100090,雷神,feature,replace,-1,none,每次出场时使环境转变为雷暴天
 100091,速成,feature,replace,-1,none,升级速度提升50%
 100092,气流,feature,replace,-1,none,每回合恢复5点怒气
@@ -644,6 +647,7 @@ id,name,type,copyType,turn,options,description
 200061,爱的,emblem,replace,-1,none,首次出场时自带爱的名义
 200072,潮水,emblem,replace,-1,none,潮水技能使对手中溺水的几率提升10%
 200074,火心,emblem,replace,-1,none,每层火环之心的伤害提升由6%转变为10%
+200077,夜视,emblem,replace,-1,none,夜幕时伤害增加15%且必中
 200090,雷祭,emblem,replace,-1,none,命中麻痹的对手会回复自身5点怒气
 200091,重击,emblem,replace,-1,none,使重击伤害增加35%
 200092,风暴,emblem,replace,-1,none,使用风暴之星会额外恢复5点怒气
@@ -709,7 +713,7 @@ id,name,type,copyType,turn,options,description
 200810,装甲,emblem,replace,-1,none,具有物防强化时受到的暴击伤害降低25%
 200826,萌月,emblem,replace,-1,none,使五味特性触发恢复体力的几率增加10%
 200845,联攻,emblem,replace,-1,none,非首发时造成的伤害增加10%
-200947,晓月,emblem,block,-1,none,首次登场时提升自身等级5级并免疫不良状态[ENDL]攻击技能附带200点固定伤害并使自身当回合受到伤害减少30%[ENDL]属性技能先制+2且命中后随机吸取对手2项能力1级
+200947,晓月,emblem,block,-1,none,首次登场时提升自身等级5级并免疫不良状态[ENDL]攻击技能附带150点固定伤害并使自身当回合受到伤害减少30%[ENDL]属性技能先制+2且命中后随机吸取对手2项能力1级
 200959,专注,emblem,replace,-1,none,击败对手时清除自身异常状态
 200961,首魅,emblem,replace,-1,none,使幻魅之眼的魅惑效果延长1回合
 200962,躯徽,emblem,replace,-1,none,使星尘幻盾回复自身120点体力
@@ -812,9 +816,9 @@ id,name,type,copyType,turn,options,description
 440000,大乱斗邀请函,item,replace,-1,item=24000&group=exclude,[ffbb33]【随身物品】[-][ENDL]首次登场时获得【伊特领域】，伊特家族以外的精灵携带时仍可以享有该领域的效果
 440001,魅魔之王,item,block,-1,item=24001&group=achievement,使用属性技能会恢复5点怒气，法伊娜的属性技能命中提升25%
 440002,笑口常开,item,block,-1,item=24002&group=achievement,晴天时每回合恢复5点怒气，笑笑葵携带时额外使技能威力增加10点（不论天气）
-484693,神迹蘑菇怪专属全能刻印,item,new,-1,group=Cm&Cm_type=0&item=484639&status=0/40/45/45/25/120,特攻 40，物防 45，特防 45，速度 25，体力 120
+484693,神迹蘑菇怪专属全能刻印,item,new,-1,group=Cm&Cm_type=0&item=484693&status=0/40/45/45/25/120,特攻 40，物防 45，特防 45，速度 25，体力 120
 484731,神迹波克尔专属全能刻印,item,new,-1,group=Cm&Cm_type=0&item=484731&status=70/0/40/40/35/90,物攻 70，物防 40，特防 40，速度 35，体力 90
-490947,神迹拂晓兔专属全能刻印,item,new,-1,group=Cm&Cm_type=0&item=490497&status=0/60/35/35/30/115,特攻 60，物防 35，特防 35，速度 30，体力 115
+490946,神迹拂晓兔专属全能刻印,item,new,-1,group=Cm&Cm_type=0&item=490946&status=0/60/35/35/30/115,特攻 60，物防 35，特防 35，速度 30，体力 115
 600002,深海,mark,replace,-1,none,双方受到攻击时25%概率溺水
 600004,极地,mark,replace,-1,none,双方暴击率提升15%，击败对手时会强化双攻1级
 600008,影触,mark,replace,-1,none,每回合随机弱化双方1项能力1级
@@ -822,6 +826,7 @@ id,name,type,copyType,turn,options,description
 610000,PVP极品资质120,mark,replace,-1,none,[ffbb33]【PVP对战规则】[-][ENDL]双方精灵资质为120
 610001,PVP无禽12星,mark,replace,-1,none,[ffbb33]【PVP对战规则】[-][ENDL]背包必须带满6只精灵，且星数总和不能超过12[ENDL]不能携带4星以上精灵，且3星精灵最多携带2只
 620000,精灵大乱斗,mark,replace,-1,res=-18,[ffbb33]【特殊规则】[-][ENDL]双方精灵随机交换使用，PVP对战时背包必须且只能携带3只精灵
+620001,竞技之门,mark,replace,-1,res=-18,[ffbb33]【特殊规则】[-][ENDL]双方精灵和技能全部随机，PVP对战时无效
 -11,商店,mark,blcok,-1,none,可以购买各式道具和加成
 -12,战斗（终极）,mark,block,-1,none,本层的最终战斗！
 -13,起始点,mark,block,-1,none,选择你的伊特吧！
@@ -892,3 +897,4 @@ id,name,type,copyType,turn,options,description
 -3059,限伤1/8,mark,replace,-1,hide=true,首次出场时获得限伤1/8
 -3060,免疫害怕,mark,replace,-1,res=999,免疫害怕状态
 -3061,免疫非火系伤害,shield,replace,-1,hide=true,免疫非火系伤害
+-3062,恢复固伤(200),mark,replace,-1,hide=true,恢复固伤(200)

@@ -65,7 +65,7 @@ public class BattlePet : Pet
 
         statusController = new PetBattleStatusController(status);
         buffController = new PetBattleBuffController(element, subElement, bossInfo.initBuffs);
-        skillController = new PetBattleSkillController(bossInfo.loopSkills, bossInfo.headerSkills, bossInfo.superSkill);
+        skillController = new PetBattleSkillController(bossInfo.loopSkills, bossInfo.headerSkills, bossInfo.superSkill, bossInfo.normalSkills.ToList());
 
         normalSkill = bossInfo.normalSkills;
         superSkill = bossInfo.superSkill;

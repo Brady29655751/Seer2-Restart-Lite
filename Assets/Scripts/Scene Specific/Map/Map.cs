@@ -30,6 +30,7 @@ public class Map
     public Vector2 initPoint => initialPoint.ToVector2();
     
     //------------
+    [XmlElement("anim")] public MapAnim anim; 
     [XmlElement("music")] public MapMusic music;
     [XmlElement("entities")] public MapEntities entities;
     [XmlIgnore] public MapResources resources;

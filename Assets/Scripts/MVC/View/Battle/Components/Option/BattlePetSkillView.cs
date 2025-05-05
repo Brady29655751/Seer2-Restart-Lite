@@ -43,8 +43,8 @@ public class BattlePetSkillView : BattleBaseView
 
     private void SetNormalSkill() {
         var normalSkills = pet.skillController.normalSkills;
-        for (int i = 0; i < normalSkills.Count; i++) {
-            skillBlockViews[i].SetSkill(normalSkills[i]);
+        for (int i = 0; i < skillBlockViews.Length; i++) {
+            skillBlockViews[i].SetSkill((i < normalSkills.Count) ? normalSkills[i] : null);
         }
     }
 
