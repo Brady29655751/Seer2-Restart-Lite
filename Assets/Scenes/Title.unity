@@ -755,7 +755,6 @@ MonoBehaviour:
   currentMapId: 70
   currentNpcId: 0
   currentMissionId: 0
-  random: -1
 --- !u!4 &227133183
 Transform:
   m_ObjectHideFlags: 0
@@ -3228,7 +3227,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &494559151
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3246,7 +3245,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 28, y: 70}
-  m_SizeDelta: {x: 306, y: 286}
+  m_SizeDelta: {x: 280, y: 348}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &494559152
 MonoBehaviour:
@@ -3268,7 +3267,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 5415b6121d2d76341a0a3935f3c695ea, type: 3}
+  m_Sprite: {fileID: 21300000, guid: c7ab0a60a9a204d43ab6afab4b10e794, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -3480,7 +3479,7 @@ Transform:
   m_GameObject: {fileID: 519420028}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -10}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -4675,7 +4674,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a62dbea00480f140a97684f258ed96d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  debugMode: 1
+  debugMode: 0
   onlineMode: 0
 --- !u!4 &747895146
 Transform:
@@ -6984,6 +6983,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   descriptionBox: {fileID: 0}
   infoPrompt: {fileID: 0}
+  nameFontSizeFit: 0
   levelTextWithLV: 1
   icon: {fileID: 456284034}
   nameText: {fileID: 1768070866}
@@ -7727,6 +7727,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   descriptionBox: {fileID: 0}
   infoPrompt: {fileID: 0}
+  nameFontSizeFit: 0
   levelTextWithLV: 1
   icon: {fileID: 254666103}
   nameText: {fileID: 446843770}
@@ -8508,6 +8509,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   descriptionBox: {fileID: 0}
   infoPrompt: {fileID: 0}
+  nameFontSizeFit: 0
   levelTextWithLV: 1
   icon: {fileID: 1810223883}
   nameText: {fileID: 1524466414}
@@ -10941,8 +10943,8 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 0}
-  m_PlayOnAwake: 0
+  m_audioClip: {fileID: 8300000, guid: 63d3bf6a02245234cb7e160aa5fe400d, type: 3}
+  m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 1
   Loop: 1
@@ -11326,6 +11328,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   descriptionBox: {fileID: 0}
   infoPrompt: {fileID: 0}
+  nameFontSizeFit: 0
   levelTextWithLV: 1
   icon: {fileID: 77436688}
   nameText: {fileID: 1636710479}
@@ -11931,7 +11934,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 51a74ee69ad6c054097c092c7906443b, type: 3}
+  m_Sprite: {fileID: 21300000, guid: fe2b3103c42a061468be128ce0b6b91b, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1

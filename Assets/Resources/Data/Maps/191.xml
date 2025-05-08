@@ -6,6 +6,72 @@
     	<fx>FX_120</fx>
     </music>
 	<entities>
+		<npc id="19101" resId="Pets/pet/494" name="Lv70 卡修斯" size="136,206" pos="230,60" namePos="20,-5">
+			<description>卡修斯</description>
+			<dialog>
+				<branch id="default" name="卡修斯" icon="Pets/pet/494" size="102,154" pos="0,45">
+					<content>这股诅咒的力量，究竟是？</content>
+					<functionHandler>
+						<func type="click">
+							<description><![CDATA[挑战卡修斯]]></description>
+							<action>battle</action>
+							<param>default</param>
+						</func>	
+					</functionHandler>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[是提升物攻和物防并降低速度]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+					</replyHandler>
+				</branch>
+			</dialog>
+			<battle>
+				<branch id="default">
+					<settings count="6">
+						<mode>3</mode>
+					</settings>
+					<enemy>
+						<pet id="494" level="70">
+							<status>
+								<hp>15000</hp>
+							</status>
+							<initBuff>61,13,14,99,-3000,-3063</initBuff>
+							<loopSkill>11770,11777,11778,11781</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>getPet</action>
+							<param>494,1</param>
+							<condition>activity[11007].done=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=卡修斯已经放入精灵仓库</param>
+							<param>item_icon=pet[494]</param>
+							<param>option_num=1</param>
+							<condition>activity[11007].done=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>11007</param>
+							<param>done=true</param>
+							<condition>activity[11007].done=[bool]false[default]false</condition>
+						</button>
+					</winHandler>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>openDialog</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
 		<teleport id="1" name="残骸通道" pos="525,310" targetMapId="192"/>
 		<teleport id="2" name="银脉山脊" pos="120,80" targetMapId="180"/>
 	</entities>

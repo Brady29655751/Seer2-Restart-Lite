@@ -310,6 +310,7 @@ public class BattlePetAnimView : BattleBaseView
         }
 
         this.currentPetAnim.transform.SetParent(this.battlePetAnimContainer);
+        this.currentPetAnim.transform.Translate(Vector3.back * this.currentPetAnim.transform.position.z);   // Z座標在0以上才看的到
     }
 
     protected void OnPetCapture(bool isSuccess)

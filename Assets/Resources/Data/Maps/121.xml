@@ -9,7 +9,7 @@
 	</music>
 	<entities>
 		<npc id="12101" resId="12101" name="" size="107,121" pos="560,120" target="false"/>
-		<npc id="12102" resId="Pets/pet/10.png" name="Lv2 法拉" size="45,60" pos="480,50" namePos="0,-5" color="0,0,0,0">
+		<npc id="12102" resId="Pets/pet/10.png" name="Lv2 法拉" size="45,60" pos="480,50" namePos="0,-5">
 			<battle>
 				<branch id="default">
 					<settings count="6" capture="true">
@@ -44,9 +44,15 @@
 					<action>battle</action>
 					<param>default</param>
 				</button>
+				<button type="auto">
+					<action>setNpcParam</action>
+					<param>12102</param>
+					<param>color=0,0,0,0</param>
+					<condition>map.anim=1</condition>
+				</button>
 			</eventHandler>
 		</npc>
-		<npc id="12103" resId="Pets/pet/10.png" name="Lv3 法拉" size="45,60" pos="348,87" namePos="0,-5" color="0,0,0,0">
+		<npc id="12103" resId="Pets/pet/10.png" name="Lv3 法拉" size="45,60" pos="348,87" namePos="0,-5">
 			<battle>
 				<branch id="default">
 					<settings count="6" capture="true">
@@ -81,9 +87,15 @@
 					<action>battle</action>
 					<param>default</param>
 				</button>
+				<button type="auto">
+					<action>setNpcParam</action>
+					<param>12103</param>
+					<param>color=0,0,0,0</param>
+					<condition>map.anim=1</condition>
+				</button>
 			</eventHandler>
 		</npc>
-		<npc id="12104" resId="Pets/pet/10.png" name="Lv4 法拉" size="45,60" pos="415,190" namePos="0,-5" color="0,0,0,0">
+		<npc id="12104" resId="Pets/pet/10.png" name="Lv4 法拉" size="45,60" pos="415,190" namePos="0,-5">
 			<battle>
 				<branch id="default">
 					<settings count="6" capture="true">
@@ -117,6 +129,12 @@
 				<button type="click">
 					<action>battle</action>
 					<param>default</param>
+				</button>
+				<button type="auto">
+					<action>setNpcParam</action>
+					<param>12104</param>
+					<param>color=0,0,0,0</param>
+					<condition>map.anim=1</condition>
 				</button>
 			</eventHandler>
 		</npc>

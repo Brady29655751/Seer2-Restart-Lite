@@ -13,6 +13,9 @@ public static class NpcConditionHandler
         if (key.TryTrimStart("random", out trimKey))
             return () => GetRandom(op, trimKey, value);
 
+        if (key.TryTrimStart("map.", out trimKey))
+            return () => Operator.Condition(op, Player.instance.currentMap?.GetMapIdentifier(trimKey) ?? 0, float.Parse(value));
+
         if (key.TryTrimStart("firstPet.", out trimKey))
             return () => GetFirstPet(op, trimKey, value);
 

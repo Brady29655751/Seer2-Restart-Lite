@@ -36,6 +36,9 @@ public static class NpcActionHandler
                 case "bgm":
                     toNpc.SetBGM(option[1]);
                     break;
+                case "namePos":
+                    toNpc.SetNamePos(option[1].ToVector2());
+                    break;
             }
         }
     }

@@ -12,6 +12,8 @@ using UnityEngine.AddressableAssets.ResourceLocators;
 public class LoginLoadingScreen : LoadingScreen
 {
     protected override IEnumerator ChangeSceneCoroutine(int sceneIndex, Action finishedCallback = null) {
+        AssetBundle.UnloadAllAssetBundles(true);
+        
         loadingText?.SetText("正在初始化");
         /*
         var initHandle = Addressables.InitializeAsync();

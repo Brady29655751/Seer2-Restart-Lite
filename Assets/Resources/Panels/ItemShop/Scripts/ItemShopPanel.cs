@@ -11,6 +11,7 @@ public class ItemShopPanel : Panel
     [SerializeField] protected IButton buyButton, sellButton;
 
     protected ItemShopMode shopMode = ItemShopMode.Buy;
+    protected List<int> itemNumLimit = new List<int>();
 
     protected Dictionary<ItemShopType, string> shopNameDict = new Dictionary<ItemShopType, string>() {
         { ItemShopType.None, "道具商店" },
@@ -64,6 +65,7 @@ public class ItemShopPanel : Panel
     protected override void Awake()
     {
         base.Awake();
+        shopController.onItemBuyEvent += (item) => SetStorage();
         shopController.onItemSellEvent += (item) => SetStorage();
     }
 
@@ -116,6 +118,10 @@ public class ItemShopPanel : Panel
                 shopItemIdDict.Set(ItemShopType.Others, itemList);
                 SetShopType(ItemShopType.Others);
                 break;
+            case "limit":
+                itemNumLimit = param.ToIntList('/');
+                SetStorage();
+                break;
         }
     }
 
@@ -142,11 +148,14 @@ public class ItemShopPanel : Panel
 
     private void SetStorage() {
         var idList = shopItemIdDict.Get(shopType, new List<int>());
-        var itemList = idList.Select(x => new Item(x, GetStorageItemCount(x))).ToList();
+        var itemList = idList.Select((x, i) => new Item(x, GetStorageItemCount(x, i))).ToList();
         shopController.SetStorage(itemList);
     }
 
-    private int GetStorageItemCount(int id) {
+    private int GetStorageItemCount(int id, int index) {
+        if (!ListHelper.IsNullOrEmpty(itemNumLimit))
+            return (itemNumLimit[index] < 0) ? -1 : Mathf.Max(0, itemNumLimit[index] - int.Parse(Activity.Shop.GetData(id.ToString(), "0")));
+
         var storage = IsYite(shopMode) ? YiTeRogueData.instance.itemBag : null;
         return IsSell(shopMode) ? (Item.Find(id, storage)?.num ?? 0) : -1;
     }

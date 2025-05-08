@@ -148,6 +148,8 @@ public class Item
 
     private static void OnBuySuccess(Item price, Item item, Action callback, List<Item> toWhichStorage = null) {
         if (toWhichStorage == null) {
+            var bought = int.Parse(Activity.Shop.GetData(item.id.ToString(), "0"));
+            Activity.Shop.SetData(item.id.ToString(), (bought + item.num).ToString());
             Item.Remove(price.id, price.num);
             Item.Add(item);
         } else {

@@ -273,6 +273,7 @@ public static class SaveSystem
 
                 // Clean activity and item
                 data.activityStorage.RemoveAll(x => ActivityInfo.IsMod(x.id));
+                data.activityStorage.Find(x => x.id == "shop")?.data.RemoveAll(x => ItemInfo.IsMod(int.Parse(x.key)));
                 data.itemStorage.RemoveAll(x => ItemInfo.IsMod(x.id));
                 data.achievement = ItemInfo.IsMod(data.achievement) ? 0 : data.achievement;
 

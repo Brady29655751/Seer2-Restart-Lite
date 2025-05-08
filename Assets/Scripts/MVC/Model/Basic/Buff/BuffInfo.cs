@@ -135,8 +135,11 @@ public class BuffInfo
             return (-1 * mod) + (_pet - mod);
         }
             
+        if (options.Get("group") == "Cm")
+            return (5 + (int)Identifier.GetNumIdentifier(options.Get("Cm_type", "0"))) * mod + _pet;
+
         if (id < 0)
-            return 10 * mod + id;
+            return 50 * mod + id;
 
         if (id <= 10)
             return id - 2;

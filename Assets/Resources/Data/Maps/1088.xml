@@ -5,7 +5,7 @@
 	</music>
 	<initialPoint>460,155</initialPoint>
 	<entities>
-		<npc id="108801" resId="Pets/pet/496" name="撒旦" size="105,139" pos="450,290" namePos="0,-30" color="0,0,0,0">
+		<npc id="108801" resId="Pets/pet/496" name="撒旦" size="105,139" pos="450,290" namePos="0,-10">
 			<description>炼狱最底层</description>
 			<dialog>
 				<branch id="default" name="撒旦" icon="Pets/pet/496" size="105,139" pos="0,45">
@@ -122,6 +122,13 @@
 				<button type="click">
 					<action>openDialog</action>
 					<param>default</param>
+				</button>
+				<button type="auto">
+					<action>setNpcParam</action>
+					<param>108801</param>
+					<param>color=0,0,0,0</param>
+					<param>namePos=0,-30</param>
+					<condition>map.anim=1</condition>
 				</button>
 			</eventHandler>
 		</npc>

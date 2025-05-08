@@ -212,6 +212,10 @@ id,name,type,copyType,turn,options,description
 2018,恢复固伤,mark,replace,-1,res=2017,每回合恢复自身[value]点体力并给予对手等量伤害
 2019,恢复固伤,mark,replace,-1,res=2017,每回合恢复自身1/[value]体力并给予对手等量伤害，体力低于1/[option[value]]时效果2倍
 2020,恢复固伤,mark,replace,-1,res=2017,每回合恢复自身[value]点体力并给予对手等量伤害，体力低于1/[option[value]]时效果2倍
+2021,伤害提升,chance,replace,-1,res=2005&auto_remove=true,下[value]次攻击伤害提升[option[value]]点
+2022,伤害提升,mark,replace,-1,res=2005,攻击伤害提升[value]点
+2023,强力恢复,mark,replace,-1,res=19,每回合恢复1/[value]体力
+2024,强力流血,mark,replace,-1,none,每回合损失[value]点体力
 3000,弱点记号,mark,stack,-1,inherit=true&legacy=true&auto_remove=true&max_val=2,每1个记号使速度下降25点，最多叠加2个。[ENDL]当前为[value]个
 3001,易伤,mark,replace,-1,none,受到的伤害增加50%
 3002,寄生炸弹,turn,replace,3,keep=false,爆炸时损失300点体力
@@ -463,6 +467,11 @@ id,name,type,copyType,turn,options,description
 3248,招财进宝,turn,replace,4,none,视为同时拥有招财与进宝（此时招财和进宝无效）
 3249,轻装急袭,turn,replace,6,res=23,先制+1，附加30点固伤[ENDL]不与蓄势待发共存
 3250,蓄势待发,turn,replace,6,res=24,后制-1，攻击增加10点威力[ENDL]不与轻装急袭共存
+3251,山神之力(地面),chance,replace,-1,auto_remove=true,下[value]次地面系技能必定暴击
+3252,山神之力(暗影),chance,replace,-1,auto_remove=true,下[value]次暗影系技能必定暴击
+3253,连山绝壑,mark,replace,-1,none,使用属性技能恢复20点怒气
+3254,神宠之力,mark,replace,-1,res=2007,每损失2%体力使受到的伤害减少1%[ENDL]对手技能未命中时吸取对手15点怒气
+3255,闪避提升,mark,replace,-1,res=18,闪避率提升[value]%
 3279,蜂纹,mark,stack,-1,auto_remove=true&max_val=3,每一层使中毒造成的伤害增加30，最多叠加3层。[ENDL]当前为[value]层
 3280,青蜂之舞,turn,replace,3,res=18,闪避率增加50%
 3281,寒冰坚韧,shield,replace,-1,none,受到伤害减少25%
@@ -579,6 +588,7 @@ id,name,type,copyType,turn,options,description
 100395,冥噬,feature,replace,-1,none,攻击恢复自身最大体力的1/16，击败对手时效果3倍
 100412,冥怒,feature,replace,-1,none,攻击恢复5点怒气，击败对手时效果6倍
 100436,甲骨,feature,replace,-1,none,首次出场时获得不屈状态
+100494,山神,feature,replace,-1,none,使用地面系技能造成暴击后使天气转变为地震
 100495,战神,feature,replace,-1,none,古战场时每回合回复1/16体力
 100496,双冥,feature,replace,-1,none,自身攻击力视为双攻较高的一项，对手防御力视为双防较低的一项
 100538,破甲,feature,replace,-1,none,首次出场时自带破甲
@@ -703,6 +713,7 @@ id,name,type,copyType,turn,options,description
 200395,通冥,emblem,replace,-1,legacy=true,阵亡时下只出场精灵会强化双防较高能力1级(双防相同时皆强化)
 200412,冥煞,emblem,replace,-1,legacy=true,阵亡时下只出场精灵会强化双攻较高能力1级(双攻相同时皆强化)
 200436,棒骨,emblem,replace,-1,none,棒骨的反弹效果和反弹上限增加10%
+200494,诅咒,emblem,replace,-1,none,地震环境下暗影系技能伤害提升35%，夜幕环境下地面系技能伤害提升35%
 200495,怒战,emblem,replace,-1,none,古战场时攻击附带35点伤害
 200496,冥变,emblem,replace,-1,none,暴走状态下所有技能先制+1
 200538,历战,emblem,replace,-1,none,使用战斗系技能会恢复20点体力
@@ -794,6 +805,14 @@ id,name,type,copyType,turn,options,description
 410010,怒劫星魂,item,replace,-1,item=21010&group=star_soul,[ffbb33]【星魂】[-][ENDL]每回合开始时回复15怒气
 410011,怒浩星魂,item,replace,-1,item=21011&group=star_soul,[ffbb33]【星魂】[-][ENDL]每回合结束时消除对手15怒气
 410012,迷你平板,item,replace,-1,none,伊特大乱斗途中每次获胜会使背包中所有精灵资质+5
+410013,V8-01,item,new,-1,group=Cm&Cm_type=1&item=21013&status=52/0/31/31/43/103,物攻 52，物防 31，特防 31，速度 43，体力 103
+410014,V8-02,item,new,-1,group=Cm&Cm_type=1&item=21014&status=0/52/31/31/43/103,特攻 52，物防 31，特防 31，速度 43，体力 103
+410015,V8-03,item,new,-1,group=Cm&Cm_type=1&item=21015&status=73/0/30/30/35/92,物攻 73，物防 30，特防 30，速度 35，体力 92
+410016,V8-04,item,new,-1,group=Cm&Cm_type=1&item=21016&status=0/73/30/30/35/92,特攻 73，物防 30，特防 30，速度 35，体力 92
+410017,V8-05,item,new,-1,group=Cm&Cm_type=1&item=21017&status=48/0/34/34/24/120,物攻 48，物防 34，特防 34，速度 24，体力 120
+410018,V8-06,item,new,-1,group=Cm&Cm_type=1&item=21018&status=0/48/34/34/24/120,特攻 48，物防 34，特防 34，速度 24，体力 120
+410019,V8-07,item,new,-1,group=Cm&Cm_type=1&item=21019&status=32/0/55/55/23/95,物攻 32，物防 55，特防 55，速度 23，体力 95
+410020,V8-08,item,new,-1,group=Cm&Cm_type=1&item=21020&status=0/32/55/55/23/95,特攻 32，物防 55，特防 55，速度 23，体力 95
 420001,粘液,item,replace,-1,item=22001&group=exclude,[ffbb33]【随身物品】[-][ENDL]使用属性技能会恢复5点怒气，法伊娜携带时额外使属性技能命中提升25%
 420002,笑笑花子,item,replace,-1,item=22002&group=exclude,[ffbb33]【随身物品】[-][ENDL]晴天时每回合恢复1/16体力，笑笑葵携带时额外使技能威力增加10点（不论天气）
 420003,破损头盔,item,replace,-1,item=22003&group=exclude,[ffbb33]【随身物品】[-][ENDL]免疫麻痹和昏迷状态，重甲独角携带时额外使攻击技能命中提升25%
@@ -819,6 +838,7 @@ id,name,type,copyType,turn,options,description
 484693,神迹蘑菇怪专属全能刻印,item,new,-1,group=Cm&Cm_type=0&item=484693&status=0/40/45/45/25/120,特攻 40，物防 45，特防 45，速度 25，体力 120
 484731,神迹波克尔专属全能刻印,item,new,-1,group=Cm&Cm_type=0&item=484731&status=70/0/40/40/35/90,物攻 70，物防 40，特防 40，速度 35，体力 90
 490946,神迹拂晓兔专属全能刻印,item,new,-1,group=Cm&Cm_type=0&item=490946&status=0/60/35/35/30/115,特攻 60，物防 35，特防 35，速度 30，体力 115
+600000,禁止道具,mark,replace,-1,none,禁止道具类加成
 600002,深海,mark,replace,-1,none,双方受到攻击时25%概率溺水
 600004,极地,mark,replace,-1,none,双方暴击率提升15%，击败对手时会强化双攻1级
 600008,影触,mark,replace,-1,none,每回合随机弱化双方1项能力1级
@@ -898,3 +918,4 @@ id,name,type,copyType,turn,options,description
 -3060,免疫害怕,mark,replace,-1,res=999,免疫害怕状态
 -3061,免疫非火系伤害,shield,replace,-1,hide=true,免疫非火系伤害
 -3062,恢复固伤(200),mark,replace,-1,hide=true,恢复固伤(200)
+-3063,山神守护,mark,replace,-1,res=2007,受到伤害减少90%，出手后使对手获得90点强力流血1回合

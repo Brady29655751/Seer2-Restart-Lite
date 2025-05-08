@@ -6,6 +6,7 @@ using UnityEngine.UI;
 using SimpleFileBrowser;
 using System.IO;
 using System.IO.Compression;
+using FTRuntime;
 
 public class TitleManager : Manager<TitleManager>
 {
@@ -22,16 +23,62 @@ public class TitleManager : Manager<TitleManager>
     }
 
     private void SetBackgroundPageImage() {
-        if (!SaveSystem.IsModExists())
-            return;
-        
         var modBackgroundSprite = ResourceManager.instance.GetLocalAddressables<Sprite>("Activities/FirstPage", true);
-        if (modBackgroundSprite == null) 
+        if (modBackgroundSprite == null) {
+            var path = $"{Application.persistentDataPath}/Resources/Activities/{GameManager.platform}/";
+            var backgroundPath = path + "map_420";
+            var petPath = path + "pfa_110166";
+            if (!FileBrowserHelpers.FileExists(backgroundPath) || !FileBrowserHelpers.FileExists(petPath))
+                return;
+
+            var mapBundle = AssetBundle.LoadFromFile(backgroundPath);
+            var petBundle = AssetBundle.LoadFromFile(petPath);
+            if ((mapBundle == null) || (petBundle == null))
+                return;
+
+            var map = mapBundle.LoadAsset<GameObject>("420-idle");
+            var petPresent = petBundle.LoadAsset<GameObject>("110166-Present");
+            var petIdle = petBundle.LoadAsset<GameObject>("110166-Idle");
+
+            if ((map == null) || (petPresent == null) || (petIdle == null))
+                return;
+
+            var obj = Instantiate(petIdle, Camera.main.transform);
+            var obj1 = Instantiate(petPresent, Camera.main.transform);
+
+            obj.transform.localScale = petIdle.transform.localScale * 1.5f;
+            obj.transform.position = new Vector3(petIdle.transform.position.x - 3, petIdle.transform.position.y + 1.25f, 5);
+            TransformHelper.Flip(obj.transform);
+            obj.SetActive(false);
+
+            obj1.transform.localScale = petPresent.transform.localScale * 1.5f;
+            obj1.transform.position = new Vector3(petPresent.transform.position.x - 3, petPresent.transform.position.y + 1.25f, 5);
+            TransformHelper.Flip(obj1.transform);
+
+            var swf = obj1.GetComponent<SwfClipController>();
+            if (swf != null) {
+                swf.loopMode = SwfClipController.LoopModes.Once;
+                swf.OnStopPlayingEvent += (controller) => {
+                    obj1.SetActive(false);
+                    obj.SetActive(true);
+                };
+                swf.GotoAndPlay(0);
+            }
+
+            var obj2 = Instantiate(map, Camera.main.transform);
+            if (obj2 == null)
+                return;
+
+            obj2.transform.localScale = new Vector3(1.5f, 1.45f, 1);
+            obj2.transform.localPosition = new Vector3(0.75f, -0.5f, 10);
+            backgroundImage.gameObject.SetActive(false);
             return;
+        }
         
         backgroundImage.SetSprite(modBackgroundSprite);
         backgroundImage.color = Color.white;
         backgroundGadgetObjectList.ForEach(x => x?.SetActive(false));
+        AudioSystem.instance.StopMusic();
     }
 
     public void GameStart() {
@@ -223,11 +270,13 @@ public class TitleManager : Manager<TitleManager>
     private void OnUnzipPetAnimationResources() {
         var zipPath = Application.persistentDataPath + "/PetAnimation.zip";
         bool result = SaveSystem.TryUnzipFile(zipPath, Application.persistentDataPath, "PetAnimation");
-        string message = result ? "全部资源下载完毕，请开始游戏" : "精灵动画资源解压失败，请手动导入资源";
+        string message = result ? "全部资源下载完毕，请重新启动游戏" : "精灵动画资源解压失败，请手动导入资源";
 
         FileBrowserHelpers.DeleteFile(zipPath);
         SceneLoader.instance.HideLoadingScreen();
-        Hintbox.OpenHintboxWithContent(message, 16);        
+        var hintbox = Hintbox.OpenHintboxWithContent(message, 16);        
+        if (result)
+            hintbox.SetOptionCallback(Application.Quit);
     }
 
     #endregion

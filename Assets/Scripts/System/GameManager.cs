@@ -9,6 +9,7 @@ public class GameManager : Singleton<GameManager>
     [SerializeField] public bool debugMode = true;
     [SerializeField] public bool onlineMode = false;
     public static string serverUrl => "Data/";
+    public static string platform => (Application.platform == RuntimePlatform.Android) ? "android" : "windows";
     public static string gameFilePostfix => (Application.platform == RuntimePlatform.Android) ? ".apk" : ".zip";
     public static string gameDownloadUrl => GetGameDownloadUrl();
     public static string resourceUrl => "https://www.dropbox.com/scl/fi/8skjwkfo4ujqal0b9jwnz/Basic.zip?rlkey=ips7c15koiamebdpu2lj3xk6p&st=9ueek3ay&dl=1";

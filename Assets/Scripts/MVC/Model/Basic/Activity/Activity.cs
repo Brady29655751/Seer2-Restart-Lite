@@ -10,6 +10,7 @@ public class Activity
 {
     public ActivityInfo info => GetActivityInfo(id);
     public static Activity Noob => Activity.Find("noob");
+    public static Activity Shop => Activity.Find("shop");
 
     [XmlAttribute("id")] public string id;
 

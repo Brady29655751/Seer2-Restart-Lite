@@ -145,6 +145,21 @@ public class Map
         return GetCanvasPixelByMousePos(mousePos, canvasSize);
     }
 
+
+    public float GetMapIdentifier(string id) {
+        return id switch {
+            "id"    => this.id,
+            "resId" => this.resId,
+            "weather"   => weather,
+            "category"  => categoryId,
+            "world" => worldId,
+            "switch"    => dayNightSwitch,
+            "dream" => dream ? 1 : 0,
+            "anim"  => (resources?.anim == null) ? 0 : 1,
+            _       => 0,  
+        };
+    }
+
 }
 
 public enum MapCategory {

@@ -7,6 +7,7 @@ using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using FTRuntime;
 
 public class FightLoadingScreen : LoadingScreen
 {
@@ -83,7 +84,11 @@ public class FightLoadingScreen : LoadingScreen
 
     public override void OnAfterLoading(Action callback)
     {
-        StartCoroutine(WaitSecondsCoroutine(1.2f, callback));
+        SwfManager.GetInstance(false)?.Pause();
+        StartCoroutine(WaitSecondsCoroutine(1.2f, () => {            
+            callback?.Invoke();
+            SwfManager.GetInstance(false)?.Resume();
+        }));
     }
 
 }

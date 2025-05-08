@@ -19,7 +19,7 @@ public class PetItemBlockView : Module
         button?.SetInteractable(!isNull, false);
         icon?.gameObject.SetActive(!isNull);
         icon?.SetSprite(isNull ? null :   item.info.icon);
-        numText?.SetText((isNull || (item.num <= 0)) ? string.Empty : item.num.ToString());
+        numText?.SetText((isNull || (item.num < 0)) ? string.Empty : item.num.ToString());
     }
 
     public void SetRewardIcon(Sprite sprite) {

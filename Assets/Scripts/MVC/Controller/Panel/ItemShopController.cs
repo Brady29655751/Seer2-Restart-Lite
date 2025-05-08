@@ -11,7 +11,7 @@ public class ItemShopController : Module
     [SerializeField] private SelectNumController selectNumController;
     [SerializeField] private ItemDetailView itemDetailView;
 
-    public event Action<Item> onItemSellEvent;
+    public event Action<Item> onItemBuyEvent, onItemSellEvent;
 
     protected ItemShopMode shopMode = ItemShopMode.Buy;
 
@@ -73,12 +73,19 @@ public class ItemShopController : Module
             }  
                 
             playerInfoController.ShowCurrency();
+            onItemBuyEvent?.Invoke(new Item(item.id, num));
         };
 
         if ((num > 1) && (shopMode == ItemShopMode.BuyYiTe)) {
             Hintbox.OpenHintboxWithContent("别贪心，一次只能购买一个哟！", 16);
             return;
-        }            
+        }   
+
+        if ((num > item.num) && (item.num >= 0)) {
+            var content = (item.num == 0) ? "此物品已售完！" : ("购买数量高于剩余数量，当前仅剩余" + item.num + "个！");
+            Hintbox.OpenHintboxWithContent(content, 16);
+            return;
+        }
 
         Item.Buy(item.id, num, onAfterBuy, storage);
     }

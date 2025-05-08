@@ -91,11 +91,13 @@ public class Database : Singleton<Database>
             return false;
         }
 
+        /*
         if (hitInfoDict.Count == 0)
         {
             error = "获取精灵打击帧数档案失败";
             return false;
         }
+        */
 
         error = string.Empty;
         return true;

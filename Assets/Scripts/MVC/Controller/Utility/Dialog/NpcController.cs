@@ -50,6 +50,10 @@ public class NpcController : Module
         npcView.SetName(name);
     }
 
+    public void SetNamePos(Vector2 pos) {
+        npcView.SetNamePos(pos);
+    }
+
     public void SetAction(Dictionary<int, NpcController> npcList, InfoPrompt infoPrompt) {
         npcView.SetAction(this, npcList, infoPrompt);
     }
