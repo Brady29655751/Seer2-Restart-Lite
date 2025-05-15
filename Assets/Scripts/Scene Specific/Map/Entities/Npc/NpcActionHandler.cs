@@ -22,6 +22,9 @@ public static class NpcActionHandler
                 case "active":
                     toNpc.SetActive(bool.Parse(option[1]));
                     break;
+                case "target":
+                    
+                    break;
                 case "name":
                     toNpc.SetName(option[1].TryTrimStart("[expr]", out expr) ? Parser.ParseOperation(expr).ToString() : option[1]);
                     break;
@@ -38,6 +41,9 @@ public static class NpcActionHandler
                     break;
                 case "namePos":
                     toNpc.SetNamePos(option[1].ToVector2());
+                    break;
+                case "pos":
+                    toNpc.SetPosition(option[1].ToVector2());
                     break;
             }
         }

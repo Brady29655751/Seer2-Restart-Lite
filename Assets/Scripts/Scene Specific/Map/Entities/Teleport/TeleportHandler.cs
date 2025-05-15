@@ -55,6 +55,7 @@ public static class TeleportHandler
         if (targetPos != default(Vector2))
             Player.SetSceneData("mapInitPos", targetPos);
         
+        Player.instance.currentNpcId = 0;
         Player.instance.currentMapId = mapId;
         SceneLoader.instance.ChangeScene(SceneId.Map);
     }

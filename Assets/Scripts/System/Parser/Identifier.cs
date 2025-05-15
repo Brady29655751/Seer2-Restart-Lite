@@ -133,6 +133,8 @@ public static class Identifier {
             if (trimId.TryTrimStart("me.", out trimId)) {
                 return trimId switch {
                     "order" => ListHelper.IsNullOrEmpty(state.actionOrder) ? 0 : (state.IsGoFirst(lhsUnit) ? 1 : 2),
+                    "pet.defElementRelation[op.pet.element]" => PetElementSystem.GetElementRelation(rhsUnit.pet.battleElementId, lhsUnit.pet),
+                    "pet.defElementRelation[op.pet.subElement]" => PetElementSystem.GetElementRelation(rhsUnit.pet.subBattleElementId, lhsUnit.pet),
                     _ => GetUnitIdentifier(trimId, lhsUnit)
                 };
             }
@@ -140,6 +142,8 @@ public static class Identifier {
             if (trimId.TryTrimStart("op.", out trimId)) {
                 return trimId switch {
                     "order" => ListHelper.IsNullOrEmpty(state.actionOrder) ? 0 : (state.IsGoFirst(rhsUnit) ? 1 : 2),
+                    "pet.defElementRelation[me.pet.element]" => PetElementSystem.GetElementRelation(lhsUnit.pet.battleElementId, rhsUnit.pet),
+                    "pet.defElementRelation[me.pet.subElement]" => PetElementSystem.GetElementRelation(lhsUnit.pet.subBattleElementId, rhsUnit.pet),
                     _ => GetUnitIdentifier(trimId, rhsUnit)
                 };
             }
@@ -148,10 +152,18 @@ public static class Identifier {
         }
             
         if (id.TryTrimStart("me.", out trimId))
-            return GetUnitIdentifier(trimId, lhsUnit);
+            return trimId switch {
+                "pet.defElementRelation[op.pet.element]" => PetElementSystem.GetElementRelation(rhsUnit.pet.battleElementId, lhsUnit.pet),
+                "pet.defElementRelation[op.pet.subElement]" => PetElementSystem.GetElementRelation(rhsUnit.pet.subBattleElementId, lhsUnit.pet),
+                _ => GetUnitIdentifier(trimId, lhsUnit)
+            };
 
         if (id.TryTrimStart("op.", out trimId))
-            return GetUnitIdentifier(trimId, rhsUnit);
+            return trimId switch {
+                "pet.defElementRelation[me.pet.element]" => PetElementSystem.GetElementRelation(lhsUnit.pet.battleElementId, rhsUnit.pet),
+                "pet.defElementRelation[me.pet.subElement]" => PetElementSystem.GetElementRelation(lhsUnit.pet.subBattleElementId, rhsUnit.pet),
+                _ => GetUnitIdentifier(trimId, rhsUnit)
+            };
 
         if (id.TryTrimStart("random", out trimId)) {
             if (trimId == string.Empty)
@@ -292,6 +304,24 @@ public static class Identifier {
             // Parse failure => buffIdExpr is BuffType.
             if (!int.TryParse(buffIdExpr, out int buffId)) {
                 BuffType buffType = buffIdExpr.ToBuffType();
+
+                if (buffIdExpr == "powerup.pos")
+                    return id switch {
+                        "count" => buffs.Count(x => x.IsPowerUp()),
+                        "own" => buffs.Exists(x => x.IsPowerUp()) ? 1 : 0,
+                        "block" => Buff.powerupBuffIds.All(buffController.IsBuffIdBlocked) ? 1 : 0,
+                        "copy" => Buff.powerupBuffIds.All(buffController.IsBuffIdCopied) ? 1 : 0,
+                        _ => 0,
+                    };
+
+                if (buffIdExpr == "powerup.neg")
+                    return id switch {
+                        "count" => buffs.Count(x => x.IsPowerDown()),
+                        "own" => buffs.Exists(x => x.IsPowerDown()) ? 1 : 0,
+                        "block" => Buff.powerdownBuffIds.All(buffController.IsBuffIdBlocked) ? 1 : 0,
+                        "copy" => Buff.powerdownBuffIds.All(buffController.IsBuffIdCopied) ? 1 : 0,
+                        _ => 0,
+                    };
 
                 return id switch {
                     "count" => buffs.Count(x => x.IsType(buffType)),

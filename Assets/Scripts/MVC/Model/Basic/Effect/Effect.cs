@@ -160,6 +160,18 @@ public class Effect {
         };
 
         var result = condOptionDictList.Select(x => {
+            /*
+            var correctTurn = this.IsCorrectTurn(state, x);
+            var correctWeather = this.IsCorrectWeather(state, x);
+            var hit = this.IsAttackAndHit(state, x);
+            var rng = this.RandomNumber(state, x);
+            var cond = ConditionFunc.Invoke(x);
+
+            if ((source.GetType() == typeof(Buff)) && ((Buff)source).id == 2031)
+                Debug.Log(correctTurn + " " + hit + " " + rng + " " + cond);
+
+            return ((!checkTurn) || correctTurn) && correctWeather && hit && rng && cond;
+            */
             return ((!checkTurn) || this.IsCorrectTurn(state, x)) && 
                 this.IsCorrectWeather(state, x) && this.IsAttackAndHit(state, x) && 
                 this.RandomNumber(state, x) && ConditionFunc.Invoke(x);

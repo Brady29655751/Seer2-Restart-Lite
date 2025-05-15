@@ -27,4 +27,8 @@ public class MapMenuController : UIModule
         var panel = Panel.OpenPanel<SPTBossPanel>();
         panel?.SetPage(Player.instance.currentMap.worldId);
     }
+
+    public void ToggleShootMode() {
+        Player.instance.isShootMode = !Player.instance.isShootMode;
+    }
 }

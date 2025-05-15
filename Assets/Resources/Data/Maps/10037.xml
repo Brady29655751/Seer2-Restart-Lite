@@ -49,6 +49,28 @@
 			<dialog>
 				<branch id="default" name="小豆芽" icon="Pets/pet/10027" size="106,135" pos="10,35">
 					<content><![CDATA[呼噜噜噜噜！]]></content>
+					<functionHandler>
+						<func type="click">
+							<description>小豆芽超进化</description>
+							<action>battle</action>
+							<param>evolve</param>
+						</func>
+						<func type="click">
+							<description>神迹觉醒</description>
+							<action>battle</action>
+							<param>miracle</param>
+						</func>
+						<func type="click">
+							<description>因子商店</description>
+							<action>openPanel</action>
+							<param>ItemShop</param>
+							<param>mode=buy</param>
+							<param>currency=8/0</param>
+							<param>item=334198</param>
+							<param>limit=1</param>
+							<param>title=因子商店</param>
+						</func>
+					</functionHandler>
 					<replyHandler>
 						<reply type="click">
 							<description><![CDATA[看起来很喜欢吃矿石？]]></description>
@@ -84,6 +106,58 @@
 						</pet>
 					</enemy>
 				</branch>
+				<branch id="evolve">
+					<settings count="6">
+						<mode>4</mode>
+					</settings>
+					<enemy>
+						<pet id="11216" level="100">
+							<status>
+								<hp>10000</hp>
+							</status>
+							<initBuff>13,14,17,20,61,100</initBuff>
+							<loopSkill>11789,11790,11792</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=PetSelect</param>
+						    <param>title=选择要进化的魔花仙子</param>
+						    <param>option_num=2</param>
+							<param>callback=evolve</param>
+						</button>
+					</winHandler>
+				</branch>
+				<branch id="miracle">
+					<settings count="6">
+						<mode>4</mode>
+					</settings>
+					<enemy>
+						<pet id="14198" level="105">
+							<status>
+								<hp>10000</hp>
+							</status>
+							<initBuff>61,100,-8</initBuff>
+							<loopSkill>11802,11803,11804,11805,11806</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setItem</action>
+							<param>add</param>
+							<param>8,50</param>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=50个精灵因子已经放入背包</param>
+							<param>item_icon=item[8]</param>
+							<param>option_num=1</param>
+						</button>
+					</winHandler>
+				</branch>
 			</battle>
 			<eventHandler>
 				<button type="auto">
@@ -97,6 +171,53 @@
 					<param>default</param>
 				</button>
 			</eventHandler>
+			<callbackHandler>
+				<button type="choose">
+					<action>openHintbox</action>
+					<param>type=PetSelect</param>
+				    <param>title=选择要进化的魔花仙子</param>
+				    <param>option_num=2</param>
+					<param>callback=evolve</param>
+				    <condition>data.PetSelect.uidNOT10029|data.PetSelect.level&lt;100</condition>
+				</button>
+				<button type="evolve">
+				    <action>openHintbox</action>
+				    <param>type=Item</param>
+				    <param>title=提示</param>
+				    <param>content=必须选择等级100的魔花仙子！</param>
+				    <param>item_icon=pet[10029]</param>
+				    <param>option_num=1</param>
+					<param>callback=choose</param>
+				    <condition>data.PetSelect.uidNOT10029|data.PetSelect.level&lt;100</condition>
+				</button>
+				<button type="evolve">
+				    <action>openHintbox</action>
+				    <param>type=Item</param>
+				    <param>title=提示</param>
+				    <param>content=魔花仙子已成功超进化</param>
+				    <param>item_icon=pet[11216]</param>
+				    <param>option_num=1</param>
+				    <condition>data.PetSelect.uid=10029</condition>
+				    <condition>data.PetSelect.levelGTE100</condition>
+				</button>
+				<button type="evolve">
+				    <action>evolvePet</action>
+				    <param>index=data.PetSelectIndex</param>
+				    <param>11216</param>
+				    <condition>data.PetSelect.uid=10029</condition>
+				    <condition>data.PetSelect.levelGTE100</condition>
+				</button>
+				<button type="evolve">
+				    <action>setPet</action>
+				    <param>index=data.PetSelectIndex</param>
+				    <param>skill=11793</param>
+				    <param>skill=11794</param>
+				    <param>skill=11795</param>
+				    <param>skill=11796</param>
+				    <condition>data.PetSelect.uid=10029</condition>
+				    <condition>data.PetSelect.levelGTE100</condition>
+				</button>
+			</callbackHandler>
 		</npc>
 		<npc id="1003704" resId="Pets/pet/12009" name="Lv5 闪光仙人球" size="57,66" pos="330,60" namePos="0,-5" active="false">
 			<description>稀有精灵</description>

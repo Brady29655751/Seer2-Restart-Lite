@@ -2945,8 +2945,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
-  m_AnchoredPosition: {x: 140, y: -2}
-  m_SizeDelta: {x: 43, y: 32}
+  m_AnchoredPosition: {x: 140, y: 0}
+  m_SizeDelta: {x: 43, y: 42}
   m_Pivot: {x: 0, y: 0.5}
 --- !u!114 &441192554
 MonoBehaviour:
@@ -2968,8 +2968,8 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 638562344}
         m_TargetAssemblyTypeName: MapMenuController, Assembly-CSharp
-        m_MethodName: OpenPanel
-        m_Mode: 5
+        m_MethodName: ToggleShootMode
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -2990,7 +2990,7 @@ MonoBehaviour:
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: "\u4EFB\u52A1"
+          m_StringArgument: "\u5C04\u51FB"
           m_BoolArgument: 0
         m_CallState: 2
   onPointerEnterEvent:
@@ -3090,7 +3090,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 7170880393122851562, guid: d34acb4d3ab7a0241b9f4f04228144f5, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 9abb04b6145c2bd499720bbc36d302b3, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1

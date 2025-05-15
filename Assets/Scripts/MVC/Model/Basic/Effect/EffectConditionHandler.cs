@@ -114,7 +114,6 @@ public static class EffectConditionHandler
             string endExpr = cmpValue.Substring(middleIndex + 1);
             int startRange = int.Parse(startExpr);
             int endRange = int.Parse(endExpr);
-
             return random.IsWithin(startRange, endRange);
         } 
             

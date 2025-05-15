@@ -180,6 +180,16 @@
 				    <condition>data.PetSelect.uid=10047</condition>
 				    <condition>data.PetSelect.levelGTE100</condition>
 				</button>
+				<button type="evolve">
+				    <action>setPet</action>
+				    <param>index=data.PetSelectIndex</param>
+				    <param>skill=11715</param>
+				    <param>skill=11716</param>
+				    <param>skill=11717</param>
+				    <param>skill=11718</param>
+				    <condition>data.PetSelect.uid=10047</condition>
+				    <condition>data.PetSelect.levelGTE100</condition>
+				</button>
 				<button type="miracle_choose">
 					<action>openHintbox</action>
 					<param>type=PetSelect</param>
@@ -224,6 +234,167 @@
 				<button type="click">
 					<action>teleport</action>
 					<param>10037</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<npc id="1003803" resId="Pets/pet/10083" name="" size="38,79" pos="80,210" namePos="0,0">
+			<description>野生精灵</description>
+			<battle>
+				<branch id="default">
+					<settings count="1" capture="true">
+						<weather>1</weather>
+					</settings>
+					<enemy>
+						<pet id="10083" level="6">
+							<loopSkill>11837</loopSkill>
+						</pet>
+					</enemy>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>setNpcParam</action>
+					<param>1003803</param>
+					<param>active=false</param>
+				</button>
+				<button type="click">
+					<action>setNpcParam</action>
+					<param>1003804</param>
+					<param>active=true</param>
+				</button>
+				<button type="shoot">
+					<action>battle</action>
+					<param>default</param>
+					<condition>player.shoot=7003</condition>
+				</button>
+			</eventHandler>
+		</npc>
+		<npc id="1003804" resId="Pets/pet/10083" name="" size="38,79" pos="260,390" namePos="0,0" active="false">
+			<description>野生精灵</description>
+			<battle>
+				<branch id="default">
+					<settings count="1" capture="true">
+						<weather>1</weather>
+					</settings>
+					<enemy>
+						<pet id="10083" level="7">
+							<loopSkill>11837</loopSkill>
+						</pet>
+					</enemy>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>setNpcParam</action>
+					<param>1003804</param>
+					<param>active=false</param>
+				</button>
+				<button type="click">
+					<action>setNpcParam</action>
+					<param>1003805</param>
+					<param>active=true</param>
+				</button>
+				<button type="shoot">
+					<action>battle</action>
+					<param>default</param>
+					<condition>player.shoot=7003</condition>
+				</button>
+			</eventHandler>
+		</npc>
+		<npc id="1003805" resId="Pets/pet/10083" name="" size="38,79" pos="195,190" namePos="0,0" active="false">
+			<description>野生精灵</description>
+			<battle>
+				<branch id="default">
+					<settings count="1" capture="true">
+						<weather>1</weather>
+					</settings>
+					<enemy>
+						<pet id="10083" level="8">
+							<loopSkill>11837</loopSkill>
+						</pet>
+					</enemy>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>setNpcParam</action>
+					<param>1003805</param>
+					<param>active=false</param>
+				</button>
+				<button type="click">
+					<action>setNpcParam</action>
+					<param>1003806</param>
+					<param>active=true</param>
+				</button>
+				<button type="shoot">
+					<action>battle</action>
+					<param>default</param>
+					<condition>player.shoot=7003</condition>
+				</button>
+			</eventHandler>
+		</npc>
+		<npc id="1003806" resId="Pets/pet/10083" name="" size="38,79" pos="225,280" namePos="0,0" active="false">
+			<description>野生精灵</description>
+			<battle>
+				<branch id="default">
+					<settings count="1" capture="true">
+						<weather>1</weather>
+					</settings>
+					<enemy>
+						<pet id="10083" level="9">
+							<loopSkill>11837</loopSkill>
+						</pet>
+					</enemy>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>setNpcParam</action>
+					<param>1003806</param>
+					<param>active=false</param>
+				</button>
+				<button type="click">
+					<action>setNpcParam</action>
+					<param>1003807</param>
+					<param>active=true</param>
+				</button>
+				<button type="shoot">
+					<action>battle</action>
+					<param>default</param>
+					<condition>player.shoot=7003</condition>
+				</button>
+			</eventHandler>
+		</npc>
+		<npc id="1003807" resId="Pets/pet/10442" name="" size="50,71" pos="85,370" namePos="0,0" active="false">
+			<description>稀有精灵</description>
+			<battle>
+				<branch id="default">
+					<settings count="1" capture="true">
+						<weather>1</weather>
+					</settings>
+					<enemy>
+						<pet id="10442" level="10">
+							<initBuff>-2</initBuff>
+							<loopSkill>11837,11837,11837,11837,11837,-4</loopSkill>
+						</pet>
+					</enemy>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>setNpcParam</action>
+					<param>1003807</param>
+					<param>active=false</param>
+				</button>
+				<button type="click">
+					<action>setNpcParam</action>
+					<param>1003803</param>
+					<param>active=true</param>
+				</button>
+				<button type="shoot">
+					<action>battle</action>
+					<param>default</param>
+					<condition>player.shoot=7003</condition>
 				</button>
 			</eventHandler>
 		</npc>

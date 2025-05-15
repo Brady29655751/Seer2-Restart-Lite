@@ -158,7 +158,7 @@ public class MapSceneView : UIModule
             actionList = battleInfo.winHandler.Select(x => NpcHandler.GetNpcEntity(npc, x, npcDict)).ToList();
 
             // 1周年争霸赛特殊活動
-            if ((map.id.IsInRange(81, 90)) && ((npc?.GetInfo()?.id ?? 0) >= 8100)) {
+            if ((map.id.IsInRange(82, 90)) && ((npc?.GetInfo()?.id ?? 0) >= 8200)) {
                 var item = new Item(7, Random.Range(1, 5));
                 Item.Add(item);
                 Item.OpenHintbox(item);

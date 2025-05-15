@@ -9,6 +9,8 @@ public class Buff
     public const int BUFFID_PVP_IV_120 = 61_0000;
     public const int BUFFID_PET_EXCHANGE = 62_0000;
     public const int BUFFID_PET_RANDOM = 62_0001;
+    public static List<int> powerupBuffIds => new List<int>(){ 1, 3, 5, 7, 9, -9 };
+    public static List<int> powerdownBuffIds => new List<int>(){ 2, 4, 6, 8, 10, -10 }; 
     public static List<Buff> yiteEndBuffDatabse => BuffInfo.database.Where(x => x.id.IsInRange(410000, 420000)).Select(x => new Buff(x.id)).ToList();
     public static List<Buff> yiteHardBuffDatabse => BuffInfo.database.Where(x => x.id.IsInRange(430000, 440000) || x.id.IsInRange(400010, 400015)).Select(x => new Buff(x.id)).ToList();
     public static List<Buff> yiteEasyBuffDatabse => BuffInfo.database.Where(x => x.id.IsInRange(420000, 430000) || x.id.IsInRange(400005, 400010)).Select(x => new Buff(x.id)).ToList();
@@ -73,18 +75,10 @@ public class Buff
         return id.IsWithin(1, 10) || id.IsWithin(-9, -10);
     }
     public bool IsPowerUp() {
-        for (int i = 1; i <= 9; i += 2) {
-            if (id == i)
-                return true;
-        }
-        return id == -9;
+        return powerupBuffIds.Contains(id);
     }
     public bool IsPowerDown() {
-        for (int i = 2; i <= 10; i += 2) {
-            if (id == i)
-                return true;
-        }
-        return id == -10;
+        return powerdownBuffIds.Contains(id);
     }
     public bool IsAbnormal() {
         return info.type == BuffType.Abnormal;
