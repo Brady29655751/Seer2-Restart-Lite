@@ -58,7 +58,7 @@ public class WorkshopPetView : Module
 
     public void OpenHelpPanel(string type) {
         string help = type switch {
-            "id" => "精灵的序号只能输入-13以下的数字",
+            "id" => "精灵的序号只能输入负整数",
             "subElement" => "精灵的副属性。单属性精灵请填写普通",
             "gender" => "精灵的性别，-1为无性别，0为雄性，1为雌性，2为双性\n" + 
                 "若为固定性别可以只写数字，例如：2\n" +

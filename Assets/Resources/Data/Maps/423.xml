@@ -1,12 +1,276 @@
-<map name="遗忘之岛"  category="7"  id="423" weather="0">
+<map name="遗忘之岛"  category="7"  id="423" weather="8">
 	<!-- <resource>10011</resource> -->
+	<fightMap>100008</fightMap>
 	<initialPoint>530,150</initialPoint>
 	<anim pos="-5,-1.5" scale="1.7,1.45"/>
 	<music category="7">
 		<bgm>BGM_032</bgm>
 	</music>
 	<entities>
-			<teleport id="1" name="时镜之岛" pos="400,50" targetMapId="422"/>
+		<npc id="42301" resId="Pets/pet/157.png" name="Lv 80 菲亚斯" size="147,125" pos="290,350" namePos="5,-20">
+			<description>SPT</description>
+			<dialog>
+				<branch id="default" name="菲亚斯" icon="Pets/pet/157.png" size="147,125" pos="10,35">
+					<content><![CDATA[我是否早已被遗忘？]]></content>
+					<functionHandler>
+						<func type="click">
+							<description><![CDATA[普通挑战]]></description>
+							<action>battle</action>
+							<param>default</param>
+						</func>
+						<func type="click">
+							<description><![CDATA[挑战1]]></description>
+							<action>battle</action>
+							<param>challenge_1</param>
+							<condition>firstPet.baseId=156</condition>
+						</func>
+						<func type="branch">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=把菲亚斯设为首发之后再来挑战吧</param>
+							<param>option_num=1</param>
+							<param>item_icon=pet[157]</param>
+							<condition>firstPet.baseIdNOT156</condition>
+						</func>
+						<func type="click">
+							<description><![CDATA[挑战2]]></description>
+							<action>battle</action>
+							<param>challenge_2</param>
+						</func>
+						<!--
+						<func type="click">
+							<description><![CDATA[超进化挑战]]></description>
+							<action>battle</action>
+							<param>evolve</param>
+							<condition>firstPet.id=157</condition>
+						</func>
+						<func type="branch">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=把菲亚斯设为首发之后再来挑战吧</param>
+							<param>option_num=1</param>
+							<param>item_icon=pet[157]</param>
+							<condition>firstPet.idNOT157</condition>
+						</func>
+						-->
+					</functionHandler>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[遗忘和沉默都是针对属性技能的效果]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+					</replyHandler>
+				</branch>
+				<branch id="default_lose" name="菲亚斯" icon="Pets/pet/157.png" size="147,125" pos="10,35">
+					<content><![CDATA[能力强化会大幅强化伤害]]></content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[似乎可以用弱化对抗强化]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+					</replyHandler>
+				</branch>
+			</dialog>
+			<battle>
+				<branch id="default">
+					<settings count="1" simulate="true">
+						<mode>3</mode>
+						<weather>8</weather>
+					</settings>
+					<player>
+						<pet id="248" level="95">
+							<status>
+								<atk>400</atk>
+								<mat>399</mat>
+								<spd>400</spd>
+								<hp>6000</hp>
+							</status>
+							<initBuff>966</initBuff>
+							<normalSkill>11875,11867,11877,11871</normalSkill>
+							<superSkill>11874</superSkill>
+						</pet>
+					</player>
+					<enemy>
+						<pet id="157" level="80">
+							<status>
+								<atk>1500</atk>
+								<mat>1500</mat>
+								<spd>500</spd>
+								<hp>3000</hp>
+							</status>
+							<initBuff>61</initBuff>
+							<loopSkill>11860,11862,11861,11862,11858,11862</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>getPet</action>
+							<param>156,10,0</param>
+							<condition>activity[spt].done[north][8][default]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=【菲亚】已经放入精灵仓库</param>
+							<param>item_icon=pet[156]</param>
+							<param>option_num=1</param>
+							<condition>activity[spt].done[north][8][default]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>spt</param>
+							<param>done[north][8][default]=true</param>
+							<condition>activity[spt].done[north][8][default]=[bool]false[default]false</condition>
+						</button>
+					</winHandler>
+					<loseHandler>
+						<button type="auto">
+							<action>openDialog</action>
+							<param>default_lose</param>
+						</button>
+					</loseHandler>
+				</branch>
+				<branch id="challenge_1">
+					<settings count="1">
+						<mode>3</mode>
+					</settings>
+					<enemy>
+						<pet id="157" level="100">
+							<status>
+								<hp>3000</hp>
+							</status>
+							<initBuff>61</initBuff>
+							<loopSkill>11860,11862,11861,11862,11858,11862</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setPet</action>
+							<param>emblem=1</param>
+							<condition>activity[spt].done[north][8][challenge_1]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=【菲亚斯】获得了【分身】纹章</param>
+							<param>item_icon=emblem[156]</param>
+							<param>option_num=1</param>
+							<condition>activity[spt].done[north][8][challenge_1]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>spt</param>
+							<param>done[north][8][challenge_1]=true</param>
+							<condition>activity[spt].done[north][8][challenge_1]=[bool]false[default]false</condition>
+						</button>
+					</winHandler>
+				</branch>
+				<branch id="challenge_2">
+					<settings count="2" parallel="2">
+						<mode>3</mode>
+						<weather>8</weather>
+					</settings>
+					<enemy>
+						<pet id="157" level="80">
+							<status>
+								<hp>3000</hp>
+							</status>
+							<initBuff>61,13,14,17</initBuff>
+							<loopSkill>11860,11862,11861,11862,11858,11862</loopSkill>
+						</pet>
+						<pet id="248" level="95">
+							<status>
+								<hp>6000</hp>
+							</status>
+							<initBuff>61,13,14,17</initBuff>
+							<loopSkill>11875,11867,11875,11877,11875,11874</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setItem</action>
+							<param>add</param>
+							<param>2,50</param>
+							<condition>activity[spt].done[north][8][challenge_2]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=50 星钻已经放入背包</param>
+							<param>item_icon=item[2]</param>
+							<param>option_num=1</param>
+							<condition>activity[spt].done[north][8][challenge_2]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>spt</param>
+							<param>done[north][8][challenge_2]=true</param>
+							<condition>activity[spt].done[north][8][challenge_2]=[bool]false[default]false</condition>
+						</button>
+					</winHandler>
+				</branch>
+				<!--
+				<branch id="evolve">
+					<settings count="1">
+						<mode>3</mode>
+						<weather>2</weather>
+					</settings>
+					<enemy>
+						<pet id="692" level="105">
+							<status>
+								<hp>2000</hp>
+							</status>
+							<initBuff>20</initBuff>
+							<loopSkill>10429,10430,10428,10426,10432</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>evolvePet</action>
+							<param>692</param>
+							<condition>activity[spt].done[north][8][evolve]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=菲亚斯已成功超进化</param>
+							<param>item_icon=pet[692]</param>
+							<param>option_num=1</param>
+							<condition>activity[spt].done[north][8][evolve]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>spt</param>
+							<param>done[north][8][evolve]=true</param>
+							<condition>activity[spt].done[north][8][evolve]=[bool]false[default]false</condition>
+						</button>
+					</winHandler>
+				</branch>
+				-->
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>openDialog</action>
+					<param>default</param>
+				</button>
+				<button type="auto">
+					<action>setNpcParam</action>
+					<param>42301</param>
+					<param>color=0,0,0,0</param>
+					<condition>map.anim=1</condition>
+				</button>
+			</eventHandler>
+		</npc>
+
+		<teleport id="1" name="时镜之岛" pos="400,50" targetMapId="422"/>
 		
 	</entities>
 

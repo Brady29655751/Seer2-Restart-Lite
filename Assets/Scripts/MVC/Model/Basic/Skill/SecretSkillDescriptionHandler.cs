@@ -6,12 +6,13 @@ public static class SecretSkillDescriptionHandler
 {
     public static List<string> specialPetNameList = new List<string>() {
         "特定精灵",
-        "迪兰特、休罗斯、拉奥叶",   
-        "笑笑葵",   
+        "迪兰特、休罗斯、拉奥叶",
+        "笑笑葵",
         "战伊特、钢伊特",
         "光伊特、暗伊特",
         "风伊特、电伊特、冰伊特",
-        "卡特罗、卡罗特"
+        "卡特罗、卡罗特",
+        "菲亚斯、卡多斯",
     };
 
     public static string GreaterThanLevel(this LearnSkillInfo secretSkillInfo) {

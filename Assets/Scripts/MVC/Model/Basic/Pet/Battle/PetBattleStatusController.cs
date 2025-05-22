@@ -100,6 +100,7 @@ public class PetBattleStatusController
         _powerupBuff = ignorePowerdown ? _powerupBuff.pos : _powerupBuff;
         
         Status status = new Status(_initStatus * Status.GetPowerUpBuff(_powerupBuff) * _multStatus + _addStatus);
+        status = Status.Max(status, Status.one);
         status.hp = hp;
         return status;
     }

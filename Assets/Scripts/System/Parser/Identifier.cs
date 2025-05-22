@@ -124,10 +124,14 @@ public static class Identifier {
             var battle = Player.instance.currentBattle;
             var state = battle.currentState;
 
-            if (trimId.TryTrimStart("last.", out trimId)) {
+            if (trimId.TryTrimStart("last.", out trimId))
+            {
                 state = state.lastTurnState;
                 if (state == null)
                     return 0;
+                    
+                lhsUnit = state.GetUnitById(lhsUnit.id);
+                rhsUnit = state.GetUnitById(rhsUnit.id);
             }
 
             if (trimId.TryTrimStart("me.", out trimId)) {

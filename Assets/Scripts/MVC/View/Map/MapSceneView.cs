@@ -46,7 +46,8 @@ public class MapSceneView : UIModule
 
     public void SetBackground(MapResources resources) {
         var prefab = resources.anim;
-        if (prefab == null) {
+        if (prefab == null)
+        {
             background.sprite = resources.bg;
             background.color = map.dream ? Color.gray : map.backgroundColor;
             return;

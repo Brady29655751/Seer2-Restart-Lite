@@ -92,8 +92,8 @@ public class WorkshopPetBasicModel : Module
             return false;
         }
 
-        if (id > -13) {
-            error = "序号需小于等于-13";
+        if (id > -1) {
+            error = "序号需小于等于-1";
             return false;
         }
 

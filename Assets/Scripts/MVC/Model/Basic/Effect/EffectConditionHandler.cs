@@ -226,25 +226,30 @@ public static class EffectConditionHandler
         Unit rhsUnit = state.GetRhsUnitById(buffUnit.id);
         var pet = buffUnit.pet;
 
+        Buff buff = null;
         BuffType buffType;
-        if (!int.TryParse(id, out int buffId)) {
+        if (!int.TryParse(id, out int buffId))
+        {
             buffType = id.ToBuffType();
-            if (buffType == BuffType.None)
-                return false;
+            if (buffType != BuffType.None)
+                return ownBuff != ListHelper.IsNullOrEmpty(pet.buffController.GetRangeBuff(x => x.IsType(buffType)));
+        }
+        else
+        {
+            if (string.IsNullOrEmpty(key) && (buffId == 0))
+                return true;
 
-            return ownBuff != ListHelper.IsNullOrEmpty(pet.buffController.GetRangeBuff(x => x.IsType(buffType)));
+            id = string.IsNullOrEmpty(key) ? $"(id:{buffId})" : null;            
         }
 
-        if (string.IsNullOrEmpty(key) && (buffId == 0))
-            return true;
+        var filter = Parser.ParseConditionFilter<Buff>(id, (expr, buff) => buff.TryGetBuffIdentifier(expr, out var num) ? num : Identifier.GetNumIdentifier(expr));
 
-        Buff buff = null;
         if (key == "unit")
-            buff = buffUnit.unitBuffs.Find(x => x.id == buffId);
+            buff = buffUnit.unitBuffs.Find(x => filter(x));
         else if (!string.IsNullOrEmpty(key))
-            buff = state.stateBuffs.Find(x => x.Key == key).Value;
+            buff = state.stateBuffs.FindAll(x => (x.Key == key) && filter(x.Value)).FirstOrDefault().Value;
         else
-            buff = pet.buffController.GetBuff(buffId);
+            buff = pet.buffController.GetRangeBuff(x => filter(x)).FirstOrDefault();
 
         bool isOwnCorrect = (ownBuff == (buff != null));
 

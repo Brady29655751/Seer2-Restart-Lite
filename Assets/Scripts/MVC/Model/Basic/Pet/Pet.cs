@@ -472,7 +472,14 @@ public class Pet
                 if ((x == null) || (!x.id.IsWithin(-1, -12)))
                     return;
 
-                int newId = Pet.GetPetInfo(x.id)?.id ?? 0;
+                int newId = x.id switch
+                {
+                    -1 => 10304,    -2 => 10305,    -3 => 10306,
+                    -4 => 10307,    -5 => 10308,    -6 => 10309,
+                    -7 => 10301,    -8 => 10302,    -9 => 10303,
+                    -10 => 10010,   -11 => 10011,   -12 => 10012,
+                    _ => x.id
+                };
 
                 x.id = newId;
                 x.basic.id = newId;

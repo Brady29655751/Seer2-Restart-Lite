@@ -271,19 +271,21 @@ public class Skill
     public string GetDescription(string plainText) {
         string desc;
         desc = plainText.Trim();
-        if (priority != 0) {
-            var priDesc = "[77e20c]【先制" + ((priority > 0) ? "+" : string.Empty) + priority + "】[-][ENDL]";
-            desc = priDesc + desc;
-        }
         if ((critical <= 100) && (critical != 5)) {
             desc = "[ff50d0]【暴击率 " + critical + "%】[-][ENDL]" + desc;
         }
         if ((accuracy <= 100) && (accuracy != (isAttack ? 95 : 100))) {
             desc = "[52e5f9]【命中率 " + accuracy + "%】[-][ENDL]" + desc;
         }
-        if (!ListHelper.IsNullOrEmpty(referBuffList)) {
-            for (int i = 0; i < referBuffList.Count; i++) {
-                var buffValueList = referBuffList[i].TrimParenthesesLoop(); 
+        if (priority != 0) {
+            var priDesc = "[77e20c]【先制" + ((priority > 0) ? "+" : string.Empty) + priority + "】[-][ENDL]";
+            desc = priDesc + desc;
+        }
+        if (!ListHelper.IsNullOrEmpty(referBuffList))
+        {
+            for (int i = 0; i < referBuffList.Count; i++)
+            {
+                var buffValueList = referBuffList[i].TrimParenthesesLoop();
                 bool isWithValue = !ListHelper.IsNullOrEmpty(buffValueList);
                 var buffId = int.Parse(isWithValue ? referBuffList[i].Substring(0, referBuffList[i].IndexOf('[')) : referBuffList[i]);
                 var buffValue = isWithValue ? int.Parse(buffValueList.FirstOrDefault(x => !x.Contains(":"))) : 0;

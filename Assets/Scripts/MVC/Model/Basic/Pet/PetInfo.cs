@@ -19,7 +19,7 @@ public class PetInfo
     public PetSkillInfo skills;
     public PetUIInfo ui;
 
-    public static bool IsMod(int id) => (id < -12);
+    public static bool IsMod(int id) => (id < 0);
     public static List<PetInfo> database => Database.instance.petInfoDict.Select(x => x.Value).Where(x => x != null)
         .OrderByDescending(x => x.id.GetSortPriority()).ToList();
 

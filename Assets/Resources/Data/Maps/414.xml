@@ -1,0 +1,81 @@
+<map name="冰封魔域"  category="5"  id="414"  weather="11">
+	<!-- <resource>10011</resource> -->
+	<initialPoint>350,90</initialPoint>
+	<music category="5">
+		<bgm>BGM_096</bgm>
+	</music>
+	<entities>
+		<npc id="41401" resId="Pets/pet/595" name="Lv100 库贝萨" size="160,198" pos="400,210" namePos="0,-5">
+		    <description>上古魔王库贝萨！</description>
+		    <dialog>
+		        <branch id="default" name="库贝萨" icon="Pets/pet/595.png" size="120,150" pos="5,35">
+					<content>吾乃上古魔王库贝萨！</content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[那么上古勇者在哪里？]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+						<reply type="click">
+							<description><![CDATA[我就是勇者！]]></description>
+							<action>battle</action>
+							<param>default</param>
+						</reply>
+					</replyHandler>
+		        </branch>
+		    </dialog>
+			<battle>
+				<branch id="default">
+					<settings count="6" star="4">
+						<mode>3</mode>
+						<weather>11</weather>
+					</settings>
+					<enemy>
+						<pet id="595" level="100">
+							<status>
+								<atk>800</atk>
+								<hp>15000</hp>
+							</status>
+							<initBuff>-8,100,61,-3000</initBuff>
+							<loopSkill>11885,11887,11892</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>getPet</action>
+							<param>593,1</param>
+							<condition>activity[11008].done=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=【库贝多】已经放入精灵仓库</param>
+							<param>item_icon=pet[593]</param>
+							<param>option_num=1</param>
+							<condition>activity[11008].done=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>11008</param>
+							<param>done=true</param>
+							<condition>activity[11008].done=[bool]false[default]false</condition>
+						</button>
+					</winHandler>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>openDialog</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+			<teleport id="1" name="雪之溶洞" pos="535,95" targetMapId="410"/>
+
+
+	</entities>
+
+
+</map>
+

@@ -55,7 +55,7 @@ public class BattlePet : Pet
         skillController = new PetBattleSkillController(normalSkill.ToList(), superSkill);
     }
 
-    public BattlePet(BossInfo bossInfo) : base(GetPetInfo(bossInfo.petId).id, bossInfo.level, bossInfo.hasEmblem) {
+    public BattlePet(BossInfo bossInfo) : base(bossInfo.petId, bossInfo.level, bossInfo.hasEmblem) {
         Status basicStatus = (bossInfo.status == null) ? normalStatus : bossInfo.status.GetBasicStatus().Select((x, i) => (x == 0) ? normalStatus[i] : x);
         Status hiddenStatus = (bossInfo.status == null) ? new Status(0, 0, 0, 0, 100, 100) : bossInfo.status.GetHiddenStatus();
         BattleStatus status = new BattleStatus(basicStatus, hiddenStatus);
