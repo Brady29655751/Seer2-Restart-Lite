@@ -160,7 +160,11 @@ public static class EffectAbilityHandler
             if (lostToGain || gainToLost)
                 heal *= -1;
 
-            int healAdd = (int)(heal * ((heal > 0) ? (targetList[i].battleStatus.rec / 100f) : 1));
+            var rec = targetList[i].battleStatus.rec;
+            if (targetList[i].buffController.GetBuff(100) != null)
+                rec = Mathf.Max(rec, 100);
+
+            int healAdd = (int)(heal * ((heal > 0) ? (rec / 100f) : 1));
             var setHp = (set == "none") ? 0 : (int)Parser.ParseEffectOperation(set, effect, lhsUnit, rhsUnit, targetList[i]);
             var maxHp = (max == "none") ? 0 : (int)Parser.ParseEffectOperation(max, effect, lhsUnit, rhsUnit, targetList[i]);
 
@@ -412,6 +416,12 @@ public static class EffectAbilityHandler
         string value = effect.abilityOptionDict.Get("value", "0");
         string option = effect.abilityOptionDict.Get("option", string.Empty);
 
+        var idExpr = id.TryTrimStart("!", out var idListExpr) ? idListExpr.Substring(1, idListExpr.Length - 2).Split('/') : new string[]{ id };
+        var turnExpr = turn.TryTrimStart("!", out var turnListExpr) ? turnListExpr.Substring(1, turnListExpr.Length - 2).Split('/') : new string[]{ turn };
+        var valueExpr = value.TryTrimStart("!", out var valueListExpr) ? valueListExpr.Substring(1, valueListExpr.Length - 2).Split('/') : new string[]{ value };
+        var optionExpr = option.TryTrimStart("!", out var optionListExpr) ? optionListExpr.Substring(1, optionListExpr.Length - 2).Split('/') : new string[]{ option };
+        int buffCount = idExpr.Length;
+
         Unit invokeUnit = (Unit)effect.invokeUnit;
         Unit lhsUnit = (who == "me") ? state.GetUnitById(invokeUnit.id) : state.GetRhsUnitById(invokeUnit.id);
         Unit rhsUnit = state.GetRhsUnitById(lhsUnit.id);
@@ -420,55 +430,68 @@ public static class EffectAbilityHandler
 
         bool isSuccess = false;
 
-        for (int j = 0; j < targetList.Count; j++) {
+        for (int j = 0; j < targetList.Count; j++)
+        {
             var pet = targetList[j];
             var buffController = targetList[j].buffController;
-            int buffTurn = (int)Parser.ParseEffectOperation(turn, effect, lhsUnit, rhsUnit);
-            int buffValue = (int)Parser.ParseEffectOperation(value, effect, lhsUnit, rhsUnit);
-            int buffId = 0;
-            var buffIdList = new List<int>();
 
-            if (id.TryTrimStart("unique", out var trimId)) {
-                buffIdList = trimId.ToIntRange();
-                if (!string.IsNullOrEmpty(key) || (buffIdList.Exists(x => Buff.GetBuffInfo(x) == null)))
-                    return false;
-                buffIdList = buffIdList.Where(x => !buffController.buffs.Exists(y => y.id == x)).ToList();
-                if (ListHelper.IsNullOrEmpty(buffIdList))
-                    return false;
-                buffId = buffIdList.Random();
-            } else {
-                if (id.TryTrimStart("random", out trimId) && trimId.TryTrimParentheses(out var buffType) && (buffType.ToBuffType() != BuffType.None))
-                    buffId = Database.instance.buffInfoDict.Where(entry => entry.Value.type == buffType.ToBuffType()).Select(entry => entry.Key).ToList().Random();
+            for (int k = 0; k < buffCount; k++)
+            {
+                int buffTurn = (int)Parser.ParseEffectOperation(turnExpr[k], effect, lhsUnit, rhsUnit);
+                int buffValue = (int)Parser.ParseEffectOperation(valueExpr[k], effect, lhsUnit, rhsUnit);
+                int buffId = 0;
+                var buffIdList = new List<int>();
+
+                if (idExpr[k].TryTrimStart("unique", out var trimId))
+                {
+                    buffIdList = trimId.ToIntRange();
+                    if (!string.IsNullOrEmpty(key) || (buffIdList.Exists(x => Buff.GetBuffInfo(x) == null)))
+                        return false;
+                    buffIdList = buffIdList.Where(x => !buffController.buffs.Exists(y => y.id == x)).ToList();
+                    if (ListHelper.IsNullOrEmpty(buffIdList))
+                        return false;
+                    buffId = buffIdList.Random();
+                }
                 else
-                    buffId = (int)Parser.ParseEffectOperation(id, effect, lhsUnit, rhsUnit);
-            }
-            var newBuffInfo = Buff.GetBuffInfo(buffId);
-            if (string.IsNullOrEmpty(key) && (newBuffInfo == null))
-                return false;
-
-            // The key prefix "rule" is reserved for pvp rules.
-            Buff newBuff = (newBuffInfo == null) ? null : new Buff(buffId, buffTurn, buffValue);
-            if (!string.IsNullOrEmpty(option)) {
-                var optionList = option.TrimParenthesesLoop('(', ')');
-                foreach (var op in optionList)
-                    newBuff.options.Set(op.Split(':')[0], op.Split(':')[1]);
-            }
-
-            if (!string.IsNullOrEmpty(key)) {
-                if ((isFieldLocked && (key == "field")) || key.StartsWith("rule"))
+                {
+                    if (idExpr[k].TryTrimStart("random", out trimId) && trimId.TryTrimParentheses(out var buffType) && (buffType.ToBuffType() != BuffType.None))
+                        buffId = Database.instance.buffInfoDict.Where(entry => entry.Value.type == buffType.ToBuffType()).Select(entry => entry.Key).ToList().Random();
+                    else
+                        buffId = (int)Parser.ParseEffectOperation(idExpr[k], effect, lhsUnit, rhsUnit);
+                }
+                var newBuffInfo = Buff.GetBuffInfo(buffId);
+                if (string.IsNullOrEmpty(key) && (newBuffInfo == null))
                     return false;
 
-                if (key == "unit")
-                    return lhsUnit.AddBuff(newBuff);
+                // The key prefix "rule" is reserved for pvp rules.
+                Buff newBuff = (newBuffInfo == null) ? null : new Buff(buffId, buffTurn, buffValue);
+                if (!string.IsNullOrEmpty(optionExpr.ElementAtOrDefault(k)))
+                {
+                    var optionList = optionExpr[k].TrimParenthesesLoop('(', ')');
+                    if (!ListHelper.IsNullOrEmpty(optionList))
+                    {
+                        foreach (var op in optionList)
+                            newBuff.options.Set(op.Split(':')[0], op.Split(':')[1]);
+                    }
+                }
 
-                state.stateBuffs.RemoveAll(x => x.Key == key);
-                if (newBuff != null)
-                    state.stateBuffs.Add(new KeyValuePair<string, Buff>(key, newBuff));
+                if (!string.IsNullOrEmpty(key))
+                {
+                    if ((isFieldLocked && (key == "field")) || key.StartsWith("rule"))
+                        return false;
 
-                return true;
+                    if (key == "unit")
+                        return lhsUnit.AddBuff(newBuff);
+
+                    state.stateBuffs.RemoveAll(x => x.Key == key);
+                    if (newBuff != null)
+                        state.stateBuffs.Add(new KeyValuePair<string, Buff>(key, newBuff));
+
+                    return true;
+                }
+
+                isSuccess |= buffController.AddBuff(newBuff, lhsUnit, state);
             }
-
-            isSuccess |= buffController.AddBuff(newBuff, lhsUnit, state);
         }
         return isSuccess;
     }

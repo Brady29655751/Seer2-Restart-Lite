@@ -635,12 +635,19 @@ public class ResourceManager : Singleton<ResourceManager>
         int dataCol = Skill.DATA_COL;
         int dataRow = info.Length / dataCol;
         Skill skill = null;
-        for (int i = 1; i < dataRow; i++)
+        try
         {
-            int cur = dataCol * i;
-            skill = new Skill(info, cur);
-            skill.SetEffects(effectLists[i - 1]);
-            skillDict.Add(skill.id, skill);
+            for (int i = 1; i < dataRow; i++)
+            {
+                int cur = dataCol * i;
+                skill = new Skill(info, cur);
+                skill.SetEffects(effectLists[i - 1]);
+                skillDict.Add(skill.id, skill);
+            }
+        }
+        catch (Exception)
+        {
+            Hintbox.OpenHintboxWithContent("技能ID " + skill.id + "出错", 16);
         }
 
         return skillDict;

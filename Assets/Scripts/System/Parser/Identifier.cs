@@ -267,6 +267,7 @@ public static class Identifier {
             Status powerup = statusController.powerup;
             return trimId switch {
                 "hit" => powerup.hp,
+                "accuracyBuff" => powerup.hp * 10 + Mathf.Clamp(powerup.hp, -3, 3) * 5,
                 "count" => powerup.Count(x => x != 0),
                 "posCount" => powerup.Count(x => x > 0),
                 "negCount" => powerup.Count(x => x < 0),

@@ -1,0 +1,228 @@
+<map name="克洛斯星地心" category="102" id="10039" weather="1">
+	<initialPoint>390,125</initialPoint>
+	<music category="102">
+		<bgm>BGM_39</bgm>
+	</music>
+	<entities>
+		<npc id="1003901" resId="Pets/pet/10811" name="Lv100 始祖灵兽" size="102,128" pos="420,280" namePos="0,-20">
+			<description>SPT</description>
+			<dialog>
+				<branch id="default" name="始祖灵兽" icon="Pets/pet/10811" size="115,126" pos="10,35">
+					<content><![CDATA[欲戴王冠，必承其重]]></content>
+					<functionHandler>
+						<func type="click">
+							<description><![CDATA[挑战始祖灵兽]]></description>
+							<action>battle</action>
+							<param>default</param>
+						</func>
+						<func type="click">
+							<description><![CDATA[超进化]]></description>
+							<action>battle</action>
+							<param>evolve</param>
+						</func>
+						<func type="click">
+							<description><![CDATA[神迹觉醒]]></description>
+							<action>battle</action>
+							<param>miracle</param>
+						</func>
+					</functionHandler>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[长得很像目灵兽]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+					</replyHandler>
+				</branch>
+			</dialog>
+			<battle>
+				<branch id="default">
+					<settings count="6" star="4">
+						<mode>3</mode>
+						<weather>1</weather>
+						<initBuff>(field:600001)</initBuff>
+					</settings>
+					<enemy>
+						<pet id="10811" level="100">
+							<status>
+								<hp>30000</hp>
+							</status>
+							<initBuff>-8,-3059</initBuff>
+							<loopSkill>11905,11907,11900,11902</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>getPet</action>
+							<param>10809,1</param>
+							<condition>activity[new_evolve_14750].done=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=【灵驹】已经放入精灵仓库</param>
+							<param>item_icon=pet[10809]</param>
+							<param>option_num=1</param>
+							<condition>activity[new_evolve_14750].done=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>new_evolve_14750</param>
+							<param>done=true</param>
+							<condition>activity[new_evolve_14750].done=[bool]false[default]false</condition>
+						</button>
+					</winHandler>
+				</branch>
+				<branch id="evolve">
+					<settings count="1">
+						<mode>3</mode>
+						<weather>1</weather>
+						<initBuff>(field:600001)</initBuff>
+					</settings>
+					<enemy>
+						<pet id="12662" level="100">
+							<status>
+								<hp>30000</hp>
+							</status>
+							<initBuff>30,61,950,-8</initBuff>
+							<loopSkill>11914,11912,11914,11916</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=PetSelect</param>
+						    <param>title=选择要进化的始祖灵兽</param>
+						    <param>option_num=2</param>
+						    <param>callback=evolve</param>
+						</button>
+					</winHandler>
+				</branch>
+				<branch id="miracle">
+					<settings count="6">
+						<mode>4</mode>
+						<weather>1</weather>
+						<initBuff>(field:600001)</initBuff>
+					</settings>
+					<enemy>
+						<pet id="14750" level="105">
+							<status>
+								<hp>30000</hp>
+							</status>
+							<initBuff>-8,-3065,61</initBuff>
+							<loopSkill>11923,11925,11924,11922,11926</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=PetSelect</param>
+						    <param>title=选择要进化的繁盛灵兽王</param>
+						    <param>option_num=2</param>
+						    <param>callback=miracle</param>
+						</button>
+					</winHandler>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>openDialog</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+			<callbackHandler>
+				<button type="choose">
+					<action>openHintbox</action>
+					<param>type=PetSelect</param>
+				    <param>title=选择要进化的始祖灵兽</param>
+				    <param>option_num=2</param>
+					<param>callback=evolve</param>
+				    <condition>data.PetSelect.uidNOT10811|data.PetSelect.level&lt;100</condition>
+				</button>
+				<button type="evolve">
+				    <action>openHintbox</action>
+				    <param>type=Item</param>
+				    <param>title=提示</param>
+				    <param>content=必须选择等级100的始祖灵兽！</param>
+				    <param>item_icon=pet[10811]</param>
+				    <param>option_num=1</param>
+					<param>callback=choose</param>
+				    <condition>data.PetSelect.uidNOT10811|data.PetSelect.level&lt;100</condition>
+				</button>
+				<button type="evolve">
+				    <action>openHintbox</action>
+				    <param>type=Item</param>
+				    <param>title=提示</param>
+				    <param>content=始祖灵兽已成功超进化</param>
+				    <param>item_icon=pet[12662]</param>
+				    <param>option_num=1</param>
+				    <condition>data.PetSelect.uid=10811</condition>
+				    <condition>data.PetSelect.levelGTE100</condition>
+				</button>
+				<button type="evolve">
+				    <action>evolvePet</action>
+				    <param>index=data.PetSelectIndex</param>
+				    <param>12662</param>
+				    <condition>data.PetSelect.uid=10811</condition>
+				    <condition>data.PetSelect.levelGTE100</condition>
+				</button>
+				<button type="evolve">
+				    <action>setPet</action>
+				    <param>index=data.PetSelectIndex</param>
+				    <param>skill=11908</param>
+				    <param>skill=11909</param>
+				    <param>skill=11910</param>
+				    <param>skill=11911</param>
+				    <condition>data.PetSelect.uid=10811</condition>
+				    <condition>data.PetSelect.levelGTE100</condition>
+				</button>
+				<button type="miracle_choose">
+					<action>openHintbox</action>
+					<param>type=PetSelect</param>
+				    <param>title=选择要进化的繁盛灵兽王</param>
+				    <param>option_num=2</param>
+					<param>callback=miracle</param>
+				    <condition>data.PetSelect.uidNOT12662|data.PetSelect.level&lt;100</condition>
+				</button>
+				<button type="miracle">
+				    <action>openHintbox</action>
+				    <param>type=Item</param>
+				    <param>title=提示</param>
+				    <param>content=必须选择等级100的繁盛灵兽王！</param>
+				    <param>item_icon=pet[12662]</param>
+				    <param>option_num=1</param>
+					<param>callback=miracle_choose</param>
+				    <condition>data.PetSelect.uidNOT12662|data.PetSelect.level&lt;100</condition>
+				</button>
+				<button type="miracle">
+				    <action>openHintbox</action>
+				    <param>type=Item</param>
+				    <param>title=提示</param>
+				    <param>content=繁盛灵兽王已成功超进化</param>
+				    <param>item_icon=pet[13326]</param>
+				    <param>option_num=1</param>
+				    <condition>data.PetSelect.uid=12662</condition>
+				    <condition>data.PetSelect.levelGTE100</condition>
+				</button>
+				<button type="miracle">
+				    <action>evolvePet</action>
+				    <param>index=data.PetSelectIndex</param>
+				    <param>13326</param>
+				    <condition>data.PetSelect.uid=12662</condition>
+				    <condition>data.PetSelect.levelGTE100</condition>
+				</button>
+			</callbackHandler>
+		</npc>
+		<npc id="1003902" resId="1001" name="" size="250,180" pos="710,85" namePos="0,0" color="0,0,0,0">
+			<description>克洛斯星沼泽</description>
+			<transport>850,125</transport>
+			<eventHandler>
+				<button type="click">
+					<action>teleport</action>
+					<param>10037</param>
+				</button>
+			</eventHandler>
+		</npc>
+	</entities>		
+</map>

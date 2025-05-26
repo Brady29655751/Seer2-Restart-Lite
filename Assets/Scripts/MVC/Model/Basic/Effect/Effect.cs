@@ -167,8 +167,8 @@ public class Effect {
             var rng = this.RandomNumber(state, x);
             var cond = ConditionFunc.Invoke(x);
 
-            if ((source.GetType() == typeof(Buff)) && ((Buff)source).id == 2031)
-                Debug.Log(correctTurn + " " + hit + " " + rng + " " + cond);
+            if ((source.GetType() == typeof(Buff)) && ((Buff)source).id == 214750)
+                Debug.Log(state.phase + " " + timing + " " + correctTurn + " " + hit + " " + rng + " " + cond);
 
             return ((!checkTurn) || correctTurn) && correctWeather && hit && rng && cond;
             */

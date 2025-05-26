@@ -20,7 +20,7 @@ public class AfterAttackPhase : BattlePhase
     public override BattlePhase GetNextPhase()
     {
         if (state.isAllUnitDone)
-            return new TurnEndPhase();
+            return new AttackEndPhase();
 
         return new BeforeAttackPhase();
     }

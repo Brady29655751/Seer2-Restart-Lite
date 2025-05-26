@@ -13,15 +13,15 @@ public class PetBattleSkillController
     public Skill superSkill;
 
     public PetBattleSkillController(List<Skill> normalSkills, Skill superSkill = null) {
-        this.normalSkills = normalSkills;
-        this.superSkill = superSkill;
+        this.normalSkills = normalSkills?.Select(x => (x == null) ? null : new Skill(x)).ToList();
+        this.superSkill = (superSkill == null) ? null : new Skill(superSkill);
     }
 
     public PetBattleSkillController(List<Skill> loopSkills, List<Skill> headerSkills = null, Skill superSkill = null, List<Skill> normalSkills = null) {
-        this.headerSkills = headerSkills;
-        this.loopSkills = loopSkills;
-        this.superSkill = superSkill;
-        this.normalSkills = normalSkills;
+        this.headerSkills = headerSkills?.Select(x => (x == null) ? null : new Skill(x)).ToList();
+        this.loopSkills = loopSkills?.Select(x => (x == null) ? null : new Skill(x)).ToList();
+        this.superSkill = (superSkill == null) ? null : new Skill(superSkill);
+        this.normalSkills = normalSkills?.Select(x => (x == null) ? null : new Skill(x)).ToList();
     }
 
     public PetBattleSkillController(PetBattleSkillController rhs) {
