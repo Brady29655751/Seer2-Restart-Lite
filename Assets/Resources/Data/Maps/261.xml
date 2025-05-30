@@ -48,9 +48,65 @@
 		</npc>
 		<npc id="26103" resId="15203" name="" size="320,220" pos="240,220" color="0,0,0,0">
 			<description>池塘</description>
+			<dialog>
+				<branch id="default" name="我" icon="7004" size="136,125" pos="0,35">
+				    <content><![CDATA[好像钓到了一条大鱼？]]></content>
+				    <replyHandler>
+				        <reply type="click">
+				            <description><![CDATA[放生大鱼]]></description>
+				            <action>openDialog</action>
+				            <param>null</param>
+				        </reply>
+						<reply type="click">
+						    <description><![CDATA[一探究竟]]></description>
+						    <action>battle</action>
+						    <param>default</param>
+						</reply>
+				    </replyHandler>
+				</branch>
+				<branch id="bait" name="我" icon="7004" size="136,125" pos="0,35">
+				    <content><![CDATA[我记得...装备鱼饵后向池塘射击才能钓鱼]]></content>
+				    <replyHandler>
+				        <reply type="click">
+				            <description><![CDATA[先去装备鱼饵]]></description>
+				            <action>openDialog</action>
+				            <param>null</param>
+				        </reply>
+						<reply type="click">
+						    <description><![CDATA[先去购买鱼饵]]></description>
+						    <action>teleport</action>
+						    <param>152</param>
+						</reply>
+				    </replyHandler>
+				</branch>
+			</dialog>
+			<battle>
+				<branch id="default">
+					<settings count="6" capture="true">
+						<weather>3</weather>
+					</settings>
+					<enemy>
+						<pet id="132" level="39">
+							<initBuff>-2</initBuff>
+							<loopSkill>12006,12006,12006,12006,12006,-4</loopSkill>
+						</pet>
+					</enemy>
+				</branch>
+			</battle>
 			<eventHandler>
 				<button type="shoot">
 					<action>fish</action>
+					<condition>random[old]GTE3</condition>
+				</button>
+				<button type="shoot">
+					<action>openDialog</action>
+					<param>default</param>
+					<condition>random[new]&lt;3</condition>
+					<condition>player.shoot=7005</condition>
+				</button>
+				<button type="click">
+					<action>openDialog</action>
+					<param>bait</param>
 				</button>
 			</eventHandler>
 		</npc>

@@ -101,7 +101,22 @@ public class Status
 
     public virtual float Get(string type) {
         int idx = typeNames.IndexOf(type.ToLower());
-        return (idx == -1) ? 0 : status[idx];
+        return type switch
+        {
+            "count" => Count(x => x != 0),
+            "posCount" => Count(x => x > 0),
+            "negCount" => Count(x => x < 0),
+            "sum" => sum,
+            "posSum" => Select(x => Mathf.Max(0, x)).sum,
+            "negSum" => Select(x => Mathf.Min(0, x)).sum,
+            "max" => max,
+            "min" => min,
+            "posMax" => posMax,
+            "negMax" => negMax,
+            "max(except:hp)" => status.Take(5).Max(),
+            "min(except:hp)" => status.Take(5).Min(),
+            _ => (idx == -1) ? 0 : status[idx],
+        };
     }
 
     public virtual void Set(string type, float value) {
@@ -335,12 +350,9 @@ public class BattleStatus : Status {
 
     public override float Get(string type) {
         var typeLow = type.ToLower();
-        if (typeLow == "sum")
-            return sum;
-
         int idx = battleTypeNames.IndexOf(typeLow);
         if (idx == -1)
-            return 0;
+            return base.Get(type);
 
         return idx <= 5 ? status[idx] : hiddenStatus[idx - 6];
     }

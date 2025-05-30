@@ -27,7 +27,7 @@ public class TitleManager : Manager<TitleManager>
         if (modBackgroundSprite == null) {
             var path = $"{Application.persistentDataPath}/Resources/Activities/{GameManager.platform}/";
             var backgroundPath = path + "map_423";
-            var petPath = path + "pfa_12798";
+            var petPath = path + "pfa_940";
             if (!FileBrowserHelpers.FileExists(backgroundPath) || !FileBrowserHelpers.FileExists(petPath))
                 return;
 
@@ -37,8 +37,8 @@ public class TitleManager : Manager<TitleManager>
                 return;
 
             var map = mapBundle.LoadAsset<GameObject>("423-idle");
-            var petPresent = petBundle.LoadAsset<GameObject>("12798-Present");
-            var petIdle = petBundle.LoadAsset<GameObject>("12798-Idle");
+            var petPresent = petBundle.LoadAsset<GameObject>("940-Present");
+            var petIdle = petBundle.LoadAsset<GameObject>("940-Idle");
 
             if ((map == null) || (petIdle == null))
                 return;
@@ -47,15 +47,15 @@ public class TitleManager : Manager<TitleManager>
             var obj1 = (petPresent == null) ? null : Instantiate(petPresent, Camera.main.transform);
 
             obj.transform.localScale = petIdle.transform.localScale * 1.5f;
-            obj.transform.position = new Vector3(petIdle.transform.position.x, petIdle.transform.position.y, 5);
-            TransformHelper.Flip(obj.transform);
+            obj.transform.position = new Vector3(petIdle.transform.position.x, petIdle.transform.position.y + 0.75f, 5);
+            // TransformHelper.Flip(obj.transform);
             obj.SetActive(obj1 == null);
 
             if (obj1 != null)
             {
                 obj1.transform.localScale = petPresent.transform.localScale * 1.5f;
-                obj1.transform.position = new Vector3(petPresent.transform.position.x - 3, petPresent.transform.position.y + 1.25f, 5);
-                TransformHelper.Flip(obj1.transform);
+                obj1.transform.position = new Vector3(petPresent.transform.position.x - 4.5f, petPresent.transform.position.y + 4f, 5);
+                // TransformHelper.Flip(obj1.transform);
 
                 var swf = obj1.GetComponent<SwfClipController>();
                 if (swf != null) {
@@ -68,12 +68,14 @@ public class TitleManager : Manager<TitleManager>
                 }   
             }
 
+            /*
             var obj2 = Instantiate(map, Camera.main.transform);
             if (obj2 == null)
                 return;
 
             obj2.transform.localScale = new Vector3(1.5f, 1.45f, 1);
             obj2.transform.localPosition = new Vector3(-4.75f, -1.6f, 10);
+            */
             backgroundImage.gameObject.SetActive(false);
             return;
         }

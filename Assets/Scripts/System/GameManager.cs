@@ -35,6 +35,7 @@ public class GameManager : Singleton<GameManager>
     }
 
     protected void Start() {
+        Application.targetFrameRate = 120;
         Utility.InitScreenSizeWithRatio(16, 9);
         ChangeState(GameState.Init);
     }

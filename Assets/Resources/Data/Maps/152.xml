@@ -325,9 +325,25 @@
 		</npc>
 		<npc id="15204" resId="15203" name="" size="320,180" pos="400,50" color="0,0,0,0">
 			<description>池塘</description>
+			<dialog>
+				<branch id="bait" name="我" icon="7004" size="136,125" pos="0,35">
+				    <content><![CDATA[我记得...装备鱼饵后向池塘射击才能钓鱼]]></content>
+				    <replyHandler>
+				        <reply type="click">
+				            <description><![CDATA[先去装备鱼饵]]></description>
+				            <action>openDialog</action>
+				            <param>null</param>
+				        </reply>
+				    </replyHandler>
+				</branch>
+			</dialog>
 			<eventHandler>
 				<button type="shoot">
 					<action>fish</action>
+				</button>
+				<button type="click">
+					<action>openDialog</action>
+					<param>bait</param>
 				</button>
 			</eventHandler>
 		</npc>

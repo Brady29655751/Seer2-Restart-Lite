@@ -468,28 +468,29 @@ public class Pet
         }
 
         if (VersionData.Compare(petDataVersion, "lite_2.9") < 0) {
-            gameData.petStorage.ForEach(x => {
-                if ((x == null) || (!x.id.IsWithin(-1, -12)))
+            foreach (var pet in allPets)
+            {
+                if ((pet == null) || (!pet.id.IsWithin(-1, -12)))
                     return;
 
-                int newId = x.id switch
+                int newId = pet.id switch
                 {
                     -1 => 10304,    -2 => 10305,    -3 => 10306,
                     -4 => 10307,    -5 => 10308,    -6 => 10309,
                     -7 => 10301,    -8 => 10302,    -9 => 10303,
                     -10 => 10010,   -11 => 10011,   -12 => 10012,
-                    _ => x.id
+                    _ => pet.id
                 };
-
-                x.id = newId;
-                x.basic.id = newId;
-                x.exp.id = newId;
-                x.feature.id = newId;
-                x.talent.id = newId;
-                x.skills.id = newId;
-                x.ui.id = newId;
-                x.ui.baseId = x.basic.baseId;
-            });
+                
+                pet.id = newId;
+                pet.basic.id = newId;
+                pet.exp.id = newId;
+                pet.feature.id = newId;
+                pet.talent.id = newId;
+                pet.skills.id = newId;
+                pet.ui.id = newId;
+                pet.ui.baseId = pet.basic.baseId;
+            };
 
             petDataVersion = "lite_2.9";
         }

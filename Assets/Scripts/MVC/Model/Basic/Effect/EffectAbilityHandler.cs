@@ -253,48 +253,59 @@ public static class EffectAbilityHandler
         Unit rhsUnit = state.GetRhsUnitById(lhsUnit.id);
         List<BattlePet> targetList = Parser.GetBattlePetTargetList(state, effect, lhsUnit, rhsUnit);
 
-        for (int j = 0; j < targetList.Count; j++) {
+        for (int j = 0; j < targetList.Count; j++)
+        {
             var pet = targetList[j];
             var statusController = pet.statusController;
             var buffController = pet.buffController;
 
             // Prepare Powerup Status
-            for (int type = 0; type < typeNames.Length; type++) {
+            for (int type = 0; type < typeNames.Length; type++)
+            {
                 string add = effect.abilityOptionDict.Get(typeNames[type], "0");
                 status[type] = Parser.ParseEffectOperation(add, effect, lhsUnit, rhsUnit, pet);
             }
 
-            if (isRandom) {
+            if (isRandom)
+            {
                 string pdf = effect.abilityOptionDict.Get("random_pdf", "none");
                 string randomTypeCountExpr = effect.abilityOptionDict.Get("random_count", "1");
                 int count = status.Count(x => x != 0);
                 int randomTypeCount = (int)Parser.ParseEffectOperation(randomTypeCountExpr, effect, lhsUnit, rhsUnit, targetList[j]);
 
-                if (pdf == "none") {
+                if (pdf == "none")
+                {
                     // pass.
-                } else if (pdf == "uniform") {
+                }
+                else if (pdf == "uniform")
+                {
                     // Uniformly random can have 2 or more different types powerup.
                     var typeList = Enumerable.Range(0, count).ToList().Random(randomTypeCount, false);
-                    for (int i = 0, index = 0; i < typeNames.Length; i++) {
+                    for (int i = 0, index = 0; i < typeNames.Length; i++)
+                    {
                         if (status[i] == 0)
                             continue;
 
                         status[i] = typeList.Contains(index) ? status[i] : 0;
                         index++;
                     }
-                } else {
+                }
+                else
+                {
                     // Custom pdf cannot have 2 or more different types powerup.
                     var probList = pdf.ToFloatList('/');
                     var sum = probList.Sum();
                     float rng = Random.Range(0f, sum);
                     int type = 0;
-                    for (type = 0; type < probList.Count; type++) {
+                    for (type = 0; type < probList.Count; type++)
+                    {
                         if (probList[type] >= rng)
                             break;
 
                         rng -= probList[type];
                     }
-                    for (int i = 0, index = 0; i < 5; i++) {
+                    for (int i = 0, index = 0; i < 5; i++)
+                    {
                         if (status[i] == 0)
                             continue;
 
@@ -305,12 +316,14 @@ public static class EffectAbilityHandler
             }
 
             // Handle min and max powerup.
-            if (min != "none") {
+            if (min != "none")
+            {
                 var minPowerup = (int)Parser.ParseEffectOperation(min, effect, lhsUnit, rhsUnit, targetList[j]);
                 pet.statusController.SetMinPowerUp(minPowerup * Status.one);
-            } 
-            
-            if (max != "none") {
+            }
+
+            if (max != "none")
+            {
                 var maxPowerup = (int)Parser.ParseEffectOperation(max, effect, lhsUnit, rhsUnit, targetList[j]);
                 pet.statusController.SetMaxPowerUp(maxPowerup * Status.one);
             }
@@ -325,7 +338,7 @@ public static class EffectAbilityHandler
             if (buffController.GetBuff(94) != null)
                 status *= -1;
 
-            pet.PowerUp(status, lhsUnit, state);    
+            pet.PowerUp(status, lhsUnit, state);
         }
 
         if (opCopy == "reverse") {
@@ -947,7 +960,7 @@ public static class EffectAbilityHandler
                     normalSkills = (ListHelper.IsNullOrEmpty(pet.skillController.normalSkills) ? pet.skillController.loopSkills : pet.skillController.normalSkills)
                         .Where(x => x != null).Select(x => Skill.GetSkill(x.id + normalShiftCount, false)).Take(4).ToArray();
                 } else {
-                    normalSkills = normalSkillExpr.ToIntList('/').Take(4).Select(id => Skill.GetSkill(id, false)).ToArray();
+                    normalSkills = normalSkillExpr.Split('/').Select(x => (int)Parser.ParseEffectOperation(x, effect, lhsUnit, rhsUnit, pet)).Take(4).Select(id => Skill.GetSkill(id, false)).ToArray();
                 }
             }
 

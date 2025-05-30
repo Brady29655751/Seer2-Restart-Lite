@@ -40,10 +40,10 @@ public class ItemShopPanel : Panel
         { ItemShopType.Sign, new List<int>() {
             500000, 500178, 500436, 500959, 500826, 
             500761, 500280, 500307, 500809, 500179,
-            500538, 501261, 501262,
+            500538, 501261, 501262, 510499,
         } },
         { ItemShopType.YiTe, new List<int>() {
-            500091, 24000,  320092, 320093, 320094,
+            500091, 24000,  320757, 320092, 320093, 320094,
             320095, 320096, 320100, 320810,
         } },
         { ItemShopType.Plant, Item.plantItemDatabase.Select(x => x.id).ToList() },

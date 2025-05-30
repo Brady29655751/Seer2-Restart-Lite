@@ -1,4 +1,4 @@
-<map name="空港"  category="7"  id="420" weather="0">
+<map name="空港"  category="7"  id="420" weather="8" switch="1">
 	<!-- <resource>10011</resource> -->
 	<anim pos="0.75,-0.5" scale="1.5,1.45"/>
 	<initialPoint>510,275</initialPoint>
@@ -6,13 +6,119 @@
 		<bgm>BGM_030</bgm>
 	</music>
 	<entities>
-
-    
-			<teleport id="1" name="飞翼氏族主城" pos="650,400" targetMapId="419"/>
-			
-
-
-
+		<npc id="42001" resId="42001" name="葛蕾芬兵团长" size="79,94" pos="325,295" namePos="0,0">
+			<description>想进入飞翼氏族，先过我这关！</description>
+			<dialog>
+				<branch id="default" name="葛蕾芬兵团长" icon="42001" size="79,94" pos="0,45">
+					<content><![CDATA[妄入飞翼群岛者，斩！（概率触发捕捉事件）]]></content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[吓人！先撤退！]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+						<reply type="click">
+							<description><![CDATA[挑战兵团长]]></description>
+							<action>battle</action>
+							<param>default</param>
+						</reply>
+					</replyHandler>
+				</branch>
+				<branch id="reward" name="葛蕾芬兵团长" icon="42001" size="79,94" pos="0,45">
+					<content><![CDATA[我的精灵很欣赏你，她想亲自考验你是否有资格让她跟随]]></content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[那你会一起跟随我吗？]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+						<reply type="click">
+							<description><![CDATA[正合我意！]]></description>
+							<action>battle</action>
+							<param>capture</param>
+						</reply>
+					</replyHandler>
+				</branch>
+			</dialog>
+			<battle>
+				<branch id="default">
+					<settings count="6">
+						<weather>8</weather>
+					</settings>
+					<enemy>
+						<pet id="168" level="70">
+							<loopSkill>11966,11970</loopSkill>
+							<superSkill>11973</superSkill>
+						</pet>
+						<pet id="168" level="71">
+							<loopSkill>11966,11970</loopSkill>
+							<superSkill>11973</superSkill>
+						</pet>
+						<pet id="168" level="72">
+							<loopSkill>11966,11970</loopSkill>
+							<superSkill>11973</superSkill>
+						</pet>
+						<pet id="168" level="73">
+							<loopSkill>11966,11970</loopSkill>
+							<superSkill>11973</superSkill>
+						</pet>
+						<pet id="168" level="74">
+							<loopSkill>11966,11970</loopSkill>
+							<superSkill>11973</superSkill>
+						</pet>
+						<pet id="168" level="75">
+							<loopSkill>11966,11970</loopSkill>
+							<superSkill>11973</superSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setItem</action>
+							<param>add</param>
+							<param>10201,3</param>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=3个砂糖甜饼已经放入背包</param>
+							<param>item_icon=item[10201]</param>
+							<param>option_num=1</param>
+						</button>
+						<button type="auto">
+							<action>openDialog</action>
+							<param>reward</param>
+							<condition>random[old]&lt;5</condition>
+						</button>
+					</winHandler>
+				</branch>
+				<branch id="capture">
+					<settings count="1" capture="true">
+						<weather>8</weather>
+					</settings>
+					<enemy>
+						<pet id="168" level="70">
+							<loopSkill>11964,11971,11974,11971,11974,-4</loopSkill>
+						</pet>
+					</enemy>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>openDialog</action>
+					<param>default</param>
+				</button>
+				<button type="auto">
+					<action>setNpcParam</action>
+					<param>42001</param>
+					<param>color=0,0,0,0</param>
+					<param>namePos=0,-5</param>
+					<condition>map.anim=1</condition>
+				</button>
+			</eventHandler>
+		</npc>
+		<teleport id="1" name="飞翼氏族主城" pos="650,400" targetMapId="419"/>
+		<teleport id="2" name="诺亚方舟" pos="295,200" targetMapId="413"/>
 	</entities>
 
 

@@ -1,14 +1,157 @@
-<map name="诺亚方舟"  category="5"  id="413"  weather="0">
+<map name="诺亚方舟"  category="5"  id="413"  weather="1">
 	<!-- <resource>10011</resource> -->
 	<initialPoint>720,130</initialPoint>
 	<music category="5">
 		<bgm>BGM_JY</bgm>
 	</music>
 	<entities>
-		
-			<teleport id="1" name="冰室" pos="800,60" targetMapId="411"/>
-			<teleport id="2" name="空港" pos="500,335" targetMapId="420"/>
-
+		<npc id="41301" resId="Pets/pet/456" name="Lv100 米瑞尔" size="101,130" pos="200,335" namePos="5,-5">
+			<description>米咔神迹觉醒</description>
+			<dialog>
+				<branch id="default" name="米瑞尔" icon="Pets/pet/456" size="92,118" pos="0,45">
+					<content><![CDATA[米咔！]]></content>
+					<functionHandler>
+						<func type="click">
+							<description><![CDATA[米咔超进化]]></description>
+							<action>battle</action>
+							<param>evolve</param>
+						</func>
+						<func type="click">
+							<description><![CDATA[神迹觉醒]]></description>
+							<action>battle</action>
+							<param>miracle</param>
+						</func>
+						<func type="click">
+							<description><![CDATA[因子商店]]></description>
+							<action>openPanel</action>
+							<param>ItemShop</param>
+							<param>mode=buy</param>
+							<param>currency=8/2</param>
+							<param>item=340940/22014/381757/381758</param>
+							<param>limit=1/1/1/1</param>
+						</func>
+					</functionHandler>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[阳光照耀大地，使万物生长]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+					</replyHandler>
+				</branch>
+			</dialog>
+			<battle>
+				<branch id="evolve">
+					<settings count="1" star="4">
+						<mode>3</mode>
+						<weather>1</weather>
+					</settings>
+					<enemy>
+						<pet id="456" level="100">
+							<status>
+								<hp>3000</hp>
+							</status>
+							<initBuff>61,-8</initBuff>
+							<loopSkill>11935,11934,11931,10514</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=PetSelect</param>
+						    <param>title=选择要进化的米咔</param>
+						    <param>option_num=2</param>
+						    <param>callback=evolve</param>
+						</button>
+					</winHandler>
+				</branch>
+				<branch id="miracle">
+					<settings count="6">
+						<mode>4</mode>
+						<weather>1</weather>
+					</settings>
+					<enemy>
+						<pet id="940" level="105">
+							<status>
+								<hp>25000</hp>
+							</status>
+							<initBuff>-8,61,57</initBuff>
+							<loopSkill>11942,11941,11941,11943,11942,11944,11945</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setItem</action>
+							<param>add</param>
+							<param>8,50</param>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=50个精灵因子已经放入背包</param>
+							<param>item_icon=item[8]</param>
+							<param>option_num=1</param>
+						</button>
+					</winHandler>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>openDialog</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+			<callbackHandler>
+				<button type="choose">
+					<action>openHintbox</action>
+					<param>type=PetSelect</param>
+				    <param>title=选择要进化的米咔</param>
+				    <param>option_num=2</param>
+					<param>callback=evolve</param>
+				    <condition>data.PetSelect.uidNOT178|data.PetSelect.level&lt;100</condition>
+				</button>
+				<button type="evolve">
+				    <action>openHintbox</action>
+				    <param>type=Item</param>
+				    <param>title=提示</param>
+				    <param>content=必须选择等级100的米咔！</param>
+				    <param>item_icon=pet[178]</param>
+				    <param>option_num=1</param>
+					<param>callback=choose</param>
+				    <condition>data.PetSelect.uidNOT178|data.PetSelect.level&lt;100</condition>
+				</button>
+				<button type="evolve">
+				    <action>openHintbox</action>
+				    <param>type=Item</param>
+				    <param>title=提示</param>
+				    <param>content=米咔已成功超进化</param>
+				    <param>item_icon=pet[456]</param>
+				    <param>option_num=1</param>
+				    <condition>data.PetSelect.uid=178</condition>
+				    <condition>data.PetSelect.levelGTE100</condition>
+				</button>
+				<button type="evolve">
+				    <action>evolvePet</action>
+				    <param>index=data.PetSelectIndex</param>
+				    <param>456</param>
+				    <condition>data.PetSelect.uid=178</condition>
+				    <condition>data.PetSelect.levelGTE100</condition>
+				</button>
+				<button type="evolve">
+				    <action>setPet</action>
+				    <param>index=data.PetSelectIndex</param>
+				    <param>skill=11932</param>
+				    <param>skill=11933</param>
+				    <param>skill=11934</param>
+				    <param>skill=11935</param>
+				    <condition>data.PetSelect.uid=178</condition>
+				    <condition>data.PetSelect.levelGTE100</condition>
+				</button>
+			</callbackHandler>
+		</npc>
+		<teleport id="1" name="冰室" pos="800,60" targetMapId="411"/>
+		<teleport id="2" name="空港" pos="500,335" targetMapId="420"/>
 	</entities>
 
 

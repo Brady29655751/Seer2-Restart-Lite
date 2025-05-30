@@ -453,7 +453,7 @@ id,timing,priority,target,condition,cond_option,effect,effect_option
 3215,on_after_dmg_cal,-1,skill,none,whos_turn=op,set_damage,op=*&value=value/100+1
 3216,on_attack\on_after_attack,-1\-1000,pet\pet,none\pet,none\who=op&type=dead&dead_cmp=1,set_buff\heal,id=3216&type=value&op=SET&value=op.pet.status.hp\add=value*2
 3217,on_before_pet_change\on_after_pet_change\on_after_pet_change,-1\-1\0,pet\pet\pet,pet\buff\buff,type=dead&dead_cmp=1\id=3217&type=value&value_cmp=1\id=3217&type=value&value_cmp=1,set_buff\heal\remove_buff,id=3217&type=value&op=SET&value=1\add=-me.pet.status.maxHp[MIN]op.pet.status.maxHp/5\id=3217
-3218,on_add_buff\on_remove_buff,-1\-1,pet\pet,none\none,none\none,powerup\powerup,who=op&max=value\who=op&max=6
+3218,on_add_buff\on_remove_buff,-1\-1,pet\pet,none\none,none\none,powerup\powerup,max=value\max=6
 3219,on_before_pet_change,-1,pet,none,none,remove_buff,id=1/3/5/7/9/-9
 3220,on_after_dmg_cal\on_after_attack,-1\-1,skill\pet,skill\skill,type=type&type_op=>&type_cmp=0\type=type&type_op=>&type_cmp=0,set_damage\set_buff,op=*&value=0.5\id=3220&type=value&op=-&value=1
 3221,on_after_dmg_cal,-1,skill,skill,type=criticalResult&criticalResult_cmp=1,set_damage,op=*&value=1.1&name=暴伤增加10%
@@ -503,7 +503,7 @@ id,timing,priority,target,condition,cond_option,effect,effect_option
 3265,on_after_dmg_cal\on_after_attack\on_after_attack,-1\-1\0,skill\pet\pet,none\skill\skill,whos_turn=op\who=op&whos_turn=op&whos_attack=op&type=type&type_op=GTE&type_cmp=0\who=op&whos_turn=op&whos_attack=op&type=type&type_op=GTE&type_cmp=0,set_damage\add_buff\copy_buff,who=op&op=*&value=value*15/100+1\id=3265&value=1\id=3265&source=me&target=op&transfer=true
 3266,on_after_dmg_cal,-1,skill,none,whos_turn=op,set_damage,who=op&op=*&value=1.5
 3267,on_after_dmg_cal,-1,skill,none,whos_turn=op,set_damage,who=op&op=*&value=1.5
-3268,on_before_attack,-1,pet,skill,who=op&whos_turn=op&type=type&type_cmp=value,set_skill,who=op&type=accuracy&op=-&value=100
+3268,on_before_attack\on_before_attack,-1\-1,skill\skill,buff\unit,whos_turn=op&id=3268&type=value&value_cmp=-1\who=op&whos_turn=op&type=type&type_cmp=value[MAX]0,set_skill\set_skill,who=op&type=accuracy&op=+&value=1000\who=op&type=accuracy&op=-&value=100
 3269,none,-1,none,none,none,none,none
 3270,on_after_dmg_cal,-1,skill,none,whos_turn=op,set_damage,who=op&op=*&value=0.75
 3271,on_turn_ready\on_turn_ready\on_after_attack\on_after_attack,-1\-1\-1\-1,skill\skill\skill\pet,skill\skill\skill\skill,type=type&type_op=>&type_cmp=0\type=type&type_op=>&type_cmp=0\type=type&type_op=>&type_cmp=0\type=type&type_op=>&type_cmp=0,set_skill\set_skill\set_skill\set_buff,type=chain&op=*&value=2\type=accuracy&op=+&value=1000\type=anger&op=SET&value=15\id=3271&type=value&op=-&value=1
@@ -511,6 +511,9 @@ id,timing,priority,target,condition,cond_option,effect,effect_option
 3273,on_turn_end,-1,pet,none,none,powerup,atk=1&mat=1&def=1&mdf=1&spd=1&hit=1
 3274,on_after_pet_change\on_after_pet_change\on_after_pet_change\on_after_pet_change,-1\-1\-1\0,pet\pet\pet\pet,none\none\none\none,none\none\none\none,add_buff\add_buff\add_buff\remove_buff,id=1001\id=1002\id=1003\id=3274
 3275,on_after_attack\on_after_attack,-1\-1,pet\pet,skill\skill,is_hit=false&type=type&type_op=>&type_cmp=0|type=type/damage&type_op=>&type_cmp=0&damage_op=<&damage_cmp=300\type=type/damage&type_op=>&type_cmp=0&damage_op=GTE&damage_cmp=300,heal\add_buff,who=op&add=-300\id=2009&value=1&option=(value:300)
+3276,on_final_dmg_cal,900,skill,skill,whos_turn=op&who=op&whos_attack=op&type=type&type_op=>&type_cmp=0,set_damage,who=op&op=+&value=40&name=多收到40固伤
+3277,on_remove_buff\on_remove_buff\on_turn_end,-1\-1\-1,pet\pet\pet,none\none\pet,none\none\type=dead&dead_cmp=1,rage\powerup\remove_buff,who=op&add=-30&name=怒气减少\who=op&spd=-1&name=弱速度\id=3277&name=死亡移除
+3278,on_after_dmg_cal,-1,skill,skill,type=type&type_op=>&type_cmp=0,set_damage,op=-&value=40&name=造成伤害减少40点
 3279,on_turn_end,100,pet,buff,id=1003,set_damage,type=buff&op=+&value=30*value
 3280,on_add_buff\on_remove_buff,-1\-1,pet\pet,none\none,none\none,add_status\add_status,type=8&add=50\type=8&add=-50
 3281,on_after_dmg_cal,-1,skill,none,whos_turn=op,set_damage,who=op&op=*&value=0.75
@@ -547,6 +550,12 @@ id,timing,priority,target,condition,cond_option,effect,effect_option
 3312,none,-1,none,none,none,none,none
 3313,none,-1,none,none,none,none,none
 3314,none,-1,none,none,none,none,none
+3315,on_remove_buff\on_remove_buff\on_turn_end,-1\-1\-1,pet\pet\pet,none\none\pet,none\none\type=dead&dead_cmp=1,rage\powerup\remove_buff,who=op&add=-30&name=怒气减少\who=op&atk=-1&name=弱攻\id=3315&name=死亡移除
+3316,on_before_attack,-1,skill,none,none,set_skill,type=critical&op=+&value=10
+3317,on_before_attack,-1,skill,none,none,set_skill,type=critical&op=+&value=15
+3318,on_before_attack\on_after_attack,-1\-1,skill\skill,skill\skill,who=op&whos_turn=op&type=type&type_op=>&type_cmp=0\who=op&whos_turn=op&whos_attack=op&type=type&type_op=>&type_cmp=0,set_skill\remove_buff,who=op&type=critical&op=+&value=1000\id=3318
+3319,on_after_attack,-1,pet,skill,who=op&whos_turn=op&whos_attack=op&type=type&type_op=>&type_cmp=0,add_buff,who=op&id=1011
+3320,on_turn_end,-1,pet,none,none,heal,type=buff&add=me.pet.status.maxHp/6
 100001,on_after_dmg_cal\on_before_attack\on_final_dmg_cal,-1\-1\900,skill\skill\skill,unit\unit\unit,type=me.pet.status.hp/me.skill.option[group]&type[0].op=<&type[0].cmp=me.pet.status.maxHp*0.25&type[1].cmp=1\type=me.pet.status.hp/me.skill.id&type[0].op=<&type[0].cmp=me.pet.status.maxHp*0.25&type[1].cmp=10002\type=me.pet.status.hp/me.skill.id&type[0].op=<&type[0].cmp=me.pet.status.maxHp*0.25&type[1].cmp=10002,set_damage\set_skill\set_damage,op=*&value=5/4\type=accuracy&op=+&value=1000\op=+&value=30
 100004,on_after_dmg_cal\on_before_attack\on_final_dmg_cal,-1\-1\900,skill\skill\skill,unit\unit\unit,type=me.pet.status.hp/me.skill.element&type[0].op=<&type[0].cmp=me.pet.status.maxHp*0.25&type[1].cmp=3\type=me.pet.status.hp/me.skill.id&type[0].op=<&type[0].cmp=me.pet.status.maxHp*0.25&type[1].cmp=10019\type=me.pet.status.hp/me.skill.id&type[0].op=<&type[0].cmp=me.pet.status.maxHp*0.25&type[1].cmp=10019,set_damage\set_skill\set_skill,op=*&value=5/4\type=accuracy&op=+&value=1000\op=+&value=30
 100007,on_after_dmg_cal\on_before_attack\on_final_dmg_cal,-1\-1\900,skill\skill\skill,status\unit\unit,whos_turn=op&status_type=hp&op=<&cmp_value=1/4\type=me.pet.status.hp/me.skill.id&type[0].op=<&type[0].cmp=me.pet.status.maxHp*0.25&type[1].cmp=10035\type=me.pet.status.hp/me.skill.id&type[0].op=<&type[0].cmp=me.pet.status.maxHp*0.25&type[1].cmp=10035,set_damage\set_skill\set_skill,who=op&op=*&value=3/4\type=accuracy&op=+&value=1000\op=+&value=30
@@ -585,6 +594,7 @@ id,timing,priority,target,condition,cond_option,effect,effect_option
 100122,on_after_dmg_cal,-1,skill,pet,type=status.maxHp&status.maxHp_op=>&status.maxHp_cmp=550,set_damage,who=op&op=*&value=0.9&name=最大体力＞550
 100126,on_after_dmg_cal\on_after_dmg_cal,-1\-1,skill\skill,skill\none,type=element&element_cmp=0\weather=4,set_damage\set_damage,op=*&value=1.15&name=普通增伤\op=*&value=1.1&name=暴风雪
 100128,on_after_dmg_cal,-1,skill,status,who=op&status_type=hp&op=<&cmp_value=1/2,set_damage,op=*&value=1.15&name=斩杀
+100130,on_after_dmg_cal,-1,skill,skill,type=criticalResult&criticalResult_cmp=1,set_damage,op=*&value=1.15
 100138,none,-1,none,none,none,none,none
 100140,on_before_attack\on_after_attack\on_after_attack,-1\-1\-1,skill\pet\pet,buff\buff\none,whos_turn=op&id=3110&own=false\id=3110&own=false\who=op&whos_turn=op&whos_attack=op&is_hit=false,set_skill\set_buff\add_buff,who=op&type=accuracy&op=-&value=10*value\id=100140&type=value&op=+&value=1\id=3110
 100146,on_before_attack,-1,skill,buff,id=3143,set_skill,type=power&op=+&value=10
@@ -592,10 +602,12 @@ id,timing,priority,target,condition,cond_option,effect,effect_option
 100151,on_after_attack,-1,skill,buff,who=op&id=1003,set_buff,who=op&id=1003&type=turn&op=SET&value=3
 100154,on_before_attack\on_after_dmg_cal,-1\-1,skill\skill,skill\skill,type=type&type_cmp=1\type=type&type_cmp=2,set_skill\set_damage,type=accuracy&op=+&value=10\op=*&value=1.1
 100156,on_after_attack\on_after_attack,-1\-1,pet\pet,skill\unit,is_hit=all&type=element&element_cmp=6\is_hit=all&type=me.skill.element/me.pet.buff[100156].value&type[0].cmp=6&type[1].cmp=1,set_buff\rage,id=100156&type=value&op=SET&value=1-value\add=15
+100166,on_after_attack,-1,pet,buff,who=op&id=3276,rage,add=5&name=攻击回怒
 100174,on_final_dmg_cal\on_final_dmg_cal,900\900,skill\skill,unit\unit,type=state.settings.parallelCount&type[0].op=NOT&type[0].cmp=2\type=state.settings.parallelCount&type[0].cmp=2,set_damage\set_damage,op=+&value=10\op=+&value=20
 100176,on_final_dmg_cal\on_final_dmg_cal,900\900,skill\skill,unit\unit,whos_turn=op&type=state.settings.parallelCount&type[0].op=NOT&type[0].cmp=2\whos_turn=op&type=state.settings.parallelCount&type[0].cmp=2,set_damage\set_damage,who=op&op=-&value=10\who=op&op=-&value=20
 100178,on_final_dmg_cal,900,skill,none,none,set_damage,op=+&value=me.pet.iv
 100179,on_battle_start\on_after_pet_change,-1\-1,state\state,none\none,none\none,set_weather\set_weather,weather=9\weather=9
+100181,on_after_attack,-1,pet,buff,who=op&id=3278,rage,who=op&add=-5&name=怒气减少
 100188,on_after_dmg_cal\on_turn_end,-1\-1,skill\pet,none\none,none\none,set_damage\rage,op=*&value=1.1\add=-5
 100192,on_turn_end,-1,pet,none,weather=3,heal,who=op&type=buff&add=-me.pet.status.maxHp[MIN]op.pet.status.maxHp/16
 100200,on_turn_end,-1,pet,buff,id=3034,heal,who=op&type=buff&add=-25
@@ -636,6 +648,8 @@ id,timing,priority,target,condition,cond_option,effect,effect_option
 100496,on_dmg_cal\on_dmg_cal,-1\-1,skill\skill,none\none,none\none,set_skill\set_skill,type=atk&op=SET&value=me.pet.status.atk[MAX]me.pet.status.mat\type=def&op=SET&value=op.pet.status.def[MIN]op.pet.status.mdf
 100538,on_add_buff,-1,pet,none,none,add_buff,id=3180
 100593,on_after_attack,-1,pet,skill,who=op&whos_turn=op&whos_attack=op&type=criticalResult&criticalResult_cmp=1,add_buff,id=2003&value=1
+100735,on_final_dmg_cal\on_after_attack,900\-1,skill\pet,unit\unit,type=state.me.order&type[0].cmp=1\type=state.me.order&type[0].cmp=2,set_damage\heal,op=+&value=35\add=35
+100757,on_add_buff,-1,pet,pet,type=status.max(except:hp)&status.max(except:hp)_cmp=me.pet.status.min(except:hp),add_status,type=0/1/2/3/4&mult=1.1
 100761,on_final_dmg_cal,-100,skill,unit,whos_turn=op&type=me.pet.buff[3126].count/op.skill.elementRelation&type[0].op=>&type[0].cmp=0&type[1].op=>&type[1].cmp=1,set_damage,who=op&op=SET&value=op.skill.damage[MIN]200
 100762,on_after_dmg_cal,-1,skill,unit,whos_turn=op&type=me.pet.buff[3141].count/op.skill.criticalResult&type[0].op=>&type[0].cmp=0&type[1].cmp=1,set_damage,who=op&op=*&value=3/4
 100763,on_before_attack,-1,skill,buff,id=3161,set_skill,type=ignorePowerup&op=SET&value=1
@@ -643,7 +657,7 @@ id,timing,priority,target,condition,cond_option,effect,effect_option
 100810,on_after_dmg_cal,-1,skill,pet,type=powerup.atk&powerup.atk_op=>&powerup.atk_cmp=0,set_damage,op=*&value=1.1
 100826,on_after_attack,-1,pet,skill,random_cmp=10*me.pet.buff[200826].value+15&type=type&type_cmp=0,heal,add=me.pet.status.maxHp/6
 100845,on_add_buff\on_add_buff\on_after_attack\on_after_attack,-1\-1\-1\-1,pet\pet\pet\pet,none\none\skill\skill,none\none\type=type&type_cmp=2\type=type&type_cmp=1,add_buff\add_buff\add_buff\add_buff,id=3121\id=3122\id=3121&value=1\id=3122&value=1
-100940,on_turn_ready,-1,pet,unit,type=me.pet.specialChance/me.skill.evolve/state.weather&type[0].op=>&type[0].cmp=0&type[1].cmp=1&type[2].cmp=1,set_pet,on_success=-7&type=id&op=SET&value=940&inherit=buff/anger&normal_skill=11941/11942/11943/11944&super_skill=11945
+100940,on_turn_ready\on_turn_ready,-1\0,pet\pet,unit\unit,type=me.pet.specialChance/me.skill.evolve/state.weather&type[0].op=>&type[0].cmp=0&type[1].cmp=1&type[2].cmp=1\type=me.pet.specialChance/me.skill.evolve/state.weather/me.pet.skinId&type[0].op=>&type[0].cmp=0&type[1].cmp=1&type[2].cmp=1&type[3].cmp=11758,set_pet\set_pet,on_success=-7&type=id&op=SET&value=940&inherit=buff/anger&normal_skill=11941/11942/11943/11944&super_skill=11945\type=skinId&op=SET&value=12639
 100946,on_turn_ready,-1,pet,unit,type=me.pet.specialChance/me.skill.evolve/me.pet.buff[3036].count&type[0].op=>&type[0].cmp=0&type[1].cmp=1&type[2].op=>&type[2].cmp=0,set_pet,on_success=-7&type=id&op=SET&value=947&inherit=buff/anger&normal_skill=11494/11495/11496/11497&super_skill=11498
 100959,on_turn_end,-1,pet,status,status_type=hp&op=<&cmp_value=1/8,powerup,spd=1
 100961,on_before_attack,-1,skill,none,weather=12,set_skill,type=accuracy&op=+&value=50
@@ -671,11 +685,12 @@ id,timing,priority,target,condition,cond_option,effect,effect_option
 110016,on_after_dmg_cal\on_after_dmg_cal,-1\-1,skill\skill,skill\skill,weather=1&who=op&whos_turn=op&type=type&type_op=>&type_cmp=0\weather=3&type=type&type_op=>&type_cmp=0,set_damage\set_damage,who=op&op=*&value=0.9\op=*&value=1.35
 110027,on_after_dmg_cal,-1,skill,buff,who=op&id=unhealthy|who=op&id=abnormal,set_damage,op=*&value=1.1
 110046,on_after_attack,-1,pet,skill,random_cmp=30&type=type&type_cmp=0,add_buff,who=op&id=1003
-110083,on_turn_start,-1,pet,none,none,add_buff,id=3268&value=random[0~2]
+110083,on_turn_start,-1,pet,none,none,add_buff,id=3268&value=random[-1~2]
 110300,on_after_attack\on_after_attack,-1\-1,pet\pet,skill\skill,type=option[group]&option[group]_cmp=10300\type=option[group]&option[group]_cmp=10300,rage\rage,who=op&add=-5\add=5
 110301,on_after_dmg_cal,-1,skill,skill,weather=1&whos_turn=op&who=op&type=criticalResult&criticalResult_cmp=1,set_damage,who=op&op=*&value=0.5
 110304,on_after_dmg_cal,-1,skill,none,weather=2,set_damage,op=*&value=1.15
 110307,on_before_attack,-1,skill,none,weather=3,set_skill,type=critical&op=+&value=15
+110499,none,-1,none,none,none,none,none
 110809,on_after_attack,-1,pet,skill,random_cmp=10&type=type&type_op=>&type_cmp=0,add_buff,who=op&id=104
 114198,on_turn_ready,-1,pet,unit,type=me.pet.specialChance/me.skill.evolve/me.pet.buff[3256].count&type[0].op=>&type[0].cmp=0&type[1].cmp=1&type[2].op=>&type[2].cmp=0,set_pet,on_success=-7&type=id&op=SET&value=14198&inherit=buff/anger&normal_skill=11802/11803/11804/11805&super_skill=11806
 114693,on_turn_ready,-1,pet,unit,type=me.pet.specialChance/me.skill.evolve/me.pet.buff[1003].count+op.pet.buff[1003].count&type[0].op=>&type[0].cmp=0&type[1].cmp=1&type[2].op=>&type[2].cmp=0,set_pet,on_success=-7&type=id&op=SET&value=114693&inherit=buff/anger&normal_skill=11729/11730/11731/11732&super_skill=11733
@@ -720,6 +735,7 @@ id,timing,priority,target,condition,cond_option,effect,effect_option
 200124,none,-1,none,none,none,none,none
 200126,on_before_attack,-1,skill,buff,none,set_skill,type=power&op=+&value=10&name=增加威力
 200128,on_before_attack,-1,skill,unit,type=state.me.order&type[0].cmp=2,set_skill,type=accuracy&op=+&value=1000&name=必中添加
+200130,none,-1,none,none,none,none,none
 200138,none,-1,none,none,none,none,none
 200140,on_after_dmg_cal,-1,skill,buff,id=3110&own=true,set_damage,op=*&value=1.1
 200146,on_after_attack\on_after_attack,-1\-1,pet\pet,skill\skill,is_hit=false&type=type&type_op=>&type_cmp=0\is_hit=false&type=type&type_op=>&type_cmp=0,rage\rage,add=10\who=op&add=-10
@@ -727,10 +743,12 @@ id,timing,priority,target,condition,cond_option,effect,effect_option
 200151,on_after_attack,-100,skill,buff,who=op&id=3279,heal,add=me.skill.damage*1/10
 200154,on_after_attack,-1,pet,skill,type=id&id_cmp=10125,rage,add=20
 200156,on_before_attack,-1,skill,buff,whos_turn=op&id=3270,set_skill,who=op&type=accuracy&op=-&value=15
+200166,on_before_attack,-1,skill,skill,type=id&id_cmp=11964,set_skill,type=accuracy&op=+&value=1000
 200174,on_turn_end,-1,pet,buff,id=3265,heal,type=buff&add=20
 200176,on_turn_end,-1,pet,buff,who=op&id=3264,set_damage,who=op&type=buff&op=+&value=20
 200178,on_before_dmg_cal,-1,skill,skill,type=type&type_cmp=100,set_skill,type=elementRelation&op=SET&value=me.skill.elementRelation[MAX]1
 200179,on_battle_start\on_after_pet_change,-1\-1,pet\pet,none\none,none\none,add_buff\add_buff,id=3139&turn=1\id=3139&turn=1
+200181,on_before_attack,-1,skill,skill,type=id&id_cmp=11979,set_skill,type=accuracy&op=+&value=1000
 200188,on_turn_ready,-1,skill,unit,random_cmp=50&type=me.skill.type/me.skill.type&type[0].op=>&type[0].cmp=0&type[1].op=NOT&type[1].cmp=100,set_damage,who=op&type=buff&op=+&value=me.skill.power
 200192,on_after_dmg_cal,-1,skill,unit,type=op.pet.buff[1001].count&type[0].op=>&type[0].cmp=0|type=op.pet.buff[1001].block&type[0].cmp=1,set_damage,op=*&value=1.1
 200200,on_turn_end,-1,pet,buff,who=op&id=3033,heal,type=buff&add=25
@@ -771,6 +789,8 @@ id,timing,priority,target,condition,cond_option,effect,effect_option
 200496,on_decide_pri,-1,skill,buff,id=90&own=true,set_skill,type=priority&op=+&value=1
 200538,on_after_attack,-1,pet,skill,type=element&element_cmp=11,heal,add=20
 200593,on_after_attack,-1000,state,pet,who=op&type=dead&dead_cmp=1,set_weather,weather=11
+200735,on_after_attack,-1,pet,skill,who=op&whos_turn=op&whos_attack=op&type=type&type_op=>&type_cmp=0,heal,who=op&add=-op.pet.status.maxHp*36[MIN]me.skill.damage/6
+200757,on_add_buff\on_add_buff,-1\0,pet\pet,pet\pet,type=personality.max&personality.max_cmp=me.pet.personality.min\type=personality.max&personality.max_cmp=me.pet.personality.min,heal\heal,max=me.pet.status.initHp/10+me.pet.status.maxHp\add=me.pet.status.initHp/10
 200761,on_after_attack,-1,pet,skill,type=option[group]&option[group]_cmp=761,rage,who=op&add=-5
 200762,on_turn_ready,-1,pet,skill,type=power&power_cmp=0,rage,add=5
 200763,on_after_attack,-1,pet,skill,type=combo&combo_op=>&combo_cmp=1,rage,add=5
@@ -778,7 +798,7 @@ id,timing,priority,target,condition,cond_option,effect,effect_option
 200810,on_after_dmg_cal,-1,skill,unit,whos_turn=op&type=me.pet.powerup.def/op.skill.criticalResult&type[0].op=>&type[0].cmp=0&type[1].cmp=1,set_damage,op=*&value=3/4
 200826,none,-1,none,none,none,none,none
 200845,on_after_dmg_cal,-1,skill,unit,type=me.pet.cursor&type[0].op=NOT&type[0].cmp=0,set_damage,who=op&op=*&value=1.1
-200940,on_battle_start\on_after_pet_change\on_before_attack\on_before_attack\on_before_attack\on_before_attack\on_after_attack,-1\-1\-1\-1\999\1000\-1,state\state\skill\skill\skill\skill\pet,none\none\skill\skill\none\none\skill,none\none\type=type&type_op=>&type_cmp=0\type=type&type_op=>&type_cmp=0\whos_turn=op\whos_turn=op\is_hit=false|type=damage&damage_op=<&damage_cmp=300,set_weather\set_weather\set_skill\set_skill\set_skill\set_skill\add_buff,weather=1\weather=1\type=ignorePowerup&op=SET&value=1\type=ignoreShield&op=SET&value=1\who=op&type=accuracy&op=%&value=1000\who=op&type=accuracy&op=+&value=me.pet.powerup.accuracyBuff[MIN]0\who=op&id=57&turn=2
+200940,on_battle_start\on_after_pet_change\on_before_attack\on_before_attack\on_before_attack\on_before_attack\on_after_attack,-1\-1\-1\-1\999\1000\-1,state\state\skill\skill\skill\skill\pet,none\none\skill\skill\none\none\skill,none\none\type=type&type_op=>&type_cmp=0\type=type&type_op=>&type_cmp=0\whos_turn=op\whos_turn=op\is_hit=false|type=type/damage&type_op=>&type_cmp=0&damage_op=<&damage_cmp=300,set_weather\set_weather\set_skill\set_skill\set_skill\set_skill\add_buff,weather=1\weather=1\type=ignorePowerup&op=SET&value=1\type=ignoreShield&op=SET&value=1\who=op&type=accuracy&op=%&value=1000\who=op&type=accuracy&op=+&value=me.pet.powerup.accuracyBuff[MIN]0\who=op&id=2030&value=50&turn=2
 200947,on_add_buff\on_add_buff\on_final_dmg_cal\on_after_attack\on_after_attack\on_decide_pri,-1\-1\900\-1\-1\-1,pet\pet\skill\pet\pet\skill,none\none\skill\skill\skill\skill,none\none\type=type&type_op=>&type_cmp=0\type=type&type_op=>&type_cmp=0\type=type&type_cmp=0\type=type&type_cmp=0,set_pet\add_buff\set_damage\add_buff\powerup\set_skill,type=level&op=+&value=5\id=13\op=+&value=150\id=2008&value=30&turn=1\who=op&copy=reverse&random=true&random_pdf=uniform&random_count=2&atk=-1&mat=-1&def=-1&mdf=-1&spd=-1&hit=-1\type=priority&op=+&value=2
 200959,on_after_attack,1000,pet,pet,who=op&type=dead&dead_cmp=1,remove_buff,type=abnormal
 200961,none,-1,none,none,none,none,none
@@ -810,9 +830,10 @@ id,timing,priority,target,condition,cond_option,effect,effect_option
 210300,on_after_dmg_cal,-1,skill,skill,type=element&element_cmp=18,set_damage,op=*&value=1.1
 210301,on_final_dmg_cal,900,skill,skill,type=type&type_cmp=1,set_damage,op=+&value=op.pet.buff[3007].value*35
 210304,on_before_dmg_cal,-1,pet,skill,type=element&element_cmp=16,set_skill,type=sameElement&op=SET&value=1.5
-210809,on_after_dmg_cal,-1,skill,buff,key=field&type=id&id_cmp=600001,set_damage,op=*&value=1.1
 210307,on_before_attack,-1,skill,status,who=op&status_type=anger&op=>&cmp_value=50,set_skill,type=power&op=+&value=15
-214198,on_after_attack\on_before_attack\on_turn_start\on_after_attack\on_turn_end,-1\-1\-1\-1\-1,pet\skill\pet\pet\pet,skill\buff\pet\skill\status,type=type&type_op=>&type_cmp=0\who=op&id=1003\who=op&type=powerup.posCount&powerup.posCount_cmp=0\who=op&whos_turn=op&whos_attack=op&type=type&type_op=>&type_cmp=0\status_type=hp&op=<&cmp_value=1/2,heal\set_skill\powerup\remove_buff\set_damage,add=me.skill.damage/2\type=power&op=*&value=2\def=1&mdf=1\who=op&id=1/3/5/7/9/-9\who=op&type=buff&op=+&value=me.pet.status.maxHp/2
+210499,on_after_attack,-1,pet,none,random_cmp=10,add_buff,who=op&id=114
+210809,on_after_dmg_cal,-1,skill,buff,key=field&type=id&id_cmp=600001,set_damage,op=*&value=1.1
+214198,on_after_attack\on_before_attack\on_after_attack\on_turn_start\on_after_attack\on_turn_end,-1\-1\-1\-1\-1\-1,pet\skill\pet\pet\pet\pet,skill\buff\buff\pet\skill\status,type=type&type_op=>&type_cmp=0\who=op&id=1003\who=op&id=1003&own=false\who=op&type=powerup.posCount&powerup.posCount_cmp=0\who=op&whos_turn=op&whos_attack=op&type=type&type_op=>&type_cmp=0\status_type=hp&op=<&cmp_value=1/2,heal\set_skill\add_buff\powerup\remove_buff\set_damage,add=me.skill.damage/2\type=power&op=*&value=2\who=op&id=1003\def=1&mdf=1\who=op&id=1/3/5/7/9/-9\who=op&type=buff&op=+&value=me.pet.status.maxHp/2
 214693,on_add_buff\on_turn_start\on_turn_start\on_turn_start\on_turn_start,-1\-1\-1\-1\-1,pet\pet\pet\pet\pet,none\buff\buff\unit\unit,none\who=op&id=unhealthy\id=abnormal\type=me.pet.buff[abnormal].own/me.pet.buff[214693].value&type[0].cmp=0&type[1].op=<&type[1].cmp=500\type=me.pet.buff[abnormal].own/me.pet.buff[214693].value&type[0].cmp=0&type[1].op=<&type[1].cmp=500,add_buff\add_buff\add_buff\heal\set_buff,id=33\id=2008&value=33&turn=1\on_fail=1007&who=op&id=random[1003|1007|111]\max=me.pet.status.maxHp+100\id=214693&type=value&op=+&value=100
 214731,on_add_buff\on_add_buff\on_after_dmg_cal\on_after_dmg_cal\on_after_attack,-1\-1\-1\-1\-1,pet\pet\skill\skill\pet,none\unit\none\none\none,none\type=state.settings.mode&type[0].op=NOT&type[0].cmp=2\whos_turn=op\none\none,add_buff\add_buff\set_damage\set_damage\heal,key=unit&id=3242&value=7\id=-8\who=op&op=*&value=0-me.pet.bag(id:10012)(dead:0).count*2.4-me.pet.bag(idNOT10012)(dead:0).count*5/100+1\op=*&value=me.pet.bag(id:10012)(dead:0).count*2.4+me.pet.bag(idNOT10012)(dead:0).count*5/100+1\add=me.pet.bag(id:10012)(dead:0).count*2.4+me.pet.bag(idNOT10012)(dead:0).count*5/100*me.skill.damage
 214732,on_add_buff\on_add_buff\on_after_dmg_cal\on_after_dmg_cal\on_after_attack,-1\-1\-1\-1\-1,pet\pet\skill\skill\pet,none\unit\none\none\none,none\type=state.settings.mode&type[0].op=NOT&type[0].cmp=2\whos_turn=op\none\none,add_buff\add_buff\set_damage\set_damage\heal,key=unit&id=3242&value=7\id=-8\who=op&op=*&value=0-me.pet.bag(id:10012)(dead:0).count*2.4-me.pet.bag(idNOT10012)(dead:0).count*5/100+1\op=*&value=me.pet.bag(id:10012)(dead:0).count*2.4+me.pet.bag(idNOT10012)(dead:0).count*5/100+1\add=me.pet.bag(id:10012)(dead:0).count*2.4+me.pet.bag(idNOT10012)(dead:0).count*5/100*me.skill.damage

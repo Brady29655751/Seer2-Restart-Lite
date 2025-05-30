@@ -1,0 +1,79 @@
+<map name="空港"  category="7"  id="-420" weather="11" switch="-1">
+	<!-- <resource>10011</resource> -->
+	<anim pos="0.75,-0.5" scale="1.5,1.45"/>
+	<initialPoint>510,275</initialPoint>
+	<music category="7">
+		<bgm>BGM_030</bgm>
+	</music>
+	<entities>
+		<npc id="-42001" resId="Pets/pet/735" name="Lv 70 瑞尔斯" size="90,151" pos="325,295" namePos="0,0">
+			<description>和盖亚很像的精灵</description>
+			<dialog>
+				<branch id="default" name="瑞尔斯" icon="Pets/pet/735" size="90,151" pos="0,35">
+					<content><![CDATA[我所做的一切没必要向任何人解释！]]></content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[弟控是这样的]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+						<reply type="click">
+							<description><![CDATA[挑战瑞尔斯]]></description>
+							<action>battle</action>
+							<param>default</param>
+						</reply>
+					</replyHandler>
+				</branch>
+			</dialog>
+			<battle>
+				<branch id="default">
+					<settings count="1">
+						<weather>11</weather>
+					</settings>
+					<enemy>
+						<pet id="735" level="70">
+							<status>
+								<hp>2000</hp>
+							</status>
+							<initBuff>61,-4,13,14,17,-7,-3000</initBuff>
+							<loopSkill>12018,12023,12023,12023,10814</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>getPet</action>
+							<param>735,1</param>
+							<condition>activity[11009].done=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=【瑞尔斯】已经放入精灵仓库</param>
+							<param>item_icon=pet[735]</param>
+							<param>option_num=1</param>
+							<condition>activity[11009].done=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>11009</param>
+							<param>done=true</param>
+							<condition>activity[11009].done=[bool]false[default]false</condition>
+						</button>
+					</winHandler>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>openDialog</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<teleport id="1" name="飞翼氏族主城" pos="650,400" targetMapId="419"/>
+		<teleport id="2" name="诺亚方舟" pos="295,200" targetMapId="413"/>
+	</entities>
+
+
+</map>
+

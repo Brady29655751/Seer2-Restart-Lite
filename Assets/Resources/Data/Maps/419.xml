@@ -1,22 +1,128 @@
-<map name="飞翼氏族主城"  category="7"  id="419" weather="0">
+<map name="飞翼氏族主城"  category="7"  id="419" weather="8">
 	<!-- <resource>10011</resource> -->
 	<initialPoint>470,150</initialPoint>
 	<music category="7">
 		<bgm>BGM_029</bgm>
 	</music>
 	<entities>
-
-    
-			<teleport id="1" name="时镜之岛" pos="100,270" targetMapId="422"/>
-			<teleport id="2" name="空港" pos="300,50" targetMapId="420"/>
-			<teleport id="3" name="汲雨之岛" pos="800,130" targetMapId="424"/>
-			<teleport id="5" name="羽冠之岛" pos="800,300" targetMapId="425"/>
-			<teleport id="4" name="飞翼之核" pos="400,400" targetMapId="421"/>
-
-
-
+		<npc id="41901" resId="41901" name="萨伯尔兵团长" size="109,107" pos="465,235" namePos="10,-5">
+			<description>让你知道我的厉害！</description>
+			<dialog>
+				<branch id="default" name="萨伯尔兵团长" icon="41901" size="109,107" pos="0,45">
+					<content><![CDATA[飞翼群岛的秩序，由我来维护！（概率触发捕捉事件）]]></content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[哇！好厉害！]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+						<reply type="click">
+							<description><![CDATA[挑战兵团长]]></description>
+							<action>battle</action>
+							<param>default</param>
+						</reply>
+					</replyHandler>
+				</branch>
+				<branch id="reward" name="萨伯尔兵团长" icon="41901" size="109,107" pos="0,45">
+					<content><![CDATA[我的精灵很欣赏你，他想亲自考验你是否有资格让他跟随]]></content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[那你会一起跟随我吗？]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+						<reply type="click">
+							<description><![CDATA[正合我意！]]></description>
+							<action>battle</action>
+							<param>capture</param>
+						</reply>
+					</replyHandler>
+				</branch>
+			</dialog>
+			<battle>
+				<branch id="default">
+					<settings count="6">
+						<weather>8</weather>
+					</settings>
+					<enemy>
+						<pet id="183" level="75">
+							<loopSkill>11985,11987</loopSkill>
+							<superSkill>11988</superSkill>
+						</pet>
+						<pet id="183" level="76">
+							<loopSkill>11985,11987</loopSkill>
+							<superSkill>11988</superSkill>
+						</pet>
+						<pet id="183" level="77">
+							<loopSkill>11985,11987</loopSkill>
+							<superSkill>11988</superSkill>
+						</pet>
+						<pet id="183" level="78">
+							<loopSkill>11985,11987</loopSkill>
+							<superSkill>11988</superSkill>
+						</pet>
+						<pet id="183" level="79">
+							<loopSkill>11985,11987</loopSkill>
+							<superSkill>11988</superSkill>
+						</pet>
+						<pet id="183" level="80">
+							<loopSkill>11985,11987</loopSkill>
+							<superSkill>11988</superSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setItem</action>
+							<param>add</param>
+							<param>10201,3</param>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=3个砂糖甜饼已经放入背包</param>
+							<param>item_icon=item[10201]</param>
+							<param>option_num=1</param>
+						</button>
+						<button type="auto">
+							<action>openDialog</action>
+							<param>reward</param>
+							<condition>random[old]&lt;5</condition>
+						</button>
+					</winHandler>
+				</branch>
+				<branch id="capture">
+					<settings count="1" capture="true">
+						<weather>8</weather>
+					</settings>
+					<enemy>
+						<pet id="183" level="75">
+							<loopSkill>11979,11980,11985,11986,11987,-4</loopSkill>
+						</pet>
+					</enemy>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>openDialog</action>
+					<param>default</param>
+				</button>
+				<!--
+				<button type="auto">
+					<action>setNpcParam</action>
+					<param>41901</param>
+					<param>color=0,0,0,0</param>
+					<param>namePos=0,-5</param>
+					<condition>map.anim=1</condition>
+				</button>
+				-->
+			</eventHandler>
+		</npc>
+		<teleport id="1" name="时镜之岛" pos="100,270" targetMapId="422"/>
+		<teleport id="2" name="空港" pos="300,50" targetMapId="420"/>
+		<teleport id="3" name="汲雨之岛" pos="800,130" targetMapId="424"/>
+		<teleport id="5" name="羽冠之岛" pos="800,300" targetMapId="425"/>
+		<teleport id="4" name="飞翼之核" pos="400,400" targetMapId="421"/>
 	</entities>
-
-
 </map>
 

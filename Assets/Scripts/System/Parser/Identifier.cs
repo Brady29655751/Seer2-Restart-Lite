@@ -247,6 +247,14 @@ public static class Identifier {
         if (id.TryTrimStart("buff", out trimId))
             return GetBuffIdentifier(trimId, pet.buffController);
 
+        if (id.TryTrimStart("personality.", out trimId)) {
+            var personalityBuff = Status.GetPersonalityBuff(pet.basic.personality);
+            return personalityBuff[trimId];
+        }
+
+        if (id.TryTrimStart("ev.", out trimId))
+            return pet.talent.ev[trimId];
+
         return pet.TryGetPetIdentifier(id, out num) ? num : GetNumIdentifier(id);
     }
 
@@ -268,15 +276,6 @@ public static class Identifier {
             return trimId switch {
                 "hit" => powerup.hp,
                 "accuracyBuff" => powerup.hp * 10 + Mathf.Clamp(powerup.hp, -3, 3) * 5,
-                "count" => powerup.Count(x => x != 0),
-                "posCount" => powerup.Count(x => x > 0),
-                "negCount" => powerup.Count(x => x < 0),
-                "sum" => powerup.sum,
-                "posSum" => powerup.Select(x => Mathf.Max(0, x)).sum,
-                "negSum" => powerup.Select(x => Mathf.Min(0, x)).sum,
-                "max" => powerup.max,
-                "posMax" => powerup.posMax,
-                "negMax" => powerup.negMax,
                 _ => powerup[trimId],
             };
         }
