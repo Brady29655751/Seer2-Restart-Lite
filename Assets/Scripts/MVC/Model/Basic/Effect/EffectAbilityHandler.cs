@@ -799,11 +799,12 @@ public static class EffectAbilityHandler
             var skillIdList = value.Split('/').Select(x => (int)Parser.ParseEffectOperation(x, effect, lhsUnit, rhsUnit)).ToList();
             skillIdList = skillIdList.Random(randomTypeCount, false);
 
-            if ((!ListHelper.IsNullOrEmpty(skillIdList)) && (skillIdList.Count > 1)) {
+            if (!ListHelper.IsNullOrEmpty(skillIdList))
+            {
                 var effectList = new List<Effect>();
-                skillIdList.ForEach(skillId => effectList.AddRange(Skill.GetSkill(skillId, false)?.effects
-                    .Select(x => new Effect(x)) ?? new List<Effect>()));
+                skillIdList.ForEach(skillId => effectList.AddRange(Skill.GetSkill(skillId, false)?.effects.Select(x => new Effect(x)) ?? new List<Effect>()));
                 lhsUnit.skillSystem.skill?.SetEffects(effectList);
+
                 return true;
             }
         }

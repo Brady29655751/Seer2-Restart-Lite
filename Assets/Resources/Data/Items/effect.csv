@@ -215,9 +215,10 @@ id,timing,priority,target,condition,cond_option,effect,effect_option
 334198,resident,-1,pet,pet,type=uid/level&uid_cmp=11216&level_op=GTE&level_cmp=100,set_pet,type=id&op=SET&value=12798
 334731,resident,-1,pet,pet,type=uid/level&uid_cmp=11836&level_op=GTE&level_cmp=100,set_pet,type=id&op=SET&value=14731
 334732,resident,-1,pet,pet,type=uid/level&uid_cmp=12197&level_op=GTE&level_cmp=100,set_pet,type=id&op=SET&value=14732
+334760,resident,-1,pet,pet,type=uid/level&uid_cmp=456&level_op=GTE&level_cmp=100,set_pet,type=id&op=SET&value=12939
 340940,resident,-1,pet,pet,type=uid/level&uid_cmp=456&level_op=GTE&level_cmp=100,set_pet,type=id&op=SET&value=939
 381757,resident,-1,pet,pet,type=baseId[456]&baseId[456]_cmp=1,set_pet,type=skinId&op=+&value=11757
-381758,resident,-1,pet,pet,type=baseId[939]&baseId[939]_cmp=1,set_pet,type=skinId&op=+&value=11758
+381758,resident,-1,pet,pet,type=baseId[939]&baseId[939]_cmp=1|type=baseId[12939]&baseId[12939]_cmp=1,set_pet,type=skinId&op=+&value=11758
 382639,resident,-1,pet,pet,type=baseId[940]&baseId[940]_cmp=1,set_pet,type=skinId&op=+&value=12639
 400000,none,-1,none,none,none,none,none
 400001,none,-1,none,none,none,none,none
@@ -239,6 +240,7 @@ id,timing,priority,target,condition,cond_option,effect,effect_option
 484693,resident,-1,pet,pet,type=baseId[114693]/level/buff[group:Cm]/buff[Cm_type:0]&baseId[114693]_cmp=1&level_op=>&level_cmp=99&buff[group:Cm]_op=<&buff[group:Cm]_cmp=3&buff[Cm_type:0]_op=<&buff[Cm_type:0]_cmp=1,set_pet,type=buff&op=+&value=484693
 484731,resident,-1,pet,pet,type=baseId[114731]/level/buff[group:Cm]/buff[Cm_type:0]&baseId[114731]_cmp=1&level_op=>&level_cmp=99&buff[group:Cm]_op=<&buff[group:Cm]_cmp=3&buff[Cm_type:0]_op=<&buff[Cm_type:0]_cmp=1,set_pet,type=buff&op=+&value=484731
 484750,resident,-1,pet,pet,type=baseId[14750]/level/buff[group:Cm]/buff[Cm_type:0]&baseId[14750]_cmp=1&level_op=>&level_cmp=99&buff[group:Cm]_op=<&buff[group:Cm]_cmp=3&buff[Cm_type:0]_op=<&buff[Cm_type:0]_cmp=1,set_pet,type=buff&op=+&value=484750
+484760,resident,-1,pet,pet,type=baseId[14760]/level/buff[group:Cm]/buff[Cm_type:0]&baseId[14760]_cmp=1&level_op=>&level_cmp=99&buff[group:Cm]_op=<&buff[group:Cm]_cmp=3&buff[Cm_type:0]_op=<&buff[Cm_type:0]_cmp=1,set_pet,type=buff&op=+&value=484760
 490940,resident,-1,pet,pet,type=baseId[940]/level/buff[group:Cm]/buff[Cm_type:0]&baseId[940]_cmp=1&level_op=>&level_cmp=99&buff[group:Cm]_op=<&buff[group:Cm]_cmp=3&buff[Cm_type:0]_op=<&buff[Cm_type:0]_cmp=1,set_pet,type=buff&op=+&value=490940
 490946,resident,-1,pet,pet,type=baseId[947]/level/buff[group:Cm]/buff[Cm_type:0]&baseId[947]_cmp=1&level_op=>&level_cmp=99&buff[group:Cm]_op=<&buff[group:Cm]_cmp=3&buff[Cm_type:0]_op=<&buff[Cm_type:0]_cmp=1,set_pet,type=buff&op=+&value=490946
 500000,resident\resident,-1\-1,state\state,none\none,none\none,set_player\set_player,param_count=2&action=setItem&param[0]=add&param[1]=2，50\param_count=5&action=openHintbox&param[0]=type＝Item&param[1]=title＝提示&param[2]=content＝50星钻已经放入背包&param[3]=item_icon＝item[2]&param[4]=option_num＝1

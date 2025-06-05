@@ -218,11 +218,21 @@ public class Pet
         if (id.TryTrimStart("normalSkill", out var trimNormalSkill) &&
             trimNormalSkill.TryTrimParentheses(out var skillIndexExpr) && 
             int.TryParse(skillIndexExpr, out var skillIndex)) {
-            return normalSkill[skillIndex]?.id ?? 0;
+            var trimId = trimNormalSkill.TrimStart($"[{skillIndexExpr}]").TrimStart('.');
+            if (string.IsNullOrEmpty(trimId))
+                trimId = "id";
+
+            return normalSkill[skillIndex]?.GetSkillIdentifier(trimId) ?? 0;
         }
 
-        if (id == "superSkill")
-            return superSkill?.id ?? 0;
+        if (id.TryTrimStart("superSkill", out var trimSuperSkill)) {
+            var trimId = trimNormalSkill.TrimStart('.');
+            if (string.IsNullOrEmpty(trimId))
+                trimId = "id";
+
+            return superSkill?.GetSkillIdentifier(trimId) ?? 0;
+        }
+            
 
         if ((id.TryTrimStart("skill", out var trimSkill)) && 
             (trimSkill.TryTrimParentheses(out var skillIdExpr)) &&

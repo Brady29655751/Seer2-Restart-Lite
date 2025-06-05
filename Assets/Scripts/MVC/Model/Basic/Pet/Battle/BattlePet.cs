@@ -155,7 +155,26 @@ public class BattlePet : Pet
     }
 
     public override float GetPetIdentifier(string id) {
-        return id switch {
+        if (id.TryTrimStart("normalSkill", out var trimNormalSkill) &&
+            trimNormalSkill.TryTrimParentheses(out var skillIndexExpr) && 
+            int.TryParse(skillIndexExpr, out var skillIndex)) {
+            var trimId = trimNormalSkill.TrimStart($"[{skillIndexExpr}]").TrimStart('.');
+            if (string.IsNullOrEmpty(trimId))
+                trimId = "id";
+
+            return skillController.normalSkills?.Get(skillIndex)?.GetSkillIdentifier(trimId) ?? 0;
+        }
+
+        if (id.TryTrimStart("superSkill", out var trimSuperSkill)) {
+            var trimId = trimNormalSkill.TrimStart('.');
+            if (string.IsNullOrEmpty(trimId))
+                trimId = "id";
+
+            return skillController.superSkill?.GetSkillIdentifier(trimId) ?? 0;
+        }
+
+        return id switch
+        {
             "stayTurn" => stayTurn,
             "chain" => chain,
             "element" => (int)buffController.element,
@@ -194,7 +213,7 @@ public class BattlePet : Pet
 
                 var addStatus = normalStatus - oldStatus;
                 maxHp += (int)addStatus.hp;
-                statusController.AddInitStatus(new Status(addStatus){ hp = 0 });
+                statusController.AddInitStatus(new Status(addStatus) { hp = 0 });
                 normalSkill = skillController.normalSkills?.ToArray();
                 superSkill = skillController.superSkill;
                 return;

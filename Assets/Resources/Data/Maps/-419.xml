@@ -1,0 +1,77 @@
+<map name="飞翼氏族主城"  category="7"  id="-419" weather="0" switch="-1">
+	<!-- <resource>10011</resource> -->
+	<initialPoint>470,150</initialPoint>
+	<music category="7">
+		<bgm>BGM_029</bgm>
+	</music>
+	<entities>
+		<npc id="-41901" resId="41901" name="萨伯尔兵团长" size="109,107" pos="465,235" namePos="10,-5">
+			<description>让你知道我的厉害！</description>
+			<dialog>
+				<branch id="default" name="萨伯尔兵团长" icon="41901" size="109,107" pos="0,45">
+					<content><![CDATA[其实兵团长在夜晚也要加班]]></content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[好辛苦啊]]></description>
+							<action>openDialog</action>
+							<param>work</param>
+						</reply>
+						<reply type="click">
+							<description><![CDATA[葛蕾芬兵团长都没加班啊]]></description>
+							<action>openDialog</action>
+							<param>battle</param>
+						</reply>
+					</replyHandler>
+				</branch>
+				<branch id="work" name="萨伯尔兵团长" icon="41901" size="109,107" pos="0,45">
+					<content><![CDATA[对啊，而且最近有些人常常指着我说是精灵假冒的，拿着精灵胶囊发疯似的朝我丢。你也要注意点啊！]]></content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[（汗）]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+					</replyHandler>
+				</branch>
+				<branch id="battle" name="我" icon="7004" size="136,125" pos="0,45">
+					<content><![CDATA[你以为我们星际使者会相信你的鬼话吗？大胆精灵！我一眼就看出你不是人！哼！雕虫小技，竟敢班门弄斧。精灵胶囊！]]></content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[精灵胶囊！...等我买了再来]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+						<reply type="click">
+							<description><![CDATA[精灵胶囊！启动！]]></description>
+							<action>battle</action>
+							<param>default</param>
+						</reply>
+					</replyHandler>
+				</branch>
+			</dialog>
+			<battle>
+				<branch id="default">
+					<settings count="6" capture="true"/>
+					<enemy>
+						<pet id="143" level="75">
+							<initBuff>-2</initBuff>
+							<loopSkill>12090,12098,12090,12098,-4</loopSkill>
+						</pet>
+					</enemy>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>openDialog</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<teleport id="1" name="时镜之岛" pos="100,270" targetMapId="422"/>
+		<teleport id="2" name="空港" pos="300,50" targetMapId="-420"/>
+		<teleport id="3" name="汲雨之岛" pos="800,130" targetMapId="424"/>
+		<teleport id="5" name="羽冠之岛" pos="800,300" targetMapId="425"/>
+		<teleport id="4" name="飞翼之核" pos="400,400" targetMapId="421"/>
+	</entities>
+</map>
+

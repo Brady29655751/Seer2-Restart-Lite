@@ -22,13 +22,18 @@
 							<param>miracle</param>
 						</func>
 						<func type="click">
+							<description><![CDATA[光之子挑战]]></description>
+							<action>battle</action>
+							<param>sun</param>
+						</func>
+						<func type="click">
 							<description><![CDATA[因子商店]]></description>
 							<action>openPanel</action>
 							<param>ItemShop</param>
 							<param>mode=buy</param>
 							<param>currency=8/2</param>
-							<param>item=340940/22014/381757/381758</param>
-							<param>limit=1/1/1/1</param>
+							<param>item=340940/334760/22014/381757/381758</param>
+							<param>limit=1/1/1/1/1</param>
 						</func>
 					</functionHandler>
 					<replyHandler>
@@ -92,6 +97,44 @@
 							<param>content=50个精灵因子已经放入背包</param>
 							<param>item_icon=item[8]</param>
 							<param>option_num=1</param>
+						</button>
+					</winHandler>
+				</branch>
+				<branch id="sun">
+					<settings count="6">
+						<mode>4</mode>
+						<weather>1</weather>
+					</settings>
+					<enemy>
+						<pet id="14760" level="105">
+							<status>
+								<hp>25000</hp>
+							</status>
+							<initBuff>-8,61,57</initBuff>
+							<loopSkill>12038,12037,12034</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setItem</action>
+							<param>add</param>
+							<param>500178,1</param>
+							<condition>activity[evolve_940].done[sun]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=1个米咔精元蛋已经放入背包</param>
+							<param>item_icon=pet[178]</param>
+							<param>option_num=1</param>
+							<condition>activity[evolve_940].done[sun]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>evolve_940</param>
+							<param>done[sun]=true</param>
+							<condition>activity[evolve_940].done[sun]=[bool]false[default]false</condition>
 						</button>
 					</winHandler>
 				</branch>

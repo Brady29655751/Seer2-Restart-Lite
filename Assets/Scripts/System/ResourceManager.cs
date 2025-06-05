@@ -533,7 +533,7 @@ public class ResourceManager : Singleton<ResourceManager>
 
     public void LoadMap(int id, Action<Map> onSuccess = null, Action<string> onFail = null)
     {
-        if (id >= -50000)
+        if (!Map.IsMod(id))
             LoadXML<Map>(mapUrl + id + ".xml", (map) => LoadMapResources(map, onSuccess, onFail), error => onFail?.Invoke("地图加载失败，请重新启动游戏"));
         else
             SaveSystem.TryLoadMapMod(id, onSuccess, onFail);

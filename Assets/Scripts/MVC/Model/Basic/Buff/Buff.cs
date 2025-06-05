@@ -157,7 +157,7 @@ public class Buff
         };
 
         desc = desc.Replace("[option[value]]", referenceBuff.options.Get("value", "0"));
-        desc = desc.Replace("[value]", referenceBuff.value.ToString()).Replace("[poker]", pokerValue);
+        desc = desc.Replace("[value]", referenceBuff.value.ToString()).Replace("[poker]", pokerValue).Replace("[skill]", Skill.GetSkill(referenceBuff.value, false)?.name ?? "技能信息错误");
         desc = desc.Replace("[ENDL]", "\n").Replace("[-]", "</color>").Replace("[", "<color=#").Replace("]", ">");
         return desc;
     }

@@ -1,17 +1,48 @@
-<map name="时镜之岛"  category="7"  id="422" weather="0">
+<map name="时镜之岛"  category="7"  id="422">
 	<!-- <resource>10011</resource> -->
-	<initialPoint>530,150</initialPoint>
+	<initialPoint>500,150</initialPoint>
 	<music category="7">
 		<bgm>BGM_031</bgm>
 	</music>
 	<entities>
-
-    
-			<teleport id="1" name="遗忘之岛" pos="150,200" targetMapId="423"/>
-			<teleport id="4" name="飞翼氏族主城" pos="700,70" targetMapId="419"/>
-
-
-
+		<npc id="42201" resId="Pets/pet/195.png" name="Lv73 克里普特" size="75,77" pos="410,45" namePos="0,0">
+			<battle>
+				<branch id="default">
+					<settings count="6" capture="true"/>
+					<enemy>
+						<pet id="195" level="73">
+							<loopSkill>12046,12054</loopSkill>
+						</pet>
+					</enemy>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>battle</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<npc id="42202" resId="Pets/pet/195.png" name="Lv72 克里普特" size="75,77" pos="600,45" namePos="0,0">
+			<battle>
+				<branch id="default">
+					<settings count="6" capture="true"/>
+					<enemy>
+						<pet id="195" level="72">
+							<loopSkill>12046,12054</loopSkill>
+						</pet>
+					</enemy>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>battle</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<teleport id="1" name="遗忘之岛" pos="150,200" targetMapId="423"/>
+		<teleport id="4" name="飞翼氏族主城" pos="700,70" targetMapId="419"/>
 	</entities>
 
 

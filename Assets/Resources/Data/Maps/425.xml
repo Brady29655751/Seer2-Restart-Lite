@@ -1,19 +1,49 @@
 <map name="羽冠之岛"  category="7"  id="425" weather="0">
 	<!-- <resource>10011</resource> -->
-	<initialPoint>530,150</initialPoint>
+	<initialPoint>500,130</initialPoint>
 	<music category="7">
 		<bgm>BGM_035</bgm>
 	</music>
 	<entities>
-
+		<npc id="42501" resId="Pets/pet/199.png" name="Lv74 泰姆尔" size="67,77" pos="340,45" namePos="0,0">
+			<battle>
+				<branch id="default">
+					<settings count="6" capture="true"/>
+					<enemy>
+						<pet id="199" level="74">
+							<loopSkill>12086,12083</loopSkill>
+						</pet>
+					</enemy>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>battle</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<npc id="42502" resId="Pets/pet/199.png" name="Lv71 泰姆尔" size="67,77" pos="620,45" namePos="0,0">
+			<battle>
+				<branch id="default">
+					<settings count="6" capture="true"/>
+					<enemy>
+						<pet id="199" level="71">
+							<loopSkill>12086,12083</loopSkill>
+						</pet>
+					</enemy>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>battle</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
     
-			<teleport id="1" name="飞翼氏族主城" pos="420,80" targetMapId="419"/>
-			<teleport id="2" name="街心花园" pos="570,175" targetMapId="426"/>
-
-			
-
-
-
+		<teleport id="1" name="飞翼氏族主城" pos="420,80" targetMapId="419"/>
+		<teleport id="2" name="街心花园" pos="570,175" targetMapId="426"/>			
 	</entities>
 
 
