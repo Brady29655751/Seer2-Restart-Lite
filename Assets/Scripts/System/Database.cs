@@ -25,13 +25,16 @@ public class Database : Singleton<Database>
 
     public void Init()
     {
-        RM.LoadPetInfo((x) => petInfoDict = x, (y) => featureInfoDict = y, (z) => hitInfoDict = z,
-            (w) => soundInfoDict = w);
-        RM.LoadSkill((x) => { 
+        RM.LoadPetInfo((x) => petInfoDict = x, (y) => featureInfoDict = y, (z) => hitInfoDict = z, (w) => soundInfoDict = w);
+        RM.LoadSkill((x) =>
+        { 
             skillDict = x;
-            RM.LoadItemInfo((y) => itemInfoDict = y);
+            RM.LoadBuffInfo((y) =>
+            {
+                buffInfoDict = y;
+                RM.LoadItemInfo((z) => itemInfoDict = z);
+            });
         });
-        RM.LoadBuffInfo((x) => buffInfoDict = x);
         RM.LoadMissionInfo((x) =>
         {
             missionInfoDict = x;

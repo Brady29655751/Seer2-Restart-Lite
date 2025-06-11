@@ -57,6 +57,7 @@ public class GameManager : Singleton<GameManager>
                 GameLogin();
                 break;
             case GameState.Play:
+            case GameState.MiniGame:
                 GamePlay();
                 break;
             case GameState.Fight:
@@ -136,10 +137,12 @@ public class GameManager : Singleton<GameManager>
     }
 }
 
-public enum GameState {
+public enum GameState
+{
     Quit = -1,
     Init = 0,
     Login = 1,
     Play = 2,
     Fight = 3,
+    MiniGame = 4,
 }

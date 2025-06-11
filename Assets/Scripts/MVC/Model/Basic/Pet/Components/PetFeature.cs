@@ -50,9 +50,13 @@ public class PetFeature
     }
 
     public int SetTrait(int traitId = 0) {
+        if (traitId == -1)
+            return traitId;
+
         afterwardBuffIds.RemoveAll(x => Buff.GetBuffInfo(x)?.options.Get("group") == "trait");
         if (traitId == 0)
             traitId = BuffInfo.database.Where(x => x.options.Get("group") == "trait").Select(x => x.id).ToList().Random();
+        
         afterwardBuffIds.Add(traitId);
         return traitId;
     }

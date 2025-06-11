@@ -9,9 +9,10 @@ public class VolumeSettingView : Module
     [SerializeField] private Hintbox confirmSettingsHintbox;
     [SerializeField] private List<ISlider> sliderBlockViews;    
     [SerializeField] private Toggle flashToggle, shakeToggle;
-    [SerializeField] private Text battleAnimSpeedText;
+    [SerializeField] private Text battleAnimSpeedText, initMapText;
 
-    public void SetSliderVolume(SettingsData settingsData) {
+    public void SetSliderVolume(SettingsData settingsData)
+    {
         sliderBlockViews[(int)VolumeOrder.BGM]?.SetSliderValue(settingsData.BGMVolume);
         sliderBlockViews[(int)VolumeOrder.BattleBGM]?.SetSliderValue(settingsData.battleBGMVolume);
         sliderBlockViews[(int)VolumeOrder.BattleSE]?.SetSliderValue(settingsData.battleSEVolume);
@@ -19,6 +20,7 @@ public class VolumeSettingView : Module
         SetFlashToggle(settingsData.flashWhenBigDamage);
         SetShakeToggle(settingsData.shakeWhenBigDamage);
         SetBattleAnimSpeedText(settingsData.battleAnimSpeed);
+        SetInitMapText(settingsData.initMapId);
     }
 
     public void OnConfirmSettings() {
@@ -51,8 +53,18 @@ public class VolumeSettingView : Module
     public void SetBattleAnimSpeedText(float value) {
         battleAnimSpeedText?.SetText(value + " 倍");
     }
+    
+    public void SetInitMapText(int value) {
+        string home = (Map.GetMap(value)?.worldId ?? 0) switch
+        {
+            1 => "新世界",
+            _ => "阿卡迪亚",
+        };
+        initMapText?.SetText(home);
+    }
 
-    public enum VolumeOrder {
+    public enum VolumeOrder
+    {
         BGM = 0, BattleBGM = 1, BattleSE = 2, UI = 3,
     }
 }

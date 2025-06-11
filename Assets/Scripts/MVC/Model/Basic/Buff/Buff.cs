@@ -12,7 +12,7 @@ public class Buff
     public static List<int> powerupBuffIds => new List<int>(){ 1, 3, 5, 7, 9, -9 };
     public static List<int> powerdownBuffIds => new List<int>(){ 2, 4, 6, 8, 10, -10 }; 
     public static List<Buff> yiteEndBuffDatabse => BuffInfo.database.Where(x => x.id.IsInRange(410000, 420000)).Select(x => new Buff(x.id)).ToList();
-    public static List<Buff> yiteHardBuffDatabse => BuffInfo.database.Where(x => x.id.IsInRange(430000, 440000) || x.id.IsInRange(400010, 400015)).Select(x => new Buff(x.id)).ToList();
+    public static List<Buff> yiteHardBuffDatabse => BuffInfo.database.Where(x => x.id.IsInRange(430000, 440000) || x.id.IsInRange(400010, 400015) || x.id.IsInRange(950, 999)).Select(x => new Buff(x.id)).ToList();
     public static List<Buff> yiteEasyBuffDatabse => BuffInfo.database.Where(x => x.id.IsInRange(420000, 430000) || x.id.IsInRange(400005, 400010)).Select(x => new Buff(x.id)).ToList();
 
     /* Basic Data */

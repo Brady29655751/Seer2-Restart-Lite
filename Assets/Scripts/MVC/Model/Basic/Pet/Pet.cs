@@ -269,8 +269,15 @@ public class Pet
             int.TryParse(trimBaseExpr, out var baseId)) {
             return ListHelper.IsNullOrEmpty(PetExpSystem.GetEvolveChain(baseId, info.ui.defaultId)) ? 0 : 1;
         }
+        
+        if (id.TryTrimStart("gender", out var trimGender) &&
+            (trimSkin.TryTrimParentheses(out var genderIdExpr)) && 
+            (int.TryParse(genderIdExpr, out var genderId))) {
+            return info.basic.genderList.Contains(genderId) ? 1 : 0;
+        } 
 
-        return id switch {
+        return id switch
+        {
             "uid" => this.id,
             "id" => info.ui.defaultId,
             "subId" => info.ui.subId,
@@ -288,7 +295,7 @@ public class Pet
             "maxLevel" => maxLevel,
             "exp" => totalExp,
             "levelExp" => levelUpExp,
-            "iv" => talent.iv, 
+            "iv" => talent.iv,
             "evStorage" => talent.evStorage,
             "emblem" => hasEmblem ? 1 : 0,
             "featureId" => feature.feature.baseId,

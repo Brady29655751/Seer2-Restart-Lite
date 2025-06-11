@@ -59,7 +59,7 @@ public class GameData
         NoobCheckPoint.Map      => 71,
         NoobCheckPoint.Train    => 61,
         NoobCheckPoint.Battle   => 61,
-        _ => -70,
+        _ => settingsData.initMapId,
     };
 
     public GameData() {

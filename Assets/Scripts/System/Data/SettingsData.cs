@@ -9,13 +9,16 @@ public class SettingsData
     public float battleBGMVolume, battleSEVolume;  
     public float battleAnimSpeed;
     public bool shakeWhenBigDamage, flashWhenBigDamage;
+    public int initMapId = -70;
 
-    public SettingsData() {
+    public SettingsData()
+    {
         useRobotAsPlayer = true;
         BGMVolume = UIVolume = 10;
-        battleBGMVolume = battleSEVolume = 10;  
+        battleBGMVolume = battleSEVolume = 10;
         battleAnimSpeed = 1;
         shakeWhenBigDamage = true;
         flashWhenBigDamage = true;
+        initMapId = -70;
     }
 }

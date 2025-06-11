@@ -1,0 +1,172 @@
+<map name="海洋星浅水区" category="102" id="10020" weather="2">
+	<initialPoint>540,240</initialPoint>
+	<music category="102">
+		<bgm>BGM_20</bgm>
+	</music>
+	<entities>
+		<npc id="1002000" resId="1001" name="" size="200,200" pos="120,0" namePos="0,0" color="0,0,0,0">
+			<description>海洋星深水区</description>
+			<transport>240,80</transport>
+			<eventHandler>
+				<button type="click">
+					<action>teleport</action>
+					<param>10021</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<npc id="1002001" resId="Maps/mine/CH4" name="" size="112,258" pos="755,-10" namePos="0,0">
+			<description>甲烷燃气</description>
+			<eventHandler>
+				<button type="click">
+					<action>openHintbox</action>
+					<param>type=Item</param>
+					<param>title=提示</param>
+					<param>content=甲烷需要合理开发，明天再来吧！</param>
+					<param>item_icon=item[1102]</param>
+					<param>option_num=1</param>
+					<condition>activity[mine].done[10020]=[bool]true[default]false</condition>
+				</button>
+				<button type="click">
+					<action>setItem</action>
+					<param>add</param>
+					<param>1102,5</param>
+					<condition>activity[mine].done[10020]=[bool]false[default]false</condition>
+				</button>
+				<button type="click">
+					<action>openHintbox</action>
+					<param>type=Item</param>
+					<param>title=提示</param>
+					<param>content=5瓶甲烷燃气已经放入背包</param>
+					<param>item_icon=item[1102]</param>
+					<param>option_num=1</param>
+					<condition>activity[mine].done[10020]=[bool]false[default]false</condition>
+				</button>
+				<button type="click">
+					<action>setActivity</action>
+					<param>mine</param>
+					<param>done[10020]=true</param>
+					<condition>activity[mine].done[10020]=[bool]false[default]false</condition>
+				</button>
+			</eventHandler>
+		</npc>
+		<npc id="1002002" resId="Pets/pet/10030" name="Lv11 贝尔" size="46,44" pos="635,70" namePos="0,0">
+			<battle>
+				<branch id="default">
+					<settings count="6" capture="true">
+						<weather>2</weather>
+					</settings>
+					<enemy>
+						<pet id="10030" level="11">
+							<loopSkill>10050</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setItem</action>
+							<param>add</param>
+							<param>1202,1</param>
+							<condition>random[old]&lt;10</condition>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=1个水之精华已经放入背包</param>
+							<param>item_icon=item[1202]</param>
+							<param>option_num=1</param>
+							<condition>random[old]&lt;10</condition>
+						</button>
+					</winHandler>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>battle</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<npc id="1002003" resId="Pets/pet/10030" name="Lv12 贝尔" size="46,44" pos="460,80" namePos="0,0">
+			<battle>
+				<branch id="default">
+					<settings count="6" capture="true">
+						<weather>2</weather>
+					</settings>
+					<enemy>
+						<pet id="10030" level="12">
+							<loopSkill>10050</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setItem</action>
+							<param>add</param>
+							<param>1202,1</param>
+							<condition>random[old]&lt;10</condition>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=1个水之精华已经放入背包</param>
+							<param>item_icon=item[1202]</param>
+							<param>option_num=1</param>
+							<condition>random[old]&lt;10</condition>
+						</button>
+					</winHandler>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>battle</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<npc id="1002004" resId="Pets/pet/10905" name="Lv15 贝尔★" size="47,52" pos="280,270" namePos="0,0" active="false">
+			<description>稀有精灵</description>
+			<battle>
+				<branch id="default">
+					<settings count="6" capture="true">
+						<weather>2</weather>
+					</settings>
+					<enemy>
+						<pet id="10905" level="15">
+							<loopSkill>10050</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setItem</action>
+							<param>add</param>
+							<param>400000,1</param>
+							<condition>battle.result.state=1</condition>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=1个陨石碎片已经放入背包</param>
+							<param>item_icon=item[400000]</param>
+							<param>option_num=1</param>
+							<condition>battle.result.state=1</condition>
+						</button>
+					</winHandler>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>battle</action>
+					<param>default</param>
+				</button>
+				<button type="auto">
+					<action>setNpcParam</action>
+					<param>1002004</param>
+					<param>active=true</param>
+					<condition>random[0~4096]&lt;1</condition>
+				</button>
+			</eventHandler>
+		</npc>
+		<teleport id="1" name="传送室" pos="740,420" targetMapId="10001"/>
+	</entities>		
+</map>

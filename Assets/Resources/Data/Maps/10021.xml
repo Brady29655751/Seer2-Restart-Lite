@@ -1,0 +1,124 @@
+<map name="海洋星深水区" category="102" id="10021" weather="100002">
+	<initialPoint>540,240</initialPoint>
+	<music category="102">
+		<bgm>BGM_20</bgm>
+	</music>
+	<entities>
+		<npc id="1002100" resId="1001" name="" size="200,200" pos="95,0" namePos="0,0" color="0,0,0,0">
+			<description>海洋星海底</description>
+			<transport>215,80</transport>
+			<eventHandler>
+				<button type="click">
+					<action>teleport</action>
+					<param>10022</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<npc id="1002101" resId="1001" name="" size="250,180" pos="640,300" namePos="0,0" color="0,0,0,0">
+			<description>海洋星浅水区</description>
+			<transport>780,340</transport>
+			<eventHandler>
+				<button type="click">
+					<action>teleport</action>
+					<param>10020</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<npc id="1002102" resId="Items/1101" name="" size="220,150" pos="740,0" namePos="0,0" color="0,0,0,0">
+			<description>黄晶矿</description>
+			<eventHandler>
+				<button type="click">
+					<action>openHintbox</action>
+					<param>type=Item</param>
+					<param>title=提示</param>
+					<param>content=矿脉需要合理开发，明天再来吧！</param>
+					<param>item_icon=item[1101]</param>
+					<param>option_num=1</param>
+					<condition>activity[mine].done[10021]=[bool]true[default]false</condition>
+				</button>
+				<button type="click">
+					<action>setItem</action>
+					<param>add</param>
+					<param>1101,10</param>
+					<condition>activity[mine].done[10021]=[bool]false[default]false</condition>
+				</button>
+				<button type="click">
+					<action>openHintbox</action>
+					<param>type=Item</param>
+					<param>title=提示</param>
+					<param>content=10个黄晶矿已经放入背包</param>
+					<param>item_icon=item[1101]</param>
+					<param>option_num=1</param>
+					<condition>activity[mine].done[10021]=[bool]false[default]false</condition>
+				</button>
+				<button type="click">
+					<action>setActivity</action>
+					<param>mine</param>
+					<param>done[10021]=true</param>
+					<condition>activity[mine].done[10021]=[bool]false[default]false</condition>
+				</button>
+			</eventHandler>
+		</npc>
+		<npc id="1002103" resId="1001" name="" size="150,100" pos="700,155" namePos="0,0" color="0,0,0,0">
+			<description>利牙鱼的口腔护理</description>
+			<dialog>
+				<branch id="default" name="利牙鱼" icon="Pets/pet/10033" size="110,112" pos="10,45">
+					<content><![CDATA[目前还没有利牙鱼需要口腔护理哦！敬请期待！]]></content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[啊？？？]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+					</replyHandler>
+				</branch>
+			</dialog>
+			<eventHandler>
+				<button type="click">
+					<action>miniGame</action>
+					<param>BrushTeeth</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<npc id="1002104" resId="Pets/pet/10198" name="Lv13 小鳍鱼" size="69,60" pos="420,180" namePos="0,0">
+			<battle>
+				<branch id="default">
+					<settings count="6" capture="true">
+						<initBuff>(field:600002)</initBuff>
+					</settings>
+					<enemy>
+						<pet id="10198" level="13">
+							<loopSkill>10401</loopSkill>
+						</pet>
+					</enemy>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>battle</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<npc id="1002105" resId="Pets/pet/10198" name="Lv14 小鳍鱼" size="69,60" pos="290,130" namePos="0,0">
+			<battle>
+				<branch id="default">
+					<settings count="6" capture="true">
+						<initBuff>(field:600002)</initBuff>
+					</settings>
+					<enemy>
+						<pet id="10198" level="14">
+							<loopSkill>10401</loopSkill>
+						</pet>
+					</enemy>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>battle</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+	</entities>		
+</map>

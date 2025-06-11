@@ -24,7 +24,10 @@ public class TitleManager : Manager<TitleManager>
 
     private void SetBackgroundPageImage() {
         var modBackgroundSprite = ResourceManager.instance.GetLocalAddressables<Sprite>("Activities/FirstPage", true);
-        if (modBackgroundSprite == null) {
+
+        if (modBackgroundSprite == null)
+        {
+            /*
             var path = $"{Application.persistentDataPath}/Resources/Activities/{GameManager.platform}/";
             var backgroundPath = path + "map_423";
             var petPath = path + "pfa_940";
@@ -58,25 +61,28 @@ public class TitleManager : Manager<TitleManager>
                 // TransformHelper.Flip(obj1.transform);
 
                 var swf = obj1.GetComponent<SwfClipController>();
-                if (swf != null) {
+                if (swf != null)
+                {
                     swf.loopMode = SwfClipController.LoopModes.Once;
-                    swf.OnStopPlayingEvent += (controller) => {
+                    swf.OnStopPlayingEvent += (controller) =>
+                    {
                         obj1.SetActive(false);
                         obj.SetActive(true);
                     };
                     swf.GotoAndPlay(0);
-                }   
+                }
             }
 
-            /*
+            //
             var obj2 = Instantiate(map, Camera.main.transform);
             if (obj2 == null)
                 return;
 
             obj2.transform.localScale = new Vector3(1.5f, 1.45f, 1);
             obj2.transform.localPosition = new Vector3(-4.75f, -1.6f, 10);
-            */
+            //
             backgroundImage.gameObject.SetActive(false);
+            */
             return;
         }
         

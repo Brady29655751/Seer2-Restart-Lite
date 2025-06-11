@@ -39,6 +39,7 @@ public class PetBagPanel : Panel
     public override void Init()
     {
         base.Init();
+        demoController?.SetMode(mode);
         itemController?.SetMode(mode);
         featureController?.SetMode(mode);
         StartCoroutine(PreloadPetAnimCoroutine(GetPetBag(), InitMode));

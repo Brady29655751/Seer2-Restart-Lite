@@ -72,6 +72,7 @@ public static class NpcHandler
             NpcAction.Player        => () => NpcActionHandler.SetPlayer(handler),
             NpcAction.SetMail       => () => NpcActionHandler.SetMail(handler),
             NpcAction.Fish          => () => NpcActionHandler.Fish(),
+            NpcAction.MiniGame      => () => NpcActionHandler.MiniGame(handler),
             _ => () => handler.callback?.ForEach(x => x?.Invoke()),
         };
     }

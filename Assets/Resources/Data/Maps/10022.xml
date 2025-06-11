@@ -1,0 +1,237 @@
+<map name="海洋星海底" category="102" id="10022" weather="100002">
+	<initialPoint>325,285</initialPoint>
+	<music category="102">
+		<bgm>BGM_20</bgm>
+	</music>
+	<entities>
+		<npc id="1002203" resId="Pets/pet/10034" name="" size="230,160" pos="730,380" namePos="0,0" color="0,0,0,0">
+		<description>SPT</description>
+		<dialog>
+			<branch id="default" name="钢牙鲨" icon="Pets/pet/10034" size="105,90" pos="10,55">
+				<content><![CDATA[（一直盯着你，盯得你心里发寒）]]></content>
+				<functionHandler>
+					<func type="click">
+						<description><![CDATA[挑战钢牙鲨]]></description>
+						<action>openHintbox</action>
+						<param>type=Item</param>
+						<param>content=钢牙鲨很厉害，确定要挑战他吗？</param>
+						<param>option_num=2</param>
+						<param>item_icon=pet[10034]</param>
+						<param>callback=battle</param>
+					</func>
+					<func type="click">
+						<description><![CDATA[超进化]]></description>
+						<action>battle</action>
+						<param>evolve</param>
+					</func>
+					<!--
+					<func type="click">
+						<description><![CDATA[神迹觉醒]]></description>
+						<action>battle</action>
+						<param>miracle</param>
+					</func>
+					-->
+				</functionHandler>
+				<replyHandler>
+					<reply type="click">
+						<description><![CDATA[钢牙鲨很厉害]]></description>
+						<action>openDialog</action>
+						<param>null</param>
+					</reply>
+				</replyHandler>
+			</branch>
+		</dialog>
+			<battle>
+				<branch id="default">
+					<settings count="6">
+						<mode>3</mode>
+						<initBuff>(field:600002)</initBuff>
+					</settings>
+					<enemy>
+						<pet id="10034" level="100">
+							<status>
+								<hp>5000</hp>
+							</status>
+							<initBuff>13,14,17,20,-3000</initBuff>
+							<headerSkill>12116</headerSkill>
+							<loopSkill>11522,12120,12118</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>getPet</action>
+							<param>10033,1</param>
+							<condition>activity[spt].done[new][2][default]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=【利牙鱼】已经放入精灵仓库</param>
+							<param>item_icon=pet[10033]</param>
+							<param>option_num=1</param>
+							<condition>activity[spt].done[new][2][default]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>spt</param>
+							<param>done[new][2][default]=true</param>
+							<condition>activity[spt].done[new][2][default]=[bool]false[default]false</condition>
+						</button>
+					</winHandler>
+				</branch>
+				<branch id="evolve">
+					<settings count="6">
+						<mode>3</mode>
+						<initBuff>(field:600002)</initBuff>
+					</settings>
+					<enemy>
+						<pet id="11230" level="100">
+							<status>
+								<hp>10000</hp>
+							</status>
+							<initBuff>13,14,17,20,61,-3000</initBuff>
+							<loopSkill>12130,12129,12123</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=PetSelect</param>
+						    <param>title=选择要进化的钢牙鲨</param>
+						    <param>option_num=2</param>
+						    <param>callback=evolve</param>
+						</button>
+					</winHandler>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>openDialog</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+			<callbackHandler>
+				<button type="battle">
+					<action>battle</action>
+					<param>default</param>
+				</button>
+				<button type="choose">
+					<action>openHintbox</action>
+					<param>type=PetSelect</param>
+				    <param>title=选择要进化的钢牙鲨</param>
+				    <param>option_num=2</param>
+					<param>callback=evolve</param>
+				    <condition>data.PetSelect.uidNOT10034|data.PetSelect.level&lt;100</condition>
+				</button>
+				<button type="evolve">
+				    <action>openHintbox</action>
+				    <param>type=Item</param>
+				    <param>title=提示</param>
+				    <param>content=必须选择等级100的钢牙鲨！</param>
+				    <param>item_icon=pet[10034]</param>
+				    <param>option_num=1</param>
+					<param>callback=choose</param>
+				    <condition>data.PetSelect.uidNOT10034|data.PetSelect.level&lt;100</condition>
+				</button>
+				<button type="evolve">
+				    <action>openHintbox</action>
+				    <param>type=Item</param>
+				    <param>title=提示</param>
+				    <param>content=钢牙鲨已成功超进化</param>
+				    <param>item_icon=pet[11230]</param>
+				    <param>option_num=1</param>
+				    <condition>data.PetSelect.uid=10034</condition>
+				    <condition>data.PetSelect.levelGTE100</condition>
+				</button>
+				<button type="evolve">
+				    <action>evolvePet</action>
+				    <param>index=data.PetSelectIndex</param>
+				    <param>11230</param>
+				    <condition>data.PetSelect.uid=10034</condition>
+				    <condition>data.PetSelect.levelGTE100</condition>
+				</button>
+				<button type="evolve">
+				    <action>setPet</action>
+				    <param>index=data.PetSelectIndex</param>
+				    <param>skill=12127</param>
+				    <param>skill=12128</param>
+				    <param>skill=12129</param>
+				    <param>skill=12130</param>
+				    <condition>data.PetSelect.uid=10034</condition>
+				    <condition>data.PetSelect.levelGTE100</condition>
+				</button>
+			</callbackHandler>
+		</npc>
+		<npc id="1002200" resId="1001" name="" size="200,200" pos="70,340" namePos="0,0" color="0,0,0,0">
+			<description>海洋星深水区</description>
+			<transport>190,420</transport>
+			<eventHandler>
+				<button type="click">
+					<action>teleport</action>
+					<param>10021</param>
+				</button>
+				<button type="auto">
+					<action>openHintbox</action>
+					<param>type=Item</param>
+					<param>content=海底很危险，穿上潜水装才能进入哦！</param>
+					<param>item_icon=buff[420010]</param>
+					<param>option_num=1</param>
+					<param>callback=teleport</param>
+					<condition>player.shootNOT7001</condition>
+				</button>
+			</eventHandler>
+			<callbackHandler>
+				<button type="teleport">
+					<action>teleport</action>
+					<param>10021</param>
+				</button>
+			</callbackHandler>
+		</npc>
+		<npc id="1002201" resId="Pets/pet/10108" name="Lv20 布鲁" size="60,58" pos="400,160" namePos="0,-5" active="false">
+			<description>神秘的精灵</description>
+			<dialog>
+				<branch id="default" name="布鲁" icon="Pets/pet/10108" size="120,115" pos="0,35">
+					<content><![CDATA[你有看到我的朋友吗？]]></content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[没遇到过]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+						<reply type="click">
+							<description><![CDATA[我带你去找吧！]]></description>
+							<action>battle</action>
+							<param>default</param>
+						</reply>
+					</replyHandler>
+				</branch>
+			</dialog>
+			<battle>
+				<branch id="default">
+					<settings count="6" capture="true">
+						<initBuff>(field:600002)</initBuff>
+					</settings>			
+					<enemy>
+						<pet id="10108" level="5">
+							<initBuff>-2</initBuff>
+							<loopSkill>10002,10002,10002,10002,-4</loopSkill>
+						</pet>
+					</enemy>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="auto">
+					<action>setNpcParam</action>
+					<param>1002201</param>
+					<param>active=true</param>
+					<condition>random[new]LTE5</condition>
+				</button>
+				<button type="click">
+					<action>openDialog</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+	</entities>		
+</map>

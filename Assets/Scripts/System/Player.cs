@@ -21,8 +21,10 @@ public class Player : Singleton<Player>
 
     public int currentNpcId = 0;
     public int currentMissionId = 0;
+    public Activity currentMiniGame = null;
 
-    public int random {
+    public int random
+    {
         get => (int)GetSceneData("random", 0) / (petBag.Any(x => (x != null) && ((Buff.GetEmblemBuff(x)?.id ?? 0) == 20_0051)) ? 4 : 1);
         set => SetSceneData("random", value);
     }

@@ -26,6 +26,7 @@ public class ResourceManager : Singleton<ResourceManager>
     public string SEPath => "SE/";
     public string prefabPath => "Prefabs/";
     public string panelPath => "Panels/";
+    public string miniGamePath => "Games/";
     public string mapPath => "Maps/";
 
     public string numString => "0123456789%";
@@ -433,6 +434,12 @@ public class ResourceManager : Singleton<ResourceManager>
         return (panel == null) ? LoadPanel(item) : panel;
     }
 
+    public GameObject GetMiniGame(string item)
+    {
+        GameObject panel = (GameObject)resDict.Get(miniGamePath + item + "/Game");
+        return (panel == null) ? LoadMiniGame(item) : panel;
+    }
+
 
     // Load and Cache the resources in resDict.
     public T Load<T>(string path, string resPath = null) where T : Object
@@ -465,6 +472,11 @@ public class ResourceManager : Singleton<ResourceManager>
     public GameObject LoadPanel(string path)
     {
         return Load<GameObject>(panelPath + path + "/Panel");
+    }
+
+    public GameObject LoadMiniGame(string path)
+    {
+        return Load<GameObject>(miniGamePath + path + "/Game");
     }
 
     public static T GetXML<T>(string text)
@@ -985,13 +997,27 @@ public class ResourceManager : Singleton<ResourceManager>
                 if (skill == null)
                     continue;
 
-                var itemDescription = "记载着技能学习诀窍的神秘书卷" + "[ENDL]" + "使精灵习得" + skill.name + "（对已习得此技能的精灵无效）";
+                var itemDescription = $"记载着技能学习诀窍的神秘书卷[ENDL]使精灵习得{skill.name}（对已习得此技能的精灵无效）";
                 var effectDescription = Skill.GetSkillDescriptionPreview(skill.rawDescription);
                 var skillItemInfo = new ItemInfo(10_0000 + id, "技能学习书（" + skill.name + "）", ItemType.Skill,
                     skill.isSuper ? 20 : 10, 6, "resId=110050", itemDescription, effectDescription);
-                var effect = new Effect("resident", "-1", "pet", "pet", "type=skill[" + id + "]&skill[" + id + "]_cmp=0", "set_pet", "type=skill&op=+&value=" + id);
+                var effect = new Effect("resident", "-1", "pet", "pet", $"type=skill[{id}]&skill[{id}]_cmp=0", "set_pet", $"type=skill&op=+&value={id}");
                 skillItemInfo.SetEffects(new List<Effect>(){ effect });
                 originalDict[10_0000 + id] = skillItemInfo;
+            }
+
+            foreach (var buffInfo in BuffInfo.database.Where(x => x?.options?.Get("group") == "trait"))
+            {
+                if (buffInfo == null)
+                    continue;
+
+                var itemDescription = $"一位神秘发明家的研究成果，临床实验证明可以引导精灵体内的奇异能力。[ENDL]使精灵异能指定改变为{buffInfo.name}";
+                var effectDescription = Buff.GetBuffDescriptionPreview(buffInfo.description);
+                var buffItemInfo = new ItemInfo(10_0000 + buffInfo.id, "异能催化剂（" + buffInfo.name + "）", ItemType.Personality,
+                    30, 6, $"resId=Buffs/{buffInfo.resId}", itemDescription, effectDescription);
+                var effect = new Effect("resident", "-1", "pet", "none", "none", "set_pet", $"type=trait&op=SET&value={buffInfo.id}");
+                buffItemInfo.SetEffects(new List<Effect>(){ effect });
+                originalDict[10_0000 + buffInfo.id] = buffItemInfo;
             }
 
             onSuccess?.Invoke(originalDict);

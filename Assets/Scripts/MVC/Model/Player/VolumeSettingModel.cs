@@ -10,21 +10,25 @@ public class VolumeSettingModel : Module
     public float battleBGMVolume { get; private set; }
     public float battleSEVolume { get; private set; }
     public bool flashWhenBigDamage { get; private set; }
-    public bool shakeWhenBigDamage { get; private set;}
+    public bool shakeWhenBigDamage { get; private set; }
 
     public float battleAnimSpeed { get; private set; }
-    
-    public void InitVolume() {
-        BGMVolume = settingsData.BGMVolume ;
+    public int initMapId { get; private set; }
+
+    public void InitVolume()
+    {
+        BGMVolume = settingsData.BGMVolume;
         UIVolume = settingsData.UIVolume;
         battleBGMVolume = settingsData.battleBGMVolume;
         battleSEVolume = settingsData.battleSEVolume;
         flashWhenBigDamage = settingsData.flashWhenBigDamage;
         shakeWhenBigDamage = settingsData.shakeWhenBigDamage;
         battleAnimSpeed = settingsData.battleAnimSpeed;
+        initMapId = settingsData.initMapId;
     }
 
-    public void OnConfirmSettings() {
+    public void OnConfirmSettings()
+    {
         settingsData.BGMVolume = BGMVolume;
         settingsData.UIVolume = UIVolume;
         settingsData.battleBGMVolume = battleBGMVolume;
@@ -32,32 +36,45 @@ public class VolumeSettingModel : Module
         settingsData.flashWhenBigDamage = flashWhenBigDamage;
         settingsData.shakeWhenBigDamage = shakeWhenBigDamage;
         settingsData.battleAnimSpeed = battleAnimSpeed;
+        settingsData.initMapId = initMapId;
         SaveSystem.SaveData();
     }
 
-    public void SetBGMVolume(float value) {
+    public void SetBGMVolume(float value)
+    {
         BGMVolume = value;
     }
-    public void SetUIVolume(float value) {
+    public void SetUIVolume(float value)
+    {
         UIVolume = value;
     }
-    public void SetBattleBGMVolume(float value) {
+    public void SetBattleBGMVolume(float value)
+    {
         battleBGMVolume = value;
     }
-    public void SetBattleSEVolume(float value) {
+    public void SetBattleSEVolume(float value)
+    {
         battleSEVolume = value;
     }
 
-    public void SetFlash(bool isOn) {
+    public void SetFlash(bool isOn)
+    {
         flashWhenBigDamage = isOn;
     }
 
-    public void SetShake(bool isOn) {
+    public void SetShake(bool isOn)
+    {
         shakeWhenBigDamage = isOn;
     }
 
-    public void SetBattleAnimSpeed(float value) {
+    public void SetBattleAnimSpeed(float value)
+    {
         battleAnimSpeed = value;
+    }
+
+    public void SetInitMapId(int value)
+    {
+        initMapId = value;
     }
 
 }

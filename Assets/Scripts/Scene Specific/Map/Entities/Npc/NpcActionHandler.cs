@@ -6,24 +6,27 @@ using UnityEngine;
 
 public static class NpcActionHandler
 {
-    public static void SetNpcParam(NpcController npc, NpcButtonHandler handler, Dictionary<int, NpcController> npcList) {
+    public static void SetNpcParam(NpcController npc, NpcButtonHandler handler, Dictionary<int, NpcController> npcList)
+    {
         if ((handler.param == null) || (handler.param.Count < 2))
             return;
 
         int id = int.Parse(handler.param[0]);
         var toNpc = npcList.Get(id, npc);
-        
-        for (int i = 1; i < handler.param.Count; i++) {
+
+        for (int i = 1; i < handler.param.Count; i++)
+        {
             var option = handler.param[i].Split('=');
             var expr = string.Empty;
-            switch (option[0]) {
+            switch (option[0])
+            {
                 default:
                     break;
                 case "active":
                     toNpc.SetActive(bool.Parse(option[1]));
                     break;
                 case "target":
-                    
+
                     break;
                 case "name":
                     toNpc.SetName(option[1].TryTrimStart("[expr]", out expr) ? Parser.ParseOperation(expr).ToString() : option[1]);
@@ -48,15 +51,18 @@ public static class NpcActionHandler
             }
         }
     }
-    
-    
-    public static void SetPlayer(NpcButtonHandler handler) {
+
+
+    public static void SetPlayer(NpcButtonHandler handler)
+    {
         if (handler.param == null)
             return;
-        
-        for (int i = 0; i < handler.param.Count; i++) {
+
+        for (int i = 0; i < handler.param.Count; i++)
+        {
             var option = handler.param[i].Split('=');
-            switch (option[0]) {
+            switch (option[0])
+            {
                 default:
                     break;
                 case "sprite":
@@ -66,13 +72,15 @@ public static class NpcActionHandler
         }
     }
 
-    public static void OpenHintbox(NpcController npc, NpcButtonHandler handler, Dictionary<int, NpcController> npcList) {
+    public static void OpenHintbox(NpcController npc, NpcButtonHandler handler, Dictionary<int, NpcController> npcList)
+    {
         if ((handler.param == null) || (handler.param.Count == 0))
             return;
-        
+
         var type = handler.param[0].Split('=');
 
-        Hintbox hintbox = type[1] switch {
+        Hintbox hintbox = type[1] switch
+        {
             "Item" => Hintbox.OpenHintbox<ItemHintbox>(),
             "PetSelect" => Hintbox.OpenHintbox<PetSelectHintbox>(),
             _ => Hintbox.OpenHintbox()
@@ -83,22 +91,28 @@ public static class NpcActionHandler
 
         if (handler.param.Count <= 1)
             return;
-        
-        for (int i = 1; i < handler.param.Count; i++) {
+
+        for (int i = 1; i < handler.param.Count; i++)
+        {
             var option = handler.param[i].Split('=');
-            if (option[0] == "callback") {
-                Action callback = () => {
-                    npc?.GetInfo()?.callbackHandler?.FindAll(x => x.typeId == option[1])?.ForEach(x => {
+            if (option[0] == "callback")
+            {
+                Action callback = () =>
+                {
+                    npc?.GetInfo()?.callbackHandler?.FindAll(x => x.typeId == option[1])?.ForEach(x =>
+                    {
                         NpcHandler.GetNpcEntity(npc, x, npcList)?.Invoke();
                     });
                 };
                 hintbox.SetOptionCallback(callback);
-            } else 
+            }
+            else
                 hintbox.SetPanelIdentifier(option[0], option[1]);
         }
     }
 
-    public static void OpenPanel(NpcButtonHandler handler) {
+    public static void OpenPanel(NpcButtonHandler handler)
+    {
         if ((handler.param == null) || (handler.param.Count == 0))
             return;
 
@@ -106,67 +120,80 @@ public static class NpcActionHandler
         if (handler.param.Count <= 1)
             return;
 
-        for (int i = 1; i < handler.param.Count; i++) {
+        for (int i = 1; i < handler.param.Count; i++)
+        {
             var option = handler.param[i].Split('=');
             panel.SetPanelIdentifier(option[0], option[1]);
         }
-    
+
     }
 
-    public static void OpenDialog(NpcInfo npcInfo, NpcButtonHandler handler) {
+    public static void OpenDialog(NpcInfo npcInfo, NpcButtonHandler handler)
+    {
         if ((handler.param == null) || (handler.param.Count == 0))
             return;
 
-        if (handler.param[0] == "null") {
+        if (handler.param[0] == "null")
+        {
             DialogManager.instance.CloseDialog();
             return;
         }
         DialogInfo dialogInfo = npcInfo?.dialogHandler?.Find(x => x.id == handler.param[0]);
         DialogManager.instance.SetCurrentNpc(npcInfo);
-      
-        if (dialogInfo?.content.StartsWith("story=") ?? false) {
+
+        if (dialogInfo?.content.StartsWith("story=") ?? false)
+        {
             dialogInfo.content = dialogInfo.content.Substring("story=".Length);
-            DialogManager.instance.OpenStoryDialog(dialogInfo); 
-        } else {
+            DialogManager.instance.OpenStoryDialog(dialogInfo);
+        }
+        else
+        {
             DialogManager.instance.OpenDialog(dialogInfo);
         }
-        
+
     }
 
-    public static void Teleport(NpcButtonHandler handler) {
+    public static void Teleport(NpcButtonHandler handler)
+    {
         if ((handler.param == null) || (handler.param.Count == 0))
             return;
 
         int mapId = int.Parse(handler.param[0]);
-        if (handler.param.Count == 1) {
+        if (handler.param.Count == 1)
+        {
             TeleportHandler.Teleport(mapId);
             return;
         }
         TeleportHandler.Teleport(mapId, handler.param[1].ToVector2());
     }
 
-    public static void SetItem(NpcButtonHandler handler) {
+    public static void SetItem(NpcButtonHandler handler)
+    {
         if ((handler.param == null) || (handler.param.Count < 2))
             return;
 
-        Action<Item> itemFunc = handler.param[0] switch {
-            "add"               => Item.Add,
-            "remove"            => (x) => Item.Remove(x.id, x.num),
-            "add_to_yite"       => (x) => Item.AddTo(x, YiTeRogueData.instance.itemBag),
-            "remove_from_yite"  => (x) => Item.RemoveFrom(x.id, x.num, YiTeRogueData.instance.itemBag),
+        Action<Item> itemFunc = handler.param[0] switch
+        {
+            "add" => Item.Add,
+            "remove" => (x) => Item.Remove(x.id, x.num),
+            "add_to_yite" => (x) => Item.AddTo(x, YiTeRogueData.instance.itemBag),
+            "remove_from_yite" => (x) => Item.RemoveFrom(x.id, x.num, YiTeRogueData.instance.itemBag),
             _ => null
         };
-        for (int i = 1; i < handler.param.Count; i++) {
+        for (int i = 1; i < handler.param.Count; i++)
+        {
             var itemInfo = handler.param[i].ToIntList();
             itemFunc?.Invoke(new Item(itemInfo[0], itemInfo[1]));
         }
     }
 
-    public static void GetPet(NpcButtonHandler handler) {
+    public static void GetPet(NpcButtonHandler handler)
+    {
         if ((handler.param == null) || (handler.param.Count == 0))
             return;
 
-        for (int i = 0; i < handler.param.Count; i++) {
+        for (int i = 0; i < handler.param.Count; i++)
+        {
             var petInfo = handler.param[i].ToIntList();
             int count = petInfo.Count;
             int id = petInfo[0];
@@ -178,11 +205,14 @@ public static class NpcActionHandler
         SaveSystem.SaveData();
     }
 
-    public static void RemovePet(NpcButtonHandler handler) {
+    public static void RemovePet(NpcButtonHandler handler)
+    {
         int index = 0;
-        if ((handler.param != null) && (handler.param.Count > 0)) {
+        if ((handler.param != null) && (handler.param.Count > 0))
+        {
             var petInfo = handler.param[0].Split('=');
-            if ((petInfo.Length >= 2) && (petInfo[0]?.ToLower() == "index")) {
+            if ((petInfo.Length >= 2) && (petInfo[0]?.ToLower() == "index"))
+            {
                 index = (int)Parser.ParseOperation(petInfo[1]);
                 if (!index.IsInRange(0, Player.instance.petBag.Length))
                     return;
@@ -196,17 +226,20 @@ public static class NpcActionHandler
         SaveSystem.SaveData();
     }
 
-    public static void SetPet(NpcButtonHandler handler) {
+    public static void SetPet(NpcButtonHandler handler)
+    {
         if ((handler.param == null) || (handler.param.Count == 0))
             return;
 
         int index = 0;
-        for (int i = 0; i < handler.param.Count; i++) {
+        for (int i = 0; i < handler.param.Count; i++)
+        {
             var petInfo = handler.param[i].Split('=');
             if (petInfo.Length < 2)
                 continue;
-            
-            if (petInfo[0].ToLower() == "index") {
+
+            if (petInfo[0].ToLower() == "index")
+            {
                 index = (int)Parser.ParseOperation(petInfo[1]);
                 if (!index.IsInRange(0, Player.instance.petBag.Length))
                     return;
@@ -219,13 +252,15 @@ public static class NpcActionHandler
         SaveSystem.SaveData();
     }
 
-    public static void EvolvePet(NpcButtonHandler handler) {
+    public static void EvolvePet(NpcButtonHandler handler)
+    {
         if ((handler.param == null) || (handler.param.Count == 0))
             return;
 
         int index = 0, paramOffset = 0;
         var petInfo = handler.param[0].Split('=');
-        if ((petInfo.Length >= 2) && (petInfo[0].ToLower() == "index")) {
+        if ((petInfo.Length >= 2) && (petInfo[0].ToLower() == "index"))
+        {
             paramOffset = 1;
             index = (int)Parser.ParseOperation(petInfo[1]);
             if (!index.IsInRange(0, Player.instance.petBag.Length))
@@ -237,12 +272,14 @@ public static class NpcActionHandler
         SaveSystem.SaveData();
     }
 
-    public static void SetMission(NpcButtonHandler handler) {
+    public static void SetMission(NpcButtonHandler handler)
+    {
         if ((handler.param == null) || (handler.param.Count < 2))
             return;
 
         int id = int.Parse(handler.param[0]);
-        switch (handler.param[1]) {
+        switch (handler.param[1])
+        {
             case "start":
                 Mission.Start(id);
                 break;
@@ -256,19 +293,22 @@ public static class NpcActionHandler
         SaveSystem.SaveData();
     }
 
-    public static void SetActivity(NpcButtonHandler handler) {
+    public static void SetActivity(NpcButtonHandler handler)
+    {
         if ((handler.param == null) || (handler.param.Count < 1))
             return;
-            
+
         var activity = Activity.Find(handler.param[0]);
-        for (int i = 1; i < handler.param.Count; i++) {
+        for (int i = 1; i < handler.param.Count; i++)
+        {
             var option = handler.param[i].Split('=');
             activity.SetData(option[0], option[1]);
         }
         SaveSystem.SaveData();
     }
 
-    public static void StartBattle(NpcInfo npcInfo, NpcButtonHandler handler) {
+    public static void StartBattle(NpcInfo npcInfo, NpcButtonHandler handler)
+    {
         if ((handler.param == null) || (handler.param.Count == 0))
             return;
 
@@ -276,7 +316,8 @@ public static class NpcActionHandler
         Player.instance.currentNpcId = (npcInfo == null) ? 0 : npcInfo.id;
         BattleInfo battleInfo = npcInfo.battleHandler.Find(x => x.id == handler.param[0]);
 
-        if (battleInfo == null) {
+        if (battleInfo == null)
+        {
             if (handler.param.Count <= 1)
                 return;
 
@@ -289,7 +330,8 @@ public static class NpcActionHandler
 
         bool isPlayerPetBag = (battleInfo.playerInfo == null) || (battleInfo.playerInfo.Count == 0);
         bool isFirstPetDead = (Player.instance.petBag[0] == null) || (Player.instance.petBag[0].currentStatus.hp == 0);
-        if (isPlayerPetBag && isFirstPetDead) {
+        if (isPlayerPetBag && isFirstPetDead)
+        {
             Hintbox hintbox = Hintbox.OpenHintbox();
             hintbox.SetTitle("提示");
             hintbox.SetContent("首发精灵血量耗尽，快去恢复精灵吧！", 14, FontOption.Arial);
@@ -297,27 +339,28 @@ public static class NpcActionHandler
             return;
         }
 
-        if ((battleInfo.settings.starLimit > 0) && Player.instance.petBag.Any(x => (x != null) && (x.info.star > battleInfo.settings.starLimit))) {
+        if ((battleInfo.settings.starLimit > 0) && Player.instance.petBag.Any(x => (x != null) && (x.info.star > battleInfo.settings.starLimit)))
+        {
             Hintbox.OpenHintboxWithContent("不能携带超过" + battleInfo.settings.starLimit + "星的精灵进行挑战哦", 16);
             return;
         }
-        
+
         Battle battle = new Battle(battleInfo);
         SceneLoader.instance.ChangeScene(SceneId.Battle);
     }
 
-    public static void SetMail(NpcButtonHandler handler) {
+    public static void SetMail(NpcButtonHandler handler)
+    {
         if ((handler.param == null) || (handler.param.Count == 0))
-            return;
-
-        if (handler.param.Count < 1)
             return;
 
         var mail = new Mail() { date = DateTime.Now };
 
-        for (int i = 0; i < handler.param.Count; i++) {
+        for (int i = 0; i < handler.param.Count; i++)
+        {
             var option = handler.param[i].Split('=');
-            switch (option[0]) {
+            switch (option[0])
+            {
                 default:
                     break;
                 case "from":
@@ -330,7 +373,8 @@ public static class NpcActionHandler
                     mail.content = option[1];
                     break;
                 case "item":
-                    mail.items = option[1].Split('/').Select(x => {
+                    mail.items = option[1].Split('/').Select(x =>
+                    {
                         var itemInfo = x.ToIntList();
                         return new Item(itemInfo[0], itemInfo[1]);
                     }).ToList();
@@ -340,16 +384,17 @@ public static class NpcActionHandler
         Mail.Add(mail);
     }
 
-    public static void Fish() {
+    public static void Fish()
+    {
         int itemId;
         List<int> probability;
-        
+
         switch (Player.instance.currentMap.categoryId)
         {
             default:
                 if (Player.instance.gameData.achievement != 7004)
                     return;
-                    
+
                 probability = new List<int>() { 25, 40, 15, 10, 7, 3 };
                 itemId = Enumerable.Range(1005, 6).ToList().Random(probability);
                 break;
@@ -364,5 +409,14 @@ public static class NpcActionHandler
         var fish = new Item(itemId, 1);
         Item.Add(fish);
         Item.OpenHintbox(fish);
+    }
+
+    public static void MiniGame(NpcButtonHandler handler)
+    {
+        if (ListHelper.IsNullOrEmpty(handler.param))
+            return;
+
+        Player.instance.currentMiniGame = new Activity(handler.param[0]);
+        SceneLoader.instance.ChangeScene(SceneId.Game);
     }
 }

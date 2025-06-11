@@ -9,6 +9,7 @@ public class NormalLoadingScreen : LoadingScreen
 {
     protected override IEnumerator ChangeSceneCoroutine(int sceneIndex, Action finishedCallback = null) {
         int loadMapSuccess = 0;
+        var sceneId = (SceneId)sceneIndex;
         void OnRequestSuccess(Map map) {
             Player.instance.currentMap = map;
             loadMapSuccess = 1;
@@ -17,6 +18,7 @@ public class NormalLoadingScreen : LoadingScreen
             loadingText?.SetText(error);
             loadMapSuccess = -1;
         }
+
         loadingText?.SetText("正在载入地图");
         Database.instance.GetMap(Player.instance.currentMapId, OnRequestSuccess, OnRequestFail);
         while (loadMapSuccess == 0) {
@@ -33,7 +35,7 @@ public class NormalLoadingScreen : LoadingScreen
             yield return null;
         }
 
-        GameManager.instance.ChangeState(GameState.Play);
+        GameManager.instance.ChangeState((sceneId == SceneId.Game) ? GameState.MiniGame : GameState.Play);
 
         if (loadMapSuccess == 1)
             finishedCallback?.Invoke();

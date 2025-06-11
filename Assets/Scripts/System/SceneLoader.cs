@@ -88,10 +88,12 @@ public class SceneLoader : Singleton<SceneLoader>
     }
 }
 
-public enum SceneId {
+public enum SceneId
+{
     Title = 0,
     Login = 1,
     Map = 2,
     Battle = 3,
     Room = 4,
+    Game = 5,
 }

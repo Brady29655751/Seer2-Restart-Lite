@@ -17,30 +17,36 @@ public class Activity
     [XmlArray("data"), XmlArrayItem(typeof(IKeyValuePair<string, string>), ElementName = "entry")]
     public List<IKeyValuePair<string, string>> data = new List<IKeyValuePair<string, string>>();
 
-    public string this[string key] {
+    public string this[string key]
+    {
         get => GetData(key);
         set => SetData(key, value);
     }
 
-    public static ActivityInfo GetActivityInfo(string id) {
+    public static ActivityInfo GetActivityInfo(string id)
+    {
         return Database.instance.GetActivityInfo(id);
     }
 
-    public static List<ActivityInfo> GetActivityInfoList() {
+    public static List<ActivityInfo> GetActivityInfoList()
+    {
         return Database.instance.activityInfos;
     }
 
-    public static Activity Find(string id) {
+    public static Activity Find(string id)
+    {
         var activityStorage = Player.instance.gameData.activityStorage;
         var activity = activityStorage.Find(x => x.id == id);
-        if (activity == null) {
+        if (activity == null)
+        {
             activity = new Activity(id);
             activityStorage.Add(activity);
         }
         return activity;
     }
 
-    public static void Link(string id) {
+    public static void Link(string id)
+    {
         ActivityInfo info = GetActivityInfo(id);
         if ((info == null) || (info.linkId == "none"))
             return;
@@ -48,33 +54,44 @@ public class Activity
         Panel.Link(info.linkId);
     }
 
-    public static void DailyLogin() {
+    public static void DailyLogin()
+    {
         var activityStorage = Player.instance.gameData.activityStorage;
         activityStorage.RemoveAll(x => (x?.info != null) && (x.info.type == ActivityType.Daily));
     }
 
-    public static void VersionUpdate() {
+    public static void VersionUpdate()
+    {
         GameData gameData = Player.instance.gameData;
         string activityDataVersion = gameData.version;
-        
-        if (VersionData.Compare(activityDataVersion, "lite_2.9.2") < 0) {
+
+        if (VersionData.Compare(activityDataVersion, "lite_2.9.2") < 0)
+        {
             gameData.activityStorage.RemoveAll(x => x.id == "noob_reward");
             activityDataVersion = "lite_2.9.2";
         }
     }
 
-    public Activity() {}
-    public Activity(string id) {
+    public Activity() { }
+    public Activity(string id)
+    {
         this.id = id;
         this.data = new List<IKeyValuePair<string, string>>();
     }
 
-    public string GetData(string key, string defaultValue = null) {
+    public string GetData(string key, string defaultValue = null)
+    {
         var entry = data.Find(x => x.key == key);
         return ((entry == null) || (entry.value == null)) ? defaultValue : entry.value;
     }
 
-    public void SetData(string key, string value) {
+    public T GetData<T>(string key, string defaultValue = null)
+    {
+        return (T)Convert.ChangeType(GetData(key, defaultValue), typeof(T));
+    }
+
+    public void SetData(string key, string value)
+    {
         // Handle Value.
         // For example, [expr]200+activity[10001].damage[default]123
         if (value.TryTrimStart("[expr]", out var expr))
@@ -86,5 +103,7 @@ public class Activity
         else
             entry.value = value;
     }
+
+    public void SetData(string key, object value) => SetData(key, value.ToString());
 
 }

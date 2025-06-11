@@ -4,15 +4,25 @@ using UnityEngine;
 
 public class PetDemoController : Module
 {
+    [SerializeField] private PetBagMode mode;
     [SerializeField] private PetDemoModel demoModel;
     [SerializeField] private PetDemoView demoView;
 
-    public void SetPet(Pet pet) {
+    public void SetPet(Pet pet)
+    {
         demoModel.SetPet(pet);
         demoView.SetPet(pet, demoModel.animMode);
+        if (mode == PetBagMode.YiTeRogue)
+            demoView.SetIVRank((IVRanking)Mathf.Clamp(pet.talent.IVRankId, 0, 4));
     }
 
-    public void SetPetAnimationActive(bool active) {
+    public void SetMode(PetBagMode mode)
+    {
+        this.mode = mode;
+    }
+
+    public void SetPetAnimationActive(bool active)
+    {
         demoView.SetAnimation(active ? demoModel.currentPet : null, demoModel.animMode);
     }
 

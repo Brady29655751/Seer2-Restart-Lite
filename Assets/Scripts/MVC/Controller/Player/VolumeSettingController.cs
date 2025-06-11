@@ -15,42 +15,59 @@ public class VolumeSettingController : Module
         volumeView.SetSliderVolume(volumeModel.settingsData);
     }
 
-    public void OnConfirmSettings() {
+    public void OnConfirmSettings()
+    {
         volumeModel.OnConfirmSettings();
         volumeView.OnConfirmSettings();
     }
 
-    public void OnBGMValueChanged(float value) {
+    public void OnBGMValueChanged(float value)
+    {
         volumeModel.SetBGMVolume(value);
         volumeView.SetBGMVolume(volumeModel.BGMVolume);
     }
 
-    public void OnBattleBGMValueChanged(float value) {
+    public void OnBattleBGMValueChanged(float value)
+    {
         volumeModel.SetBattleBGMVolume(value);
         volumeView.SetBattleBGMVolume(volumeModel.battleBGMVolume);
     }
 
-    public void OnBattleSEValueChanged(float value) {
+    public void OnBattleSEValueChanged(float value)
+    {
         volumeModel.SetBattleSEVolume(value);
         volumeView.SetBattleSEVolume(volumeModel.battleSEVolume);
     }
 
-    public void OnUIValueChanged(float value) {
+    public void OnUIValueChanged(float value)
+    {
         volumeModel.SetUIVolume(value);
         volumeView.SetUIVolume(volumeModel.UIVolume);
     }
 
-    public void OnBigDamageFlashChanged(bool isOn) {
+    public void OnBigDamageFlashChanged(bool isOn)
+    {
         volumeModel.SetFlash(isOn);
     }
 
-    public void OnBigDamageShakeChanged(bool isOn) {
+    public void OnBigDamageShakeChanged(bool isOn)
+    {
         volumeModel.SetShake(isOn);
     }
 
-    public void OnBattleAnimSpeedChanged() {
+    public void OnBattleAnimSpeedChanged()
+    {
         float speed = (volumeModel.battleAnimSpeed == 1) ? 2 : 1;
         volumeModel.SetBattleAnimSpeed(speed);
         volumeView.SetBattleAnimSpeedText(volumeModel.battleAnimSpeed);
+    }
+
+    public void OnInitMapChanged()
+    {
+        int initMapId = (volumeModel.initMapId == -70) ? 10001 : -70;
+        volumeModel.SetInitMapId(initMapId);
+        volumeView.SetInitMapText(initMapId);
+        
+        volumeModel.OnConfirmSettings();
     }
 }

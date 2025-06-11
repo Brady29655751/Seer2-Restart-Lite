@@ -66,6 +66,7 @@ public static class NpcActionDatabase {
         { "player", NpcAction.Player },
         { "mail", NpcAction.SetMail },
         { "fish", NpcAction.Fish },
+        { "miniGame", NpcAction.MiniGame },
     };
 
     private static List<NpcAction> petActionList = new List<NpcAction>() {
@@ -90,7 +91,8 @@ public enum ButtonEventType {
     OnPointerOver,
 }
 
-public enum NpcAction {
+public enum NpcAction
+{
     None,
     SetNpcParam,
     OpenHintbox,
@@ -108,4 +110,5 @@ public enum NpcAction {
     Player,
     SetMail,
     Fish,
+    MiniGame,
 }
