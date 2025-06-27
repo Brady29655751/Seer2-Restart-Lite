@@ -129,6 +129,7 @@ id,name,type,copyType,turn,options,description
 118,禁闭,abnormal,replace,2,res=115&movable=true,物攻技能[value]%几率失效
 119,魔狱,abnormal,replace,2,res=116&movable=true,特攻技能[value]%几率失效
 120,停滞,abnormal,replace,1,movable=true,自身的主动换场会失效
+122,冰封,abnormal,replace,2,none,无法行动，结束时会转化为冻伤并降低速度1级
 123,疲惫,abnormal,replace,2,none,非常疲惫，无法行动
 126,失神,abnormal,replace,-1,res=114&movable=true&auto_remove=true,下[value]次属性技能[option[value]]%几率失效
 127,禁闭,abnormal,replace,-1,res=115&movable=true&auto_remove=true,下[value]次物攻技能[option[value]]%几率失效
@@ -563,7 +564,7 @@ id,name,type,copyType,turn,options,description
 3318,火花印记,chance,replace,-1,none,对手下次攻击必定暴击
 3319,火花躯体,turn,replace,3,none,受到攻击时使对手烫伤
 3320,明镜止水,turn,replace,3,res=19,每回合回复1/6体力
-3321,天轮阳舞诀,chance,replace,-1,res=3217&legacy=true,阵亡时下一个上场的精灵损失1/3体力恢复对手，最高不超过对手最大体力的1会失3
+3321,天轮阳舞诀,chance,replace,-1,res=3217&legacy=true,阵亡时下一个上场的精灵损失1/3体力恢复对手，最高不超过对手最大体力的1/3
 3322,技能无效,chance,replace,-1,none,使用[ffbb33]【[skill]】[-]会失效
 3323,圣芒驱散,mark,replace,-1,keep=false&inherit=true,主动换场时下一个出场精灵随机获得异常状态和不良状态各1种
 3324,储备弹,mark,stack,-1,max_val=4,每层使特攻恢复5点怒气，最多4层[ENDL]当前为[value]层
@@ -582,6 +583,15 @@ id,name,type,copyType,turn,options,description
 3337,水蚀,chance,replace,-1,none,下次受到水系攻击伤害翻倍
 3338,蓝光,turn,replace,3,none,水系技能威力提升10点
 3339,锁敌,mark,replace,-1,keep=false&inherit=true&legacy=true,对手的技能必中（换场继承）
+3340,腾飞,mark,replace,-1,none,受到攻击时获得1层升空状态
+3341,升空,mark,stack,-1,max_val=4,每层增加15%闪避率，最高叠加4层[ENDL]受到暴击时移除此印记
+3342,银月印记,chance,replace,-1,inherit=true,出场时当回合闪避率提高70%并移除（主动换场继承）
+3343,彩虹羽,mark,replace,-1,none,受到暴击时吸取对手100点体力
+3344,天空领域,mark,replace,-1,none,体力低于1/2时闪避率提升15%
+3345,踏浪迎击,chance,replace,-1,none,下一次攻击连击数2倍
+3346,混沌海潮,mark,replace,-1,none,对手使用攻击技能会弱化对手双攻1级，对手使用属性技能会弱化对手速度和命中1级
+3347,海之契约,mark,replace,-1,res=3346,对手使用攻击技能会冰封，对手使用属性技能会弱化对手全能力1级
+3348,过载,mark,replace,-1,none,使用必杀技以外的技能会恢复等量怒气
 100001,终结,feature,replace,-1,none,体力低于1/4时，消耗弱点记号的技能伤害增加25%，且使水泡必中并附加30点伤害
 100004,炎火,feature,replace,-1,none,体力低于1/4时，火系技能造成的伤害增加25%，且使火焰必中并附加30点伤害
 100007,坚韧,feature,replace,-1,none,体力低于1/4时，受到的伤害减少25%，且使种子爆弹必中并附加30点伤害
@@ -630,10 +640,11 @@ id,name,type,copyType,turn,options,description
 100154,紫电,feature,replace,-1,none,特攻技能伤害增加10%，物攻技能命中率增加10%
 100156,飞翔,feature,replace,-1,none,每使用2次飞行系技能恢复自身15点怒气
 100166,通缉,feature,replace,-1,none,对手具有通缉令时攻击恢复自身5点怒气
+100172,过载,feature,replace,-1,none,回合开始时若怒气高于70则获得1回合过载
 100174,武斗,feature,replace,-1,none,造成伤害增加10点，双精灵时效果2倍
 100176,仁义,feature,replace,-1,none,受到伤害减少10点，双精灵时效果2倍
 100178,潜能,feature,replace,-1,none,攻击附带自身个体值的伤害
-100179,夜行,feature,replace,-1,none,每次登场时使环境转变为夜幕
+100179,夜行,feature,replace,-1,none,每次出场时使环境转变为夜幕
 100181,拷问,feature,replace,-1,none,攻击具有拷问者的对手减少对手5点怒气
 100188,胆怯,feature,replace,-1,none,伤害增加10%但每回合失去5点怒气
 100192,炽热,feature,replace,-1,none,炎热时每回合使对手失去1/16体力，最高不超过自身最大体力的1/16
@@ -680,7 +691,7 @@ id,name,type,copyType,turn,options,description
 100593,苍穹,feature,replace,-1,none,受到暴击时使自身下次攻击必定暴击
 100658,龙王,feature,replace,-1,none,攻击龙系精灵伤害2倍，受到龙系伤害减半
 100735,斗神,feature,replace,-1,none,先出手时附带35点伤害，后出手时恢复35点体力
-100757,本源,feature,replace,-1,none,首次登场时若全能力值（不含体力）相等则全能力值提升10%
+100757,本源,feature,replace,-1,none,首次出场时若全能力值（不含体力）相等则全能力值提升10%
 100761,固态,feature,replace,-1,none,固态化状态下受到的克制系伤害不超过200
 100762,液态,feature,replace,-1,none,液态化状态下受到的暴击伤害减少25%
 100763,气态,feature,replace,-1,none,气态化状态下攻击无视对手防御类强化
@@ -702,6 +713,7 @@ id,name,type,copyType,turn,options,description
 100982,灵脉,feature,replace,-1,none,免疫不良状态，回合结束时体力为1会怒气回满，血衣状态下对手暴击-1
 100983,灵幻,feature,replace,-1,none,免疫不良状态，怒气上限提升为200点
 100984,灵沁,feature,replace,-1,none,免疫不良状态，暴击时回复10点怒气
+100987,灵翼,feature,replace,-1,none,免疫不良状态，成功闪避时恢复35点体力
 100988,灵影,feature,replace,-1,none,免疫不良状态，被对手技能命中时生成1枚影钩
 100989,最强,feature,replace,-1,none,全能力值提升100点
 100990,王者,feature,replace,-1,none,免疫不良状态，怒气不低于30
@@ -725,8 +737,10 @@ id,name,type,copyType,turn,options,description
 110301,飞叶,feature,replace,-1,none,晴天环境下受到的暴击伤害减半
 110304,骇浪,feature,replace,-1,none,雨天环境下造成的伤害增加15%
 110307,魔焰,feature,replace,-1,none,炎热环境下暴击率增加15%
+110346,鱼龙,feature,replace,-1,none,攻击水系精灵伤害翻倍，受到的龙系伤害减半
 110499,时空,feature,replace,-1,none,首发时可以进入超时空通道
 110809,灵光,feature,replace,-1,none,攻击技能命中10%使对手麻痹
+113309,鱼王,feature,replace,-1,none,[ffbb33]【专属动作】[-]神迹觉醒[ENDL][ffbb33]【时点】[-]决定技能时[ENDL][ffbb33]【条件】[-]深海场地
 113326,灵兽,feature,replace,-1,none,[ffbb33]【专属动作】[-]神迹觉醒[ENDL][ffbb33]【时点】[-]决定技能时[ENDL][ffbb33]【条件】[-]森林场地
 114198,花仙,feature,replace,-1,none,[ffbb33]【专属动作】[-]神迹觉醒[ENDL][ffbb33]【时点】[-]决定技能时[ENDL][ffbb33]【条件】[-]具有藤蔓生长状态
 114693,蘑神,feature,replace,-1,none,[ffbb33]【专属动作】[-]神迹觉醒[ENDL][ffbb33]【时点】[-]决定技能时[ENDL][ffbb33]【条件】[-]任意一方处于中毒状态
@@ -752,7 +766,7 @@ id,name,type,copyType,turn,options,description
 200039,焰火,emblem,replace,-1,none,增加1回合焰火的效果回合数
 200041,虚弱,emblem,replace,-1,none,对手处于能力下降状态时自身伤害增加10%
 200046,辉之,emblem,replace,-1,none,出场自带星之辉状态
-200051,摇铃,emblem,replace,-1,none,非战斗时的事件触发概率变为4倍
+200051,摇铃,emblem,replace,-1,none,非战斗时的事件触发概率变为4倍（不可叠加）
 200055,针灸,emblem,replace,-1,none,增加2回合针灸的持续时间
 200058,拳之,emblem,replace,-1,none,拳类技能伤害增加10%
 200061,爱的,emblem,replace,-1,none,首次出场时自带爱的名义
@@ -782,6 +796,7 @@ id,name,type,copyType,turn,options,description
 200154,挑衅,emblem,replace,-1,none,挑衅也增加自身20点怒气
 200156,分身,emblem,replace,-1,none,具有分身术状态时使对手的命中率降低15%
 200166,缉拿,emblem,replace,-1,none,使通缉令技能必中
+200172,超载,emblem,replace,-1,none,自身每2点怒气使双方受到的物理伤害减少1%，受到的特殊伤害增加1%
 200174,武者,emblem,replace,-1,none,具有武者之心时每回合回复20点体力
 200176,仁者,emblem,replace,-1,none,对手具有仁者之心时使对手每回合失去20点体力
 200178,必杀,emblem,replace,-1,none,必杀技的属性相克系数不会低于1
@@ -832,7 +847,7 @@ id,name,type,copyType,turn,options,description
 200593,天霸,emblem,replace,-1,none,击败对手时使环境转变为古战场
 200658,三色,emblem,replace,-1,none,龙系攻击命中后会依照当前回合数使用绿光珠、水流弹、炎火球其中之一进行追击
 200735,天武,emblem,replace,-1,none,受到攻击时反弹1/6伤害，最高不超过自身最大体力的6倍
-200757,平衡,emblem,replace,-1,none,首次登场时若性格为平衡发展则最大体力提高10%
+200757,平衡,emblem,replace,-1,none,首次出场时若性格为平衡发展则最大体力提高10%
 200761,冰晶,emblem,replace,-1,none,冰晶类技能命中后会消除对手5点怒气
 200762,变幻,emblem,replace,-1,none,使用威力为0的技能会在决定技能时恢复5点怒气
 200763,蒸气,emblem,replace,-1,none,使用连击技能会恢复5点怒气
@@ -840,8 +855,8 @@ id,name,type,copyType,turn,options,description
 200810,装甲,emblem,replace,-1,none,具有物防强化时受到的暴击伤害降低25%
 200826,萌月,emblem,replace,-1,none,使五味特性触发恢复体力的几率增加10%
 200845,联攻,emblem,replace,-1,none,非首发时造成的伤害增加10%
-200940,破阳,emblem,replace,-1,none,每次登场时使环境转变为晴天[ENDL]攻击无视对手防御类强化和护盾类效果[ENDL]无视对手的必中效果和命中强化[ENDL]攻击未命中或伤害低于300则使对手2回合内治疗减少50%
-200947,晓月,emblem,block,-1,none,首次登场时提升自身等级5级并免疫不良状态[ENDL]攻击技能附带150点固定伤害并使自身当回合受到伤害减少30%[ENDL]属性技能先制+2且命中后随机吸取对手2项能力1级
+200940,破阳,emblem,replace,-1,none,每次出场时使环境转变为晴天[ENDL]攻击无视对手防御类强化和护盾类效果[ENDL]无视对手的必中效果和命中强化[ENDL]攻击未命中或伤害低于300则使对手2回合内治疗减少50%
+200947,晓月,emblem,block,-1,none,首次出场时提升自身等级5级并免疫不良状态[ENDL]攻击技能附带150点固定伤害并使自身当回合受到伤害减少30%[ENDL]属性技能先制+2且命中后随机吸取对手2项能力1级
 200959,专注,emblem,replace,-1,none,击败对手时清除自身异常状态
 200961,首魅,emblem,replace,-1,none,使幻魅之眼的魅惑效果延长1回合
 200962,躯徽,emblem,replace,-1,none,使星尘幻盾回复自身120点体力
@@ -854,6 +869,7 @@ id,name,type,copyType,turn,options,description
 200982,潮汐,emblem,replace,-1,none,战斗时全队附带潮汐领域
 200983,烈火,emblem,replace,-1,none,战斗时全队附带烈火领域
 200984,寒霜,emblem,replace,-1,none,战斗时全队附带寒霜领域
+200987,天空,emblem,replace,-1,none,战斗时全队附带天空领域
 200988,幻视,emblem,replace,-1,none,战斗时全队附带幻视领域
 200989,王者,emblem,replace,-1,none,首次出场时附带王者体质
 200990,王权,emblem,replace,-1,hide=true,战斗时全队附带王权领域
@@ -877,13 +893,15 @@ id,name,type,copyType,turn,options,description
 210301,花舞,emblem,replace,-1,none,对手被花粉影响时，自身的物理技能附带35点固定伤害
 210304,龙牙,emblem,replace,-1,none,使用龙系技能同样适用本系加成
 210307,火拳,emblem,replace,-1,none,对手怒气高于50时，自身技能威力增加15
+210346,海洋,emblem,replace,-1,none,水系技能伤害增加10%
 210499,零域,emblem,replace,-1,none,技能命中后10%使对手沉默
 210809,魔草,emblem,replace,-1,none,森林场地下造成的伤害增加10%
+213309,沧海,emblem,replace,-1,none,每次出场时获得200点护盾[ENDL]攻击时若自身具有护盾则35%威力翻倍，否则吸取对方最大体力的1/3，最高不超过自身最大体力的1/3
 213326,繁盛,emblem,replace,-1,none,攻击结束时若自身体力高于回合开始时，则自身全能力+1[ENDL]若自身体力不高于回合开始时，则回合结束时恢复自身1/3体力，且自身体力低于1/2时造成等量伤害[ENDL][ENDL]本回合开始时自身体力为[value]
 214198,魔灵,emblem,replace,-1,none,造成伤害的1/2恢复自身体力[ENDL]对手中毒时自身攻击技能威力2倍，否则使对手中毒[ENDL]回合开始时若对手没有能力强化则强化自身双防1级[ENDL]受到攻击时消除对手能力强化[ENDL]回合结束时若自身体力低于1/2则造成自身1/2最大体力的固定伤害
-214693,护罩,emblem,stack,-1,max_val=500,首次登场时获得吸收状态[ENDL]回合开始时若对手处于不良状态则使自身当回合受到的伤害减少33%[ENDL]回合开始时若自身处于异常状态则使对手陷入中毒、寄生、感染中的随机1种，失败时或自身不处于异常状态时增加100点体力上限，最多500点
-214731,创世,emblem,replace,-1,none,自己每存活1只精灵使受到的伤害减少5%、攻击伤害提升5%、造成伤害的5%恢复自身体力。若存活的精灵为[ffbb33]波克尔[-]（闪光视同），则上述效果提升为12%[ENDL]首次登场时全队获得7片[ffbb33]【神羽】[-][ENDL]首次登场时自身获得[ffbb33]【神之体质】[-](PVP无效)
-214732,创世,emblem,replace,-1,none,自己每存活1只精灵使受到的伤害减少5%、攻击伤害提升5%、造成伤害的5%恢复自身体力。若存活的精灵为[ffbb33]波克尔[-]（闪光视同），则上述效果提升为12%[ENDL]首次登场时全队获得7片[ffbb33]【神羽】[-][ENDL]首次登场时自身获得[ffbb33]【神之体质】[-](PVP无效)
+214693,护罩,emblem,stack,-1,max_val=500,首次出场时获得吸收状态[ENDL]回合开始时若对手处于不良状态则使自身当回合受到的伤害减少33%[ENDL]回合开始时若自身处于异常状态则使对手陷入中毒、寄生、感染中的随机1种，失败时或自身不处于异常状态时增加100点体力上限，最多500点
+214731,创世,emblem,replace,-1,none,自己每存活1只精灵使受到的伤害减少5%、攻击伤害提升5%、造成伤害的5%恢复自身体力。若存活的精灵为[ffbb33]波克尔[-]（闪光视同），则上述效果提升为12%[ENDL]首次出场时全队获得7片[ffbb33]【神羽】[-][ENDL]首次出场时自身获得[ffbb33]【神之体质】[-](PVP无效)
+214732,创世,emblem,replace,-1,none,自己每存活1只精灵使受到的伤害减少5%、攻击伤害提升5%、造成伤害的5%恢复自身体力。若存活的精灵为[ffbb33]波克尔[-]（闪光视同），则上述效果提升为12%[ENDL]首次出场时全队获得7片[ffbb33]【神羽】[-][ENDL]首次出场时自身获得[ffbb33]【神之体质】[-](PVP无效)
 214750,云境,emblem,replace,-1,none,攻击结束时若自身体力高于回合开始时，则自身全能力+1，且自身体力高于1/2时额外使对手获得[ffbb33]【琼花仙荼】[-]3回合[ENDL]若自身体力不高于回合开始时，则回合结束时恢复自身1/3体力，且自身体力低于1/2时效果2倍并造成等量伤害[ENDL][ENDL]本回合开始时自身体力为[value]
 214760,阳舞,emblem,replace,-1,none,免疫异常和能力下降状态[ENDL]回合开始时恢复30点怒气[ENDL]攻击伤害低于对手最大体力的1/2时使对手损失300点体力，否则造成伤害的1/2恢复自身体力
 300354,海牙,emblem,replace,-1,none,冰系技能暴击率提升25%，超能系技能暴击伤害提升15%
@@ -953,7 +971,7 @@ id,name,type,copyType,turn,options,description
 420010,咕噜气泡,item,replace,-1,item=22010&group=exclude,[ffbb33]【随身物品】[-][ENDL]免疫窒息和溺水状态，安迷亚携带时空气储量会在回合开始时填满
 420011,星币,item,replace,-1,item=22011&group=exclude,[ffbb33]【随身物品】[-][ENDL]普通系伤害增加25%，蓝虎鲸携带时首次出场会获得星之尾状态
 420012,水珠,item,replace,-1,item=22012&group=exclude,[ffbb33]【随身物品】[-][ENDL]雨天时暴击伤害增加15%，阿卡纳斯携带时首次出场会获得水纹状态
-420013,忏悔魔心,item,replace,-1,item=22013&group=exclude,[ffbb33]【随身物品】[-][ENDL]首次登场时获得效果触发率提升15%的印记，撒旦携带时可以使用[ffbb33]【专属动作】[-]暴走
+420013,忏悔魔心,item,replace,-1,item=22013&group=exclude,[ffbb33]【随身物品】[-][ENDL]首次出场时获得效果触发率提升15%的印记，撒旦携带时可以使用[ffbb33]【专属动作】[-]暴走
 420014,太阳之冠,item,replace,-1,item=22014&group=exclude,[ffbb33]【随身物品】[-][ENDL]攻击未命中或造成的伤害低于100时恢复20点怒气，米咔携带时免疫超能系伤害
 430000,商城礼券,item,replace,-1,none,伊特大乱斗途中的商店买一送二
 430001,蘑菇果实,item,replace,-1,item=23001&group=exclude,[ffbb33]【随身物品】[-][ENDL]威力低于自身体重的技能连击数+1，但会有25%概率使自身在出手前陷入昏迷1回合
@@ -961,9 +979,10 @@ id,name,type,copyType,turn,options,description
 430003,黑水结晶,item,replace,-1,item=23003&group=exclude,[ffbb33]【随身物品】[-][ENDL]每回合恢复10点怒气，但是受到的伤害增加15%
 430004,草目璞玉,item,replace,-1,item=23004&group=exclude,[ffbb33]【随身物品】[-][ENDL]技能暴击时使天气转变为晴天
 430005,茶叶包,item,replace,-1,item=23005&group=exclude,[ffbb33]【随身物品】[-][ENDL]回合开始时若自身为满体力则使对手当回合【禁疗】
-440000,大乱斗邀请函,item,replace,-1,item=24000&group=exclude,[ffbb33]【随身物品】[-][ENDL]首次登场时获得【伊特领域】，伊特家族以外的精灵携带时仍可以享有该领域的效果
+440000,大乱斗邀请函,item,replace,-1,item=24000&group=exclude,[ffbb33]【随身物品】[-][ENDL]首次出场时获得【伊特领域】，伊特家族以外的精灵携带时仍可以享有该领域的效果
 440001,魅魔之王,item,block,-1,item=24001&group=achievement,必定遇见雌性野生精灵（无雌性种类时无效）
 440002,笑口常开,item,block,-1,item=24002&group=achievement,晴天时每回合恢复5点怒气，笑笑葵携带时额外使技能威力增加10点（不论天气）
+483309,神迹鱼龙王专属全能刻印,item,new,-1,group=Cm&Cm_type=0&item=483309&status=0/68/39/39/35/94,特攻 68，物防 39，特防 39，速度 35，体力 94
 484198,神迹魔花仙子专属全能刻印,item,new,-1,group=Cm&Cm_type=0&item=482798&status=0/55/50/50/20/100,特攻 55，物防 50，特防 50，速度 20，体力 100
 484693,神迹蘑菇怪专属全能刻印,item,new,-1,group=Cm&Cm_type=0&item=484693&status=0/40/45/45/25/120,特攻 40，物防 45，特防 45，速度 25，体力 120
 484731,神迹波克尔专属全能刻印,item,new,-1,group=Cm&Cm_type=0&item=484731&status=70/0/40/40/35/90,物攻 70，物防 40，特防 40，速度 35，体力 90
@@ -1057,3 +1076,10 @@ id,name,type,copyType,turn,options,description
 -3064,保底琼花仙荼,mark,replace,-1,hide=true,技能无效时添加琼花仙荼3回合
 -3065,零域,mark,replace,-1,none,使身高和体重转变为0
 -3066,哈莫雷特挑战,mark,replace,-1,none,必须使用水火草轮换攻击才会受伤
+-3067,空步,mark,replace,-1,none,结束时使翼灵兽回归并自动替换上场
+-3068,翼灵,mark,replace,-1,none,受到致死攻击时若回合数低于30则会回满体力
+-3069,对流层,mark,replace,10,none,闪避率提高30%，结束时转变为平流层
+-3070,平流层,mark,replace,10,none,闪避率提高30%，受到的伤害减少30%，结束时转变为中间层
+-3071,中间层,mark,replace,10,none,闪避率提高30%，受到的伤害减少30%，每回合使对手冻伤，结束时转变为热层
+-3072,热层,mark,replace,10,none,闪避率提高30%，受到的伤害减少30%，每回合使对手烧伤，结束时转变为逃逸层
+-3073,逃逸层,mark,replace,-1,none,闪避率提高60%，受到的伤害减少60%，每回合使对手烧伤和冻伤

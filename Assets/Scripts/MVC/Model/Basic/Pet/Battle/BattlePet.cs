@@ -155,9 +155,22 @@ public class BattlePet : Pet
     }
 
     public override float GetPetIdentifier(string id) {
+        if ((id.TryTrimStart("skill", out var trimSkill)) &&
+            (trimSkill.TryTrimParentheses(out var skillIdExpr)) &&
+            (int.TryParse(skillIdExpr, out var skillId)))
+        {
+            trimSkill = trimSkill.TrimStart("[" + skillIdExpr + "]").TrimStart('.');
+            trimSkill = string.IsNullOrEmpty(trimSkill) ? "id" : trimSkill;
+            if ((skillController.superSkill?.id ?? 0) == skillId)
+                return skillController.superSkill.GetSkillIdentifier(trimSkill);
+
+            return skillController.normalSkills?.FirstOrDefault(x => (x != null) && (x.id == skillId))?.GetSkillIdentifier(trimSkill) ?? float.MinValue;
+        }
+
         if (id.TryTrimStart("normalSkill", out var trimNormalSkill) &&
-            trimNormalSkill.TryTrimParentheses(out var skillIndexExpr) && 
-            int.TryParse(skillIndexExpr, out var skillIndex)) {
+            trimNormalSkill.TryTrimParentheses(out var skillIndexExpr) &&
+            int.TryParse(skillIndexExpr, out var skillIndex))
+        {
             var trimId = trimNormalSkill.TrimStart($"[{skillIndexExpr}]").TrimStart('.');
             if (string.IsNullOrEmpty(trimId))
                 trimId = "id";
@@ -166,7 +179,7 @@ public class BattlePet : Pet
         }
 
         if (id.TryTrimStart("superSkill", out var trimSuperSkill)) {
-            var trimId = trimNormalSkill.TrimStart('.');
+            var trimId = trimSuperSkill.TrimStart('.');
             if (string.IsNullOrEmpty(trimId))
                 trimId = "id";
 

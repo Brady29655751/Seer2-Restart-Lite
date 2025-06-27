@@ -283,13 +283,13 @@ public static class Identifier {
         return GetNumIdentifier(id);
     }
 
-    public static float GetSkillIdentifier(string id, UnitSkillSystem skillSystem) {
+    public static float GetSkillIdentifier(string id, UnitSkillSystem skillSystem, string key = null) {
         float num = 0;
         
         if (skillSystem.TryGetSkillSystemIdentifier(id, out num))
             return num;
         
-        return skillSystem.skill.TryGetSkillIdentifier(id, out num) ? num : GetNumIdentifier(id);
+        return skillSystem.GetSkillByKey(key).TryGetSkillIdentifier(id, out num) ? num : GetNumIdentifier(id);
     }
 
     public static float GetBuffIdentifier(string id, PetBattleBuffController buffController) {

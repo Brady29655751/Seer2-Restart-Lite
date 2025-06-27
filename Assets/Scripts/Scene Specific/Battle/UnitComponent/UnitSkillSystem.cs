@@ -10,12 +10,14 @@ public class UnitSkillSystem
     public static string[] normalHpType => new string[] { "skill", "item", "buff" };
 
     public Skill skill = null;
+    public Skill counterSkill = null;
     public float level;
     public float atk;
     public float def;
     public float weatherBuff = 1f;
     public float sameElementBuff = 1f;
     public float elementRelation = 1f;
+    public bool isCounter = false;
     public bool isHit = true;
     public bool isCritical = false;
 
@@ -39,12 +41,14 @@ public class UnitSkillSystem
 
     public UnitSkillSystem(UnitSkillSystem rhs) {
         skill = (rhs.skill == null) ?  null : new Skill(rhs.skill);
+        counterSkill = (rhs.counterSkill == null) ?  null : new Skill(rhs.counterSkill);
         level = rhs.level;
         atk = rhs.atk;
         def = rhs.def;
         weatherBuff = rhs.weatherBuff;
         sameElementBuff = rhs.sameElementBuff;
         elementRelation = rhs.elementRelation;
+        isCounter = rhs.isCounter;
         isHit = rhs.isHit;
         isCritical = rhs.isCritical;
 
@@ -59,15 +63,28 @@ public class UnitSkillSystem
         itemHeal = rhs.itemHeal;
     }
 
-    public void EnsureSkillNotNull() {
+    public Skill GetSkillByKey(string key)
+    {
+        return key switch
+        {
+            "counter" => counterSkill,
+            _ => skill,
+        };
+    }
+
+    public void EnsureSkillNotNull()
+    {
         skill ??= Skill.GetNoOpSkill();
+        counterSkill ??= Skill.GetNoOpSkill();
     }
 
     public void OnTurnStart() {
         skill = null;
+        counterSkill = null;
 
         level = atk = def = 0;
         weatherBuff = sameElementBuff = elementRelation = 1f;
+        isCounter = false;
         isHit = true;
         isCritical = false;
 
@@ -87,7 +104,17 @@ public class UnitSkillSystem
         damageDict = damageDict.Where(x => !x.Key.StartsWith("skill")).ToDictionary(x => x.Key, x => x.Value);
     }
 
-    public bool CalculateAccuracy(BattlePet atkPet, BattlePet defPet) {
+    public void SwapCounterSkill(bool isCounterStart)
+    {
+        isCounter = isCounterStart;
+        
+        var tmp = counterSkill;
+        counterSkill = isCounterStart ? skill : Skill.GetNoOpSkill();
+        skill = tmp;
+    }
+
+    public bool CalculateAccuracy(BattlePet atkPet, BattlePet defPet)
+    {
         float _random = Random.Range(0f, 100f);
         isHit = (skill.accuracy + atkPet.battleStatus.hit - defPet.battleStatus.eva) >= _random;
         return isHit;
@@ -148,6 +175,7 @@ public class UnitSkillSystem
             "heal" => skillHeal,
             "heal[item]" => itemHeal,
             "heal[buff]" => buffHeal,
+            "counter" => isCounter ? 1 : 0,
             "hit" => isHit ? 1 : 0,
             "criticalResult" => isCritical ? 1 : 0,
             _ => float.MinValue,
@@ -159,10 +187,11 @@ public class UnitSkillSystem
         return num != float.MinValue;
     }
 
-    public void SetSkillSystemIdentifier(string id, float num) {
-        switch (id) {
+    public void SetSkillSystemIdentifier(string id, float num, string key = null) {
+        switch (id)
+        {
             default:
-                skill.SetSkillIdentifier(id, num);
+                GetSkillByKey(key).SetSkillIdentifier(id, num);
                 return;
             case "level":
                 level = num;

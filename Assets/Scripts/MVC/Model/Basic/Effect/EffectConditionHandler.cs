@@ -216,6 +216,7 @@ public static class EffectConditionHandler
         string id = condOptions.Get("id", "0");
         string own = condOptions.Get("own", "true");
         string type = condOptions.Get("type", "none");
+        
         string[] typeList = type.Split('/');
 
         if (!bool.TryParse(own, out bool ownBuff))
@@ -228,28 +229,31 @@ public static class EffectConditionHandler
 
         Buff buff = null;
         BuffType buffType;
-        if (!int.TryParse(id, out int buffId))
+        if (!id.TryTrimParentheses(out _, '(', ')'))
         {
-            buffType = id.ToBuffType();
-            if (buffType != BuffType.None)
-                return ownBuff != ListHelper.IsNullOrEmpty(pet.buffController.GetRangeBuff(x => x.IsType(buffType)));
-        }
-        else
-        {
-            if (string.IsNullOrEmpty(key) && (buffId == 0))
-                return true;
+            if (!int.TryParse(id, out int buffId))
+            {
+                buffType = id.ToBuffType();
+                if (buffType != BuffType.None)
+                    return ownBuff != ListHelper.IsNullOrEmpty(pet.buffController.GetRangeBuff(x => x.IsType(buffType)));
+            }
+            else
+            {
+                if (string.IsNullOrEmpty(key) && (buffId == 0))
+                    return true;
 
-            id = string.IsNullOrEmpty(key) ? $"(id:{buffId})" : null;            
+                id = (string.IsNullOrEmpty(key) || (key == "unit")) ? $"(id:{buffId})" : null;
+            }   
         }
 
-        var filter = Parser.ParseConditionFilter<Buff>(id, (expr, buff) => buff.TryGetBuffIdentifier(expr, out var num) ? num : Identifier.GetNumIdentifier(expr));
+        var buffFilter = Parser.ParseConditionFilter<Buff>(id, (expr, buff) => buff.TryGetBuffIdentifier(expr, out var num) ? num : Identifier.GetNumIdentifier(expr));
 
         if (key == "unit")
-            buff = buffUnit.unitBuffs.Find(x => filter(x));
+            buff = buffUnit.unitBuffs.Find(x => buffFilter(x));
         else if (!string.IsNullOrEmpty(key))
-            buff = state.stateBuffs.FindAll(x => (x.Key == key) && filter(x.Value)).FirstOrDefault().Value;
+            buff = state.stateBuffs.FindAll(x => (x.Key == key) && buffFilter(x.Value)).FirstOrDefault().Value;
         else
-            buff = pet.buffController.GetRangeBuff(x => filter(x)).FirstOrDefault();
+            buff = pet.buffController.GetRangeBuff(x => buffFilter(x)).FirstOrDefault();
 
         bool isOwnCorrect = (ownBuff == (buff != null));
 

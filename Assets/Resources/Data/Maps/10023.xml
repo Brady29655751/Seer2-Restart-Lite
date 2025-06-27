@@ -1,0 +1,247 @@
+<map name="深海禁地" category="102" id="10023" weather="100002">
+	<initialPoint>325,285</initialPoint>
+	<music category="102">
+		<bgm>BGM_20</bgm>
+	</music>
+	<entities>
+		<npc id="1002303" resId="Pets/pet/10729" name="鱼龙王" size="229,209" pos="625,265" namePos="0,0">
+			<description>鱼龙王神迹觉醒</description>
+			<dialog>
+				<branch id="default" name="鱼龙王" icon="Pets/pet/10729" size="153,139" pos="-10,35">
+					<content><![CDATA[曾经沧海难为水，除却巫山不是云]]></content>
+					<functionHandler>
+						<func type="click">
+							<description><![CDATA[挑战鱼龙王]]></description>
+							<action>battle</action>
+							<param>default</param>
+						</func>
+						<func type="click">
+							<description><![CDATA[超进化]]></description>
+							<action>battle</action>
+							<param>evolve</param>
+						</func>
+						<func type="click">
+							<description><![CDATA[神迹觉醒]]></description>
+							<action>battle</action>
+							<param>miracle</param>
+						</func>
+					</functionHandler>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[取次花丛懒回顾，半缘修道半缘君]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+					</replyHandler>
+				</branch>
+			</dialog>
+			<battle>
+				<branch id="default">
+					<settings count="6" star="4">
+						<mode>3</mode>
+						<weather>2</weather>
+						<initBuff>(field:600002)</initBuff>
+					</settings>
+					<enemy>
+						<pet id="10729" level="100">
+							<status>
+								<hp>25000</hp>
+							</status>
+							<initBuff>-8,-3059,97</initBuff>
+							<loopSkill>12196,12197,12198</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>getPet</action>
+							<param>10346,1</param>
+							<condition>activity[new_evolve_13309].done=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=【宝贝鲤】已经放入精灵仓库</param>
+							<param>item_icon=pet[10346]</param>
+							<param>option_num=1</param>
+							<condition>activity[new_evolve_13309].done=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>new_evolve_13309</param>
+							<param>done=true</param>
+							<condition>activity[new_evolve_13309].done=[bool]false[default]false</condition>
+						</button>
+					</winHandler>
+				</branch>
+				<branch id="evolve">
+					<settings count="1">
+						<mode>3</mode>
+						<weather>2</weather>
+						<initBuff>(field:600002)</initBuff>
+					</settings>
+					<enemy>
+						<pet id="12485" level="100">
+							<status>
+								<hp>25000</hp>
+							</status>
+							<initBuff>-8,-3065,61,967,964,965</initBuff>
+							<loopSkill>12201,12203,12204,12198</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=PetSelect</param>
+						    <param>title=选择要进化的鱼龙王</param>
+						    <param>option_num=2</param>
+						    <param>callback=evolve</param>
+						</button>
+					</winHandler>
+				</branch>
+				<branch id="miracle">
+					<settings count="6">
+						<mode>4</mode>
+						<weather>2</weather>
+						<initBuff>(field:600001)</initBuff>
+					</settings>
+					<enemy>
+						<pet id="113309" level="105">
+							<status>
+								<hp>25000</hp>
+							</status>
+							<initBuff>-8,-3065,61,11,964</initBuff>
+							<loopSkill>12216,12217,12218,12214</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=PetSelect</param>
+						    <param>title=选择要进化的鱼龙帝王</param>
+						    <param>option_num=2</param>
+						    <param>callback=miracle</param>
+						</button>
+					</winHandler>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>openDialog</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+			<callbackHandler>
+				<button type="battle">
+					<action>battle</action>
+					<param>default</param>
+				</button>
+				<button type="choose">
+					<action>openHintbox</action>
+					<param>type=PetSelect</param>
+				    <param>title=选择要进化的鱼龙王</param>
+				    <param>option_num=2</param>
+					<param>callback=evolve</param>
+				    <condition>data.PetSelect.uidNOT10729|data.PetSelect.level&lt;100</condition>
+				</button>
+				<button type="evolve">
+				    <action>openHintbox</action>
+				    <param>type=Item</param>
+				    <param>title=提示</param>
+				    <param>content=必须选择等级100的鱼龙王！</param>
+				    <param>item_icon=pet[10729]</param>
+				    <param>option_num=1</param>
+					<param>callback=choose</param>
+				    <condition>data.PetSelect.uidNOT10729|data.PetSelect.level&lt;100</condition>
+				</button>
+				<button type="evolve">
+				    <action>openHintbox</action>
+				    <param>type=Item</param>
+				    <param>title=提示</param>
+				    <param>content=鱼龙王已成功超进化</param>
+				    <param>item_icon=pet[12485]</param>
+				    <param>option_num=1</param>
+				    <condition>data.PetSelect.uid=10729</condition>
+				    <condition>data.PetSelect.levelGTE100</condition>
+				</button>
+				<button type="evolve">
+				    <action>evolvePet</action>
+				    <param>index=data.PetSelectIndex</param>
+				    <param>12485</param>
+				    <condition>data.PetSelect.uid=10729</condition>
+				    <condition>data.PetSelect.levelGTE100</condition>
+				</button>
+				<button type="evolve">
+				    <action>setPet</action>
+				    <param>index=data.PetSelectIndex</param>
+				    <param>skill=12205</param>
+				    <param>skill=12206</param>
+				    <param>skill=12207</param>
+				    <param>skill=12208</param>
+				    <condition>data.PetSelect.uid=10729</condition>
+				    <condition>data.PetSelect.levelGTE100</condition>
+				</button>
+				<button type="miracle_choose">
+					<action>openHintbox</action>
+					<param>type=PetSelect</param>
+				    <param>title=选择要进化的鱼龙帝王</param>
+				    <param>option_num=2</param>
+					<param>callback=miracle</param>
+				    <condition>data.PetSelect.uidNOT12485|data.PetSelect.level&lt;100</condition>
+				</button>
+				<button type="miracle">
+				    <action>openHintbox</action>
+				    <param>type=Item</param>
+				    <param>title=提示</param>
+				    <param>content=必须选择等级100的鱼龙帝王！</param>
+				    <param>item_icon=pet[12485]</param>
+				    <param>option_num=1</param>
+					<param>callback=miracle_choose</param>
+				    <condition>data.PetSelect.uidNOT12485|data.PetSelect.level&lt;100</condition>
+				</button>
+				<button type="miracle">
+				    <action>openHintbox</action>
+				    <param>type=Item</param>
+				    <param>title=提示</param>
+				    <param>content=鱼龙帝王已成功超进化</param>
+				    <param>item_icon=pet[13309]</param>
+				    <param>option_num=1</param>
+				    <condition>data.PetSelect.uid=12485</condition>
+				    <condition>data.PetSelect.levelGTE100</condition>
+				</button>
+				<button type="miracle">
+				    <action>evolvePet</action>
+				    <param>index=data.PetSelectIndex</param>
+				    <param>13309</param>
+				    <condition>data.PetSelect.uid=12485</condition>
+				    <condition>data.PetSelect.levelGTE100</condition>
+				</button>
+			</callbackHandler>
+		</npc>
+		<npc id="1002300" resId="1001" name="" size="200,200" pos="80,215" namePos="0,0" color="0,0,0,0">
+			<description>海洋星海底</description>
+			<transport>200,230</transport>
+			<eventHandler>
+				<button type="click">
+					<action>teleport</action>
+					<param>10022</param>
+				</button>
+				<button type="auto">
+					<action>openHintbox</action>
+					<param>type=Item</param>
+					<param>content=海底很危险，穿上潜水装才能进入哦！</param>
+					<param>item_icon=buff[420010]</param>
+					<param>option_num=1</param>
+					<param>callback=teleport</param>
+					<condition>player.shootNOT7001</condition>
+				</button>
+			</eventHandler>
+			<callbackHandler>
+				<button type="teleport">
+					<action>teleport</action>
+					<param>10021</param>
+				</button>
+			</callbackHandler>
+		</npc>
+	</entities>		
+</map>

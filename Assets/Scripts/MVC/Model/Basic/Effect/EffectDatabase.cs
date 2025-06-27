@@ -74,6 +74,7 @@ public static class EffectDatabase {
         {"set_weather", EffectAbility.SetWeather},
         {"set_player", EffectAbility.SetPlayer},
         {"poker", EffectAbility.Poker},
+        {"set_pet_bag", EffectAbility.SetPetBag},
     };
 
     public static EffectTiming ToEffectTiming(this string timing) {
@@ -141,7 +142,8 @@ public enum EffectCondition {
     Poker,
 }
 
-public enum EffectAbility {
+public enum EffectAbility
+{
     None,
     Win,
     Escape,
@@ -162,4 +164,5 @@ public enum EffectAbility {
     SetWeather,
     SetPlayer,
     Poker,
+    SetPetBag,
 }

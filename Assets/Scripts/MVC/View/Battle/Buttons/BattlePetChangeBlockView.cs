@@ -13,10 +13,10 @@ public class BattlePetChangeBlockView : Module
     [SerializeField] private RectTransform hpBarRect;
 
     public void SetPet(BattlePet pet) {
-        if (pet == null) {
-            gameObject.SetActive(false);
+        gameObject.SetActive(pet != null);
+        if (pet == null)
             return;
-        }
+        
         this.pet = pet;
         SetIcon(  pet.ui.icon);
         SetElement(pet.element);

@@ -451,7 +451,7 @@ public class Pet
         if (evolveId == 0)
             return null;
 
-        var specialSkills = skills.ownSkill.Where(x => !skills.skillList.Exists(y => y.id == x.id)).ToList();
+        var specialSkills = skills.ownSkill.Where(x => (!skills.skillList.Exists(y => y.id == x.id)) || skills.secretSkillInfo.Any(y => (y.skill.id == x.id) && (y.secretType == SecretType.Others))).ToList();
         Pet evolvePet = new Pet(evolveId, this);
         if (!keepSkill) {
             evolvePet.LevelDown(evolvePet.level);

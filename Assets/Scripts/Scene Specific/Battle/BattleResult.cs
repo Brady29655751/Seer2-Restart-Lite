@@ -204,8 +204,10 @@ public class BattleResult
             return;
 
         var secretSkillInfo = pet.skills.secretSkillInfo.Where(x => !pet.skills.ownSkillId.Contains(x.skill.id)).ToArray();
-        for (int i = 0; i < secretSkillInfo.Length; i++) {
-            if (secretSkillInfo[i].Condition(pet, endState)) {
+        for (int i = 0; i < secretSkillInfo.Length; i++)
+        {
+            if (secretSkillInfo[i].Condition(pet, endState))
+            {
                 var skill = secretSkillInfo[i].skill;
                 pet.skills.LearnNewSkill(skill);
                 learnedSecretSkills.Add(skill);

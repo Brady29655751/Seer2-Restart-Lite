@@ -176,7 +176,11 @@ public class Skill
         };
 
         if (!skill.isAction) {
-            skill.options.Set("target_index", data[1]);
+            var selectEffects = skill.effects.Where(x => x.isSelect).ToList();
+            var targetIndexList = data[1].Split('/');
+            for (int i = 0; i < selectEffects.Count; i++)
+                selectEffects[i].abilityOptionDict.Set("target_index", targetIndexList.Get(i, "-1"));
+
             skill.options.Set("evolve", data[2]);
         }
 
@@ -193,7 +197,7 @@ public class Skill
             (int)SkillType.道具 => new string[] { id.ToString(), options.Get("item_id", "0") },
             (int)SkillType.換场 => new string[] { id.ToString(), options.Get("source_index", "0"), options.Get("target_index", "0"), options.Get("passive", "false") },
             (int)SkillType.逃跑 => new string[] { id.ToString() },
-            _ => new string[] { id.ToString(), options.Get("target_index", "-1"), options.Get("evolve", "0") }
+            _ => new string[] { id.ToString(), effects.Where(x => x.isSelect).Select(e => e.abilityOptionDict.Get("target_index", "-1")).ConcatToString("/"), options.Get("evolve", "0") }
         };
 
         if (settings.parallelCount > 1)
@@ -420,7 +424,7 @@ public class Skill
                 power = Mathf.Max((int)value, 0);
                 return;
             case "anger":
-                anger = (int)value;
+                anger = Mathf.Max((int)value, 0);
                 return;
             case "accuracy":
                 accuracy = (int)value;

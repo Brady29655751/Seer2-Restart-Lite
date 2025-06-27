@@ -167,7 +167,7 @@ public class Effect {
             var rng = this.RandomNumber(state, x);
             var cond = ConditionFunc.Invoke(x);
 
-            if ((source.GetType() == typeof(Buff)) && ((Buff)source).id == 214750)
+            if ((source.GetType() == typeof(Buff)) && ((Buff)source).id == -9999)
                 Debug.Log(state.phase + " " + timing + " " + correctTurn + " " + hit + " " + rng + " " + cond);
 
             return ((!checkTurn) || correctTurn) && correctWeather && hit && rng && cond;
@@ -175,6 +175,7 @@ public class Effect {
             return ((!checkTurn) || this.IsCorrectTurn(state, x)) && 
                 this.IsCorrectWeather(state, x) && this.IsAttackAndHit(state, x) && 
                 this.RandomNumber(state, x) && ConditionFunc.Invoke(x);
+            
         }).Any(x => x);
 
         return result;
@@ -216,6 +217,7 @@ public class Effect {
                 EffectAbility.SetWeather => this.SetWeather(state),
                 EffectAbility.SetPlayer => this.SetPlayer(state),
                 EffectAbility.Poker => this.Poker(state),
+                EffectAbility.SetPetBag => this.SetPetBag(state),
                 _ => true
             });
         }

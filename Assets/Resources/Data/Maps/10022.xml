@@ -5,42 +5,42 @@
 	</music>
 	<entities>
 		<npc id="1002203" resId="Pets/pet/10034" name="" size="230,160" pos="730,380" namePos="0,0" color="0,0,0,0">
-		<description>SPT</description>
-		<dialog>
-			<branch id="default" name="钢牙鲨" icon="Pets/pet/10034" size="105,90" pos="10,55">
-				<content><![CDATA[（一直盯着你，盯得你心里发寒）]]></content>
-				<functionHandler>
-					<func type="click">
-						<description><![CDATA[挑战钢牙鲨]]></description>
-						<action>openHintbox</action>
-						<param>type=Item</param>
-						<param>content=钢牙鲨很厉害，确定要挑战他吗？</param>
-						<param>option_num=2</param>
-						<param>item_icon=pet[10034]</param>
-						<param>callback=battle</param>
-					</func>
-					<func type="click">
-						<description><![CDATA[超进化]]></description>
-						<action>battle</action>
-						<param>evolve</param>
-					</func>
-					<!--
-					<func type="click">
-						<description><![CDATA[神迹觉醒]]></description>
-						<action>battle</action>
-						<param>miracle</param>
-					</func>
-					-->
-				</functionHandler>
-				<replyHandler>
-					<reply type="click">
-						<description><![CDATA[钢牙鲨很厉害]]></description>
-						<action>openDialog</action>
-						<param>null</param>
-					</reply>
-				</replyHandler>
-			</branch>
-		</dialog>
+			<description>SPT</description>
+			<dialog>
+				<branch id="default" name="钢牙鲨" icon="Pets/pet/10034" size="105,90" pos="10,55">
+					<content><![CDATA[（一直盯着你，盯得你心里发寒）]]></content>
+					<functionHandler>
+						<func type="click">
+							<description><![CDATA[挑战钢牙鲨]]></description>
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>content=钢牙鲨很厉害，确定要挑战他吗？</param>
+							<param>option_num=2</param>
+							<param>item_icon=pet[10034]</param>
+							<param>callback=battle</param>
+						</func>
+						<func type="click">
+							<description><![CDATA[超进化]]></description>
+							<action>battle</action>
+							<param>evolve</param>
+						</func>
+						<!--
+						<func type="click">
+							<description><![CDATA[神迹觉醒]]></description>
+							<action>battle</action>
+							<param>miracle</param>
+						</func>
+						-->
+					</functionHandler>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[钢牙鲨很厉害]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+					</replyHandler>
+				</branch>
+			</dialog>
 			<battle>
 				<branch id="default">
 					<settings count="6">
@@ -187,6 +187,16 @@
 					<param>10021</param>
 				</button>
 			</callbackHandler>
+		</npc>
+		<npc id="1002204" resId="1001" name="" size="200,200" pos="760,60" namePos="0,0" color="0,0,0,0">
+			<description>深海禁地</description>
+			<transport>800,120</transport>
+			<eventHandler>
+				<button type="click">
+					<action>teleport</action>
+					<param>10023</param>
+				</button>
+			</eventHandler>
 		</npc>
 		<npc id="1002201" resId="Pets/pet/10108" name="Lv20 布鲁" size="60,58" pos="400,160" namePos="0,-5" active="false">
 			<description>神秘的精灵</description>
