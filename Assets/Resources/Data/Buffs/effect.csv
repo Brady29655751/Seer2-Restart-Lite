@@ -592,6 +592,13 @@ id,timing,priority,target,condition,cond_option,effect,effect_option
 3346,on_after_attack\on_after_attack,-1\-1,pet\pet,skill\skill,who=op&whos_turn=op&whos_attack=op&type=type&type_op=>&type_cmp=0&is_hit=all\who=op&whos_turn=op&whos_attack=op&type=type&type_cmp=0&is_hit=all,powerup\powerup,who=op&atk=-1&mat=-1\who=op&spd=-1&hit=-1
 3347,on_after_attack\on_after_attack,-1\-1,pet\pet,skill\skill,who=op&whos_turn=op&whos_attack=op&type=type&type_op=>&type_cmp=0&is_hit=all\who=op&whos_turn=op&whos_attack=op&type=type&type_cmp=0&is_hit=all,add_buff\powerup,who=op&id=122\who=op&atk=-1&mat=-1&def=-1&mdf=-1&spd=-1&hit=-1
 3348,on_after_attack,-1,pet,skill,type=type&type_op=NOT&type_cmp=100,rage,add=me.skill.anger
+3349,on_before_attack\on_after_attack\on_after_attack,-1\-1\-1,skill\pet\pet,unit\none\none,whos_turn=op&type=state.me.order&type[0].cmp=1\who=op&whos_turn=op&whos_attack=op&is_hit=false\who=op&whos_turn=op&whos_attack=op&is_hit=false,set_skill\add_buff\remove_buff,who=op&type=accuracy&op=-&value=30&name=先手闪避\id=3350&name=闪避成功时\id=3349&name=闪避移除
+3350,on_before_attack\on_remove_buff,-1\-1,skill\pet,buff\none,whos_turn=op\none,set_skill\rage,who=op&type=accuracy&op=-&value=15&name=闪避\add=10&name=取消时回怒
+3351,on_before_attack\on_after_attack\on_after_attack,-1\-1\-1,skill\pet\pet,unit\skill\skill,type=state.me.order&type[0].cmp=2\type=criticalResult&criticalResult_cmp=1\type=criticalResult&criticalResult_cmp=1,set_skill\add_buff\remove_buff,type=critical&op=+&value=30&name=暴击率\id=3352&name=暴击后获得领域\id=3351&name=暴击后移除
+3352,on_after_dmg_cal\on_remove_buff,-1\-1,skill\pet,skill\none,type=type&type_op=>&type_cmp=0\none,set_damage\rage,op=*&value=1.15&name=造成伤害1.15\add=10&name=移除时
+3353,on_after_dmg_cal\on_turn_end,-1\100,skill\pet,none\none,whos_turn=op\none,set_damage\heal,who=op&op=*&value=0.75&name=抵挡25%伤害\type=buff&add=me.pet.status.maxHp*0.1&name=通用恢复
+3354,on_after_dmg_cal\on_turn_end,-1\100,skill\pet,none\buff,whos_turn=op\id=3354&type=turn&turn_cmp=1,set_damage\heal,who=op&op=*&value=0.65&name=抵挡35%伤害\type=buff&add=me.pet.status.lostHp*1/4&name=结束回血
+3355,on_add_buff\on_remove_buff\on_after_dmg_cal\on_after_attack\on_remove_buff,-1\-1\-1\-1\-1,pet\pet\skill\pet\pet,none\none\none\skill\none,none\none\whos_turn=op\who=op&whos_turn=op&whos_attack=op&type=criticalResult&criticalResult_cmp=1\none,add_status\add_status\set_damage\set_buff\heal,type=9&add=-25\type=9&add=25\who=op&op=*&value=0.25\id=3355&type=value&op=-&value=1\set=1
 100001,on_after_dmg_cal\on_before_attack\on_final_dmg_cal,-1\-1\900,skill\skill\skill,unit\unit\unit,type=me.pet.status.hp/me.skill.option[group]&type[0].op=<&type[0].cmp=me.pet.status.maxHp*0.25&type[1].cmp=1\type=me.pet.status.hp/me.skill.id&type[0].op=<&type[0].cmp=me.pet.status.maxHp*0.25&type[1].cmp=10002\type=me.pet.status.hp/me.skill.id&type[0].op=<&type[0].cmp=me.pet.status.maxHp*0.25&type[1].cmp=10002,set_damage\set_skill\set_damage,op=*&value=5/4\type=accuracy&op=+&value=1000\op=+&value=30
 100004,on_after_dmg_cal\on_before_attack\on_final_dmg_cal,-1\-1\900,skill\skill\skill,unit\unit\unit,type=me.pet.status.hp/me.skill.element&type[0].op=<&type[0].cmp=me.pet.status.maxHp*0.25&type[1].cmp=3\type=me.pet.status.hp/me.skill.id&type[0].op=<&type[0].cmp=me.pet.status.maxHp*0.25&type[1].cmp=10019\type=me.pet.status.hp/me.skill.id&type[0].op=<&type[0].cmp=me.pet.status.maxHp*0.25&type[1].cmp=10019,set_damage\set_skill\set_skill,op=*&value=5/4\type=accuracy&op=+&value=1000\op=+&value=30
 100007,on_after_dmg_cal\on_before_attack\on_final_dmg_cal,-1\-1\900,skill\skill\skill,status\unit\unit,whos_turn=op&status_type=hp&op=<&cmp_value=1/4\type=me.pet.status.hp/me.skill.id&type[0].op=<&type[0].cmp=me.pet.status.maxHp*0.25&type[1].cmp=10035\type=me.pet.status.hp/me.skill.id&type[0].op=<&type[0].cmp=me.pet.status.maxHp*0.25&type[1].cmp=10035,set_damage\set_skill\set_skill,who=op&op=*&value=3/4\type=accuracy&op=+&value=1000\op=+&value=30
@@ -652,6 +659,8 @@ id,timing,priority,target,condition,cond_option,effect,effect_option
 100196,on_before_attack,-1,skill,none,none,set_skill,type=critical&op=+&value=10&name=暴击率
 100198,on_after_attack,-1,pet,none,random_cmp=10,add_buff,id=2043&value=1&option=(value:1)
 100200,on_turn_end,-1,pet,buff,id=3034,heal,who=op&type=buff&add=-25
+100208,on_after_dmg_cal,-1,skill,skill,type=state.me.order/me.skill.type&type[0].cmp=1&type[1].cmp=2,set_damage,op=*&value=1.1&name=特攻伤害增加
+100212,on_after_dmg_cal,-1,skill,skill,type=element&element_cmp=8,set_damage,op=*&value=1.25
 100214,on_before_attack\on_before_attack\on_before_attack,-1\-1\-1,pet\pet\skill,status\status\unit,status_type=hp&op=>&cmp_value=1/2\status_type=hp&op=LTE&cmp_value=1/2\type=me.pet.status.hp/me.skill.element&type[0].op=<&type[0].cmp=me.pet.status.maxHp/2&type[1].cmp=13,block_buff\block_buff\set_skill,op=+&type_list=unhealthy\op=-&type_list=unhealthy\type=accuracy&op=+&value=1000
 100218,on_before_attack\on_before_attack\on_before_attack\on_before_attack,-1\-1\-1\-1,pet\pet\pet\pet,skill\skill\skill\skill,type=type&type_cmp=1\type=type&type_cmp=1\type=type&type_cmp=2\type=type&type_cmp=2,add_buff\remove_buff\add_buff\remove_buff,id=3239&value=1&name=物攻获得顺流\id=3240&name=物攻移除逆流\id=3240&value=1&name=特攻获得顺流\id=3239&name=特攻移除顺流
 100220,on_add_buff\on_add_buff\on_after_attack\on_after_attack,-1\-1\-1\-1,pet\pet\pet\pet,none\none\skill\skill,none\none\type=type&type_cmp=1\type=type&type_cmp=2,add_buff\add_buff\add_buff\add_buff,id=3116\id=3117\id=3116&value=1\id=3117&value=1
@@ -738,6 +747,7 @@ id,timing,priority,target,condition,cond_option,effect,effect_option
 110304,on_after_dmg_cal,-1,skill,none,weather=2,set_damage,op=*&value=1.15
 110307,on_before_attack,-1,skill,none,weather=3,set_skill,type=critical&op=+&value=15
 110346,on_after_dmg_cal\on_after_dmg_cal,-1\-1,skill\skill,pet\skill,who=op&type=element&element_cmp=2|who=op&type=subElement&subElement_cmp=2\who=op&whos_turn=op&type=element&element_cmp=16,set_damage\set_damage,op=*&value=2\who=op&op=/&value=2
+110370,on_add_buff,-1,pet,none,none,add_buff,id=3355&value=1
 110499,none,-1,none,none,none,none,none
 110809,on_after_attack,-1,pet,skill,random_cmp=10&type=type&type_op=>&type_cmp=0,add_buff,who=op&id=104
 113309,on_turn_ready,-1,pet,unit,type=me.pet.specialChance/me.skill.evolve/state.buff[field].id&type[0].op=>&type[0].cmp=0&type[1].cmp=1&type[2].cmp=600002,set_pet,on_success=-7&type=id&op=SET&value=113309&inherit=buff/anger&normal_skill=12214/12215/12216/12217&super_skill=12218
@@ -808,6 +818,8 @@ id,timing,priority,target,condition,cond_option,effect,effect_option
 200196,on_after_dmg_cal,-1,skill,buff,id=3326,set_damage,op=*&value=1.1&name=彩霞增伤
 200198,on_before_attack,-1,skill,unit,type=state.me.order&type[0].cmp=1,set_skill,type=critical&op=+&value=5
 200200,on_turn_end,-1,pet,buff,who=op&id=3033,heal,type=buff&add=25
+200208,on_after_dmg_cal,-1,skill,skill,type=state.me.order/me.skill.type&type[0].cmp=2&type[1].cmp=1,set_damage,op=*&value=1.1&name=物攻伤害增加
+200212,on_add_buff\on_remove_buff,-1\-1,pet\pet,none\none,none\none,block_buff\block_buff,op=+&id_list=107&name=免疫石化\op=-&id_list=107&name=移除
 200214,on_after_attack,-1,pet,skill,type=element&element_cmp=13,rage,add=5
 200218,on_turn_end\on_after_dmg_cal,-1\-1,pet\skill,buff\buff,id=3239\id=3240,rage\set_damage,add=5&name=顺流\op=*&value=1.1&name=逆流伤害1.1倍
 200220,on_after_dmg_cal,-1,skill,unit,whos_turn=op&type=me.pet.cursor&type[0].op=NOT&type[0].cmp=0,set_damage,who=op&op=*&value=0.9
@@ -894,6 +906,7 @@ id,timing,priority,target,condition,cond_option,effect,effect_option
 210304,on_before_dmg_cal,-1,pet,skill,type=element&element_cmp=16,set_skill,type=sameElement&op=SET&value=1.5
 210307,on_before_attack,-1,skill,status,who=op&status_type=anger&op=>&cmp_value=50,set_skill,type=power&op=+&value=15
 210346,on_after_dmg_cal,-1,skill,skill,type=element&element_cmp=2,set_damage,op=*&value=1.1
+210370,on_after_dmg_cal,-1,skill,skill,type=element&element_cmp=13,set_damage,op=*&value=1.25
 210499,on_after_attack,-1,pet,none,random_cmp=10,add_buff,who=op&id=114
 210809,on_after_dmg_cal,-1,skill,buff,key=field&type=id&id_cmp=600001,set_damage,op=*&value=1.1
 213309,on_add_buff\on_after_pet_change\on_before_attack\on_after_attack\on_after_attack,-1\-1\-1\-1\-1,pet\pet\skill\pet\pet,none\none\unit\unit\unit,none\none\random_cmp=35&type=me.pet.buff[31].count/me.skill.type&type[0].cmp=1&type[1].op=>&type[1].cmp=0\type=me.pet.buff[31].count/me.skill.type&type[0].cmp=0&type[1].op=>&type[1].cmp=0\type=me.pet.buff[31].count/me.skill.type&type[0].cmp=0&type[1].op=>&type[1].cmp=0,add_buff\add_buff\set_skill\heal\heal,id=31&value=200\id=31&value=200\type=power&op=*&value=2\who=op&add=-me.pet.status.maxHp[MIN]op.pet.status.maxHp/3\add=me.pet.status.maxHp[MIN]op.pet.status.maxHp/3

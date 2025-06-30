@@ -5,15 +5,67 @@
 		<bgm>BGM_037</bgm>
 	</music>
 	<entities>
-
-    
-			<teleport id="1" name="飞翼氏族主城" pos="280,220" targetMapId="419"/>
-			
-
-
-
+		<npc id="42101" resId="Pets/pet/213.png" name="Lv78 石像魔" size="109,102" pos="340,45" namePos="0,0">
+			<battle>
+				<branch id="default">
+					<settings count="6" capture="true"/>
+					<enemy>
+						<pet id="213" level="78">
+							<loopSkill>12250,12251</loopSkill>
+						</pet>
+					</enemy>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>battle</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<npc id="42102" resId="Pets/pet/213.png" name="Lv79 石像魔" size="109,102" pos="130,160" namePos="0,0">
+			<battle>
+				<branch id="default">
+					<settings count="6" capture="true"/>
+					<enemy>
+						<pet id="213" level="79">
+							<loopSkill>12250,12251</loopSkill>
+						</pet>
+					</enemy>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>battle</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<npc id="42103" resId="Pets/pet/173.png" name="Lv80 阿童钢" size="109,102" pos="620,45" namePos="0,0" active="false">
+			<battle>
+				<branch id="default">
+					<settings count="6" capture="true"/>
+					<enemy>
+						<pet id="173" level="80">
+							<loopSkill>12220,12221</loopSkill>
+						</pet>
+					</enemy>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>battle</action>
+					<param>default</param>
+				</button>
+				<button type="auto">
+					<action>setNpcParam</action>
+					<param>42103</param>
+					<param>active=true</param>
+					<condition>random[new]LTE5</condition>
+				</button>
+			</eventHandler>
+		</npc>
+		<teleport id="1" name="飞翼氏族主城" pos="280,220" targetMapId="419"/>
 	</entities>
-
-
 </map>
 

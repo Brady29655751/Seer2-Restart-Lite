@@ -5,15 +5,43 @@
 		<bgm>BGM_033</bgm>
 	</music>
 	<entities>
-
-    
-			<teleport id="1" name="飞翼氏族主城" pos="100,50" targetMapId="419"/>
-		
-
-
-
+		<npc id="42401" resId="Pets/pet/209.png" name="Lv76 安吉丽塔" size="80,97" pos="320,65" namePos="0,0">
+			<battle>
+				<branch id="default">
+					<settings count="6" capture="true"/>
+					<enemy>
+						<pet id="209" level="76">
+							<loopSkill>12240</loopSkill>
+						</pet>
+					</enemy>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>battle</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<npc id="42402" resId="Pets/pet/209.png" name="Lv77 安吉丽塔" size="80,97" pos="840,190" namePos="0,0">
+			<battle>
+				<branch id="default">
+					<settings count="6" capture="true"/>
+					<enemy>
+						<pet id="209" level="77">
+							<loopSkill>12240</loopSkill>
+						</pet>
+					</enemy>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>battle</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<teleport id="1" name="飞翼氏族主城" pos="100,50" targetMapId="419"/>
 	</entities>
-
-
 </map>
 
