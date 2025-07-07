@@ -102,6 +102,7 @@ public static class EffectConditionHandler
             random *= (lhsUnit.pet.buffController.GetBuff(75)?.value ?? 100f) / 100f;
             random += lhsUnit.pet.buffController.GetBuff(67)?.value ?? 0;
             random *= (lhsUnit.pet.buffController.GetBuff(76)?.value ?? 100f) / 100f;
+            random -= state.stateBuffs.Count(x => x.Value.id == 600014) * 15;
             random = lhsUnit.pet.buffController.GetBuff(68)?.value ?? random;
         }
 

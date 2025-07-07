@@ -1154,6 +1154,9 @@ public static class EffectAbilityHandler
                 ));
             }
 
+            if (state.stateBuffs.Exists(x => x.Value.id == 600000))
+                buffs.RemoveAll(x => x.IsType(BuffType.Item));
+
             lhsUnit.pet.buffController.AddRangeBuff(buffs, lhsUnit, state);
             if (lhsUnit.pet.buffController.GetBuff(-7) != null)
             {

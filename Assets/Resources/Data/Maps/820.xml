@@ -1,0 +1,261 @@
+<map name="火源通径" category="9" id="820">
+	<fightMap>100004</fightMap>
+	<music category="9">
+		<bgm>BGM_820</bgm>
+	</music>
+	<initialPoint>650,140</initialPoint>
+	<entities>
+		<npc id="82001" resId="Pets/pet/1100" name="Lv 90 雷切" size="112,140" pos="745,325" namePos="0,-20">
+			<description>雷切</description>
+			<dialog>
+				<branch id="default" name="雷切" icon="Pets/pet/1100" size="112,140" pos="0,35">
+					<content><![CDATA[上古之初，万物皆有灵]]></content>
+					<functionHandler>
+						<func type="click">
+							<description><![CDATA[挑战器灵双打]]></description>
+							<action>battle</action>
+							<param>default</param>
+						</func>
+						<!--
+						<func type="click">
+							<description><![CDATA[兑换道具]]></description>
+							<action>openPanel</action>
+							<param>ItemShop</param>
+							<param>mode=buy</param>
+							<param>currency=400001/400002</param>
+							<param>item=400001/400002</param>
+							<param>limit=-1/-1</param>
+							<param>title=兑换道具</param>
+						</func>
+						-->
+					</functionHandler>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[和雷伊凯撒是什么关系？]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+					</replyHandler>
+				</branch>
+			</dialog>
+			<battle>
+				<branch id="default">
+					<settings count="2" parallel="2">
+						<mode>3</mode>
+						<initBuff>(rule:600000)</initBuff>
+					</settings>
+					<enemy>
+						<pet id="1100" level="90">
+							<status>
+								<atk>500</atk>
+								<hp>2000</hp>
+							</status>
+							<initBuff>-8,17,20</initBuff>
+							<loopSkill>11550,12281,12279</loopSkill>
+							<superSkill>12284</superSkill>
+						</pet>
+						<pet id="1101" level="90">
+							<status>
+								<mat>500</mat>
+								<hp>2000</hp>
+							</status>
+							<initBuff>-8,17,20</initBuff>
+							<loopSkill>12287,12289,12291</loopSkill>
+							<superSkill>12292</superSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>getPet</action>
+							<param>1100,1</param>
+							<condition>activity[20006].done[3][1100]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=【雷切】已经放入精灵仓库</param>
+							<param>item_icon=pet[1100]</param>
+							<param>option_num=1</param>
+							<condition>activity[20006].done[3][1100]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>20006</param>
+							<param>done[3][1100]=true</param>
+							<condition>activity[20006].done[3][1100]=[bool]false[default]false</condition>
+						</button>
+					</winHandler>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>openDialog</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<npc id="82002" resId="Pets/pet/1101" name="Lv 90 焰爪" size="115,121" pos="615,365" namePos="0,-20">
+			<description>焰爪</description>
+			<dialog>
+				<branch id="default" name="焰爪" icon="Pets/pet/1101" size="115,121" pos="0,35">
+					<content><![CDATA[上古之初，万物皆有灵]]></content>
+					<functionHandler>
+						<func type="click">
+							<description><![CDATA[挑战器灵]]></description>
+							<action>battle</action>
+							<param>default</param>
+						</func>
+					</functionHandler>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[和雷伊凯撒是什么关系？]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+					</replyHandler>
+				</branch>
+			</dialog>
+			<battle>
+				<branch id="default">
+					<settings count="2">
+						<mode>3</mode>
+						<initBuff>(rule:600000)</initBuff>
+					</settings>
+					<enemy>
+						<pet id="1101" level="90">
+							<status>
+								<mat>500</mat>
+								<hp>2000</hp>
+							</status>
+							<initBuff>-8,17,20</initBuff>
+							<loopSkill>12287,12289,12291</loopSkill>
+							<superSkill>12292</superSkill>
+						</pet>
+						<pet id="1100" level="90">
+							<status>
+								<atk>500</atk>
+								<hp>2000</hp>
+							</status>
+							<initBuff>-8,17,20</initBuff>
+							<loopSkill>11550,12281,12279</loopSkill>
+							<superSkill>12284</superSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>getPet</action>
+							<param>1101,1</param>
+							<condition>activity[20006].done[3][1101]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=【焰爪】已经放入精灵仓库</param>
+							<param>item_icon=pet[1101]</param>
+							<param>option_num=1</param>
+							<condition>activity[20006].done[3][1101]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>20006</param>
+							<param>done[3][1101]=true</param>
+							<condition>activity[20006].done[3][1101]=[bool]false[default]false</condition>
+						</button>
+					</winHandler>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>openDialog</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<npc id="82003" resId="Pets/pet/1102" name="Lv 90 冥锁" size="135,158" pos="270,100" namePos="0,-30">
+			<description>冥锁</description>
+			<dialog>
+				<branch id="default" name="冥锁" icon="Pets/pet/1102" size="135,158" pos="0,15">
+					<content><![CDATA[上古之初，万物皆有灵]]></content>
+					<functionHandler>
+						<func type="click">
+							<description><![CDATA[挑战器灵]]></description>
+							<action>battle</action>
+							<param>default</param>
+						</func>
+						<!--
+						<func type="click">
+							<description><![CDATA[兑换道具]]></description>
+							<action>openPanel</action>
+							<param>ItemShop</param>
+							<param>mode=buy</param>
+							<param>currency=400001/400002</param>
+							<param>item=400001/400002</param>
+							<param>limit=-1/-1</param>
+							<param>title=兑换道具</param>
+						</func>
+						-->
+					</functionHandler>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[和撒旦是什么关系？]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+					</replyHandler>
+				</branch>
+			</dialog>
+			<battle>
+				<branch id="default">
+					<settings count="1">
+						<mode>3</mode>
+						<initBuff>(rule:600000)</initBuff>
+					</settings>
+					<enemy>
+						<pet id="1102" level="90">
+							<status>
+								<def>1000</def>
+								<mdf>1000</mdf>
+								<hp>3000</hp>
+							</status>
+							<initBuff>-8,17,20,68,-3059</initBuff>
+							<loopSkill>12294,12295,12296,12298</loopSkill>
+							<superSkill>12301</superSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>getPet</action>
+							<param>1102,1</param>
+							<condition>activity[20006].done[3][1102]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=【冥锁】已经放入精灵仓库</param>
+							<param>item_icon=pet[1102]</param>
+							<param>option_num=1</param>
+							<condition>activity[20006].done[3][1102]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>20006</param>
+							<param>done[3][1102]=true</param>
+							<condition>activity[20006].done[3][1102]=[bool]false[default]false</condition>
+						</button>
+					</winHandler>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>openDialog</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+        <teleport id="1" name="脉流之瀑" pos="790,115" targetMapId="810"/>
+		<teleport id="2" name="纠结之藤" pos="230,365" targetMapId="830"/>
+	</entities>
+</map>

@@ -726,6 +726,9 @@ id,name,type,copyType,turn,options,description
 100988,灵影,feature,replace,-1,none,免疫不良状态，被对手技能命中时生成1枚影钩
 100989,最强,feature,replace,-1,none,全能力值提升100点
 100990,王者,feature,replace,-1,none,免疫不良状态，怒气不低于30
+101100,雷切,feature,replace,-1,none,免疫麻痹状态
+101101,焰爪,feature,repalce,-1,none,免疫烫伤状态
+101102,冥锁,feature,replace,-1,none,免疫混乱状态
 101220,歃血,feature,replace,-1,none,每损失1%体力提升1%暴击率
 101261,黑桃,feature,replace,-1,none,拥有黑桃花色时造成的伤害增加10%
 101262,方块,feature,replace,-1,none,拥有方块花色时受到的伤害减少10%
@@ -885,6 +888,9 @@ id,name,type,copyType,turn,options,description
 200988,幻视,emblem,replace,-1,none,战斗时全队附带幻视领域
 200989,王者,emblem,replace,-1,none,首次出场时附带王者体质
 200990,王权,emblem,replace,-1,hide=true,战斗时全队附带王权领域
+201100,静电,emblem,replace,-1,none,静电场地下暴击率增加15%
+201101,火山,emblem,replace,-1,none,火山场地下伤害提升15%
+201102,炼狱,emblem,replace,-1,none,炼狱场地下受到的伤害减少15%
 201220,浴血,emblem,replace,-1,none,使用浴血之火会使对手损失35点怒气
 201261,扑克,emblem,replace,-1,none,首次出场时随机获得1张扑克牌
 201262,地主,emblem,replace,-1,none,使用王炸会回复15点怒气
@@ -986,6 +992,8 @@ id,name,type,copyType,turn,options,description
 420012,水珠,item,replace,-1,item=22012&group=exclude,[ffbb33]【随身物品】[-][ENDL]雨天时暴击伤害增加15%，阿卡纳斯携带时首次出场会获得水纹状态
 420013,忏悔魔心,item,replace,-1,item=22013&group=exclude,[ffbb33]【随身物品】[-][ENDL]首次出场时获得效果触发率提升15%的印记，撒旦携带时可以使用[ffbb33]【专属动作】[-]暴走
 420014,太阳之冠,item,replace,-1,item=22014&group=exclude,[ffbb33]【随身物品】[-][ENDL]攻击未命中或造成的伤害低于100时恢复20点怒气，米咔携带时免疫超能系伤害
+420015,幻空结晶,item,replace,-1,item=22015&group=exclude,[ffbb33]【随身物品】[-][ENDL]回合开始时35%使对手烧伤，乔尼携带时必定烧伤
+420016,烟雾弹,item,replace,-1,item=22016&group=exclude,[ffbb33]【随身物品】[-][ENDL]使用技能35%使对手失明，大将岩浮携带时会额外使眩晕的对手混乱
 430000,商城礼券,item,replace,-1,none,伊特大乱斗途中的商店买一送二
 430001,蘑菇果实,item,replace,-1,item=23001&group=exclude,[ffbb33]【随身物品】[-][ENDL]威力低于自身体重的技能连击数+1，但会有25%概率使自身在出手前陷入昏迷1回合
 430002,伊萨晶石,item,replace,-1,item=23002&group=exclude,[ffbb33]【随身物品】[-][ENDL]每回合恢复双方1/12体力
@@ -1005,10 +1013,13 @@ id,name,type,copyType,turn,options,description
 490946,神迹拂晓兔专属全能刻印,item,new,-1,group=Cm&Cm_type=0&item=490946&status=0/60/35/35/30/115,特攻 60，物防 35，特防 35，速度 30，体力 115
 600000,禁止道具,mark,replace,-1,none,禁止道具类加成
 600001,森林,mark,replace,-1,none,草系和光系技能命中后恢复35点体力和10点怒气
-600002,深海,mark,replace,-1,none,双方受到攻击时35%概率溺水[ENDL]水系精灵闪避率提高10%
-600004,极地,mark,replace,-1,none,双方暴击率提升15%，击败对手时会强化双攻1级
+600002,深海,mark,replace,-1,none,受到攻击时35%概率溺水[ENDL]水系精灵闪避率提高10%
+600003,火山,mark,replace,-1,none,物理攻击15%使对手烧伤3回合[ENDL]特殊攻击35%使对手烫伤3回合[ENDL]属性技能50%使对手燃烧3回合
+600004,极地,mark,replace,-1,none,暴击率提升15%，击败对手时会强化双攻1级
 600008,影触,mark,replace,-1,none,每回合随机弱化双方1项能力1级
 600009,冰封之轴,mark,replace,-1,none,冰封之轴拥有狂暴的冰冻能量，能够冻住整个北半球！
+600014,炼狱,mark,replace,-1,none,效果触发率增加15%[ENDL]回合结束时10%使自身混乱
+600015,静电,mark,replace,-1,none,连击技能每3次连击会使连击数+1
 600020,魔界,mark,replace,-1,none,造成伤害的1/4会恢复自身体力，第2次行动附带60点固定伤害
 610000,PVP极品资质120,mark,replace,-1,none,[ffbb33]【PVP对战规则】[-][ENDL]双方精灵资质为120
 610001,PVP无禽12星,mark,replace,-1,none,[ffbb33]【PVP对战规则】[-][ENDL]背包必须带满6只精灵，且星数总和不能超过12[ENDL]不能携带4星以上精灵，且3星精灵最多携带2只
