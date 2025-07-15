@@ -16,6 +16,11 @@
 							<action>battle</action>
 							<param>default</param>
 						</func>
+						<func type="click">
+							<description><![CDATA[雷神器灵进化]]></description>
+							<action>battle</action>
+							<param>evolve</param>
+						</func>
 						<!--
 						<func type="click">
 							<description><![CDATA[兑换道具]]></description>
@@ -87,6 +92,32 @@
 						</button>
 					</winHandler>
 				</branch>
+				<branch id="evolve">
+					<settings count="1" star="4">
+						<mode>3</mode>
+						<weather>3</weather>
+						<initBuff>(field:600003)</initBuff>
+					</settings>
+					<enemy>
+						<pet id="2558" level="100">
+							<status>
+								<hp>5000</hp>
+							</status>
+							<initBuff>-8,17,20,77,92,98</initBuff>
+							<loopSkill>12308,12310,12304,12303,12305,12302,12307</loopSkill>
+							<superSkill>12306</superSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=PetSelect</param>
+						    <param>title=选择要进化的雷伊</param>
+						    <param>option_num=2</param>
+						    <param>callback=evolve</param>
+						</button>
+					</winHandler>
+				</branch>
 			</battle>
 			<eventHandler>
 				<button type="click">
@@ -94,6 +125,53 @@
 					<param>default</param>
 				</button>
 			</eventHandler>
+			<callbackHandler>
+				<button type="choose">
+					<action>openHintbox</action>
+					<param>type=PetSelect</param>
+				    <param>title=选择要进化的雷伊</param>
+				    <param>option_num=2</param>
+					<param>callback=evolve</param>
+				    <condition>data.PetSelect.uidNOT90|data.PetSelect.level&lt;100</condition>
+				</button>
+				<button type="evolve">
+				    <action>openHintbox</action>
+				    <param>type=Item</param>
+				    <param>title=提示</param>
+				    <param>content=必须选择等级100的雷伊！</param>
+				    <param>item_icon=pet[90]</param>
+				    <param>option_num=1</param>
+					<param>callback=choose</param>
+				    <condition>data.PetSelect.uidNOT90|data.PetSelect.level&lt;100</condition>
+				</button>
+				<button type="evolve">
+				    <action>openHintbox</action>
+				    <param>type=Item</param>
+				    <param>title=提示</param>
+				    <param>content=雷伊已成功超进化</param>
+				    <param>item_icon=pet[2558]</param>
+				    <param>option_num=1</param>
+				    <condition>data.PetSelect.uid=90</condition>
+				    <condition>data.PetSelect.levelGTE100</condition>
+				</button>
+				<button type="evolve">
+				    <action>evolvePet</action>
+				    <param>index=data.PetSelectIndex</param>
+				    <param>2558</param>
+				    <condition>data.PetSelect.uid=90</condition>
+				    <condition>data.PetSelect.levelGTE100</condition>
+				</button>
+				<button type="evolve">
+				    <action>setPet</action>
+				    <param>index=data.PetSelectIndex</param>
+				    <param>skill=12307</param>
+				    <param>skill=12308</param>
+				    <param>skill=12309</param>
+				    <param>skill=12310</param>
+				    <condition>data.PetSelect.uid=90</condition>
+				    <condition>data.PetSelect.levelGTE100</condition>
+				</button>
+			</callbackHandler>
 		</npc>
 		<npc id="82002" resId="Pets/pet/1101" name="Lv 90 焰爪" size="115,121" pos="615,365" namePos="0,-20">
 			<description>焰爪</description>
@@ -105,6 +183,11 @@
 							<description><![CDATA[挑战器灵]]></description>
 							<action>battle</action>
 							<param>default</param>
+						</func>
+						<func type="click">
+							<description><![CDATA[凯萨器灵进化]]></description>
+							<action>battle</action>
+							<param>evolve</param>
 						</func>
 					</functionHandler>
 					<replyHandler>
@@ -165,6 +248,32 @@
 						</button>
 					</winHandler>
 				</branch>
+				<branch id="evolve">
+					<settings count="1">
+						<mode>3</mode>
+						<weather>3</weather>
+						<initBuff>(field:600003)</initBuff>
+					</settings>
+					<enemy>
+						<pet id="2559" level="100">
+							<status>
+								<hp>5000</hp>
+							</status>
+							<initBuff>-8,17,92,98</initBuff>
+							<loopSkill>12316,12313,12317,12319,12314</loopSkill>
+							<superSkill>12315</superSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=PetSelect</param>
+						    <param>title=选择要进化的凯萨</param>
+						    <param>option_num=2</param>
+						    <param>callback=evolve</param>
+						</button>
+					</winHandler>
+				</branch>
 			</battle>
 			<eventHandler>
 				<button type="click">
@@ -172,6 +281,53 @@
 					<param>default</param>
 				</button>
 			</eventHandler>
+			<callbackHandler>
+				<button type="choose">
+					<action>openHintbox</action>
+					<param>type=PetSelect</param>
+				    <param>title=选择要进化的凯萨</param>
+				    <param>option_num=2</param>
+					<param>callback=evolve</param>
+				    <condition>data.PetSelect.uidNOT234|data.PetSelect.level&lt;100</condition>
+				</button>
+				<button type="evolve">
+				    <action>openHintbox</action>
+				    <param>type=Item</param>
+				    <param>title=提示</param>
+				    <param>content=必须选择等级100的凯萨！</param>
+				    <param>item_icon=pet[234]</param>
+				    <param>option_num=1</param>
+					<param>callback=choose</param>
+				    <condition>data.PetSelect.uidNOT234|data.PetSelect.level&lt;100</condition>
+				</button>
+				<button type="evolve">
+				    <action>openHintbox</action>
+				    <param>type=Item</param>
+				    <param>title=提示</param>
+				    <param>content=凯萨已成功超进化</param>
+				    <param>item_icon=pet[2559]</param>
+				    <param>option_num=1</param>
+				    <condition>data.PetSelect.uid=234</condition>
+				    <condition>data.PetSelect.levelGTE100</condition>
+				</button>
+				<button type="evolve">
+				    <action>evolvePet</action>
+				    <param>index=data.PetSelectIndex</param>
+				    <param>2559</param>
+				    <condition>data.PetSelect.uid=234</condition>
+				    <condition>data.PetSelect.levelGTE100</condition>
+				</button>
+				<button type="evolve">
+				    <action>setPet</action>
+				    <param>index=data.PetSelectIndex</param>
+				    <param>skill=12316</param>
+				    <param>skill=12317</param>
+				    <param>skill=12318</param>
+				    <param>skill=12319</param>
+				    <condition>data.PetSelect.uid=234</condition>
+				    <condition>data.PetSelect.levelGTE100</condition>
+				</button>
+			</callbackHandler>
 		</npc>
 		<npc id="82003" resId="Pets/pet/1102" name="Lv 90 冥锁" size="135,158" pos="270,100" namePos="0,-30">
 			<description>冥锁</description>
