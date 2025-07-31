@@ -142,7 +142,7 @@ public class BattlePet : Pet
         if (skill.type == SkillType.特殊) {
             return new KeyValuePair<int, int>((int)status.mat, (int)status.mdf);
         }
-        if (skill.type == SkillType.必杀) {
+        if ((skill.type == SkillType.必杀) || (skill.type == SkillType.连携)) {
             if (status.atk > status.mat) {
                 return new KeyValuePair<int, int>((int)status.atk, (int)status.def);
             }

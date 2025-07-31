@@ -1,0 +1,168 @@
+<map name="云海藏书"  category="7"  id="430">
+	<!-- <resource>10011</resource> -->
+	<initialPoint>600,270</initialPoint>
+	<music category="7">
+		<bgm>BGM_037</bgm>
+	</music>
+	<entities>
+		<npc id="43002" resId="Pets/pet/522.png" name="布克" size="240,244" pos="365,55" namePos="0,-20">
+		    <description>开卷有益</description>
+		    <dialog>
+		        <branch id="default" name="布克" icon="Pets/pet/522.png" size="120,122" pos="0,45">
+		            <content><![CDATA[书中自有黄金屋！]]></content>
+					<functionHandler>
+						<func type="click">
+							<description><![CDATA[挑战一]]></description>
+							<action>battle</action>
+							<param>challenge_1</param>
+						</func>
+						<func type="click">
+							<description><![CDATA[挑战二]]></description>
+							<action>battle</action>
+							<param>challenge_2</param>
+							<condition>firstPet.id=522</condition>
+						</func>
+						<func type="branch">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=把布克设为首发之后再来挑战吧</param>
+							<param>option_num=1</param>
+							<param>item_icon=pet[522]</param>
+							<condition>firstPet.idNOT522</condition>
+						</func>
+						<func type="click">
+							<description><![CDATA[挑战三]]></description>
+							<action>battle</action>
+							<param>challenge_3</param>
+						</func>
+					</functionHandler>
+		            <replyHandler>
+		            	<reply type="click">
+		            		<description><![CDATA[那么颜如玉在哪里？]]></description>
+		            		<action>openDialog</action>
+		            		<param>null</param>
+		            	</reply>
+		            </replyHandler>
+		        </branch>
+		    </dialog>
+			<battle>
+				<branch id="challenge_1">
+					<settings count="1"/>
+					<enemy>
+						<pet id="522" level="90">
+							<status>
+								<hp>5000</hp>
+							</status>
+							<initBuff>-4,-8,100</initBuff>
+							<loopSkill>12346,12341,12352,12352,12352</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>getPet</action>
+							<param>521,10,0</param>
+							<condition>activity[11011].done[1]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=【布布】已经放入精灵仓库</param>
+							<param>item_icon=pet[521]</param>
+							<param>option_num=1</param>
+							<condition>activity[11011].done[1]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>11011</param>
+							<param>done[1]=true</param>
+							<condition>activity[11011].done[1]=[bool]false[default]false</condition>
+						</button>
+					</winHandler>
+				</branch>
+				<branch id="challenge_2">
+					<settings count="1"/>
+					<enemy>
+						<pet id="522" level="90">
+							<status>
+								<hp>2000</hp>
+							</status>
+							<initBuff>14,-3074</initBuff>
+							<loopSkill>12347,12354,12341,12341,12349</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setPet</action>
+							<param>emblem=1</param>
+							<condition>activity[11011].done[2]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=【布克】获得了【增效】纹章</param>
+							<param>item_icon=emblem[522]</param>
+							<param>option_num=1</param>
+							<condition>activity[11011].done[2]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>11011</param>
+							<param>done[2]=true</param>
+							<condition>activity[11011].done[2]=[bool]false[default]false</condition>
+						</button>
+					</winHandler>
+				</branch>
+				<branch id="challenge_3">
+					<settings count="6" star="2"/>
+					<enemy>
+						<pet id="522" level="90">
+							<status>
+								<hp>30000</hp>
+							</status>
+							<initBuff>-8,-3030</initBuff>
+							<loopSkill>12341</loopSkill>
+							<superSkill>12350</superSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setItem</action>
+							<param>add</param>
+							<param>2,100</param>
+							<condition>activity[11011].done[3]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=100 星钻已经放入背包</param>
+							<param>item_icon=item[2]</param>
+							<param>option_num=1</param>
+							<condition>activity[11011].done[3]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>11011</param>
+							<param>done[3]=true</param>
+							<condition>activity[11011].done[3]=[bool]false[default]false</condition>
+						</button>
+					</winHandler>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>openDialog</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<teleport id="1" name="研究院" pos="230,430" targetMapId="429"/>
+		<!-- <teleport id="2" name="星象之台" pos="800,210" targetMapId="431"/> -->
+	</entities>
+
+
+</map>
+

@@ -707,7 +707,7 @@ public static class EffectAbilityHandler
         }
         if (isType)
         {
-            buffs = lhsBuffController.GetRangeBuff(x => x.IsType(copyType) && filter(x));
+            buffs = lhsBuffController.GetRangeBuff(x => (!x.IsUneffectable()) && x.IsType(copyType) && filter(x));
             rhsBuffController.AddRangeBuff(buffs.Select(x => new Buff(x)), rhsUnit, state);
         }
 
@@ -1394,16 +1394,12 @@ public static class EffectAbilityHandler
                     {
                         var myIndex = lhsUnit.petSystem.petBag.IndexOf(pet);
                         var opIndex = rhsUnit.petSystem.petBag.IndexOf(pet);
-                        if (myIndex >= 0)
-                        {
-                            lhsUnit.petSystem.backupPetBag[myIndex] = new BattlePet(lhsUnit.petSystem.petBag[myIndex]);
-                            lhsUnit.petSystem.petBag[myIndex] = null;
-                        }
+                        var unit = (myIndex >= 0) ? lhsUnit : rhsUnit;
+                        var index = (myIndex >= 0) ? myIndex : opIndex;
 
-                        else if (opIndex >= 0)
-                            rhsUnit.petSystem.petBag[opIndex] = null;
-
-                        isSuccess |= (myIndex >= 0) || (opIndex >= 0);
+                        unit.petSystem.petBag[index] = null;
+                        
+                        isSuccess |= (index >= 0);
                     }
                 }
 

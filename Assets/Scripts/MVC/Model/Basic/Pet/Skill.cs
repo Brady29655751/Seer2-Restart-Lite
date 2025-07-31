@@ -327,12 +327,14 @@ public class Skill
     }
 
     public bool IsAction() {
-        return (type != SkillType.属性) && (type != SkillType.物理) 
-            && (type != SkillType.特殊) && (type != SkillType.必杀);
+        return type < SkillType.属性;
+            // (type != SkillType.属性) && (type != SkillType.物理) 
+            // && (type != SkillType.特殊) && (type != SkillType.必杀);
     }
 
     public bool IsAttack() {
-        return (type == SkillType.物理) || (type == SkillType.特殊) || (type == SkillType.必杀);
+        return type > SkillType.属性;
+        // (type == SkillType.物理) || (type == SkillType.特殊) || (type == SkillType.必杀);
     }
 
     public bool IsSelect() {
@@ -358,7 +360,7 @@ public class Skill
         if (type == SkillType.属性)
             return PetAnimationType.Property;
 
-        if (type == SkillType.必杀)
+        if ((type == SkillType.必杀) || (type == SkillType.连携))
             return isSecondSuper ? PetAnimationType.SecondSuper : PetAnimationType.Super;
 
         return PetAnimationType.None;
@@ -466,6 +468,6 @@ public class Skill
 
 public enum SkillType {
     空过 = -1, 道具 = -2, 換场 = -3, 逃跑 = -4,
-    属性 = 0, 物理 = 1, 特殊 = 2, 必杀 = 100,
+    属性 = 0, 物理 = 1, 特殊 = 2, 连携 = 3, 必杀 = 100,
 }
 

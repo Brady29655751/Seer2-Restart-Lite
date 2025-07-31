@@ -28,6 +28,30 @@
 				</button>
 			</eventHandler>
 		</npc>
+		<npc id="10002" resId="Pets/pet/251.png" name="" size="30,36" pos="210,360" active="false">
+			<battle>
+				<branch id="default">
+					<settings count="6" capture="true"/>
+					<enemy>
+						<pet id="251" level="15">
+							<loopSkill>12357</loopSkill>
+						</pet>
+					</enemy>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>battle</action>
+					<param>default</param>
+				</button>
+				<button type="auto">
+					<action>setNpcParam</action>
+					<param>10002</param>
+					<param>active=true</param>
+					<condition>random[new]LTE5</condition>
+				</button>
+			</eventHandler>
+		</npc>
 		<teleport id="1" name="草系主城" pos="860,255" targetMapId="90"/>
 		<teleport id="2" name="水仙草界" pos="80,210" targetMapId="151"/>
 		<teleport id="3" name="碧玉森林" pos="440,395" targetMapId="101"/>
