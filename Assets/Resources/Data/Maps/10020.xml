@@ -167,6 +167,152 @@
 				</button>
 			</eventHandler>
 		</npc>
+		<npc id="1002005" resId="Pets/pet/114780" name="Lv105 神迹巴拉龟" size="218,158" pos="520,300" namePos="-10,0">
+			<description>巴拉龟神迹觉醒！</description>
+			<dialog>
+				<branch id="default" name="神迹巴拉龟" icon="Pets/pet/114780" size="164,119" pos="10,35">
+					<content><![CDATA[我不是雄龟！]]></content>
+					<functionHandler>
+						<func type="click">
+							<description><![CDATA[超进化]]></description>
+							<action>battle</action>
+							<param>evolve</param>
+						</func>
+						<func type="click">
+							<description><![CDATA[神迹觉醒]]></description>
+							<action>battle</action>
+							<param>miracle</param>
+						</func>
+						<func type="click">
+							<description><![CDATA[因子商店]]></description>
+							<action>openPanel</action>
+							<param>ItemShop</param>
+							<param>mode=buy</param>
+							<param>currency=8/0</param>
+							<param>item=333147/333145/334731/334732</param>
+							<param>limit=1/1/1/1</param>
+							<param>title=因子商店</param>
+						</func>
+					</functionHandler>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[所以你是雌龟？]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+					</replyHandler>
+				</branch>
+			</dialog>
+			<battle>
+				<branch id="evolve">
+					<settings count="1" star="4">
+						<mode>3</mode>
+						<weather>2</weather>
+					</settings>
+					<enemy>
+						<pet id="12698" level="100">
+							<status>
+								<hp>10000</hp>
+							</status>
+							<initBuff>13,14,17,20,99,3336</initBuff>
+							<loopSkill>12394,12396</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=PetSelect</param>
+						    <param>title=选择要进化的巴拉龟</param>
+						    <param>option_num=2</param>
+						    <param>callback=evolve</param>
+						</button>
+					</winHandler>
+				</branch>
+				<branch id="miracle">
+					<settings count="6">
+						<mode>4</mode>
+						<weather>2</weather>
+					</settings>
+					<enemy>
+						<pet id="114780" level="105">
+							<status>
+								<hp>30000</hp>
+							</status>
+							<initBuff>-8,61,3336,-2001</initBuff>
+							<loopSkill>12408,12409,12410,12411,12412</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setItem</action>
+							<param>add</param>
+							<param>8,50</param>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=50个精灵因子已经放入背包</param>
+							<param>item_icon=item[8]</param>
+							<param>option_num=1</param>
+						</button>
+					</winHandler>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>openDialog</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+			<callbackHandler>
+				<button type="choose">
+					<action>openHintbox</action>
+					<param>type=PetSelect</param>
+				    <param>title=选择要进化的巴拉龟</param>
+				    <param>option_num=2</param>
+					<param>callback=evolve</param>
+				    <condition>data.PetSelect.uidNOT10032|data.PetSelect.level&lt;100</condition>
+				</button>
+				<button type="evolve">
+				    <action>openHintbox</action>
+				    <param>type=Item</param>
+				    <param>title=提示</param>
+				    <param>content=必须选择等级100的巴拉龟！</param>
+				    <param>item_icon=pet[10032]</param>
+				    <param>option_num=1</param>
+					<param>callback=choose</param>
+				    <condition>data.PetSelect.uidNOT10032|data.PetSelect.level&lt;100</condition>
+				</button>
+				<button type="evolve">
+				    <action>openHintbox</action>
+				    <param>type=Item</param>
+				    <param>title=提示</param>
+				    <param>content=巴拉龟已成功超进化</param>
+				    <param>item_icon=pet[12698]</param>
+				    <param>option_num=1</param>
+				    <condition>data.PetSelect.uid=10032</condition>
+				    <condition>data.PetSelect.levelGTE100</condition>
+				</button>
+				<button type="evolve">
+				    <action>evolvePet</action>
+				    <param>index=data.PetSelectIndex</param>
+				    <param>12698</param>
+				    <condition>data.PetSelect.uid=10032</condition>
+				    <condition>data.PetSelect.levelGTE100</condition>
+				</button>
+				<button type="evolve">
+				    <action>setPet</action>
+				    <param>index=data.PetSelectIndex</param>
+				    <param>skill=12399</param>
+				    <param>skill=12400</param>
+				    <param>skill=12401</param>
+				    <param>skill=12402</param>
+				    <condition>data.PetSelect.uid=10032</condition>
+				    <condition>data.PetSelect.levelGTE100</condition>
+				</button>
+			</callbackHandler>
+		</npc>
 		<teleport id="1" name="传送室" pos="740,420" targetMapId="10001"/>
 	</entities>		
 </map>

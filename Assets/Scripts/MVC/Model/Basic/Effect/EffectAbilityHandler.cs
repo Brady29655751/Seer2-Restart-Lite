@@ -600,17 +600,28 @@ public static class EffectAbilityHandler
             foreach (var type in typeRange)
             {
                 var buffType = type.ToBuffType();
+                if (buffController.GetBuff(Buff.GetProtectBuffTypeId(buffType)) != null)
+                    continue;
+
                 isSuccess |= buffController.RemoveRangeBuff(x => (!x.IsUneffectable()) && x.IsType(buffType) && filter(x), lhsUnit, state);
             }
             return isSuccess;
         }
         if (isId)
         {
+            var idRangeResult = new List<int>(idRange);
             foreach (var id in idRange)
             {
                 var buff = new Buff(id);
                 if ((!buff.IsPower()) || (!filter(buff)))
                     continue;
+
+                if ((buff.IsPowerUp() && (buffController.GetBuff(Buff.BUFFID_PROTECT_POWERUP) != null)) ||
+                    (buff.IsPowerDown() && (buffController.GetBuff(Buff.BUFFID_PROTECT_POWERDOWN) != null)))
+                {
+                    idRangeResult.Remove(id);
+                    continue;
+                }
 
                 int buffId = id.IsWithin(-9, -10) ? 5 : ((id - 1) / 2);
 
@@ -620,7 +631,7 @@ public static class EffectAbilityHandler
                 if ((Mathf.Abs(id) % 2 == 1) ^ (statusController.powerup[buffId] < 0))
                     statusController.SetPowerUp(buffId, 0);
             }
-            return buffController.RemoveRangeBuff(x => idRange.Contains(x.id) && filter(x), lhsUnit, state);
+            return buffController.RemoveRangeBuff(x => idRangeResult.Contains(x.id) && filter(x), lhsUnit, state);
         }
 
         return false;
@@ -695,6 +706,15 @@ public static class EffectAbilityHandler
                     continue;
                 }
 
+                if (isTransfer || isReverse)
+                {
+                    if ((buff.IsPowerUp() && (lhsBuffController.GetBuff(Buff.BUFFID_PROTECT_POWERUP) != null)) ||
+                        (buff.IsPowerDown() && (lhsBuffController.GetBuff(Buff.BUFFID_PROTECT_POWERDOWN) != null)))
+                    {
+                        continue;       
+                    }
+                }
+
                 int type = buff.id.IsWithin(-9, -10) ? 5 : (buff.id - 1) / 2;
                 status[type] = (isReverse ? -1 : 1) * powerup[type];
 
@@ -705,7 +725,8 @@ public static class EffectAbilityHandler
             }
             rhsUnit.pet.PowerUp(status, rhsUnit, state);
         }
-        if (isType)
+
+        if (isType && (lhsBuffController.GetBuff(Buff.GetProtectBuffTypeId(copyType)) == null))
         {
             buffs = lhsBuffController.GetRangeBuff(x => (!x.IsUneffectable()) && x.IsType(copyType) && filter(x));
             rhsBuffController.AddRangeBuff(buffs.Select(x => new Buff(x)), rhsUnit, state);
@@ -781,6 +802,7 @@ public static class EffectAbilityHandler
         string type = effect.abilityOptionDict.Get("type", "skill");
         string op = effect.abilityOptionDict.Get("op", "+");
         string value = effect.abilityOptionDict.Get("value", "0");
+        string option = effect.abilityOptionDict.Get("option", null);
 
         BattleState damageState = turn switch
         {
@@ -814,7 +836,16 @@ public static class EffectAbilityHandler
         }
         else
         {
-            skillSystem.damageDict[type] = (int)Operator.Operate(op, skillSystem.damageDict.Get(type, 0), damage);
+            var keys = option switch
+            {
+                "start" => skillSystem.damageDict.Keys.Where(x => x.StartsWith(type)),
+                "end" => skillSystem.damageDict.Keys.Where(x => x.EndsWith(type)),
+                "contain" => skillSystem.damageDict.Keys.Where(x => x.Split("_").Contains(type)),
+                _ => type.SingleToList()
+            };
+            
+            foreach (var key in keys)
+                skillSystem.damageDict[key] = (int)Operator.Operate(op, skillSystem.damageDict.Get(key, 0), damage);
         }
 
         return true;
@@ -1047,7 +1078,7 @@ public static class EffectAbilityHandler
                 {
                     var opSkillController = rhsUnit.pet.skillController;
                     normalSkills = (ListHelper.IsNullOrEmpty(opSkillController.normalSkills) ? opSkillController.loopSkills : opSkillController.normalSkills)
-                        .GroupBy(x => x?.id ?? 0).Select(x => x.First()).Take(4).ToArray();
+                        .Where(x => x != null).GroupBy(x => x?.id ?? 0).Select(x => x.First()).Take(4).ToArray();
 
                     Array.Resize(ref normalSkills, 4);
                 }
@@ -1056,7 +1087,7 @@ public static class EffectAbilityHandler
                     int.TryParse(normalShift, out var normalShiftCount))
                 {
                     normalSkills = (ListHelper.IsNullOrEmpty(pet.skillController.normalSkills) ? pet.skillController.loopSkills : pet.skillController.normalSkills)
-                        .Where(x => x != null).Select(x => Skill.GetSkill(x.id + normalShiftCount, false)).Take(4).ToArray();
+                        .Select(x => (x == null) ? null : Skill.GetSkill(x.id + normalShiftCount, false)).Take(4).ToArray();
                 }
                 else
                 {
@@ -1117,8 +1148,8 @@ public static class EffectAbilityHandler
             var inheritList = effect.abilityOptionDict.Get("inherit", "buff").Split('/');
             Pet switchPet = new Pet((int)newValue, battlePet);
             bool isSkillShifted = TryGetShiftedSkills(battlePet, out var normalSkills, out var superSkill);
-            switchPet.normalSkill = isSkillShifted ? normalSkills : battlePet.normalSkill;
-            switchPet.superSkill = isSkillShifted ? superSkill : battlePet.superSkill;
+            switchPet.normalSkill = isSkillShifted ? normalSkills : battlePet.skillController.normalSkills.ToArray();
+            switchPet.superSkill = isSkillShifted ? superSkill : battlePet.skillController.superSkill;
 
             // Check if inherit skin.
             if (inheritList.Contains("skin"))

@@ -9,7 +9,9 @@ public class Buff
     public const int BUFFID_PVP_IV_120 = 61_0000;
     public const int BUFFID_PET_EXCHANGE = 62_0000;
     public const int BUFFID_PET_RANDOM = 62_0001;
-    public static List<int> powerupBuffIds => new List<int>(){ 1, 3, 5, 7, 9, -9 };
+    public const int BUFFID_PROTECT_POWERUP = -2003;
+    public const int BUFFID_PROTECT_POWERDOWN = -2004;
+    public static List<int> powerupBuffIds => new List<int>() { 1, 3, 5, 7, 9, -9 };
     public static List<int> powerdownBuffIds => new List<int>(){ 2, 4, 6, 8, 10, -10 }; 
     public static List<Buff> yiteEndBuffDatabse => BuffInfo.database.Where(x => x.id.IsInRange(410000, 420000)).Select(x => new Buff(x.id)).ToList();
     public static List<Buff> yiteHardBuffDatabse => BuffInfo.database.Where(x => x.id.IsInRange(430000, 440000) || x.id.IsInRange(400010, 400015) || x.id.IsInRange(950, 999)).Select(x => new Buff(x.id)).ToList();
@@ -109,17 +111,29 @@ public class Buff
         return new Buff(GetExtendUIBuffId(extend));
     }
 
-    public static int GetPowerUpBuffId(int type, int powerup) {
+    public static int GetPowerUpBuffId(int type, int powerup)
+    {
         if (powerup == 0)
             return 0;
 
         if (type == 5)
-            return(powerup > 0) ? -9 : -10;
+            return (powerup > 0) ? -9 : -10;
 
         return 2 * type + (powerup > 0 ? 1 : 2);
     }
 
-    public static Buff GetWeatherBuff(int weatherId) {
+    public static int GetProtectBuffTypeId(BuffType type)
+    {
+        return type switch
+        {
+            BuffType.TurnBased => -2001,
+            BuffType.ChanceBased => -2002,
+            _ => 0,
+        };
+    }
+
+    public static Buff GetWeatherBuff(int weatherId)
+    {
         int id = 50_0000 + weatherId;
         if (GetBuffInfo(id) == null)
             return new Buff(50_0000);

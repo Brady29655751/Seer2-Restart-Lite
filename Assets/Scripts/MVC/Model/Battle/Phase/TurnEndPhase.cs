@@ -65,10 +65,23 @@ public class TurnEndPhase : BattlePhase
         var clientPetBag = clientUnit.petSystem.GetParallelPetBag(parallelCount);
 
         void ParallelBuffEffected(Unit unit, List<BattlePet> petBag) {
-            for (int i = 0; i < petBag.Count; i++) {
+            for (int i = 0; i < petBag.Count; i++)
+            {
                 var cursor = (parallelCount <= 1) ? 0 : unit.petSystem.petBag.IndexOf(petBag[i]);
                 var skillSystem = unit.parallelSkillSystems[cursor];
-                petBag[i].hp += skillSystem.buffHeal - skillSystem.totalBuffDamage;
+                var buffDamageShield = petBag[i].buffController.GetBuff(2000);
+                var reducedBuffDamage = Mathf.Max(skillSystem.totalBuffDamage - (buffDamageShield?.value ?? 0), 0);
+                petBag[i].hp += skillSystem.buffHeal - reducedBuffDamage;
+
+                if (buffDamageShield != null)
+                {
+                    buffDamageShield.value -= skillSystem.totalBuffDamage;
+                    if (buffDamageShield.info.autoRemove && (buffDamageShield.value <= 0))
+                    {
+                        petBag[i].buffController.RemoveBuff(buffDamageShield, unit, state);
+                    }
+                }
+                    
             }
         }
 
