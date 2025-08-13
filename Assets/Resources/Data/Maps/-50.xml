@@ -1,4 +1,4 @@
-<map name="机械室" category="1" id="50" weather="0" switch="1">
+<map name="机械室" category="1" id="-50" weather="0" switch="-1" pathId="-1">
 	<!-- <resource>10005</resource> -->
 	<fightMap>100011</fightMap>
 	<initialPoint>460,100</initialPoint>
@@ -6,6 +6,15 @@
 		<bgm>MU_000</bgm>
 	</music>
 	<entities>
+		<npc id="-5000" resId="1001" name="" size="245,200" pos="590,340" color="0,0,0,0">
+			<description><![CDATA[传送室]]></description>
+			<eventHandler>
+				<button type="click">
+					<action>teleport</action>
+					<param>-70</param>
+				</button>
+			</eventHandler>
+		</npc>
 		<!--
 		<npc id="4" resId="4" name="菲鲁" dir="0" width="70" height="120" pos="400,417" actorPos="544,443" path="">
 			<dialog npcId="4" transport="1,300,400">
@@ -28,6 +37,5 @@
 			</eventHandler>
 		</npc>
 		-->
-		<teleport id="1" name="传送室" pos="700,65" targetMapId="70"/> 
 	</entities>
 </map>

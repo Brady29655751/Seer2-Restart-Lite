@@ -86,8 +86,8 @@ public class Battle
         var masterPetBag = PhotonNetwork.IsMasterClient ? myPetBag : opPetBag;
         var clientPetBag = PhotonNetwork.IsMasterClient ? opPetBag : myPetBag;
         Init(masterPetBag, clientPetBag, roomSettings);
-        RecordBattle(masterPetBag.Select(x => (x == null) ? null : new Pet(x)).ToArray(), 
-            clientPetBag.Select(x => (x == null) ? null : new Pet(x)).ToArray(), roomSettings, PhotonNetwork.IsMasterClient);
+        // RecordBattle(masterPetBag.Select(x => (x == null) ? null : new Pet(x)).ToArray(), 
+        //     clientPetBag.Select(x => (x == null) ? null : new Pet(x)).ToArray(), roomSettings, PhotonNetwork.IsMasterClient);
     }
 
     private void Init(BattlePet[] masterPetBag, BattlePet[] clientPetBag, BattleSettings settings) {

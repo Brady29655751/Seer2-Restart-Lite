@@ -1,0 +1,128 @@
+<map name="火山星山脚下" category="102" id="10015" weather="3">
+	<initialPoint>540,240</initialPoint>
+	<music category="102">
+		<bgm>BGM_15</bgm>
+	</music>
+	<entities>
+		<npc id="1001501" resId="1001" name="" size="250,180" pos="710,360" namePos="0,0" color="0,0,0,0">
+			<description>火山星山洞</description>
+			<transport>780,340</transport>
+			<eventHandler>
+				<button type="click">
+					<action>teleport</action>
+					<param>10016</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<npc id="1001502" resId="Items/1101" name="黄晶矿" size="150,100" pos="510,120" namePos="0,10010" color="0,0,0,0">
+			<description>黄晶矿</description>
+			<eventHandler>
+				<button type="click">
+					<action>openHintbox</action>
+					<param>type=Item</param>
+					<param>title=提示</param>
+					<param>content=矿脉需要合理开发，明天再来吧！</param>
+					<param>item_icon=item[1101]</param>
+					<param>option_num=1</param>
+					<condition>activity[mine].done[10015]=[bool]true[default]false</condition>
+				</button>
+				<button type="click">
+					<action>setItem</action>
+					<param>add</param>
+					<param>1101,10</param>
+					<condition>activity[mine].done[10015]=[bool]false[default]false</condition>
+				</button>
+				<button type="click">
+					<action>openHintbox</action>
+					<param>type=Item</param>
+					<param>title=提示</param>
+					<param>content=10个黄晶矿已经放入背包</param>
+					<param>item_icon=item[1101]</param>
+					<param>option_num=1</param>
+					<condition>activity[mine].done[10015]=[bool]false[default]false</condition>
+				</button>
+				<button type="click">
+					<action>setActivity</action>
+					<param>mine</param>
+					<param>done[10015]=true</param>
+					<condition>activity[mine].done[10015]=[bool]false[default]false</condition>
+				</button>
+			</eventHandler>
+		</npc>
+		<npc id="1001504" resId="Pets/pet/10038" name="Lv21 火炎贝" size="40,70" pos="420,180" namePos="0,0">
+			<battle>
+				<branch id="default">
+					<settings count="6" capture="true">
+						<weather>3</weather>
+					</settings>
+					<enemy>
+						<pet id="10038" level="21">
+							<loopSkill>12425,12426</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setItem</action>
+							<param>add</param>
+							<param>1203,1</param>
+							<condition>random[old]&lt;10</condition>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=1个火焰元素已经放入背包</param>
+							<param>item_icon=item[1203]</param>
+							<param>option_num=1</param>
+							<condition>random[old]&lt;10</condition>
+						</button>
+					</winHandler>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>battle</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<npc id="1001505" resId="Pets/pet/10038" name="Lv22 火炎贝" size="40,70" pos="265,220" namePos="0,0">
+			<battle>
+				<branch id="default">
+					<settings count="6" capture="true">
+						<weather>3</weather>
+					</settings>
+					<enemy>
+						<pet id="10038" level="22">
+							<loopSkill>12425,12426</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setItem</action>
+							<param>add</param>
+							<param>1203,1</param>
+							<condition>random[old]&lt;10</condition>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=1个火焰元素已经放入背包</param>
+							<param>item_icon=item[1203]</param>
+							<param>option_num=1</param>
+							<condition>random[old]&lt;10</condition>
+						</button>
+					</winHandler>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>battle</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<teleport id="1" name="传送室" pos="55,315" targetMapId="10001"/>
+	</entities>		
+</map>

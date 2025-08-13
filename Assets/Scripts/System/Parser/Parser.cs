@@ -153,6 +153,7 @@ public static class Parser {
     public static List<BattlePet> GetBattlePetTargetList(BattleState state, Effect effect, Unit lhsUnit, Unit rhsUnit) {
         return effect.target switch {
             EffectTarget.CurrentPetBag => GetBattlePetTargetListFromPetBag(effect, lhsUnit, rhsUnit),
+            EffectTarget.CurrentToken => lhsUnit.token?.SingleToList() ?? new List<BattlePet>(),
             _ => GetBattlePetTargetListFromDefault(state, effect, lhsUnit, rhsUnit),
         };
     }

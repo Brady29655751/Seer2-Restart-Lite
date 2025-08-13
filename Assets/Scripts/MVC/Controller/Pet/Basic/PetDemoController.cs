@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,6 +8,8 @@ public class PetDemoController : Module
     [SerializeField] private PetBagMode mode;
     [SerializeField] private PetDemoModel demoModel;
     [SerializeField] private PetDemoView demoView;
+
+    public event Action<Pet> onChangeNameSuccessEvent;
 
     public void SetPet(Pet pet)
     {
@@ -19,6 +22,20 @@ public class PetDemoController : Module
     public void SetMode(PetBagMode mode)
     {
         this.mode = mode;
+    }
+
+    public void ChangePetName(bool isActive)
+    {
+        if (mode != PetBagMode.Normal)
+            return;
+
+        demoView.ChangeName(isActive);
+        if (!isActive)
+        {
+            demoModel.ChangePetName();
+            onChangeNameSuccessEvent?.Invoke(demoModel.currentPet);
+            return;
+        }
     }
 
     public void SetPetAnimationActive(bool active)

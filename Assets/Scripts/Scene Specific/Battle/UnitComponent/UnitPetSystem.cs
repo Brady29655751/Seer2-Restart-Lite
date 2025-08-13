@@ -8,9 +8,11 @@ public class UnitPetSystem
 {
     public BattlePet[] petBag = new BattlePet[6];
     public BattlePet[] backupPetBag = new BattlePet[6];
+    public BattlePet[] tokenPetBag = new BattlePet[6];
     public int cursor = 0;
     public int specialChance = 1;
     public BattlePet pet => petBag[cursor];
+    public BattlePet token => tokenPetBag[cursor];
     public int petNum => petBag.Count(x => x != null);
     public int alivePetNum => petBag.Count(x => (x != null) && (!x.isDead));
     public int deadPetNum => petBag.Count(x => (x != null) && (x.isDead));
@@ -18,6 +20,7 @@ public class UnitPetSystem
     public UnitPetSystem(BattlePet[] originalPetBag) {
         petBag = new BattlePet[originalPetBag.Length];
         backupPetBag = new BattlePet[originalPetBag.Length];
+        tokenPetBag = new BattlePet[originalPetBag.Length];
         Array.Copy(originalPetBag, petBag, originalPetBag.Length);
         cursor = 0;
         specialChance = 1;
@@ -26,6 +29,7 @@ public class UnitPetSystem
     public UnitPetSystem(UnitPetSystem rhs) {
         petBag = rhs.petBag.Select(x => (x == null) ? null : new BattlePet(x)).ToArray();
         backupPetBag = rhs.backupPetBag.Select(x => (x == null) ? null : new BattlePet(x)).ToArray();
+        tokenPetBag = rhs.tokenPetBag.Select(x => (x == null) ? null : new BattlePet(x)).ToArray();
         cursor = rhs.cursor;
         specialChance = rhs.specialChance;
     }
@@ -48,12 +52,39 @@ public class UnitPetSystem
         return true;
     }
 
+    public bool SwapTokenPet(int index)
+    {
+        if (!index.IsInRange(0, petBag.Length))
+            return false;
+
+        if ((tokenPetBag[index] == null) || tokenPetBag[index].isDead)
+            return false;
+
+        if (tokenPetBag[index] != null)
+            tokenPetBag[index].stayTurn = 0;
+
+        var anger = petBag[index]?.anger ?? 0;
+        var pet = tokenPetBag[index];
+        tokenPetBag[index] = petBag[index];
+        petBag[index] = pet;
+        petBag[index].anger = anger;
+        return true;
+    }
+
     public void OnTurnStart(Unit thisUnit, BattleState state)
     {
         var parallelCount = Mathf.Min(state.settings.parallelCount, alivePetNum);
         var parallelCursor = cursor;
 
         GetParallelPetBag(parallelCount).ForEach(x => x.OnTurnStart(thisUnit, state));
+
+        for (int i = 0; i < petBag.Length; i++)
+        {
+            if ((petBag[i] == null) || (petBag[i].isDead))
+                tokenPetBag[i] = null;
+
+            tokenPetBag[i]?.OnTurnStart(thisUnit, state);
+        }
 
         if ((state.settings.parallelCount > 1) && (pet?.isDead ?? true))
             cursor = GetNextCursorCircular();

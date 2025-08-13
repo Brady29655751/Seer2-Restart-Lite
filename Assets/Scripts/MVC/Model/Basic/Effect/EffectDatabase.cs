@@ -37,6 +37,7 @@ public static class EffectDatabase {
         {"state", EffectTarget.CurrentState},
         {"pet", EffectTarget.CurrentPet},
         {"pet_bag", EffectTarget.CurrentPetBag},
+        {"token", EffectTarget.CurrentToken},
         {"skill", EffectTarget.CurrentSkill},
         {"item", EffectTarget.CurrentItem},
         {"buff",EffectTarget.CurrentBuff},
@@ -46,6 +47,7 @@ public static class EffectDatabase {
         {"none", EffectCondition.None},
         {"unit", EffectCondition.CurrentUnit},
         {"pet", EffectCondition.CurrentPet},
+        {"token", EffectCondition.CurrentToken},
         {"status", EffectCondition.CurrentStatus},
         {"buff", EffectCondition.CurrentBuff},
         {"skill", EffectCondition.CurrentSkill},
@@ -121,7 +123,8 @@ public enum EffectTiming {
     OnBeforePetChange = -5, OnAfterPetChange = -6,
 }
 
-public enum EffectTarget {
+public enum EffectTarget
+{
     None,
     CurrentState,
     CurrentItem,
@@ -129,12 +132,14 @@ public enum EffectTarget {
     CurrentBuff,
     CurrentPet,
     CurrentPetBag,
+    CurrentToken,
 }
 
 public enum EffectCondition {
     None,
     CurrentUnit,
     CurrentPet,
+    CurrentToken,
     CurrentStatus,
     CurrentSkill,
     CurrentBuff,

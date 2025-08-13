@@ -14,6 +14,7 @@ public class PetDemoView : Module
     [SerializeField] private InfoPrompt infoPrompt;
     [SerializeField] private Image demoImage;
     [SerializeField] private Text nameText;
+    [SerializeField] private GameObject changeNameObject;
 
     [SerializeField] private IButton featureButton;
     [SerializeField] private Text featureText;
@@ -62,7 +63,13 @@ public class PetDemoView : Module
         nameText.text = name;
     }
 
-    public void SetElement(Element element, Element subElement) {
+    public void ChangeName(bool isActive)
+    {
+        changeNameObject?.SetActive(isActive);
+    }
+
+    public void SetElement(Element element, Element subElement)
+    {
         elementButton?.image?.SetElementSprite(element);
         subElementButton?.image?.SetElementSprite(subElement);
         subElementButton?.gameObject.SetActive(subElement != Element.普通);

@@ -151,6 +151,7 @@ public class Effect {
         Func<Dictionary<string, string>, bool> ConditionFunc = condition switch {
             EffectCondition.CurrentUnit => ((x) => this.UnitCondition(state, x)),
             EffectCondition.CurrentPet => ((x) => this.PetCondition(state, x)),
+            EffectCondition.CurrentToken => ((x) => this.PetCondition(state, x)),
             EffectCondition.CurrentStatus => ((x) => this.StatusCondition(state, x)),
             EffectCondition.CurrentBuff => ((x) => this.BuffCondition(state, x)),
             EffectCondition.CurrentSkill => ((x) => this.SkillCondition(state, x)),

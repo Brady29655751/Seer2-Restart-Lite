@@ -11,23 +11,25 @@ public class BattlePetSkillView : BattleBaseView
     private BattlePet pet => petSystem?.pet;
     private bool interactable;
     private bool superSkillClickable = false;
-    private bool evolve = false;
+    private bool evolve = false, token = false;
 
     [SerializeField] private Material shiningMaterial;
-    [SerializeField] private IButton noOpSkillButton, superSkillButton, evolveSkillButton;
+    [SerializeField] private IButton noOpSkillButton, superSkillButton, evolveSkillButton, tokenSkillButton;
     [SerializeField] private Image[] superSkillButtonBackground = new Image[3];
     [SerializeField] private BattlePetSkillBlockView[] skillBlockViews = new BattlePetSkillBlockView[4];
 
-    public void SetPetSystem(UnitPetSystem petSystem) {
+    public void SetPetSystem(UnitPetSystem petSystem)
+    {
         if (petSystem?.pet == null)
             return;
-            
+
         this.petSystem = petSystem;
         SetNormalSkill();
         SetInteractable(interactable);
     }
 
-    public void SetInteractable(bool interactable) {
+    public void SetInteractable(bool interactable)
+    {
         var anger = -1;
 
         if (interactable && (!pet.isDead))
@@ -37,26 +39,32 @@ public class BattlePetSkillView : BattleBaseView
         SetSuperSkillInteractable(anger);
         SetNoOpSkillInteractable((anger == -1) ? int.MaxValue : anger);
         SetEvolveSkillInteractable(interactable);
+        SetTokenSkillInteractable(interactable && (petSystem.token != null));
 
         this.interactable = interactable;
     }
 
-    private void SetNormalSkill() {
+    private void SetNormalSkill()
+    {
         var normalSkills = pet.skillController.normalSkills;
-        for (int i = 0; i < skillBlockViews.Length; i++) {
+        for (int i = 0; i < skillBlockViews.Length; i++)
+        {
             skillBlockViews[i].SetSkill((i < normalSkills.Count) ? normalSkills[i] : null);
         }
     }
 
-    private void SetNormalSkillInteractable(int petAnger) {
+    private void SetNormalSkillInteractable(int petAnger)
+    {
         var normalSkills = pet.skillController.normalSkills;
-        for (int i = 0; i < normalSkills.Count; i++) {
+        for (int i = 0; i < normalSkills.Count; i++)
+        {
             bool interactable = (normalSkills[i] == null) ? false : (petAnger >= normalSkills[i].anger);
             skillBlockViews[i].SetInteractable(interactable);
         }
     }
 
-    private void SetSuperSkillInteractable(int petAnger) {
+    private void SetSuperSkillInteractable(int petAnger)
+    {
         var superSkill = pet.skillController.superSkill;
         bool interactable = (superSkill != null) && (petAnger >= superSkill.anger);
         superSkillClickable = interactable;
@@ -66,18 +74,45 @@ public class BattlePetSkillView : BattleBaseView
         // superSkillButtonBackground[2].gameObject.SetActive(interactable);
     }
 
-    private void SetEvolveSkill(bool evolve) {
+    private void SetEvolveSkill(bool evolve)
+    {
         this.evolve = evolve;
         evolveSkillButton?.SetMaterial(evolve ? shiningMaterial : null);
     }
 
-    private void SetEvolveSkillInteractable(bool interactable) {
+    private void SetEvolveSkillInteractable(bool interactable)
+    {
         evolveSkillButton?.SetInteractable(interactable);
         if (!interactable)
             evolveSkillButton?.SetMaterial(null);
     }
 
-    public void SelectNormalSkill(int index) {
+    private void SetTokenSkill(bool token)
+    {
+        this.token = token;
+        tokenSkillButton?.SetMaterial(token ? shiningMaterial : null);
+
+        var state = new BattleState(battle.currentState);
+        if (token)
+            state.myUnit.petSystem.SwapTokenPet(state.myUnit.petSystem.cursor);
+
+        UI.SetState(null, state);
+        UI.ProcessQuery(true);
+    }
+
+    private void SetTokenSkillInteractable(bool interactable)
+    {
+        tokenSkillButton?.gameObject.SetActive(interactable);
+        tokenSkillButton?.SetInteractable(interactable);
+        if (!interactable)
+        {
+            tokenSkillButton?.SetMaterial(null);
+            this.token = false;   
+        }
+    }
+
+    public void SelectNormalSkill(int index)
+    {
         if (!index.IsInRange(0, skillBlockViews.Length))
             return;
 
@@ -85,7 +120,8 @@ public class BattlePetSkillView : BattleBaseView
         if (battle.settings.parallelCount > 1)
             skill.SetParallelIndex(battle.currentState.myUnit.petSystem.cursor, battle.currentState.opUnit.petSystem.cursor);
 
-        if (evolve) {
+        if (evolve)
+        {
             skill.options.Set("evolve", "1");
             SetEvolveSkill(false);
         }
@@ -93,7 +129,8 @@ public class BattlePetSkillView : BattleBaseView
         battle.SetSkill(skill, true);
     }
 
-    public void ShowNormalSkillInfo(int index) {
+    public void ShowNormalSkillInfo(int index)
+    {
         if (!index.IsInRange(0, skillBlockViews.Length))
             return;
 
@@ -108,7 +145,8 @@ public class BattlePetSkillView : BattleBaseView
         descriptionBox.SetBoxPosition(new Vector2(80 + 175 * index, 109));
     }
 
-    public void SelectSuperSkill() {
+    public void SelectSuperSkill()
+    {
         if (pet.skillController.superSkill == null)
             return;
 
@@ -119,7 +157,8 @@ public class BattlePetSkillView : BattleBaseView
         if (battle.settings.parallelCount > 1)
             skill.SetParallelIndex(battle.currentState.myUnit.petSystem.cursor, battle.currentState.opUnit.petSystem.cursor);
 
-        if (evolve) {
+        if (evolve)
+        {
             skill.options.Set("evolve", "1");
             SetEvolveSkill(false);
         }
@@ -127,7 +166,8 @@ public class BattlePetSkillView : BattleBaseView
         battle.SetSkill(skill, true);
     }
 
-    public void ShowSuperSkillInfo() {
+    public void ShowSuperSkillInfo()
+    {
         var superSkill = pet?.skillController?.superSkill;
 
         float boxSizeY = Mathf.Max(150, superSkill?.description.GetPreferredSize(12, 14).y ?? 0);
@@ -139,27 +179,33 @@ public class BattlePetSkillView : BattleBaseView
         descriptionBox.SetBoxPosition(new Vector2(5, 115));
     }
 
-    public void SetNoOpSkillInteractable(int petAnger) {
+    public void SetNoOpSkillInteractable(int petAnger)
+    {
         bool isNormalSkillUsable = pet.skillController.normalSkills.Where(x => x != null).Any(x => petAnger >= x.anger);
         bool isSuperSkillUsable = (pet.skillController.superSkill != null) && (petAnger >= pet.skillController.superSkill.anger);
         bool isAnySkillUsable = isNormalSkillUsable || isSuperSkillUsable;
         noOpSkillButton.SetInteractable(!isAnySkillUsable);
     }
 
-    public void SelectNoOpSkill() {
+    public void SelectNoOpSkill()
+    {
         battle.SetSkill(Skill.GetNoOpSkill(), true);
     }
 
-    public void ShowNoOpSkillInfo() {
+    public void ShowNoOpSkillInfo()
+    {
         infoPrompt.SetSkill(Skill.GetNoOpSkill(), false);
     }
 
-    public void SelectEvolveSkill() {
+    public void SelectEvolveSkill()
+    {
         SetEvolveSkill(!evolve);
     }
 
-    public void ShowEvolveSkillInfo() {
-        infoPrompt.SetSkill(new Skill(){ 
+    public void ShowEvolveSkillInfo()
+    {
+        infoPrompt.SetSkill(new Skill()
+        {
             name = "专属动作" + (evolve ? "（正在使用）" : string.Empty),
             critical = 5,
             accuracy = 100,
@@ -168,4 +214,24 @@ public class BattlePetSkillView : BattleBaseView
         });
     }
 
+    public void SelectTokenSkill()
+    {
+        if (UI.currentState.myUnit.token == null)
+        {
+            Hintbox.OpenHintboxWithContent("当前精灵没有分身或附属精灵！", 16);
+            return;
+        }
+        SetTokenSkill(!token);
+    }
+
+    public void ShowTokenSkillInfo()
+    {
+        infoPrompt.SetSkill(new Skill()
+        {
+            name = "附属精灵" + (token ? "（正在查看）" : string.Empty),
+            critical = 5,
+            accuracy = 100,
+            rawDescription = "手动点击查看当前精灵的附属精灵",
+        });
+    }
 }

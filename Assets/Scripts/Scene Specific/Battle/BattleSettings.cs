@@ -3,6 +3,7 @@ using System.Linq;
 using System.Xml.Serialization;
 using System.Collections;
 using System.Collections.Generic;
+using Photon.Pun;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -17,6 +18,7 @@ public class BattleSettings
     [XmlElement("captureLevel")] public int captureLevel = 1;
     [XmlIgnore] public bool isPVP => GetSettingsIdentifier("mode") == (float)BattleMode.PVP;
     [XmlIgnore] public bool isAutoOK => (!isPVP) && (parallelCount <= 1);
+    [XmlIgnore] public bool isReveal => (mode != BattleMode.PVP) || ((bool)PhotonNetwork.CurrentRoom.CustomProperties["reveal"]);
 
 
     [XmlAttribute("count")] public int petCount = 6;
@@ -85,6 +87,7 @@ public class BattleSettings
             "item" => isItemOK ? 1 : 0,
             "capture" => isCaptureOK ? 1 : 0,
             "captureLevel" => isCaptureOK ? captureLevel : -1,
+            "reveal" => isReveal ? 1 : 0,
             _ => float.MinValue,
         };
     }

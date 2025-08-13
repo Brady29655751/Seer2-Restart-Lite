@@ -15,13 +15,34 @@ public static class SaveSystem
     public const int MAX_SAVE_COUNT = 3;
     public static string savePath => Application.persistentDataPath + "/save" + Player.instance.gameDataId + ".xml";
 
-    public static bool TryUnzipFile(string zipPath, string dirPath, string dirName) {
-        try {
-            if (FileBrowserHelpers.DirectoryExists(dirPath + "/" + dirName))
+    public static bool TryGetZipFileEntry(string zipPath, string entryFullName, out ZipArchiveEntry entry)
+    {
+        try
+        {
+            using (ZipArchive zipArchive = ZipFile.OpenRead(zipPath))
+            {
+                entry = zipArchive.GetEntry(entryFullName);
+            }
+        }
+        catch (Exception)
+        {
+            entry = null;
+            return false;
+        }
+
+        return true;
+    }
+
+    public static bool TryUnzipFile(string zipPath, string dirPath, string dirName, bool overwrite = false) {
+        try
+        {
+            if ((!overwrite) && FileBrowserHelpers.DirectoryExists(dirPath + "/" + dirName))
                 FileBrowserHelpers.DeleteDirectory(dirPath + "/" + dirName);
 
-            ZipFile.ExtractToDirectory(zipPath, dirPath, true);
-        } catch (Exception) {
+            ZipFile.ExtractToDirectory(zipPath, dirPath, overwrite);
+        }
+        catch (Exception)
+        {
             return false;
         }
         return true;
@@ -130,14 +151,18 @@ public static class SaveSystem
         // return FileBrowserHelpers.DirectoryExists(Application.persistentDataPath + "/Resources");
     }
 
-    public static bool TryImportResources(string importPath, out string error) {
+    public static bool TryImportResources(string importPath, out string error, bool overwrite = false) {
         try {
             var dirName = FileBrowserHelpers.GetFilename(importPath);
             var resourceName = Application.persistentDataPath + "/" + dirName;
-            if (FileBrowserHelpers.DirectoryExists(resourceName))
-                FileBrowserHelpers.DeleteDirectory(resourceName);
+            var resourcePath = resourceName;
+            if (!overwrite)
+            {
+                if (FileBrowserHelpers.DirectoryExists(resourceName))
+                    FileBrowserHelpers.DeleteDirectory(resourceName);
 
-            var resourcePath = FileBrowserHelpers.CreateFolderInDirectory(Application.persistentDataPath, dirName);
+                resourcePath = FileBrowserHelpers.CreateFolderInDirectory(Application.persistentDataPath, dirName);
+            }
             FileBrowserHelpers.CopyDirectory(importPath, resourcePath);
             error = string.Empty;
         } catch (Exception e) {

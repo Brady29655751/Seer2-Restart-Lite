@@ -111,6 +111,7 @@ public class PetBagPanel : Panel
     }
 
     private void InitOtherSubscriptions() {
+        demoController.onChangeNameSuccessEvent += OnChangeNameSuccess;
         statusController.onSetEVSuccessEvent += OnSetEVSuccess;
         itemController.onItemUsedEvent += OnItemUsed;
         skinController.onSetSkinSuccessEvent += OnSetSkinSuccess;
@@ -128,7 +129,13 @@ public class PetBagPanel : Panel
             personalityController.onSelectPersonalityEvent += OnSetPersonalitySuccess;
     }
 
-    private void OnSetEVSuccess(Pet pet) {
+    private void OnChangeNameSuccess(Pet pet)
+    {
+        RefreshPetBag(petBag);
+    }
+
+    private void OnSetEVSuccess(Pet pet)
+    {
         selectController.RefreshView();
     }
 

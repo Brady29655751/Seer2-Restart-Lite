@@ -36,6 +36,9 @@ public class AfterAttackPhase : BattlePhase
         // 技能行動次數-1，精靈已行動次數+1
         state.atkUnit.skill.chain--;
         state.atkUnit.petSystem.pet.chain++;
+        if (state.atkUnit.petSystem.token != null)
+            state.atkUnit.petSystem.token.chain++;
+        
         state.atkUnit.isDone = true;
 
         // 如果防禦方有反擊，把主動權交給防禦方，攔截攻擊方的多次行動

@@ -51,11 +51,13 @@ public class InfoPrompt : IMonoBehaviour
         SetInfoPrompt(size, content, fixPos, align, lineSpacing);
     }
 
-    public void SetInfoPromptWithAutoSize(string content, TextAnchor align, float lineSpacing = 1.2f) {
+    public void SetInfoPromptWithAutoSize(string content, TextAnchor align, float lineSpacing = 1.2f, bool showAtRight = true) {
         // int sizeX = 21 + (text.fontSize) * Mathf.Min(content.Length, 21);
         // int sizeY = 35 + (text.fontSize + 6) * ((content.Length - 1) / 21);
         Vector2 size = new Vector2(content.GetPreferredSize(21, text.fontSize).x, this.text.preferredHeight + 21);
-        SetInfoPrompt(size, content, align, lineSpacing);
+        Vector2 zeroFixPos = (Application.platform == RuntimePlatform.Android) ? new Vector2(60, 2) : new Vector2(10, 2);
+        Vector2 fixPos = showAtRight ? zeroFixPos : new Vector2(-size.x - 2, -size.y / 2 - 2);
+        SetInfoPrompt(size, content, fixPos, align, lineSpacing);
     }
 
     public void SetInfoPrompt(Vector2 size, string content, Vector2 fixPos, TextAnchor align = TextAnchor.MiddleCenter, float lineSpacing = 1.2f) {

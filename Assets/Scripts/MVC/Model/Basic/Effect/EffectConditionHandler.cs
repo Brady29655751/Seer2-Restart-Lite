@@ -168,15 +168,23 @@ public static class EffectConditionHandler
         var invokeUnitId = ((Unit)effect.invokeUnit).id;
         Unit lhsUnit = (who == "me") ? state.GetUnitById(invokeUnitId) : state.GetRhsUnitById(invokeUnitId);
         Unit rhsUnit = state.GetRhsUnitById(lhsUnit.id);
-        BattlePet battlePet = lhsUnit.pet;
+        BattlePet battlePet = effect.condition switch {
+            EffectCondition.CurrentToken => lhsUnit.token,
+            _ => lhsUnit.pet,
+        };
 
-        for (int i = 0; i < typeList.Length; i++) {
-            string op = condOptions.Get(typeList[i] + "_op", "=");
-            string cmpValue = condOptions.Get(typeList[i] + "_cmp", "0");
-            float value = Parser.ParseEffectOperation(cmpValue, effect, lhsUnit, rhsUnit);
-            if (!Operator.Condition(op, Identifier.GetPetIdentifier(typeList[i], lhsUnit.petSystem), value))
-                return false;
-        }
+        if (battlePet == null)
+            return !bool.Parse(condOptions.Get("own", "true"));
+
+        for (int i = 0; i < typeList.Length; i++)
+            {
+                string op = condOptions.Get(typeList[i] + "_op", "=");
+                string cmpValue = condOptions.Get(typeList[i] + "_cmp", "0");
+                float value = Parser.ParseEffectOperation(cmpValue, effect, lhsUnit, rhsUnit);
+                if (!Operator.Condition(op, Identifier.GetPetIdentifier(typeList[i], lhsUnit.petSystem, battlePet), value))
+                    return false;
+            }
+
         return true;
     }
 

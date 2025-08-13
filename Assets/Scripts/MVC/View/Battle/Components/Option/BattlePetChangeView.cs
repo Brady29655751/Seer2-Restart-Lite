@@ -67,20 +67,23 @@ public class BattlePetChangeView : BattleBaseView
         }
     }
 
-    public void SelectPet(int index) {
+    public void SelectPet(int index)
+    {
         if (!index.IsInRange(0, changeBlockViews.Length))
             return;
-        
-        if (UI.isSkillSelectMode) {
+
+        if (UI.isSkillSelectMode)
+        {
             var skill = battle.currentState.myUnit.skill;
             foreach (var e in skill.effects.Where(x => x.IsSelect()))
                 e.abilityOptionDict.Set("target_index", index.ToString());
-            
+
             battle.SetSkill(skill, true);
             return;
         }
 
-        if (battle.settings.parallelCount > 1) {
+        if (battle.settings.parallelCount > 1)
+        {
             bool isMe = index < (petBag.Length / 2);
             int targetIndex = isMe ? index : (petBag.Length - index - 1);
             var unit = isMe ? battle.currentState.myUnit : battle.currentState.opUnit;
@@ -90,20 +93,32 @@ public class BattlePetChangeView : BattleBaseView
             UI.ProcessQuery(true);
             return;
         }
-        
+
         battle.SetSkill(Skill.GetPetChangeSkill(cursor, index, battle.currentState.isAnyPetDead), true);
         SetChangeBlockChosen(index);
     }
 
-    public void ShowPetChangeInfo(int index) {
+    public void ShowPetChangeInfo(int index)
+    {
+        ShowPetChangeInfo(index, false);
+    }
+
+    public void ShowOpPetChangeInfo(int index)
+    {
+        ShowPetChangeInfo(index, true);
+    }
+
+    public void ShowPetChangeInfo(int index, bool isOp)
+    {
         if (!index.IsInRange(0, petBag.Length))
             return;
 
-        var pet = petBag[index];
-        var opPet = UI.currentState.opUnit.pet;
-        
-        string header = "<size=4>\n</size><size=16><color=#52e5f9>  " + pet.name + "</color></size><size=6>\n\n</size>";
-        string content = "<size=16>HP " + pet.hp + " / " + pet.maxHp + "</size><size=4>\n\n</size>";
+        var pet = isOp ? UI.currentState.myUnit.pet : petBag[index];
+        var opPet = isOp ? petBag[index] : UI.currentState.opUnit.pet;
+        var infoPet = isOp ? opPet : pet;
+
+        string header = "<size=4>\n</size><size=16><color=#52e5f9>  " + infoPet.name + "</color></size><size=6>\n\n</size>";
+        string content = "<size=16>HP " + infoPet.hp + " / " + infoPet.maxHp + "</size><size=4>\n\n</size>";
 
         float attack = PetElementSystem.GetElementRelation(pet.battleElementId, opPet);
         float subAttack = PetElementSystem.GetElementRelation(pet.subBattleElementId, opPet);
@@ -118,25 +133,25 @@ public class BattlePetChangeView : BattleBaseView
         var maxLength = Mathf.Max(attackElement.GetElementName().Length, defenseElement.GetElementName().Length,
             (subAttackElement == Element.普通) ? 0 : subAttackElement.GetElementName().Length,
             (subDefenseElement == Element.普通) ? 0 : subDefenseElement.GetElementName().Length);
-        
-        if (battle.settings.parallelCount <= 1) 
+
+        if (battle.settings.parallelCount <= 1)
         {
-            content += "我方 <b><color=#ffbb33>" + attackElement.GetElementName(maxLength) + "系</color></b> <color=#" 
-                + ColorUtility.ToHtmlStringRGB(PetElementSystem.GetElementRelationColor(attack)) + ">" 
+            content += "我方 <b><color=#ffbb33>" + attackElement.GetElementName(maxLength) + "系</color></b> <color=#"
+                + ColorUtility.ToHtmlStringRGB(PetElementSystem.GetElementRelationColor(attack)) + ">"
                 + PetElementSystem.GetElementRelationNote(attack) + " >> " + "</color>对方  <color=#ffbb33>" + attack.ToString() + "</color>";
 
             if (subAttackElement != Element.普通)
-                content += "\n我方 <b><color=#ffbb33>" + subAttackElement.GetElementName(maxLength) + "系</color></b> <color=#" 
-                    + ColorUtility.ToHtmlStringRGB(PetElementSystem.GetElementRelationColor(subAttack)) + ">" 
+                content += "\n我方 <b><color=#ffbb33>" + subAttackElement.GetElementName(maxLength) + "系</color></b> <color=#"
+                    + ColorUtility.ToHtmlStringRGB(PetElementSystem.GetElementRelationColor(subAttack)) + ">"
                     + PetElementSystem.GetElementRelationNote(subAttack) + " >> " + "</color>对方  <color=#ffbb33>" + subAttack.ToString() + "</color>";
 
-            content += "\n敌方 <b><color=#ffbb33>" + defenseElement.GetElementName(maxLength) + "系</color></b> <color=#" 
-                + ColorUtility.ToHtmlStringRGB(PetElementSystem.GetElementRelationColor(defense)) + ">" 
+            content += "\n敌方 <b><color=#ffbb33>" + defenseElement.GetElementName(maxLength) + "系</color></b> <color=#"
+                + ColorUtility.ToHtmlStringRGB(PetElementSystem.GetElementRelationColor(defense)) + ">"
                 + PetElementSystem.GetElementRelationNote(defense) + " << " + "</color>我方  <color=#ffbb33>" + defense.ToString() + "</color>";
 
             if (subDefenseElement != Element.普通)
-                content += "\n敌方 <b><color=#ffbb33>" + subDefenseElement.GetElementName(maxLength) + "系</color></b> <color=#" 
-                    + ColorUtility.ToHtmlStringRGB(PetElementSystem.GetElementRelationColor(subDefense)) + ">" 
+                content += "\n敌方 <b><color=#ffbb33>" + subDefenseElement.GetElementName(maxLength) + "系</color></b> <color=#"
+                    + ColorUtility.ToHtmlStringRGB(PetElementSystem.GetElementRelationColor(subDefense)) + ">"
                     + PetElementSystem.GetElementRelationNote(subDefense) + " << " + "</color>我方  <color=#ffbb33>" + subDefense.ToString() + "</color>";
         }
 

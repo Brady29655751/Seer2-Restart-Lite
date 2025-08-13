@@ -101,7 +101,7 @@ public class UnitHudSystem
     {
         if (isAtkUnit)
         {
-            if (thisUnit.skillSystem.skill.isAttack)
+            if (thisUnit.skillSystem.skill.isAttack || (!thisUnit.skillSystem.isHit))
             {
                 this.CurDamageInfo = new DamageInfo(thisUnit.IsMyUnit(), true, thisUnit.skillSystem.totalSkillDamage,
                     thisUnit.skillSystem.isHit, thisUnit.skillSystem.isCritical, thisUnit.skillSystem.elementRelation);
@@ -133,7 +133,7 @@ public class UnitHudSystem
         {
             this.CurDamageInfo = new DamageInfo(thisUnit.IsMyUnit(), false, Mathf.Abs(rhsResult));
         }
-        else if (thisResult > 0)
+        if (thisResult > 0)
         {
             this.CurHealInfo = new HealInfo(thisResult, thisUnit.IsMyUnit(), thisUnit.skill.type == SkillType.道具);
         }

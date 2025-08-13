@@ -10,11 +10,11 @@ public class BattleOptionView : BattleBaseView
     [SerializeField] private BattlePetSkillView skillView;
     [SerializeField] private BattlePetItemController captureController;
     [SerializeField] private BattlePetItemController itemController;
-    [SerializeField] private BattlePetChangeView changeView;
+    [SerializeField] private BattlePetChangeView changeView, opChangeView;
     [SerializeField] private Hintbox escapeView;
     [SerializeField] private BattleAutoView autoView;
 
-    private Module[] options => new Module[5] { skillView, changeView, captureController, itemController, escapeView };
+    private Module[] options => new Module[] { skillView, changeView, captureController, itemController, escapeView, opChangeView };
 
     protected override void Awake()
     {
@@ -28,6 +28,12 @@ public class BattleOptionView : BattleBaseView
     }
 
     public void Select(int index) {
+        if ((options.ElementAtOrDefault(index) == opChangeView) && (!battle.settings.isReveal))
+        {
+            Hintbox.OpenHintboxWithContent("当前模式下，对手阵容不公开！", 16);
+            return;
+        }
+
         optionSelectView.Select(index);
         for (int i = 0; i < options.Length; i++) {
             options[i]?.gameObject.SetActive(i == index);
@@ -71,6 +77,8 @@ public class BattleOptionView : BattleBaseView
         skillView.SetPetSystem(myUnit.petSystem);
         changeView.SetPetBag(petBag);
         changeView.SetChangeBlockChosen(myUnit.petSystem.cursor, parallelCursor);
+        opChangeView.SetPetBag(opBag);
+        opChangeView.SetChangeBlockChosen(opUnit.petSystem.cursor, -1);
         captureController.SetItemBag(itemBag);
         itemController.SetItemBag(itemBag);
 

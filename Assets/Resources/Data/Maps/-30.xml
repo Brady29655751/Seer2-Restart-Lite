@@ -1,4 +1,4 @@
-<map name="资料室" category="1" id="30" weather="0" switch="1">
+<map name="资料室" category="1" id="-30" weather="0" switch="-1" pathId="-1">
 	<!-- <resource>10003</resource> -->
 	<fightMap>100011</fightMap>
 	<initialPoint>460,100</initialPoint>
@@ -6,6 +6,15 @@
 		<bgm>MU_000</bgm>
 	</music>
 	<entities>
+		<npc id="-3000" resId="1001" name="" size="245,200" pos="290,200" color="0,0,0,0">
+			<description><![CDATA[传送室]]></description>
+			<eventHandler>
+				<button type="click">
+					<action>teleport</action>
+					<param>-70</param>
+				</button>
+			</eventHandler>
+		</npc>
 		<!--
 		<npc id="7" resId="7" name="娜威拉" dir="1" width="75" height="105" pos="783,348" actorPos="690,464" path="">
 			<dialog npcId="7" transport="1,300,400">
@@ -90,9 +99,6 @@
 			</eventHandler>
 		</npc>
 		-->	
-		<teleport id="1" name="游戏室" pos="550,60" targetMapId="80"/>
-		<teleport id="2" name="动力室" pos="320,180" targetMapId="40"/>
-		<teleport id="3" name="实验室" pos="820,180" targetMapId="20"/>
 	</entities>
 
 </map>

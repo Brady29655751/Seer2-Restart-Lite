@@ -1,0 +1,124 @@
+<map name="火山星山洞" category="102" id="10016" weather="100003">
+	<initialPoint>540,240</initialPoint>
+	<music category="102">
+		<bgm>BGM_15</bgm>
+	</music>
+	<entities>
+		<npc id="1001600" resId="1001" name="" size="200,200" pos="0,160" namePos="0,0" color="0,0,0,0">
+			<description>火山星山脚下</description>
+			<transport>120,240</transport>
+			<eventHandler>
+				<button type="click">
+					<action>teleport</action>
+					<param>10015</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<!--
+		<npc id="1001601" resId="1001" name="" size="250,180" pos="640,300" namePos="0,0" color="0,0,0,0">
+			<description>海洋星浅水区</description>
+			<transport>780,340</transport>
+			<eventHandler>
+				<button type="click">
+					<action>teleport</action>
+					<param>10020</param>
+				</button>
+			</eventHandler>
+		</npc>
+		-->
+		<npc id="1001603" resId="Pets/pet/10133" name="Lv25 巴多" size="48,44" pos="240,160" namePos="0,0" active="false">
+			<description>神秘的精灵</description>
+			<dialog>
+				<branch id="default" name="巴多" icon="Pets/pet/10133" size="96,88" pos="10,55">
+					<content><![CDATA[巴多！巴多！]]></content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[看起来身体卡在了出气口]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+						<reply type="click">
+							<description><![CDATA[尝试喷发气体协助脱困]]></description>
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>content=先去搜集气体再来尝试吧</param>
+							<param>option_num=1</param>
+							<param>item_icon=item[1102]</param>
+							<condition>item[1102].num=0</condition>
+						</reply>
+						<reply type="branch">
+							<action>battle</action>
+							<param>default</param>
+							<condition>item[1102].numNOT0</condition>
+						</reply>
+					</replyHandler>
+				</branch>
+			</dialog>
+			<battle>
+				<branch id="default">
+					<settings count="6" capture="true">
+						<initBuff>(field:600003)</initBuff>
+					</settings>
+					<enemy>
+						<pet id="10133" level="25">
+							<initBuff>-2</initBuff>
+							<loopSkill>12438,12439</loopSkill>
+						</pet>
+					</enemy>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="auto">
+					<action>setNpcParam</action>
+					<param>1001603</param>
+					<param>active=true</param>
+					<condition>random[new]LTE5</condition>
+				</button>
+				<button type="click">
+					<action>openDialog</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<npc id="1001604" resId="Pets/pet/10035" name="Lv23 吉尔" size="56,70" pos="420,180" namePos="0,0">
+			<battle>
+				<branch id="default">
+					<settings count="6" capture="true">
+						<initBuff>(field:600003)</initBuff>
+					</settings>
+					<enemy>
+						<pet id="10035" level="23">
+							<loopSkill>12414,12415</loopSkill>
+						</pet>
+					</enemy>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>battle</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<npc id="1001605" resId="Pets/pet/10035" name="Lv24 吉尔" size="56,70" pos="320,325" namePos="0,0">
+			<battle>
+				<branch id="default">
+					<settings count="6" capture="true">
+						<initBuff>(field:600003)</initBuff>
+					</settings>
+					<enemy>
+						<pet id="10035" level="24">
+							<loopSkill>12414,12415</loopSkill>
+						</pet>
+					</enemy>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>battle</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+	</entities>		
+</map>

@@ -4,9 +4,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using SimpleFileBrowser;
-using System.IO;
-using System.IO.Compression;
 using FTRuntime;
+using System.Linq;
 
 public class TitleManager : Manager<TitleManager>
 {
@@ -14,7 +13,7 @@ public class TitleManager : Manager<TitleManager>
     [SerializeField] private List<GameObject> backgroundGadgetObjectList;
     [SerializeField] private IButton startButton;
     [SerializeField] private IText versionDateText, versionStringText;
-    [SerializeField] private GameObject toolBarObject, modOperateObject, helpObject;
+    [SerializeField] private GameObject toolBarObject, resourceOperateObject, modOperateObject, helpObject;
 
     private void Start() {
         GetVersion();
@@ -238,18 +237,55 @@ public class TitleManager : Manager<TitleManager>
             loadingScreen.ShowLoadingProgress);
     }
 
-    public void OnImportResources() {
-        FileBrowser.ShowLoadDialog(OnResourceSuccess, OnCancel, FileBrowser.PickMode.Folders, title: "选择要导入的资源（手机端请先点击左边的Browse才能浏览）");
+    public void OnOperateResources()
+    {
+        toolBarObject?.SetActive(false);
+        resourceOperateObject?.SetActive(true);
     }
 
-    private void OnResourceSuccess(string[] paths) {
+    public void OnUpdateResources()
+    {
+        FileBrowser.ShowLoadDialog((paths) => OnResourceSuccess(paths, true), OnCancel, FileBrowser.PickMode.FilesAndFolders, title: "选择要导入的资源（手机端请先点击左边的Browse才能浏览）");
+    }
+
+    public void OnImportResources()
+    {
+        FileBrowser.ShowLoadDialog((paths) => OnResourceSuccess(paths, false), OnCancel, FileBrowser.PickMode.FilesAndFolders, title: "选择要导入的资源（手机端请先点击左边的Browse才能浏览）");
+    }
+
+    private void OnResourceSuccess(string[] paths, bool overwrite) {
         if ((paths[0] == Application.persistentDataPath) || 
             FileBrowserHelpers.IsPathDescendantOfAnother(paths[0], Application.persistentDataPath)) {
             Hintbox.OpenHintboxWithContent("需选择外部文件，而非默认存档位置文件", 16);
             return;
         }
-        var isSuccessImporting = SaveSystem.TryImportResources(paths[0], out var error);
-        var message = isSuccessImporting ? "导入成功" : ("导入失败\n" + error);
+
+        string action = overwrite ? "更新" : "导入";
+
+        if (paths[0].EndsWith(".zip"))
+        {
+            if (SaveSystem.TryGetZipFileEntry(paths[0], "Resources/", out var entry) && (entry != null))
+            {
+                bool result = SaveSystem.TryUnzipFile(paths[0], Application.persistentDataPath, "Resources", overwrite);
+                string zipMessage = result ? (action + "<color=#ffbb33>【基础资源包】</color>成功！") : "解压<color=#ffbb33>【基础资源包】</color>发生错误，请尝试手动解压导入";
+                Hintbox.OpenHintboxWithContent(zipMessage, 16);
+                return;
+            }
+
+            if (SaveSystem.TryGetZipFileEntry(paths[0], "PetAnimation/", out entry) && (entry != null))
+            {
+                bool result = SaveSystem.TryUnzipFile(paths[0], Application.persistentDataPath, "PetAnimation", overwrite);
+                string zipMessage = result ? (action + "<color=#ffbb33>【动画资源包】</color>成功！") : "解压<color=#ffbb33>【动画资源包】</color>发生错误，请尝试手动解压导入";
+                Hintbox.OpenHintboxWithContent(zipMessage, 16);
+                return;
+            }
+
+            Hintbox.OpenHintboxWithContent("读取压缩档发生错误", 16);
+            return;
+        }
+
+        var isSuccessImporting = SaveSystem.TryImportResources(paths[0], out var error, overwrite);
+        var message = action + (isSuccessImporting ? "成功" : ("失败\n" + error));
         var hintbox = Hintbox.OpenHintboxWithContent(message, 16);
     }
 
@@ -263,13 +299,16 @@ public class TitleManager : Manager<TitleManager>
         hintbox.SetOptionNum(1);
     }
 
-    private void OnUnzipBasicResources() {
+
+    private void OnUnzipBasicResources()
+    {
         var zipPath = Application.persistentDataPath + "/BasicResources.zip";
         bool result = SaveSystem.TryUnzipFile(zipPath, Application.persistentDataPath, "Resources");
 
         FileBrowserHelpers.DeleteFile(zipPath);
 
-        if (!result) {
+        if (!result)
+        {
             SceneLoader.instance.HideLoadingScreen();
             Hintbox.OpenHintboxWithContent("基础资源解压失败，请手动导入资源", 16);
             return;

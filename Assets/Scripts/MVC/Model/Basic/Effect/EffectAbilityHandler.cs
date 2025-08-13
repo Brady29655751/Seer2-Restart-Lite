@@ -981,6 +981,20 @@ public static class EffectAbilityHandler
                     pet.EvolveTo(evolveId, keepSkill);
                     return true;
                 }
+                // Name.
+                if (type == "name")
+                {
+                    switch (op)
+                    {
+                        default:
+                            pet.name = value;
+                            break;
+                        case "+":
+                            pet.name += value;
+                            break;
+                    }
+                    return true;
+                }
                 // Add Skin.
                 if ((type == "skinId") && (op == "+"))
                 {
@@ -1054,7 +1068,10 @@ public static class EffectAbilityHandler
         Unit invokeUnit = (Unit)effect.invokeUnit;
         Unit lhsUnit = (who == "me") ? state.GetUnitById(invokeUnit.id) : state.GetRhsUnitById(invokeUnit.id);
         Unit rhsUnit = state.GetRhsUnitById(lhsUnit.id);
-        BattlePet battlePet = lhsUnit.pet;
+        BattlePet battlePet = Parser.GetBattlePetTargetList(state, effect, lhsUnit, rhsUnit)?.FirstOrDefault();
+
+        if (battlePet == null)
+            return false;
 
         oldValue = battlePet.GetPetIdentifier(type);
         newValue = Parser.ParseEffectOperation(value, effect, lhsUnit, rhsUnit);
@@ -1116,6 +1133,23 @@ public static class EffectAbilityHandler
             return true;
         }
 
+        if (type == "name")
+        {
+            // Name.
+            if (type == "name")
+            {
+                switch (op)
+                {
+                    default:
+                        battlePet.name = value;
+                        break;
+                    case "+":
+                        battlePet.name += value;
+                        break;
+                }
+                return true;
+            }
+        }
 
         // Switch to special pet.
         if (type == "id")
@@ -1148,6 +1182,7 @@ public static class EffectAbilityHandler
             var inheritList = effect.abilityOptionDict.Get("inherit", "buff").Split('/');
             Pet switchPet = new Pet((int)newValue, battlePet);
             bool isSkillShifted = TryGetShiftedSkills(battlePet, out var normalSkills, out var superSkill);
+            switchPet.record.SetRecord("lastSwitchPetId", battlePet.id);
             switchPet.normalSkill = isSkillShifted ? normalSkills : battlePet.skillController.normalSkills.ToArray();
             switchPet.superSkill = isSkillShifted ? superSkill : battlePet.skillController.superSkill;
 
@@ -1207,7 +1242,7 @@ public static class EffectAbilityHandler
         if (type.TryTrimStart("skill", out var trimType))
         {
             var isSuccess = false;
-            var skillController = lhsUnit.pet.skillController;
+            var skillController = battlePet.skillController;
             var filter = Parser.ParseConditionFilter<Skill>(effect.abilityOptionDict.Get("filter"),
                 (expr, skill) => skill.TryGetSkillIdentifier(expr, out var num) ? num : Identifier.GetNumIdentifier(expr));
             var skillList = (skillController.normalSkills ?? new List<Skill>()).Append(skillController.superSkill).Where(x => (x != null) && filter(x)).ToList();
@@ -1399,8 +1434,9 @@ public static class EffectAbilityHandler
     {
         var who = effect.abilityOptionDict.Get("who", "me");
         var type = effect.abilityOptionDict.Get("type", string.Empty);
-        var op = effect.abilityOptionDict.Get("op", "+");
+        var op = effect.abilityOptionDict.Get("op", "SET");
         var value = effect.abilityOptionDict.Get("value", "0");
+        var options = effect.abilityOptionDict.Get("option", null)?.TrimParenthesesLoop('(', ')') ?? new List<string>();
 
         Unit invokeUnit = (Unit)effect.invokeUnit;
         Unit lhsUnit = (who == "me") ? state.GetUnitById(invokeUnit.id) : state.GetRhsUnitById(invokeUnit.id);
@@ -1413,13 +1449,7 @@ public static class EffectAbilityHandler
         switch (type)
         {
             default:
-                if (op == "+")
-                {
-                    isSuccess = lhsUnit.petSystem.SwapBackupPet((int)newValue);
-                    if (lhsUnit.petSystem.petBag.ElementAtOrDefault(cursor) != null)
-                        lhsUnit.petSystem.cursor = cursor;
-                }
-                else if (op == "-")
+                if (op == "-")
                 {
                     foreach (var pet in targetList)
                     {
@@ -1429,9 +1459,47 @@ public static class EffectAbilityHandler
                         var index = (myIndex >= 0) ? myIndex : opIndex;
 
                         unit.petSystem.petBag[index] = null;
-                        
+
                         isSuccess |= (index >= 0);
                     }
+                }
+                else if (op == "SET")
+                {
+                    isSuccess = lhsUnit.petSystem.SwapBackupPet((int)newValue);
+                    if (lhsUnit.petSystem.petBag.ElementAtOrDefault(cursor) != null)
+                        lhsUnit.petSystem.cursor = cursor;
+                }
+
+                if (lhsUnit.pet == null)
+                    lhsUnit.petSystem.cursor = (lhsUnit.petSystem.petBag.ElementAtOrDefault(cursor) == null) ? lhsUnit.petSystem.GetNextCursorCircular() : cursor;
+
+                if (rhsUnit.pet == null)
+                    rhsUnit.petSystem.cursor = rhsUnit.petSystem.GetNextCursorCircular();
+
+                break;
+
+            case "token":
+                if (op == "+")
+                {
+                    var pet = BattlePet.GetBattlePet(new Pet((int)newValue, lhsUnit.pet));
+                    var buffs = new List<Buff>(){ Buff.GetFeatureBuff(pet), Buff.GetEmblemBuff(pet) };
+                    buffs.AddRange(pet.initBuffs);
+
+                    pet.buffController.AddRangeBuff(buffs, lhsUnit, state);
+                    pet.skillController.normalSkills = new List<Skill>();
+                    pet.skillController.superSkill = null;
+
+                    lhsUnit.petSystem.tokenPetBag[lhsUnit.petSystem.cursor] = pet;
+                    return true;
+                }
+                if (op == "-")
+                {
+                    lhsUnit.petSystem.tokenPetBag[lhsUnit.petSystem.cursor] = null;
+                    return true;
+                }
+                if (op == "SET")
+                {
+                    isSuccess = lhsUnit.petSystem.SwapTokenPet((int)newValue);
                 }
 
                 if (lhsUnit.pet == null)

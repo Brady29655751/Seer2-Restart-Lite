@@ -1,0 +1,77 @@
+<map name="裂空" category="1" id="3" resId="3" switch="-1">
+	<fightMapColor>64,64,64,255</fightMapColor>
+	<initialPoint>400,80</initialPoint>
+	<music category="100">
+		<bgm>BGM_2</bgm>
+	</music>
+	<entities>
+		<npc id="301" resId="Pets/pet/606" name="Lv70 布莱克" size="216,238" pos="380,170" namePos="0,-5">
+			<description>布莱克</description>
+			<dialog>
+				<branch id="default" name="布莱克" icon="Pets/pet/606" size="108,119" pos="0,45">
+					<content>卡修斯，在哪里？</content>
+					<functionHandler>
+						<func type="click">
+							<description><![CDATA[挑战布莱克]]></description>
+							<action>battle</action>
+							<param>default</param>
+						</func>	
+					</functionHandler>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[可以发布寻精灵启事]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+					</replyHandler>
+				</branch>
+			</dialog>
+			<battle>
+				<branch id="default">
+					<settings count="1">
+						<mode>3</mode>
+					</settings>
+					<enemy>
+						<pet id="606" level="70">
+							<status>
+								<hp>2000</hp>
+							</status>
+							<initBuff>61,12,13,14,17,90,99,960,962,-3000,-3059</initBuff>
+							<headerSkill>12450</headerSkill>
+							<loopSkill>12458,12459,12460</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>getPet</action>
+							<param>606,1</param>
+							<condition>activity[11012].done=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=布莱克已经放入精灵仓库</param>
+							<param>item_icon=pet[606]</param>
+							<param>option_num=1</param>
+							<condition>activity[11012].done=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>11012</param>
+							<param>done=true</param>
+							<condition>activity[11012].done=[bool]false[default]false</condition>
+						</button>
+					</winHandler>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>openDialog</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<!-- <teleport id="1" name="传送室" pos="720,60" targetMapId="-70"/> -->
+	</entities>
+</map>

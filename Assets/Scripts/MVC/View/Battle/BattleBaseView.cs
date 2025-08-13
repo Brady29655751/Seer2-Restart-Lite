@@ -9,12 +9,25 @@ public class BattleBaseView : Module
     [SerializeField] protected DescriptionBox descriptionBox;
     [SerializeField] protected InfoPrompt infoPrompt;
 
-    public virtual void SetDescriptionBoxActive(bool active) {
+    public virtual void SetDescriptionBoxActive(bool active)
+    {
         descriptionBox.gameObject.SetActive(active);
     }
 
-    public virtual void SetInfoPromptActive(bool active) {
+    public virtual void SetInfoPromptActive(bool active)
+    {
         infoPrompt.SetActive(active);
+    }
+
+    public virtual void SetInfoPromptContent(string text)
+    {
+        infoPrompt.SetInfoPromptWithAutoSize(text, TextAnchor.MiddleLeft);
+    }
+
+    public virtual void SetInfoPromptContentAtLeft(string text)
+    {
+        infoPrompt.SetInfoPromptWithAutoSize(text, TextAnchor.MiddleLeft, showAtRight: false);
+        
     }
     
 }

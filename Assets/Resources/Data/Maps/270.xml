@@ -69,6 +69,33 @@
 							<action>openDialog</action>
 							<param>null</param>
 						</reply>
+						<reply type="click">
+							<description><![CDATA[哼，看我拿熔石对付你]]></description>
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=你获得了【熔石】！</param>
+							<param>item_icon=buff[420017]</param>
+							<param>option_num=1</param>
+							<condition>activity[20009].done[270]=[bool]false[default]false</condition>
+						</reply>
+						<reply type="branch">
+							<action>setItem</action>
+							<param>add</param>
+							<param>22017,1</param>
+							<condition>activity[20009].done[270]=[bool]false[default]false</condition>
+						</reply>
+						<reply type="branch">
+							<action>setActivity</action>
+							<param>20009</param>
+							<param>done[270]=true</param>
+							<condition>activity[20009].done[270]=[bool]false[default]false</condition>
+						</reply>
+						<reply type="branch">
+							<action>openDialog</action>
+							<param>null</param>
+							<condition>activity[20009].done[270]=[bool]true[default]false</condition>
+						</reply>
 					</replyHandler>
 				</branch>
 			</dialog>

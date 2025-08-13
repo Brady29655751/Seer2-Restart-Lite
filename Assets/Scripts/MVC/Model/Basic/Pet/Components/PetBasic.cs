@@ -11,6 +11,7 @@ public class PetBasic
     public int baseId => info.baseId;
 
     [XmlAttribute] public int id;
+    public string name;
     public int gender;
     public Personality personality;
     public int height, weight;
@@ -35,6 +36,7 @@ public class PetBasic
     public PetBasic(PetBasic rhs)
     {
         id = rhs.id;
+        name = rhs.name;
         gender = rhs.gender;
         personality = rhs.personality;
         height = rhs.height;

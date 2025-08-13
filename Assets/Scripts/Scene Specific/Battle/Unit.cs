@@ -20,6 +20,7 @@ public class Unit
     public UnitHudSystem hudSystem;
 
     public BattlePet pet => petSystem.pet;
+    public BattlePet token => petSystem.token;
     public Skill skill
     {
         get => skillSystem.skill;
