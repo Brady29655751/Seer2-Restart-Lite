@@ -6,6 +6,7 @@ using UnityEngine;
 public static class EffectDatabase {
 
     private static Dictionary<string, EffectTiming> timingConvDict = new Dictionary<string, EffectTiming>() {    
+        {"all", EffectTiming.All},
         {"none", EffectTiming.None},
         {"resident", EffectTiming.Resident},
         {"on_battle_start", EffectTiming.OnBattleStart},
@@ -113,6 +114,7 @@ public static class EffectDatabase {
 }
 
 public enum EffectTiming {
+    All = -999,
     None = 0, Resident = 1, OnBattleStart = 2,
     OnTurnStart = 3, OnTurnReady = 4, OnDecidePriority = 5, OnPriorityReady = 6, OnBeforeAttack = 7,
     OnBeforeDamageCalculate = 8, OnDamageCalculate = 9, OnAfterDamageCalculate = 10, OnFinalDamageCalculate = 11,

@@ -284,6 +284,9 @@ public static class EffectAbilityHandler
             for (int type = 0; type < typeNames.Length; type++)
             {
                 string add = effect.abilityOptionDict.Get(typeNames[type], "0");
+                if (effect.abilityOptionDict.TryGet("all", out var allValue))
+                    add = allValue;
+                
                 status[type] = Parser.ParseEffectOperation(add, effect, lhsUnit, rhsUnit, pet);
             }
 
@@ -446,6 +449,16 @@ public static class EffectAbilityHandler
             ,
         };
 
+        // Switch special type
+        if (typeBlockList.Remove(BuffType.Power))
+            idBlockList.AddRange(Buff.powerupBuffIds.Concat(Buff.powerdownBuffIds));
+
+        if (typeBlockList.Remove(BuffType.Powerup))
+            idBlockList.AddRange(Buff.powerupBuffIds);
+
+        if (typeBlockList.Remove(BuffType.Powerdown))
+            idBlockList.AddRange(Buff.powerdownBuffIds);
+
         idFunc.Invoke(idBlockList);
         typeFunc.Invoke(typeBlockList);
         return true;
@@ -550,12 +563,22 @@ public static class EffectAbilityHandler
 
         // The key prefix "rule" is reserved for pvp rules.
         string[] keyRange = keyList.Split('/').Where(x => !x.StartsWith("rule")).ToArray();
-        List<int> idRange = idList.ToIntList('/');
-        string[] typeRange = typeList.Split('/');
+        List<int> idRange = idList.ToIntList('/').Where(x => x != 0).ToList();
+        List<BuffType> typeRange = typeList.Split('/').Select(x => x.ToBuffType()).Where(x => x != BuffType.None).ToList();
+
+        // Switch special type
+        if (typeRange.Remove(BuffType.Power))
+            idRange.AddRange(Buff.powerupBuffIds.Concat(Buff.powerdownBuffIds));
+
+        if (typeRange.Remove(BuffType.Powerup))
+            idRange.AddRange(Buff.powerupBuffIds);
+
+        if (typeRange.Remove(BuffType.Powerdown))
+            idRange.AddRange(Buff.powerdownBuffIds);
 
         bool isKey = !string.IsNullOrEmpty(keyList);
-        bool isId = (idList != "0") && (idRange.Count != 0);
-        bool isType = typeList != "none";
+        bool isId = (idRange.Count > 0) && (!idRange.All(x => x == 0));
+        bool isType = typeRange.Count > 0;
 
         Unit invokeUnit = (Unit)effect.invokeUnit;
         Unit lhsUnit = (who == "me") ? state.GetUnitById(invokeUnit.id) : state.GetRhsUnitById(invokeUnit.id);
@@ -579,7 +602,7 @@ public static class EffectAbilityHandler
                 if (isType)
                 {
                     foreach (var type in typeRange)
-                        isSuccess |= lhsUnit.RemoveBuff(x => (!x.IsUneffectable()) && x.IsType(type.ToBuffType()) && filter(x));
+                        isSuccess |= lhsUnit.RemoveBuff(x => (!x.IsUneffectable()) && x.IsType(type) && filter(x));
 
                     return isSuccess;
                 }
@@ -599,11 +622,10 @@ public static class EffectAbilityHandler
             var isSuccess = false;
             foreach (var type in typeRange)
             {
-                var buffType = type.ToBuffType();
-                if (buffController.GetBuff(Buff.GetProtectBuffTypeId(buffType)) != null)
+                if (buffController.GetBuff(Buff.GetProtectBuffTypeId(type)) != null)
                     continue;
 
-                isSuccess |= buffController.RemoveRangeBuff(x => (!x.IsUneffectable()) && x.IsType(buffType) && filter(x), lhsUnit, state);
+                isSuccess |= buffController.RemoveRangeBuff(x => (!x.IsUneffectable()) && x.IsType(type) && filter(x), lhsUnit, state);
             }
             return isSuccess;
         }
@@ -612,6 +634,9 @@ public static class EffectAbilityHandler
             var idRangeResult = new List<int>(idRange);
             foreach (var id in idRange)
             {
+                if (Buff.GetBuffInfo(id) == null)
+                    continue;
+
                 var buff = new Buff(id);
                 if ((!buff.IsPower()) || (!filter(buff)))
                     continue;
@@ -652,7 +677,6 @@ public static class EffectAbilityHandler
         Unit rhsUnit = (target == "me") ? state.GetUnitById(invokeUnit.id) : state.GetRhsUnitById(invokeUnit.id);
         var lhsBuffController = lhsUnit.pet.buffController;
         var rhsBuffController = rhsUnit.pet.buffController;
-        var copyType = typeList.ToBuffType();
         var filter = Parser.ParseConditionFilter<Buff>(filterList, (id, buff) =>
         {
             if (buff == null)
@@ -681,11 +705,22 @@ public static class EffectAbilityHandler
         {
             "random" => GetRandomBuff(false),
             "unique[random]" => GetRandomBuff(true),
-            _ => idList.ToIntList('/'),
+            _ => idList.ToIntList('/').Where(x => x != 0).ToList(),
         };
-        string[] typeRange = typeList.Split('/');
-        bool isId = (idList != "0") && (idRange.Count != 0);
-        bool isType = (typeList != "none");
+        List<BuffType> typeRange = typeList.Split('/').Select(x => x.ToBuffType()).Where(x => x != BuffType.None).ToList();
+
+        // Switch special type.
+        if (typeRange.Remove(BuffType.Power))
+            idRange.AddRange(Buff.powerupBuffIds.Concat(Buff.powerdownBuffIds));
+
+        if (typeRange.Remove(BuffType.Powerup))
+            idRange.AddRange(Buff.powerupBuffIds);
+
+        if (typeRange.Remove(BuffType.Powerdown))
+            idRange.AddRange(Buff.powerdownBuffIds);
+
+        bool isId = (idRange.Count > 0) && (!idRange.All(x => x == 0));
+        bool isType = typeRange.Count > 0;
 
         if (!isId && !isType)
             return false;
@@ -711,7 +746,7 @@ public static class EffectAbilityHandler
                     if ((buff.IsPowerUp() && (lhsBuffController.GetBuff(Buff.BUFFID_PROTECT_POWERUP) != null)) ||
                         (buff.IsPowerDown() && (lhsBuffController.GetBuff(Buff.BUFFID_PROTECT_POWERDOWN) != null)))
                     {
-                        continue;       
+                        continue;
                     }
                 }
 
@@ -726,9 +761,15 @@ public static class EffectAbilityHandler
             rhsUnit.pet.PowerUp(status, rhsUnit, state);
         }
 
-        if (isType && (lhsBuffController.GetBuff(Buff.GetProtectBuffTypeId(copyType)) == null))
+        if (isType)
         {
-            buffs = lhsBuffController.GetRangeBuff(x => (!x.IsUneffectable()) && x.IsType(copyType) && filter(x));
+            foreach (var type in typeRange)
+            {
+                if (lhsBuffController.GetBuff(Buff.GetProtectBuffTypeId(type)) != null)
+                    continue;
+
+                buffs = buffs.Concat(lhsBuffController.GetRangeBuff(x => (!x.IsUneffectable()) && x.IsType(type) && filter(x)));
+            }
             rhsBuffController.AddRangeBuff(buffs.Select(x => new Buff(x)), rhsUnit, state);
         }
 
@@ -1482,7 +1523,7 @@ public static class EffectAbilityHandler
                 if (op == "+")
                 {
                     var pet = BattlePet.GetBattlePet(new Pet((int)newValue, lhsUnit.pet));
-                    var buffs = new List<Buff>(){ Buff.GetFeatureBuff(pet), Buff.GetEmblemBuff(pet) };
+                    var buffs = new List<Buff>(){ Buff.GetFeatureBuff(pet), Buff.GetEmblemBuff(pet), new Buff(Buff.BUFFID_TOKEN) };
                     buffs.AddRange(pet.initBuffs);
 
                     pet.buffController.AddRangeBuff(buffs, lhsUnit, state);

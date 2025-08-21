@@ -21,6 +21,7 @@ public class BattlePet : Pet
 
     public bool isDead => (battleStatus.hp <= 0);
     public bool isMovable => buffController.isMovable;
+    public bool isToken => buffController.GetBuff(Buff.BUFFID_TOKEN) != null;
 
     public Status initStatus => statusController.initStatus;
     public BattleStatus battleStatus => statusController.battleStatus;
@@ -192,6 +193,9 @@ public class BattlePet : Pet
             "chain" => chain,
             "element" => (int)buffController.element,
             "subElement" => (int)buffController.subElement,
+            "movable" => isMovable ? 1 : 0,
+            "dead" => isDead ? 1 : 0,
+            "token" => isToken ? 1 : 0,
             _ => base.GetPetIdentifier(id),
         };
     }

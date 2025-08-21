@@ -13,7 +13,13 @@ public class NpcController : Module
         return npcModel.npcInfo;
     }
 
-    public void SetActive(bool active) {
+    public object GetNpcIdentifier(string id)
+    {
+        return npcView.GetIdentifier(id);
+    }
+
+    public void SetActive(bool active)
+    {
         gameObject.SetActive(active);
     }
 
@@ -54,7 +60,13 @@ public class NpcController : Module
         npcView.SetNamePos(pos);
     }
 
-    public void SetAction(Dictionary<int, NpcController> npcList, InfoPrompt infoPrompt) {
+    public void SetRaycastTarget(bool isRaycastTarget)
+    {
+        npcView.SetRaycastTarget(isRaycastTarget);
+    }
+
+    public void SetAction(Dictionary<int, NpcController> npcList, InfoPrompt infoPrompt)
+    {
         npcView.SetAction(this, npcList, infoPrompt);
     }
 

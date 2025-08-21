@@ -14,8 +14,18 @@ public class NpcView : Module
     [SerializeField] private Image image;
     [SerializeField] private IButton button;
     [SerializeField] private Text nameText;
+
+    public object GetIdentifier(string id)
+    {
+        return id switch
+        {
+            "color" => button?.image.color ?? Color.clear,
+            _ => null,
+        };
+    }
     
-    public void SetNpcInfo(NpcInfo info) {
+    public void SetNpcInfo(NpcInfo info)
+    {
         SetRaycastTarget(info.raycastTarget);
         SetRect(info.pos, info.size, info.rotation);
         SetName(info.name);

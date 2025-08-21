@@ -26,7 +26,7 @@ public static class NpcActionHandler
                     toNpc.SetActive(bool.Parse(option[1]));
                     break;
                 case "target":
-
+                    toNpc.SetRaycastTarget(bool.Parse(option[1]));
                     break;
                 case "name":
                     toNpc.SetName(option[1].TryTrimStart("[expr]", out expr) ? Parser.ParseOperation(expr).ToString() : option[1]);

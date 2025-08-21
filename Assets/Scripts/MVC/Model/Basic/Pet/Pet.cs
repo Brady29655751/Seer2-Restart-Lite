@@ -31,7 +31,7 @@ public class Pet
     // Properties and Shortcut.
     /* Basic */
     public int hashId => GetPetHashId();
-    public string name
+    [XmlIgnore] public string name
     {
         get => string.IsNullOrEmpty(basic.name) ? info.basic.name : basic.name;
         set => basic.name = value;

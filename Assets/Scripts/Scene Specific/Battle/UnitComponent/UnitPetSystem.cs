@@ -83,7 +83,14 @@ public class UnitPetSystem
             if ((petBag[i] == null) || (petBag[i].isDead))
                 tokenPetBag[i] = null;
 
-            tokenPetBag[i]?.OnTurnStart(thisUnit, state);
+            if (tokenPetBag[i] != null)
+            {
+                SwapTokenPet(i);
+                petBag[i].OnTurnStart(thisUnit, state);
+
+                if ((petBag[i]?.isToken) ?? (tokenPetBag[i] != null))
+                    SwapTokenPet(i);
+            }
         }
 
         if ((state.settings.parallelCount > 1) && (pet?.isDead ?? true))

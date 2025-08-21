@@ -1,0 +1,255 @@
+<map name="火山星深处" category="102" id="10017" weather="3">
+	<initialPoint>210,355</initialPoint>
+	<music category="102">
+		<bgm>BGM_15</bgm>
+	</music>
+	<entities>
+		<npc id="1001700" resId="1001" name="" size="200,160" pos="0,380" namePos="0,0" color="0,0,0,0">
+			<description>火山星山洞</description>
+			<transport>120,440</transport>
+			<eventHandler>
+				<button type="click">
+					<action>teleport</action>
+					<param>10016</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<!--
+		<npc id="1001701" resId="1001" name="" size="250,180" pos="640,300" namePos="0,0" color="0,0,0,0">
+			<description>海洋星浅水区</description>
+			<transport>780,340</transport>
+			<eventHandler>
+				<button type="click">
+					<action>teleport</action>
+					<param>10020</param>
+				</button>
+			</eventHandler>
+		</npc>
+		-->
+		<npc id="1001703" resId="Pets/pet/10042" name="Lv 100 里奥斯" size="119,137" pos="770,270" namePos="0,0">
+			<description>SPT</description>
+			<dialog>
+				<branch id="default" name="里奥斯" icon="Pets/pet/10042" size="119,137" pos="10,55">
+					<content><![CDATA[（一直盯着你，盯得你快要发火）]]></content>
+					<functionHandler>
+						<func type="click">
+							<description><![CDATA[挑战里奥斯]]></description>
+							<action>battle</action>
+							<param>default</param>
+						</func>
+						<func type="click">
+							<description><![CDATA[超进化]]></description>
+							<action>battle</action>
+							<param>evolve</param>
+						</func>
+						<!--
+						<func type="click">
+							<description><![CDATA[神迹觉醒]]></description>
+							<action>battle</action>
+							<param>miracle</param>
+						</func>
+						-->
+					</functionHandler>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[我有高压水枪能灭火]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+					</replyHandler>
+				</branch>
+			</dialog>
+			<battle>
+				<branch id="default">
+					<settings count="6">
+						<mode>3</mode>
+						<weather>3</weather>
+					</settings>
+					<enemy>
+						<pet id="10042" level="100">
+							<status>
+								<hp>5000</hp>
+							</status>
+							<initBuff>13,14,17,20,-3034,-3035,-3059,-2003,-3082</initBuff>
+							<loopSkill>12496,12498,12499,12497</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>getPet</action>
+							<param>10041,1</param>
+							<condition>activity[spt].done[new][3][default]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=【胡里亚】已经放入精灵仓库</param>
+							<param>item_icon=pet[10041]</param>
+							<param>option_num=1</param>
+							<condition>activity[spt].done[new][3][default]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>spt</param>
+							<param>done[new][3][default]=true</param>
+							<condition>activity[spt].done[new][3][default]=[bool]false[default]false</condition>
+						</button>
+					</winHandler>
+				</branch>
+				<branch id="evolve">
+					<settings count="6">
+						<mode>3</mode>
+						<weather>3</weather>
+					</settings>
+					<enemy>
+						<pet id="11298" level="100">
+							<status>
+								<def>800</def>
+								<mdf>800</mdf>
+								<hp>10000</hp>
+							</status>
+							<initBuff>12,13,14,17,20,56,61,3373,-3059</initBuff>
+							<loopSkill>12500,12511,12510</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=PetSelect</param>
+						    <param>title=选择要进化的里奥斯</param>
+						    <param>option_num=2</param>
+						    <param>callback=evolve</param>
+						</button>
+					</winHandler>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>openDialog</action>
+					<param>default</param>
+					<condition>npc[1001706].color=255,255,255,255</condition>
+					<condition>npc[1001707].color=255,255,255,255</condition>
+				</button>
+				<button type="click">
+					<action>openHintbox</action>
+					<param>type=Item</param>
+					<param>title=提示</param>
+					<param>content=先铺好道路再过来挑战里奥斯吧！</param>
+					<param>item_icon=item[7002]</param>
+					<param>option_num=1</param>
+					<condition>npc[1001706].colorNOT255,255,255,255|npc[1001707].colorNOT255,255,255,255</condition>
+				</button>
+			</eventHandler>
+			<callbackHandler>
+				<button type="choose">
+					<action>openHintbox</action>
+					<param>type=PetSelect</param>
+				    <param>title=选择要进化的里奥斯</param>
+				    <param>option_num=2</param>
+					<param>callback=evolve</param>
+				    <condition>data.PetSelect.uidNOT10042|data.PetSelect.level&lt;100</condition>
+				</button>
+				<button type="evolve">
+				    <action>openHintbox</action>
+				    <param>type=Item</param>
+				    <param>title=提示</param>
+				    <param>content=必须选择等级100的里奥斯！</param>
+				    <param>item_icon=pet[10042]</param>
+				    <param>option_num=1</param>
+					<param>callback=choose</param>
+				    <condition>data.PetSelect.uidNOT10042|data.PetSelect.level&lt;100</condition>
+				</button>
+				<button type="evolve">
+				    <action>openHintbox</action>
+				    <param>type=Item</param>
+				    <param>title=提示</param>
+				    <param>content=里奥斯已成功超进化</param>
+				    <param>item_icon=pet[11298]</param>
+				    <param>option_num=1</param>
+				    <condition>data.PetSelect.uid=10042</condition>
+				    <condition>data.PetSelect.levelGTE100</condition>
+				</button>
+				<button type="evolve">
+				    <action>evolvePet</action>
+				    <param>index=data.PetSelectIndex</param>
+				    <param>11298</param>
+				    <condition>data.PetSelect.uid=10042</condition>
+				    <condition>data.PetSelect.levelGTE100</condition>
+				</button>
+				<button type="evolve">
+				    <action>setPet</action>
+				    <param>index=data.PetSelectIndex</param>
+				    <param>skill=12509</param>
+				    <param>skill=12510</param>
+				    <param>skill=12511</param>
+				    <param>skill=12512</param>
+				    <condition>data.PetSelect.uid=10042</condition>
+				    <condition>data.PetSelect.levelGTE100</condition>
+				</button>
+			</callbackHandler>
+		</npc>
+		<npc id="1001704" resId="Pets/pet/10335" name="Lv26 赤甲虫" size="64,48" pos="450,300" namePos="0,0">
+			<battle>
+				<branch id="default">
+					<settings count="6" capture="true">
+						<weather>3</weather>
+					</settings>
+					<enemy>
+						<pet id="10335" level="26">
+							<loopSkill>10985,12481</loopSkill>
+						</pet>
+					</enemy>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>battle</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<npc id="1001705" resId="Pets/pet/10335" name="Lv27 赤甲虫" size="64,48" pos="270,260" namePos="0,0">
+			<battle>
+				<branch id="default">
+					<settings count="6" capture="true">
+						<weather>3</weather>
+					</settings>
+					<enemy>
+						<pet id="10335" level="27">
+							<loopSkill>10985,12481</loopSkill>
+						</pet>
+					</enemy>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>battle</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<npc id="1001706" resId="1001706" name="" size="171,171" pos="290,400" namePos="0,0" color="0,0,0,0">
+			<eventHandler>
+				<button type="shoot">
+					<action>setNpcParam</action>
+					<param>1001706</param>
+					<param>color=255,255,255,255</param>
+					<param>pos=290,160</param>
+					<condition>player.shoot=7002</condition>
+				</button>
+			</eventHandler>
+		</npc>
+		<npc id="1001707" resId="1001707" name="" size="321,273" pos="470,380" namePos="0,0" color="0,0,0,0">
+			<eventHandler>
+				<button type="shoot">
+					<action>setNpcParam</action>
+					<param>1001707</param>
+					<param>color=255,255,255,255</param>
+					<param>pos=455,42.5</param>
+					<condition>player.shoot=7002</condition>
+				</button>
+			</eventHandler>
+		</npc>
+	</entities>		
+</map>

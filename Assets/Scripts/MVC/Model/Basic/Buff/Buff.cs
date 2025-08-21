@@ -6,6 +6,7 @@ using UnityEngine;
 
 public class Buff
 {
+    public const int BUFFID_TOKEN = -21;
     public const int BUFFID_PVP_IV_120 = 61_0000;
     public const int BUFFID_PET_EXCHANGE = 62_0000;
     public const int BUFFID_PET_RANDOM = 62_0001;
@@ -64,6 +65,9 @@ public class Buff
     public bool IsType(BuffType type) {
         return type switch {
             BuffType.All        => !IsPower(),
+            BuffType.Power      => IsPower(),
+            BuffType.Powerup  => IsPowerUp(),
+            BuffType.Powerdown  => IsPowerDown(),
             BuffType.TurnBased  => (turn > 0) && (!IsUnhealthy()) && (!IsAbnormal()),
             _                   => info.type == type,
         };
@@ -128,6 +132,8 @@ public class Buff
         {
             BuffType.TurnBased => -2001,
             BuffType.ChanceBased => -2002,
+            BuffType.Powerup => -2003,
+            BuffType.Powerdown => -2004,
             _ => 0,
         };
     }
@@ -171,7 +177,9 @@ public class Buff
         };
 
         desc = desc.Replace("[option[value]]", referenceBuff.options.Get("value", "0"));
-        desc = desc.Replace("[value]", referenceBuff.value.ToString()).Replace("[poker]", pokerValue).Replace("[skill]", Skill.GetSkill(referenceBuff.value, false)?.name ?? "技能信息错误");
+        desc = desc.Replace("[value]", referenceBuff.value.ToString()).Replace("[poker]", pokerValue);
+        desc = desc.Replace("[pet]", Pet.GetPetInfo(referenceBuff.value)?.name ?? "精灵信息错误");
+        desc = desc.Replace("[skill]", Skill.GetSkill(referenceBuff.value, false)?.name ?? "技能信息错误");
         desc = desc.Replace("[ENDL]", "\n").Replace("[-]", "</color>").Replace("[", "<color=#").Replace("]", ">");
         return desc;
     }

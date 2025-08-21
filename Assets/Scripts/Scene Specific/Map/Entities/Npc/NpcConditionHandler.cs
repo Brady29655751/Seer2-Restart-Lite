@@ -16,8 +16,21 @@ public static class NpcConditionHandler
         if (key.TryTrimStart("map.", out trimKey))
             return () => Operator.Condition(op, Player.instance.currentMap?.GetMapIdentifier(trimKey) ?? 0, float.Parse(value));
 
+        if (key.TryTrimStart("npc", out trimKey))
+        {
+            int id = int.Parse(trimKey.TrimParentheses());
+            string dataKey = trimKey.Substring(trimKey.IndexOf('.') + 1);
+            var npcDict = (Dictionary<int, NpcController>)Player.GetSceneData("mapNpcList");
+            var npc = npcDict.Get(id);
+            return () => dataKey switch
+            {
+                "color" => (op == "=") ^ (((Color)npc.GetNpcIdentifier("color")) != value.ToColor()),
+                _ => false,
+            };
+        }
+
         if (key.TryTrimStart("firstPet.", out trimKey))
-            return () => GetFirstPet(op, trimKey, value);
+                return () => GetFirstPet(op, trimKey, value);
 
         if (key.TryTrimStart("activity", out trimKey)) {
             string id = trimKey.TrimParentheses();

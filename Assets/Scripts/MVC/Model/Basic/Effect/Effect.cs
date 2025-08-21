@@ -127,7 +127,7 @@ public class Effect {
 
     public bool Condition(object invokeUnit, BattleState state, bool checkPhase = true, bool checkTurn = true) {
         bool isCorrectPhase = ((state == null) && (timing == EffectTiming.Resident)) || 
-            ((state != null) && (state.phase == timing));
+            ((state != null) && ((timing == state.phase) || ((state.phase > EffectTiming.Resident) && (timing == EffectTiming.All))));
 
         if (checkPhase && !isCorrectPhase)
             return false;

@@ -6,6 +6,9 @@ using UnityEngine;
 public static class BuffDatabase
 {   
     public static Dictionary<string, BuffType> typeConvDict = new Dictionary<string, BuffType>() {
+        {"powerup.neg", BuffType.Powerdown},
+        {"powerup.pos", BuffType.Powerup},
+        {"powerup", BuffType.Power},
         {"all", BuffType.All},
         {"none", BuffType.None},
         {"feature", BuffType.Feature},
@@ -47,6 +50,9 @@ public static class BuffDatabase
 }
 
 public enum BuffType {
+    Powerdown = -4, // 弱化
+    Powerup = -3,   // 強化
+    Power = -2,     // 能力變化
     All = -1,       // 全部
     None = 0,       // 無
     Feature = 1,    // 特性類狀態

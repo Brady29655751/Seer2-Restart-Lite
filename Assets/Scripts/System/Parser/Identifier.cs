@@ -228,16 +228,11 @@ public static class Identifier {
             id = trimId;
         }
 
-        if (id == "movable")
-            return pet.isMovable ? 1 : 0;
-
-        if (id == "dead")
-            return pet.isDead ? 1 : 0;
-
         //TODO Extend this with variable, such as op.pet.element
         if (id.TryTrimStart("defElementRelation", out trimId) &&
             trimId.TryTrimParentheses(out trimId) &&
-            int.TryParse(trimId, out var elementId)) {
+            int.TryParse(trimId, out var elementId))
+        {
             return PetElementSystem.GetElementRelation(elementId, pet);
         }
 
@@ -309,7 +304,7 @@ public static class Identifier {
             if (!int.TryParse(buffIdExpr, out int buffId)) {
                 BuffType buffType = buffIdExpr.ToBuffType();
 
-                if (buffIdExpr == "powerup.pos")
+                if (buffType == BuffType.Powerup)
                     return id switch {
                         "count" => buffs.Count(x => x.IsPowerUp()),
                         "own" => buffs.Exists(x => x.IsPowerUp()) ? 1 : 0,
@@ -318,7 +313,7 @@ public static class Identifier {
                         _ => 0,
                     };
 
-                if (buffIdExpr == "powerup.neg")
+                if (buffType == BuffType.Powerdown)
                     return id switch {
                         "count" => buffs.Count(x => x.IsPowerDown()),
                         "own" => buffs.Exists(x => x.IsPowerDown()) ? 1 : 0,
