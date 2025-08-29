@@ -24,13 +24,11 @@
 							<action>battle</action>
 							<param>evolve</param>
 						</func>
-						<!--
 						<func type="click">
 							<description><![CDATA[神迹觉醒]]></description>
 							<action>battle</action>
 							<param>miracle</param>
 						</func>
-						-->
 					</functionHandler>
 					<replyHandler>
 						<reply type="click">
@@ -104,6 +102,30 @@
 						</button>
 					</winHandler>
 				</branch>
+				<branch id="miracle">
+					<settings count="6">
+						<mode>3</mode>
+						<initBuff>(field:600002)</initBuff>
+					</settings>
+					<enemy>
+						<pet id="114798" level="105">
+							<status>
+								<hp>25000</hp>
+							</status>
+							<initBuff>-8,61,-3059,-3062,-3065,-3082</initBuff>
+							<loopSkill>12575,12578,12579</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=PetSelect</param>
+						    <param>title=选择要进化的巨齿鲨</param>
+						    <param>option_num=2</param>
+						    <param>callback=miracle</param>
+						</button>
+					</winHandler>
+				</branch>
 			</battle>
 			<eventHandler>
 				<button type="click">
@@ -161,6 +183,41 @@
 				    <condition>data.PetSelect.uid=10034</condition>
 				    <condition>data.PetSelect.levelGTE100</condition>
 				</button>
+				<button type="miracle_choose">
+					<action>openHintbox</action>
+					<param>type=PetSelect</param>
+				    <param>title=选择要进化的巨齿鲨</param>
+				    <param>option_num=2</param>
+					<param>callback=miracle</param>
+				    <condition>data.PetSelect.uidNOT11230|data.PetSelect.level&lt;100</condition>
+				</button>
+				<button type="miracle">
+				    <action>openHintbox</action>
+				    <param>type=Item</param>
+				    <param>title=提示</param>
+				    <param>content=必须选择等级100的巨齿鲨！</param>
+				    <param>item_icon=pet[11230]</param>
+				    <param>option_num=1</param>
+					<param>callback=miracle_choose</param>
+				    <condition>data.PetSelect.uidNOT11230|data.PetSelect.level&lt;100</condition>
+				</button>
+				<button type="miracle">
+				    <action>openHintbox</action>
+				    <param>type=Item</param>
+				    <param>title=提示</param>
+				    <param>content=巨齿鲨已成功超进化</param>
+				    <param>item_icon=pet[14798]</param>
+				    <param>option_num=1</param>
+				    <condition>data.PetSelect.uid=11230</condition>
+				    <condition>data.PetSelect.levelGTE100</condition>
+				</button>
+				<button type="miracle">
+				    <action>evolvePet</action>
+				    <param>index=data.PetSelectIndex</param>
+				    <param>14798</param>
+				    <condition>data.PetSelect.uid=11230</condition>
+				    <condition>data.PetSelect.levelGTE100</condition>
+				</button>
 			</callbackHandler>
 		</npc>
 		<npc id="1002200" resId="1001" name="" size="200,200" pos="70,340" namePos="0,0" color="0,0,0,0">
@@ -198,7 +255,7 @@
 				</button>
 			</eventHandler>
 		</npc>
-		<npc id="1002201" resId="Pets/pet/10108" name="Lv20 布鲁" size="60,58" pos="400,160" namePos="0,-5" active="false">
+		<npc id="1002201" resId="Pets/pet/10108" name="Lv15 布鲁" size="60,58" pos="400,160" namePos="0,-5" active="false">
 			<description>神秘的精灵</description>
 			<dialog>
 				<branch id="default" name="布鲁" icon="Pets/pet/10108" size="120,115" pos="0,35">
@@ -223,7 +280,7 @@
 						<initBuff>(field:600002)</initBuff>
 					</settings>			
 					<enemy>
-						<pet id="10108" level="5">
+						<pet id="10108" level="15">
 							<initBuff>-2</initBuff>
 							<loopSkill>10002,10002,10002,10002,-4</loopSkill>
 						</pet>

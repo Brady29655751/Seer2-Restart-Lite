@@ -118,7 +118,7 @@ public class MapSceneView : UIModule
                     var date = DateTime.Parse(activity.GetData("land[" + id + "].date[ripe]", DateTime.MaxValue.ToString()));
                     var ripe = DateTime.Now >= date;
                     var icon = ripe ? plantId : int.Parse(item.options.Get("seed", "600000"));
-                    npc.SetIcon("Items/" + icon);
+                    npc.SetIcon((ItemInfo.IsMod(icon) ? "Mod/" : string.Empty) + "Items/" + icon);
                 }
                 npc.SetColor(isPlantGrowing ? Color.white : Color.clear);
             }

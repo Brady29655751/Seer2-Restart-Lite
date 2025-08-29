@@ -105,7 +105,7 @@ id,name,type,copyType,turn,options,description
 94,能力反转,mark,replace,-1,none,获得的能力变化效果相反
 95,至尊光环,mark,replace,-1,none,自身弱化不超过[value]级，对手强化不超过[value]级
 96,限伤,mark,replace,-1,none,受到的伤害不超过最大体力的1/[value]
-97,暴怒,mark,replace,-1,hide=true,锁定100怒气
+97,怒气锁定,mark,replace,-1,hide=true,锁定100怒气
 98,环境锁定,mark,replace,-1,none,锁定环境效果
 99,王者体质,mark,replace,-1,none,免疫秒杀效果
 100,至尊体质,mark,replace,-1,none,免疫体力回复率降低的效果[ENDL]免疫禁疗、极限游戏、哨戒模式状态
@@ -632,6 +632,7 @@ id,name,type,copyType,turn,options,description
 3383,直觉闪避,chance,replace,-1,none,闪避下一次攻击，移除时强化自身物防1级
 3384,热血,chance,replace,-1,none,下次击败对手时强化自身物攻1级并恢复15点怒气
 3385,天焚寰宇,mark,replace,-1,none,能力强化被消除时移除此印记并使对手损失1/2体力，最高不超过自身最大体力的1/2
+3386,连打,mark,block,-1,res=65,行动次数+1
 100001,终结,feature,replace,-1,none,体力低于1/4时，消耗弱点记号的技能伤害增加25%，且使水泡必中并附加30点伤害
 100004,炎火,feature,replace,-1,none,体力低于1/4时，火系技能造成的伤害增加25%，且使火焰必中并附加30点伤害
 100007,坚韧,feature,replace,-1,none,体力低于1/4时，受到的伤害减少25%，且使种子爆弹必中并附加30点伤害
@@ -785,6 +786,7 @@ id,name,type,copyType,turn,options,description
 110038,炎贝,feature,replace,-1,none,攻击燃烧的对手会恢复5点怒气
 110041,火网,feature,replace,-1,none,攻击处于密集火网状态的对手伤害增加10%
 110046,蘑菇,feature,replace,-1,none,属性技能命中后30%概率使对手中毒
+110062,连打,feature,replace,-1,none,双精灵对战中获得连打时，全队都会获得连打
 110083,洞游,feature,replace,-1,none,每回合开始时随机获得1种洞游
 110108,海妖,feature,replace,-1,none,水量充足时每回合恢复5点怒气
 110133,焰忍,feature,replace,-1,none,替换上场时若自身没有焰忍则会获得焰忍，此特性最多发动6次[ENDL]当前已发动[value]次
@@ -809,6 +811,7 @@ id,name,type,copyType,turn,options,description
 114750,始祖,feature,replace,-1,none,[ffbb33]【专属动作】[-]神迹觉醒[ENDL][ffbb33]【时点】[-]决定技能时[ENDL][ffbb33]【条件】[-]森林场地
 114760,光子,feature,replace,-1,none,[ffbb33]【专属动作】[-]神迹觉醒[ENDL][ffbb33]【时点】[-]决定技能时[ENDL][ffbb33]【条件】[-]具有火花躯体状态
 114780,海龟,feature,replace,-1,none,[ffbb33]【专属动作】[-]神迹觉醒[ENDL][ffbb33]【时点】[-]决定技能时[ENDL][ffbb33]【条件】[-]具有水之波动状态
+114798,狂鲛,feature,replace,-1,none,[ffbb33]【专属动作】[-]神迹觉醒[ENDL][ffbb33]【时点】[-]决定技能时[ENDL][ffbb33]【条件】[-]具有暴怒状态
 200001,追击,emblem,replace,-1,none,命中率和闪避率提高10%
 200004,怒火,emblem,replace,-1,none,怒气回复率提高20%（攻击命中与回合结束回复的怒气除外）
 200007,治愈,emblem,replace,-1,none,体力回复率提高20%
@@ -962,6 +965,7 @@ id,name,type,copyType,turn,options,description
 210038,熔壳,emblem,replace,-1,none,免疫燃烧状态
 210041,幻影,emblem,replace,-1,none,神秘系技能15%使对手恐惧
 210046,孢子,emblem,replace,-1,none,攻击技能命中后15%概率使对手被寄生
+210062,甲壳,emblem,replace,-1,none,双精灵对战中，全队受到的伤害减少10%
 210083,捆绑,emblem,replace,-1,none,后出手时15%弱化对手速度1级
 210108,蓝光,emblem,replace,-1,none,首次出场时获得蓝光状态
 210133,屏息,emblem,replace,-1,none,击败对手时获得焰忍
@@ -986,6 +990,7 @@ id,name,type,copyType,turn,options,description
 214750,云境,emblem,replace,-1,none,攻击结束时若自身体力高于回合开始时，则自身全能力强化1级，且自身体力高于1/2时额外使对手获得[ffbb33]【琼花仙荼】[-]3回合[ENDL]若自身体力不高于回合开始时，则回合结束时恢复自身1/3体力，且自身体力低于1/2时效果2倍并造成等量伤害[ENDL][ENDL]本回合开始时自身体力为[value]
 214760,阳舞,emblem,replace,-1,none,免疫异常和能力下降状态[ENDL]回合开始时恢复30点怒气[ENDL]攻击伤害低于对手最大体力的1/2时使对手损失300点体力，否则造成伤害的1/2恢复自身体力
 214780,念动,emblem,replace,-1,none,回合开始时若自身处于[ffbb33]【瘫痪】[-]状态则获得[ffbb33]【吸收】[-]状态1回合，并使对手[ffbb33]【失神】[-]1回合[ENDL]攻击时若对手不处于异常状态则伤害提升50%，否则吸取对手最大体力的1/3，最高不超过自身最大体力的1/3
+214798,霸颚,emblem,replace,-1,none,能力强化上限提升至12级[ENDL]回合开始时强化自身物攻和速度2级[ENDL]回合结束时若自身没有能力强化则会使对手[ffbb33]【流血】[-]和[ffbb33]【冻伤】[-]
 300354,海牙,emblem,replace,-1,none,冰系技能暴击率提升25%，超能系技能暴击伤害提升15%
 500000,无,weather,replace,-1,none,无天气或环境效果
 500001,晴天,weather,replace,-1,none,草系和光系技能伤害+35%
@@ -1090,6 +1095,7 @@ id,name,type,copyType,turn,options,description
 600014,炼狱,mark,replace,-1,none,效果触发率增加15%[ENDL]回合结束时10%使自身混乱
 600015,静电,mark,replace,-1,none,连击技能每3次连击会使连击数+1
 600020,魔界,mark,replace,-1,none,造成伤害的1/4会恢复自身体力，第2次行动附带60点固定伤害
+600099,梦境,mark,replace,-1,none,普通系技能伤害提升35%
 610000,PVP极品资质120,mark,replace,-1,none,[ffbb33]【PVP对战规则】[-][ENDL]双方精灵资质为120
 610001,PVP无禽12星,mark,replace,-1,none,[ffbb33]【PVP对战规则】[-][ENDL]背包必须带满6只精灵，且星数总和不能超过12[ENDL]不能携带4星以上精灵，且3星精灵最多携带2只
 620000,精灵大乱斗,mark,replace,-1,res=-18,[ffbb33]【特殊规则】[-][ENDL]双方精灵随机交换使用，PVP对战时背包必须且只能携带3只精灵

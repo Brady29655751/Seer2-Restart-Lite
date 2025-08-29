@@ -684,7 +684,7 @@ public static class EffectAbilityHandler
 
             return Parser.ParseEffectOperation(id, effect, lhsUnit, rhsUnit, buff, false);
         });
-        IEnumerable<Buff> buffs = null;
+        IEnumerable<Buff> buffs = new List<Buff>();
 
         List<int> GetRandomBuff(bool unique = false)
         {

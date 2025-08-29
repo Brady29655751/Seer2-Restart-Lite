@@ -60,6 +60,7 @@ public class WorkshopEffectModel : Module
         return timingDropdown.value switch {
             prevStage + 1  => EffectTiming.Resident,
             lastStage + 1  => EffectTiming.OnBattleEnd,
+            lastStage + 2  => EffectTiming.All,
             _ => EffectTiming.None,
         };
     }

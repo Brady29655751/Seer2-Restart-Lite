@@ -240,6 +240,104 @@
 				</button>
 			</eventHandler>
 		</npc>
+		<npc id="12108" resId="Pets/pet/608" name="魅魔伊娜" size="89,137" pos="195,360" namePos="0,0">
+			<description>法伊娜超进化</description>
+			<dialog>
+				<branch id="default" name="魅魔伊娜" icon="Pets/pet/608" size="89,137" pos="0,45">
+					<content><![CDATA[不要轻易帮助雌性精灵]]></content>
+					<functionHandler>
+						<func type="click">
+							<description><![CDATA[超进化挑战]]></description>
+							<action>battle</action>
+							<param>evolve</param>
+						</func>
+					</functionHandler>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[雄性魅魔的肺腑之言]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+					</replyHandler>
+				</branch>
+			</dialog>
+			<battle>
+				<branch id="evolve">
+					<settings count="1" star="4"/>
+					<enemy>
+						<pet id="608" level="100">
+							<status>
+								<hp>2000</hp>
+							</status>
+							<initBuff>-8</initBuff>
+							<loopSkill>12562</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=PetSelect</param>
+						    <param>title=选择要进化的法伊娜</param>
+						    <param>option_num=2</param>
+						    <param>callback=evolve</param>
+						</button>
+					</winHandler>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>openDialog</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+			<callbackHandler>
+				<button type="choose">
+					<action>openHintbox</action>
+					<param>type=PetSelect</param>
+				    <param>title=选择要进化的法伊娜</param>
+				    <param>option_num=2</param>
+					<param>callback=evolve</param>
+				    <condition>data.PetSelect.uidNOT12|data.PetSelect.level&lt;100</condition>
+				</button>
+				<button type="evolve">
+				    <action>openHintbox</action>
+				    <param>type=Item</param>
+				    <param>title=提示</param>
+				    <param>content=必须选择等级100的法伊娜！</param>
+				    <param>item_icon=pet[12]</param>
+				    <param>option_num=1</param>
+					<param>callback=choose</param>
+				    <condition>data.PetSelect.uidNOT12|data.PetSelect.level&lt;100</condition>
+				</button>
+				<button type="evolve">
+				    <action>openHintbox</action>
+				    <param>type=Item</param>
+				    <param>title=提示</param>
+				    <param>content=法伊娜已成功超进化</param>
+				    <param>item_icon=pet[608]</param>
+				    <param>option_num=1</param>
+				    <condition>data.PetSelect.uid=12</condition>
+				    <condition>data.PetSelect.levelGTE100</condition>
+				</button>
+				<button type="evolve">
+				    <action>evolvePet</action>
+				    <param>index=data.PetSelectIndex</param>
+				    <param>608</param>
+				    <condition>data.PetSelect.uid=12</condition>
+				    <condition>data.PetSelect.levelGTE100</condition>
+				</button>
+				<button type="evolve">
+				    <action>setPet</action>
+				    <param>index=data.PetSelectIndex</param>
+				    <param>skill=12566</param>
+				    <param>skill=12567</param>
+				    <param>skill=12568</param>
+				    <param>skill=12569</param>
+				    <condition>data.PetSelect.uid=12</condition>
+				    <condition>data.PetSelect.levelGTE100</condition>
+				</button>
+			</callbackHandler>
+		</npc>
 		<teleport id="1" name="草系主城" pos="680,60" targetMapId="90"/>
 		<teleport id="2" name="朽木桥" pos="450,220" targetMapId="122"/>
 	</entities>

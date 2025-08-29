@@ -451,7 +451,8 @@ public class Pet
     }
 
     public Pet EvolveTo(int evolveId, bool keepSkill = true) {
-        int cursor = Player.instance.petBag.AllIndexOf(this).FirstOrDefault();
+        var allPets = Player.instance.petBag.AllIndexOf(this);
+        int cursor = ListHelper.IsNullOrEmpty(allPets) ? -1 : allPets[0];
         if (evolveId == 0)
             return null;
 

@@ -18,7 +18,14 @@ public class PetDictionaryPanel : Panel
         InitSelectSubscriptions();
     }
 
-    private void InitSelectSubscriptions() {
+    public override void Init()
+    {
+        base.Init();
+        SelectMode(PetDictionaryMode.All);
+    }
+
+    private void InitSelectSubscriptions()
+    {
         selectController.onSelectPetEvent += demoController.SetPet;
         selectController.onSelectPetEvent += infoController.SetPet;
     }

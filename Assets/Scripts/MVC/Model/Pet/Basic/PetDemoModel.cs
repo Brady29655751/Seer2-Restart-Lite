@@ -10,7 +10,7 @@ public class PetDemoModel : Module
 
     public string petName
     {
-        get => currentPet.name;
+        get => currentPet?.name;
         set
         {
             currentPet.name = value;
