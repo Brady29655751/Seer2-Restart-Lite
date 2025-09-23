@@ -327,6 +327,7 @@ public static class Identifier {
                     "own" => buffs.Exists(x => x.IsType(buffType)) ? 1 : 0,
                     "block" => buffController.IsBuffTypeBlocked(buffType) ? 1 : 0,
                     "copy"  => buffController.IsBuffTypeCopied(buffType) ? 1 : 0,
+                    "id"    => buffController.GetRangeBuff(x => x.IsType(buffType)).FirstOrDefault()?.id ?? 0,
                     _ => 0,
                 };
             }

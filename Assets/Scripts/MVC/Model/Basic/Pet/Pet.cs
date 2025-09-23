@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
 using System.Threading.Tasks;
+using ExitGames.Client.Photon.StructWrapping;
 
 [XmlRoot("pet")]
 public class Pet
@@ -13,6 +14,7 @@ public class Pet
     [XmlIgnore] public PetInfo info => GetPetInfo(id);
 
     public int id;
+    public Pet backupPet;  // 原始型態（退化時將退化前的型態放在這）
     public PetBasic basic;   // 基本資料，屬性、性格、身高體重、獲得日期等
     public PetFeature feature;  // 特性、紋章等
     public PetExp exp;  // 經驗值、等級相關等
@@ -138,6 +140,7 @@ public class Pet
             return;
 
         id = _copy.id;
+        backupPet = (_copy.backupPet == null) ? null : new Pet(_copy.backupPet);
 
         basic = new PetBasic(_copy.basic);
         feature = new PetFeature(_copy.feature);
@@ -469,27 +472,78 @@ public class Pet
         return evolvePet;
     }
 
-    public static void VersionUpdate() {
+    public bool Devolve()
+    {
+        var allPets = Player.instance.petBag.AllIndexOf(this);
+        int cursor = ListHelper.IsNullOrEmpty(allPets) ? -1 : allPets[0];
+        if (!cursor.IsInRange(0, Player.instance.petBag.Length))
+            return false;
+
+        if (backupPet != null)
+        {
+            Player.instance.petBag[cursor] = backupPet;
+            return true;
+        }
+
+        // Get devolve candidates
+        var chain = PetExpSystem.GetEvolveChain(basic.baseId, backupPet?.id ?? id);
+
+        // Remove self
+        chain?.Remove(id);
+
+        if (ListHelper.IsNullOrEmpty(chain))
+        {
+            Hintbox.OpenHintboxWithContent("没有可退化的形态", 16);
+            return false;
+        }
+
+        var starPets = chain.Select(x => new Pet(x, this)).ToList();
+        foreach (var starPet in starPets)
+        {
+            starPet.skills = new PetSkill(starPet.id, starPet.level);
+            starPet.skills.LearnAllSkill();
+            starPet.backupPet = this;
+        }
+
+        var hintbox = Hintbox.OpenHintbox<PetSelectHintbox>();
+        hintbox.SetTitle("请选择要退化的形态");
+        hintbox.SetStorage(starPets);
+        hintbox.SetConfirmSelectCallback(pet =>
+        {
+            Player.instance.petBag[cursor] = pet;
+
+            var petBagController = GameObject.FindObjectOfType<PetBagController>();
+            if (petBagController != null)
+                petBagController.RefreshPetBag();
+        });
+        return true;
+    }
+
+    public static void VersionUpdate()
+    {
         GameData gameData = Player.instance.gameData;
         string petDataVersion = gameData.version;
 
         IEnumerable<Pet> allPets = gameData.petBag.Concat(gameData.petStorage).Where(x => x != null);
 
-        if (VersionData.Compare(petDataVersion, "beta_0.1") < 0) {
+        if (VersionData.Compare(petDataVersion, "beta_0.1") < 0)
+        {
             foreach (var pet in allPets)
                 pet.ui = new PetUI(pet.id, pet.basic.baseId);
 
             petDataVersion = "beta_0.1";
         }
 
-        if (VersionData.Compare(petDataVersion, "lite_2.8") < 0) {
+        if (VersionData.Compare(petDataVersion, "lite_2.8") < 0)
+        {
             foreach (var pet in allPets)
                 pet.basic.gender = pet.info?.basic.gender ?? 0;
-            
+
             petDataVersion = "lite_2.8";
         }
 
-        if (VersionData.Compare(petDataVersion, "lite_2.9") < 0) {
+        if (VersionData.Compare(petDataVersion, "lite_2.9") < 0)
+        {
             foreach (var pet in allPets)
             {
                 if ((pet == null) || (!pet.id.IsWithin(-1, -12)))
@@ -497,13 +551,21 @@ public class Pet
 
                 int newId = pet.id switch
                 {
-                    -1 => 10304,    -2 => 10305,    -3 => 10306,
-                    -4 => 10307,    -5 => 10308,    -6 => 10309,
-                    -7 => 10301,    -8 => 10302,    -9 => 10303,
-                    -10 => 10010,   -11 => 10011,   -12 => 10012,
+                    -1 => 10304,
+                    -2 => 10305,
+                    -3 => 10306,
+                    -4 => 10307,
+                    -5 => 10308,
+                    -6 => 10309,
+                    -7 => 10301,
+                    -8 => 10302,
+                    -9 => 10303,
+                    -10 => 10010,
+                    -11 => 10011,
+                    -12 => 10012,
                     _ => pet.id
                 };
-                
+
                 pet.id = newId;
                 pet.basic.id = newId;
                 pet.exp.id = newId;
@@ -512,12 +574,14 @@ public class Pet
                 pet.skills.id = newId;
                 pet.ui.id = newId;
                 pet.ui.baseId = pet.basic.baseId;
-            };
+            }
+            ;
 
             petDataVersion = "lite_2.9";
         }
 
-        if (VersionData.Compare(petDataVersion, "lite_2.9.4") < 0) {
+        if (VersionData.Compare(petDataVersion, "lite_2.9.4") < 0)
+        {
             foreach (var pet in allPets)
                 if (!ListHelper.IsNullOrEmpty(PetExpSystem.GetEvolveChain(685, pet.id)))
                     Enumerable.Range(11748, 4).Select(x => Skill.GetSkill(x, false)).ToList().ForEach(x => pet.skills.LearnNewSkill(x));

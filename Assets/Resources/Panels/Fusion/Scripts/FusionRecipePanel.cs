@@ -16,7 +16,7 @@ public class FusionRecipePanel : Panel
     }
 
     public void ShowItemInfo(int index) {
-        var item = fusionModel.fusionItems.ElementAtOrDefault(index);
+        var item = fusionModel.currentRecipe.items.ElementAtOrDefault(index);
         if (item == null)
             return;
 
@@ -24,24 +24,26 @@ public class FusionRecipePanel : Panel
     }
 
     public void PrevPage() {
-        fusionModel.recipeIndex--;
+        fusionModel.databaseRecipePage--;
         OnSetPage();
     }
 
     public void NextPage() {
-        fusionModel.recipeIndex++;
+        fusionModel.databaseRecipePage++;
         OnSetPage();
     }
 
     private void OnSetPage() {
-        int lastPage = fusionModel.fusionRecipeInfos.Count - 1;
-        fusionModel.recipeIndex = Mathf.Clamp(fusionModel.recipeIndex, 0, lastPage);
-        if (!fusionModel.TryGetRecipe(fusionModel.fusionRecipeInfos[fusionModel.recipeIndex]))
+        int lastPage = Mathf.Max(PetFusionSystem.fusionRecipes.Count - 1, 0);
+        fusionModel.databaseRecipePage = Mathf.Clamp(fusionModel.databaseRecipePage, 0, lastPage);
+        pageView.SetPage(fusionModel.databaseRecipePage, lastPage);
+
+        var recipe = PetFusionSystem.fusionRecipes.Get(fusionModel.databaseRecipePage, null);
+        if (recipe == null)
             return;
-            
-        fusionView.SetMainPet(Pet.GetExamplePet(fusionModel.fusionPetId.Item1));
-        fusionView.SetSubPet(Pet.GetExamplePet(fusionModel.fusionPetId.Item2));
-        fusionView.SetItem(fusionModel.fusionItems);
-        pageView.SetPage(fusionModel.recipeIndex, lastPage);
+
+        fusionView.SetMainPet(Pet.GetExamplePet(recipe.petId.Item1));
+        fusionView.SetSubPet(Pet.GetExamplePet(recipe.petId.Item2));
+        fusionView.SetItem(recipe.items);
     }
 }

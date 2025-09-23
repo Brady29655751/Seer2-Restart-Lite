@@ -284,8 +284,15 @@ public static class EffectAbilityHandler
             for (int type = 0; type < typeNames.Length; type++)
             {
                 string add = effect.abilityOptionDict.Get(typeNames[type], "0");
-                if (effect.abilityOptionDict.TryGet("all", out var allValue))
-                    add = allValue;
+                if (effect.abilityOptionDict.TryGet("all", out var specialValue))
+                    add = specialValue;
+
+                var powerup = pet.statusController.powerup[type];
+                if (effect.abilityOptionDict.TryGet("pos", out specialValue) && (powerup > 0))
+                    add = specialValue;
+
+                if (effect.abilityOptionDict.TryGet("neg", out specialValue) && (powerup < 0))
+                    add = specialValue;
                 
                 status[type] = Parser.ParseEffectOperation(add, effect, lhsUnit, rhsUnit, pet);
             }
@@ -504,17 +511,36 @@ public static class EffectAbilityHandler
                     buffIdList = trimId.ToIntRange();
                     if (!string.IsNullOrEmpty(key) || (buffIdList.Exists(x => Buff.GetBuffInfo(x) == null)))
                         return false;
+
                     buffIdList = buffIdList.Where(x => !buffController.buffs.Exists(y => y.id == x)).ToList();
                     if (ListHelper.IsNullOrEmpty(buffIdList))
                         return false;
+
                     buffId = buffIdList.Random();
                 }
                 else
                 {
-                    if (idExpr[k].TryTrimStart("random", out trimId) && trimId.TryTrimParentheses(out var buffType) && (buffType.ToBuffType() != BuffType.None))
-                        buffId = Database.instance.buffInfoDict.Where(entry => entry.Value.type == buffType.ToBuffType()).Select(entry => entry.Key).ToList().Random();
+                    if (idExpr[k].TryTrimStart("random", out trimId) && trimId.TryTrimParentheses(out var buffTypeExpr))
+                    {
+                        var buffTypeSplitList = buffTypeExpr.Split('|');
+                        if (buffTypeSplitList.All(x => x.ToBuffType() != BuffType.None))
+                        {
+                            foreach (var buffTypeSplit in buffTypeSplitList)
+                            {
+                                var buffType = buffTypeSplit.ToBuffType();
+                                buffIdList = buffIdList.Concat(Database.instance.buffInfoDict.Where(entry => entry.Value.type == buffType).Select(entry => entry.Key)).ToList();
+                            }
+                            buffId = buffIdList.Random();
+                        }
+                        else
+                        {
+                            buffId = (int)Parser.ParseEffectOperation(idExpr[k], effect, lhsUnit, rhsUnit);    
+                        }
+                    }
                     else
+                    {
                         buffId = (int)Parser.ParseEffectOperation(idExpr[k], effect, lhsUnit, rhsUnit);
+                    }   
                 }
                 var newBuffInfo = Buff.GetBuffInfo(buffId);
                 if (string.IsNullOrEmpty(key) && (newBuffInfo == null))
@@ -528,7 +554,10 @@ public static class EffectAbilityHandler
                     if (!ListHelper.IsNullOrEmpty(optionList))
                     {
                         foreach (var op in optionList)
-                            newBuff.options.Set(op.Split(':')[0], op.Split(':')[1]);
+                        {
+                            var num = Identifier.GetIdentifier(op.Split(':')[1], effect, lhsUnit, rhsUnit);
+                            newBuff.options.Set(op.Split(':')[0], (num == float.MinValue) ? op.Split(':')[1] : num.ToString());
+                        }
                     }
                 }
 
@@ -1010,17 +1039,23 @@ public static class EffectAbilityHandler
                 oldValue = pet.GetPetIdentifier(type);
                 newValue = pet.TryGetPetIdentifier(value, out var num) ? num : Identifier.GetNumIdentifier(value);
                 // Evolve pet.
-                if ((type == "id") && (op == "SET"))
+                if (type == "id")
                 {
-                    var evolveId = (int)newValue;
-                    if (Pet.GetPetInfo(evolveId) == null)
-                        return false;
-                    string keepSkillExpr = effect.abilityOptionDict.Get("keep_skill", "true");
-                    if (!bool.TryParse(keepSkillExpr, out var keepSkill))
-                        return false;
+                    if (op == "-")
+                        return pet.Devolve();
 
-                    pet.EvolveTo(evolveId, keepSkill);
-                    return true;
+                    if (op == "SET")
+                    {
+                        var evolveId = (int)newValue;
+                        if (Pet.GetPetInfo(evolveId) == null)
+                            return false;
+                        string keepSkillExpr = effect.abilityOptionDict.Get("keep_skill", "true");
+                        if (!bool.TryParse(keepSkillExpr, out var keepSkill))
+                            return false;
+                        
+                        pet.EvolveTo(evolveId, keepSkill);
+                        return true;
+                    }
                 }
                 // Name.
                 if (type == "name")

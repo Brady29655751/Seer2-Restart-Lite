@@ -94,7 +94,9 @@ public class Battle
         Player.instance.currentBattle = this;
         Random.InitState(settings.seed);
 
-        if (settings.initBuffs.Exists(x => (x.Value != null) && (x.Value.id == Buff.BUFFID_PET_EXCHANGE))) {
+        // 精靈大亂鬥模式
+        if (settings.initBuffs.Exists(x => (x.Value != null) && (x.Value.id == Buff.BUFFID_PET_EXCHANGE)))
+        {
             var allPetBag = masterPetBag.Concat(clientPetBag).Where(x => x != null).ToList();
             var randomPetBag = allPetBag.Random(allPetBag.Count, false);
 
@@ -102,15 +104,26 @@ public class Battle
             clientPetBag = randomPetBag.Skip(allPetBag.Count / 2).ToArray();
         }
 
-        if (!settings.isPVP) 
+        if (!settings.isPVP)
         {
-            masterPetBag.ForEach((x, i) => {
+            // 大亂鬥補丁：PVE 時玩家方要還原為正常精靈
+            masterPetBag.ForEach((x, i) =>
+            {
                 if (x == null)
                     return;
-                    
+
                 x.skillController.loopSkills = null;
                 x.buffController.buffs.RemoveAll(buff => buff.id == -3);
             });
+
+            // 尼爾補丁
+            if (settings.isCaptureOK && (Player.instance.currentMap.worldId == 1))
+            {
+                if (NpcConditionHandler.GetRandom("<", "0~256", "1"))
+                {
+                    clientPetBag[0] = BattlePet.GetBattlePet(new Pet(10077, clientPetBag[0]?.level ?? 1));
+                }
+            }
         }
 
         this.lastState = null;

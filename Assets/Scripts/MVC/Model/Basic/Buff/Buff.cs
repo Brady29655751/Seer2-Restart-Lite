@@ -218,7 +218,13 @@ public class Buff
     }
 
     public void SetBuffIdentifier(string id, float num) {
-        switch (id) {
+        if (id.TryTrimStart("option", out var trimId) && trimId.TryTrimParentheses(out trimId))
+        {
+            options.Set(trimId, num.ToString());
+            return;
+        }
+        switch (id)
+        {
             default:
                 return;
             case "value":

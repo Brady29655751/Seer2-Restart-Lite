@@ -80,16 +80,18 @@ public class UnitPetSystem
 
         for (int i = 0; i < petBag.Length; i++)
         {
-            if ((petBag[i] == null) || (petBag[i].isDead))
-                tokenPetBag[i] = null;
-
-            if (tokenPetBag[i] != null)
+            if (petBag[i]?.isToken ?? true)
             {
-                SwapTokenPet(i);
-                petBag[i].OnTurnStart(thisUnit, state);
+                if (petBag[i]?.isDead ?? false)
+                    petBag[i] = null;
 
-                if ((petBag[i]?.isToken) ?? (tokenPetBag[i] != null))
-                    SwapTokenPet(i);
+                if (SwapTokenPet(i))
+                    petBag[i].OnTurnStart(thisUnit, state);
+            }
+            else
+            {
+                if (tokenPetBag[i]?.isDead ?? false)
+                    tokenPetBag[i] = null;
             }
         }
 

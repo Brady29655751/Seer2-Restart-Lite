@@ -191,6 +191,8 @@ id,timing,priority,target,condition,cond_option,effect,effect_option
 290001,resident,-1,state,none,none,none,pet=10003/10027&base=10001/10027&item=1101[20]/1201[5]/610002[100]/620001[5]&result=10301
 290002,resident,-1,state,none,none,none,pet=10006/10198&base=10004/10198&item=1102[20]/1202[5]/1006[50]/1010[5]&result=10304
 290003,resident,-1,state,none,none,none,pet=10009/10035&base=10007/10035&item=1101[20]/1203[5]/1012[50]/1016[5]&result=10307
+290004,resident,-1,state,none,none,none,pet=10079/10164&base=10077/10164&item=1201[10]/1202[10]/1203[10]/1206[10]&result=10310[95]/10313[5]
+290005,resident,-1,state,none,none,none,pet=10079/10164&base=10077/10164&item=400000[1]&result=10313
 300048,resident,-1,pet,pet,type=baseId/emblem&baseId_cmp=46&emblem_cmp=0,set_pet,type=emblem&op=SET&value=1
 300058,resident,-1,pet,pet,type=baseId/emblem&baseId_cmp=58&emblem_cmp=0,set_pet,type=emblem&op=SET&value=1
 300077,resident,-1,pet,pet,type=baseId/emblem&baseId_cmp=77&emblem_cmp=0,set_pet,type=emblem&op=SET&value=1
@@ -215,6 +217,7 @@ id,timing,priority,target,condition,cond_option,effect,effect_option
 300845,resident,-1,pet,pet,type=baseId/emblem&baseId_cmp=845&emblem_cmp=0,set_pet,type=emblem&op=SET&value=1
 301220,resident,-1,pet,pet,type=baseId/emblem&baseId_cmp=1220&emblem_cmp=0,set_pet,type=emblem&op=SET&value=1
 310970,resident,-1,pet,pet,type=baseId&baseId_cmp=970,set_pet,type=featureType&op=+&value=1
+320000,resident,-1,pet,none,none,set_pet,type=id&op=-&value=0
 320092,resident,-1,pet,pet,type=id/level&id_cmp=91&level_op=GTE&level_cmp=25,set_pet,type=id&op=SET&value=92
 320093,resident,-1,pet,pet,type=id/level&id_cmp=91&level_op=GTE&level_cmp=25,set_pet,type=id&op=SET&value=93
 320094,resident,-1,pet,pet,type=id/level&id_cmp=91&level_op=GTE&level_cmp=25,set_pet,type=id&op=SET&value=94
@@ -259,7 +262,8 @@ id,timing,priority,target,condition,cond_option,effect,effect_option
 484731,resident,-1,pet,pet,type=baseId[114731]/level/buff[group:Cm]/buff[Cm_type:0]&baseId[114731]_cmp=1&level_op=>&level_cmp=99&buff[group:Cm]_op=<&buff[group:Cm]_cmp=3&buff[Cm_type:0]_op=<&buff[Cm_type:0]_cmp=1,set_pet,type=buff&op=+&value=484731
 484750,resident,-1,pet,pet,type=baseId[14750]/level/buff[group:Cm]/buff[Cm_type:0]&baseId[14750]_cmp=1&level_op=>&level_cmp=99&buff[group:Cm]_op=<&buff[group:Cm]_cmp=3&buff[Cm_type:0]_op=<&buff[Cm_type:0]_cmp=1,set_pet,type=buff&op=+&value=484750
 484760,resident,-1,pet,pet,type=baseId[14760]/level/buff[group:Cm]/buff[Cm_type:0]&baseId[14760]_cmp=1&level_op=>&level_cmp=99&buff[group:Cm]_op=<&buff[group:Cm]_cmp=3&buff[Cm_type:0]_op=<&buff[Cm_type:0]_cmp=1,set_pet,type=buff&op=+&value=484760
-484780,resident,-1,pet,pet,type=baseId[14780]/level/buff[group:Cm]/buff[Cm_type:0]&baseId[14780]_cmp=1&level_op=>&level_cmp=99&buff[group:Cm]_op=<&buff[group:Cm]_cmp=3&buff[Cm_type:0]_op=<&buff[Cm_type:0]_cmp=1,set_pet,type=buff&op=+&value=484780
+484780,resident,-1,pet,pet,type=baseId[114780]/level/buff[group:Cm]/buff[Cm_type:0]&baseId[114780]_cmp=1&level_op=>&level_cmp=99&buff[group:Cm]_op=<&buff[group:Cm]_cmp=3&buff[Cm_type:0]_op=<&buff[Cm_type:0]_cmp=1,set_pet,type=buff&op=+&value=484780
+484798,resident,-1,pet,pet,type=baseId[114798]/level/buff[group:Cm]/buff[Cm_type:0]&baseId[114798]_cmp=1&level_op=>&level_cmp=99&buff[group:Cm]_op=<&buff[group:Cm]_cmp=3&buff[Cm_type:0]_op=<&buff[Cm_type:0]_cmp=1,set_pet,type=buff&op=+&value=484798
 490940,resident,-1,pet,pet,type=baseId[940]/level/buff[group:Cm]/buff[Cm_type:0]&baseId[940]_cmp=1&level_op=>&level_cmp=99&buff[group:Cm]_op=<&buff[group:Cm]_cmp=3&buff[Cm_type:0]_op=<&buff[Cm_type:0]_cmp=1,set_pet,type=buff&op=+&value=490940
 490946,resident,-1,pet,pet,type=baseId[947]/level/buff[group:Cm]/buff[Cm_type:0]&baseId[947]_cmp=1&level_op=>&level_cmp=99&buff[group:Cm]_op=<&buff[group:Cm]_cmp=3&buff[Cm_type:0]_op=<&buff[Cm_type:0]_cmp=1,set_pet,type=buff&op=+&value=490946
 490999,resident,-1,pet,pet,type=baseId[999]/level/buff[group:Cm]/buff[Cm_type:0]&baseId[999]_cmp=1&level_op=>&level_cmp=99&buff[group:Cm]_op=<&buff[group:Cm]_cmp=3&buff[Cm_type:0]_op=<&buff[Cm_type:0]_cmp=1,set_pet,type=buff&op=+&value=490999

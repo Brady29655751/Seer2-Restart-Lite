@@ -24,7 +24,9 @@ public class Effect {
 
     public bool isSelect => IsSelect();
 
-    public Effect(string _timing, string _priority, string _target, string _condition, string _condition_option, string _ability, string _ability_option) {
+    public Effect(){}
+    public Effect(string _timing, string _priority, string _target, string _condition, string _condition_option, string _ability, string _ability_option)
+    {
         source = null;
         timing = _timing.ToEffectTiming();
         priority = int.Parse(_priority);

@@ -90,7 +90,7 @@ id,name,type,copyType,turn,options,description
 79,旋灭裂空阵,turn,replace,5,none,每回合损失30点体力
 80,圣光气,chance,max,-1,auto_remove=true,下[value]次攻击必定暴击
 81,虚无,mark,replace,-1,none,闪避率提升100%
-82,元素,mark,replace,-1,none,敬请期待
+82,元素,shield,replace,-1,none,免疫光系和暗影系技能伤害
 83,能量,mark,replace,-1,none,敬请期待
 84,生命,mark,replace,-1,none,每回合恢复100点体力
 85,轮回,chance,block,-1,none,受到致死攻击时复活并回满体力，复活后所有技能连击数+1[ENDL]整场战斗只能发动一次
@@ -531,7 +531,7 @@ id,name,type,copyType,turn,options,description
 3282,冻气附体,mark,replace,-1,none,暴击率增加10%
 3283,反射龟壳,turn,replace,3,none,受到伤害时反弹（最大体力-600）点伤害，结束时使自身获得冻气附体
 3284,凝聚冻气,mark,max,-1,res=19,每回合回复1/8体力
-3285,反射,mark,replace,-1,res=47,反弹受到伤害[value]%的伤害，最高不超过10*[value]点
+3285,反射,mark,replace,-1,res=47,反弹受到伤害[value]%的伤害，最高不超过[value]0点
 3286,寒冰护甲,shield,max,-1,auto_remove=true,抵挡自身（最大体力-500）的2倍的伤害护盾，结束时使自身获得冻气附体
 3287,安抚,turn,replace,5,none,无法强化
 3288,心灵制约,turn,replace,3,none,回合结束减少15点怒气
@@ -633,6 +633,16 @@ id,name,type,copyType,turn,options,description
 3384,热血,chance,replace,-1,none,下次击败对手时强化自身物攻1级并恢复15点怒气
 3385,天焚寰宇,mark,replace,-1,none,能力强化被消除时移除此印记并使对手损失1/2体力，最高不超过自身最大体力的1/2
 3386,连打,mark,block,-1,res=65,行动次数+1
+3387,迷象星,chance,block,-1,none,对手的超能系技能命中时，移除此印记并使自身混乱
+3388,限则光速,mark,replace,-1,none,回合结束时对手的速度能力变化等级不会超过自身
+3389,虚像星离,mark,replace,-1,legacy=true&inherit=false,阵亡时使下只出场精灵陷入魅惑
+3390,溯尘星,chance,replace,-1,res=3387,下次受到的伤害不低于400则会移除并恢复全部体力
+3391,星释定裁,shield,max,-1,res=3051,受到攻击时累计记录受到的伤害，最高不超过自身最大体力
+3392,游隧星,mark,replace,-1,res=3387,回合开始时40%获得连打状态1回合
+3393,幻光,chance,replace,-1,keep=false,下次以对手为目标的属性技能会失效
+3394,晶核,mark,stack,-1,max_val=42&auto_remove=true,每层增加1点威力，达到42层时会移除并获得超核，当前为[value]层
+3395,超核,chance,replace,-1,none,下次攻击威力增加100点
+3396,幻术,mark,block,3,keep=false,结束时使自身睡眠
 100001,终结,feature,replace,-1,none,体力低于1/4时，消耗弱点记号的技能伤害增加25%，且使水泡必中并附加30点伤害
 100004,炎火,feature,replace,-1,none,体力低于1/4时，火系技能造成的伤害增加25%，且使火焰必中并附加30点伤害
 100007,坚韧,feature,replace,-1,none,体力低于1/4时，受到的伤害减少25%，且使种子爆弹必中并附加30点伤害
@@ -787,6 +797,7 @@ id,name,type,copyType,turn,options,description
 110041,火网,feature,replace,-1,none,攻击处于密集火网状态的对手伤害增加10%
 110046,蘑菇,feature,replace,-1,none,属性技能命中后30%概率使对手中毒
 110062,连打,feature,replace,-1,none,双精灵对战中获得连打时，全队都会获得连打
+110077,变化,feature,replace,-1,none,回合开始时复制对手的特性和纹章
 110083,洞游,feature,replace,-1,none,每回合开始时随机获得1种洞游
 110108,海妖,feature,replace,-1,none,水量充足时每回合恢复5点怒气
 110133,焰忍,feature,replace,-1,none,替换上场时若自身没有焰忍则会获得焰忍，此特性最多发动6次[ENDL]当前已发动[value]次
@@ -795,6 +806,7 @@ id,name,type,copyType,turn,options,description
 110301,飞叶,feature,replace,-1,none,晴天环境下受到的暴击伤害减半
 110304,骇浪,feature,replace,-1,none,雨天环境下造成的伤害增加15%
 110307,魔焰,feature,replace,-1,none,炎热环境下暴击率增加15%
+110313,异能,feature,replace,-1,none,攻击技能15%使对手陷入幻术
 110335,焰舞,feature,replace,-1,none,火系技能10%使对手昏迷
 110346,鱼龙,feature,replace,-1,none,攻击水系精灵伤害翻倍，受到的龙系伤害减半
 110370,命晶,feature,replace,-1,none,首次出场时获得1颗命水晶
@@ -966,6 +978,7 @@ id,name,type,copyType,turn,options,description
 210041,幻影,emblem,replace,-1,none,神秘系技能15%使对手恐惧
 210046,孢子,emblem,replace,-1,none,攻击技能命中后15%概率使对手被寄生
 210062,甲壳,emblem,replace,-1,none,双精灵对战中，全队受到的伤害减少10%
+210077,控制,emblem,replace,-1,none,对手受击时怒气减少5点
 210083,捆绑,emblem,replace,-1,none,后出手时15%弱化对手速度1级
 210108,蓝光,emblem,replace,-1,none,首次出场时获得蓝光状态
 210133,屏息,emblem,replace,-1,none,击败对手时获得焰忍
@@ -974,6 +987,7 @@ id,name,type,copyType,turn,options,description
 210301,花舞,emblem,replace,-1,none,对手被花粉影响时，自身的物理技能附带35点固定伤害
 210304,龙牙,emblem,replace,-1,none,使用龙系技能同样适用本系加成
 210307,火拳,emblem,replace,-1,none,对手怒气高于50时，自身技能威力增加15
+210313,晶核,emblem,replace,-1,none,攻击命中后获得与「最终威力的十位数」相同层数的晶核
 210335,温室,emblem,replace,-1,none,攻击时10%获得1层火环之心
 210346,海洋,emblem,replace,-1,none,水系技能伤害增加10%
 210370,晶凌,emblem,replace,-1,none,光系技能伤害增加25%
@@ -1082,6 +1096,7 @@ id,name,type,copyType,turn,options,description
 484750,神迹始祖灵兽专属全能刻印,item,new,-1,group=Cm&Cm_type=0&item=484750&status=0/51/37/37/35/115,特攻 51，物防 37，特防 37，速度 35，体力 115
 484760,光之子米咔专属全能刻印,item,new,-1,group=Cm&Cm_type=0&item=484760&status=0/50/37/37/33/118,特攻 50，物防 37，特防 37，速度 33，体力 118
 484780,神迹巴拉龟专属全能刻印,item,new,-1,group=Cm&Cm_type=0&item=484780&status=0/40/48/49/24/114,特攻 40，物防 48，特防 49，速度 24，体力 114
+484798,神迹钢牙鲨专属全能刻印,item,new,-1,group=Cm&Cm_type=0&item=484798&status=75/0/35/35/50/80,物攻 75，物防 35，特防 35，速度 50，体力 80
 490940,神迹米咔专属全能刻印,item,new,-1,group=Cm&Cm_type=0&item=490940&status=0/64/36/37/33/105,特攻 64，物防 36，特防 37，速度 33，体力 105
 490946,神迹拂晓兔专属全能刻印,item,new,-1,group=Cm&Cm_type=0&item=490946&status=0/60/35/35/30/115,特攻 60，物防 35，特防 35，速度 30，体力 115
 490999,王者凯伊专属全能刻印,item,new,-1,group=Cm&Cm_type=0&item=490999&status=0/0/50/50/50/125,物防 50，特防 50，速度 50，体力 125

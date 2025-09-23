@@ -21,7 +21,7 @@ public class PetInfoView : Module
         if (pet == null)
             return;
             
-        SetID(pet.info.ui.defaultId, pet.info.ui.subId, pet.info.star);
+        SetID(pet.info.ui.defaultId, pet.info.ui.subId, pet.info.star, pet.backupPet != null);
         SetLevel(pet.level);
         SetEvolveLevel(pet.info.exp.evolveLevel);
         SetLevelUpExp((pet.level >= pet.maxLevel) ? 0 : pet.levelUpExp);
@@ -30,9 +30,11 @@ public class PetInfoView : Module
         SetGetPetDate(pet.basic.getPetDate);
     }
 
-    public void SetID(int id, int subId, int star) {
+    public void SetID(int id, int subId, int star, bool isDevolved) {
         var subIdText = (subId == 0) ? string.Empty : ("-" + subId);
-        idText?.SetText(id + subIdText + " <color=#ffbb33>(★<size=4> </size>" + star + "<size=4> </size>)</color>");
+        var starColor = isDevolved ? "ff00ff" : "ffbb33";
+        var starText = $"<color=#{starColor}>(★<size=4> </size>" + star + "<size=4> </size>)</color>";
+        idText?.SetText($"{id}{subIdText} {starText}");
     }
 
     public void SetLevel(int level) {

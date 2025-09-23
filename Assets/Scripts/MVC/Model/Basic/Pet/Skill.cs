@@ -92,7 +92,8 @@ public class Skill
         this.rawDescription = rawDescription.ReplaceSpecialWhiteSpaceCharacters(string.Empty);
     }
 
-    private void InitOptionsProperty() {
+    private void InitOptionsProperty()
+    {
         referBuffList = options.Get("ref_buff", null)?.Split('/').ToList();
 
         isSecondSuper = bool.Parse(options.Get("second_super", "false"));
@@ -377,9 +378,36 @@ public class Skill
     public float GetSkillIdentifier(string id) {
         if (id.TryTrimStart("option", out var trimId))
             return Identifier.GetNumIdentifier(options.Get(trimId.TrimParentheses(), "0"));
-        
 
-        return id switch {
+        if (id.TryTrimStart("effect.", out trimId))
+        {
+            if (trimId.TryTrimStart("ability", out var trimExpr))
+            {
+                var trimAbility = trimExpr.TrimParenthesesLoop('(', ')');
+                var okEffects = new List<Effect>(effects);
+
+                for (int i = 0; i < trimAbility.Count; i++)
+                {
+                    var split = trimAbility[i].Split(':');
+                    if (split.Length == 1)
+                        okEffects.RemoveAll(x => x.ability != split[0].ToEffectAbility());
+                    else
+                        okEffects.RemoveAll(x => x.abilityOptionDict.Get(split[0]) != split[1]);
+
+                    trimExpr = trimExpr.TrimStart('(' + trimAbility[i] + ')');
+                }   
+
+                trimExpr = trimExpr.TrimStart('.');
+                return trimExpr switch
+                {
+                    "count" => okEffects.Count,
+                    _ => okEffects.Count,
+                };
+            }
+        }
+
+        return id switch
+        {
             "id" => this.id,
             "element" => elementId,
             "type" => (float)type,

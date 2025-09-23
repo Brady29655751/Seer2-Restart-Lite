@@ -192,15 +192,25 @@ public static class NpcActionHandler
         if ((handler.param == null) || (handler.param.Count == 0))
             return;
 
+        Pet pet = null;
         for (int i = 0; i < handler.param.Count; i++)
         {
-            var petInfo = handler.param[i].ToIntList();
-            int count = petInfo.Count;
-            int id = petInfo[0];
-            int level = (count < 2) ? 1 : petInfo[1];
-            bool emblem = (count < 3) ? true : (petInfo[2] != 0);
-            Pet pet = new Pet(id, level, emblem);
-            Player.instance.gameData.petStorage.Add(pet);
+            var split = handler.param[i].Split('=');
+            if (split.Length == 1)
+            {
+                var petInfo = handler.param[i].ToIntList();
+                int count = petInfo.Count;
+                int id = petInfo[0];
+                int level = (count < 2) ? 1 : petInfo[1];
+                bool emblem = (count < 3) ? true : (petInfo[2] != 0);
+
+                pet = new Pet(id, level, emblem);
+                Player.instance.gameData.petStorage.Add(pet);
+            }
+            else
+            {
+                pet?.SetPetIdentifier(split[0], float.Parse(split[1]));
+            }
         }
         SaveSystem.SaveData();
     }
