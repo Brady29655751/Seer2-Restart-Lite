@@ -128,10 +128,8 @@ public class BattlePet : Pet
     }
 
     public static KeyValuePair<int, int> GetSkillTypeStatus(Skill skill, BattlePet lhs, BattlePet rhs) {
-        Status ignoreLhsPowerdownStatus = lhs.statusController.GetCurrentStatus(ignorePowerdown: true);
-        Status ignoreRhsPowerupStatus = rhs.statusController.GetCurrentStatus(ignorePowerup: true);
-        var lhsStatus = skill.ignorePowerdown ? ignoreLhsPowerdownStatus : lhs.battleStatus;
-        var rhsStatus = skill.ignorePowerup ? ignoreRhsPowerupStatus : rhs.battleStatus;
+        var lhsStatus = lhs.statusController.GetCurrentStatus(multPowerdown: skill.multPowerdown);
+        var rhsStatus = rhs.statusController.GetCurrentStatus(multPowerup: skill.multPowerup);
 
         Status status = new Status(lhsStatus.atk, lhsStatus.mat, rhsStatus.def, rhsStatus.mdf, 0, 0);
         status.spd = (status.atk + status.mat) / 2;
@@ -265,8 +263,12 @@ public class BattlePet : Pet
     }
 
     public virtual void OnTurnStart(Unit thisUnit, BattleState state) {
-        stayTurn += 1;
         chain = 0;
+
+        if (isToken)
+            return;
+
+        stayTurn += 1;
         buffController.OnTurnStart(thisUnit, state);
     }
 

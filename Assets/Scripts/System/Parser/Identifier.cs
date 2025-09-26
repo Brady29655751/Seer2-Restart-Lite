@@ -270,7 +270,6 @@ public static class Identifier {
             Status powerup = statusController.powerup;
             return trimId switch {
                 "hit" => powerup.hp,
-                "accuracyBuff" => powerup.hp * 10 + Mathf.Clamp(powerup.hp, -3, 3) * 5,
                 _ => powerup[trimId],
             };
         }

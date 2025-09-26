@@ -20,12 +20,15 @@ public class Status
     [XmlElement("mdf")] public float mdf { get => status[3]; set => status[3] = value; }
     [XmlElement("spd")] public float spd { get => status[4]; set => status[4] = value; }
     [XmlElement("hp")] public float hp { get => status[5]; set => status[5] = value; }
-    public float this[int n] {
+    
+    public float this[int n]
+    {
         get => Get(n);
         set => Set(n, value);
     }
 
-    public float this[string type] {
+    public float this[string type]
+    {
         get => Get(type);
         set => Set(type, value);
     }
@@ -39,27 +42,37 @@ public class Status
     public Status neg => this.Select(x => Mathf.Min(x, 0));
     public float posMax => pos.status.Max();
     public float negMax => neg.status.Min();
+    public float accuracyBuff => hp * 10 + Mathf.Clamp(hp, -3, 3) * 5;
 
 
     #region constructors and utility
 
-    public Status() {}
+    public Status() { }
 
-    public Status(Status copy) {
-        for(int i = 0; i < status.Length; i++) {
+    public Status(Status copy)
+    {
+        for (int i = 0; i < status.Length; i++)
+        {
             status[i] = copy.status[i];
         }
     }
-    public Status(float ability) {
-        for(int i = 0; i < status.Length; i++) {
+
+    public Status(float ability)
+    {
+        for (int i = 0; i < status.Length; i++)
+        {
             status[i] = ability;
-        }  
+        }
     }
-    public Status(IEnumerable<float> array) {
+
+    public Status(IEnumerable<float> array)
+    {
         status = array.Where((x, i) => i < 6).ToArray();
     }
-    public Status(float atk, float mat, float def, float mdf, float spd, float hp) {
-        this.atk = atk;     
+
+    public Status(float atk, float mat, float def, float mdf, float spd, float hp)
+    {
+        this.atk = atk;
         this.mat = mat;
         this.def = def;
         this.mdf = mdf;
@@ -67,39 +80,71 @@ public class Status
         this.hp = hp;
     }
 
-    public override string ToString() {
+    public static Status Parse(string str, Status defaultReutrn = null, char leftPar = '(', char rightPar = ')')
+    {
+        if (string.IsNullOrEmpty(str))
+            return defaultReutrn;
+
+        var floatList = str.ToFloatList('/');
+        if (!ListHelper.IsNullOrEmpty(floatList) && (floatList.Count == typeNames.Length))
+            return new Status(floatList);
+
+        var typeList = str.TrimParenthesesLoop(leftPar, rightPar);
+        if (ListHelper.IsNullOrEmpty(str))
+            return defaultReutrn;
+
+        var status = new Status(defaultReutrn ?? Status.zero);
+        foreach (var type in typeList)
+        {
+            var split = type.Split(':');
+            if ((split.Length != 2) || (!float.TryParse(split[1], out var num)))
+                return defaultReutrn;
+
+            status[split[0]] = num;
+        }
+        return status;
+    }
+
+    public override string ToString()
+    {
         Status floorStatus = Status.FloorToInt(this);
         string repr = string.Empty;
 
-        for (int i = 0; i < 6; i++) {
+        for (int i = 0; i < 6; i++)
+        {
             repr += typeNames[i] + ": " + floorStatus[i].ToString() + " ";
         }
         return repr;
     }
 
-    public virtual string ToString(string delimeter) {
+    public virtual string ToString(string delimeter)
+    {
         return Status.FloorToInt(this).status.Select(x => x.ToString()).ConcatToString(delimeter);
     }
 
-    public virtual float[] ToArray() {
+    public virtual float[] ToArray()
+    {
         return status.ToArray();
     }
 
-    public virtual float Get(int type) {
+    public virtual float Get(int type)
+    {
         if (!type.IsWithin(0, 5))
             return 0;
 
         return status[type];
     }
 
-    public virtual void Set(int type, float value) {
+    public virtual void Set(int type, float value)
+    {
         if (!type.IsWithin(0, 5))
             return;
 
         status[type] = value;
     }
 
-    public virtual float Get(string type) {
+    public virtual float Get(string type)
+    {
         int idx = typeNames.IndexOf(type.ToLower());
         return type switch
         {
@@ -115,11 +160,13 @@ public class Status
             "negMax" => negMax,
             "max(except:hp)" => status.Take(5).Max(),
             "min(except:hp)" => status.Take(5).Min(),
+            "accuracyBuff" => accuracyBuff,
             _ => (idx == -1) ? 0 : status[idx],
         };
     }
 
-    public virtual void Set(string type, float value) {
+    public virtual void Set(string type, float value)
+    {
         int idx = typeNames.IndexOf(type.ToLower());
         if (idx == -1)
             return;
@@ -127,15 +174,18 @@ public class Status
         status[idx] = value;
     }
 
-    public Status Select(Func<float, float> selector) {
+    public Status Select(Func<float, float> selector)
+    {
         return new Status(status.Select(selector).ToArray());
     }
 
-    public Status Select(Func<float, int, float> selector) {
+    public Status Select(Func<float, int, float> selector)
+    {
         return new Status(status.Select(selector).ToArray());
     }
 
-    public int Count(Func<float, bool> pred) {
+    public int Count(Func<float, bool> pred)
+    {
         return status.Count(pred);
     }
 
@@ -143,86 +193,108 @@ public class Status
 
     #region math functions
 
-    public static Status FloorToInt(Status value, Func<float, int> floorFunc = null) { 
+    public static Status FloorToInt(Status value, Func<float, int> floorFunc = null)
+    {
         floorFunc = floorFunc ?? Mathf.FloorToInt;
         return value.Select(x => floorFunc(x));
     }
-    public static Status Sign(Status value) {
+    public static Status Sign(Status value)
+    {
         return value.Select((x, i) => Mathf.Sign(value[i]));
     }
-    public static Status Abs(Status value) {
+    public static Status Abs(Status value)
+    {
         return value.Select((x, i) => Mathf.Abs(value[i]));
     }
-    public static Status Min(Status lhs, Status rhs) {
+    public static Status Min(Status lhs, Status rhs)
+    {
         return lhs.Select((x, i) => Mathf.Min(lhs[i], rhs[i]));
     }
-    public static Status Max(Status lhs, Status rhs) {
+    public static Status Max(Status lhs, Status rhs)
+    {
         return lhs.Select((x, i) => Mathf.Max(lhs[i], rhs[i]));
     }
-    public static Status Clamp(Status value, Status min, Status max) {
+    public static Status Clamp(Status value, Status min, Status max)
+    {
         return value.Select((x, i) => Mathf.Clamp(value[i], min[i], max[i]));
     }
-    public static Status Pow(Status value, float power) {
+    public static Status Pow(Status value, float power)
+    {
         return value.Select((x, i) => Mathf.Pow(value[i], power));
     }
-    public static Status Pow(Status value, Status power) {
+    public static Status Pow(Status value, Status power)
+    {
         return value.Select((x, i) => Mathf.Pow(value[i], power[i]));
     }
 
     #endregion
 
     #region operator
-    public static Status operator +(float lhs, Status rhs) {
+    public static Status operator +(float lhs, Status rhs)
+    {
         return rhs + lhs;
     }
-    public static Status operator +(Status lhs, float rhs) {
+    public static Status operator +(Status lhs, float rhs)
+    {
         return lhs + new Status(rhs);
     }
-    public static Status operator +(Status lhs, Status rhs) {
+    public static Status operator +(Status lhs, Status rhs)
+    {
         return lhs.Select((x, i) => lhs[i] + rhs[i]);
     }
 
-    public static Status operator -(Status lhs, float rhs) {
+    public static Status operator -(Status lhs, float rhs)
+    {
         return lhs - new Status(rhs);
     }
-    public static Status operator -(Status lhs, Status rhs) {
+    public static Status operator -(Status lhs, Status rhs)
+    {
         return lhs + rhs * (-1);
     }
 
-    public static Status operator *(float lhs, Status rhs) {
+    public static Status operator *(float lhs, Status rhs)
+    {
         return rhs * lhs;
     }
-    public static Status operator *(Status lhs, float rhs) {
+    public static Status operator *(Status lhs, float rhs)
+    {
         return lhs * new Status(rhs);
-    }    
-    public static Status operator *(Status lhs, Status rhs) {
+    }
+    public static Status operator *(Status lhs, Status rhs)
+    {
         return lhs.Select((x, i) => lhs[i] * rhs[i]);
     }
 
-    public static Status operator /(Status lhs, float rhs) {
+    public static Status operator /(Status lhs, float rhs)
+    {
         return lhs * (1 / rhs);
     }
 
-    public static Status operator ^(Status lhs, float rhs) {
+    public static Status operator ^(Status lhs, float rhs)
+    {
         return Status.Pow(lhs, rhs);
     }
-    public static Status operator ^(Status lhs, Status rhs) {
+    public static Status operator ^(Status lhs, Status rhs)
+    {
         return Status.Pow(lhs, rhs);
     }
 
     #endregion
 
-    public static Personality Add(Personality lhs, Personality rhs) {
+    public static Personality Add(Personality lhs, Personality rhs)
+    {
         var lhsBuff = GetPersonalityBuff(lhs) - Status.one;
         var rhsBuff = GetPersonalityBuff(rhs) - Status.one;
-        
-        for (int i = 0; i < Status.typeNames.Length; i++) {
+
+        for (int i = 0; i < Status.typeNames.Length; i++)
+        {
             if ((lhsBuff[i] == rhsBuff[i]) && (lhsBuff[i] != 0))
                 return lhs;
         }
 
         var buff = lhsBuff + rhsBuff + Status.one;
-        for (int i = 0; i < 55; i++) {
+        for (int i = 0; i < 55; i++)
+        {
             var p = (Personality)i;
             if ((GetPersonalityBuff(p) - buff).status.All(x => x == 0))
                 return p;
@@ -231,14 +303,16 @@ public class Status
         return Personality.实干;
     }
 
-    public static Status GetPersonalityBuff(Personality p) {
+    public static Status GetPersonalityBuff(Personality p)
+    {
         int id = (int)p;
         Status buff = Status.one;
 
         if (!id.IsInRange(0, 55))
             return buff;
 
-        if (id < 25) {
+        if (id < 25)
+        {
             int up = id / 5;
             int down = id % 5;
             buff.status[up] += 0.1f;
@@ -249,28 +323,29 @@ public class Status
         id -= 25;
         List<int> upIndex = (id / 3) switch
         {
-            0 => new List<int>(){0, 1},
-            1 => new List<int>(){0, 2},
-            2 => new List<int>(){0, 3},
-            3 => new List<int>(){0, 4},
-            4 => new List<int>(){1, 2},
-            5 => new List<int>(){1, 3},
-            6 => new List<int>(){1, 4},
-            7 => new List<int>(){2, 3},
-            8 => new List<int>(){2, 4},
-            _ => new List<int>(){3, 4},
+            0 => new List<int>() { 0, 1 },
+            1 => new List<int>() { 0, 2 },
+            2 => new List<int>() { 0, 3 },
+            3 => new List<int>() { 0, 4 },
+            4 => new List<int>() { 1, 2 },
+            5 => new List<int>() { 1, 3 },
+            6 => new List<int>() { 1, 4 },
+            7 => new List<int>() { 2, 3 },
+            8 => new List<int>() { 2, 4 },
+            _ => new List<int>() { 3, 4 },
         };
         List<int> downIndex = Enumerable.Range(0, 5).Where(x => !upIndex.Contains(x)).ToList();
-      
+
         upIndex.ForEach(x => buff.status[x] += 0.1f);
         downIndex.ForEach((x, i) => buff.status[x] -= (id % 3 == i) ? 0 : 0.1f);
         return buff;
     }
 
-    public static string GetPersonalityBuffDescription(Personality p, string delim = "\n", string amount = "10%") {
+    public static string GetPersonalityBuffDescription(Personality p, string delim = "\n", string amount = "10%")
+    {
         int id = (int)p;
         var buff = GetPersonalityBuff(p) - Status.one;
-        string desc = string.Empty;            
+        string desc = string.Empty;
 
         int[] up = buff.status.FindAllIndex(x => x > 0);
         int[] down = buff.status.FindAllIndex(x => x < 0);
@@ -288,7 +363,8 @@ public class Status
         return (1 + 0.5f * abs) ^ (powerup.sign);
     }
 
-    public static Status GetPetNormalStatus(int level, Status baseStatus, int iv, Status ev, Personality p) {
+    public static Status GetPetNormalStatus(int level, Status baseStatus, int iv, Status ev, Personality p)
+    {
         Status normalStatus = (((((baseStatus * 2) + iv + (ev / 4)) * level) / 100) + 5) * Status.GetPersonalityBuff(p);
         Status hpStatus = ((((baseStatus * 2) + iv + (ev / 4)) * level) / 100) + 10 + level;
         normalStatus.hp = hpStatus.hp;
@@ -296,7 +372,8 @@ public class Status
     }
 }
 
-public class BattleStatus : Status {
+public class BattleStatus : Status
+{
     public static string[] battleTypeNames => typeNames.Concat(hiddenTypeNames).ToArray();
     public static string[] battleTypeNamesChinese => typeNamesChinese.Concat(hiddenTypeNamesChinese).ToArray();
 
@@ -310,21 +387,25 @@ public class BattleStatus : Status {
     [XmlElement("cdf")] public float cdf { get => hiddenStatus[3]; set => hiddenStatus[3] = value; }
     [XmlElement("rec")] public float rec { get => hiddenStatus[4]; set => hiddenStatus[4] = value; }
     [XmlElement("angrec")] public float angrec { get => hiddenStatus[5]; set => hiddenStatus[5] = value; }
-    public new float this[int n] {
-        get => (n <= 5) ? status[n] : hiddenStatus[n-6];
+    public new float this[int n]
+    {
+        get => (n <= 5) ? status[n] : hiddenStatus[n - 6];
         set => SetHiddenStatus(n, value);
     }
 
-    public override string ToString() {
+    public override string ToString()
+    {
         Status floorStatus = Status.FloorToInt(new Status(hiddenStatus));
         string repr = string.Empty;
-        for (int i = 0; i < hiddenStatus.Length; i++) {
+        for (int i = 0; i < hiddenStatus.Length; i++)
+        {
             repr += (hiddenTypeNames[i] + ": " + floorStatus[i] + " ");
         }
         return base.ToString() + "\n" + repr;
     }
 
-    public override string ToString(string delimeter) {
+    public override string ToString(string delimeter)
+    {
         return base.ToString(delimeter) + delimeter + GetHiddenStatus().ToString(delimeter);
     }
 
@@ -341,14 +422,16 @@ public class BattleStatus : Status {
         if (!type.IsWithin(0, 11))
             return;
 
-        if (type <= 5) {
+        if (type <= 5)
+        {
             base.Set(type, value);
             return;
         }
         hiddenStatus[type - 6] = value;
     }
 
-    public override float Get(string type) {
+    public override float Get(string type)
+    {
         var typeLow = type.ToLower();
         int idx = battleTypeNames.IndexOf(typeLow);
         if (idx == -1)
@@ -357,12 +440,14 @@ public class BattleStatus : Status {
         return idx <= 5 ? status[idx] : hiddenStatus[idx - 6];
     }
 
-    public override void Set(string type, float value) {
+    public override void Set(string type, float value)
+    {
         int idx = battleTypeNames.IndexOf(type.ToLower());
         if (idx == -1)
             return;
 
-        if (idx <= 5) {
+        if (idx <= 5)
+        {
             status[idx] = value;
             return;
         }
@@ -370,44 +455,53 @@ public class BattleStatus : Status {
         hiddenStatus[idx - 6] = value;
     }
 
-    public Status GetBasicStatus() {
+    public Status GetBasicStatus()
+    {
         return new Status(status);
     }
-    public Status GetHiddenStatus() {
+    public Status GetHiddenStatus()
+    {
         return new Status(hiddenStatus);
     }
 
-    public BattleStatus() {
+    public BattleStatus()
+    {
         rec = 100;
         angrec = 100;
     }
 
-    public BattleStatus(Status normalStatus) : base(normalStatus) {
+    public BattleStatus(Status normalStatus) : base(normalStatus)
+    {
         rec = 100;
         angrec = 100;
     }
 
-    public BattleStatus(Status normalStatus, Status extraStatus) : base(normalStatus) {
-        for(int i = 0; i < hiddenStatus.Length; i++) {
+    public BattleStatus(Status normalStatus, Status extraStatus) : base(normalStatus)
+    {
+        for (int i = 0; i < hiddenStatus.Length; i++)
+        {
             hiddenStatus[i] = extraStatus[i];
         }
     }
 
-    public static BattleStatus FloorToInt(BattleStatus value, Func<float, int> floorFunc = null) { 
+    public static BattleStatus FloorToInt(BattleStatus value, Func<float, int> floorFunc = null)
+    {
         Status normal = new Status(value.status);
         Status hidden = new Status(value.hiddenStatus);
         return new BattleStatus(Status.FloorToInt(normal, floorFunc), Status.FloorToInt(hidden, floorFunc));
     }
 
-    public void SetHiddenStatus(int type, float value) {
+    public void SetHiddenStatus(int type, float value)
+    {
         if (type <= 5)
             status[type] = value;
-        else 
+        else
             hiddenStatus[type - 6] = value;
     }
 }
 
-public enum StatusType {
+public enum StatusType
+{
     Atk = 0,
     Mat = 1,
     Def = 2,
@@ -422,7 +516,8 @@ public enum StatusType {
     AngRec = 11,
 }
 
-public enum HiddenStatusType {
+public enum HiddenStatusType
+{
     Hit = 0,
     Cri = 1,
     Eva = 2,

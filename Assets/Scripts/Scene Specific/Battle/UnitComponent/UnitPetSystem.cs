@@ -82,7 +82,7 @@ public class UnitPetSystem
         {
             if (petBag[i]?.isToken ?? true)
             {
-                if (petBag[i]?.isDead ?? false)
+                if (petBag[i]?.isDead ?? true)
                     petBag[i] = null;
 
                 if (SwapTokenPet(i))
@@ -90,8 +90,10 @@ public class UnitPetSystem
             }
             else
             {
-                if (tokenPetBag[i]?.isDead ?? false)
+                if (tokenPetBag[i]?.isDead ?? true)
                     tokenPetBag[i] = null;
+                else
+                    tokenPetBag[i].OnTurnStart(thisUnit, state);
             }
         }
 

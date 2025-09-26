@@ -188,11 +188,27 @@ public class BattleManager : Manager<BattleManager>
             yield break;
         }
 
-        var skill = pet.normalSkill.Get(cursor - 1) ?? Skill.GetNoOpSkill();
+        var isNormalSkill = cursor.IsWithin(0, 4);
+        var item = isNormalSkill ? null : new Item(cursor);
+        var skill = isNormalSkill ? (pet.normalSkill.Get(cursor - 1) ?? Skill.GetNoOpSkill()) : Skill.GetItemSkill(item);
         var superSkill = pet.superSkill;
         var isAnySkillOK = pet.buffController.GetBuff(61) != null;
         var isSuper = battle.isAutoSuperSkill && (superSkill != null)
             && ((superSkill.anger <= pet.anger) || isAnySkillOK);
+
+        if (!isNormalSkill)
+        {
+            var usable = item.IsUsable(battle?.currentState.myUnit, battle?.currentState);
+            var isTimingOk = item.effects.Exists(x => (x.timing >= EffectTiming.OnBattleStart) && (x.timing <= EffectTiming.OnBattleEnd));
+            var isCaptureOK = battle.settings.isCaptureOK || (item.info.type != ItemType.Capture);
+            if (usable && isTimingOk && isCaptureOK)
+            {
+                if (!battle.settings.isSimulate)
+                    Item.Remove(item.id);
+            }
+            else
+                skill = Skill.GetNoOpSkill();
+        }
 
         if (isSuper)
             skill = superSkill;

@@ -116,7 +116,8 @@ public class UnitSkillSystem
     public bool CalculateAccuracy(BattlePet atkPet, BattlePet defPet)
     {
         float _random = Random.Range(0f, 100f);
-        isHit = (skill.accuracy + atkPet.battleStatus.hit - defPet.battleStatus.eva) >= _random;
+        var accuracyBuff = atkPet.statusController.GetCurrentPowerup(multPowerdown: skill.multPowerdown).accuracyBuff;
+        isHit = (skill.accuracy + accuracyBuff + atkPet.battleStatus.hit - defPet.battleStatus.eva) >= _random;
         return isHit;
     }
 

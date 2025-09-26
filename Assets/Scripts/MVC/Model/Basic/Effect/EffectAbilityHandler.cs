@@ -506,10 +506,23 @@ public static class EffectAbilityHandler
                 int buffId = 0;
                 var buffIdList = new List<int>();
 
-                if (idExpr[k].TryTrimStart("unique", out var trimId))
+                if (idExpr[k].TryTrimStart("unique", out var trimId) && trimId.TryTrimParentheses(out var buffTypeExpr))
                 {
-                    buffIdList = trimId.ToIntRange();
-                    if (!string.IsNullOrEmpty(key) || (buffIdList.Exists(x => Buff.GetBuffInfo(x) == null)))
+                    var buffTypeSplitList = buffTypeExpr.Split('|');
+                    if (buffTypeSplitList.All(x => x.ToBuffType() != BuffType.None))
+                    {
+                        foreach (var buffTypeSplit in buffTypeSplitList)
+                        {
+                            var buffType = buffTypeSplit.ToBuffType();
+                            buffIdList = buffIdList.Concat(Database.instance.buffInfoDict.Where(entry => entry.Value.type == buffType).Select(entry => entry.Key)).ToList();
+                        }
+                    }
+                    else
+                    {
+                        buffIdList = trimId.ToIntRange();
+                    }
+
+                    if (!string.IsNullOrEmpty(key) || buffIdList.Exists(x => Buff.GetBuffInfo(x) == null))
                         return false;
 
                     buffIdList = buffIdList.Where(x => !buffController.buffs.Exists(y => y.id == x)).ToList();
@@ -520,7 +533,7 @@ public static class EffectAbilityHandler
                 }
                 else
                 {
-                    if (idExpr[k].TryTrimStart("random", out trimId) && trimId.TryTrimParentheses(out var buffTypeExpr))
+                    if (idExpr[k].TryTrimStart("random", out trimId) && trimId.TryTrimParentheses(out buffTypeExpr))
                     {
                         var buffTypeSplitList = buffTypeExpr.Split('|');
                         if (buffTypeSplitList.All(x => x.ToBuffType() != BuffType.None))

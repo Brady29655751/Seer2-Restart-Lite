@@ -176,7 +176,17 @@ public class Buff
             _   => referenceBuff.value.ToString()
         };
 
-        desc = desc.Replace("[option[value]]", referenceBuff.options.Get("value", "0"));
+        int index = 0;
+        while (true)
+        {
+            index = desc.IndexOf("[option[", index);
+            if (index < 0)
+                break;
+
+            var optionKey = desc.Substring(index + 1).TrimParentheses();
+            desc = desc.Replace($"[option[{optionKey}]]", referenceBuff.options.Get(optionKey, "0"));
+        }
+
         desc = desc.Replace("[value]", referenceBuff.value.ToString()).Replace("[poker]", pokerValue);
         desc = desc.Replace("[pet]", Pet.GetPetInfo(referenceBuff.value)?.name ?? "精灵信息错误");
         desc = desc.Replace("[skill]", Skill.GetSkill(referenceBuff.value, false)?.name ?? "技能信息错误");

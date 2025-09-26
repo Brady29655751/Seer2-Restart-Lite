@@ -229,7 +229,7 @@ public class Effect {
         var postSkills = abilityOptionDict.Get("on_" + (result ? "success" : "fail")).ToIntList('/');
         var postEffects = postSkills?.Select(skillId => {
             // Get Post Effects
-            var effects = Skill.GetSkill(skillId, false)?.effects;
+            var effects = Skill.GetSkill(skillId, false)?.effects?.Select(x => new Effect(x)).ToList();
             if (effects == null)
                 return effects;
 

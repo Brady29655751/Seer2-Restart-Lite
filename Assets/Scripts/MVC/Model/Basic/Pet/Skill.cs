@@ -35,7 +35,18 @@ public class Skill
     public float critical;
     public int combo, chain;
     public int priority;
-    public bool ignoreShield = false, ignorePowerup = false, ignorePowerdown = false;
+    public bool ignoreShield = false;
+    public bool ignorePowerup
+    {
+        get => multPowerup.atk * multPowerup.mat == 0;
+        set => multPowerup.atk = multPowerup.mat = value ? 0 : 1;
+    }
+    public bool ignorePowerdown
+    {
+        get => multPowerdown.atk * multPowerdown.mat == 0;
+        set => multPowerdown.atk = multPowerdown.mat = value ? 0 : 1;
+    }
+    public Status multPowerup = Status.one, multPowerdown = Status.one;
 
 
     /* Properties */
@@ -49,13 +60,15 @@ public class Skill
     public PetAnimationType petAnimType => GetPetAnimationType();
     public PetAnimationType captureAnimType => GetCaptureAnimationType();
 
-    public static bool IsMod(int id) {
+    public static bool IsMod(int id)
+    {
         return id < -10000;
     }
 
-    public Skill() {}
+    public Skill() { }
 
-    public Skill(string[] _data, int startIndex = 0) {
+    public Skill(string[] _data, int startIndex = 0)
+    {
         string[] _slicedData = new string[DATA_COL];
         Array.Copy(_data, startIndex, _slicedData, 0, _slicedData.Length);
 
@@ -76,7 +89,8 @@ public class Skill
     }
 
     public Skill(int id, string name, Element element, SkillType type,
-        int power, int anger, int accuracy, string options, string rawDescription) {
+        int power, int anger, int accuracy, string options, string rawDescription)
+    {
         this.id = id;
         this.name = name.ReplaceSpecialWhiteSpaceCharacters(string.Empty);
         this.element = element;
@@ -85,7 +99,7 @@ public class Skill
         this.anger = anger;
         this.accuracy = accuracy;
         this.options.ParseOptions(options.ReplaceSpecialWhiteSpaceCharacters(string.Empty));
-        
+
         combo = chain = 1;
         InitOptionsProperty();
 
@@ -100,11 +114,14 @@ public class Skill
         critical = float.Parse(options.Get("critical", "5"));
         priority = int.Parse(options.Get("priority", "0"));
         ignoreShield = bool.Parse(options.Get("ignore_shield", "false"));
+        multPowerup = Status.Parse(options.Get("mult_powerup"), Status.one);
+        multPowerdown = Status.Parse(options.Get("mult_powerdown"), Status.one);
         ignorePowerup = bool.Parse(options.Get("ignore_powerup", "false"));
         ignorePowerdown = bool.Parse(options.Get("ignore_powerdown", "false"));
     }
 
-    public Skill(Skill rhs) {
+    public Skill(Skill rhs)
+    {
         id = rhs.id;
         name = rhs.name;
         elementId = rhs.elementId;
@@ -123,12 +140,13 @@ public class Skill
         chain = rhs.chain;
         priority = rhs.priority;
         ignoreShield = rhs.ignoreShield;
-        ignorePowerup = rhs.ignorePowerup;
-        ignorePowerdown = rhs.ignorePowerdown;
+        multPowerup = new Status(rhs.multPowerup);
+        multPowerdown = new Status(rhs.multPowerdown);
         referBuffList = rhs.referBuffList?.ToList();
     }
 
-    protected Skill(SkillType specialType) {
+    protected Skill(SkillType specialType)
+    {
         id = (int)specialType;
         type = specialType;
         power = anger = 0;
@@ -136,26 +154,28 @@ public class Skill
         combo = chain = 1;
     }
 
-    public string[] GetRawInfoStringArray() {
+    public string[] GetRawInfoStringArray()
+    {
         string[] defaultOptionKeys = new string[] { "critical", "priority", "second_super",
             "ignore_shield", "ignore_powerup", "ignore_powerdown", "ref_buff" };
 
         string rawOptionString = ((critical == 5) ? string.Empty : ("critical=" + critical + "&")) +
-            ((priority == 0) ? string.Empty : ("priority=" + priority + "&")) + 
+            ((priority == 0) ? string.Empty : ("priority=" + priority + "&")) +
             (isSecondSuper ? ("second_super=true&") : string.Empty) +
-            (ignoreShield ? ("ignore_shield=" + ignoreShield + "&") : string.Empty) + 
-            (ignorePowerup ? ("ignore_powerup=" + ignorePowerup + "&") : string.Empty) + 
-            (ignorePowerdown ? ("ignore_powerdown=" + ignorePowerdown + "&") : string.Empty) + 
+            (ignoreShield ? ("ignore_shield=" + ignoreShield + "&") : string.Empty) +
+            (ignorePowerup ? ("ignore_powerup=" + ignorePowerup + "&") : string.Empty) +
+            (ignorePowerdown ? ("ignore_powerdown=" + ignorePowerdown + "&") : string.Empty) +
             (ListHelper.IsNullOrEmpty(referBuffList) ? string.Empty : ("ref_buff=" + referBuffList.ConcatToString("/")));
-        
+
         string otherOptionString = options.Where(entry => !defaultOptionKeys.Contains(entry.Key)).Select(entry => entry.Key + "=" + entry.Value).ConcatToString("&");
-        string allOptionString = string.IsNullOrEmpty(rawOptionString + otherOptionString) ? "none" : (rawOptionString + "&" + otherOptionString); 
+        string allOptionString = string.IsNullOrEmpty(rawOptionString + otherOptionString) ? "none" : (rawOptionString + "&" + otherOptionString);
 
         return new string[] { id.ToString(), name, elementId.ToString(), ((int)type).ToString(),
             power.ToString(), anger.ToString(), accuracy.ToString(), allOptionString.Trim('&'), rawDescription  };
     }
 
-    public static Skill GetSkill(int id, bool avoidNull = true) {
+    public static Skill GetSkill(int id, bool avoidNull = true)
+    {
         Skill skill = Database.instance.GetSkill(id);
         return avoidNull ? (skill ?? GetNoOpSkill()) : skill;
     }
@@ -165,10 +185,12 @@ public class Skill
         return "id: " + id + " name: " + name;
     }
 
-    public static Skill ParseRPCData(string[] data) {
+    public static Skill ParseRPCData(string[] data)
+    {
         var len = data.Length;
         int id = int.Parse(data[0]);
-        var skill = id switch {
+        var skill = id switch
+        {
             (int)SkillType.空过 => Skill.GetNoOpSkill(),
             (int)SkillType.道具 => Skill.GetItemSkill(new Item(int.Parse(data[1]))),
             (int)SkillType.換场 => Skill.GetPetChangeSkill(int.Parse(data[1]), int.Parse(data[2]), bool.Parse(data[3])),
@@ -176,7 +198,8 @@ public class Skill
             _ => Skill.GetSkill(id)
         };
 
-        if (!skill.isAction) {
+        if (!skill.isAction)
+        {
             var selectEffects = skill.effects.Where(x => x.isSelect).ToList();
             var targetIndexList = data[1].Split('/');
             for (int i = 0; i < selectEffects.Count; i++)
@@ -192,8 +215,10 @@ public class Skill
         return skill;
     }
 
-    public string[] ToRPCData(BattleSettings settings) {
-        var data = id switch {
+    public string[] ToRPCData(BattleSettings settings)
+    {
+        var data = id switch
+        {
             (int)SkillType.空过 => new string[] { id.ToString() },
             (int)SkillType.道具 => new string[] { id.ToString(), options.Get("item_id", "0") },
             (int)SkillType.換场 => new string[] { id.ToString(), options.Get("source_index", "0"), options.Get("target_index", "0"), options.Get("passive", "false") },
@@ -207,11 +232,13 @@ public class Skill
         return data;
     }
 
-    public static Skill GetRandomSkill() {
+    public static Skill GetRandomSkill()
+    {
         var skillData = GameManager.versionData.skillData;
         int minSkillId = skillData.minSkillId;
         int maxSkillId = skillData.maxSkillId;
-        while (true) {
+        while (true)
+        {
             int skillId = Random.Range(minSkillId, maxSkillId + 1);
             Skill skill = Skill.GetSkill(skillId);
             if ((skill.type != SkillType.必杀) && (!skill.isSelect))
@@ -219,7 +246,8 @@ public class Skill
         }
     }
 
-    public static Skill GetNoOpSkill() {
+    public static Skill GetNoOpSkill()
+    {
         Skill skill = new Skill(SkillType.空过);
         skill.name = "空过";
         skill.rawDescription = "跳过自己的回合";
@@ -228,7 +256,8 @@ public class Skill
         return skill;
     }
 
-    public static Skill GetEscapeSkill() {
+    public static Skill GetEscapeSkill()
+    {
         Skill skill = new Skill(SkillType.逃跑);
         skill.name = "逃跑";
         skill.priority = 6;
@@ -236,7 +265,8 @@ public class Skill
         return skill;
     }
 
-    public static Skill GetPetChangeSkill(int sourceIndex, int targetIndex, bool passive = false) {
+    public static Skill GetPetChangeSkill(int sourceIndex, int targetIndex, bool passive = false)
+    {
         Skill skill = new Skill(SkillType.換场);
         skill.name = "換场";
         skill.options.Set("source_index", sourceIndex.ToString());
@@ -246,7 +276,8 @@ public class Skill
         return skill;
     }
 
-    public static Skill GetPetChangeSkillWithTiming(Skill petChangeSkill, EffectTiming timing) {
+    public static Skill GetPetChangeSkillWithTiming(Skill petChangeSkill, EffectTiming timing)
+    {
         if (petChangeSkill == null)
             return null;
 
@@ -261,7 +292,8 @@ public class Skill
         return skill;
     }
 
-    public static Skill GetItemSkill(Item item) {
+    public static Skill GetItemSkill(Item item)
+    {
         Skill skill = new Skill(SkillType.道具);
         skill.name = "道具";
         skill.options.Set("item_id", item.id.ToString());
@@ -269,20 +301,25 @@ public class Skill
         return skill;
     }
 
-    public static string GetSkillDescriptionPreview(string plainText) {
+    public static string GetSkillDescriptionPreview(string plainText)
+    {
         return plainText.Replace("[ENDL]", "\n").Replace("[-]", "</color>").Replace("[", "<color=#").Replace("]", ">");
     }
 
-    public string GetDescription(string plainText) {
+    public string GetDescription(string plainText)
+    {
         string desc;
         desc = plainText.Trim();
-        if ((critical <= 100) && (critical != 5)) {
+        if ((critical <= 100) && (critical != 5))
+        {
             desc = "[ff50d0]【暴击率 " + critical + "%】[-][ENDL]" + desc;
         }
-        if ((accuracy <= 100) && (accuracy != (isAttack ? 95 : 100))) {
+        if ((accuracy <= 100) && (accuracy != (isAttack ? 95 : 100)))
+        {
             desc = "[52e5f9]【命中率 " + accuracy + "%】[-][ENDL]" + desc;
         }
-        if (priority != 0) {
+        if (priority != 0)
+        {
             var priDesc = "[77e20c]【先制" + ((priority > 0) ? "+" : string.Empty) + priority + "】[-][ENDL]";
             desc = priDesc + desc;
         }
@@ -303,55 +340,66 @@ public class Skill
             }
         }
         return Skill.GetSkillDescriptionPreview(desc);
-    }   
+    }
 
-    public void SetEffects(Effect _effect) {
+    public void SetEffects(Effect _effect)
+    {
         _effect.source = this;
         effects = new List<Effect>() { _effect };
     }
 
-    public void SetEffects(List<Effect> _effects) {
-        foreach (var e in _effects) {
+    public void SetEffects(List<Effect> _effects)
+    {
+        foreach (var e in _effects)
+        {
             e.source = this;
         }
         effects = _effects;
     }
 
-    public void SetParallelIndex(int parallelSourceIndex = 0, int parallelTargetIndex = 0) {
+    public void SetParallelIndex(int parallelSourceIndex = 0, int parallelTargetIndex = 0)
+    {
         options.Set("parallel_source_index", parallelSourceIndex.ToString());
         options.Set("parallel_target_index", parallelTargetIndex.ToString());
 
-        effects.ForEach(x => {
+        effects.ForEach(x =>
+        {
             x?.abilityOptionDict?.Set("parallel_source_index", parallelSourceIndex.ToString());
             x?.abilityOptionDict?.Set("parallel_target_index", parallelTargetIndex.ToString());
         });
     }
 
-    public bool IsAction() {
+    public bool IsAction()
+    {
         return type < SkillType.属性;
-            // (type != SkillType.属性) && (type != SkillType.物理) 
-            // && (type != SkillType.特殊) && (type != SkillType.必杀);
+        // (type != SkillType.属性) && (type != SkillType.物理) 
+        // && (type != SkillType.特殊) && (type != SkillType.必杀);
     }
 
-    public bool IsAttack() {
+    public bool IsAttack()
+    {
         return type > SkillType.属性;
         // (type == SkillType.物理) || (type == SkillType.特殊) || (type == SkillType.必杀);
     }
 
-    public bool IsSelect() {
+    public bool IsSelect()
+    {
         return effects.Exists(x => x.IsSelect());
     }
 
-    public bool IsSelectReady() {
-        return effects.All(x => (!x.IsSelect()) || 
-            (x.abilityOptionDict.Get("target_index", "-1") != "-1"));    
+    public bool IsSelectReady()
+    {
+        return effects.All(x => (!x.IsSelect()) ||
+            (x.abilityOptionDict.Get("target_index", "-1") != "-1"));
     }
 
-    public bool IsCapture() {
+    public bool IsCapture()
+    {
         return effects.Any(x => x.ability == EffectAbility.Capture);
     }
 
-    public PetAnimationType GetPetAnimationType() {
+    public PetAnimationType GetPetAnimationType()
+    {
         if (type == SkillType.物理)
             return PetAnimationType.Physic;
 
@@ -367,17 +415,28 @@ public class Skill
         return PetAnimationType.None;
     }
 
-    public PetAnimationType GetCaptureAnimationType() {
+    public PetAnimationType GetCaptureAnimationType()
+    {
         if (isCapture)
-            return (options.Get("capture_result", "false") == "false") ? 
+            return (options.Get("capture_result", "false") == "false") ?
                 PetAnimationType.CaptureFail : PetAnimationType.CaptureSuccess;
 
         return PetAnimationType.None;
     }
 
-    public float GetSkillIdentifier(string id) {
+    public float GetSkillIdentifier(string id)
+    {
         if (id.TryTrimStart("option", out var trimId))
             return Identifier.GetNumIdentifier(options.Get(trimId.TrimParentheses(), "0"));
+
+        if (id.TryTrimStart("multPower", out trimId))
+        {
+            if (trimId.TryTrimStart("up.", out trimId))
+                return multPowerup[trimId];
+
+            if (trimId.TryTrimStart("down.", out trimId))
+                return multPowerdown[trimId];
+        }
 
         if (id.TryTrimStart("effect.", out trimId))
         {
@@ -395,7 +454,7 @@ public class Skill
                         okEffects.RemoveAll(x => x.abilityOptionDict.Get(split[0]) != split[1]);
 
                     trimExpr = trimExpr.TrimStart('(' + trimAbility[i] + ')');
-                }   
+                }
 
                 trimExpr = trimExpr.TrimStart('.');
                 return trimExpr switch
@@ -429,18 +488,37 @@ public class Skill
         };
     }
 
-    public bool TryGetSkillIdentifier(string id, out float num) {
+    public bool TryGetSkillIdentifier(string id, out float num)
+    {
         num = GetSkillIdentifier(id);
         return num != float.MinValue;
     }
 
-    public void SetSkillIdentifier(string id, float value) {
-        if (id.TryTrimStart("option", out var trimId) && trimId.TryTrimParentheses(out var optionKey)) {
+    public void SetSkillIdentifier(string id, float value)
+    {
+        if (id.TryTrimStart("option", out var trimId) && trimId.TryTrimParentheses(out var optionKey))
+        {
             options.Set(optionKey, value.ToString());
             return;
         }
 
-        switch (id) {
+        if (id.TryTrimStart("multPower", out trimId))
+        {
+            if (trimId.TryTrimStart("up.", out trimId))
+            {
+                multPowerup[trimId] = value;
+                return;
+            }
+
+            if (trimId.TryTrimStart("down.", out trimId))
+            {
+                multPowerdown[trimId] = value;
+                return;
+            }
+        }
+
+        switch (id)
+        {
             default:
                 return;
             case "element":
@@ -490,11 +568,12 @@ public class Skill
                 SetParallelIndex(int.Parse(options.Get("parallel_source_index", "0")), (int)value);
                 return;
         }
-    }   
+    }
 
 }
 
-public enum SkillType {
+public enum SkillType
+{
     空过 = -1, 道具 = -2, 換场 = -3, 逃跑 = -4,
     属性 = 0, 物理 = 1, 特殊 = 2, 连携 = 3, 必杀 = 100,
 }

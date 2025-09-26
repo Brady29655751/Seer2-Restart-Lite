@@ -97,13 +97,11 @@
 							<action>battle</action>
 							<param>evolve</param>
 						</func>
-						<!--
 						<func type="click">
 							<description><![CDATA[神迹觉醒]]></description>
 							<action>battle</action>
 							<param>miracle</param>
 						</func>
-						-->
 					</functionHandler>
 					<replyHandler>
 						<reply type="click">
@@ -178,6 +176,30 @@
 						</button>
 					</winHandler>
 				</branch>
+				<branch id="miracle">
+					<settings count="6">
+						<mode>4</mode>
+						<weather>3</weather>
+					</settings>
+					<enemy>
+						<pet id="113786" level="105">
+							<status>
+								<hp>25000</hp>
+							</status>
+							<initBuff>-8,61,-3082,-3083,3017</initBuff>
+							<loopSkill>12715,12716,12719</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=PetSelect</param>
+						    <param>title=选择要进化的里奥杰斯</param>
+						    <param>option_num=2</param>
+						    <param>callback=miracle</param>
+						</button>
+					</winHandler>
+				</branch>
 			</battle>
 			<eventHandler>
 				<button type="click">
@@ -240,6 +262,41 @@
 				    <param>skill=12511</param>
 				    <param>skill=12512</param>
 				    <condition>data.PetSelect.uid=10042</condition>
+				    <condition>data.PetSelect.levelGTE100</condition>
+				</button>
+				<button type="miracle_choose">
+					<action>openHintbox</action>
+					<param>type=PetSelect</param>
+				    <param>title=选择要进化的里奥杰斯</param>
+				    <param>option_num=2</param>
+					<param>callback=miracle</param>
+				    <condition>data.PetSelect.uidNOT11298|data.PetSelect.level&lt;100</condition>
+				</button>
+				<button type="miracle">
+				    <action>openHintbox</action>
+				    <param>type=Item</param>
+				    <param>title=提示</param>
+				    <param>content=必须选择等级100的里奥杰斯！</param>
+				    <param>item_icon=pet[11298]</param>
+				    <param>option_num=1</param>
+					<param>callback=miracle_choose</param>
+				    <condition>data.PetSelect.uidNOT11298|data.PetSelect.level&lt;100</condition>
+				</button>
+				<button type="miracle">
+				    <action>openHintbox</action>
+				    <param>type=Item</param>
+				    <param>title=提示</param>
+				    <param>content=里奥杰斯已成功神迹觉醒</param>
+				    <param>item_icon=pet[13786]</param>
+				    <param>option_num=1</param>
+				    <condition>data.PetSelect.uid=11298</condition>
+				    <condition>data.PetSelect.levelGTE100</condition>
+				</button>
+				<button type="miracle">
+				    <action>evolvePet</action>
+				    <param>index=data.PetSelectIndex</param>
+				    <param>13786</param>
+				    <condition>data.PetSelect.uid=11298</condition>
 				    <condition>data.PetSelect.levelGTE100</condition>
 				</button>
 			</callbackHandler>

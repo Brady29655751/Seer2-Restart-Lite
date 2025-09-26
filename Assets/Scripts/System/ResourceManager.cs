@@ -765,12 +765,15 @@ public class ResourceManager : Singleton<ResourceManager>
 
                 foreach (var entry in soundDict)
                     soundInfo.Set(entry.Key, entry.Value);
-            } else {
-                if (error != string.Empty) {
+            }
+            else
+            {
+                if (error != string.Empty)
+                {
                     var hintbox = Hintbox.OpenHintboxWithContent(error, 16);
                     hintbox.SetTitle("加载自制精灵失败");
                     hintbox.SetSize(720, 360);
-                }         
+                }
             }
 
             onSuccess?.Invoke(petInfos);
@@ -912,12 +915,21 @@ public class ResourceManager : Singleton<ResourceManager>
         var effectLists = GetEffectLists(effects);
         int dataCol = BuffInfo.DATA_COL;
         int dataRow = data.Length / dataCol;
-        for (int i = 1; i < dataRow; i++)
+        BuffInfo info = null;
+
+        try
         {
-            int cur = dataCol * i;
-            BuffInfo info = new BuffInfo(data, cur);
-            info.SetEffects(effectLists[i - 1]);
-            buffInfoDict.Set(info.id, info);
+            for (int i = 1; i < dataRow; i++)
+            {
+                int cur = dataCol * i;
+                info = new BuffInfo(data, cur);
+                info.SetEffects(effectLists[i - 1]);
+                buffInfoDict.Set(info.id, info);
+            }
+        }
+        catch (Exception)
+        {
+            Hintbox.OpenHintboxWithContent("印记ID " + info.id + "出错", 16);
         }
 
         return buffInfoDict;
@@ -955,12 +967,20 @@ public class ResourceManager : Singleton<ResourceManager>
         var effectLists = GetEffectLists(effects);
         int dataCol = ItemInfo.DATA_COL;
         int dataRow = data.Length / dataCol;
-        for (int i = 1; i < dataRow; i++)
+        ItemInfo info = null;
+        try
         {
-            int cur = dataCol * i;
-            ItemInfo info = new ItemInfo(data, cur);
-            info.SetEffects(effectLists[i - 1]);
-            itemInfoDict.Set(info.id, info);
+            for (int i = 1; i < dataRow; i++)
+            {
+                int cur = dataCol * i;
+                info = new ItemInfo(data, cur);
+                info.SetEffects(effectLists[i - 1]);
+                itemInfoDict.Set(info.id, info);
+            }
+        }
+        catch (Exception)
+        {
+            Hintbox.OpenHintboxWithContent("道具ID " + info.id + "出错", 16);
         }
 
         return itemInfoDict;

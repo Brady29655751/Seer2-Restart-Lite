@@ -117,11 +117,18 @@ public class Battle
             });
 
             // 尼爾補丁
-            if (settings.isCaptureOK && (Player.instance.currentMap.worldId == 1))
+            if (settings.isCaptureOK && (Player.instance.currentMap.worldId == 1) && (clientPetBag[0].buffController.GetBuff(-2) == null))
             {
-                if (NpcConditionHandler.GetRandom("<", "0~256", "1"))
+                if (Random.Range(0, 256) < 1)
                 {
-                    clientPetBag[0] = BattlePet.GetBattlePet(new Pet(10077, clientPetBag[0]?.level ?? 1));
+                    var bossInfo = new BossInfo()
+                    {
+                        petId = (masterPetBag[0].basic.baseId == 10077) ? 10416 : 10077,
+                        level = clientPetBag[0].level,
+                        initBuffIds = "-2",
+                        loopSkillIds = "12641,12641,12641,12641,-4",
+                    };
+                    clientPetBag[0] = BattlePet.GetBattlePet(bossInfo);
                 }
             }
         }

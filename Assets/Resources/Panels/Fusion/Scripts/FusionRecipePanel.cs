@@ -16,7 +16,11 @@ public class FusionRecipePanel : Panel
     }
 
     public void ShowItemInfo(int index) {
-        var item = fusionModel.currentRecipe.items.ElementAtOrDefault(index);
+        var recipe = PetFusionSystem.fusionRecipes.Get(fusionModel.databaseRecipePage, null);
+        if (recipe == null)
+            return;
+
+        var item = recipe.items.ElementAtOrDefault(index);
         if (item == null)
             return;
 
