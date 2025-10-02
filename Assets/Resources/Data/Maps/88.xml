@@ -9,7 +9,7 @@
 			<description>这里是王者之门，去迎接各种挑战吧！</description>
 			<dialog>
 				<branch id="default" name="上尉门罗" icon="8101" size="119,91" pos="0,55">
-					<content><![CDATA[这里是王者之门，去迎接各种挑战吧！]]></content>
+					<content><![CDATA[这里是王者之门，去迎接各种挑战吧！前7层只能使用4星以下精灵挑战哦！]]></content>
 					<functionHandler>
 						<func type="click">
 							<description><![CDATA[王者之门]]></description>
@@ -36,7 +36,7 @@
 			</dialog>
 			<battle>
 			    <branch id="1">
-			    	<settings count="6">
+			    	<settings count="6" star="4">
 						<mode>1</mode>
 					</settings>
 			    	<enemy>
@@ -114,7 +114,7 @@
 			    	</winHandler>
 			    </branch>
 				<branch id="2">
-					<settings count="6">
+					<settings count="6" star="4">
 						<mode>1</mode>
 					</settings>
 					<enemy>
@@ -151,7 +151,7 @@
 							<headerSkill>10196</headerSkill>
 				        	<loopSkill>10194</loopSkill>
 				        </pet>
-				        <pet id="10012" level="100">
+				        <pet id="10166" level="100">
 				            <status>
 								<atk>600</atk>
 				                <hp>4000</hp>
@@ -185,13 +185,95 @@
 						<button type="auto">
 							<action>setActivity</action>
 							<param>door</param>
-							<param>king[floor]=2</param>
+							<param>king[floor]=3</param>
 						</button>
 						<button type="auto">
 							<action>setActivity</action>
 							<param>door</param>
 							<param>king[max]=2</param>
-							<condition>activity[door].king[max]=[int]1[default]1</condition>
+							<condition>activity[door].king[max]=[int]1[default]0</condition>
+						</button>
+					</winHandler>
+				</branch>
+				<branch id="3">
+					<settings count="6" star="4">
+						<mode>1</mode>
+					</settings>
+					<enemy>
+						<pet id="27" level="100">
+				            <status>
+								<mat>600</mat>
+				                <hp>5000</hp>
+				            </status>
+				            <initBuff>13,14,17,20,100,420010,-3016,-3022</initBuff>
+							<loopSkill>10675,10674,10676</loopSkill>
+							<superSkill>10672</superSkill>
+						</pet>
+						<pet id="29" level="100">
+						    <status>
+								<atk>600</atk>
+						        <hp>5000</hp>
+						    </status>
+						    <initBuff>13,14,17,20,61,99,420011,-3000,-3007</initBuff>
+							<loopSkill>10414,10411</loopSkill>
+						</pet>
+						<pet id="42" level="100">
+						    <status>
+						        <hp>5000</hp>
+						    </status>
+						    <initBuff>13,14,17,20,23,420021,980,985,950,991</initBuff>
+							<loopSkill>10635,10644</loopSkill>
+							<superSkill>10642</superSkill>
+						</pet>
+				        <pet id="52" level="100">
+				            <status>
+				                <hp>5000</hp>
+				            </status>
+				            <initBuff>-8,45,61,-2003</initBuff>
+				        	<loopSkill>11741,11740,11742</loopSkill>
+				        </pet>
+				        <pet id="73" level="100">
+				            <status>
+								<def>600</def>
+								<mdf>600</mdf>
+				                <hp>5000</hp>
+				            </status>
+				            <initBuff>13,14,17,20,100,-3016,-3076,978,964</initBuff>
+				        	<loopSkill>10740,10737</loopSkill>
+							<superSkill>10742</superSkill>
+				        </pet>
+						<pet id="141" level="100">
+						    <status>
+						        <hp>5000</hp>
+						    </status>
+						    <initBuff>100,-3054,61,-3012,-3059</initBuff>
+							<loopSkill>10807,10800,10804</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setItem</action>
+							<param>add</param>
+							<param>3,50</param>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=50 荣誉点已经放入背包</param>
+							<param>option_num=1</param>
+							<param>item_icon=item[3]</param>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>door</param>
+							<param>king[floor]=4</param>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>door</param>
+							<param>king[max]=3</param>
+							<condition>activity[door].king[max]=[int]2[default]0</condition>
 						</button>
 					</winHandler>
 				</branch>

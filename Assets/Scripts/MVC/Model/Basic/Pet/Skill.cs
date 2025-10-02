@@ -38,15 +38,17 @@ public class Skill
     public bool ignoreShield = false;
     public bool ignorePowerup
     {
-        get => multPowerup.atk * multPowerup.mat == 0;
-        set => multPowerup.atk = multPowerup.mat = value ? 0 : 1;
+        get => powerup.mult.def * powerup.mult.mdf == 0;
+        set => powerup.mult.def = powerup.mult.mdf = value ? 0 : 1;
     }
     public bool ignorePowerdown
     {
-        get => multPowerdown.atk * multPowerdown.mat == 0;
-        set => multPowerdown.atk = multPowerdown.mat = value ? 0 : 1;
+        get => powerdown.mult.atk * powerdown.mult.mat == 0;
+        set => powerdown.mult.atk = powerdown.mult.mat = value ? 0 : 1;
     }
-    public Status multPowerup = Status.one, multPowerdown = Status.one;
+    // public Status multPowerup = Status.one, multPowerdown = Status.one;
+    public Linear<Status> powerup = new Linear<Status>(Status.one, Status.zero);
+    public Linear<Status> powerdown = new Linear<Status>(Status.one, Status.zero);
 
 
     /* Properties */
@@ -114,8 +116,6 @@ public class Skill
         critical = float.Parse(options.Get("critical", "5"));
         priority = int.Parse(options.Get("priority", "0"));
         ignoreShield = bool.Parse(options.Get("ignore_shield", "false"));
-        multPowerup = Status.Parse(options.Get("mult_powerup"), Status.one);
-        multPowerdown = Status.Parse(options.Get("mult_powerdown"), Status.one);
         ignorePowerup = bool.Parse(options.Get("ignore_powerup", "false"));
         ignorePowerdown = bool.Parse(options.Get("ignore_powerdown", "false"));
     }
@@ -140,8 +140,8 @@ public class Skill
         chain = rhs.chain;
         priority = rhs.priority;
         ignoreShield = rhs.ignoreShield;
-        multPowerup = new Status(rhs.multPowerup);
-        multPowerdown = new Status(rhs.multPowerdown);
+        powerup = new Linear<Status>(rhs.powerup);
+        powerdown = new Linear<Status>(rhs.powerdown);
         referBuffList = rhs.referBuffList?.ToList();
     }
 
@@ -429,13 +429,22 @@ public class Skill
         if (id.TryTrimStart("option", out var trimId))
             return Identifier.GetNumIdentifier(options.Get(trimId.TrimParentheses(), "0"));
 
-        if (id.TryTrimStart("multPower", out trimId))
+        if (id.TryTrimStart("powerup.", out trimId))
         {
-            if (trimId.TryTrimStart("up.", out trimId))
-                return multPowerup[trimId];
-
-            if (trimId.TryTrimStart("down.", out trimId))
-                return multPowerdown[trimId];
+            var split = trimId.Split('.');
+            var power = split[0] switch
+            {
+                "pos" => powerup,
+                "neg" => powerdown,
+                _ => new Linear<Status>(Status.one, Status.zero),
+            };
+            var status = split[1] switch
+            {
+                "mult" => power.mult,
+                "add" => power.add,
+                _ => Status.zero,
+            };
+            return status[split[2]];
         }
 
         if (id.TryTrimStart("effect.", out trimId))
@@ -501,20 +510,24 @@ public class Skill
             options.Set(optionKey, value.ToString());
             return;
         }
-
-        if (id.TryTrimStart("multPower", out trimId))
+        
+        if (id.TryTrimStart("powerup.", out trimId))
         {
-            if (trimId.TryTrimStart("up.", out trimId))
+            var split = trimId.Split('.');
+            var power = split[0] switch
             {
-                multPowerup[trimId] = value;
-                return;
-            }
-
-            if (trimId.TryTrimStart("down.", out trimId))
+                "pos" => powerup,
+                "neg" => powerdown,
+                _ => new Linear<Status>(Status.one, Status.zero),
+            };
+            var status = split[1] switch
             {
-                multPowerdown[trimId] = value;
-                return;
-            }
+                "mult" => power.mult,
+                "add" => power.add,
+                _ => Status.zero,
+            };
+            status[split[2]] = value;
+            return;
         }
 
         switch (id)

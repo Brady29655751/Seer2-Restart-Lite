@@ -274,14 +274,20 @@ public class Pet
         if (id.TryTrimStart("baseId", out var trimBase) && 
             (trimBase.TryTrimParentheses(out var trimBaseExpr)) &&
             int.TryParse(trimBaseExpr, out var baseId)) {
-            return ListHelper.IsNullOrEmpty(PetExpSystem.GetEvolveChain(baseId, info.ui.defaultId)) ? 0 : 1;
+            return ListHelper.IsNullOrEmpty(PetExpSystem.GetEvolveChain(baseId, this.id)) ? 0 : 1;
         }
         
         if (id.TryTrimStart("gender", out var trimGender) &&
             (trimSkin.TryTrimParentheses(out var genderIdExpr)) && 
             (int.TryParse(genderIdExpr, out var genderId))) {
             return info.basic.genderList.Contains(genderId) ? 1 : 0;
-        } 
+        }
+
+        if (id == "own")
+        {
+            var allPets = Player.instance.petBag.Concat(Player.instance.gameData.petStorage).Where(x => x != null);
+            return allPets.Any(x => (x.id == this.id) || (x.GetPetIdentifier($"baseId[{this.id}]") == 1)) ? 1 : 0;
+        }
 
         return id switch
         {

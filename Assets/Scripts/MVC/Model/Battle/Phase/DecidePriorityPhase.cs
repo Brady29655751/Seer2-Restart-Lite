@@ -42,7 +42,7 @@ public class DecidePriorityPhase : BattlePhase
         return priorityUnits.OrderByDescending(p => ((p.Item2 == null) || (p.Item3 == null)) ? -1 : 0)
             .ThenByDescending(p => p.Item2.isAction ? 1 : 0)
             .ThenByDescending(p => p.Item2.priority)
-            .ThenByDescending(p => p.Item3.statusController.GetCurrentStatus(multPowerdown: p.Item2.multPowerdown).spd)
+            .ThenByDescending(p => p.Item3.statusController.GetCurrentStatus(p.Item2.powerup, p.Item2.powerdown).spd)
             .ThenBy(p => Random.Range(0, 100))
             .Select(p => (int)(Mathf.Sign(p.Item1.id) * (p.Item4 + 1)))
             .ToList();

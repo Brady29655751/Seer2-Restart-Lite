@@ -9,15 +9,16 @@ public class DoorModel : Module
 {
     public string door { get; private set; }
     public string mode { get; private set;}
+    public string modeWithParentheses => string.IsNullOrEmpty(mode) ? string.Empty : $"[{mode}]";
     public string floor => battleInfo.id;
     public int petNum => GetPetNum();
 
     public int doorIndex => DoorPanel.doorNames.IndexOf(door);
-    public string floorKey => door + "[" + mode + "]" + "[floor]";
+    public string floorKey => door + modeWithParentheses + "[floor]";
     public string floorData => activity.GetData(floorKey, "1");
     public int floorNum => int.Parse(floorData);
 
-    public string maxFloorKey => door + "[" + mode + "]" + "[max]";
+    public string maxFloorKey => door + modeWithParentheses + "[max]";
     public string maxFloorData => activity.GetData(maxFloorKey, "0");
     public int floorMax => int.Parse(maxFloorData);
 

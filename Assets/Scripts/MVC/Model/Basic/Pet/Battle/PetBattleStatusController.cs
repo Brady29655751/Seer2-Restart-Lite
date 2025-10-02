@@ -94,8 +94,8 @@ public class PetBattleStatusController
         _maxAnger = rhs._maxAnger;
     } 
 
-    public Status GetCurrentStatus(Status multPowerup = null, Status multPowerdown = null) {
-        var currentPowerup = GetCurrentPowerup(multPowerup, multPowerdown);
+    public Status GetCurrentStatus(Linear<Status> powerup = null, Linear<Status> powerdown = null) {
+        var currentPowerup = GetCurrentPowerup(powerup, powerdown);
         Status status = new Status(_initStatus * Status.GetPowerUpBuff(currentPowerup) * _multStatus + _addStatus);
         status = Status.Max(status, Status.one);
         status.hp = hp;
@@ -109,15 +109,23 @@ public class PetBattleStatusController
         return status;
     }
 
-    public Status GetCurrentPowerup(Status multPowerup = null, Status multPowerdown = null)
+    public Status GetCurrentPowerup(Linear<Status> powerup = null, Linear<Status> powerdown = null)
     {
         var basePowerup = Status.FloorToInt(Status.Clamp(_powerup, _minPowerUp, _maxPowerUp));
-        if ((multPowerup == null) && (multPowerdown == null))
+        if ((powerup == null) && (powerdown == null))
             return basePowerup;
 
-        var pos = basePowerup.pos * (multPowerup ?? Status.one);
-        var neg = basePowerup.neg * (multPowerdown ?? Status.one);
-        return pos + neg;
+        var currentPowerup = basePowerup.Select((x, i) =>
+        {
+            if (x > 0)
+                return (int)(x * (powerup?.mult[i] ?? Status.one[i]) + (powerup?.add[i] ?? 0));
+
+            if (x < 0)
+                return (int)(x * (powerdown?.mult[i] ?? Status.one[i]) + (powerdown?.add[i] ?? 0));
+
+            return x;
+        });
+        return currentPowerup;
     }
 
     public int GetPowerUp(int type)

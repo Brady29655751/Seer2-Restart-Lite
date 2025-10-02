@@ -128,8 +128,8 @@ public class BattlePet : Pet
     }
 
     public static KeyValuePair<int, int> GetSkillTypeStatus(Skill skill, BattlePet lhs, BattlePet rhs) {
-        var lhsStatus = lhs.statusController.GetCurrentStatus(multPowerdown: skill.multPowerdown);
-        var rhsStatus = rhs.statusController.GetCurrentStatus(multPowerup: skill.multPowerup);
+        var lhsStatus = lhs.statusController.GetCurrentStatus(skill.powerup, skill.powerdown);
+        var rhsStatus = rhs.statusController.GetCurrentStatus(skill.powerup, skill.powerdown);
 
         Status status = new Status(lhsStatus.atk, lhsStatus.mat, rhsStatus.def, rhsStatus.mdf, 0, 0);
         status.spd = (status.atk + status.mat) / 2;

@@ -51,10 +51,23 @@ namespace System {
                 return str;
 
             int startIndex = str.IndexOf(leftPar);
-            int endIndex = str.IndexOf(rightPar);
-            if ((startIndex == -1) || (endIndex == -1) || (endIndex < startIndex))
+            int endIndex = str.LastIndexOf(rightPar);
+            if ((startIndex == -1) || (endIndex == -1) || (str.IndexOf(rightPar) < startIndex))
                 return str;
 
+            for (int i = startIndex + 1, l = 1, r = 0; i <= endIndex; i++)
+            {
+                if (str[i] == leftPar)
+                    l++;
+                else if (str[i] == rightPar)
+                    r++;
+
+                if (l == r)
+                {
+                    endIndex = i;
+                    break;
+                }
+            }
             return str.Substring(startIndex + 1, endIndex - startIndex - 1);
         }
 

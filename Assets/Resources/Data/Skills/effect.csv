@@ -2718,7 +2718,7 @@ id,timing,priority,target,condition,cond_option,effect,effect_option
 12705,on_after_attack,-1,pet,none,none,add_buff,id=3401&name=永恒月光
 12706,on_after_attack,-1,pet,none,none,add_buff,who=op&id=3402&name=棱镜
 12707,on_after_attack,-1,pet,none,none,remove_buff,on_fail=12695&who=op&type=powerup.pos
-12708,on_after_attack\on_after_attack,-1\-1,pet\pet,none\none,none\none,add_buff\add_buff,id=12\id=13
+12708,on_after_attack\on_after_attack,-1\-1,pet\pet,none\none,none\none,add_buff\add_buff,id=12&turn=5\id=13&turn=5
 12709,none,-1,none,none,none,none,none
 12710,on_after_attack,-1,pet,none,none,add_buff,who=op&id=3380
 12711,on_after_attack,-1,pet,none,none,add_buff,who=op&id=121
@@ -2730,6 +2730,7 @@ id,timing,priority,target,condition,cond_option,effect,effect_option
 12717,on_after_attack\on_after_attack,-1\-1,pet\pet,none\none,none\none,powerup\add_buff,all=1\id=![3132/14/2001]&value=![0/0/2]&turn=![-1/4/3]
 12718,on_decide_pri\on_after_attack,-1\-1,skill\pet,buff\buff,who=op&id=1001\who=op&id=1001,set_skill\add_buff,type=priority&op=+&value=1\id=18&turn=2
 12719,on_after_attack\on_after_attack\on_after_attack\on_after_attack,-1\-1\-1\-1000,pet\pet\pet\pet,none\status\status\pet,none\status_type=hp&op=GTE&cmp_value=1/2\status_type=hp&op=<&cmp_value=1/2\who=op&type=dead&dead_cmp=1,remove_buff\heal\heal\add_buff,on_success=1008&who=op&type=turn\add=me.skill.damage*0.4\add=me.skill.damage*0.8\who=op&id=3381
+12720,none,-1,none,none,none,none,none
 1001,on_after_attack,-1,pet,none,none,add_buff,id=2010&value=200&turn=2
 1002,on_before_attack,-1,skill,none,none,set_skill,who=op&type=effect&op=SET&value=0
 1003,on_after_attack,-1,pet,none,none,add_buff,who=op&id=57&turn=2

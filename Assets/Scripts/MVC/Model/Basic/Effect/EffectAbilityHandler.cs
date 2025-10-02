@@ -635,33 +635,33 @@ public static class EffectAbilityHandler
             return Parser.ParseEffectOperation(id, effect, lhsUnit, rhsUnit, buff, false);
         });
 
+        bool isSuccess = false;
+
         if (isKey)
         {
             // Unit Buffs
             if (keyList == "unit")
             {
-                bool isSuccess = false;
                 if (isType)
                 {
                     foreach (var type in typeRange)
                         isSuccess |= lhsUnit.RemoveBuff(x => (!x.IsUneffectable()) && x.IsType(type) && filter(x));
-
-                    return isSuccess;
                 }
                 if (isId)
-                    return lhsUnit.RemoveBuff(x => idRange.Contains(x.id) && filter(x));
-
-                return false;
+                    isSuccess |= lhsUnit.RemoveBuff(x => idRange.Contains(x.id) && filter(x));
             }
-            // State Buffs
-            bool isFieldLocked = (lhsUnit.pet.buffController.GetBuff(92) != null) || (rhsUnit.pet.buffController.GetBuff(92) != null);
-            Func<string, bool> fieldLockFilter = (key) => !(isFieldLocked && (key == "field"));
-            return state.stateBuffs.RemoveAll(x => keyRange.Contains(x.Key) && filter(x.Value) && fieldLockFilter(x.Key)) > 0;
+            else
+            {
+                // State Buffs
+                bool isFieldLocked = (lhsUnit.pet.buffController.GetBuff(92) != null) || (rhsUnit.pet.buffController.GetBuff(92) != null);
+                Func<string, bool> fieldLockFilter = (key) => !(isFieldLocked && (key == "field"));
+                isSuccess |= state.stateBuffs.RemoveAll(x => keyRange.Contains(x.Key) && filter(x.Value) && fieldLockFilter(x.Key)) > 0;
+            }
+            return isSuccess;
         }
 
         if (isType)
         {
-            var isSuccess = false;
             foreach (var type in typeRange)
             {
                 if (buffController.GetBuff(Buff.GetProtectBuffTypeId(type)) != null)
@@ -669,8 +669,8 @@ public static class EffectAbilityHandler
 
                 isSuccess |= buffController.RemoveRangeBuff(x => (!x.IsUneffectable()) && x.IsType(type) && filter(x), lhsUnit, state);
             }
-            return isSuccess;
         }
+
         if (isId)
         {
             var idRangeResult = new List<int>(idRange);
@@ -698,10 +698,10 @@ public static class EffectAbilityHandler
                 if ((Mathf.Abs(id) % 2 == 1) ^ (statusController.powerup[buffId] < 0))
                     statusController.SetPowerUp(buffId, 0);
             }
-            return buffController.RemoveRangeBuff(x => idRangeResult.Contains(x.id) && filter(x), lhsUnit, state);
+            isSuccess |= buffController.RemoveRangeBuff(x => idRangeResult.Contains(x.id) && filter(x), lhsUnit, state);
         }
 
-        return false;
+        return isSuccess;
     }
 
     public static bool CopyBuff(this Effect effect, BattleState state)
@@ -775,11 +775,11 @@ public static class EffectAbilityHandler
             buffs = lhsBuffController.GetRangeBuff(x => idRange.Contains(x.id) && filter(x));
             var powerup = lhsUnit.pet.statusController.powerup;
             var status = new Status();
-            foreach (var buff in buffs)
+            foreach (var buff in buffs.Select(x => new Buff(x)))
             {
                 if (!buff.IsPower())
                 {
-                    rhsBuffController.AddBuff(new Buff(buff), rhsUnit, state);
+                    rhsBuffController.AddBuff(buff, rhsUnit, state);
                     continue;
                 }
 
@@ -788,6 +788,7 @@ public static class EffectAbilityHandler
                     if ((buff.IsPowerUp() && (lhsBuffController.GetBuff(Buff.BUFFID_PROTECT_POWERUP) != null)) ||
                         (buff.IsPowerDown() && (lhsBuffController.GetBuff(Buff.BUFFID_PROTECT_POWERDOWN) != null)))
                     {
+                        buffs = buffs.Where(x => x.id != buff.id);
                         continue;
                     }
                 }

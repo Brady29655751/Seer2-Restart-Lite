@@ -138,7 +138,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.7529412, g: 0.7529412, b: 0.7529412, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -497,7 +497,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 338, y: 180}
+  m_AnchoredPosition: {x: 338, y: 145}
   m_SizeDelta: {x: 48, y: 47}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2005651166114666492
@@ -1562,7 +1562,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.7529412, g: 0.7529412, b: 0.7529412, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -1638,7 +1638,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.7529412, g: 0.7529412, b: 0.7529412, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -2401,6 +2401,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8529614205132995938}
+  - component: {fileID: 5657145591210046427}
   m_Layer: 5
   m_Name: North SPT
   m_TagString: Untagged
@@ -2437,6 +2438,32 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: -60}
   m_SizeDelta: {x: 0, y: -100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &5657145591210046427
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3960190357130414797}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b47ea242a247ce946a0694c59c445470, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  infoPrompt: {fileID: 5245554706616219598}
+  descriptionBox: {fileID: 0}
+  bossId: 110000001f000000260000003900000000000000000000007f0000009d000000d7000000
+  mapId: 8e000000c10000000e01000098000000000000000000000094010000a701000016030000
+  bossButtonList:
+  - {fileID: 5509743360917049219}
+  - {fileID: 2735691208356262859}
+  - {fileID: 8740442015770594975}
+  - {fileID: 9122759250145750029}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 6223677795908158036}
+  - {fileID: 3168124376340019339}
+  - {fileID: 1079270898669447148}
 --- !u!1 &4289705294256707584
 GameObject:
   m_ObjectHideFlags: 0
@@ -3096,13 +3123,14 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7683570561337662916}
+  - component: {fileID: 3114656303876287992}
   m_Layer: 5
   m_Name: Pano SPT
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &7683570561337662916
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3127,6 +3155,26 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: -30}
   m_SizeDelta: {x: 0, y: -60}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &3114656303876287992
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5670539353637061033}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b47ea242a247ce946a0694c59c445470, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  infoPrompt: {fileID: 5245554706616219598}
+  descriptionBox: {fileID: 0}
+  bossId: 3f270000322700003a270000
+  mapId: 362700002627000021270000
+  bossButtonList:
+  - {fileID: 4403473020267333366}
+  - {fileID: 1666815073260628387}
+  - {fileID: 6195029572497673397}
 --- !u!1 &5801980010484232025
 GameObject:
   m_ObjectHideFlags: 0
@@ -4198,24 +4246,9 @@ MonoBehaviour:
   descriptionBox: {fileID: 0}
   background: {fileID: 6302837961113395426}
   ESCButton: {fileID: 6302837959936172377}
-  bossPages:
+  bossPageObjects:
   - {fileID: 3960190357130414797}
   - {fileID: 5670539353637061033}
-  bossId: 110000001f000000260000003900000000000000000000007f0000009d000000d70000003f270000322700003a270000
-  mapId: 8e000000c10000000e01000098000000000000000000000094010000a701000016030000362700002627000021270000
-  bossButtonList:
-  - {fileID: 5509743360917049219}
-  - {fileID: 2735691208356262859}
-  - {fileID: 8740442015770594975}
-  - {fileID: 9122759250145750029}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 6223677795908158036}
-  - {fileID: 3168124376340019339}
-  - {fileID: 1079270898669447148}
-  - {fileID: 4403473020267333366}
-  - {fileID: 1666815073260628387}
-  - {fileID: 6195029572497673397}
 --- !u!1 &6569927343717510775
 GameObject:
   m_ObjectHideFlags: 0

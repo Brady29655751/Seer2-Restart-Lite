@@ -37,6 +37,33 @@
 							<action>openDialog</action>
 							<param>null</param>
 						</reply>
+						<reply type="click">
+							<description><![CDATA[▼ 下一页]]></description>
+							<action>openDialog</action>
+							<param>evolve</param>
+						</reply>
+					</replyHandler>
+				</branch>
+				<branch id="evolve" name="雷伊" icon="Pets/pet/90" size="80,142" pos="0,35">
+					<content><![CDATA[邪恶的气息正在逼近......]]></content>
+					<functionHandler>
+						<func type="click">
+							<description><![CDATA[器灵进化]]></description>
+							<action>teleport</action>
+							<param>820</param>
+						</func>
+					</functionHandler>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[好可怕啊]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+						<reply type="click">
+							<description><![CDATA[▲ 上一页]]></description>
+							<action>openDialog</action>
+							<param>default</param>
+						</reply>
 					</replyHandler>
 				</branch>
 				<branch id="pet" name="雷伊" icon="Pets/pet/90" size="80,142" pos="0,35">
@@ -208,6 +235,33 @@
 							<action>openDialog</action>
 							<param>null</param>
 						</reply>
+						<reply type="click">
+							<description><![CDATA[▼ 下一页]]></description>
+							<action>openDialog</action>
+							<param>evolve</param>
+						</reply>
+					</replyHandler>
+				</branch>
+				<branch id="evolve" name="凯萨" icon="Pets/pet/234" size="100,120" pos="0,55">
+					<content><![CDATA[邪恶的气息正在逼近......]]></content>
+					<functionHandler>
+						<func type="click">
+							<description><![CDATA[器灵进化]]></description>
+							<action>teleport</action>
+							<param>820</param>
+						</func>
+					</functionHandler>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[好可怕啊]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+						<reply type="click">
+							<description><![CDATA[▲ 上一页]]></description>
+							<action>openDialog</action>
+							<param>default</param>
+						</reply>
 					</replyHandler>
 				</branch>
 				<branch id="pet" name="凯萨" icon="Pets/pet/234" size="100,120" pos="0,55">
@@ -374,7 +428,7 @@
 							<param>ItemShop</param>
 							<param>mode=buy</param>
 							<param>currency=400003/2</param>
-							<param>item=110454/110485/112306/112315/400003</param>
+							<param>item=110454/110485/112306/112315/112720/400003</param>
 							<param>title=兑换道具</param>
 						</func>
 					</functionHandler>

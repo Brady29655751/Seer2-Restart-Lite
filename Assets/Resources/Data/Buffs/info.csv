@@ -334,7 +334,7 @@ id,name,type,copyType,turn,options,description
 3084,命中低下,turn,replace,1,res=21,必中-2
 3085,影钩,mark,stack,-1,auto_remove=true&max_val=16,攻击时每枚影钩有5%概率使对手恐惧，最多叠加16枚[ENDL]当前为[value]枚
 3086,幻视领域,mark,replace,-1,inherit=true,回合结束时若自身体力低于1/2会使对方随机1项能力下降1级
-3087,光滑,turn,replace,2,res=18&keep=false,闪避率提高75%，但受到的伤害翻倍
+3087,光滑,turn,replace,2,res=18&keep=false,闪避率提高85%，但受到的伤害翻倍
 3088,影子,mark,stack,-1,max_val=6&auto_remove=true,搜集到的影子，最多6个[ENDL]当前为[value]个
 3089,无影,turn,replace,5,none,使速度下降50点
 3090,影子模仿,mark,block,-1,none,战斗开始时变身为对方的样子
@@ -583,7 +583,7 @@ id,name,type,copyType,turn,options,description
 3333,失去嗅觉,turn,replace,5,none,受到伤害增加50%
 3334,失去味觉,turn,replace,5,none,受到伤害减少15点怒气
 3335,蓄气,mark,replace,-1,res=3012,物理攻击无视对手25%物防值
-3336,水之波动,mark,replace,-1,none,速度值提升50点，受到的伤害减少50点
+3336,水之波动,mark,replace,-1,none,受到的伤害减少50点
 3337,水蚀,chance,replace,-1,none,下次受到水系攻击伤害翻倍
 3338,蓝光,turn,replace,3,none,水系技能威力提升10点
 3339,锁敌,mark,replace,-1,keep=false&inherit=true&legacy=true,对手的技能必中（换场继承）
@@ -1095,6 +1095,8 @@ id,name,type,copyType,turn,options,description
 420017,熔石,item,replace,-1,item=22017&group=exclude,[ffbb33]【随身物品】[-][ENDL]自身攻击力视为双攻较高的一项，霍克努尔携带时首次出场会获得纯净状态
 420018,雷声魄,item,replace,-1,item=22018&group=exclude,[ffbb33]【随身物品】[-][ENDL]每次出场时使场地转变为静电，雷伊携带时怒气回复率增加20%
 420019,火神符,item,replace,-1,item=22019&group=exclude,[ffbb33]【随身物品】[-][ENDL]每次出场时使场地转变为火山，凯萨携带时体力回复率增加20%
+420020,赤炎火苗,item,replace,-1,item=22020&group=exclude,[ffbb33]【随身物品】[-][ENDL]每次出场的第一回合先制+1，赤焰兽携带时每次出场的第一回合伤害2倍
+420021,夜明珠,item,replace,-1,item=22021&group=exclude,[ffbb33]【随身物品】[-][ENDL]对手处于能力下降状态时伤害增加25%，水墨飞马携带时攻击前使对手获得浑浊1回合
 430000,商城礼券,item,replace,-1,none,伊特大乱斗途中的商店买一送二
 430001,蘑菇果实,item,replace,-1,item=23001&group=exclude,[ffbb33]【随身物品】[-][ENDL]威力低于自身体重的技能连击数+1，但会有25%概率使自身在出手前陷入昏迷1回合
 430002,伊萨晶石,item,replace,-1,item=23002&group=exclude,[ffbb33]【随身物品】[-][ENDL]每回合恢复双方1/12体力

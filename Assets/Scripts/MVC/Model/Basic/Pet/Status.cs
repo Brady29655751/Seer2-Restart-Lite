@@ -148,6 +148,7 @@ public class Status
         int idx = typeNames.IndexOf(type.ToLower());
         return type switch
         {
+            "hit"   => hp,
             "count" => Count(x => x != 0),
             "posCount" => Count(x => x > 0),
             "negCount" => Count(x => x < 0),
@@ -167,6 +168,12 @@ public class Status
 
     public virtual void Set(string type, float value)
     {
+        if (type == "hit")
+        {
+            hp = value;
+            return;
+        }
+        
         int idx = typeNames.IndexOf(type.ToLower());
         if (idx == -1)
             return;

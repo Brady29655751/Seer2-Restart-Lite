@@ -189,7 +189,7 @@ public class BattleManager : Manager<BattleManager>
         }
 
         var isNormalSkill = cursor.IsWithin(0, 4);
-        var item = isNormalSkill ? null : new Item(cursor);
+        var item = isNormalSkill ? null : new Item(cursor, (Item.Find(cursor) == null) ? 0 : 1);
         var skill = isNormalSkill ? (pet.normalSkill.Get(cursor - 1) ?? Skill.GetNoOpSkill()) : Skill.GetItemSkill(item);
         var superSkill = pet.superSkill;
         var isAnySkillOK = pet.buffController.GetBuff(61) != null;

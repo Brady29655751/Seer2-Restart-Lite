@@ -266,13 +266,8 @@ public static class Identifier {
             };
         }
 
-        if (id.TryTrimStart("powerup.", out trimId)) {
-            Status powerup = statusController.powerup;
-            return trimId switch {
-                "hit" => powerup.hp,
-                _ => powerup[trimId],
-            };
-        }
+        if (id.TryTrimStart("powerup.", out trimId))
+            return statusController.powerup[trimId];
 
         return GetNumIdentifier(id);
     }
@@ -293,9 +288,9 @@ public static class Identifier {
             return buffs.Count;
 
         if (id.StartsWith("[")) {
-            int buffIdStartIdx = id.IndexOf('[');
-            int buffIdEndIdx = id.IndexOf(']');
-            string buffIdExpr = id.Substring(buffIdStartIdx + 1, buffIdEndIdx - buffIdStartIdx - 1);
+            // int buffIdStartIdx = id.IndexOf('[');
+            // int buffIdEndIdx = id.IndexOf(']');
+            string buffIdExpr = id.TrimParentheses();
             
             id = id.TrimStart("[" + buffIdExpr + "].");
 
@@ -320,13 +315,23 @@ public static class Identifier {
                         "copy" => Buff.powerdownBuffIds.All(buffController.IsBuffIdCopied) ? 1 : 0,
                         _ => 0,
                     };
+                    
+                if (buffType == BuffType.Power)
+                    return id switch {
+                        "count" => buffs.Count(x => x.IsPower()),
+                        "own" => buffs.Exists(x => x.IsPower()) ? 1 : 0,
+                        "block" => Buff.powerupBuffIds.Concat(Buff.powerdownBuffIds).All(buffController.IsBuffIdBlocked) ? 1 : 0,
+                        "copy" => Buff.powerupBuffIds.Concat(Buff.powerdownBuffIds).All(buffController.IsBuffIdCopied) ? 1 : 0,
+                        _ => 0,
+                    };
 
-                return id switch {
+                return id switch
+                {
                     "count" => buffs.Count(x => x.IsType(buffType)),
                     "own" => buffs.Exists(x => x.IsType(buffType)) ? 1 : 0,
                     "block" => buffController.IsBuffTypeBlocked(buffType) ? 1 : 0,
-                    "copy"  => buffController.IsBuffTypeCopied(buffType) ? 1 : 0,
-                    "id"    => buffController.GetRangeBuff(x => x.IsType(buffType)).FirstOrDefault()?.id ?? 0,
+                    "copy" => buffController.IsBuffTypeCopied(buffType) ? 1 : 0,
+                    "id" => buffController.GetRangeBuff(x => x.IsType(buffType)).FirstOrDefault()?.id ?? 0,
                     _ => 0,
                 };
             }
