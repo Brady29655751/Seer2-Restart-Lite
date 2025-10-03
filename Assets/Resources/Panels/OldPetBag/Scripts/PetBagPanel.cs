@@ -30,7 +30,8 @@ public class PetBagPanel : Panel
 
     // [SerializeField] private PetSwitchController switchController;
 
-    protected override void Awake() {
+    protected override void Awake()
+    {
         base.Awake();
         InitSelectSubscriptions();
         InitOtherSubscriptions();
@@ -43,10 +44,11 @@ public class PetBagPanel : Panel
         itemController?.SetMode(mode);
         featureController?.SetMode(mode);
         StartCoroutine(PreloadPetAnimCoroutine(GetPetBag(), InitMode));
-        
-        void InitMode() 
+
+        void InitMode()
         {
-            switch (mode) {
+            switch (mode)
+            {
                 case PetBagMode.Normal:
                     SetPetBag(playerPetBag);
                     SetItemBag(playerItemBag);
@@ -61,10 +63,12 @@ public class PetBagPanel : Panel
                 default:
                     break;
             }
+            SetSkillRule(Player.instance.gameData.settingsData.rule);
         }
     }
 
-    private IEnumerator PreloadPetAnimCoroutine(Pet[] preloadPetBag, Action onFinishCallback) {
+    private IEnumerator PreloadPetAnimCoroutine(Pet[] preloadPetBag, Action onFinishCallback)
+    {
         if (ListHelper.IsNullOrEmpty(preloadPetBag))
             yield break;
 
@@ -73,7 +77,8 @@ public class PetBagPanel : Panel
         float[] progress = Enumerable.Repeat(0f, preloadPetBag.Length).ToArray();
         var loadingScreen = SceneLoader.instance.ShowLoadingScreen(-1, "正在加载精灵背包 (0/" + preloadPetBag.Length + ")");
 
-        for (int i = 0; i < preloadPetBag.Length; i++) {
+        for (int i = 0; i < preloadPetBag.Length; i++)
+        {
             int copy = i;
             var pet = preloadPetBag[copy];
             if (pet == null)
@@ -82,7 +87,8 @@ public class PetBagPanel : Panel
                 pet.ui.PreloadPetAnimAsync(() => done++, p => progress[copy] = p);
         }
 
-        while ((done < preloadPetBag.Length) && (timeout > 0)) {
+        while ((done < preloadPetBag.Length) && (timeout > 0))
+        {
             loadingScreen.ShowLoadingProgress(progress.Sum() / preloadPetBag.Length);
             loadingScreen.SetText("正在加载精灵背包 (" + done + "/" + preloadPetBag.Length + ")");
             timeout -= Time.deltaTime;
@@ -93,9 +99,10 @@ public class PetBagPanel : Panel
         SceneLoader.instance.HideLoadingScreen();
     }
 
-    private void InitSelectSubscriptions() {
+    private void InitSelectSubscriptions()
+    {
         selectController.onSelectPetEvent += demoController.SetPet;
-        
+
         if (featureController != null)
             selectController.onSelectPetEvent += featureController.SetPet;
 
@@ -110,7 +117,8 @@ public class PetBagPanel : Panel
             selectController.onSelectPetEvent += personalityController.SetPet;
     }
 
-    private void InitOtherSubscriptions() {
+    private void InitOtherSubscriptions()
+    {
         demoController.onChangeNameSuccessEvent += OnChangeNameSuccess;
         statusController.onSetEVSuccessEvent += OnSetEVSuccess;
         itemController.onItemUsedEvent += OnItemUsed;
@@ -139,7 +147,8 @@ public class PetBagPanel : Panel
         selectController.RefreshView();
     }
 
-    private void OnItemUsed(Item item, int usedNum) {
+    private void OnItemUsed(Item item, int usedNum)
+    {
         var itemCategoryIndex = itemController.GetCurrentCategoryIndex();
         var itemPage = itemController.GetCurrentPage();
 
@@ -151,66 +160,94 @@ public class PetBagPanel : Panel
         itemController.SetPage(itemPage);
     }
 
-    private void OnSetSkinSuccess() {
+    private void OnSetSkinSuccess()
+    {
         // Only change skin when petBag is player's true petBag.
         RefreshPetBag(playerPetBag);
     }
 
-    private void OnRemoveBuffSuccess(Buff buff) {
+    private void OnRemoveBuffSuccess(Buff buff)
+    {
         RefreshPetBag(petBag);
     }
 
-    private void OnSelectTeamSuccess(Pet[] bag) {
-        void OnSuccess(Pet[] newBag) {
+    private void OnSelectTeamSuccess(Pet[] bag)
+    {
+        void OnSuccess(Pet[] newBag)
+        {
             RefreshPetBag(newBag);
             Hintbox.OpenHintboxWithContent("切换队伍成功", 16);
         }
-        
-        switch (mode) {
+
+        switch (mode)
+        {
             default:
                 break;
             case PetBagMode.PVP:
                 OnSuccess(bag);
                 break;
-        }   
+        }
     }
 
-    private void OnSwitchPetSuccess(Pet pet) {
+    private void OnSwitchPetSuccess(Pet pet)
+    {
         int cursor = selectController.GetCursor().FirstOrDefault();
         var newBag = petBag.Select((x, i) => (i == cursor) ? pet : x).ToArray();
         RefreshPetBag(newBag);
     }
 
-    private void OnSetPersonalitySuccess(Personality personality) {
+    private void OnSetPersonalitySuccess(Personality personality)
+    {
         RefreshPetBag(petBag);
     }
 
-    private void RefreshPetBag(Pet[] bag) {
+    private void RefreshPetBag(Pet[] bag)
+    {
         int cursor = selectController.GetCursor().FirstOrDefault();
         SetPetBag(bag);
         selectController.Select(cursor);
     }
 
-    public void RefreshPetBag() {
+    public void RefreshPetBag()
+    {
         RefreshPetBag(GetPetBag());
     }
 
-    public Pet[] GetPetBag() {
-        return mode switch {
-            PetBagMode.Normal    => playerPetBag,
+    public Pet[] GetPetBag()
+    {
+        return mode switch
+        {
+            PetBagMode.Normal => playerPetBag,
             PetBagMode.YiTeRogue => YiTeRogueData.instance.petBag,
             _ => petBag,
         };
     }
 
-    public void SetPetBag(Pet[] bag) {
+    public void SetPetBag(Pet[] bag)
+    {
         List<Pet> storage = bag.ToList();
         selectController.SetStorage(storage);
         selectController.Select(0);
     }
 
-    public void SetItemBag(List<Item> bag) {
+    public void SetItemBag(List<Item> bag)
+    {
         itemController.SetItemBag(bag);
+    }
+
+    public void SetSkillRule(BattleRule rule)
+    {
+        skillController.Rule = rule;
+        swapSkillController.SetRule(rule);
+        Player.instance.gameData.settingsData.ruleId = (int)rule;
+        SaveSystem.SaveData();
+    }
+
+    public void SwitchSkillRule()
+    {
+        var rule = skillController.Rule;
+        var nextRule = (BattleRule)((int)(rule + 1) % Enum.GetNames(typeof(BattleRule)).Length);
+        SetSkillRule(nextRule);
     }
 }
 

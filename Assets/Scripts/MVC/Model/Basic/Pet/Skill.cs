@@ -21,7 +21,15 @@ public class Skill
     }
     public SkillType type;
     public int power;
-    public int anger;
+
+    public string rawCostString;
+    public int anger, pp, maxPP;
+    public int PP
+    {
+        get => Mathf.Clamp(pp, 0, maxPP);
+        set => pp = Mathf.Clamp(value, 0, maxPP);
+    }
+
     public int accuracy;
     public string rawDescription;
     public string description => GetDescription(rawDescription);
@@ -80,7 +88,9 @@ public class Skill
         element = (Element)elementId;
         type = (SkillType)int.Parse(_slicedData[3]);
         power = int.Parse(_slicedData[4]);
-        anger = int.Parse(_slicedData[5]);
+
+        InitCost(_slicedData[5]);
+
         accuracy = int.Parse(_slicedData[6]);
         options.ParseOptions(_slicedData[7]);
 
@@ -91,14 +101,16 @@ public class Skill
     }
 
     public Skill(int id, string name, Element element, SkillType type,
-        int power, int anger, int accuracy, string options, string rawDescription)
+        int power, string cost, int accuracy, string options, string rawDescription)
     {
         this.id = id;
         this.name = name.ReplaceSpecialWhiteSpaceCharacters(string.Empty);
         this.element = element;
         this.type = type;
         this.power = power;
-        this.anger = anger;
+
+        InitCost(cost);
+
         this.accuracy = accuracy;
         this.options.ParseOptions(options.ReplaceSpecialWhiteSpaceCharacters(string.Empty));
 
@@ -106,6 +118,16 @@ public class Skill
         InitOptionsProperty();
 
         this.rawDescription = rawDescription.ReplaceSpecialWhiteSpaceCharacters(string.Empty);
+    }
+
+    private void InitCost(string cost)
+    {
+        this.rawCostString = cost;
+
+        var list = cost.ToIntList('/');
+        anger = list[0];
+        maxPP = (list.Get(1, 0) > 0) ? list[1] : Mathf.Max(5, 40 - anger);
+        PP = maxPP;
     }
 
     private void InitOptionsProperty()
@@ -120,7 +142,7 @@ public class Skill
         ignorePowerdown = bool.Parse(options.Get("ignore_powerdown", "false"));
     }
 
-    public Skill(Skill rhs)
+    public Skill(Skill rhs, bool copyPP = true)
     {
         id = rhs.id;
         name = rhs.name;
@@ -129,6 +151,8 @@ public class Skill
         type = rhs.type;
         power = rhs.power;
         anger = rhs.anger;
+        maxPP = rhs.maxPP;
+        PP = copyPP ? rhs.PP : maxPP;
         accuracy = rhs.accuracy;
         options = rhs.options.ToDictionary(entry => entry.Key, entry => entry.Value);
         rawDescription = rhs.rawDescription;
@@ -481,6 +505,8 @@ public class Skill
             "type" => (float)type,
             "power" => power,
             "anger" => anger,
+            "pp" => PP,
+            "maxPP" => maxPP,
             "accuracy" => accuracy,
             "priority" => priority,
             "critical" => critical,
@@ -546,6 +572,12 @@ public class Skill
                 return;
             case "anger":
                 anger = Mathf.Max((int)value, 0);
+                return;
+            case "pp":
+                PP = (int)value;
+                return;
+            case "maxPP":
+                maxPP = Mathf.Max((int)value, 0);
                 return;
             case "accuracy":
                 accuracy = (int)value;

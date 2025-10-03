@@ -5,6 +5,17 @@ using UnityEngine;
 
 public class PetBackupSkillController : Module
 {
+    [SerializeField] private BattleRule rule = BattleRule.Anger;
+    public BattleRule Rule
+    {
+        get => rule;
+        set
+        {
+            rule = value;
+            SetPet(backupSkillModel.currentPet);
+        }
+    }
+
     [SerializeField] private PetBackupSkillModel backupSkillModel;
     [SerializeField] private PetBackupSkillView backupSkillView;
     [SerializeField] private PageView backupPageView;
@@ -19,13 +30,13 @@ public class PetBackupSkillController : Module
 
     public void SetPet(Pet pet) {
         backupSkillModel.SetPet(pet);
-        backupSkillView.SetPet(backupSkillModel.normalSkillInfos, backupSkillModel.superSkillInfo);
+        backupSkillView.SetPet(backupSkillModel.normalSkillInfos, backupSkillModel.superSkillInfo, rule);
         OnBackupSkillSetPage();
     }
 
     public void Refresh() {
         backupSkillModel.SetPet(backupSkillModel.currentPet, backupSkillModel.page, true);
-        backupSkillView.SetPet(backupSkillModel.normalSkillInfos, backupSkillModel.superSkillInfo);
+        backupSkillView.SetPet(backupSkillModel.normalSkillInfos, backupSkillModel.superSkillInfo, rule);
         OnBackupSkillSetPage();
     }
 
@@ -70,7 +81,7 @@ public class PetBackupSkillController : Module
             return null;
 
         backupSkillModel.SwapPetNormalSkill(currentSkill);
-        backupSkillView.SetNormalSkills(backupSkillModel.normalSkillInfos);
+        backupSkillView.SetNormalSkills(backupSkillModel.normalSkillInfos, rule);
         return backupSkill;
     }
 
@@ -83,7 +94,7 @@ public class PetBackupSkillController : Module
             return null;
         
         backupSkillModel.SwapPetSuperSkill(currentSkill);
-        backupSkillView.SetSuperSkill(backupSkillModel.superSkillInfo);
+        backupSkillView.SetSuperSkill(backupSkillModel.superSkillInfo, rule);
         return backupSkill;
     }
 
@@ -98,7 +109,7 @@ public class PetBackupSkillController : Module
 
     public void OnBackupSkillPrevPage() {
         backupSkillModel.PrevPage();
-        backupSkillView.SetNormalSkills(backupSkillModel.normalSkillInfos);
+        backupSkillView.SetNormalSkills(backupSkillModel.normalSkillInfos, rule);
         if (backupSkillModel.isNormalSkillChosen) {
             backupSkillView.SelectNormalSkill(backupSkillModel.cursor[0]);
         }
@@ -107,7 +118,7 @@ public class PetBackupSkillController : Module
 
     public void OnBackupSkillNextPage() {
         backupSkillModel.NextPage();
-        backupSkillView.SetNormalSkills(backupSkillModel.normalSkillInfos);
+        backupSkillView.SetNormalSkills(backupSkillModel.normalSkillInfos, rule);
         if (backupSkillModel.isNormalSkillChosen) {
             backupSkillView.SelectNormalSkill(backupSkillModel.cursor[0]);
         }

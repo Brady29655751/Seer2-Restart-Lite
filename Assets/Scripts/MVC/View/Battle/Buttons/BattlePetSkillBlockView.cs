@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class BattlePetSkillBlockView : Module
 {
     private Skill currentSkill;
-    private bool isNull => (currentSkill == null);
+    private bool isNull => currentSkill == null;
 
     [SerializeField] private IButton skillButton;
     [SerializeField] private Image elementImage;
@@ -15,7 +15,7 @@ public class BattlePetSkillBlockView : Module
     [SerializeField] private Text powerText;
     [SerializeField] private Text angerText;
 
-    public void SetSkill(Skill skill) {
+    public void SetSkill(Skill skill, BattleRule rule = BattleRule.Anger) {
         currentSkill = skill;
         if (isNull) {
             gameObject.SetActive(false);
@@ -25,7 +25,7 @@ public class BattlePetSkillBlockView : Module
         SetName();
         SetElement();
         SetType();
-        SetPowerAndAnger();
+        SetPowerAndAnger(rule);
     }
 
     private void SetName() {
@@ -43,9 +43,19 @@ public class BattlePetSkillBlockView : Module
         typeText.text = isNull ? string.Empty : currentSkill.type.ToString();
     }
 
-    private void SetPowerAndAnger() {
-        powerText.text = isNull ? string.Empty : ("威力: " + currentSkill.power.ToString());
-        angerText.text = isNull ? string.Empty : ("怒气: " + currentSkill.anger.ToString());
+    private void SetPowerAndAnger(BattleRule rule = BattleRule.Anger) {
+        if (isNull) {
+            powerText.text = string.Empty;
+            angerText.text = string.Empty;
+            return;
+        }
+
+        powerText.text = $"威力: {currentSkill.power}";
+        angerText.text = rule switch {
+            BattleRule.Anger    => $"怒气: {currentSkill.anger}",
+            BattleRule.PP       => $"PP: {currentSkill.pp}/{currentSkill.maxPP}",
+            _                   => string.Empty,
+        };
     }
 
     public void SetInteractable(bool interactable) {

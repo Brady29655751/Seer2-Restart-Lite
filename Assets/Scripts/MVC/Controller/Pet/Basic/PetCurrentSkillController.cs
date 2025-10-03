@@ -5,6 +5,17 @@ using UnityEngine;
 
 public class PetCurrentSkillController : Module
 {
+    [SerializeField] private BattleRule rule = BattleRule.Anger;
+    public BattleRule Rule
+    {
+        get => rule;
+        set
+        {
+            rule = value;
+            SetPet(currentSkillModel.currentPet);
+        }
+    }
+
     [SerializeField] private PetCurrentSkillModel currentSkillModel;
     [SerializeField] private PetCurrentSkillView currentSkillView;
     [SerializeField] private PetDemoController demoController;
@@ -14,7 +25,7 @@ public class PetCurrentSkillController : Module
 
     public void SetPet(Pet pet) {
         currentSkillModel.SetPet(pet);
-        currentSkillView.SetPet(pet);
+        currentSkillView.SetPet(pet, rule);
     }
 
     public void OpenSecretSkillPanel() {
@@ -75,7 +86,7 @@ public class PetCurrentSkillController : Module
             return null;
         
         currentSkillModel.SwapPetNormalSkill(backupSkill);
-        currentSkillView.SetNormalSkills(currentSkillModel.normalSkillInfos);
+        currentSkillView.SetNormalSkills(currentSkillModel.normalSkillInfos, rule);
         return currentSkill;
     }
 
@@ -88,7 +99,7 @@ public class PetCurrentSkillController : Module
             return null;
 
         currentSkillModel.SwapPetSuperSkill(backupSkill);
-        currentSkillView.SetSuperSkill(currentSkillModel.superSkillInfo);
+        currentSkillView.SetSuperSkill(currentSkillModel.superSkillInfo, rule);
         return currentSkill;
     }
 }

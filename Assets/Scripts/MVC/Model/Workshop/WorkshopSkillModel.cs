@@ -18,7 +18,7 @@ public class WorkshopSkillModel : Module
     public Element element => (Element)(elementDropdown.value);
     public SkillType type => (SkillType)((typeDropdown.value == 4) ? 100 : typeDropdown.value);
     public int power => int.Parse(powerInputField.inputString);
-    public int anger => int.Parse(angerInputField.inputString);
+    public string cost => angerInputField.inputString;
     public int accuracy => int.Parse(accuracyInputField.inputString);
     public int priority => string.IsNullOrEmpty(priorityInputField.inputString) ? 0 : int.Parse(priorityInputField.inputString);
     
@@ -37,7 +37,7 @@ public class WorkshopSkillModel : Module
     }
 
     public Skill GetSkill() {
-        var skill = new Skill(id, skillName, element, type, power, anger, accuracy, optionsAll, description);
+        var skill = new Skill(id, skillName, element, type, power, cost, accuracy, optionsAll, description);
         skill.SetEffects(effectList.Select(x => new Effect(x)).ToList());
         return skill;
     }
@@ -50,7 +50,7 @@ public class WorkshopSkillModel : Module
         typeDropdown.value = Mathf.Min((int)skill.type, 4);
 
         powerInputField.SetInputString(skill.power.ToString());
-        angerInputField.SetInputString(skill.anger.ToString());
+        angerInputField.SetInputString(skill.rawCostString);
         accuracyInputField.SetInputString(skill.accuracy.ToString());
         priorityInputField.SetInputString(skill.priority.ToString());
 
@@ -185,7 +185,14 @@ public class WorkshopSkillModel : Module
             return false;
         }
 
-        if ((power < 0) || (anger < 0) || (accuracy < 0)) {
+        var costList = cost.ToIntList('/');
+        if (ListHelper.IsNullOrEmpty(costList))
+        {
+            error = "怒气格式错误！";
+            return false;
+        }
+
+        if ((power < 0) || costList.Exists(x => x < 0) || (accuracy < 0)) {
             error = "威力、怒气、命中不能为负数！";
             return false;
         }

@@ -19,14 +19,14 @@ public class PetSkillBlockView : Module
     [SerializeField] private Text powerText;
     [SerializeField] private Text angerText;
 
-    public void SetSkill(LearnSkillInfo skillInfo) {
+    public void SetSkill(LearnSkillInfo skillInfo, BattleRule rule = BattleRule.Anger) {
         currentSkill = skillInfo?.skill;
         currentSecretType = skillInfo?.secretType ?? SecretType.GreaterThanLevel;
         skillButton.SetInteractable(!isNull, false);
         SetName();
         SetElement();
         SetType();
-        SetPowerAndAnger();
+        SetPowerAndAnger(rule);
         SetSecret(currentSecretType);
         SetChosen(false);
     }
@@ -50,9 +50,19 @@ public class PetSkillBlockView : Module
         typeText.text = isNull ? string.Empty : currentSkill.type.ToString();
     }
 
-    private void SetPowerAndAnger() {
-        powerText.text = isNull ? string.Empty : ("威力: " + currentSkill.power.ToString());
-        angerText.text = isNull ? string.Empty : ("怒气: " + currentSkill.anger.ToString());
+    private void SetPowerAndAnger(BattleRule rule = BattleRule.Anger) {
+        if (isNull) {
+            powerText.text = string.Empty;
+            angerText.text = string.Empty;
+            return;
+        } 
+        powerText.text = $"威力: {currentSkill.power}";
+        angerText.text = rule switch
+        {
+            BattleRule.Anger => $"怒气: {currentSkill.anger}",
+            BattleRule.PP => $"次数: {currentSkill.maxPP}",
+            _ => string.Empty,
+        };
     }
 
     private void SetSecret(SecretType secretType) {

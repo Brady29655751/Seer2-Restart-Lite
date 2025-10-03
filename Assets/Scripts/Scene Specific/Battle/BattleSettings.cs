@@ -30,6 +30,11 @@ public class BattleSettings
         get => (BattleMode)modeId;
         set => modeId = (int)value;
     }
+    [XmlElement("rule")] public int ruleId = 0;
+    [XmlIgnore] public BattleRule rule {
+        get => (BattleRule)ruleId;
+        set => ruleId = (int)value;
+    }
     [XmlElement("weather")] public int weather = 0;
     [XmlElement("initBuff")] public string initBuffExpr;
     [XmlIgnore] public List<KeyValuePair<string, Buff>> initBuffs {
@@ -65,6 +70,7 @@ public class BattleSettings
         isItemOK = rhs.isItemOK;
         
         mode = rhs.mode;
+        rule = rhs.rule;
         weather = rhs.weather;
         petCount = rhs.petCount;
         parallelCount = rhs.parallelCount;
@@ -76,6 +82,7 @@ public class BattleSettings
     public float GetSettingsIdentifier(string id) {
         return id switch {
             "mode" => (mode == BattleMode.Record) ? (int)BattleMode.PVP : modeId,
+            "rule" => ruleId,
             "petCount" => petCount,
             "parallelCount" => parallelCount,
             "starLimit" => starLimit,
@@ -109,7 +116,8 @@ public class BattleSettings
     }
 }
 
-public enum BattleMode {
+public enum BattleMode
+{
     Record = -1,
     Normal = 0,
     SelfSimulation = 1,
@@ -117,4 +125,10 @@ public enum BattleMode {
     SPT = 3,
     Special = 4,
     YiTeRogue = 5,
+}
+
+public enum BattleRule
+{
+    Anger = 0,
+    PP = 1,
 }

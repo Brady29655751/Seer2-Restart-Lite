@@ -133,8 +133,9 @@ public class BattlePhase
             return false;
         }
 
-        if ((atkUnit.pet.isDead) || (!atkUnit.pet.isMovable) || ((atkUnit.skill.anger > atkUnit.pet.anger) && (atkUnit.pet.buffController.GetBuff(61) == null))
-            || (atkUnit.skill.chain <= 0)) {
+        if ((atkUnit.pet.isDead) || (!atkUnit.pet.isMovable) || (!atkUnit.IsSkillCostEnough(battle.settings.rule))
+            || (atkUnit.skill.chain <= 0))
+        {
             atkUnit.SetSkill(Skill.GetNoOpSkill());
             atkUnit.isDone = true;
             SetUIState(null);

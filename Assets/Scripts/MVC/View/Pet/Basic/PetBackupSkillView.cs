@@ -13,12 +13,12 @@ public class PetBackupSkillView : Module
     [SerializeField] private PetSkillBlockView superSkillBlockView;
     [SerializeField] private PetSkillBlockView[] normalSkillBlockViews = new PetSkillBlockView[4];
 
-    public void SetPet(LearnSkillInfo[] normalSkillInfos, LearnSkillInfo superSkillInfo) {
+    public void SetPet(LearnSkillInfo[] normalSkillInfos, LearnSkillInfo superSkillInfo, BattleRule rule = BattleRule.Anger) {
         // if (pet == null)
         //     return;
 
-        SetNormalSkills(normalSkillInfos);
-        SetSuperSkill(superSkillInfo);
+        SetNormalSkills(normalSkillInfos, rule);
+        SetSuperSkill(superSkillInfo, rule);
         SetActive(false);
     }
 
@@ -30,16 +30,16 @@ public class PetBackupSkillView : Module
         background?.gameObject.SetActive(active);
     }
 
-    public void SetNormalSkills(LearnSkillInfo[] normalSkillInfos) {
+    public void SetNormalSkills(LearnSkillInfo[] normalSkillInfos, BattleRule rule = BattleRule.Anger) {
         Array.Resize(ref normalSkillInfos, 4);
 
         for (int i = 0; i < 4; i++) {
-            normalSkillBlockViews[i].SetSkill(normalSkillInfos[i]);
+            normalSkillBlockViews[i].SetSkill(normalSkillInfos[i], rule);
         }
     }
 
-    public void SetSuperSkill(LearnSkillInfo superSkillInfo) {
-        superSkillBlockView.SetSkill(superSkillInfo);
+    public void SetSuperSkill(LearnSkillInfo superSkillInfo, BattleRule rule = BattleRule.Anger) {
+        superSkillBlockView.SetSkill(superSkillInfo, rule);
     }
 
     public void SelectNormalSkill(int index) {

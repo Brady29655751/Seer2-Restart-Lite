@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Xml.Serialization;
 using UnityEngine;
 
 public class SettingsData
@@ -10,6 +11,8 @@ public class SettingsData
     public float battleAnimSpeed;
     public bool shakeWhenBigDamage, flashWhenBigDamage;
     public int initMapId = -70;
+    public int ruleId;
+    [XmlIgnore] public BattleRule rule => (BattleRule)ruleId;
 
     public SettingsData()
     {
@@ -20,5 +23,6 @@ public class SettingsData
         shakeWhenBigDamage = true;
         flashWhenBigDamage = true;
         initMapId = -70;
+        ruleId = 0;
     }
 }

@@ -181,10 +181,13 @@ public class Battle
         Unit unit = (isMe ? myUnit : opUnit);
         Unit rhsUnit = (isMe ? opUnit : myUnit);
 
-        if (settings.parallelCount > 1) {
+        if (settings.parallelCount > 1)
+        {
             var sourceIndex = int.Parse(skill.options.Get("parallel_source_index", "0"));
             unit.parallelSkillSystems[sourceIndex].skill = skill;
-        } else
+            unit.petSystem.petBag[sourceIndex].skillController.TakeSkillCost(skill, settings.rule);
+        }
+        else
             unit.SetSkill(skill);
 
         if (isMe) {

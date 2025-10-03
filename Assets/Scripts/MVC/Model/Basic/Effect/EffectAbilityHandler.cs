@@ -225,6 +225,7 @@ public static class EffectAbilityHandler
     public static bool Rage(this Effect effect, BattleState state)
     {
         string who = effect.abilityOptionDict.Get("who", "me");
+        string type = effect.abilityOptionDict.Get("type", "anger");
         string mult = effect.abilityOptionDict.Get("mult", "0/1");
         string add = effect.abilityOptionDict.Get("add", "0");
         string set = effect.abilityOptionDict.Get("set", "none");
@@ -236,19 +237,31 @@ public static class EffectAbilityHandler
         Unit rhsUnit = state.GetRhsUnitById(lhsUnit.id);
 
         var statusController = lhsUnit.pet.statusController;
-        statusController.minAnger = (min == "none") ? statusController.minAnger : (int)Parser.ParseEffectOperation(min, effect, lhsUnit, rhsUnit);
-        statusController.maxAnger = (max == "none") ? statusController.maxAnger : (int)Parser.ParseEffectOperation(max, effect, lhsUnit, rhsUnit);
+        var skillController = lhsUnit.pet.skillController;
 
-        if (set == "none")
+        switch (type)
         {
-            float anger = Parser.ParseEffectOperation(add, effect, lhsUnit, rhsUnit);
-            int angerAdd = (int)(anger * ((anger > 0) ? (lhsUnit.pet.battleStatus.angrec / 100f) : 1));
-            lhsUnit.pet.anger += angerAdd;
-        }
-        else
-        {
-            float anger = Parser.ParseEffectOperation(set, effect, lhsUnit, rhsUnit);
-            lhsUnit.pet.anger = (int)anger;
+            case "anger":
+                statusController.minAnger = (min == "none") ? statusController.minAnger : (int)Parser.ParseEffectOperation(min, effect, lhsUnit, rhsUnit);
+                statusController.maxAnger = (max == "none") ? statusController.maxAnger : (int)Parser.ParseEffectOperation(max, effect, lhsUnit, rhsUnit);
+
+                if (set == "none")
+                {
+                    float anger = Parser.ParseEffectOperation(add, effect, lhsUnit, rhsUnit);
+                    int angerAdd = (int)(anger * ((anger > 0) ? (lhsUnit.pet.battleStatus.angrec / 100f) : 1));
+                    lhsUnit.pet.anger += angerAdd;
+                }
+                else
+                {
+                    float anger = Parser.ParseEffectOperation(set, effect, lhsUnit, rhsUnit);
+                    lhsUnit.pet.anger = (int)anger;
+                }
+                break;
+
+            case "pp":
+                float pp = Parser.ParseEffectOperation(add, effect, lhsUnit, rhsUnit);
+                skillController.allSkills.ForEach(x => x.PP += (int)pp);
+                break;
         }
         return true;
     }

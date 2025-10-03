@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using ExitGames.Client.Photon.StructWrapping;
 
 public class BattlePetSkillView : BattleBaseView
 {
@@ -32,12 +33,14 @@ public class BattlePetSkillView : BattleBaseView
     {
         var anger = -1;
 
-        if (interactable && (!pet.isDead))
+        interactable &= (pet != null) && (!pet.isDead);
+
+        if (interactable)
             anger = (pet.buffController.GetBuff(61) != null) ? int.MaxValue : pet.anger;
 
-        SetNormalSkillInteractable(anger);
-        SetSuperSkillInteractable(anger);
-        SetNoOpSkillInteractable((anger == -1) ? int.MaxValue : anger);
+        SetNormalSkillInteractable(interactable, anger);
+        SetSuperSkillInteractable(interactable, anger);
+        SetNoOpSkillInteractable(interactable, (anger == -1) ? int.MaxValue : anger);
         SetEvolveSkillInteractable(interactable);
         SetTokenSkillInteractable(interactable && (petSystem.token != null));
 
@@ -49,27 +52,42 @@ public class BattlePetSkillView : BattleBaseView
         var normalSkills = pet.skillController.normalSkills;
         for (int i = 0; i < skillBlockViews.Length; i++)
         {
-            skillBlockViews[i].SetSkill((i < normalSkills.Count) ? normalSkills[i] : null);
+            skillBlockViews[i].SetSkill((i < normalSkills.Count) ? normalSkills[i] : null, battle.settings.rule);
         }
     }
 
-    private void SetNormalSkillInteractable(int petAnger)
+    private void SetNormalSkillInteractable(bool interactable, int petAnger)
     {
         var normalSkills = pet.skillController.normalSkills;
         for (int i = 0; i < normalSkills.Count; i++)
         {
-            bool interactable = (normalSkills[i] == null) ? false : (petAnger >= normalSkills[i].anger);
-            skillBlockViews[i].SetInteractable(interactable);
+            bool usable;
+            if (normalSkills[i] == null)
+                usable = false;
+            else
+                usable = battle.settings.rule switch
+                {
+                    BattleRule.PP => normalSkills[i].PP > 0,
+                    BattleRule.Anger => petAnger >= normalSkills[i].anger,
+                    _ => true,
+                };
+
+            skillBlockViews[i].SetInteractable(interactable && usable);
         }
     }
 
-    private void SetSuperSkillInteractable(int petAnger)
+    private void SetSuperSkillInteractable(bool interactable, int petAnger)
     {
         var superSkill = pet.skillController.superSkill;
-        bool interactable = (superSkill != null) && (petAnger >= superSkill.anger);
-        superSkillClickable = interactable;
+        bool usable = (superSkill != null) && battle.settings.rule switch
+        {
+            BattleRule.Anger => petAnger >= superSkill.anger,
+            BattleRule.PP => superSkill.PP > 0,
+            _ => true,
+        };
+        superSkillClickable = interactable && usable;
         superSkillButton.SetInteractable(true);
-        superSkillButtonBackground[0].SetMaterial(interactable ? shiningMaterial : null);
+        superSkillButtonBackground[0].SetMaterial((interactable && usable) ? shiningMaterial : null);
         // superSkillButtonBackground[1].gameObject.SetActive(interactable);
         // superSkillButtonBackground[2].gameObject.SetActive(interactable);
     }
@@ -169,22 +187,47 @@ public class BattlePetSkillView : BattleBaseView
     public void ShowSuperSkillInfo()
     {
         var superSkill = pet?.skillController?.superSkill;
+        var description = superSkill?.description;
 
-        float boxSizeY = Mathf.Max(150, superSkill?.description.GetPreferredSize(12, 14).y ?? 0);
-        float boxSizeYMedium = Mathf.Max(150, superSkill?.description.GetPreferredSize(15, 14).y ?? 0);
-        float boxSizeYLarge = Mathf.Max(150, superSkill?.description.GetPreferredSize(24, 14).y ?? 0);
+        if (description != null)
+        {
+            var addDescription = $"<color=#ff3300>【威力 {superSkill.power}】</color>\n";
+            if (battle.settings.rule == BattleRule.PP)
+                addDescription += battle.settings.rule switch
+                {
+                    BattleRule.Anger => $"<color=#ffbb33>【怒气 {superSkill.anger}】</color>\n",
+                    BattleRule.PP => $"<color=#ffbb33>【次数 {superSkill.PP} / {superSkill.maxPP}】</color>\n",
+                    _ => string.Empty
+                };
+                
+            description = addDescription + description;
+        }
+            
+        float boxSizeY = Mathf.Max(150, description?.GetPreferredSize(12, 14).y ?? 0);
+        float boxSizeYMedium = Mathf.Max(150, description?.GetPreferredSize(15, 14).y ?? 0);
+        float boxSizeYLarge = Mathf.Max(150, description?.GetPreferredSize(24, 14).y ?? 0);
         var boxSize = (boxSizeY > 250) ? ((boxSizeYMedium > 300) ? new Vector2(300, boxSizeYLarge) : new Vector2(200, boxSizeYMedium)) : new Vector2(170, boxSizeY);
         descriptionBox.SetBoxSize(boxSize);
-        descriptionBox.SetText(superSkill?.description ?? "尚未习得必杀技");
+        descriptionBox.SetText(description ?? "尚未习得必杀技");
         descriptionBox.SetBoxPosition(new Vector2(5, 115));
     }
 
-    public void SetNoOpSkillInteractable(int petAnger)
+    public void SetNoOpSkillInteractable(bool interactable, int petAnger)
     {
-        bool isNormalSkillUsable = pet.skillController.normalSkills.Where(x => x != null).Any(x => petAnger >= x.anger);
-        bool isSuperSkillUsable = (pet.skillController.superSkill != null) && (petAnger >= pet.skillController.superSkill.anger);
+        bool isNormalSkillUsable = battle.settings.rule switch
+        {
+            BattleRule.Anger => pet.skillController.normalSkills.Where(x => x != null).Any(x => petAnger >= x.anger),
+            BattleRule.PP => pet.skillController.normalSkills.Where(x => x != null).Any(x => x.PP > 0),
+            _ => true,
+        };
+        bool isSuperSkillUsable = (pet.skillController.superSkill != null) && battle.settings.rule switch
+        {
+            BattleRule.Anger => petAnger >= pet.skillController.superSkill.anger,
+            BattleRule.PP => pet.skillController.superSkill.PP > 0,
+            _ => true,
+        };
         bool isAnySkillUsable = isNormalSkillUsable || isSuperSkillUsable;
-        noOpSkillButton.SetInteractable(!isAnySkillUsable);
+        noOpSkillButton.SetInteractable(interactable && (!isAnySkillUsable));
     }
 
     public void SelectNoOpSkill()

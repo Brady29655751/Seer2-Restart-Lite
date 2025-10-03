@@ -32,7 +32,15 @@ public class PetSwapSkillController : Module
         specialSkillController.onSelectSuperSkillEvent += OnSelectSpecialSuperSkill;
     }
 
-    public void SetPet(Pet pet) {
+    public void SetRule(BattleRule rule)
+    {
+        currentSkillController.Rule = rule;
+        backupSkillController.Rule = rule;
+        specialSkillController.Rule = rule;
+    }
+
+    public void SetPet(Pet pet)
+    {
         currentSkillController.SetPet(pet);
         backupSkillController.SetPet(pet);
         specialSkillController.SetPet(pet);

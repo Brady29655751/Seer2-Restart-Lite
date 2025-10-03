@@ -109,20 +109,33 @@ public class Unit
     public void SetSkill(Skill _skill)
     {
         skillSystem.skill = (_skill == null) ? null : new Skill(_skill);
+        pet.skillController.TakeSkillCost(skill, Player.instance.currentBattle.settings.rule);
     }
 
-    public bool AddBuff(Buff newBuff) 
+    public bool IsSkillCostEnough(BattleRule rule)
+    {
+        return rule switch
+        {
+            BattleRule.Anger => (skill.anger <= pet.anger) || (pet.buffController.GetBuff(61) != null),
+            BattleRule.PP => true,
+            _ => true,
+        };
+    }
+
+    public bool AddBuff(Buff newBuff)
     {
         if (newBuff == null)
             return false;
 
         var oldBuff = unitBuffs.Find(x => x.id == newBuff.id);
-        if (oldBuff == null) {
+        if (oldBuff == null)
+        {
             unitBuffs.Add(newBuff);
             return true;
         }
 
-        switch (newBuff.info.copyHandleType) {
+        switch (newBuff.info.copyHandleType)
+        {
             default:
             case CopyHandleType.New:
                 unitBuffs.Add(newBuff);
@@ -132,27 +145,31 @@ public class Unit
             case CopyHandleType.Replace:
                 int oldBuffTurn = (oldBuff.turn == -1) ? int.MaxValue : oldBuff.turn;
                 int newBuffTurn = (newBuff.turn == -1) ? int.MaxValue : newBuff.turn;
-                if (oldBuffTurn <= newBuffTurn) {
+                if (oldBuffTurn <= newBuffTurn)
+                {
                     unitBuffs.Remove(oldBuff);
                     unitBuffs.Add(newBuff);
                     return true;
                 }
                 return false;
             case CopyHandleType.Stack:
-                if (oldBuff.value < oldBuff.info.maxValue) {
+                if (oldBuff.value < oldBuff.info.maxValue)
+                {
                     oldBuff.value += newBuff.value;
                     return true;
                 }
                 return false;
             case CopyHandleType.Max:
-                if (newBuff.value > oldBuff.value) {
+                if (newBuff.value > oldBuff.value)
+                {
                     unitBuffs.Remove(oldBuff);
                     unitBuffs.Add(newBuff);
                     return true;
                 }
                 return false;
             case CopyHandleType.Min:
-                if (newBuff.value < oldBuff.value) {
+                if (newBuff.value < oldBuff.value)
+                {
                     unitBuffs.Remove(oldBuff);
                     unitBuffs.Add(newBuff);
                     return true;
