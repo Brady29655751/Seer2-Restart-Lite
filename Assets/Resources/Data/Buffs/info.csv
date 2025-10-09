@@ -41,12 +41,12 @@ id,name,type,copyType,turn,options,description
 30,暴伤抵抗,mark,replace,-1,none,免疫暴击伤害
 31,护盾,shield,max,-1,auto_remove=true,当前可以吸收[value]点伤害
 32,限伤,shield,min,-1,none,受到的伤害不超过[value]
-33,吸收,chance,replace,-1,res=32&keep=false,吸收对手下一次的攻击伤害
-34,限伤,chance,min,-1,res=32,下一次受到的伤害不超过[value]
-35,必中,chance,replace,-1,res=17&keep=false,下一次技能必中（包括属性技能）
-36,闪避,chance,replace,-1,res=18&keep=false,闪避下一次技能（包括属性技能）
-37,必中,chance,replace,-1,res=17&keep=false,下一次攻击必中（不包括属性技能）
-38,闪避,chance,replace,-1,res=18&keep=false,闪避下一次攻击（不包括属性技能）
+33,吸收,chance,replace,-1,res=32&keep=false,吸收对手下次的攻击伤害
+34,限伤,chance,min,-1,res=32,下次受到的伤害不超过[value]
+35,必中,chance,replace,-1,res=17&keep=false,下次技能必中（包括属性技能）
+36,闪避,chance,replace,-1,res=18&keep=false,闪避下次技能（包括属性技能）
+37,必中,chance,replace,-1,res=17&keep=false,下次攻击必中（不包括属性技能）
+38,闪避,chance,replace,-1,res=18&keep=false,闪避下次攻击（不包括属性技能）
 39,闪避,turn,replace,1,res=18&keep=false,闪避对手的技能（包括属性技能）
 40,闪避,turn,replace,1,res=18&keep=false,闪避对手的攻击（不包括属性技能）
 41,暴击率提升,mark,replace,-1,res=27,暴击率增加15%
@@ -57,12 +57,12 @@ id,name,type,copyType,turn,options,description
 46,浑浊,mark,replace,-1,none,受到的能力弱化效果翻倍
 47,反射,mark,replace,-1,none,反射一半攻击伤害，最高不超过自身最大体力
 48,反射,mark,replace,-1,res=47,反射全部攻击伤害，最高不超过自身最大体力的2倍
-49,反射,chance,replace,-1,res=47,反射下一次攻击的一半伤害，最高不超过自身最大体力
-50,反射,chance,replace,-1,res=47,反射下一次攻击的全部伤害，最高不超过自身最大体力的2倍
-51,反射物攻,chance,replace,-1,none,反射下一次物理攻击的一半伤害，最高不超过自身最大体力
-52,反射物攻,chance,replace,-1,res=51,反射下一次物理攻击的全部伤害，最高不超过自身最大体力的2倍
-53,反射特攻,chance,replace,-1,none,反射下一次特殊攻击的一半伤害，最高不超过自身最大体力
-54,反射特攻,chance,replace,-1,res=53,反射下一次特殊攻击的一半伤害，最高不超过自身最大体力的2倍
+49,反射,chance,replace,-1,res=47,反射下次攻击的一半伤害，最高不超过自身最大体力
+50,反射,chance,replace,-1,res=47,反射下次攻击的全部伤害，最高不超过自身最大体力的2倍
+51,反射物攻,chance,replace,-1,none,反射下次物理攻击的一半伤害，最高不超过自身最大体力
+52,反射物攻,chance,replace,-1,res=51,反射下次物理攻击的全部伤害，最高不超过自身最大体力的2倍
+53,反射特攻,chance,replace,-1,none,反射下次特殊攻击的一半伤害，最高不超过自身最大体力
+54,反射特攻,chance,replace,-1,res=53,反射下次特殊攻击的一半伤害，最高不超过自身最大体力的2倍
 55,星刃解封,mark,replace,-1,none,使物攻伤害不低于150
 56,星辉解封,mark,replace,-1,res=55,使特攻伤害不低于150
 57,禁疗,mark,replace,-1,none,无法恢复体力
@@ -90,7 +90,7 @@ id,name,type,copyType,turn,options,description
 79,旋灭裂空阵,turn,replace,5,none,每回合损失30点体力
 80,圣光气,chance,max,-1,auto_remove=true,下[value]次攻击必定暴击
 81,虚无,mark,replace,-1,none,闪避率提升100%
-82,元素,shield,replace,-1,none,免疫光系和暗影系技能伤害
+82,元素,shield,replace,-1,none,免疫光系和暗影系攻击伤害
 83,能量,mark,replace,-1,none,敬请期待
 84,生命,mark,replace,-1,none,每回合恢复100点体力
 85,轮回,chance,block,-1,none,受到致死攻击时复活并回满体力，复活后所有技能连击数+1[ENDL]整场战斗只能发动一次
@@ -229,8 +229,8 @@ id,name,type,copyType,turn,options,description
 2024,强力流血,mark,replace,-1,none,每回合损失[value]点体力
 2025,攻击恢复,chance,replace,-1,auto_remove=true,下[value]次攻击恢复造成伤害1/[option[value]]的体力
 2026,攻击恢复,mark,replace,-1,res=2025,攻击恢复造成伤害1/[value]的体力
-2027,怒耗提升,mark,replace,-1,none,常规技能消耗怒气提升[value]点
-2028,怒耗降低,mark,replace,-1,none,常规技能消耗怒气降低[value]点
+2027,怒耗提升,mark,replace,-1,none,常规技能怒气消耗提升[value]点
+2028,怒耗降低,mark,replace,-1,none,常规技能怒气消耗降低[value]点
 2029,治疗提升,mark,replace,-1,res=19,体力回复率增加[value]%
 2030,治疗减少,mark,replace,-1,none,体力回复率降低[value]%
 2031,自然庇佑,mark,replace,-1,none,受到攻击时有[value]%概率使自身触发以下效果：[ENDL]20%概率恢复400点体力[ENDL]30%概率恢复300点体力[ENDL]50%概率恢复200点体力
@@ -250,7 +250,7 @@ id,name,type,copyType,turn,options,description
 3000,弱点记号,mark,stack,-1,inherit=true&legacy=true&auto_remove=true&max_val=2,每个记号使速度下降25点，最多叠加2个。[ENDL]当前为[value]个
 3001,易伤,mark,replace,-1,none,受到的伤害增加50%
 3002,寄生炸弹,turn,replace,3,keep=false,爆炸时损失300点体力
-3003,迷惑,abnormal,replace,-1,movable=true,使对手下一次造成的伤害减半并且另一半由对手承担（此状态为异常状态）
+3003,迷惑,abnormal,replace,-1,movable=true,使对手下次造成的伤害减半并且另一半由对手承担（此状态为异常状态）
 3004,穿击波,mark,stack,-1,keep=false&hide=true&max_val=3,穿击波连续命中[value]次
 3005,花草护体,mark,replace,-1,res=29,暴击抵抗增加25%
 3006,金光绿叶,turn,replace,3,none,每回合回复自身10点怒气
@@ -261,10 +261,10 @@ id,name,type,copyType,turn,options,description
 3011,玩水,turn,replace,5,res=16&keep=false,受到的火系攻击伤害减半
 3012,瞄准,mark,replace,-1,none,特殊攻击忽视对手25%当前特防值
 3013,穿透水炮,mark,stack,-1,keep=false&hide=true&max_val=3,穿透水炮连续命中[value]次
-3014,佯攻,chance,replace,-1,none,下一次技能威力+50[ENDL]（佯攻除外）
-3015,必中,chance,replace,-1,res=17&keep=false,下一次技能必中
-3016,炎之意志,chance,replace,-1,none,下一次攻击伤害增加100%
-3017,不屈,chance,replace,-1,none,下一次受到致死攻击时，保留1点体力
+3014,佯攻,chance,replace,-1,none,下次技能威力+50[ENDL]（佯攻除外）
+3015,必中,chance,replace,-1,res=17&keep=false,下次技能必中
+3016,炎之意志,chance,replace,-1,none,下次攻击伤害增加100%
+3017,不屈,chance,replace,-1,none,下次受到致死攻击时，保留1点体力
 3018,拉奥呼唤,turn,replace,3,res=19,每回合回复自身13%体力
 3019,种子,mark,replace,-1,auto_remove=true,自身受到攻击伤害时，消耗1个种子以减少20%受到的伤害[ENDL]当前为[value]个
 3020,命中低下,mark,replace,-1,res=21,命中下降15%
@@ -274,7 +274,7 @@ id,name,type,copyType,turn,options,description
 3024,幻觉,turn,replace,5,none,使自身属性技能必中
 3025,葵花种子,mark,replace,-1,none,造成的伤害降低15%
 3026,无力草,turn,replace,5,none,特殊攻击造成的伤害减半
-3027,吸收草,chance,replace,-1,none,吸收对手下一次的攻击伤害
+3027,吸收草,chance,replace,-1,none,吸收对手下次的攻击伤害
 3028,爱的名义,mark,replace,-1,none,使自身所有技能必中
 3029,誓言之约,turn,replace,6,none,结束时恢复所有体力
 3030,生息,turn,replace,5,none,每回合回复15怒气
@@ -305,15 +305,15 @@ id,name,type,copyType,turn,options,description
 3055,光武神通,chance,block,-1,none,在承受到一次伤害后记录此次伤害值的一半，使自身下个技能伤害附加记录值
 3056,光武灵通,chance,block,-1,none,在承受到一次伤害后记录此次伤害值的一半，使自身生成一个记录值的护盾
 3057,灵通传达,chance,replace,-1,none,造成的伤害低于100则减少自身15怒气
-3058,星辰回转,turn,replace,3,none,借助星辰之力吞噬高于600点的伤害且反噬给对手，最高不超过自身最大体力的2倍
+3058,星辰回转,mark,replace,-1,none,借助星辰之力吞噬高于600点的伤害且反噬给对手，最高不超过自身最大体力的2倍
 3059,星屑,turn,replace,3,none,无法恢复体力
 3060,星之尾,mark,replace,-1,none,移除特定技能的负面效果
 3061,水纹,mark,replace,-1,none,暴击率提升10%
-3062,水纹屏障,chance,replace,-1,none,失去护盾时使自身下一次造成的伤害增加50%
+3062,水纹屏障,chance,replace,-1,none,失去护盾时使自身下次造成的伤害增加50%
 3063,水盾,turn,replace,5,res=47,反射物理攻击的一半伤害，最高不超过自身最大体力
 3064,眩晕,turn,replace,5,none,速度值减少50点
-3065,水龙缠绕,chance,replace,-1,none,下一次攻击连击数改为1
-3066,充电,chance,replace,-1,res=3050,下一次使用电系技能伤害翻倍
+3065,水龙缠绕,chance,replace,-1,none,下次攻击连击数改为1
+3066,充电,chance,replace,-1,res=3050,下次使用电系技能伤害翻倍
 3067,雷神觉醒,turn,replace,3,none,每回合回复35点怒气
 3068,星之辉,mark,stack,-1,res=67,特定技能效果触发率提升[value]%
 3069,后空翻,turn,replace,1,res=18,躲避物理攻击，但自身受到特殊攻击伤害翻倍
@@ -324,8 +324,8 @@ id,name,type,copyType,turn,options,description
 3074,生命复苏,chance,replace,-1,keep=false&inherit=true,主动换场时下一个出场精灵恢复1/4体力
 3075,复苏领域,mark,replace,-1,inherit=true,对手攻击时若自身体力低于1/2会恢复自身1/12体力
 3076,光之盾,shield,replace,-1,none,使对手的技能失效
-3077,物理伤害增加,chance,replace,-1,none,使下一次物理技能伤害增加[value]%
-3078,特殊伤害增加,chance,replace,-1,none,使下一次特殊技能伤害增加[value]%
+3077,物理伤害增加,chance,replace,-1,none,使下次物理技能伤害增加[value]%
+3078,特殊伤害增加,chance,replace,-1,none,使下次特殊技能伤害增加[value]%
 3079,星的指引,mark,replace,-1,none,自身使用属性技能的当回合，对手的主动换场会失效
 3080,弱化状态,turn,replace,5,none,使自身技能威力-50
 3081,回归之约,mark,max,-1,none,纪录当前体力值
@@ -362,7 +362,7 @@ id,name,type,copyType,turn,options,description
 3112,末日宣告,turn,replace,3,none,攻击附带35点固定伤害
 3113,渗透劲,turn,replace,1,none,使用技能会强迫转变为渗透劲
 3114,协作接力,mark,replace,-1,keep=false&inherit=true,主动换场时下一个出场精灵下次攻击伤害增加25%
-3115,协作接力,chance,replace,-1,res=3114,下一次攻击伤害增加25%
+3115,协作接力,chance,replace,-1,res=3114,下次攻击伤害增加25%
 3116,特攻联动,mark,stack,-1,max_val=3,使特攻增加25点，最高叠加3层[ENDL]当前为[value]层
 3117,物防联动,mark,stack,-1,max_val=3,使物防增加25点，最高叠加3层[ENDL]当前为[value]层
 3118,出口成章,turn,replace,3,none,特攻技能造成伤害的1/4将恢复自身体力
@@ -415,7 +415,7 @@ id,name,type,copyType,turn,options,description
 3165,光之领域,mark,replace,-1,none,体力回复率增加15%
 3166,光辉领域,mark,replace,-1,none,体力回复率增加25%
 3167,恐惧之念,mark,stack,-1,auto_remove=true&max_val=3&keep=false&inherit=true&legacy=true,每层使命中率降低10%，回合开始时若达到3层则会消耗2层并陷入恐惧状态2回合[ENDL]当前为[value]层
-3168,暗影之光,chance,replace,-1,keep=false,下一次攻击伤害减少25%
+3168,暗影之光,chance,replace,-1,keep=false,下次攻击伤害减少25%
 3169,暗之领域,mark,replace,-1,none,怒气回复率增加15%
 3170,暗影领域,mark,replace,-1,none,怒气回复率增加25%
 3171,记恨,mark,replace,-1,none,本回合攻击伤害低于对手则下回合暴击率增加35%
@@ -451,7 +451,7 @@ id,name,type,copyType,turn,options,description
 3201,红心,mark,new,-1,keep=false&inherit=true&legacy=true&group=poker,扑克牌。点数是 [ff0000]红心[-] [poker][ENDL]
 3202,方块,mark,new,-1,keep=false&inherit=true&legacy=true&group=poker,扑克牌。点数是 [ff0000]方块[-] [poker][ENDL]
 3203,梅花,mark,new,-1,keep=false&inherit=true&legacy=true&group=poker,扑克牌。点数是 [ffbb33]梅花[-] [poker][ENDL]
-3204,暴击,chance,replace,-1,res=27,下一次攻击必定暴击
+3204,暴击,chance,replace,-1,res=27,下次攻击必定暴击
 3205,一级冰妖,turn,replace,2,none,物攻伤害增加10%
 3206,二级冰妖,turn,replace,2,none,物攻伤害增加15%
 3207,三级冰妖,mark,replace,-1,none,物攻伤害增加20%
@@ -592,7 +592,7 @@ id,name,type,copyType,turn,options,description
 3342,银月印记,chance,replace,-1,inherit=true,出场时当回合闪避率提高70%并移除（主动换场继承）
 3343,彩虹羽,mark,replace,-1,none,受到暴击时吸取对手100点体力
 3344,天空领域,mark,replace,-1,none,体力低于1/2时闪避率提升15%
-3345,踏浪迎击,chance,replace,-1,none,下一次攻击连击数2倍
+3345,踏浪迎击,chance,replace,-1,none,下次攻击连击数2倍
 3346,混沌海潮,mark,replace,-1,none,对手使用攻击技能会弱化对手双攻1级，对手使用属性技能会弱化对手速度和命中1级
 3347,海之契约,mark,replace,-1,res=3346,对手使用攻击技能会冰封，对手使用属性技能会弱化对手全能力1级
 3348,过载,mark,replace,-1,none,使用必杀技以外的技能会恢复等量怒气
@@ -629,8 +629,8 @@ id,name,type,copyType,turn,options,description
 3379,密集火网,mark,replace,-1,none,回合结束时若自身烧伤则会消除自身强化
 3380,炎火咒,mark,replace,-1,none,命中下降15%，使用属性技能会使自身烧伤
 3381,永恒圣焰,mark,replace,-1,legacy=true,阵亡时使下只出场精灵烧伤
-3382,集火,chance,replace,-1,none,下一次使用火系技能伤害翻倍
-3383,直觉闪避,chance,replace,-1,none,闪避下一次攻击，移除时强化自身物防1级
+3382,集火,chance,replace,-1,none,下次使用火系技能伤害翻倍
+3383,直觉闪避,chance,replace,-1,none,闪避下次攻击，移除时强化自身物防1级
 3384,热血,chance,replace,-1,none,下次击败对手时强化自身物攻1级并恢复15点怒气
 3385,天焚寰宇,mark,replace,-1,none,能力强化被消除时移除此印记并使对手损失1/2体力，最高不超过自身最大体力的1/2
 3386,连打,mark,block,-1,res=65,行动次数+1
@@ -651,7 +651,20 @@ id,name,type,copyType,turn,options,description
 3401,永恒月光,turn,replace,5,none,每回合恢复1/12体力
 3402,月棱镜,mark,replace,-1,none,属性技能命中会恢复对手1/8体力
 3403,火光烛天,mark,replace,-1,res=3373,对手使用属性技能时使对手烧伤，失败时消除对手回合类印记
-3404,凝缀星,mark,replace,-1,res=3387,自身的攻击力视为高35%
+3404,凝缀星,mark,replace,-1,res=3387,自身的攻击力视为高25%
+3405,夜暝星,chance,replace,-1,res=3387,使对手下次攻击必定暴击
+3406,世录星,mark,replace,-1,res=3387,怒气高于对手时伤害增加25%
+3407,飞之领域,mark,replace,-1,none,每回合恢复5点怒气
+3408,飞空领域,mark,replace,-1,none,每回合恢复10点怒气
+3409,沙暴阵,mark,replace,-1,none,闪避率提升15%
+3410,沙之领域,mark,replace,-1,none,闪避率提升5%
+3411,沙暴领域,mark,replace,-1,none,闪避率提升10%
+3412,闪避物攻,turn,replace,2,res=18,闪避物攻
+3413,虫群阵,mark,replace,-1,none,连击技能伤害增加35%
+3414,虫之领域,mark,replace,-1,none,攻击附带20点固伤
+3415,虫群领域,mark,replace,-1,none,攻击附带40点固伤
+3416,连击数提升,chance,replace,-1,res=60,下次攻击连击数+1
+3417,沐月之羽,mark,replace,-1,res=3343,全能力值提升50点
 100001,终结,feature,replace,-1,none,体力低于1/4时，消耗弱点记号的技能伤害增加25%，且使水泡必中并附加30点伤害
 100004,炎火,feature,replace,-1,none,体力低于1/4时，火系技能造成的伤害增加25%，且使火焰必中并附加30点伤害
 100007,坚韧,feature,replace,-1,none,体力低于1/4时，受到的伤害减少25%，且使种子爆弹必中并附加30点伤害
@@ -684,6 +697,9 @@ id,name,type,copyType,turn,options,description
 100094,破冰,feature,replace,-1,none,冰系伤害增加15%
 100095,黑暗,feature,replace,-1,none,攻击后若怒气低于对手则会恢复造成伤害1/2的体力
 100096,光明,feature,replace,-1,none,回合结束时若怒气高于对手则会恢复自身1/8体力
+100097,飞空,feature,replace,-1,none,先出手时恢复自身5点怒气
+100098,沙速,feature,replace,-1,none,闪避成功时强化自身速度1级
+100099,连携,feature,replace,-1,none,威力低于50的技能必中
 100100,好战,feature,replace,-1,none,回合结束时若怒气低于对手则会恢复自身15点怒气
 100119,后劲,feature,replace,-1,none,后出手时造成的伤害增加10%
 100122,冰固,feature,replace,-1,none,最大体力＞550时受到伤害减少10%
@@ -813,6 +829,7 @@ id,name,type,copyType,turn,options,description
 110108,海妖,feature,replace,-1,none,水量充足时每回合恢复5点怒气
 110133,焰忍,feature,replace,-1,none,替换上场时若自身没有焰忍则会获得焰忍，此特性最多发动6次[ENDL]当前已发动[value]次
 110198,破浪,feature,replace,-1,none,对手体力高于1/2时造成的伤害增加10%
+110298,猛虎,feature,replace,-1,none,10%概率使对手的技能失效
 110300,谱尼,feature,replace,-1,none,封印类技能命中后会吸取对手5点怒气
 110301,飞叶,feature,replace,-1,none,晴天环境下受到的暴击伤害减半
 110304,骇浪,feature,replace,-1,none,雨天环境下造成的伤害增加15%
@@ -823,6 +840,7 @@ id,name,type,copyType,turn,options,description
 110370,命晶,feature,replace,-1,none,首次出场时获得1颗命水晶
 110392,炎魔,feature,replace,-1,none,热血状态下伤害提升10%
 110416,思维,feature,replace,-1,none,使用思维类技能会使对手损失35点体力
+110461,满月,feature,replace,-1,none,每月22日免疫异常且所有技能先制+1
 110499,时空,feature,replace,-1,none,首发时可以进入超时空通道
 110809,灵光,feature,replace,-1,none,攻击技能命中10%使对手麻痹
 113302,炎魔,feature,replace,-1,none,[ffbb33]【专属动作】[-]神迹觉醒[ENDL][ffbb33]【时点】[-]决定技能时[ENDL][ffbb33]【条件】[-]火山场地
@@ -869,6 +887,9 @@ id,name,type,copyType,turn,options,description
 200094,深结,emblem,replace,-1,none,对手冻伤/冰冻时暴击率分别增加10%/20%
 200095,恐惧,emblem,replace,-1,none,对手恐惧时自身的攻击伤害不会低于100
 200096,光辉,emblem,replace,-1,none,每回合恢复自身20点体力
+200097,飞空,emblem,replace,-1,none,使飞旋之光额外恢复5点怒气
+200098,沙阵,emblem,replace,-1,none,具有速度强化时闪避率提升10%
+200099,虫群,emblem,replace,-1,none,连击技能伤害增加10%
 200100,斗魂,emblem,replace,-1,none,使斗战之魂消耗怒气附加的固定伤害翻倍
 200119,坚韧,emblem,replace,-1,none,具有寒冰坚韧时受到伤害减少20点
 200122,冻气,emblem,replace,-1,none,具有冻气附体时暴击率增加5%
@@ -983,7 +1004,7 @@ id,name,type,copyType,turn,options,description
 210001,吸取,emblem,replace,-1,none,特殊攻击造成伤害的1/4恢复自身体力
 210004,海浪,emblem,replace,-1,none,对手体力低于1/2时，自身造成的伤害增加10%
 210007,燃烧,emblem,replace,-1,none,普通系技能命中会使对手燃烧1回合
-210010,红韵,emblem,replace,-1,none,体力低于1/4时，使用红韵有35%几率闪避下一次攻击
+210010,红韵,emblem,replace,-1,none,体力低于1/4时，使用红韵有35%几率闪避下次攻击
 210016,刺甲,emblem,replace,-1,none,受到攻击时使对手流失35点体力
 210027,消化,emblem,replace,-1,none,使用道具时行动次数+1
 210030,波涛,emblem,replace,-1,none,具有水之波动状态时免疫异常状态
@@ -998,6 +1019,7 @@ id,name,type,copyType,turn,options,description
 210108,蓝光,emblem,replace,-1,none,首次出场时获得蓝光状态
 210133,屏息,emblem,replace,-1,none,击败对手时获得焰忍
 210198,鳞甲,emblem,replace,-1,none,深海场地下受到的伤害减少10%
+210298,连爪,emblem,replace,-1,none,10%概率使造成的伤害2倍
 210300,圣灵,emblem,replace,-1,none,圣灵系技能伤害提高10%
 210301,花舞,emblem,replace,-1,none,对手被花粉影响时，自身的物理技能附带35点固定伤害
 210304,龙牙,emblem,replace,-1,none,使用龙系技能同样适用本系加成
@@ -1008,6 +1030,7 @@ id,name,type,copyType,turn,options,description
 210370,晶凌,emblem,replace,-1,none,光系技能伤害增加25%
 210392,天罚,emblem,replace,-1,none,受到的伤害超过300会使对手烧伤
 210416,干涉,emblem,replace,-1,none,双精灵对战中，思维类技能会使双方全队都获得效果
+210461,光羽,emblem,replace,-1,none,沐月之羽状态下技能威力增加10点
 210499,零域,emblem,replace,-1,none,技能命中后10%使对手沉默
 210809,魔草,emblem,replace,-1,none,森林场地下造成的伤害增加10%
 213302,苍炎,emblem,replace,-1,none,对手攻击前使对手烧伤，失败时消除对手回合类印记[ENDL]回合结束时，若对手处于烧伤状态则下次攻击先制+2且攻击伤害提升100%，否则恢复自身1/3体力并给予对手等量伤害

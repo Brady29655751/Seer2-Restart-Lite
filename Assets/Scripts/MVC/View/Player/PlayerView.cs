@@ -42,8 +42,14 @@ public class PlayerView : Module
     public void SetPlayerPosition(Vector2 currentPos) {
         playerRect.anchoredPosition = currentPos;
     }
+    
+    public void SetPlayerSize(Vector2 size) {
+        playerRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, size.x);
+        playerRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, size.y);
+    }
 
-    public void SetPlayerName(string value) {
+    public void SetPlayerName(string value)
+    {
         playerNameText.text = value;
     }
 

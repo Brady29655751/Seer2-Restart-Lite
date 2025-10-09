@@ -40,7 +40,7 @@ public class BattlePetStatusView : BattleBaseView
             currentHp = Mathf.Clamp(currentHp, 0, maxHp);
             diff = (hp == lastHp) ? 0 : (hp - currentHp) / (hp - lastHp);
             SetHpBar(currentHp, maxHp);
-            yield return new WaitForSeconds(0.02f);
+            yield return new WaitForSeconds(0.01f);
         }
         SetHpBar(hp, maxHp);
         isHpDone = true;
@@ -83,7 +83,7 @@ public class BattlePetStatusView : BattleBaseView
             currentAnger = Mathf.Clamp(currentAnger, 0, maxAnger);
             diff = (anger == lastAnger) ? 0 : (anger - currentAnger) / (anger - lastAnger);
             SetAngerBar(currentAnger, maxAnger);
-            yield return new WaitForSeconds(0.02f);
+            yield return new WaitForSeconds(0.01f);
         }
         SetAngerBar(anger, maxAnger);
         isAngerDone = true;

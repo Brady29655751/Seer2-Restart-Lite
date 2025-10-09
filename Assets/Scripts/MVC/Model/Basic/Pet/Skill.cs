@@ -66,6 +66,7 @@ public class Skill
     public bool isSelect => IsSelect();
     public bool isCapture => IsCapture();
 
+    public float animSpeed => float.TryParse(options.Get("anim_speed", "1"), out var speed) ? speed : 1;
     public string soundId => options.Get("sound", string.Empty);
     public PetAnimationType petAnimType => GetPetAnimationType();
     public PetAnimationType captureAnimType => GetCaptureAnimationType();

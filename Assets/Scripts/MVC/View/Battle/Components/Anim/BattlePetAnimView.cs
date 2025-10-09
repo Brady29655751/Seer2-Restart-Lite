@@ -96,13 +96,14 @@ public class BattlePetAnimView : BattleBaseView
         }
     }
 
-    public void SetPetSkillAnim(PetAnimationType type)
+    public void SetPetSkillAnim(Skill skill, PetAnimationType type)
     {
         // isPetDone表示UI有沒有播放完畢
         isPetDone = false;
 
         // 若為必殺技則立刻播放技能音效
         // PetUI 和 SoundInfo 有可能為 Null，必須用?.額外判定
+        var skillAnimSpeed = this.animSpeed * (skill?.animSpeed ?? 1);
         var sound = this.currentPetUI?.soundInfo?.GetSoundByType(type);
         bool isSuperSkill = (type is PetAnimationType.Super or PetAnimationType.SecondSuper);
         if (isSuperSkill)
@@ -118,11 +119,11 @@ public class BattlePetAnimView : BattleBaseView
             controller.clip.sortingOrder = 2; //攻击动画在2层,其他精灵动画都在1层,但捕捉动画在UI层在上面的
             this.currentPetAnim.transform.position = new Vector3(this.currentPetAnim.transform.position.x,
                 this.currentPetAnim.transform.position.y, 2);
-            controller.rateScale = animSpeed;
+            controller.rateScale = skillAnimSpeed;
             controller.autoPlay = false;
             controller.loopMode = SwfClipController.LoopModes.Once;
             controller.OnStopPlayingEvent += SetPetIdle; //注册一个事件监听,当动画播放完毕后,回到idle状态
-            this.ApplyAnimation();
+            this.ApplyAnimation(false);
             if (type is PetAnimationType.Super or PetAnimationType.SecondSuper)
             {
                 this.camara.ScreenShake(0.4f);
@@ -136,7 +137,7 @@ public class BattlePetAnimView : BattleBaseView
                 }
             }
 
-            _ = SetOnHit((int)(this.currentPetUI.hitInfo.GetFrameByType(type) * 1000 / (24 * animSpeed)), () => {  
+            _ = SetOnHit((int)(this.currentPetUI.hitInfo.GetFrameByType(type) * 1000 / (24 * skillAnimSpeed)), () => {  
                 // 若不為必殺技則擊中才有音效
                 if (!isSuperSkill)
                     PlaySkillSound(sound); 
@@ -156,6 +157,7 @@ public class BattlePetAnimView : BattleBaseView
                 PetAnimationType.SecondSuper => this.defalutSuperTrigger,
                 _ => string.Empty
             };
+            skillAnim.anim.SetFloat("speed", skillAnimSpeed);
             skillAnim.transform.SetAsLastSibling();
             skillAnim.onAnimHitEvent.SetListener(() => {
                 if (!isSuperSkill)
@@ -296,10 +298,13 @@ public class BattlePetAnimView : BattleBaseView
         OnPetEnd();
     }
 
-    private void ApplyAnimation()
+    private void ApplyAnimation(bool fixRateScale = true)
     {
         TransformHelper.DisableAllChild(this.battlePetAnimContainer);
-        this.currentPetAnim.GetComponent<SwfClipController>().rateScale = this.animSpeed;
+
+        if (fixRateScale)
+            this.currentPetAnim.GetComponent<SwfClipController>().rateScale = this.animSpeed;
+
         this.currentPetAnim.SetActive(true);
         if ((!isMyView && this.currentPetAnim.transform.localScale.x > 0) ||
             (isMyView && this.currentPetAnim.transform.localScale.x < 0))

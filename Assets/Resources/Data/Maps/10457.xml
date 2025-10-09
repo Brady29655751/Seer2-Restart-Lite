@@ -1,0 +1,74 @@
+<map name="巨型陨石" category="101" id="10457" resId="10415" weather="9">
+	<initialPoint>240,230</initialPoint>
+	<music category="101">
+		<bgm>BGM_1</bgm>
+	</music>
+	<entities>
+		<npc id="1045701" resId="Pets/pet/10462" name="Lv70 阿尔达拉" size="152,180" pos="380,180" namePos="0,0">
+			<description>阿尔达拉</description>
+			<dialog>
+				<branch id="default" name="阿尔达拉" icon="Pets/pet/10462" size="152,180" pos="0,35">
+					<content>月圆人团圆</content>
+					<functionHandler>
+						<func type="click">
+							<description><![CDATA[挑战阿尔达拉]]></description>
+							<action>battle</action>
+							<param>default</param>
+						</func>	
+					</functionHandler>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[中秋佳节！]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+					</replyHandler>
+				</branch>
+			</dialog>
+			<battle>
+				<branch id="default">
+					<settings count="6">
+						<weather>9</weather>
+					</settings>
+					<enemy>
+						<pet id="10462" level="70">
+							<status>
+								<hp>2000</hp>
+							</status>
+							<initBuff>14,77,3417,61,-3</initBuff>
+							<loopSkill>12840,12839,12832,12836</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>getPet</action>
+							<param>10461,1</param>
+							<condition>activity[new_moon].done[10462][default]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=阿尔克已经放入精灵仓库</param>
+							<param>item_icon=pet[10461]</param>
+							<param>option_num=1</param>
+							<condition>activity[new_moon].done[10462][default]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>new_moon</param>
+							<param>done[10462][default]=true</param>
+							<condition>activity[new_moon].done[10462][default]=[bool]false[default]false</condition>
+						</button>
+					</winHandler>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>openDialog</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+	</entities>		
+</map>

@@ -12,16 +12,19 @@ public class PlayerController : Manager<PlayerController>
     [SerializeField] private RobotView robotView;
     private PlayerView playerView;
 
-    private void FixedUpdate() {
+    private void FixedUpdate()
+    {
         playerModel.OnPlayerMove();
         playerView.SetPlayerPosition(playerModel.currentPos);
         if (!playerModel.isMoving)
             playerView.SetDirection(new Vector2(0, 0));
     }
 
-    public void OnClickMap(BaseEventData bed) {
+    public void OnClickMap(BaseEventData bed)
+    {
         var ped = (PointerEventData)bed;
-        switch (ped.pointerId) {
+        switch (ped.pointerId)
+        {
             default:
                 if (Player.instance.isShootMode)
                     Shoot();
@@ -34,14 +37,23 @@ public class PlayerController : Manager<PlayerController>
         }
     }
 
-    public void SetMap(Map map) {
+    public void SetMap(Map map)
+    {
         playerModel.SetMap(map);
         nonoView.gameObject.SetActive(!playerModel.useRobot);
         robotView.gameObject.SetActive(playerModel.useRobot);
         playerView = playerModel.useRobot ? robotView : nonoView;
+
+        var item = Item.GetItemInfo(Player.instance.gameData.achievement);
+        if ((item != null) && (item.type == ItemType.Equipment))
+        {
+            nonoView.SetPlayerSprite(item.icon);
+            nonoView.SetPlayerSize(item.icon.GetResizedSize(100 * Vector2.one));
+        }
     }
 
-    public void Shoot(List<Action> callbacks = null) {
+    public void Shoot(List<Action> callbacks = null)
+    {
         if (!Player.instance.isShootMode)
             return;
 
@@ -50,54 +62,62 @@ public class PlayerController : Manager<PlayerController>
         playerView.Shoot((item == 0) ? 1 : item, pos, callbacks);
     }
 
-    public void SetDestinationByMousePos() { 
+    public void SetDestinationByMousePos()
+    {
         playerModel.SetDestinationByMousePos(Input.mousePosition, null);
         playerView.SetDirection(playerModel.direction);
     }
 
-    public void SetDestinationByMousePos(Action onArrive = null) {
+    public void SetDestinationByMousePos(Action onArrive = null)
+    {
         playerModel.SetDestinationByMousePos(Input.mousePosition, onArrive);
         playerView.SetDirection(playerModel.direction);
     }
 
-    public void SetDestinationByCanvasPos(Vector2 canvasPos, Action onArrive = null) {
+    public void SetDestinationByCanvasPos(Vector2 canvasPos, Action onArrive = null)
+    {
         playerModel.SetDestinationByCanvasPos(canvasPos, onArrive);
         playerView.SetDirection(playerModel.direction);
     }
 
-    public void SetPlayerPositionByMapPos(Vector2 mapPos, Vector2 anchor) {
+    public void SetPlayerPositionByMapPos(Vector2 mapPos, Vector2 anchor)
+    {
         playerModel.SetPlayerPositionByMapPos(mapPos, anchor);
         playerView.SetPlayerPosition(playerModel.currentPos);
     }
 
-    public void SetPlayerPosition(Vector2 canvasPos) {
+    public void SetPlayerPosition(Vector2 canvasPos)
+    {
         playerModel.SetPlayerPosition(canvasPos);
         playerView.SetPlayerPosition(playerModel.currentPos);
     }
 
-    public void SetPlayerName(string newName) {
+    public void SetPlayerName(string newName)
+    {
         playerView.SetPlayerName(newName);
     }
 
-    public void SetPlayerAchievement(string newAchievement) {
+    public void SetPlayerAchievement(string newAchievement)
+    {
         playerView.SetPlayerAchievement(newAchievement);
     }
 
-    public void OpenPlayerInfoPanel() {
+    public void OpenPlayerInfoPanel()
+    {
         playerView.OpenPlayerInfoPanel();
     }
-    
+
     public void SetPlayerSprite(string spriteName)
     {
-        // 直接透過 NpcInfo.GetIcon 自動加載對應 Npc 資源
-        Sprite sprite = NpcInfo.GetIcon(spriteName);
+        SetPlayerSprite(NpcInfo.GetIcon(spriteName));
+    }
 
-        if (sprite != null) {
-            // 如果成功加载到 Sprite，将其传递给 playerView.SetPlayerSprite 方法
-            playerView.SetPlayerSprite(sprite);
-        } else{
-            Debug.LogError("Failed to load Sprite: " + spriteName);
-        }
+    public void SetPlayerSprite(Sprite sprite)
+    {
+        if (sprite == null)
+            return;
+
+        playerView.SetPlayerSprite(sprite);
     }
 
 }

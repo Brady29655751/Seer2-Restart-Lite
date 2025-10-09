@@ -95,7 +95,7 @@ namespace MiniGame
             hintbox.SetOptionNum(1);
             hintbox.SetOptionCallback(() =>
             {
-                var item = new Item(10232, germ / 2);
+                var item = new Item(1, germ * 100);
                 Item.Add(item);
 
                 var itemHintbox = Item.OpenHintbox(item);

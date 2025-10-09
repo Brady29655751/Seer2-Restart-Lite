@@ -454,6 +454,11 @@
 							<action>battle</action>
 							<param>default</param>
 						</func>
+						<func type="click">
+							<description><![CDATA[超进化挑战]]></description>
+							<action>battle</action>
+							<param>evolve</param>
+						</func>
 					</functionHandler>
 					<replyHandler>
 						<reply type="click">
@@ -504,6 +509,33 @@
 						</button>
 					</winHandler>
 				</branch>
+				<branch id="evolve">
+					<settings count="1" star="4">
+						<mode>4</mode>
+						<weather>12</weather>
+					</settings>
+					<enemy>
+						<pet id="974" level="105">
+							<status>
+								<atk>600</atk>
+								<mat>600</mat>
+								<spd>1</spd>
+								<hp>25000</hp>
+							</status>
+							<initBuff>12,13,14,20,45,99,98,68,3398</initBuff>
+							<loopSkill>12733,12739,12733,12740</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=PetSelect</param>
+						    <param>title=选择要进化的星之足影</param>
+						    <param>option_num=2</param>
+						    <param>callback=evolve</param>
+						</button>
+					</winHandler>
+				</branch>
 			</battle>
 			<eventHandler>
 				<button type="click">
@@ -511,6 +543,53 @@
 					<param>default</param>
 				</button>
 			</eventHandler>
+			<callbackHandler>
+				<button type="choose">
+					<action>openHintbox</action>
+					<param>type=PetSelect</param>
+				    <param>title=选择要进化的星之足影</param>
+				    <param>option_num=2</param>
+					<param>callback=evolve</param>
+				    <condition>data.PetSelect.uidNOT964|data.PetSelect.level&lt;100</condition>
+				</button>
+				<button type="evolve">
+				    <action>openHintbox</action>
+				    <param>type=Item</param>
+				    <param>title=提示</param>
+				    <param>content=必须选择等级100的星之足影！</param>
+				    <param>item_icon=pet[964]</param>
+				    <param>option_num=1</param>
+					<param>callback=choose</param>
+				    <condition>data.PetSelect.uidNOT964|data.PetSelect.level&lt;100</condition>
+				</button>
+				<button type="evolve">
+				    <action>openHintbox</action>
+				    <param>type=Item</param>
+				    <param>title=提示</param>
+				    <param>content=星之足影已成功超进化</param>
+				    <param>item_icon=pet[974]</param>
+				    <param>option_num=1</param>
+				    <condition>data.PetSelect.uid=964</condition>
+				    <condition>data.PetSelect.levelGTE100</condition>
+				</button>
+				<button type="evolve">
+				    <action>evolvePet</action>
+				    <param>index=data.PetSelectIndex</param>
+				    <param>974</param>
+				    <condition>data.PetSelect.uid=964</condition>
+				    <condition>data.PetSelect.levelGTE100</condition>
+				</button>
+				<button type="evolve">
+				    <action>setPet</action>
+				    <param>index=data.PetSelectIndex</param>
+				    <param>skill=12737</param>
+				    <param>skill=12738</param>
+				    <param>skill=12739</param>
+				    <param>skill=12740</param>
+				    <condition>data.PetSelect.uid=964</condition>
+				    <condition>data.PetSelect.levelGTE100</condition>
+				</button>
+			</callbackHandler>
 		</npc>
 		<npc id="105" resId="Pets/pet/965.png" name="Lv 105 星之背影" size="102,92" pos="110,220" namePos="0,-10">
 			<description><![CDATA[星之背影]]></description>
@@ -522,6 +601,11 @@
 							<description><![CDATA[普通挑战]]></description>
 							<action>battle</action>
 							<param>default</param>
+						</func>
+						<func type="click">
+							<description><![CDATA[超进化挑战]]></description>
+							<action>battle</action>
+							<param>evolve</param>
 						</func>
 					</functionHandler>
 					<replyHandler>
@@ -573,6 +657,31 @@
 						</button>
 					</winHandler>
 				</branch>
+				<branch id="evolve">
+					<settings count="1" star="4">
+						<mode>4</mode>
+						<weather>12</weather>
+					</settings>
+					<enemy>
+						<pet id="975" level="105">
+							<status>
+								<spd>400</spd>
+								<hp>30000</hp>
+							</status>
+							<initBuff>22,56,57,82,98,99,3058,11,13,14,-3050,3001</initBuff>
+							<loopSkill>12752,12760,12746,12755</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=PetSelect</param>
+						    <param>title=选择要进化的星之背影</param>
+						    <param>option_num=2</param>
+						    <param>callback=evolve</param>
+						</button>
+					</winHandler>
+				</branch>
 			</battle>
 			<eventHandler>
 				<button type="click">
@@ -580,6 +689,53 @@
 					<param>default</param>
 				</button>
 			</eventHandler>
+			<callbackHandler>
+				<button type="choose">
+					<action>openHintbox</action>
+					<param>type=PetSelect</param>
+				    <param>title=选择要进化的星之背影</param>
+				    <param>option_num=2</param>
+					<param>callback=evolve</param>
+				    <condition>data.PetSelect.uidNOT965|data.PetSelect.level&lt;100</condition>
+				</button>
+				<button type="evolve">
+				    <action>openHintbox</action>
+				    <param>type=Item</param>
+				    <param>title=提示</param>
+				    <param>content=必须选择等级100的星之背影！</param>
+				    <param>item_icon=pet[965]</param>
+				    <param>option_num=1</param>
+					<param>callback=choose</param>
+				    <condition>data.PetSelect.uidNOT965|data.PetSelect.level&lt;100</condition>
+				</button>
+				<button type="evolve">
+				    <action>openHintbox</action>
+				    <param>type=Item</param>
+				    <param>title=提示</param>
+				    <param>content=星之背影已成功超进化</param>
+				    <param>item_icon=pet[975]</param>
+				    <param>option_num=1</param>
+				    <condition>data.PetSelect.uid=965</condition>
+				    <condition>data.PetSelect.levelGTE100</condition>
+				</button>
+				<button type="evolve">
+				    <action>evolvePet</action>
+				    <param>index=data.PetSelectIndex</param>
+				    <param>975</param>
+				    <condition>data.PetSelect.uid=965</condition>
+				    <condition>data.PetSelect.levelGTE100</condition>
+				</button>
+				<button type="evolve">
+				    <action>setPet</action>
+				    <param>index=data.PetSelectIndex</param>
+				    <param>skill=12757</param>
+				    <param>skill=12758</param>
+				    <param>skill=12759</param>
+				    <param>skill=12760</param>
+				    <condition>data.PetSelect.uid=965</condition>
+				    <condition>data.PetSelect.levelGTE100</condition>
+				</button>
+			</callbackHandler>
 		</npc>
 		<npc id="106" resId="Pets/pet/966.png" name="Lv 105 星之心影" size="100,120" pos="130,325" namePos="0,-10">
 			<description><![CDATA[星之心影]]></description>
@@ -591,6 +747,11 @@
 							<description><![CDATA[普通挑战]]></description>
 							<action>battle</action>
 							<param>default</param>
+						</func>
+						<func type="click">
+							<description><![CDATA[超进化挑战]]></description>
+							<action>battle</action>
+							<param>evolve</param>
 						</func>
 					</functionHandler>
 					<replyHandler>
@@ -640,6 +801,30 @@
 						</button>
 					</winHandler>
 				</branch>
+				<branch id="evolve">
+					<settings count="1" star="4">
+						<mode>4</mode>
+						<weather>12</weather>
+					</settings>
+					<enemy>
+						<pet id="976" level="105">
+							<status>
+								<hp>35000</hp>
+							</status>
+							<initBuff>57,61,98,-8,77,-3059</initBuff>
+							<loopSkill>12776</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=PetSelect</param>
+						    <param>title=选择要进化的星之心影</param>
+						    <param>option_num=2</param>
+						    <param>callback=evolve</param>
+						</button>
+					</winHandler>
+				</branch>
 			</battle>
 			<eventHandler>
 				<button type="click">
@@ -647,6 +832,53 @@
 					<param>default</param>
 				</button>
 			</eventHandler>
+			<callbackHandler>
+				<button type="choose">
+					<action>openHintbox</action>
+					<param>type=PetSelect</param>
+				    <param>title=选择要进化的星之心影</param>
+				    <param>option_num=2</param>
+					<param>callback=evolve</param>
+				    <condition>data.PetSelect.uidNOT966|data.PetSelect.level&lt;100</condition>
+				</button>
+				<button type="evolve">
+				    <action>openHintbox</action>
+				    <param>type=Item</param>
+				    <param>title=提示</param>
+				    <param>content=必须选择等级100的星之心影！</param>
+				    <param>item_icon=pet[966]</param>
+				    <param>option_num=1</param>
+					<param>callback=choose</param>
+				    <condition>data.PetSelect.uidNOT966|data.PetSelect.level&lt;100</condition>
+				</button>
+				<button type="evolve">
+				    <action>openHintbox</action>
+				    <param>type=Item</param>
+				    <param>title=提示</param>
+				    <param>content=星之心影已成功超进化</param>
+				    <param>item_icon=pet[976]</param>
+				    <param>option_num=1</param>
+				    <condition>data.PetSelect.uid=966</condition>
+				    <condition>data.PetSelect.levelGTE100</condition>
+				</button>
+				<button type="evolve">
+				    <action>evolvePet</action>
+				    <param>index=data.PetSelectIndex</param>
+				    <param>976</param>
+				    <condition>data.PetSelect.uid=966</condition>
+				    <condition>data.PetSelect.levelGTE100</condition>
+				</button>
+				<button type="evolve">
+				    <action>setPet</action>
+				    <param>index=data.PetSelectIndex</param>
+				    <param>skill=12777</param>
+				    <param>skill=12778</param>
+				    <param>skill=12779</param>
+				    <param>skill=12780</param>
+				    <condition>data.PetSelect.uid=966</condition>
+				    <condition>data.PetSelect.levelGTE100</condition>
+				</button>
+			</callbackHandler>
 		</npc>
 		<teleport id="1" name="VIP乐园" pos="720,60" targetMapId="89"/>
 	</entities>

@@ -46,7 +46,8 @@ public class ItemShopPanel : Panel
         } },
         { ItemShopType.YiTe, new List<int>() {
             500091, 24000,  320757, 320092, 320093, 320094,
-            320095, 320096, 320100, 320810,
+            320095, 320096, 320097, 320098, 320099, 320100,
+            320810,
         } },
         { ItemShopType.Plant, Item.plantItemDatabase.Select(x => x.id).ToList() },
         { ItemShopType.Achievement, Item.achievementItemDatabase.Select(x => x.id).ToList() },

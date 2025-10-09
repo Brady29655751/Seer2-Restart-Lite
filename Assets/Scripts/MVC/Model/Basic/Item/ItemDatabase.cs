@@ -26,6 +26,7 @@ public static class ItemDatabase
         {"seed", ItemType.Seed},
         {"achievement", ItemType.Achievement},
         {"shoot", ItemType.Shoot},
+        {"equipment", ItemType.Equipment},
     };
 
     public static Dictionary<ItemType, string> typeNameDict = new Dictionary<ItemType, string>() {
@@ -49,6 +50,7 @@ public static class ItemDatabase
         {ItemType.Seed, "种子"},
         {ItemType.Achievement, "称号"},
         {ItemType.Shoot, "射击"},
+        {ItemType.Equipment, "装备"},
     };
 
     public static Dictionary<ItemCategory, List<ItemType>> categoryDict = new Dictionary<ItemCategory, List<ItemType>>() {
@@ -59,6 +61,7 @@ public static class ItemDatabase
         { ItemCategory.Capture, new List<ItemType>() { ItemType.Capture } },
         { ItemCategory.Stuff, new List<ItemType>() { ItemType.Mine, ItemType.Stuff }},
         { ItemCategory.Plant, new List<ItemType>() { ItemType.Plant, ItemType.Seed }},
+        { ItemCategory.Achievement, new List<ItemType>() { ItemType.Achievement, ItemType.Shoot, ItemType.Equipment } },
 
         { ItemCategory.PetGrow, new List<ItemType>() { ItemType.Evolve, ItemType.EXP, ItemType.EV, ItemType.IV, ItemType.Personality } },
         { ItemCategory.PetEmblem, new List<ItemType>() { ItemType.Emblem } },
@@ -88,7 +91,8 @@ public static class ItemDatabase
 
 }
 
-public enum ItemType {
+public enum ItemType
+{
     None,
     Currency,
     HpPotion,
@@ -109,9 +113,11 @@ public enum ItemType {
     Seed,
     Achievement,
     Shoot,
+    Equipment,
 }
 
-public enum ItemCategory {
+public enum ItemCategory
+{
     All,
     Currency,
     Pet,
@@ -123,4 +129,5 @@ public enum ItemCategory {
     PetBattle,
     PetOthers,
     Plant,
+    Achievement,
 }

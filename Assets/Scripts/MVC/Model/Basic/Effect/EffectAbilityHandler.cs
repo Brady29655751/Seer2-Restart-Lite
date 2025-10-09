@@ -259,8 +259,16 @@ public static class EffectAbilityHandler
                 break;
 
             case "pp":
-                float pp = Parser.ParseEffectOperation(add, effect, lhsUnit, rhsUnit);
-                skillController.allSkills.ForEach(x => x.PP += (int)pp);
+                if (set == "none")
+                {
+                    float pp = Parser.ParseEffectOperation(add, effect, lhsUnit, rhsUnit);
+                    skillController.allSkills.ForEach(x => x.PP += (int)pp);
+                }
+                else
+                {
+                    float pp = Parser.ParseEffectOperation(set, effect, lhsUnit, rhsUnit);
+                    skillController.allSkills.ForEach(x => x.PP = (int)pp);
+                }
                 break;
         }
         return true;

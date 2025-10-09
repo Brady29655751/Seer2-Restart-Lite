@@ -16,7 +16,7 @@ public class ChangeNameModel : Module
     public override void Init()
     {
         base.Init();
-        achievementList = Player.instance.gameData.itemStorage.Where(x => (x != null) && (x.info.type == ItemType.Achievement) || (x.info.type == ItemType.Shoot))
+        achievementList = Player.instance.gameData.itemStorage.Where(x => (x != null) && x.IsInCategory(ItemCategory.Achievement))
             .OrderByDescending(x => x.info.type).ThenBy(x => x.id).ToList();
 
         idp.SetDropdownOptions("无".SingleToList().Concat(achievementList.Select(x => x.name)).ToList());

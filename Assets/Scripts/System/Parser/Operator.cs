@@ -23,7 +23,7 @@ public static class Operator {
         var opIndex = -1;
 
         op = defaultOp;
-    
+
         foreach (var key in Operator.condDict.Keys) {
             opIndex = halfStr.IndexOf(key);
             if (opIndex != -1) {
@@ -82,8 +82,8 @@ public static class Operator {
     }
 
     public static Dictionary<string, Func<float, float, float>> opDict { get; } = new Dictionary<string, Func<float, float, float>>() {
-        {"+", Add},  {"-", Sub},  {"*", Mult},  {"/", Div},  {"^", Pow},  {"%", Mod},  
-        {"[MIN]", Mathf.Min},     {"[MAX]", Mathf.Max},      {"SET", Set}, 
+        {"+", Add},  {"-", Sub},  {"*", Mult},  {"/", Div},  {"^", Pow},    {"%", Mod},     
+        {"[MIN]", Mathf.Min},     {"[MAX]", Mathf.Max},      {"SET", Set},  {"[ABS]", Abs},
     };
 
     public static float Operate(string op, float lhs, float rhs) {
@@ -110,6 +110,10 @@ public static class Operator {
     }
     public static float Set(float lhs, float rhs) {
         return rhs;
+    }
+    
+    public static float Abs(float lhs, float rhs) {
+        return Mathf.Abs(lhs - rhs);
     }
 
 }

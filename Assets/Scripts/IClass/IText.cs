@@ -49,6 +49,9 @@ public class IText : IMonoBehaviour, IPointerClickHandler, IPointerEnterHandler,
     }
 
     public void SetText(string text) {
+        if (this.text == null)
+            return;
+            
         this.text.text = text;
     }
 

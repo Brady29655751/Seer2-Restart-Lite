@@ -1,11 +1,21 @@
 <map name="机械室" category="101" id="10008" weather="0">
-	<initialPoint>640,230</initialPoint>
+	<initialPoint>440,230</initialPoint>
 	<music category="101">
 		<bgm>BGM_2</bgm>
 	</music>
 	<entities>
-		<npc id="1000801" resId="none" name="领取套装" size="370,300" pos="0,0" namePos="65,-90" color="0,0,0,0">
-			<description>领取特殊装备</description>
+		<npc id="1000800" resId="1001" name="" size="250,180" pos="0,360" namePos="0,0" color="0,0,0,0">
+			<description>地下室</description>
+			<transport>80,420</transport>
+			<eventHandler>
+				<button type="click">
+					<action>teleport</action>
+					<param>10011</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<npc id="1000801" resId="none" name="购买探索装备" size="370,300" pos="0,0" namePos="65,-90" color="0,0,0,0">
+			<description>购买探索装备</description>
 			<eventHandler>
 				<button type="click">
 					<action>openPanel</action>
@@ -13,7 +23,20 @@
 					<param>mode=buy</param>
 					<param>currency=1/2</param>
 					<param>item=7001/7002/7003</param>
-					<param>title=装备购买</param>
+					<param>title=探索装备</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<npc id="1000802" resId="none" name="购买套装" size="200,200" pos="650,210" namePos="5,-5" color="0,0,0,0">
+			<description>装备工厂</description>
+			<eventHandler>
+				<button type="click">
+					<action>openPanel</action>
+					<param>ItemShop</param>
+					<param>mode=buy</param>
+					<param>currency=2/3</param>
+					<param>item=30001</param>
+					<param>title=套装商店</param>
 				</button>
 			</eventHandler>
 		</npc>

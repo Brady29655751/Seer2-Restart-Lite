@@ -37,7 +37,8 @@ namespace MiniGame
 
         protected override void Awake()
         {
-            timer.onDoneEvent += (time) => OnFinish();
+            if (timer != null)
+                timer.onDoneEvent += (time) => OnFinish();
         }
 
         public virtual void OnFinish()

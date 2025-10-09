@@ -171,6 +171,7 @@ id,timing,priority,target,condition,cond_option,effect,effect_option
 24000,resident,-1,pet,pet,type=buff[group:exclude]&buff[group:exclude]_cmp=0,set_pet,type=buff&op=+&value=440000
 24001,on_battle_start,-1,pet,none,none,add_buff,key=unit&id=440001
 24002,on_battle_start,-1,pet,none,none,add_buff,key=unit&id=440002
+30001,none,-1,none,none,none,none,none
 110050,resident,-1,pet,pet,type=skill[10050]&skill[10050]_cmp=0,set_pet,type=skill&op=+&value=10050
 110454,resident,-1,pet,pet,type=baseId/skill[10454]&baseId_cmp=90&skill[10454]_cmp=0,set_pet,type=skill&op=+&value=10454
 110485,resident,-1,pet,pet,type=baseId/skill[10485]&baseId_cmp=234&skill[10485]_cmp=0,set_pet,type=skill&op=+&value=10485
@@ -229,6 +230,9 @@ id,timing,priority,target,condition,cond_option,effect,effect_option
 320094,resident,-1,pet,pet,type=id/level&id_cmp=91&level_op=GTE&level_cmp=25,set_pet,type=id&op=SET&value=94
 320095,resident,-1,pet,pet,type=id/level&id_cmp=91&level_op=GTE&level_cmp=25,set_pet,type=id&op=SET&value=95
 320096,resident,-1,pet,pet,type=id/level&id_cmp=91&level_op=GTE&level_cmp=25,set_pet,type=id&op=SET&value=96
+320097,resident,-1,pet,pet,type=id/level&id_cmp=91&level_op=GTE&level_cmp=25,set_pet,type=id&op=SET&value=97
+320098,resident,-1,pet,pet,type=id/level&id_cmp=91&level_op=GTE&level_cmp=25,set_pet,type=id&op=SET&value=98
+320099,resident,-1,pet,pet,type=id/level&id_cmp=91&level_op=GTE&level_cmp=25,set_pet,type=id&op=SET&value=99
 320100,resident,-1,pet,pet,type=id/level&id_cmp=91&level_op=GTE&level_cmp=25,set_pet,type=id&op=SET&value=100
 320757,resident,-1,pet,pet,type=id/level&id_cmp=91&level_op=GTE&level_cmp=25,set_pet,type=id&op=SET&value=757
 320761,resident\resident\resident,-1\-1\-1,pet\pet\pet,pet\pet\pet,type=id&id_cmp=761\type=id&id_cmp=762\type=id&id_cmp=763,set_pet\set_pet\set_pet,type=id&op=SET&value=762&keep_skill=false\type=id&op=SET&value=763&keep_skill=false\type=id&op=SET&value=761&keep_skill=false
