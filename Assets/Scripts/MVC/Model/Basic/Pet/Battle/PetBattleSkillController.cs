@@ -99,7 +99,7 @@ public class PetBattleSkillController
         //    return loopSkills[loopIndex];
 
         //return null;
-        
+
         return allSkills.Find(x => (x?.id ?? 0) == id);
     }
 

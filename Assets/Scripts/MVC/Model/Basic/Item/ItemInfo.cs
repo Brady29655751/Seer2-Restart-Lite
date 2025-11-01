@@ -91,6 +91,9 @@ public class ItemInfo
         if (!removable)
             itemDesc = "[ffbb33]【无限再生】[-][ENDL]" + itemDesc;
 
+        if (habitat != "-" && habitat != "点击领取")
+            itemDesc += "[ENDL][ENDL][66ccff]【获取方式：" + habitat + "】[-][ENDL]" + itemDesc;
+
         return itemDesc.ReplaceColorAndNewline();
     }
 

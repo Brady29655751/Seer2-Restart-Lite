@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class PetBattleStatusController
-{   
+{
     private Status _initStatus, _addStatus, _multStatus, _hiddenStatus;
     private Status _powerup, _maxPowerUp, _minPowerUp;
 
@@ -22,28 +22,34 @@ public class PetBattleStatusController
 
     public BattleStatus battleStatus => new BattleStatus(currentStatus, hiddenStatus);
 
-    public int hp {
+    public int hp
+    {
         get => Mathf.Clamp(_hp, 0, _maxHp);
         set => _hp = Mathf.Clamp(value, 0, _maxHp);
     }
-    public int maxHp {
+    public int maxHp
+    {
         get => Mathf.Max(_maxHp, 0);
         set => _maxHp = Mathf.Max(value, 0);
     }
-    public int anger {
+    public int anger
+    {
         get => Mathf.Clamp(_anger, _minAnger, _maxAnger);
         set => _anger = Mathf.Clamp(value, _minAnger, _maxAnger);
     }
-    public int minAnger {
+    public int minAnger
+    {
         get => Mathf.Max(_minAnger, 0);
         set => _minAnger = Mathf.Max(value, 0);
     }
-    public int maxAnger {
+    public int maxAnger
+    {
         get => Mathf.Max(_maxAnger, 0);
         set => _maxAnger = Mathf.Max(value, 0);
     }
 
-    public PetBattleStatusController(Status normalStatus, float initHp, int initAnger = 20) {
+    public PetBattleStatusController(Status normalStatus, float initHp, int initAnger = 20)
+    {
         _initStatus = new Status(normalStatus);
         _addStatus = Status.zero;
         _multStatus = Status.one;
@@ -60,7 +66,8 @@ public class PetBattleStatusController
         _maxAnger = 100;
     }
 
-    public PetBattleStatusController(BattleStatus battleStatus) {
+    public PetBattleStatusController(BattleStatus battleStatus)
+    {
         _initStatus = battleStatus.GetBasicStatus();
         _addStatus = Status.zero;
         _multStatus = Status.one;
@@ -77,7 +84,8 @@ public class PetBattleStatusController
         _maxAnger = 100;
     }
 
-    public PetBattleStatusController(PetBattleStatusController rhs) {
+    public PetBattleStatusController(PetBattleStatusController rhs)
+    {
         _initStatus = new Status(rhs._initStatus);
         _addStatus = new Status(rhs._addStatus);
         _multStatus = new Status(rhs._multStatus);
@@ -92,9 +100,10 @@ public class PetBattleStatusController
         _anger = rhs._anger;
         _minAnger = rhs._minAnger;
         _maxAnger = rhs._maxAnger;
-    } 
+    }
 
-    public Status GetCurrentStatus(Linear<Status> powerup = null, Linear<Status> powerdown = null) {
+    public Status GetCurrentStatus(Linear<Status> powerup = null, Linear<Status> powerdown = null)
+    {
         var currentPowerup = GetCurrentPowerup(powerup, powerdown);
         Status status = new Status(_initStatus * Status.GetPowerUpBuff(currentPowerup) * _multStatus + _addStatus);
         status = Status.Max(status, Status.one);
@@ -102,13 +111,15 @@ public class PetBattleStatusController
         return status;
     }
 
-    public Status GetHiddenStatus() {
+    public Status GetHiddenStatus()
+    {
         var status = new Status(_hiddenStatus);
         status[4] = Mathf.Max(status[4], 0);
         status[5] = Mathf.Max(status[5], 0);
         return status;
     }
 
+    #region powerup
     public Status GetCurrentPowerup(Linear<Status> powerup = null, Linear<Status> powerdown = null)
     {
         var basePowerup = Status.FloorToInt(Status.Clamp(_powerup, _minPowerUp, _maxPowerUp));
@@ -133,62 +144,91 @@ public class PetBattleStatusController
         return (int)powerup[type];
     }
 
-    public void SetPowerUp(int type, int powerup) {
+    public void SetPowerUp(int type, int powerup)
+    {
         _powerup[type] = Mathf.Clamp(powerup, _minPowerUp[type], _maxPowerUp[type]);
     }
 
-    public void SetPowerUp(Status powerup) {
-        for (int i = 0; i < Status.typeNames.Length; i++) {
+    public void SetPowerUp(Status powerup)
+    {
+        for (int i = 0; i < Status.typeNames.Length; i++)
+        {
             SetPowerUp(i, (int)powerup[i]);
         }
     }
 
-    public void SetMinPowerUp(int type, int min) {
+    public void SetMinPowerUp(int type, int min)
+    {
         _minPowerUp[type] = min;
     }
-    public void SetMinPowerUp(Status minPowerup) {
-        for (int i = 0; i < Status.typeNames.Length; i++) {
+    public void SetMinPowerUp(Status minPowerup)
+    {
+        for (int i = 0; i < Status.typeNames.Length; i++)
+        {
             SetMinPowerUp(i, (int)minPowerup[i]);
         }
     }
 
-    public void SetMaxPowerUp(int type, int max) {
+    public void SetMaxPowerUp(int type, int max)
+    {
         _maxPowerUp[type] = max;
     }
 
-    public void SetMaxPowerUp(Status maxPowerup) {
-        for (int i = 0; i < Status.typeNames.Length; i++) {
+    public void SetMaxPowerUp(Status maxPowerup)
+    {
+        for (int i = 0; i < Status.typeNames.Length; i++)
+        {
             SetMaxPowerUp(i, (int)maxPowerup[i]);
         }
     }
 
-    public void AddPowerUp(int type, int addAmount) {
+    public void AddPowerUp(int type, int addAmount)
+    {
         int newPowerup = (int)powerup[type] + addAmount;
         SetPowerUp(type, newPowerup);
     }
+    #endregion
 
-    public void AddInitStatus(Status status) {
+    #region status
+    public void MultInitStatus(int type, float multAmount)
+    {
+        _initStatus *= multAmount;
+    }
+
+    public void AddInitStatus(Status status)
+    {
         _initStatus += status;
     }
 
-    public void AddBattleStatus(int type, int addAmount) {
+    public void AddInitStatus(int type, int addAmount)
+    {
+        _initStatus[type] += addAmount;
+    }
+
+    public void AddBattleStatus(int type, int addAmount)
+    {
         int basicTypeLength = Status.typeNames.Length;
-        if (type < basicTypeLength) {
+        if (type < basicTypeLength)
+        {
             AddCurrentStatus(type, addAmount);
             return;
         }
         AddHiddenStatus(type - basicTypeLength, addAmount);
     }
 
-    public void MultCurrentStatus(int type, float multAmount) {
+    public void MultCurrentStatus(int type, float multAmount)
+    {
         _multStatus[type] *= multAmount;
     }
 
-    public void AddCurrentStatus(int type, int addAmount) {
+    public void AddCurrentStatus(int type, int addAmount)
+    {
         _addStatus[type] += addAmount;
     }
 
-    public void AddHiddenStatus(int type, int addAmount) {
+    public void AddHiddenStatus(int type, int addAmount)
+    {
         _hiddenStatus[type] += addAmount;
     }
+    #endregion
 }

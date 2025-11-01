@@ -82,8 +82,9 @@ public static class Operator {
     }
 
     public static Dictionary<string, Func<float, float, float>> opDict { get; } = new Dictionary<string, Func<float, float, float>>() {
-        {"+", Add},  {"-", Sub},  {"*", Mult},  {"/", Div},  {"^", Pow},    {"%", Mod},     
+        {"+", Add},  {"-", Sub},  {"*", Mult},  {"/", Div},  {"^", Pow},    {"%", Mod},
         {"[MIN]", Mathf.Min},     {"[MAX]", Mathf.Max},      {"SET", Set},  {"[ABS]", Abs},
+        {"[FLR]", Floor},       {"[CEL]", Ceil},          {"[RND]", Round}
     };
 
     public static float Operate(string op, float lhs, float rhs) {
@@ -111,11 +112,25 @@ public static class Operator {
     public static float Set(float lhs, float rhs) {
         return rhs;
     }
-    
+
     public static float Abs(float lhs, float rhs) {
         return Mathf.Abs(lhs - rhs);
     }
 
+    public static float Floor(float lhs, float rhs)
+    {
+        return Mathf.FloorToInt(lhs / rhs);
+    }
+
+    public static float Ceil(float lhs, float rhs)
+    {
+        return Mathf.CeilToInt(lhs / rhs);
+    }
+
+    public static float Round(float lhs, float rhs)
+    {
+        return Mathf.RoundToInt(lhs / rhs);
+    }
 }
 
 public enum DataType {

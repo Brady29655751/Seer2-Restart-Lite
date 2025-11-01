@@ -54,7 +54,6 @@ public class Skill
         get => powerdown.mult.atk * powerdown.mult.mat == 0;
         set => powerdown.mult.atk = powerdown.mult.mat = value ? 0 : 1;
     }
-    // public Status multPowerup = Status.one, multPowerdown = Status.one;
     public Linear<Status> powerup = new Linear<Status>(Status.one, Status.zero);
     public Linear<Status> powerdown = new Linear<Status>(Status.one, Status.zero);
 
@@ -165,8 +164,8 @@ public class Skill
         chain = rhs.chain;
         priority = rhs.priority;
         ignoreShield = rhs.ignoreShield;
-        powerup = new Linear<Status>(rhs.powerup);
-        powerdown = new Linear<Status>(rhs.powerdown);
+        powerup = new Linear<Status>(new Status(rhs.powerup.mult), new Status(rhs.powerup.add));
+        powerdown = new Linear<Status>(new Status(rhs.powerdown.mult), new Status(rhs.powerdown.add));
         referBuffList = rhs.referBuffList?.ToList();
     }
 
@@ -196,7 +195,7 @@ public class Skill
         string allOptionString = string.IsNullOrEmpty(rawOptionString + otherOptionString) ? "none" : (rawOptionString + "&" + otherOptionString);
 
         return new string[] { id.ToString(), name, elementId.ToString(), ((int)type).ToString(),
-            power.ToString(), anger.ToString(), accuracy.ToString(), allOptionString.Trim('&'), rawDescription  };
+            power.ToString(), rawCostString, accuracy.ToString(), allOptionString.Trim('&'), rawDescription  };
     }
 
     public static Skill GetSkill(int id, bool avoidNull = true)
@@ -396,7 +395,7 @@ public class Skill
 
     public bool IsAction()
     {
-        return type < SkillType.属性;
+        return (type < SkillType.属性) && (type != SkillType.被动);
         // (type != SkillType.属性) && (type != SkillType.物理) 
         // && (type != SkillType.特殊) && (type != SkillType.必杀);
     }
@@ -508,6 +507,7 @@ public class Skill
             "anger" => anger,
             "pp" => PP,
             "maxPP" => maxPP,
+            "lostPP" => maxPP - PP,
             "accuracy" => accuracy,
             "priority" => priority,
             "critical" => critical,
@@ -590,7 +590,7 @@ public class Skill
                 critical = value;
                 return;
             case "combo":
-                combo = (int)value;
+                combo = Mathf.Max((int)value, 0);
                 return;
             case "chain":
                 chain = (int)value;
@@ -620,7 +620,7 @@ public class Skill
 
 public enum SkillType
 {
-    空过 = -1, 道具 = -2, 換场 = -3, 逃跑 = -4,
+    空过 = -1, 道具 = -2, 換场 = -3, 逃跑 = -4, 被动 = -5,
     属性 = 0, 物理 = 1, 特殊 = 2, 连携 = 3, 必杀 = 100,
 }
 

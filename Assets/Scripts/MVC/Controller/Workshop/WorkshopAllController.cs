@@ -84,10 +84,10 @@ public class WorkshopAllController : Module
         if (allModel.currentSkill == null) 
             return;
 
-        if (allModel.currentSkill.IsAction()) {
-            Hintbox.OpenHintboxWithContent("无法查看该技能", 16);
-            return;
-        }
+        // if (allModel.currentSkill.IsAction()) {
+        //     Hintbox.OpenHintboxWithContent("无法查看该技能", 16);
+        //     return;
+        // }
 
         optionSelectController.Select(2);
         skillController.SetSkill(allModel.currentSkill);

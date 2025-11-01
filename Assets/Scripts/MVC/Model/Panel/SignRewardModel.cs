@@ -6,8 +6,8 @@ using UnityEngine;
 public class SignRewardModel : Module
 {
     public string activityId { get; private set; } = "noob_reward";
-    private string rewardIconDataPath => "Panels/SignReward/Data/" + activityId + "/rewardIcons";
-    private string rewardItemDataPath => "Panels/SignReward/Data/" + activityId + "/rewardItems";
+    private string rewardIconDataPath => $"Panels/SignReward/Data/rewardIcons/{activityId}";
+    private string rewardItemDataPath => $"Panels/SignReward/Data/rewardItems/{activityId}";
 
     public Activity activity => Activity.Find(activityId);
     public bool isTodaySigned => IsTodaySigned();

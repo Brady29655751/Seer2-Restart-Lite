@@ -70,7 +70,7 @@ public class GameManager : Singleton<GameManager>
     }
 
     private void GameInit() {
-        GetVersionData();
+       // GetVersionData();
     }
 
     private void GameQuit() {

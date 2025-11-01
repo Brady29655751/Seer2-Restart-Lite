@@ -11,8 +11,17 @@ public static class PetExpSystem
     private static Func<int, uint> n1 = (n) => (uint)(n);
 
     #region exp-system
+    public static int GetLevelByTotalExp(uint totalExp, int expType = 0) {
+        int level = 0;
+        
+        while (GetTotalExp(level + 1, expType) <= totalExp)
+            level++;
+        
+        return level;
+    }
 
-    public static uint GetLevelExp(int level, int expType = 0) {
+    public static uint GetLevelExp(int level, int expType = 0)
+    {
         return (level == 0) ? 0 : GetLevelExpFormula(expType)(level);
     }
 

@@ -7,7 +7,7 @@ namespace MiniGame
 {
     public class PlayerController : Module
     {
-        [SerializeField] protected const float Speed = 3f;
+        [SerializeField] protected float moveSpeed = 3f;
         [SerializeField] protected SpriteRenderer spriteRenderer;
         [SerializeField] protected Sprite[] playerDirectionSprite = new Sprite[4];
 
@@ -31,7 +31,7 @@ namespace MiniGame
             direction[2] = Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A); // 左
             direction[3] = Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D); // 右
 
-            float[] move = direction.Select(x => x ? Speed * Time.deltaTime : 0).ToArray();
+            float[] move = direction.Select(x => x ? moveSpeed * Time.deltaTime : 0).ToArray();
             this.Position += move[0] * Vector3.up + move[1] * Vector3.down + move[2] * Vector3.left + move[3] * Vector3.right;
 
             SetDirection(direction);

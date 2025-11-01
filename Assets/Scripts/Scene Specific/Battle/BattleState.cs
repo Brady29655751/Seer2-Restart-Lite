@@ -221,9 +221,11 @@ public class BattleState
     public virtual EffectHandler GetEffectHandler(Unit invokeUnit, bool addSkillEffect = true) {
 
         if (invokeUnit == null)
-            return GetEffectHandler(masterUnit).Concat(GetEffectHandler(clientUnit));
+            return GetEffectHandler(masterUnit, addSkillEffect).Concat(GetEffectHandler(clientUnit, addSkillEffect));
 
         var unitEffects = invokeUnit.unitBuffs.Where(x => !x.ignore).Select(x => x.effects);
+        var skillEffects = invokeUnit.pet.skillController.allSkills.Where(x => (x != null) && (x.type == SkillType.被动))
+            .Where(x => invokeUnit.pet.IsSkillCostEnough(x.id, settings.rule)).Select(x => x.effects);
         var buffEffects = invokeUnit.pet.buffs.Where(x => !x.ignore).Select(x => x.effects);
         var handler = new EffectHandler();
 
@@ -235,6 +237,9 @@ public class BattleState
 
         if (addSkillEffect && (invokeUnit.skill != null))
             handler.AddEffects(invokeUnit, invokeUnit.skill.effects);
+
+        foreach (var e in skillEffects)
+            handler.AddEffects(invokeUnit, e);
 
         foreach (var e in unitEffects)
             handler.AddEffects(invokeUnit, e);

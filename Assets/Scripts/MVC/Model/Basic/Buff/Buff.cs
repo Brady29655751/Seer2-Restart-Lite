@@ -184,7 +184,7 @@ public class Buff
                 break;
 
             var optionKey = desc.Substring(index + 1).TrimParentheses();
-            desc = desc.Replace($"[option[{optionKey}]]", referenceBuff.options.Get(optionKey, "0"));
+            desc = desc.Replace($"[option[{optionKey}]]", referenceBuff.options.Get(optionKey, $"空栏位"));
         }
 
         desc = desc.Replace("[value]", referenceBuff.value.ToString()).Replace("[poker]", pokerValue);
@@ -197,11 +197,17 @@ public class Buff
     public string GetDescription() {
         string desc = GetBuffDescriptionPreview(info.description, this);
 
-        if (!info.keep && !IsUnhealthy() && !IsAbnormal()) 
-            desc += "（若精灵换场则不保留）";
+        if (!info.keep && !IsUnhealthy() && !IsAbnormal())
+            desc += "\n（换场不保留原精灵身上）";
+
+        if (info.inherit)
+            desc += "\n（换场继承给下一位精灵）";
+            
+        if (info.legacy)
+            desc += "\n（阵亡继承给下一位精灵）";
         
         if (turn > 0)
-            desc += "\n持续 " + turn + " 回合";
+            desc += $"\n持续 {turn} 回合";
         
         return desc;
     }

@@ -57,8 +57,8 @@ public class PetBasic
             {
                 int hash = 17;
                 hash = hash * 31 + this.id;
-                hash = hash * 31 + this.height;
-                hash = hash * 31 + this.weight;
+                // hash = hash * 31 + this.height;
+                // hash = hash * 31 + this.weight;
                 hash = hash * 31 + (int)this.personality;
                 hash = hash * 31 + this.getPetDate.GetHashCode();
                 return hash;

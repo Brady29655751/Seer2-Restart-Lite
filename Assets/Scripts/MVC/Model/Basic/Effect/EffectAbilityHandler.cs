@@ -231,6 +231,9 @@ public static class EffectAbilityHandler
         string set = effect.abilityOptionDict.Get("set", "none");
         string min = effect.abilityOptionDict.Get("min", "none");
         string max = effect.abilityOptionDict.Get("max", "none");
+        string filterList = effect.abilityOptionDict.Get("filter", "none");
+        string random = effect.abilityOptionDict.Get("random", "false");
+        string randomTypeCountExpr = effect.abilityOptionDict.Get("random_count", "-1");
 
         Unit invokeUnit = (Unit)effect.invokeUnit;
         Unit lhsUnit = (who == "me") ? state.GetUnitById(invokeUnit.id) : state.GetRhsUnitById(invokeUnit.id);
@@ -238,6 +241,13 @@ public static class EffectAbilityHandler
 
         var statusController = lhsUnit.pet.statusController;
         var skillController = lhsUnit.pet.skillController;
+
+        var isRandom = bool.Parse(random);
+        var randomTypeCount = (int)Parser.ParseEffectOperation(randomTypeCountExpr, effect, lhsUnit, rhsUnit);
+        var filter = Parser.ParseConditionFilter<Skill>(filterList, (expr, skill) =>
+        {
+            return skill.TryGetSkillIdentifier(expr, out var num) ? num : Identifier.GetNumIdentifier(expr);
+        });
 
         switch (type)
         {
@@ -259,15 +269,19 @@ public static class EffectAbilityHandler
                 break;
 
             case "pp":
+                var ppSkills = skillController.allSkills.Where(x => x != null).Where(filter).ToList();
+                if (isRandom)
+                    ppSkills = ppSkills.Random(randomTypeCount);
+
                 if (set == "none")
                 {
                     float pp = Parser.ParseEffectOperation(add, effect, lhsUnit, rhsUnit);
-                    skillController.allSkills.ForEach(x => x.PP += (int)pp);
+                    ppSkills.ForEach(x => x.PP += (int)pp);
                 }
                 else
                 {
                     float pp = Parser.ParseEffectOperation(set, effect, lhsUnit, rhsUnit);
-                    skillController.allSkills.ForEach(x => x.PP = (int)pp);
+                    ppSkills.ForEach(x => x.PP = (int)pp);
                 }
                 break;
         }
@@ -413,6 +427,7 @@ public static class EffectAbilityHandler
     public static bool AddStatus(this Effect effect, BattleState state)
     {
         string who = effect.abilityOptionDict.Get("who", "me");
+        string key = effect.abilityOptionDict.Get("key", "current");
         string type = effect.abilityOptionDict.Get("type", "5");
         string mult = effect.abilityOptionDict.Get("mult", "0/1");
         string add = effect.abilityOptionDict.Get("add", "0");
@@ -429,14 +444,27 @@ public static class EffectAbilityHandler
             Unit lhsUnit = (who == "me") ? state.GetUnitById(invokeUnit.id) : state.GetRhsUnitById(invokeUnit.id);
             Unit rhsUnit = state.GetRhsUnitById(lhsUnit.id);
             var pet = lhsUnit.pet;
+            var statusController = pet.statusController;
             float statusMult = Parser.ParseEffectOperation(mult, effect, lhsUnit, rhsUnit);
             int statusAdd = (int)Parser.ParseEffectOperation(add, effect, lhsUnit, rhsUnit);
 
+            Action<int, float> MultFunc = key switch
+            {
+                "init" => statusController.MultInitStatus,
+                _ => statusController.MultCurrentStatus,
+            };
+
+            Action<int, int> AddFunc = key switch
+            {
+                "init" => statusController.AddInitStatus,
+                _ => statusController.AddBattleStatus,
+            };
+
             if (statusMult != 0)
-                pet.statusController.MultCurrentStatus(statusType, statusMult);
+                MultFunc(statusType, statusMult);
 
             //statusAdd += Mathf.FloorToInt(pet.initStatus[statusType] * statusMult);
-            pet.statusController.AddBattleStatus(statusType, statusAdd);
+            AddFunc(statusType, statusAdd);
         }
 
         return true;
@@ -589,7 +617,7 @@ public static class EffectAbilityHandler
                     {
                         foreach (var op in optionList)
                         {
-                            var num = Identifier.GetIdentifier(op.Split(':')[1], effect, lhsUnit, rhsUnit);
+                            var num = Parser.ParseEffectOperation(op.Split(':')[1], effect, lhsUnit, rhsUnit);
                             newBuff.options.Set(op.Split(':')[0], (num == float.MinValue) ? op.Split(':')[1] : num.ToString());
                         }
                     }

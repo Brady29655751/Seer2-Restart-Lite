@@ -135,6 +135,9 @@ public class BattlePetSkillView : BattleBaseView
             return;
 
         var skill = new Skill(pet.skillController.normalSkills[index]);
+        if (skill.type == SkillType.被动)
+            return;
+
         if (battle.settings.parallelCount > 1)
             skill.SetParallelIndex(battle.currentState.myUnit.petSystem.cursor, battle.currentState.opUnit.petSystem.cursor);
 
@@ -172,6 +175,9 @@ public class BattlePetSkillView : BattleBaseView
             return;
 
         var skill = new Skill(pet.skillController.superSkill);
+        if (skill.type == SkillType.被动)
+            return;
+        
         if (battle.settings.parallelCount > 1)
             skill.SetParallelIndex(battle.currentState.myUnit.petSystem.cursor, battle.currentState.opUnit.petSystem.cursor);
 

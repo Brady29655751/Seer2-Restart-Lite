@@ -1,0 +1,72 @@
+<map name="乌黑矿坑" category="6" id="520" weather="0">
+	<fightMapColor>64,64,64,255</fightMapColor>
+	<initialPoint>529,357</initialPoint>
+	<music category="6">
+		<bgm>BGM_520</bgm>
+	</music>
+	<entities>
+		<npc id="52001" resId="Pets/pet/87.png" name="Lv50 三眼石蝎" size="70,87" pos="670,225" namePos="0,0" active="false">
+			<battle>
+				<branch id="default">
+					<settings count="6" capture="true"/>
+					<enemy>
+						<pet id="87" level="50">
+							<initBuff>-2,75</initBuff>
+							<loopSkill>12845,12845,12845,12845,12845,-4</loopSkill>
+						</pet>
+					</enemy>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>battle</action>
+					<param>default</param>
+				</button>
+				<button type="auto">
+					<action>setNpcParam</action>
+					<param>52001</param>
+					<param>active=true</param>
+					<condition>random[new]LTE5</condition>
+				</button>
+			</eventHandler>
+		</npc>
+		<npc id="52002" resId="Pets/pet/88.png" name="Lv41 皮格" size="53,38" pos="740,140" namePos="0,0">
+			<battle>
+				<branch id="default">
+					<settings count="6" capture="true"/>
+					<enemy>
+						<pet id="88" level="41">
+							<loopSkill>12857</loopSkill>
+						</pet>
+					</enemy>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>battle</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<npc id="52003" resId="Pets/pet/88.png" name="Lv42 皮格" size="53,38" pos="400,85" namePos="0,0">
+			<battle>
+				<branch id="default">
+					<settings count="6" capture="true"/>
+					<enemy>
+						<pet id="88" level="42">
+							<loopSkill>12857</loopSkill>
+						</pet>
+					</enemy>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>battle</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<teleport id="1" name="地道之路" pos="595,50" targetMapId="510"/>
+		<teleport id="2" name="实验禁地" pos="620,380" targetMapId="500"/>
+	</entities>		
+</map>

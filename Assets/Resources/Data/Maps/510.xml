@@ -1,0 +1,48 @@
+<map name="地道之路" category="6" id="510" weather="0">
+	<fightMapColor>64,64,64,255</fightMapColor>
+	<initialPoint>485,150</initialPoint>
+	<music category="6">
+		<bgm>BGM_520</bgm>
+	</music>
+	<entities>
+		<npc id="51002" resId="Pets/pet/64.png" name="Lv43 格尔西克" size="61,45" pos="330,190" namePos="0,0">
+			<battle>
+				<branch id="default">
+					<settings count="6" capture="true"/>
+					<enemy>
+						<pet id="64" level="43">
+							<loopSkill>12903,12904</loopSkill>
+						</pet>
+					</enemy>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>battle</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<npc id="51003" resId="Pets/pet/64.png" name="Lv44 格尔西克" size="61,45" pos="210,130" namePos="0,0">
+			<battle>
+				<branch id="default">
+					<settings count="6" capture="true"/>
+					<enemy>
+						<pet id="64" level="44">
+							<loopSkill>12903,12904</loopSkill>
+						</pet>
+					</enemy>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>battle</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<teleport id="1" name="乌黑矿坑" pos="510,270" targetMapId="520"/>
+		<teleport id="2" name="地月氏族主城" pos="170,60" targetMapId="470"/>
+		<teleport id="3" name="幽静浅滩" pos="600,105" targetMapId="220"/>
+	</entities>		
+</map>

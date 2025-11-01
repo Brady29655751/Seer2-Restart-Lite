@@ -11,7 +11,7 @@ public class VersionData
     [XmlElement("gameVersion")] public string gameVersion;
     [XmlElement("buildVersion")] public string buildVersion;
     [XmlElement("resourceVersion")] public string resourceVersion;
-    
+
     public static List<string> versionType => new List<string>() { "alpha", "beta", "lite" };
     public static string DefaultVersion => "alpha_0.1";
 
@@ -23,15 +23,18 @@ public class VersionData
     public VersionSkillData skillData;
     public VersionMissionData missionData;
 
-    public bool IsEmpty() {
+    public bool IsEmpty()
+    {
         return string.IsNullOrEmpty(gameVersion);
     }
 
-    public static bool IsNullOrEmpty(VersionData versionData) {
+    public static bool IsNullOrEmpty(VersionData versionData)
+    {
         return (versionData == null) || (versionData.IsEmpty());
     }
 
-    public static int Compare(string lhsVersion, string rhsVersion, int compareBits = int.MaxValue) {
+    public static int Compare(string lhsVersion, string rhsVersion, int compareBits = int.MaxValue)
+    {
         int lhsVersionIndex = versionType.FindIndex(x => lhsVersion.StartsWith(x));
         int rhsVersionIndex = versionType.FindIndex(x => rhsVersion.StartsWith(x));
 
@@ -41,11 +44,12 @@ public class VersionData
         if (lhsVersionIndex != rhsVersionIndex)
             return lhsVersionIndex.CompareTo(rhsVersionIndex);
 
-        var lhsVersionSplit = (lhsVersion.TrimStart(versionType[lhsVersionIndex] + "_")).Split('.').Select(int.Parse).ToArray();
-        var rhsVersionSplit = (rhsVersion.TrimStart(versionType[rhsVersionIndex] + "_")).Split('.').Select(int.Parse).ToArray();
+        var lhsVersionSplit = lhsVersion.TrimStart(versionType[lhsVersionIndex] + "_").Split('.').Select(int.Parse).ToArray();
+        var rhsVersionSplit = rhsVersion.TrimStart(versionType[rhsVersionIndex] + "_").Split('.').Select(int.Parse).ToArray();
         var length = Mathf.Max(lhsVersionSplit.Length, rhsVersionSplit.Length);
 
-        for (int i = 0; i < length; i++) {
+        for (int i = 0; i < length; i++)
+        {
             if (i >= compareBits)
                 break;
 
@@ -60,7 +64,8 @@ public class VersionData
     }
 }
 
-public class VersionMailData {
+public class VersionMailData
+{
 
     [XmlArray("updateMail"), XmlArrayItem(typeof(Mail), ElementName = "mail")]
     public List<Mail> updateMails;
@@ -68,13 +73,14 @@ public class VersionMailData {
     public Mail dailyLoginMail;
 }
 
-public class VersionPetData {
+public class VersionPetData
+{
     public int petNum;
     public int minPetId, maxPetId;
     [XmlElement("topicPetId")] public string topicPets;
     [XmlIgnore] public List<int> topicPetIds => topicPets.ToIntList();
 
-    [XmlIgnore] public List<Pet> petAllWithMod => PetInfo.database.Select(x => Pet.GetExamplePet(x.id )).Where(x => x != null).ToList();
+    [XmlIgnore] public List<Pet> petAllWithMod => PetInfo.database.Select(x => Pet.GetExamplePet(x.id)).Where(x => x != null).ToList();
     [XmlIgnore] public List<Pet> petDictionary => petAllWithMod.Where(x => x.id.IsWithin(minPetId, maxPetId)).ToList();
     [XmlIgnore] public List<Pet> petLastEvolveDictionary => petDictionary.GroupBy(x => x.basic.baseId).Select(group => group.Last()).ToList();
     [XmlIgnore] public List<Pet> petModLastEvolveDictionary => petMod.Where(x => (!x.info.ui.hide) && (!ListHelper.IsNullOrEmpty(x.ownSkill))).GroupBy(x => x.basic.baseId).Select(group => group.Last()).ToList();
@@ -84,12 +90,14 @@ public class VersionPetData {
 
 }
 
-public class VersionSkillData {
+public class VersionSkillData
+{
     public int skillNum;
     public int minSkillId, maxSkillId;
 }
 
-public class VersionMissionData {
+public class VersionMissionData
+{
     [XmlElement("mainCount")] public int mainMissionCount;
     [XmlElement("sideCount")] public int sideMissionCount;
     [XmlElement("dailyCount")] public int dailyMissionCount;

@@ -16,7 +16,11 @@ public class WorkshopSkillModel : Module
     public int id => int.Parse(idInputField.inputString);
     public string skillName => nameInputField.inputString;
     public Element element => (Element)(elementDropdown.value);
-    public SkillType type => (SkillType)((typeDropdown.value == 4) ? 100 : typeDropdown.value);
+    public SkillType type => typeDropdown.value switch
+    {
+        9 => SkillType.必杀,
+        _ => (SkillType)(typeDropdown.value - 5)
+    };
     public int power => int.Parse(powerInputField.inputString);
     public string cost => angerInputField.inputString;
     public int accuracy => int.Parse(accuracyInputField.inputString);
@@ -47,7 +51,7 @@ public class WorkshopSkillModel : Module
         nameInputField.SetInputString(skill.name);
 
         elementDropdown.value = (int)skill.element;
-        typeDropdown.value = Mathf.Min((int)skill.type, 4);
+        typeDropdown.value = Mathf.Min((int)(skill.type - 5), 4);
 
         powerInputField.SetInputString(skill.power.ToString());
         angerInputField.SetInputString(skill.rawCostString);

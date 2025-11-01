@@ -9,6 +9,7 @@ using UnityEngine.UI;
 using Object = UnityEngine.Object;
 using System.Threading.Tasks;
 using SimpleFileBrowser;
+using WebSocketSharp;
 
 public class ResourceManager : Singleton<ResourceManager>
 {
@@ -19,6 +20,7 @@ public class ResourceManager : Singleton<ResourceManager>
     private string itemUrl => GameManager.serverUrl + "Items/";
     private string missionUrl => GameManager.serverUrl + "Missions/";
     private string activityUrl => GameManager.serverUrl + "Activities/";
+    private string trpgUrl => GameManager.serverUrl + "TRPG/";
 
     public string spritePath => "Sprites/";
     public string fontPath => "Fonts/";

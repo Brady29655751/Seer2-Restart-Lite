@@ -1,0 +1,64 @@
+<map name="地月氏族主城" category="6" id="470" weather="0">
+	<fightMapColor>64,64,64,255</fightMapColor>
+	<initialPoint>290,80</initialPoint>
+	<music category="6">
+		<bgm>BGM_520</bgm>
+	</music>
+	<entities>
+		<npc id="47001" resId="Pets/pet/110" name="埃卡维特" size="103,101" pos="395,140" namePos="0,0">
+			<description>会变戏法的精灵</description>
+			<dialog>
+				<branch id="default" name="埃卡维特" icon="Pets/pet/110" size="103,101" pos="10,45">
+					<content><![CDATA[钓鱼佬永不空军！]]></content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[鱼蠢的精灵]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+						<reply type="click">
+							<description><![CDATA[尝试引诱]]></description>
+							<action>openDialog</action>
+							<param>fish</param>
+							<condition>item[1017].num+item[1018].num+item[1019].num+item[1020].num+item[1021].numLTE0</condition>
+						</reply>
+						<reply type="branch">
+							<action>battle</action>
+							<param>default</param>
+							<condition>item[1017].num+item[1018].num+item[1019].num+item[1020].num+item[1021].num&gt;0</condition>
+						</reply>
+					</replyHandler>
+				</branch>
+				<branch id="fish" name="埃卡维特" icon="Pets/pet/110" size="103,101" pos="10,45">
+					<content><![CDATA[寻常的鱼已经吃腻了，来点不一样的稀有鱼类！比如<b><color=#ffbb33>独龙鱼</color>、<color=#ffbb33>两栖鱼</color>、<color=#ffbb33>三角鱼</color>、<color=#ffbb33>四爪鱼</color>或者<color=#ffbb33>九幽龙鱼</color></b>！]]></content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[挑食鬼！钓不到只能挖宝了...]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+					</replyHandler>
+				</branch>
+			</dialog>
+			<battle>
+				<branch id="default">
+					<settings count="6" capture="true"/>
+					<enemy>
+						<pet id="110" level="45">
+							<initBuff>-2,75</initBuff>
+							<loopSkill>12901,12901,12901,12901,12901,-4</loopSkill>
+						</pet>
+					</enemy>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>openDialog</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<teleport id="1" name="地道之路" pos="110,275" targetMapId="510"/>
+		<!-- <teleport id="2" name="实验禁地" pos="620,380" targetMapId="500"/> -->
+	</entities>		
+</map>
