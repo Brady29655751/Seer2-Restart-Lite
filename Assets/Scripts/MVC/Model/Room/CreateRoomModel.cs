@@ -19,6 +19,11 @@ public class CreateRoomModel : Module
 
     public List<Buff> rules => settings.initBuffs.Select(x => x.Value).ToList();
 
+    public void SetBattleSystem(BattleRule rule)
+    {
+        settings.rule = rule;
+    }
+
     public void SetPetCount(int count) {
         settings.petCount = count;
     }
@@ -50,10 +55,12 @@ public class CreateRoomModel : Module
     }
 
     public void CreateRoom() {
-        NetworkData networkData = new NetworkData() {
+        NetworkData networkData = new NetworkData()
+        {
             networkAction = NetworkAction.Create,
             roomName = Random.Range(10001, 100000).ToString(),
         };
+        networkData.roomProperty["rule"] = (int)settings.rule;
         networkData.roomProperty["count"] = settings.petCount;
         networkData.roomProperty["time"] = settings.time;
         networkData.roomProperty["item"] = settings.isItemOK;

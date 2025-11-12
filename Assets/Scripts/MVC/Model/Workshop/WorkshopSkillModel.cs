@@ -16,11 +16,7 @@ public class WorkshopSkillModel : Module
     public int id => int.Parse(idInputField.inputString);
     public string skillName => nameInputField.inputString;
     public Element element => (Element)(elementDropdown.value);
-    public SkillType type => typeDropdown.value switch
-    {
-        9 => SkillType.必杀,
-        _ => (SkillType)(typeDropdown.value - 5)
-    };
+    public SkillType type => GetSkillTypeFromDropdown();
     public int power => int.Parse(powerInputField.inputString);
     public string cost => angerInputField.inputString;
     public int accuracy => int.Parse(accuracyInputField.inputString);
@@ -33,11 +29,22 @@ public class WorkshopSkillModel : Module
 
     public List<Effect> effectList = new List<Effect>();
 
-    protected override void Awake() {
+    protected override void Awake()
+    {
         // if (!PetElementSystem.IsMod())
         //     return;
 
         elementDropdown.SetDropdownOptions(PetElementSystem.elementNameList);
+    }
+    
+    public SkillType GetSkillTypeFromDropdown()
+    {
+        if (typeDropdown.value < 4)
+            return (SkillType)typeDropdown.value;
+        else if (typeDropdown.value == 4)
+            return SkillType.必杀;
+        else
+            return (SkillType)(typeDropdown.value - 10);
     }
 
     public Skill GetSkill() {

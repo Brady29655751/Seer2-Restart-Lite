@@ -1,0 +1,72 @@
+<map name="黄金之路" category="6" id="360" weather="0">
+	<fightMapColor>64,64,64,255</fightMapColor>
+	<initialPoint>385,200</initialPoint>
+	<music category="6">
+		<bgm>BGM_320</bgm>
+	</music>
+	<entities>
+		<npc id="36003" resId="Pets/pet/137.png" name="Lv55 鲁卜哈利" size="109,84" pos="575,285" namePos="0,0" active="false">
+			<battle>
+				<branch id="default">
+					<settings count="6" capture="true"/>
+					<enemy>
+						<pet id="137" level="55">
+							<initBuff>-2</initBuff>
+							<loopSkill>12990,12990,12996,12996,12996,-4</loopSkill>
+						</pet>
+					</enemy>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>battle</action>
+					<param>default</param>
+				</button>
+				<button type="auto">
+					<action>setNpcParam</action>
+					<param>36003</param>
+					<param>active=true</param>
+					<condition>random[new]LTE5</condition>
+				</button>
+			</eventHandler>
+		</npc>
+		<npc id="36001" resId="Pets/pet/69.png" name="Lv53 蛋壳鸡" size="58,90" pos="390,55" namePos="0,0">
+			<battle>
+				<branch id="default">
+					<settings count="6" capture="true"/>
+					<enemy>
+						<pet id="69" level="53">
+							<loopSkill>12966</loopSkill>
+						</pet>
+					</enemy>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>battle</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<npc id="36002" resId="Pets/pet/69.png" name="Lv54 蛋壳鸡" size="58,90" pos="155,135" namePos="0,0">
+			<battle>
+				<branch id="default">
+					<settings count="6" capture="true"/>
+					<enemy>
+						<pet id="69" level="54">
+							<loopSkill>12966</loopSkill>
+						</pet>
+					</enemy>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>battle</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<!-- <teleport id="1" name="三八跑道线(地)" pos="65,120" targetMapId="370"/> -->
+		<teleport id="2" name="沙爪氏族主城" pos="530,45" targetMapId="320"/>
+	</entities>		
+</map>

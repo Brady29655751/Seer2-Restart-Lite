@@ -102,6 +102,21 @@
 							<condition>random[0~100]LTE10|activity[10002].guarantee[1]GTE[int]20[default]0</condition>
 							<condition>activity[10002].done[1]=[bool]false[default]false</condition>
 						</button>
+						<button type="auto">
+							<action>setItem</action>
+							<param>add</param>
+							<param>22022,1</param>
+							<condition>random[old]&lt;10</condition>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=1个蓝色闪电已经放入背包</param>
+							<param>item_icon=buff[420022]</param>
+							<param>option_num=1</param>
+							<condition>random[old]&lt;10</condition>
+						</button>
 					</winHandler>
 				</branch>
 			</battle>
@@ -206,6 +221,21 @@
 							<param>reward</param>
 							<condition>random[0~100]LTE10|activity[10002].guarantee[2]GTE[int]20[default]0</condition>
 							<condition>activity[10002].done[2]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>setItem</action>
+							<param>add</param>
+							<param>22023,1</param>
+							<condition>random[old]&lt;10</condition>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=1个断裂皮鞭已经放入背包</param>
+							<param>item_icon=buff[420023]</param>
+							<param>option_num=1</param>
+							<condition>random[old]&lt;10</condition>
 						</button>
 					</winHandler>
 				</branch>
@@ -385,6 +415,21 @@
 							<param>soul</param>
 							<param>done[north][2]=true</param>
 							<condition>activity[soul].done[north][2]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>setItem</action>
+							<param>add</param>
+							<param>23006,1</param>
+							<condition>random[old]&lt;10</condition>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=1个水脉璞玉已经放入背包</param>
+							<param>item_icon=buff[430006]</param>
+							<param>option_num=1</param>
+							<condition>random[old]&lt;10</condition>
 						</button>
 					</winHandler>
 				</branch>

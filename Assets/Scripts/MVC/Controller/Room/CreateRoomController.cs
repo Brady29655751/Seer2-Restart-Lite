@@ -14,7 +14,15 @@ public class CreateRoomController : Module
         buffController.SetDIYSuccessCallback(info => AddRule(info.id));
     }
 
-    public void SetPetCount(int count) {
+    public void SetBattleSystem(int system)
+    {
+        var rule = (BattleRule)system;
+        createModel.SetBattleSystem(rule);
+        createView.SetBattleSystem(rule);
+    }
+
+    public void SetPetCount(int count)
+    {
         createModel.SetPetCount(count);
         createView.SetPetCount(count);
     }

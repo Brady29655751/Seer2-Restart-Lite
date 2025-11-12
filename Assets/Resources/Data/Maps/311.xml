@@ -1,0 +1,208 @@
+<map name="三八擂台" category="6" id="311" weather="0">
+	<fightMapColor>64,64,64,255</fightMapColor>
+	<initialPoint>380,70</initialPoint>
+	<music category="6">
+		<bgm>BGM_310</bgm>
+	</music>
+	<entities>
+		<npc id="31101" resId="Pets/pet/185" name="丘吉" size="71,77" pos="145,185" namePos="5,-5">
+			<description>三八双雄6v6挑战</description>
+			<dialog>
+				<branch id="default" name="丘吉" icon="Pets/pet/185" size="71,77" pos="0,60">
+					<content><![CDATA[擂台至尊，三八双雄！]]></content>
+					<functionHandler>
+						<func type="click">
+							<description><![CDATA[挑战丘吉军团]]></description>
+							<action>battle</action>
+							<param>qiouji</param>
+						</func>
+						<func type="click">
+							<description><![CDATA[挑战巴多军团]]></description>
+							<action>battle</action>
+							<param>baduo</param>
+						</func>
+					</functionHandler>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[号令天下，莫敢不从]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+					</replyHandler>
+				</branch>
+			</dialog>
+			<battle>
+				<branch id="qiouji">
+					<settings count="6"/>
+					<enemy>
+						<pet id="185" level="35">
+							<loopSkill>12920,12923</loopSkill>
+						</pet>
+						<pet id="185" level="45">
+							<loopSkill>12920,12923</loopSkill>
+						</pet>
+						<pet id="185" level="55">
+							<loopSkill>12920,12923</loopSkill>
+						</pet>
+						<pet id="185" level="65">
+							<loopSkill>12920,12923</loopSkill>
+						</pet>
+						<pet id="185" level="75">
+							<loopSkill>12920,12923</loopSkill>
+						</pet>
+						<pet id="185" level="85">
+							<loopSkill>12920,12923</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setItem</action>
+							<param>add</param>
+							<param>10201,3</param>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=3个砂糖甜饼已经放入背包</param>
+							<param>item_icon=item[10201]</param>
+							<param>option_num=1</param>
+						</button>
+					</winHandler>
+				</branch>
+				<branch id="baduo">
+					<settings count="6"/>
+					<enemy>
+						<pet id="187" level="35">
+							<loopSkill>12936,12942</loopSkill>
+						</pet>
+						<pet id="187" level="45">
+							<loopSkill>12936,12942</loopSkill>
+						</pet>
+						<pet id="187" level="55">
+							<loopSkill>12936,12942</loopSkill>
+						</pet>
+						<pet id="187" level="65">
+							<loopSkill>12936,12942</loopSkill>
+						</pet>
+						<pet id="187" level="75">
+							<loopSkill>12936,12942</loopSkill>
+						</pet>
+						<pet id="187" level="85">
+							<loopSkill>12936,12942</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setItem</action>
+							<param>add</param>
+							<param>10201,3</param>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=3个砂糖甜饼已经放入背包</param>
+							<param>item_icon=item[10201]</param>
+							<param>option_num=1</param>
+						</button>
+					</winHandler>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>openDialog</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<npc id="31102" resId="Pets/pet/187" name="巴多" size="80,84" pos="230,345" namePos="-10,0">
+			<description>三八双雄2v2挑战</description>
+			<dialog>
+				<branch id="default" name="巴多" icon="Pets/pet/187" size="80,84" pos="10,55">
+					<content><![CDATA[灵兽不出，谁与争锋？]]></content>
+					<functionHandler>
+						<func type="click">
+							<description><![CDATA[挑战三八双雄]]></description>
+							<action>battle</action>
+							<param>default</param>
+						</func>
+					</functionHandler>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[灵兽你们也要碰瓷？]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+					</replyHandler>
+				</branch>
+			</dialog>
+			<battle>
+				<branch id="default">
+					<settings count="2" parallel="2"/>
+					<enemy>
+						<pet id="185" level="100">
+							<status>
+								<def>800</def>
+								<hp>3000</hp>
+							</status>
+							<initBuff>-8</initBuff>
+							<loopSkill>12928,12925</loopSkill>
+						</pet>
+						<pet id="187" level="100">
+							<status>
+								<mdf>800</mdf>
+								<hp>3000</hp>
+							</status>
+							<initBuff>-8</initBuff>
+							<loopSkill>12941,12944</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>getPet</action>
+							<param>184</param>
+							<condition>activity[10005].done=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=【丘丁】已经放入精灵仓库</param>
+							<param>item_icon=pet[184]</param>
+							<param>option_num=1</param>
+							<condition>activity[10005].done=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>getPet</action>
+							<param>186</param>
+							<condition>activity[10005].done=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=【巴度】已经放入精灵仓库</param>
+							<param>item_icon=pet[186]</param>
+							<param>option_num=1</param>
+							<condition>activity[10005].done=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>10005</param>
+							<param>done=true</param>
+							<condition>activity[10005].done=[bool]false[default]false</condition>
+						</button>
+					</winHandler>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>openDialog</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<teleport id="1" name="三八跑道线(沙)" pos="520,60" targetMapId="310"/>
+	</entities>		
+</map>

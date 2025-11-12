@@ -63,16 +63,19 @@ public class Battle
     /// <param name="opHash">Opponent properties</param>
     public Battle(Hashtable roomHash, Hashtable myHash, Hashtable opHash) {
         var seed = (int)roomHash["seed"];
+        var rule = (int)roomHash["rule"];
         var petCount = (int)roomHash["count"];
+        var time = (int)roomHash["time"];
         var buffList = (int[])roomHash["buff"];
         var iv = buffList.Contains(Buff.BUFFID_PVP_IV_120) ? 120 : 31;
 
         var roomSettings = new BattleSettings() {
             seed = seed,
             mode = BattleMode.PVP,
+            rule = (BattleRule)rule,
             petCount = petCount,
             parallelCount = (petCount == 2) ? 2 : 1,
-            time = (int)roomHash["time"],
+            time = time,
             initBuffs = buffList.Select((x, i) => new KeyValuePair<string, Buff>("rule[" + i + "]", new Buff(x))).ToList(),
             weather = 0,
             isSimulate = true,

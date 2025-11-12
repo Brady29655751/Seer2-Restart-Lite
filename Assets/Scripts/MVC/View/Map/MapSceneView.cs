@@ -14,6 +14,7 @@ public class MapSceneView : UIModule
     [SerializeField] private Image background, pathMask;
 
     private Map map;
+    private Map lastMap => Player.instance.lastMap;
     private Dictionary<int, NpcController> npcDict = new Dictionary<int, NpcController>();
     private Dictionary<int, NpcController> farmDict = new Dictionary<int, NpcController>();
     private Dictionary<int, GameObject> teleportDict = new Dictionary<int, GameObject>();
@@ -24,15 +25,19 @@ public class MapSceneView : UIModule
 
     public void SetMap(Map map) {
         this.map = map;
-        SetResources(map.resources);
+        bool refreshBGM = (!SceneLoader.IsCurrentSceneSameAsLast()) || (lastMap == null) || (!map.music.ValueEquals(lastMap?.music));
+        
+        SetResources(map.resources, refreshBGM);
         SetEntites(map.entities);
         CheckBattleResult();
 
         CheckDailyLogin();        
     }
 
-    public void SetResources(MapResources resources) {
-        SetBGM(resources);
+    public void SetResources(MapResources resources, bool refreshBGM = true) {
+        if (refreshBGM)
+            SetBGM(resources);
+            
         SetBackground(resources);
         SetPathMask(resources);
     }

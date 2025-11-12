@@ -2,7 +2,7 @@
 	<fightMapColor>64,64,64,255</fightMapColor>
 	<initialPoint>290,80</initialPoint>
 	<music category="6">
-		<bgm>BGM_520</bgm>
+		<bgm>BGM_470</bgm>
 	</music>
 	<entities>
 		<npc id="47001" resId="Pets/pet/110" name="埃卡维特" size="103,101" pos="395,140" namePos="0,0">
@@ -20,12 +20,16 @@
 							<description><![CDATA[尝试引诱]]></description>
 							<action>openDialog</action>
 							<param>fish</param>
-							<condition>item[1017].num+item[1018].num+item[1019].num+item[1020].num+item[1021].numLTE0</condition>
+							<condition>item[1017].numLTE0</condition>
+							<condition>item[1018].numLTE0</condition>
+							<condition>item[1019].numLTE0</condition>
+							<condition>item[1020].numLTE0</condition>
+							<condition>item[1021].numLTE0</condition>
 						</reply>
 						<reply type="branch">
 							<action>battle</action>
 							<param>default</param>
-							<condition>item[1017].num+item[1018].num+item[1019].num+item[1020].num+item[1021].num&gt;0</condition>
+							<condition>item[1017].num&gt;0|item[1018].num&gt;0|item[1019].num&gt;0|item[1020].num&gt;0|item[1021].num&gt;0</condition>
 						</reply>
 					</replyHandler>
 				</branch>
@@ -59,6 +63,7 @@
 			</eventHandler>
 		</npc>
 		<teleport id="1" name="地道之路" pos="110,275" targetMapId="510"/>
-		<!-- <teleport id="2" name="实验禁地" pos="620,380" targetMapId="500"/> -->
+		<teleport id="2" name="地下黑市" pos="650,160" targetMapId="490"/>
+		<teleport id="3" name="三八跑道线(地)" pos="75,75" targetMapId="390"/>
 	</entities>		
 </map>

@@ -47,7 +47,7 @@ public class ItemInfo
         effectDescription = _slicedData[6].Trim();
     }
 
-    public ItemInfo(int id, string itemName, ItemType type, int price, int currencyType, 
+    public ItemInfo(int id, string itemName, ItemType type, int price, int currencyType,
         string options, string itemDescription, string effectDescription) {
         this.id = id;
         this.name = itemName.ReplaceSpecialWhiteSpaceCharacters(string.Empty);
@@ -88,16 +88,21 @@ public class ItemInfo
 
     public string GetItemDescription() {
         var itemDesc = itemDescription;
+        
         if (!removable)
             itemDesc = "[ffbb33]【无限再生】[-][ENDL]" + itemDesc;
-
-        if (habitat != "-" && habitat != "点击领取")
-            itemDesc += "[ENDL][ENDL][66ccff]【获取方式：" + habitat + "】[-][ENDL]" + itemDesc;
 
         return itemDesc.ReplaceColorAndNewline();
     }
 
-    public string GetEffectDescription() => effectDescription.ReplaceColorAndNewline();
+    public string GetEffectDescription() {
+        var effectDesc = effectDescription;
+
+        if (habitat != "-" && habitat != "点击领取")
+            effectDesc += "[ENDL][ENDL][66ccff]【获取方式：" + habitat + "】[-]";
+
+        return effectDesc.ReplaceColorAndNewline();
+    }
 
     public string[] GetRawInfoStringArray() {
         var itemDesc = string.IsNullOrEmpty(itemDescription) ? "none" : itemDescription;

@@ -9,6 +9,13 @@ public class MapMusic
     [XmlAttribute("category")] public int category;
     [XmlElement("bgm")] public string bgm;
     [XmlElement("fx")] public string fx;
+
+    public bool ValueEquals(MapMusic other) {
+        if (other == null)
+            return false;
+            
+        return category == other.category && bgm == other.bgm && fx == other.fx;
+    }
 }
 
 public class MapAnim

@@ -163,11 +163,14 @@ id,timing,priority,target,condition,cond_option,effect,effect_option
 22019,resident,-1,pet,pet,type=buff[group:exclude]&buff[group:exclude]_cmp=0,set_pet,type=buff&op=+&value=420019
 22020,resident,-1,pet,pet,type=buff[group:exclude]&buff[group:exclude]_cmp=0,set_pet,type=buff&op=+&value=420020
 22021,resident,-1,pet,pet,type=buff[group:exclude]&buff[group:exclude]_cmp=0,set_pet,type=buff&op=+&value=420021
+22022,resident,-1,pet,pet,type=buff[group:exclude]&buff[group:exclude]_cmp=0,set_pet,type=buff&op=+&value=420022
+22023,resident,-1,pet,pet,type=buff[group:exclude]&buff[group:exclude]_cmp=0,set_pet,type=buff&op=+&value=420023
 23001,resident,-1,pet,pet,type=buff[group:exclude]&buff[group:exclude]_cmp=0,set_pet,type=buff&op=+&value=430001
 23002,resident,-1,pet,pet,type=buff[group:exclude]&buff[group:exclude]_cmp=0,set_pet,type=buff&op=+&value=430002
 23003,resident,-1,pet,pet,type=buff[group:exclude]&buff[group:exclude]_cmp=0,set_pet,type=buff&op=+&value=430003
 23004,resident,-1,pet,pet,type=buff[group:exclude]&buff[group:exclude]_cmp=0,set_pet,type=buff&op=+&value=430004
 23005,resident,-1,pet,pet,type=buff[group:exclude]&buff[group:exclude]_cmp=0,set_pet,type=buff&op=+&value=430005
+23006,resident,-1,pet,pet,type=buff[group:exclude]&buff[group:exclude]_cmp=0,set_pet,type=buff&op=+&value=430006
 24000,resident,-1,pet,pet,type=buff[group:exclude]&buff[group:exclude]_cmp=0,set_pet,type=buff&op=+&value=440000
 24001,on_battle_start,-1,pet,none,none,add_buff,key=unit&id=440001
 24002,on_battle_start,-1,pet,none,none,add_buff,key=unit&id=440002
@@ -304,7 +307,9 @@ id,timing,priority,target,condition,cond_option,effect,effect_option
 600001,none,-1,none,none,none,none,none
 600002,none,-1,none,none,none,none,none
 600003,none,-1,none,none,none,none,none
+600004,none,-1,none,none,none,none,none
 610001,resident,-1,state,none,random_cmp=3,none,plant=620001
 610002,resident\resident,-1\-1,state\state,none\none,random_type=unit&random_cmp=5\random_cmp=5,set_player\set_player,param_count=2&action=setItem&param[0]=add&param[1]=22002，1\param_count=5&action=openHintbox&param[0]=type＝Item&param[1]=title＝提示&param[2]=content＝你的笑笑花额外产出了1枚【笑笑花子】！&param[3]=item_icon＝buff[420002]&param[4]=option_num＝1
 610003,none,-1,none,none,none,none,none
+610004,resident\resident,-1\-1,state\state,none\none,random_type=unit&random_cmp=1\random_cmp=1,set_player\set_player,param_count=2&action=setItem&param[0]=add&param[1]=23001，1\param_count=5&action=openHintbox&param[0]=type＝Item&param[1]=title＝提示&param[2]=content＝你的亮顶蘑菇额外产出了1枚【蘑菇果实】！&param[3]=item_icon＝buff[430001]&param[4]=option_num＝1
 620001,none,-1,none,none,none,none,none

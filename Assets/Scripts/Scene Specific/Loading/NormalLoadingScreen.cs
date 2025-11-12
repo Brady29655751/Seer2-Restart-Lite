@@ -11,6 +11,9 @@ public class NormalLoadingScreen : LoadingScreen
         int loadMapSuccess = 0;
         var sceneId = (SceneId)sceneIndex;
         void OnRequestSuccess(Map map) {
+            Player.instance.lastMapId = Player.instance.currentMap?.id ?? 0;
+            Player.instance.lastMap = Player.instance.currentMap;
+            Player.instance.currentMapId = map?.id ?? 0;
             Player.instance.currentMap = map;
             loadMapSuccess = 1;
         }

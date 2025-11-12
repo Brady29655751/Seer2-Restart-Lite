@@ -1,0 +1,46 @@
+<map name="地铁站" category="6" id="480" weather="0">
+	<fightMapColor>64,64,64,255</fightMapColor>
+	<initialPoint>485,150</initialPoint>
+	<music category="6">
+		<bgm>BGM_470</bgm>
+	</music>
+	<entities>
+		<npc id="36001" resId="Pets/pet/54.png" name="Lv48 牛顿" size="107,77" pos="670,140" namePos="0,0">
+			<battle>
+				<branch id="default">
+					<settings count="6" capture="true"/>
+					<enemy>
+						<pet id="54" level="48">
+							<loopSkill>13011</loopSkill>
+						</pet>
+					</enemy>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>battle</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<npc id="36002" resId="Pets/pet/54.png" name="Lv49 牛顿" size="107,77" pos="400,50" namePos="0,0">
+			<battle>
+				<branch id="default">
+					<settings count="6" capture="true"/>
+					<enemy>
+						<pet id="54" level="49">
+							<loopSkill>13011</loopSkill>
+						</pet>
+					</enemy>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>battle</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<teleport id="1" name="地下黑市" pos="315,365" targetMapId="490"/>
+	</entities>		
+</map>

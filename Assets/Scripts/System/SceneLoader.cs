@@ -11,14 +11,20 @@ public class SceneLoader : Singleton<SceneLoader>
 {
     private const int sceneNum = 4;
     private LoadingScreen currentLoadingScreen;
-    private int nextSceneId;
+    private int nextSceneId, lastSceneId;
 
     public GameObject canvas;
     public LoadingScreen defaultLoadingScreen, transparentLoadingScreen;
     public LoadingScreen[] loadingScreens = new LoadingScreen[sceneNum];
 
-    public void ChangeScene(SceneId index, bool network = false) {
+    public static bool IsCurrentSceneSameAsLast() {
+        return instance.lastSceneId == instance.nextSceneId;
+    }
+
+    public void ChangeScene(SceneId index, bool network = false)
+    {
         PhotonNetwork.AutomaticallySyncScene = network;
+        lastSceneId = nextSceneId;
         nextSceneId = (int)index;
         OnBeforeLoading();
     }

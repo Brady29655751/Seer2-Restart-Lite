@@ -1,0 +1,47 @@
+<map name="地下黑市" category="6" id="490" weather="0">
+	<fightMapColor>64,64,64,255</fightMapColor>
+	<initialPoint>285,100</initialPoint>
+	<music category="6">
+		<bgm>BGM_470</bgm>
+	</music>
+	<entities>
+		<npc id="49002" resId="Pets/pet/203.png" name="Lv46 碎晶蜂" size="82,71" pos="445,65" namePos="0,0">
+			<battle>
+				<branch id="default">
+					<settings count="6" capture="true"/>
+					<enemy>
+						<pet id="203" level="46">
+							<loopSkill>12981</loopSkill>
+						</pet>
+					</enemy>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>battle</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<npc id="49003" resId="Pets/pet/203.png" name="Lv47 碎晶蜂" size="82,71" pos="700,135" namePos="0,0">
+			<battle>
+				<branch id="default">
+					<settings count="6" capture="true"/>
+					<enemy>
+						<pet id="203" level="47">
+							<loopSkill>12981</loopSkill>
+						</pet>
+					</enemy>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>battle</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<teleport id="1" name="地铁站" pos="810,195" targetMapId="480"/>
+		<teleport id="2" name="地月氏族主城" pos="85,220" targetMapId="470"/>
+	</entities>		
+</map>

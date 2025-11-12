@@ -9,9 +9,16 @@ public class CreateRoomView : Module
 {
     [SerializeField] private Hintbox hintbox;
     [SerializeField] private BattlePetBuffView buffView;
-    [SerializeField] private Image petCountBackground, turnTimeBackground, itemBagBackground, revealBackground;
+    [SerializeField] private Image systemBackground, petCountBackground, turnTimeBackground, itemBagBackground, revealBackground;
 
-    public void SetPetCount(int count) {
+    public void SetBattleSystem(BattleRule rule)
+    {
+        int posX = 200 + (int)rule * 105;
+        systemBackground.rectTransform.anchoredPosition = new Vector2(posX, 0);
+    }
+
+    public void SetPetCount(int count)
+    {
         int[] countList = new int[] { 1, 6, 2 };
         int posX = 200 + countList.IndexOf(count) * 70;
         petCountBackground.rectTransform.anchoredPosition = new Vector2(posX, 0);

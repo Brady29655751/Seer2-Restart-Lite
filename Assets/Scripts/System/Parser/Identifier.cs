@@ -316,6 +316,7 @@ public static class Identifier
                 "anger" => statusController.anger,
                 "minAnger" => statusController.minAnger,
                 "maxAnger" => statusController.maxAnger,
+                "lostAnger"=> statusController.maxAnger - statusController.anger,
                 _ => trimId.TryTrimStart("init", out var statusId) ? statusController.initStatus[statusId] : statusController.battleStatus[trimId],
             };
         }

@@ -1,0 +1,48 @@
+<map name="三八跑道线(沙)" category="6" id="310" weather="0">
+	<fightMapColor>64,64,64,255</fightMapColor>
+	<initialPoint>385,200</initialPoint>
+	<music category="6">
+		<bgm>BGM_310</bgm>
+	</music>
+	<entities>
+		<npc id="31001" resId="Pets/pet/114.png" name="Lv51 蹦蹦鼠" size="82,80" pos="675,120" namePos="15,0">
+			<battle>
+				<branch id="default">
+					<settings count="6" capture="true"/>
+					<enemy>
+						<pet id="114" level="51">
+							<loopSkill>12948,12956</loopSkill>
+						</pet>
+					</enemy>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>battle</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<npc id="31002" resId="Pets/pet/114.png" name="Lv52 蹦蹦鼠" size="82,80" pos="465,95" namePos="15,0">
+			<battle>
+				<branch id="default">
+					<settings count="6" capture="true"/>
+					<enemy>
+						<pet id="114" level="52">
+							<loopSkill>12948,12956</loopSkill>
+						</pet>
+					</enemy>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>battle</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<teleport id="1" name="三八跑道线(地)" pos="310,270" targetMapId="390"/>
+		<teleport id="2" name="沙爪氏族主城" pos="555,100" targetMapId="320"/>
+		<teleport id="3" name="三八擂台" pos="535,230" targetMapId="311"/>
+	</entities>		
+</map>

@@ -15,9 +15,9 @@ public class Player : Singleton<Player>
     }
     public int petBagCursor = 0;
     public Pet pet => petBag[petBagCursor];
-    
-    public int currentMapId = 70;
-    public Map currentMap = null;
+
+    public int currentMapId = 70, lastMapId = 0;
+    public Map currentMap = null, lastMap = null;
 
     public int currentNpcId = 0;
     public int currentMissionId = 0;

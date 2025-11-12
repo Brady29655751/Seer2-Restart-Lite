@@ -185,7 +185,7 @@ public class BattlePet : Pet
             var filter = Parser.ParseConditionFilter<Skill>(trimSkill, (expr, skill) => skill?.GetSkillIdentifier(expr) ?? Identifier.GetNumIdentifier(expr));
             var allSkills = skillController.allSkills.Where(x => x != null).Where(filter).ToList();
 
-            trimSkill = trimSkill.TrimStart("(" + filterList.ConcatToString(")(") + ")").TrimStart('.');
+            trimSkill = trimSkill.TrimStart("(" + filterList?.ConcatToString(")(") + ")").TrimStart('.');
             var split = trimSkill.Split('.');
             if (split.Length <= 1)
                 return split[0] switch
