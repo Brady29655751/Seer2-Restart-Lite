@@ -30,6 +30,10 @@ public static class PetElementSystem {
         "精灵王", "上古", "机械"
     };
 
+    public static List<string> elementColorList = new List<string>() {
+        "#ffffff", "#73c652", "#65ffff", "#fd0100",
+    };
+
     public static Dictionary<Element, List<float>> elementDefenseRelation = new Dictionary<Element, List<float>>() {
         { Element.普通, new List<float>() { N, N, N, N, N, N, N, N, N, N, N, N, N, N, N, N, N, N, N, N, N, N } },
         { Element.草, new List<float>()   { N, R, R, W, N, W, W, R, R, N, N, N, R, O, N, N, N, R, W, W, W, W } },
@@ -119,6 +123,14 @@ public static class PetElementSystem {
             .Select(index => (Element)index).ToList() ?? new List<Element>();
     }
 
+    public static Color GetElementColor(Element element)
+    {
+        var code = elementColorList.Get((int)element, "#ffffff").TrimStart("#");
+        if (ColorUtility.TryParseHtmlString(code, out var color))
+            return color;
+
+        return Color.white;
+    }
 }
 
 public enum Element {

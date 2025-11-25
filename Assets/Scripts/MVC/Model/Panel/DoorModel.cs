@@ -35,6 +35,7 @@ public class DoorModel : Module
             "challenge" => 1,
             "brave" => 3,
             "competition" => 3,
+            "hero" => 6,
             "twin" => 2,
             _ => 6
         };
@@ -58,6 +59,7 @@ public class DoorModel : Module
                 return;
 
             case "competition":
+            case "hero":
                 if ((floorNum > 21) || (floorNum % 7 == 0))
                     goto default;
 
@@ -74,7 +76,7 @@ public class DoorModel : Module
                 };
                 BattleSettings settings = new BattleSettings()
                 {
-                    petCount = 3,
+                    petCount = door == "competition" ? 3 : 6,
                     mode = BattleMode.SelfSimulation,
                     initBuffExpr = "(rule:" + Buff.BUFFID_PET_RANDOM + ")",
                     isItemOK = mode == "easy",
@@ -83,8 +85,8 @@ public class DoorModel : Module
                 BattleInfo battleInfo = new BattleInfo() 
                 {
                     settings = settings,
-                    playerInfo = Enumerable.Range(0, 3).Select(x => BossInfo.GetRandomEnemyInfo()).ToList(),
-                    enemyInfo = Enumerable.Range(0, 3).Select(x => BossInfo.GetRandomEnemyInfo()).ToList(),
+                    playerInfo = BossInfo.GetRandomEnemyInfoList(count: settings.petCount, withMod: door == "hero"),
+                    enemyInfo = BossInfo.GetRandomEnemyInfoList(count: settings.petCount, withMod: door == "hero"),
                     winHandler = NpcButtonHandler.Callback(WinHandler).SingleToList(),
                     loseHandler = new List<NpcButtonHandler>(),
                 };

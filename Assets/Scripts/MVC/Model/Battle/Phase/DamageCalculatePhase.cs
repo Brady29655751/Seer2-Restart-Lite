@@ -11,6 +11,8 @@ public class DamageCalculatePhase : BattlePhase
 
     public override void DoWork()
     {
+        SetDamagePhase(EffectTiming.OnDamageParamCalculate);
+
         state.atkUnit.PrepareDamageParam(state.defUnit);
 
         SetDamagePhase(EffectTiming.OnBeforeDamageCalculate);

@@ -7,11 +7,16 @@ using System;
 
 public class PetSkinController : Module
 {
+    private PetBagMode mode = PetBagMode.Normal;
     [SerializeField] private PetSkinModel skinModel;
     [SerializeField] private PetSkinView skinView;
     [SerializeField] private PageView pageView;
 
     public event Action onSetSkinSuccessEvent;
+
+    public void SetMode(PetBagMode mode) {
+        this.mode = mode;
+    }
 
     public void SetPet(Pet pet) {
         skinModel.SetPet(pet);
@@ -25,7 +30,7 @@ public class PetSkinController : Module
     }
 
     public void OnSkinConfirm() {
-        skinModel.SetSkin();
+        skinModel.SetSkin(mode == PetBagMode.Normal);
         skinView.OnSkinConfirm();
         onSetSkinSuccessEvent?.Invoke();
     }

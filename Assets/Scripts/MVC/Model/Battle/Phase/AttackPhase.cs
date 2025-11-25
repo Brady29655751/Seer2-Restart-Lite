@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class AttackPhase : BattlePhase
@@ -57,11 +59,53 @@ public class AttackPhase : BattlePhase
         var lastState = new BattleState(state);
         var atkUnit = state.atkUnit;
         var defUnit = state.defUnit;
+        var atkColor = atkUnit.IsMyUnit() ? "#ffbb33" : "#ff0080";
+        var defColor = atkUnit.IsMyUnit() ? "#ff0080" : "#ffbb33";
 
-        if (atkUnit.skillSystem.isHit) {
+        var report = string.Empty;
+
+        if (atkUnit.skill.GetSkillIdentifier("evolve") != 0)
+            state.AddReport($"<color={atkColor}>【{atkUnit.pet.name}】</color>激活了专属动作！");
+
+        if (atkUnit.skill.type >= SkillType.属性)
+            report += $"<color={atkColor}>【{atkUnit.pet.name}】</color>使用了<color=#00ffff>{atkUnit.skill.name}</color>，";
+
+        if (atkUnit.skill.type == SkillType.属性)
+            report += "是属性技能！";
+
+        if (atkUnit.skillSystem.isHit) 
+        {
             defUnit.pet.hp -= atkUnit.skillSystem.totalSkillDamage;
             defUnit.pet.anger += Mathf.FloorToInt((defUnit.pet.maxAnger / 2 - 1) * (1f * atkUnit.skillSystem.totalSkillDamage / defUnit.pet.maxHp) * (defUnit.pet.battleStatus.angrec / 100f));
+
+            if (atkUnit.skill.isAttack && atkUnit.skillSystem.isCritical)
+                report += "打出了致命一击，";
+            
+            if (atkUnit.skill.isAttack || (atkUnit.skillSystem.totalSkillDamage > 0))
+                report += $"對<color={defColor}>【{defUnit.pet.name}】</color>造成了 <color=#ff4444><size=13>{atkUnit.skillSystem.totalSkillDamage}</size></color> 點傷害！";   
+
+            if (atkUnit.skill.options.TryGet("battle_report", out var customReport)) 
+                report += customReport.Replace("[atk_pet]", $"<color={atkColor}>【{atkUnit.pet.name}】</color>")
+                    .Replace("[def_pet]", $"<color={defColor}>【{defUnit.pet.name}】</color>").ReplaceColorAndNewline();
+            /*
+            else
+            {
+                var abnormalBuff = atkUnit.pet.buffController.GetRangeBuff(x => x.IsType(BuffType.Abnormal)).FirstOrDefault();
+                var unhealthyBuff = atkUnit.pet.buffController.GetRangeBuff(x => x.IsType(BuffType.Unhealthy)).FirstOrDefault();
+                if (abnormalBuff == null && unhealthyBuff == null)
+                    report += "<color=#00ffff>【状态】正常</color>";
+                else
+                    report += $"<color=#00ffff>【状态】{abnormalBuff?.name} {unhealthyBuff?.name}</color>";
+            }
+            */
+        } 
+        else
+        {
+            report += $"但是没有命中<color={defColor}>【{defUnit.pet.name}】</color>！";
         }
+
+        state.AddReport(report);
+
         atkUnit.hudSystem.OnHit(atkUnit, true);
         defUnit.hudSystem.OnHit(defUnit, false);
 

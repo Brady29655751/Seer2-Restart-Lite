@@ -1,10 +1,268 @@
-<map name="黑岩旋梯" category="6" id="530" weather="0">
+<map name="黑岩旋梯" category="6" id="530" weather="6">
 	<fightMapColor>64,64,64,255</fightMapColor>
 	<initialPoint>485,70</initialPoint>
 	<music category="6">
 		<bgm>BGM_520</bgm>
 	</music>
 	<entities>
+		<npc id="53001" resId="Pets/pet/80" name="Lv 50 巨锤莫古" size="172,112" pos="485,200" namePos="10,0">
+			<description>SPT</description>
+			<dialog>
+				<branch id="default" name="巨锤莫古" icon="Pets/pet/80" size="129,84" pos="0,55">
+					<content><![CDATA[我就是被斗的那只鸡]]></content>
+					<functionHandler>
+						<func type="click">
+							<description><![CDATA[普通挑战]]></description>
+							<action>battle</action>
+							<param>default</param>
+						</func>
+						<func type="click">
+							<description><![CDATA[挑战1]]></description>
+							<action>battle</action>
+							<param>challenge_1</param>
+							<condition>firstPet.baseId=79</condition>
+						</func>
+						<func type="branch">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=把巨锤莫古设为首发之后再来挑战吧</param>
+							<param>option_num=1</param>
+							<param>item_icon=pet[80]</param>
+							<condition>firstPet.baseIdNOT79</condition>
+						</func>
+						<func type="click">
+							<description><![CDATA[挑战2]]></description>
+							<action>battle</action>
+							<param>challenge_2</param>
+						</func>
+						<!--
+						<func type="click">
+							<description><![CDATA[超进化挑战]]></description>
+							<action>battle</action>
+							<param>evolve</param>
+							<condition>firstPet.id=38</condition>
+						</func>
+						<func type="branch">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=把巨锤莫古设为首发之后再来挑战吧</param>
+							<param>option_num=1</param>
+							<param>item_icon=pet[38]</param>
+							<condition>firstPet.idNOT38</condition>
+						</func>
+						-->
+					</functionHandler>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[沙皇鸟比你更像鸡]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+					</replyHandler>
+				</branch>
+				<branch id="default_lose" name="巨锤莫古" icon="Pets/pet/80" size="129,84" pos="0,55">
+					<content><![CDATA[斗鸡场的敌人时常使用不同种类的攻击，那时候应付起来很吃力]]></content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[原来如此]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+					</replyHandler>
+				</branch>
+			</dialog>
+			<battle>
+				<branch id="default">
+					<settings count="6" simulate="true" item="false">
+						<mode>3</mode>
+						<weather>6</weather>
+					</settings>
+					<player>
+						<pet id="82" level="55">
+							<status>
+								<spd>400</spd>
+								<hp>1200</hp>
+							</status>
+							<normalSkill>13064,13068,13075,13074</normalSkill>
+						</pet>
+					</player>
+					<enemy>
+						<pet id="80" level="50">
+							<status>
+								<spd>600</spd>
+								<hp>1000</hp>
+							</status>
+							<initBuff>17</initBuff>
+							<loopSkill>13059,13051,13059,13055,13059,13061</loopSkill>
+						</pet>								
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>getPet</action>
+							<param>79,10,0</param>
+							<condition>activity[spt].done[north][5][default]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=【莫古】已经放入精灵仓库</param>
+							<param>item_icon=pet[79]</param>
+							<param>option_num=1</param>
+							<condition>activity[spt].done[north][5][default]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>spt</param>
+							<param>done[north][5][default]=true</param>
+							<condition>activity[spt].done[north][5][default]=[bool]false[default]false</condition>
+						</button>
+					</winHandler>
+					<loseHandler>
+						<button type="auto">
+							<action>openDialog</action>
+							<param>default_lose</param>
+						</button>
+					</loseHandler>
+				</branch>
+				<branch id="challenge_1">
+					<settings count="1">
+						<mode>3</mode>
+						<weather>6</weather>
+					</settings>
+					<enemy>
+						<pet id="80" level="100">
+							<status>
+								<atk>600</atk>
+								<hp>2000</hp>
+							</status>
+							<initBuff>13,20</initBuff>
+							<loopSkill>13051,13061,13061,13055</loopSkill>
+							<superSkill>13058</superSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setPet</action>
+							<param>emblem=1</param>
+							<condition>activity[spt].done[north][5][challenge_1]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=【巨锤莫古】获得了【必破】纹章</param>
+							<param>item_icon=emblem[80]</param>
+							<param>option_num=1</param>
+							<condition>activity[spt].done[north][5][challenge_1]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>spt</param>
+							<param>done[north][5][challenge_1]=true</param>
+							<condition>activity[spt].done[north][5][challenge_1]=[bool]false[default]false</condition>
+						</button>
+					</winHandler>
+				</branch>
+				<branch id="challenge_2">
+					<settings count="2" parallel="2">
+						<mode>3</mode>
+						<weather>6</weather>
+					</settings>
+					<enemy>
+						<pet id="80" level="100">
+							<status>
+								<def>600</def>
+								<mdf>600</mdf>
+								<hp>3000</hp>
+							</status>
+							<initBuff>-8</initBuff>
+							<loopSkill>13057</loopSkill>
+						</pet>
+						<pet id="82" level="100">
+							<status>
+								<def>600</def>
+								<mdf>600</mdf>
+								<hp>3000</hp>
+							</status>
+							<initBuff>-8</initBuff>
+							<loopSkill>13070</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setItem</action>
+							<param>add</param>
+							<param>2,50</param>
+							<condition>activity[spt].done[north][5][challenge_2]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=50 星钻已经放入背包</param>
+							<param>item_icon=item[2]</param>
+							<param>option_num=1</param>
+							<condition>activity[spt].done[north][5][challenge_2]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>spt</param>
+							<param>done[north][5][challenge_2]=true</param>
+							<condition>activity[spt].done[north][5][challenge_2]=[bool]false[default]false</condition>
+						</button>
+					</winHandler>
+				</branch>
+				<!--
+				<branch id="evolve">
+					<settings count="1">
+						<mode>3</mode>
+						<weather>3</weather>
+					</settings>
+					<enemy>
+						<pet id="693" level="105">
+							<status>
+								<hp>2000</hp>
+							</status>
+							<initBuff>13,14,17,20</initBuff>
+							<headerSkill>10561</headerSkill>
+							<loopSkill>10562,10566</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>evolvePet</action>
+							<param>693</param>
+							<condition>activity[spt].done[north][5][evolve]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=巨锤莫古已成功超进化</param>
+							<param>item_icon=pet[693]</param>
+							<param>option_num=1</param>
+							<condition>activity[spt].done[north][5][evolve]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>spt</param>
+							<param>done[north][5][evolve]=true</param>
+							<condition>activity[spt].done[north][5][evolve]=[bool]false[default]false</condition>
+						</button>
+					</winHandler>
+				</branch>
+				-->
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>openDialog</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
 		<teleport id="1" name="地道之路" pos="770,55" targetMapId="510"/>
 	</entities>		
 </map>

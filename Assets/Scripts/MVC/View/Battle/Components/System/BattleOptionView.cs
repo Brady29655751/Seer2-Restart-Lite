@@ -3,9 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class BattleOptionView : BattleBaseView
 {
+    [SerializeField] private ExtendButton recordExtendButton;
+    [SerializeField] private GameObject recordPanel;
+    [SerializeField] private IText recordText;
     [SerializeField] private BattleOptionSelectView optionSelectView;
     [SerializeField] private BattlePetSkillView skillView;
     [SerializeField] private BattlePetItemController captureController;
@@ -16,6 +20,9 @@ public class BattleOptionView : BattleBaseView
 
     private Module[] options => new Module[] { skillView, changeView, captureController, itemController, escapeView, opChangeView };
 
+    private ScrollRect recordScrollRect;
+    private bool isRecordPanelActive => (recordPanel != null) && recordPanel.activeSelf;
+
     protected override void Awake()
     {
         base.Awake();
@@ -25,6 +32,29 @@ public class BattleOptionView : BattleBaseView
         }
 
         autoView?.gameObject.SetActive(battle.settings.isAutoOK);
+
+        if (isRecordPanelActive)
+        {
+            recordScrollRect = recordPanel.GetComponentInChildren<ScrollRect>();
+            ToggleRecordPanel();   
+        }
+    }
+
+    public void ToggleRecordPanel()
+    {
+        var isOn = isRecordPanelActive;
+        if (recordExtendButton?.image?.rectTransform != null)
+        {
+            var pos = recordExtendButton.image.rectTransform.anchoredPosition;
+            recordExtendButton.image.rectTransform.anchoredPosition = new Vector2(pos.x, pos.y + (isOn ? -1 : 1) * 180);
+            recordExtendButton.SetMode(isOn);
+        }
+
+        if (recordPanel != null)
+        {
+            recordScrollRect.verticalNormalizedPosition = 0;
+            recordPanel.SetActive(!isOn);
+        }
     }
 
     public void Select(int index) {
@@ -74,11 +104,16 @@ public class BattleOptionView : BattleBaseView
         var parallelCursor = (parallelCount > 1) ? opUnit.petSystem.cursor : -1;
         var itemBag = (currentState.settings.mode == BattleMode.YiTeRogue) ? YiTeRogueData.instance.itemBag : Player.instance.gameData.itemBag;
 
+        if (recordPanel != null)
+        {
+            recordText.SetText(currentState.reports.ConcatToString("\n"));
+            recordScrollRect.verticalNormalizedPosition = 0;
+        }
         skillView.SetPetSystem(myUnit.petSystem);
         changeView.SetPetBag(petBag);
-        changeView.SetChangeBlockChosen(myUnit.petSystem.cursor, parallelCursor);
+        changeView.SetCursor(myUnit.petSystem.cursor, parallelCursor);
         opChangeView.SetPetBag(opBag);
-        opChangeView.SetChangeBlockChosen(opUnit.petSystem.cursor, -1);
+        opChangeView.SetCursor(opUnit.petSystem.cursor, -1);
         captureController.SetItemBag(itemBag);
         itemController.SetItemBag(itemBag);
 

@@ -43,6 +43,7 @@ public class PetBagPanel : Panel
         demoController?.SetMode(mode);
         itemController?.SetMode(mode);
         featureController?.SetMode(mode);
+        skinController?.SetMode(mode);
         StartCoroutine(PreloadPetAnimCoroutine(GetPetBag(), InitMode));
 
         void InitMode()
@@ -162,8 +163,7 @@ public class PetBagPanel : Panel
 
     private void OnSetSkinSuccess()
     {
-        // Only change skin when petBag is player's true petBag.
-        RefreshPetBag(playerPetBag);
+        RefreshPetBag(petBag);
     }
 
     private void OnRemoveBuffSuccess(Buff buff)

@@ -14,6 +14,7 @@ public class BattleSystemView : BattleBaseView
     [SerializeField] private BattlePetBuffView stateBuffView;
     [SerializeField] private BattleAudioView audioView;
     [SerializeField] private BattleResultView resultView;
+    [SerializeField] private List<GameObject> normalFightOnlyObjects, doubleFightOnlyObjects;
 
     protected override void Awake()
     {
@@ -21,6 +22,17 @@ public class BattleSystemView : BattleBaseView
         timer.gameObject.SetActive(battle.settings.mode == BattleMode.PVP);
         timer.onStartEvent += OnTimerStart;
         timer.onDoneEvent += OnTimerDone;
+    }
+
+    public override void Init()
+    {
+        foreach (var obj in normalFightOnlyObjects)
+            if (obj != null)
+                obj.SetActive(battle.settings.parallelCount == 1);
+
+        foreach (var obj in doubleFightOnlyObjects)
+            if (obj != null)
+                obj.SetActive(battle.settings.parallelCount > 1);
     }
 
     public void SetAutoBattleActive(bool active) {

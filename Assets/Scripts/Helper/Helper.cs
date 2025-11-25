@@ -182,15 +182,17 @@ namespace System {
             return str.ToFloatList(delimeter)?.Select(x => (int)x).ToList();
         }
 
-        public static List<int> ToIntRange(this string str) {
+        public static List<int> ToIntRange(this string str, Func<string, int> parseFunc = null) {
             if (string.IsNullOrEmpty(str) || (str == "none"))
                 return new List<int>();
 
             var strRanges = str.Replace("－", "-").TrimParentheses().Split('|');
             var allRanges = new List<int>();
+            
+            parseFunc ??= int.Parse;
 
             for (int i = 0; i < strRanges.Length; i++) {
-                var range = strRanges[i].Split('~').Select(int.Parse).ToList();
+                var range = strRanges[i].Split('~').Select(parseFunc).ToList();
                 if (range.Count == 1) {
                     allRanges.Add(range[0]);
                     continue;

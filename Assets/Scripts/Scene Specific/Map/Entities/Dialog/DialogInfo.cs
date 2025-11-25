@@ -21,7 +21,8 @@ public class DialogInfo
     
 
     [XmlAttribute] public string name;
-    [XmlElement] public string content;
+    [XmlElement("content")] public string rawContent;
+    public string content => GetContent();
 
     [XmlArray("functionHandler"), XmlArrayItem(typeof(NpcButtonHandler), ElementName = "func")] 
     public List<NpcButtonHandler> functionHandler;
@@ -31,6 +32,32 @@ public class DialogInfo
 
     public static Sprite GetIcon(string resId) {
         return NpcInfo.GetIcon(resId);
+    }
+
+    public string GetContent()
+    {
+        var result = rawContent;
+        int startIndex = result.IndexOf("{expr:");
+        if (startIndex < 0)
+            return result;
+
+        int endIndex = result.IndexOf("}", startIndex);
+        
+        while ((startIndex >= 0) && (endIndex > startIndex))
+        {
+            string expr = result.Substring(startIndex + 6, endIndex - startIndex - 6);
+            string evalResult = Identifier.GetIdentifier(expr).ToString();
+
+            result = result.Substring(0, startIndex) + evalResult + result.Substring(endIndex + 1);
+
+            startIndex = result.IndexOf("{expr:");
+            if (startIndex < 0)
+                break;
+
+            endIndex = result.IndexOf("}", startIndex);
+        }
+
+        return result;
     }
 
 }

@@ -86,6 +86,10 @@ public class Battle
             
         var myPetBag = BattlePet.GetBattlePetBag(myHash, roomSettings.petCount, iv);
         var opPetBag = BattlePet.GetBattlePetBag(opHash, roomSettings.petCount, iv);
+
+        myPetBag.ForEach((x, i) => x?.SetPetIdentifier("skinId", ((int[])myHash["skin"])[i]));
+        opPetBag.ForEach((x, i) => x?.SetPetIdentifier("skinId", ((int[])opHash["skin"])[i]));
+
         var masterPetBag = PhotonNetwork.IsMasterClient ? myPetBag : opPetBag;
         var clientPetBag = PhotonNetwork.IsMasterClient ? opPetBag : myPetBag;
         Init(masterPetBag, clientPetBag, roomSettings);

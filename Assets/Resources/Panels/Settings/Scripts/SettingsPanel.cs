@@ -38,6 +38,23 @@ public class SettingsPanel : Panel
     public void OpenWorkshopPanel() {
         Panel.OpenPanel<WorkshopPanel>();
     }
+
+    public void DeleteAccount()
+    {
+        var hintbox = Hintbox.OpenHintboxWithContent("确定要删除<color=#ffbb33>当前</color>存档吗？\n\n<color=#ffbb33>注意：删除后无法复原！</color>", 16);
+        hintbox.SetOptionNum(2);
+        hintbox.SetOptionCallback(OnConfirmDeleteAccount);
+    }
+
+    private void OnConfirmDeleteAccount()
+    {
+        Player.instance.gameData = GameData.GetDefaultData();
+        SaveSystem.SaveData();
+
+        var hintbox = Hintbox.OpenHintboxWithContent("已删除当前存档，请重新启动游戏", 16);
+        hintbox.SetOptionNum(1);
+        hintbox.SetOptionCallback(QuitGame);
+    }
     
     public void QuitGame() {
         Application.Quit();

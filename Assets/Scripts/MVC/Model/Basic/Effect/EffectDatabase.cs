@@ -13,8 +13,8 @@ public static class EffectDatabase {
         {"on_turn_start", EffectTiming.OnTurnStart},
         {"on_turn_ready", EffectTiming.OnTurnReady},
         {"on_decide_pri", EffectTiming.OnDecidePriority},
-        {"on_pri_ready", EffectTiming.OnPriorityReady},
         {"on_before_attack", EffectTiming.OnBeforeAttack},
+        {"on_dmg_param_cal", EffectTiming.OnDamageParamCalculate},
         {"on_before_dmg_cal", EffectTiming.OnBeforeDamageCalculate},
         {"on_dmg_cal", EffectTiming.OnDamageCalculate},
         {"on_after_dmg_cal", EffectTiming.OnAfterDamageCalculate},
@@ -116,7 +116,7 @@ public static class EffectDatabase {
 public enum EffectTiming {
     All = -999,
     None = 0, Resident = 1, OnBattleStart = 2,
-    OnTurnStart = 3, OnTurnReady = 4, OnDecidePriority = 5, OnPriorityReady = 6, OnBeforeAttack = 7,
+    OnTurnStart = 3, OnTurnReady = 4, OnDecidePriority = 5, OnBeforeAttack = 6, OnDamageParamCalculate = 7,
     OnBeforeDamageCalculate = 8, OnDamageCalculate = 9, OnAfterDamageCalculate = 10, OnFinalDamageCalculate = 11,
     OnAttack = 12, OnAfterAttack = 13, OnAttackEnd = 14, OnTurnEnd = 15, OnBattleEnd = 999,
 

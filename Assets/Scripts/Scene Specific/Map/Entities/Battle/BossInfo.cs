@@ -27,16 +27,6 @@ public class BossInfo
     [XmlElement("superSkill")] public int superSkillId;
     [XmlIgnore] public Skill superSkill => Skill.GetSkill(superSkillId, false);
 
-    public static BossInfo GetRandomEnemyInfo(int level = 100, Func<Pet, bool> bannedPetFunc = null)
-    {
-        bannedPetFunc ??= (p) => false;
-        var difficulty = YiTeRogueData.instance.difficulty;
-        var petData = GameManager.versionData.petData;
-        var petDict = petData.petLastEvolveDictionary;
-        var petIdList = petDict.Where(x => !bannedPetFunc(x)).Select(x => x.id).ToList().Random(1);
-        return GetRandomEnemyInfo(petIdList, level);
-    }
-
     public static BossInfo GetRandomEnemyInfo(List<int> enemyIdList, int level = 100) 
     {
         var pet = Pet.GetExamplePet(enemyIdList.Random());
@@ -50,6 +40,23 @@ public class BossInfo
             superSkillId = pet.ownSkill.FirstOrDefault(x => x.isSuper)?.id ?? 0,
             initBuffIds = "-3",
         };
+    }
+
+    public static BossInfo GetRandomEnemyInfo(int level = 100, Func<Pet, bool> bannedPetFunc = null, bool withMod = false)
+    {
+        return GetRandomEnemyInfoList(1, level, bannedPetFunc, withMod).FirstOrDefault();
+    }
+
+    public static List<BossInfo> GetRandomEnemyInfoList(int count = 1, int level = 100, Func<Pet, bool> bannedPetFunc = null, bool withMod = false)
+    {
+        bannedPetFunc ??= (p) => false;
+        var petData = GameManager.versionData.petData;
+        var petDict = petData.petLastEvolveDictionary;
+        if (withMod)
+            petDict = petDict.Concat(petData.petModLastEvolveDictionary).ToList();
+
+        var petIdList = petDict.Where(x => !bannedPetFunc(x)).Select(x => x.id).ToList().Random(count, false);
+        return petIdList.Select(x => GetRandomEnemyInfo(x.SingleToList(), level)).ToList();
     }
 
     public BossInfo FixToYiTeRogue(YiTeRogueEvent rogueEvent) {

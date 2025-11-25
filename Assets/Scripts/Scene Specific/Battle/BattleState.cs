@@ -16,6 +16,7 @@ public class BattleState
     public int weather;
     public Buff weatherBuff => Buff.GetWeatherBuff(weather);
     public List<KeyValuePair<string, Buff>> stateBuffs = new List<KeyValuePair<string, Buff>>();
+    public Queue<string> reports = new Queue<string>(30);
 
     public Unit masterUnit, clientUnit;
     public List<int> actionOrder = new List<int>();
@@ -40,6 +41,7 @@ public class BattleState
         this.phase = EffectTiming.OnBattleStart;
         this.weather = settings.weather;
         this.stateBuffs = settings.initBuffs;
+        this.reports = new Queue<string>(30);
 
         this.masterUnit = new Unit(masterTurn);
         this.clientUnit = new Unit(clientTurn);
@@ -59,6 +61,7 @@ public class BattleState
         phase = rhs.phase;
         weather = rhs.weather;
         stateBuffs = rhs.stateBuffs.Select(x => new KeyValuePair<string, Buff>(x.Key, new Buff(x.Value))).ToList();
+        reports = new Queue<string>(rhs.reports);
 
         masterUnit = new Unit(rhs.masterUnit);
         clientUnit = new Unit(rhs.clientUnit);
@@ -106,6 +109,9 @@ public class BattleState
                 lastTurnState.lastTurnState = null;
             }
             lastTurnState = new BattleState(this){ phase = EffectTiming.OnTurnEnd };
+        } else {
+            AddReport($"我方<color=#ffbb33>【{myUnit.pet.name}】</color>登场了！");
+            AddReport($"敌方<color=#ff0080>【{opUnit.pet.name}】</color>登场了！");
         }
 
         turn++;
@@ -119,6 +125,8 @@ public class BattleState
         }
 
         stateBuffs.RemoveAll(x => x.Value.turn == 0);
+
+        AddReport($"<size=16><color=#00ff00>==== 第 {turn} 回合 ====</color></size>");
 
         masterUnit.OnTurnStart(this);
         clientUnit.OnTurnStart(this);
@@ -261,5 +269,12 @@ public class BattleState
 
         phase = tmpPhase;
         return effects;
+    }
+
+    public virtual void AddReport(string report) {
+        if (reports.Count >= 30)
+            reports.Dequeue();
+
+        reports.Enqueue(report);
     }
 }

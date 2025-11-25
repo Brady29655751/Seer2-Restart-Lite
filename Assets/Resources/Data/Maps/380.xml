@@ -1,0 +1,165 @@
+<map name="沙之迷穴" category="6" id="380">
+	<fightMapColor>64,64,64,255</fightMapColor>
+	<music category="6">
+		<bgm>BGM_380</bgm>
+	</music>
+	<initialPoint>430,120</initialPoint>
+	<entities>
+		<npc id="38001" resId="Pets/pet/112" name="砂吉塔" size="166,162" pos="385,185" namePos="10,0">
+		    <description>别想抢夺财宝！</description>
+		    <dialog>
+		        <branch id="default" name="砂吉塔" icon="Pets/pet/112.png" size="83,81" pos="0,55">
+		            <content><![CDATA[砂砂！别想抢夺财宝！]]></content>
+					<functionHandler>
+						<func type="click">
+							<description><![CDATA[挑战一]]></description>
+							<action>battle</action>
+							<param>challenge_1</param>
+						</func>
+						<func type="click">
+							<description><![CDATA[挑战二]]></description>
+							<action>battle</action>
+							<param>challenge_2</param>
+							<condition>firstPet.id=112</condition>
+						</func>
+						<func type="branch">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=把砂吉塔设为首发之后再来挑战吧</param>
+							<param>option_num=1</param>
+							<param>item_icon=pet[112]</param>
+							<condition>firstPet.idNOT112</condition>
+						</func>
+						<func type="click">
+							<description><![CDATA[挑战三]]></description>
+							<action>battle</action>
+							<param>challenge_3</param>
+						</func>
+					</functionHandler>
+		            <replyHandler>
+		            	<reply type="click">
+		            		<description><![CDATA[财富要流通才有价值]]></description>
+		            		<action>openDialog</action>
+		            		<param>null</param>
+		            	</reply>
+		            </replyHandler>
+		        </branch>
+		    </dialog>
+			<battle>
+				<branch id="challenge_1">
+					<settings count="1"/>
+					<enemy>
+						<pet id="112" level="60">
+							<status>
+								<hp>5000</hp>
+							</status>
+							<initBuff>-4,20,964</initBuff>
+							<loopSkill>13085,13078,13078,13078,13078</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>getPet</action>
+							<param>111,10,0</param>
+							<condition>activity[11015].done[1]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=【砂砂】已经放入精灵仓库</param>
+							<param>item_icon=pet[111]</param>
+							<param>option_num=1</param>
+							<condition>activity[11015].done[1]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>11015</param>
+							<param>done[1]=true</param>
+							<condition>activity[11015].done[1]=[bool]false[default]false</condition>
+						</button>
+					</winHandler>
+				</branch>
+				<branch id="challenge_2">
+					<settings count="1"/>
+					<enemy>
+						<pet id="112" level="60">
+							<status>
+								<hp>5000</hp>
+							</status>
+							<initBuff>17,20</initBuff>
+							<headerSkill>13085,13088</headerSkill>
+							<loopSkill>13089,13079,13085,13090</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setPet</action>
+							<param>emblem=1</param>
+							<condition>activity[11015].done[2]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=【砂吉塔】获得了【柔软】纹章</param>
+							<param>item_icon=emblem[111]</param>
+							<param>option_num=1</param>
+							<condition>activity[11015].done[2]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>11015</param>
+							<param>done[2]=true</param>
+							<condition>activity[11015].done[2]=[bool]false[default]false</condition>
+						</button>
+					</winHandler>
+				</branch>
+				<branch id="challenge_3">
+					<settings count="6"/>
+					<enemy>
+						<pet id="112" level="60">
+							<status>
+								<hp>50000</hp>
+							</status>
+							<initBuff>-8,23,-3082</initBuff>
+							<loopSkill>13078</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setItem</action>
+							<param>add</param>
+							<param>2,100</param>
+							<condition>activity[11015].done[3]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=100 星钻已经放入背包</param>
+							<param>item_icon=item[2]</param>
+							<param>option_num=1</param>
+							<condition>activity[11015].done[3]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>11015</param>
+							<param>done[3]=true</param>
+							<condition>activity[11015].done[3]=[bool]false[default]false</condition>
+						</button>
+					</winHandler>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>openDialog</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+        <teleport id="1" name="海市蜃楼" pos="355,60" targetMapId="370"/>
+		<teleport id="2" name="熔岩地穴" pos="560,190" targetMapId="381"/>
+	</entities>
+</map>

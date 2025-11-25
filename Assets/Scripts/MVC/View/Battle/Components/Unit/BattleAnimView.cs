@@ -12,11 +12,12 @@ public class BattleAnimView : BattleBaseView
 
     public bool isDone => petView.isDone;
 
-    public void SetUnit(Unit lastUnit, Unit currentUnit)
+    public void SetUnit(Unit lastUnit, Unit currentUnit, int cursorOffset = 0)
     {
         if (currentUnit == null)
             return;
-        SetPet(lastUnit, currentUnit);
+
+        SetPet(lastUnit, currentUnit, cursorOffset);
         SetDamage(currentUnit);
         SetOtherSidePet(currentUnit);
         SetCapture(currentUnit);
@@ -25,13 +26,14 @@ public class BattleAnimView : BattleBaseView
 
     private int lastPetId = 0; //上一个单位的宠物id.专门用来判断是否需要刷新宠物
 
-    private void SetPet(Unit lastUnit, Unit currentUnit)
+    private void SetPet(Unit lastUnit, Unit currentUnit, int cursorOffset = 0)
     {
         // int lastCursor = (lastUnit == null) ? -1 : lastUnit.petSystem.cursor;
-        int currentPetId = currentUnit?.pet?.hashId ?? 0;
+        var currentPet = currentUnit?.petSystem.GetParallelPetBag(battle.settings.parallelCount)?.Get(cursorOffset);
+        int currentPetId = currentPet?.hashId ?? 0;
         if (lastPetId != currentPetId)
         {
-            petView.SetPet(currentUnit.pet);
+            petView.SetPet(currentPet, cursorOffset);
             this.lastPetId = currentPetId;
             return;
         }
@@ -42,6 +44,9 @@ public class BattleAnimView : BattleBaseView
             petView.SetPetStateAnim(currentUnit.hudSystem.petAnimType);
             return;
         }
+
+        if (cursorOffset > 0)
+            return;
 
         if (currentUnit.hudSystem.petAnimType is PetAnimationType.Physic or PetAnimationType.Special
             or PetAnimationType.Property or PetAnimationType.Super or PetAnimationType.SecondSuper)

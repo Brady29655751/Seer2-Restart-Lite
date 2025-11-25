@@ -36,7 +36,8 @@ public class DoorController : Module
         playerController.SetStorage(playerController.GetPetSelections().Take(doorModel.petNum).ToList());
         playerController.Select(0);
 
-        if ((doorModel.door == "competition") && (doorModel.floorNum < 21) && (doorModel.floorNum % 7 != 0))
+        bool isSpecialDoor = (doorModel.door == "competition") || (doorModel.door == "hero");
+        if (isSpecialDoor && (doorModel.floorNum < 21) && (doorModel.floorNum % 7 != 0))
             enemyController.SetStorage(new List<Pet>());
         else
             enemyController.SetStorage(doorModel.battleInfo.enemyInfo.Select(x => new Pet(x.petId, x.level)).ToList());

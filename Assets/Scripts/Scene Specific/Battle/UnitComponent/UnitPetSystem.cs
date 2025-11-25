@@ -4,7 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class UnitPetSystem 
+public class UnitPetSystem
 {
     public BattlePet[] petBag = new BattlePet[6];
     public BattlePet[] backupPetBag = new BattlePet[6];
@@ -69,6 +69,33 @@ public class UnitPetSystem
         petBag[index] = pet;
         petBag[index].anger = anger;
         return true;
+    }
+
+    public void AddNewPet(BattlePet pet)
+    {
+        int newPetCursor;
+        for (newPetCursor = 0; newPetCursor < petBag.Length; newPetCursor++)
+        {
+            if (petBag[newPetCursor] != null)
+                continue;
+
+            if (backupPetBag[newPetCursor] != null)
+                continue;
+
+            if (tokenPetBag[newPetCursor] != null)
+                continue;
+            
+            break;
+        }
+
+        if (newPetCursor >= petBag.Length)
+        {
+            Array.Resize(ref petBag, (petBag.Length / 6 + 1) * 6);
+            Array.Resize(ref backupPetBag, (backupPetBag.Length / 6 + 1) * 6);
+            Array.Resize(ref tokenPetBag, (tokenPetBag.Length / 6 + 1) * 6);
+        }
+        
+        petBag[newPetCursor] = pet;
     }
 
     public void OnTurnStart(Unit thisUnit, BattleState state)

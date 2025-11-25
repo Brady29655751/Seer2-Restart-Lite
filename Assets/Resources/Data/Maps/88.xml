@@ -277,6 +277,176 @@
 						</button>
 					</winHandler>
 				</branch>
+				<branch id="4">
+					<settings count="6">
+						<mode>1</mode>
+					</settings>
+					<enemy>
+						<pet id="33" level="100">
+				            <status>
+								<mat>600</mat>
+				                <hp>6000</hp>
+				            </status>
+				            <initBuff>13,14,17,20,100,420015,-3029,-3022,-2003,-3076</initBuff>
+							<loopSkill>10532,10520,10533</loopSkill>
+							<superSkill>10529</superSkill>
+						</pet>
+						<pet id="36" level="100">
+						    <status>
+								<atk>600</atk>
+						        <hp>6000</hp>
+						    </status>
+						    <initBuff>-8,20,77,-3076,-3018,420016</initBuff>
+							<loopSkill>10542,10548,10546,10542,10542,10548,10542,10547</loopSkill>
+							<superSkill>10544</superSkill>
+						</pet>
+						<pet id="40" level="100">
+						    <status>
+						        <hp>6000</hp>
+						    </status>
+						    <initBuff>-8,20,991,992,994,950,956,420020</initBuff>
+							<loopSkill>10968,19963,10966</loopSkill>
+						</pet>
+				        <pet id="76" level="100">
+				            <status>
+				                <hp>6000</hp>
+				            </status>
+				            <initBuff>-8,56,-3030,-3076,2042,981,986</initBuff>
+				        	<loopSkill>10985,10991</loopSkill>
+							<superSkill>10992</superSkill>
+				        </pet>
+				        <pet id="132" level="100">
+				            <status>
+								<def>600</def>
+								<mdf>600</mdf>
+				                <hp>6000</hp>
+				            </status>
+				            <initBuff>-8,27,100,981,976,950,971,996,997,999</initBuff>
+				        	<loopSkill>12013,12014</loopSkill>
+				        </pet>
+						<pet id="193" level="100">
+						    <status>
+								<atk>600</atk>
+								<mat>600</mat>	
+								<def>600</def>
+								<mdf>600</mdf>
+						        <hp>6000</hp>
+						    </status>
+						    <initBuff>14,-3022,61,100,968,951,-3059,-3028,-3076,981</initBuff>
+							<loopSkill>11009,11007,11006,10998</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setItem</action>
+							<param>add</param>
+							<param>3,100</param>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=100 荣誉点已经放入背包</param>
+							<param>option_num=1</param>
+							<param>item_icon=item[3]</param>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>door</param>
+							<param>king[floor]=5</param>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>door</param>
+							<param>king[max]=4</param>
+							<condition>activity[door].king[max]=[int]3[default]0</condition>
+						</button>
+					</winHandler>
+				</branch>
+				<!--
+				<branch id="5">
+					<settings count="6" star="4">
+						<mode>1</mode>
+					</settings>
+					<enemy>
+						<pet id="27" level="100">
+				            <status>
+								<mat>600</mat>
+				                <hp>5000</hp>
+				            </status>
+				            <initBuff>13,14,17,20,100,420010,-3016,-3022</initBuff>
+							<loopSkill>10675,10674,10676</loopSkill>
+							<superSkill>10672</superSkill>
+						</pet>
+						<pet id="29" level="100">
+						    <status>
+								<atk>600</atk>
+						        <hp>5000</hp>
+						    </status>
+						    <initBuff>13,14,17,20,61,99,420011,-3000,-3007</initBuff>
+							<loopSkill>10414,10411</loopSkill>
+						</pet>
+						<pet id="42" level="100">
+						    <status>
+						        <hp>5000</hp>
+						    </status>
+						    <initBuff>13,14,17,20,23,420021,980,985,950,991</initBuff>
+							<loopSkill>10635,10644</loopSkill>
+							<superSkill>10642</superSkill>
+						</pet>
+				        <pet id="52" level="100">
+				            <status>
+				                <hp>5000</hp>
+				            </status>
+				            <initBuff>-8,45,61,-2003</initBuff>
+				        	<loopSkill>11741,11740,11742</loopSkill>
+				        </pet>
+				        <pet id="73" level="100">
+				            <status>
+								<def>600</def>
+								<mdf>600</mdf>
+				                <hp>5000</hp>
+				            </status>
+				            <initBuff>13,14,17,20,100,-3016,-3076,978,964</initBuff>
+				        	<loopSkill>10740,10737</loopSkill>
+							<superSkill>10742</superSkill>
+				        </pet>
+						<pet id="141" level="100">
+						    <status>
+						        <hp>5000</hp>
+						    </status>
+						    <initBuff>100,-3054,61,-3012,-3059</initBuff>
+							<loopSkill>10807,10800,10804</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setItem</action>
+							<param>add</param>
+							<param>3,100</param>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=100 荣誉点已经放入背包</param>
+							<param>option_num=1</param>
+							<param>item_icon=item[3]</param>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>door</param>
+							<param>king[floor]=4</param>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>door</param>
+							<param>king[max]=3</param>
+							<condition>activity[door].king[max]=[int]2[default]0</condition>
+						</button>
+					</winHandler>
+				</branch>
+				-->
 			</battle>
 			<eventHandler>
 				<button type="click">

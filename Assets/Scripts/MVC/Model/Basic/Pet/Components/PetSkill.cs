@@ -20,15 +20,15 @@ public class PetSkill
 
     /* Pet learned skills */
     [XmlIgnore] public List<Skill> ownSkill {
-        get => ownSkillId.Distinct().Select(x => Skill.GetSkill(x, false)).Where(x => (x != null) && (x.type != SkillType.空过)).ToList();
-        set => ownSkillId = (value == null) ? new int[1] : value.Where(x => (x != null) && (x.type != SkillType.空过)).Select(x => x.id).ToArray();
+        get => ownSkillId.Distinct().Select(x => Skill.GetSkill(x, false)).Where(x => !Skill.IsNullOrEmpty(x)).ToList();
+        set => ownSkillId = (value == null) ? new int[1] : value.Where(x => !Skill.IsNullOrEmpty(x)).Select(x => x.id).ToArray();
     }
-    [XmlIgnore] public List<Skill> ownSuperSkill => ownSkill.Where(x => (x != null) && (x.type == SkillType.必杀)).ToList();
+    [XmlIgnore] public List<Skill> ownSuperSkill => ownSkill.Where(x => (!Skill.IsNullOrEmpty(x)) && (x.positionType == SkillType.必杀)).ToList();
     
     /* Pet current skills */
     [XmlIgnore] public Skill[] normalSkill { 
         get => GetNormalSkill(); 
-        set => normalSkillId = (value == null) ? new int[4] : value.Where(x => (x != null) && (x.type != SkillType.空过) && (x.type != SkillType.必杀)).Take(4).Select(x => (x == null) ? 0 : x.id).ToArray();
+        set => normalSkillId = (value == null) ? new int[4] : value.Where(x => (!Skill.IsNullOrEmpty(x)) && (x.positionType != SkillType.必杀)).Take(4).Select(x => (x == null) ? 0 : x.id).ToArray();
     }
     public LearnSkillInfo[] normalSkillInfo => GetLearnSkillInfos(normalSkillId);
 
@@ -39,7 +39,7 @@ public class PetSkill
     public LearnSkillInfo superSkillInfo => GetLearnSkillInfos(superSkillId);
 
     /* Pet backup skills */
-    public Skill[] backupNormalSkill => ownSkill.Where(x => (x != null) && (x.type != SkillType.空过) && (x.type != SkillType.必杀) && normalSkill.All(y => x.id != (y?.id ?? 0))).ToArray();
+    public Skill[] backupNormalSkill => ownSkill.Where(x => (!Skill.IsNullOrEmpty(x)) && (x.positionType != SkillType.必杀) && normalSkill.All(y => x.id != (y?.id ?? 0))).ToArray();
     public LearnSkillInfo[] backupNormalSkillInfo => GetLearnSkillInfos(backupNormalSkill.Select(x => x.id).ToArray());
     
     public Skill backupSuperSkill => GetBackupSuperSkill();
@@ -103,7 +103,7 @@ public class PetSkill
             return;
 
         ownSkillId = ownSkillId.Concat(newSkillId).Where(x => x != 0).ToArray();
-        superSkill = superSkill ?? ownSkill?.FirstOrDefault(x => (x?.type ?? SkillType.属性) == SkillType.必杀);
+        superSkill = superSkill ?? ownSkill?.FirstOrDefault(x => (!Skill.IsNullOrEmpty(x)) && (x.positionType == SkillType.必杀));
 
         if (!normalSkill.Contains(null))
             return;
@@ -119,7 +119,7 @@ public class PetSkill
             return false;
 
         ownSkillId = ownSkillId.Concat(new int[1]{ skill.id }).ToArray();
-        superSkill = superSkill ?? ownSkill.FirstOrDefault(x => x.type == SkillType.必杀);
+        superSkill = superSkill ?? ownSkill.FirstOrDefault(x => (!Skill.IsNullOrEmpty(x)) && (x.positionType == SkillType.必杀));
         if (!normalSkill.Contains(null))
             return true;
 
@@ -131,12 +131,12 @@ public class PetSkill
     public void LearnAllSkill() {
         ownSkill = skillList;
         normalSkill = skillList.ToArray();
-        superSkill = skillList.FirstOrDefault(x => x.type == SkillType.必杀);
+        superSkill = skillList.FirstOrDefault(x => (!Skill.IsNullOrEmpty(x)) && (x.positionType == SkillType.必杀));
     }
 
     public Skill[] GetNormalSkill() {
         Skill[] ret = normalSkillId.Distinct().Select(x => Skill.GetSkill(x, false)).Where(x => x != null)
-            .Where(x => (x.type != SkillType.空过) && (x.type != SkillType.必杀)).ToArray(); 
+            .Where(x => (!Skill.IsNullOrEmpty(x)) && (x.positionType != SkillType.必杀)).ToArray(); 
         Array.Resize(ref ret, 4);
         return ret;
     }
@@ -167,7 +167,7 @@ public class PetSkill
         if ((!normalSkillId.Contains(oldSkill.id)) || (!ownSkillId.Contains(newSkill.id)))
             return;
 
-        if (oldSkill.isSuper || oldSkill.isAction || newSkill.isSuper || newSkill.isAction)
+        if ((oldSkill.positionType == SkillType.必杀) || oldSkill.isAction || (newSkill.positionType == SkillType.必杀) || newSkill.isAction)
             return;
 
         normalSkill = normalSkill.Update(oldSkill, newSkill).ToArray();

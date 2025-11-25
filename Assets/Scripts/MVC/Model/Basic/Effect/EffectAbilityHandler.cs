@@ -329,7 +329,16 @@ public static class EffectAbilityHandler
                 if (effect.abilityOptionDict.TryGet("neg", out specialValue) && (powerup < 0))
                     add = specialValue;
                 
-                status[type] = Parser.ParseEffectOperation(add, effect, lhsUnit, rhsUnit, pet);
+                status[type] = (add == "op") ? rhsUnit.pet.statusController.powerup[type]
+                    : Parser.ParseEffectOperation(add, effect, lhsUnit, rhsUnit, pet);
+
+                if (effect.abilityOptionDict.TryGet("set", out specialValue))
+                {
+                    var setValue = (specialValue == "op") ? rhsUnit.pet.statusController.powerup[type] 
+                        : Parser.ParseEffectOperation(specialValue, effect, lhsUnit, rhsUnit, pet);
+
+                    status[type] = setValue - powerup;   
+                }
             }
 
             if (isRandom)
@@ -395,14 +404,17 @@ public static class EffectAbilityHandler
             }
 
             // Powerup.
-            if (buffController.GetBuff(45) != null)
-                status = status.Select(x => x * (x > 0 ? 2 : 1));
+            if (!effect.abilityOptionDict.TryGet("set", out _))
+            {
+                if (buffController.GetBuff(45) != null)
+                    status = status.Select(x => x * (x > 0 ? 2 : 1));
 
-            if (buffController.GetBuff(46) != null)
-                status = status.Select(x => x * (x < 0 ? 2 : 1));
+                if (buffController.GetBuff(46) != null)
+                    status = status.Select(x => x * (x < 0 ? 2 : 1));
 
-            if (buffController.GetBuff(94) != null)
-                status *= -1;
+                if (buffController.GetBuff(94) != null)
+                    status *= -1;   
+            }
 
             pet.PowerUp(status, lhsUnit, state);
         }
@@ -1588,7 +1600,40 @@ public static class EffectAbilityHandler
         switch (type)
         {
             default:
-                if (op == "-")
+                if (op == "+")
+                {
+                    Pet pet = null;
+                    var filter = Parser.ParseConditionFilter<Pet>(effect.abilityOptionDict.Get("filter", null),
+                        (expr, pet) => pet.TryGetPetIdentifier(expr, out var num) ? num : Identifier.GetNumIdentifier(expr));
+
+                    pet = value switch
+                    {
+                        "random" => PetInfo.database.Where(x => !ListHelper.IsNullOrEmpty(x.skills.skillList)).Select(x => Pet.GetExamplePet(x.id)).Where(filter).ToList().Random(),
+                        "op" => new Pet(rhsUnit.pet),
+                        _ => Pet.GetExamplePet((int)newValue),
+                    };
+
+                    pet.normalSkill = (value switch {
+                        "random" => pet.ownSkill.Where(x => x.type != SkillType.必杀).ToList().Random(4, false),
+                        "op" => rhsUnit.pet.skillController.allSkills.Where(x => x != null && x.type != SkillType.必杀).TakeLast(4),
+                        _ => pet.ownSkill.Where(x => x.type != SkillType.必杀).TakeLast(4),
+                    }).ToArray();
+
+                    pet.superSkill = value switch {
+                        "random" => pet.ownSkill.Where(x => x.type == SkillType.必杀).ToList().Random(),
+                        "op" => rhsUnit.pet.skillController.superSkill,
+                        _ => pet.ownSkill.FirstOrDefault(x => x.type == SkillType.必杀),
+                    };
+
+                    var battlePet = BattlePet.GetBattlePet(pet);
+                    var buffs = new List<Buff>() { Buff.GetFeatureBuff(battlePet), Buff.GetEmblemBuff(battlePet) };
+                    
+                    buffs.AddRange(battlePet.initBuffs);
+                    battlePet.buffController.AddRangeBuff(buffs, lhsUnit, state);
+
+                    lhsUnit.petSystem.AddNewPet(battlePet);
+                }
+                else if (op == "-")
                 {
                     foreach (var pet in targetList)
                     {

@@ -121,8 +121,8 @@ public class PetBattleBuffController
             return false;
 
         if (triggerCopy && IsBuffCopied(newBuff) && !newBuff.IsPower()) {
-            var rhsUnit = state.GetRhsUnitById(buffUnit.id);
-            rhsUnit.pet.buffController.AddBuff(newBuff, rhsUnit, state, false);
+            var rhsUnit = state?.GetRhsUnitById(buffUnit.id);
+            rhsUnit?.pet.buffController.AddBuff(newBuff, rhsUnit, state, false);
         }
 
         if (IsBuffBlocked(newBuff) && !newBuff.IsPower())

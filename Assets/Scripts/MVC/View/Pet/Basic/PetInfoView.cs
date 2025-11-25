@@ -32,7 +32,7 @@ public class PetInfoView : Module
 
     public void SetID(int id, int subId, int star, bool isDevolved) {
         var subIdText = (subId == 0) ? string.Empty : ("-" + subId);
-        var starColor = isDevolved ? "ff00ff" : "ffbb33";
+        var starColor = isDevolved ? "ff0080" : "ffbb33";
         var starText = $"<color=#{starColor}>(★<size=4> </size>" + star + "<size=4> </size>)</color>";
         idText?.SetText($"{id}{subIdText} {starText}");
     }

@@ -222,11 +222,12 @@ public class BattlePetSkillView : BattleBaseView
     {
         bool isNormalSkillUsable = battle.settings.rule switch
         {
-            BattleRule.Anger => pet.skillController.normalSkills.Where(x => x != null).Any(x => petAnger >= x.anger),
-            BattleRule.PP => pet.skillController.normalSkills.Where(x => x != null).Any(x => x.PP > 0),
+            BattleRule.Anger => pet.skillController.normalSkills.Where(x => (x != null) && (x.type != SkillType.被动)).Any(x => petAnger >= x.anger),
+            BattleRule.PP => pet.skillController.normalSkills.Where(x => (x != null) && (x.type != SkillType.被动)).Any(x => x.PP > 0),
             _ => true,
         };
-        bool isSuperSkillUsable = (pet.skillController.superSkill != null) && battle.settings.rule switch
+        bool isSuperSkillUsable = (pet.skillController.superSkill != null) && (pet.skillController.superSkill.type != SkillType.被动) &&
+        battle.settings.rule switch
         {
             BattleRule.Anger => petAnger >= pet.skillController.superSkill.anger,
             BattleRule.PP => pet.skillController.superSkill.PP > 0,

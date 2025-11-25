@@ -143,7 +143,7 @@ public static class NpcActionHandler
 
         if (dialogInfo?.content.StartsWith("story=") ?? false)
         {
-            dialogInfo.content = dialogInfo.content.Substring("story=".Length);
+            dialogInfo.rawContent = dialogInfo.rawContent.Substring("story=".Length);
             DialogManager.instance.OpenStoryDialog(dialogInfo);
         }
         else

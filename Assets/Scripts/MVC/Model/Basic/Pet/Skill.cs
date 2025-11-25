@@ -59,6 +59,7 @@ public class Skill
 
 
     /* Properties */
+    public SkillType positionType => GetPositionType();
     public bool isSuper => type == SkillType.必杀;
     public bool isAction => IsAction();
     public bool isAttack => IsAttack();
@@ -73,6 +74,11 @@ public class Skill
     public static bool IsMod(int id)
     {
         return id < -10000;
+    }
+
+    public static bool IsNullOrEmpty(Skill skill) 
+    {
+        return (skill == null) || (skill.type == SkillType.空过);
     }
 
     public Skill() { }
@@ -319,7 +325,7 @@ public class Skill
     public static Skill GetItemSkill(Item item)
     {
         Skill skill = new Skill(SkillType.道具);
-        skill.name = "道具";
+        skill.name = $"【道具】{item.name}";
         skill.options.Set("item_id", item.id.ToString());
         skill.effects = item.effects;
         return skill;
@@ -420,6 +426,14 @@ public class Skill
     public bool IsCapture()
     {
         return effects.Any(x => x.ability == EffectAbility.Capture);
+    }
+
+    public SkillType GetPositionType()
+    {
+        if (options.TryGet("position", out var value))
+            return (value.ToLower() == "super") ? SkillType.必杀 : SkillType.连携;
+
+        return type;
     }
 
     public PetAnimationType GetPetAnimationType()

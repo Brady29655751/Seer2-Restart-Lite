@@ -11,9 +11,14 @@ public class BattleManager : Manager<BattleManager>
     public Battle battle => Player.instance.currentBattle;
     [SerializeField] private BattleSystemView systemView;
     [SerializeField] private BattleUnitView playerView, enemyView;
+    [SerializeField] private List<BattleUnitView> doublePlayerView, doubleEnemyView;
     [SerializeField] private PhotonView masterView, clientView;
 
-    public bool isDone => playerView.isDone && enemyView.isDone;
+    private List<BattleUnitView> allUnitViews => GetAllUnitViews();
+    private List<BattleUnitView> allPlayerViews => allUnitViews.Take(allUnitViews.Count / 2).ToList();
+    private List<BattleUnitView> allEnemyViews => allUnitViews.TakeLast(allUnitViews.Count / 2).ToList();
+
+    public bool isDone => allUnitViews?.All(x => x?.isDone ?? true) ?? true;
     public bool isSkillSelectMode { get; protected set; } = false;
     public BattleState currentState => (currentUIState == null) ? null : new BattleState(currentUIState);
     protected BattleState currentUIState = null;
@@ -39,6 +44,14 @@ public class BattleManager : Manager<BattleManager>
     private void Start()
     {
         battle.OnBattleStart();
+    }
+
+    private List<BattleUnitView> GetAllUnitViews()
+    {
+        if (battle.settings.parallelCount > 1)
+            return doublePlayerView.Concat(doubleEnemyView).ToList();
+        else
+            return new List<BattleUnitView>() { playerView, enemyView };
     }
 
     public void StartTimer() => systemView.StartTimer();
@@ -70,8 +83,8 @@ public class BattleManager : Manager<BattleManager>
     private void SetCurrentUIState(BattleState newState) 
     {
         systemView.SetState(currentUIState, newState);
-        playerView.SetState(currentUIState, newState);
-        enemyView.SetState(currentUIState, newState);
+        allPlayerViews?.ForEach((x, i) => x?.SetState(currentUIState, newState, i));
+        allEnemyViews?.ForEach((x, i) => x?.SetState(currentUIState, newState, i));
 
         currentUIState = newState;
     }
@@ -119,8 +132,8 @@ public class BattleManager : Manager<BattleManager>
             newState = queue.Dequeue();
             if (newState.result.isBattleEnd)
             {
-                playerView.SetState(currentUIState, newState);
-                enemyView.SetState(currentUIState, newState);
+                allPlayerViews?.ForEach((x, i) => x?.SetState(currentUIState, newState, i));
+                allEnemyViews?.ForEach((x, i) => x?.SetState(currentUIState, newState, i));
                 ProcessResult(newState.result);
                 return;
             }

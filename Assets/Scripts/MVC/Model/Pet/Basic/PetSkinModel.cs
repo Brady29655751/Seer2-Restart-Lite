@@ -16,11 +16,15 @@ public class PetSkinModel : SelectModel<int>
         SetPage(0);
     }
 
-    public void SetSkin() {
+    public void SetSkin(bool save) {
         if (cursor.Length == 0)
             return;
 
         currentPet.ui.skinId = currentSkinId;
+
+        if (!save)
+            return;
+            
         SaveSystem.SaveData();
     }
 }

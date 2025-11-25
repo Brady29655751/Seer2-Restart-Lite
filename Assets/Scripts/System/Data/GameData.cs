@@ -87,7 +87,7 @@ public class GameData
         yiteRogueData = new YiTeRogueData();
     }
 
-    public static GameData GetDefaultData(int initCoin, int initDiamond) {
+    public static GameData GetDefaultData(int initCoin = 2000, int initDiamond = 0) {
         GameData gameData = new GameData();
         gameData.petBag = new Pet[6] {
             new Pet(1, 10),

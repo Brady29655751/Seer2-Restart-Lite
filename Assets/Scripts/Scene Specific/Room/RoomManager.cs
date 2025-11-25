@@ -134,6 +134,7 @@ public class RoomManager : Manager<RoomManager>
         }
 
         hash["pet"] = petBagPanel.petBag.Where(x => x != null).Select(x => x.id).ToArray();
+        hash["skin"] = petBagPanel.petBag.Where(x => x != null).Select(x => x.GetPetIdentifier("skinId")).ToArray();
         hash["char"] = petBagPanel.petBag.Where(x => x != null).Select(x => (int)x.basic.personality).ToArray();
         hash["feature"] = petBagPanel.petBag.Where(x => x != null).Select(x => x.feature.featureId).ToArray();
         hash["emblem"] = petBagPanel.petBag.Where(x => x != null).Select(x => x.feature.emblemId).ToArray();

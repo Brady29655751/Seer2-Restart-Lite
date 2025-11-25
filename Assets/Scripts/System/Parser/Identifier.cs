@@ -139,6 +139,9 @@ public static class Identifier
         bool isOtherSourceAvailable = (otherSource != null) && ((!useOtherSourceOnlyWhenTarget) || id.TryTrimStart("target.", out id));
         object idSource = isOtherSourceAvailable ? otherSource : effect.source;
 
+        if (id.TryTrimStart("random", out var trimId) && trimId.TryTrimParentheses(out trimId))
+            return trimId.ToIntRange(x => (int)Parser.ParseEffectOperation(x, effect, lhsUnit, rhsUnit, otherSource, useOtherSourceOnlyWhenTarget)).Random();
+
         return idSource switch
         {
             BattlePet battlePet => isOtherSourceAvailable ? GetPetIdentifier(id, lhsUnit.petSystem, battlePet) :

@@ -296,21 +296,20 @@ namespace UnityEngine
         public static Color32 gold => new Color32(255, 187, 0, 255);
         public static Color32 red => Color.red;
         public static Color32 green => new Color32(119, 226, 12, 255);
+        public static Color32 blue => new Color32(0, 128, 255, 255);
+        public static Color32 orange => new Color32(255, 128, 0, 255);
         public static Color32 secretSkill => new Color32(252, 237, 105, 255);
         public static Color32 normalSkill => new Color32(82, 229, 249, 255);
+        public static List<Color32> starColors => new List<Color32>()
+        {
+            Color.clear,    Color.white,    Color.green,    Color.cyan, 
+            Color.magenta,  ColorHelper.gold,   Color.red,  ColorHelper.orange,  
+            ColorHelper.blue,
+        };
 
         public static Color32 GetStarColor(int star)
         {
-            return star switch
-            {
-                6 => ColorHelper.red,
-                5 => ColorHelper.gold,
-                4 => Color.magenta,
-                3 => Color.cyan,
-                2 => Color.green,
-                1 => Color.white,
-                _ => Color.clear,
-            };
+            return starColors.Get(star, Color.clear);
         }
 
         public static void SetColor(this UI.Image image, Color color) {

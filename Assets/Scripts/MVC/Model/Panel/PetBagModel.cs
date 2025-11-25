@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
@@ -24,11 +25,16 @@ public class PetBagModel : Module
     }
 
     public void SetPetSwap(int indexA, int indexB) {
-        petBag.Swap(indexA, indexB);
         if ((mode == PetBagMode.Normal) || (mode == PetBagMode.YiTeRogue))
+        {
+            petBag.Swap(indexA, indexB);
             SaveSystem.SaveData();
+        }
         else
+        {
+            selectModel.Swap(petBag[indexA], indexB);
             selectModel.SetPage(selectModel.page);
+        }
     }
 
     public void SetPetDrop(int dropIndex) {

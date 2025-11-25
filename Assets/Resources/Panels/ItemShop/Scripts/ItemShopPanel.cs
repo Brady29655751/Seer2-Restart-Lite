@@ -36,7 +36,7 @@ public class ItemShopPanel : Panel
         { ItemShopType.Honor, new List<int>() { 
             8001,   8002,   8003,   8004,   8005,
             8006,   8007,   8008,
-            300048, 300058, 300077, 300174, 300176,
+            300048, 300058, 300077, 300133, 300174, 300176,
         } },
         { ItemShopType.Sign, new List<int>() {
             500000, 500178, 500436, 500959, 500826,

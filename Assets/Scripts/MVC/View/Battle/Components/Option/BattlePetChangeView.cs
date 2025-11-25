@@ -8,37 +8,54 @@ using UnityEngine.UI;
 public class BattlePetChangeView : BattleBaseView
 {
     private BattlePet[] petBag;
-    private int cursor;
+    private bool isSkillSelectMode = false;
+    private int cursor, page = 0;
+    private int lastPage => (petBag.Length - 1) / 6;
     [SerializeField] private GameObject parallelIndicator;
     [SerializeField] private BattlePetChangeBlockView[] changeBlockViews = new BattlePetChangeBlockView[6];
+    [SerializeField] private PageView pageView;
 
     public override void Init() {
         parallelIndicator?.SetActive(battle.settings.parallelCount > 1);
     }
 
-    public void SetPetBag(BattlePet[] petBag) {
-        Array.Resize(ref petBag, 6);
-        this.petBag = petBag;
-
-        SetChangeBlocks(petBag);
-    }
-
-    private void SetChangeBlocks(BattlePet[] petBag) {
-        for (int i = 0; i < 6; i++)
-            changeBlockViews[i].SetPet(petBag[i]);     
-    }
-
-    public void SetChangeBlockChosen(int index, int parallelIndex = -1)
+    public void SetPetBag(BattlePet[] petBag)
     {
-        if (!index.IsInRange(0, changeBlockViews.Length))
-           return;
+        Array.Resize(ref petBag, (petBag.Length + 5) / 6 * 6);
+        this.petBag = petBag;
+    }
 
-        cursor = index;
+    private void SetPage(int page)
+    {
+        this.page = Mathf.Clamp(page, 0, lastPage);
+        pageView?.gameObject.SetActive(lastPage > 0);
+        pageView?.SetPage(page, lastPage);
+
+        SetPetChangeBlocks(petBag);
+        SetPetChangeBlockChosen();
+        SetSkillSelectMode(isSkillSelectMode);
+    }
+
+    public void PrevPage()
+    {
+        SetPage(page - 1);
+    }
+
+    public void NextPage()
+    {
+        SetPage(page + 1);
+    }
+
+    private void SetPetChangeBlocks(BattlePet[] petBag)
+    {
+        for (int i = 0; i < 6; i++)
+            changeBlockViews[i].SetPet(petBag[page * 6 + i]);
+    }
+
+    private void SetPetChangeBlockChosen()
+    {
         for(int i = 0; i < 6; i++)
-            changeBlockViews[i].SetChosen(i == index);
-
-        if (parallelIndex.IsInRange(0, changeBlockViews.Length))
-            changeBlockViews[5 - parallelIndex].SetChosen(true);
+            changeBlockViews[i].SetChosen((page * 6 + i) == cursor);
     }
 
     public void SetChangeBlockInteractable(int index, bool interactable) {
@@ -49,6 +66,7 @@ public class BattlePetChangeView : BattleBaseView
     }
 
     public void SetSkillSelectMode(bool isSkillSelectMode) {
+        this.isSkillSelectMode = isSkillSelectMode;
         if (!isSkillSelectMode)
             return;
 
@@ -56,9 +74,10 @@ public class BattlePetChangeView : BattleBaseView
         var isSelectDead = skill.effects.Exists(x => x.targetType.Contains("dead"));
         var isSelectOther = skill.effects.Exists(x => x.targetType.Contains("other"));
 
-        for (int i = 0; i < 6; i++) {    
-            var isTarget = (petBag[i] != null) && (isSelectDead ^ (!petBag[i].isDead));
-            var isCursor = isSelectOther && (cursor == i);
+        for (int i = 0; i < 6; i++) {  
+            var index = page * 6 + i;  
+            var isTarget = (petBag[index] != null) && (isSelectDead ^ (!petBag[index].isDead));
+            var isCursor = isSelectOther && (cursor == index);
             var isParallel = (battle.settings.parallelCount <= 1) || (i < battle.settings.parallelCount);
             var interactable = isTarget && (!isCursor) && isParallel;
             
@@ -67,11 +86,24 @@ public class BattlePetChangeView : BattleBaseView
         }
     }
 
+    public void SetCursor(int index, int parallelIndex = -1)
+    {
+        if (index < 0)
+           return;
+    
+        cursor = index;
+        SetPage(cursor / 6);
+    
+        if (parallelIndex.IsInRange(0, changeBlockViews.Length))
+            changeBlockViews[5 - parallelIndex].SetChosen(true);
+    }
+
     public void SelectPet(int index)
     {
         if (!index.IsInRange(0, changeBlockViews.Length))
             return;
 
+        index += page * 6;
         if (UI.isSkillSelectMode)
         {
             var skill = battle.currentState.myUnit.skill;
@@ -95,7 +127,7 @@ public class BattlePetChangeView : BattleBaseView
         }
 
         battle.SetSkill(Skill.GetPetChangeSkill(cursor, index, battle.currentState.isAnyPetDead), true);
-        SetChangeBlockChosen(index);
+        SetCursor(index);
     }
 
     public void ShowPetChangeInfo(int index)
@@ -113,8 +145,9 @@ public class BattlePetChangeView : BattleBaseView
         if (!index.IsInRange(0, petBag.Length))
             return;
 
-        var pet = isOp ? UI.currentState.myUnit.pet : petBag[index];
-        var opPet = isOp ? petBag[index] : UI.currentState.opUnit.pet;
+        var cursor = page * 6 + index;
+        var pet = isOp ? UI.currentState.myUnit.pet : petBag[cursor];
+        var opPet = isOp ? petBag[cursor] : UI.currentState.opUnit.pet;
         var infoPet = isOp ? opPet : pet;
 
         string header = "<size=4>\n</size><size=16><color=#52e5f9>  " + infoPet.name + "</color></size><size=6>\n\n</size>";

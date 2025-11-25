@@ -58,7 +58,7 @@ public class WorkshopSkillModel : Module
         nameInputField.SetInputString(skill.name);
 
         elementDropdown.value = (int)skill.element;
-        typeDropdown.value = Mathf.Min((int)(skill.type - 5), 4);
+        typeDropdown.value = (skill.type < 0) ? ((int)skill.type + 10) : Mathf.Min((int)skill.type, 4);
 
         powerInputField.SetInputString(skill.power.ToString());
         angerInputField.SetInputString(skill.rawCostString);

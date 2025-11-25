@@ -46,21 +46,18 @@ public class WorkshopEffectModel : Module
     }
 
     public EffectTiming GetEffectTiming() {
-        const int prevStage = 5, midStage = 10, lastStage = 19;
+        const int beforeResident = 5, atTurnEnd = 20;
 
-        if (timingDropdown.value.IsWithin(1, prevStage))
+        if (timingDropdown.value.IsWithin(1, beforeResident))
             return (EffectTiming)(-timingDropdown.value - 1);
 
-        if (timingDropdown.value.IsWithin(prevStage + 2, midStage))
-            return (EffectTiming)(timingDropdown.value - prevStage);
-
-        if (timingDropdown.value.IsWithin(midStage + 1, lastStage))
-            return (EffectTiming)(timingDropdown.value - (midStage - 6));
+        if (timingDropdown.value.IsWithin(beforeResident + 2, atTurnEnd))
+            return (EffectTiming)(timingDropdown.value - beforeResident);
 
         return timingDropdown.value switch {
-            prevStage + 1  => EffectTiming.Resident,
-            lastStage + 1  => EffectTiming.OnBattleEnd,
-            lastStage + 2  => EffectTiming.All,
+            beforeResident + 1  => EffectTiming.Resident,
+            atTurnEnd + 1  => EffectTiming.OnBattleEnd,
+            atTurnEnd + 2  => EffectTiming.All,
             _ => EffectTiming.None,
         };
     }

@@ -1,0 +1,78 @@
+<map name="熔岩地穴" category="6" id="381" weather="6">
+	<fightMapColor>64,64,64,255</fightMapColor>
+	<music category="6">
+		<bgm>BGM_381</bgm>
+	</music>
+	<initialPoint>390,105</initialPoint>
+	<entities>
+		<npc id="38101" resId="Pets/pet/985" name="Lv 105 月灵兽" size="232,238" pos="80,200" namePos="0,0">
+			<description><![CDATA[月灵兽]]></description>
+			<dialog>
+				<branch id="default" name="月灵兽" icon="Pets/pet/985" size="116,144" pos="0,45">
+					<content><![CDATA[我是精灵王之犄角，地月氏族不朽的守护者]]></content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[月灵兽居然沉睡在这]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+						<reply type="click">
+							<description><![CDATA[挑战月灵兽]]></description>
+							<action>battle</action>
+							<param>default</param>
+						</reply>
+					</replyHandler>
+				</branch>
+			</dialog>
+			<battle>
+				<branch id="default">
+					<settings count="6">
+						<weather>6</weather>
+					</settings>
+					<enemy>
+						<pet id="985" level="105">
+							<status>
+								<def>600</def>
+								<mdf>600</mdf>
+								<hp>35000</hp>
+							</status>
+							<initBuff>14,17,20,-3022,-3084,-3059</initBuff>
+							<loopSkill>13023,13020,13030,13020,13023,13030,13020</loopSkill>
+							<superSkill>13029</superSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>getPet</action>
+							<param>985,100</param>
+							<condition>activity[soul].done[north][5]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=【月灵兽】已经放入精灵仓库</param>
+							<param>item_icon=pet[985]</param>
+							<param>option_num=1</param>
+							<condition>activity[soul].done[north][5]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>soul</param>
+							<param>done[north][5]=true</param>
+							<condition>activity[soul].done[north][5]=[bool]false[default]false</condition>
+						</button>
+					</winHandler>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>openDialog</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+        <teleport id="1" name="沙之迷穴" pos="700,260" targetMapId="380"/>
+		<teleport id="2" name="沙爪祭坛" pos="500,60" targetMapId="382"/>
+	</entities>
+</map>

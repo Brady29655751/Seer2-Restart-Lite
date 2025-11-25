@@ -217,9 +217,9 @@ public class BattleResult
 
     private void DoWork(BattleState endState, Action<BattleState, BattlePet, Pet> work) {
         foreach (var cursor in fightPetCursors) {
-            Pet pet = Player.instance.petBag[cursor];
-            BattlePet battlePet = endState.myUnit.petSystem.petBag[cursor];
-            if (pet == null)
+            Pet pet = Player.instance.petBag.Get(cursor);
+            BattlePet battlePet = endState.myUnit.petSystem.petBag.Get(cursor);
+            if ((pet == null) || (battlePet == null))
                 continue;
 
             work?.Invoke(endState, battlePet, pet);

@@ -119,17 +119,17 @@ public static class Operator {
 
     public static float Floor(float lhs, float rhs)
     {
-        return Mathf.FloorToInt(lhs / rhs);
+        return Mathf.FloorToInt(lhs / rhs) * rhs;
     }
 
     public static float Ceil(float lhs, float rhs)
     {
-        return Mathf.CeilToInt(lhs / rhs);
+        return Mathf.CeilToInt(lhs / rhs) * rhs;
     }
 
     public static float Round(float lhs, float rhs)
     {
-        return Mathf.RoundToInt(lhs / rhs);
+        return Mathf.RoundToInt(lhs / rhs) * rhs;
     }
 }
 

@@ -37,6 +37,7 @@ public class WorkshopSkillView : Module
                 "暴击率：critical=数值(默认为5%)\n" +
                 "无视护盾：ignore_shield=true\n" + 
                 "无视能力变化：ignore_powerup=true\n\n" +
+                "自定义战报：battle_report=自定义文字\n\n" +
                 "例1：暴击率35%且無視護盾，critical=35&ignore_shield=true\n" +
                 "例2：参照流血（30点）和魅惑描述，ref_buff=1004[30]/101",
 

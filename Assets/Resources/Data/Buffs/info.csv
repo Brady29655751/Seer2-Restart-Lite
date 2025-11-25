@@ -680,6 +680,23 @@ id,name,type,copyType,turn,options,description
 3428,蜂针,mark,stack,-1,max_val=3&auto_remove=true,消耗蜂针可以发动特定技能效果，消耗完则免疫异常
 3429,砂分身,mark,stack,-1,max_val=3&auto_remove=true,消耗砂分身可以发动特定技能效果[ENDL]当前为[value]层
 3430,越挫越勇,mark,replace,-1,none,每损失1%体力提升1%伤害
+3431,驾驭,mark,block,-1,none,已召唤协助者
+3432,地盾领域,mark,replace,-1,none,体力低于1/2时受到的伤害减少15%
+3433,致命沙灵,mark,replace,-1,none,暴击抵抗下降15%，受到的暴击伤害提升35%
+3434,捕获沙魂,mark,block,-1,none,已捕获对手灵魂
+3435,沙漠领域,mark,replace,-1,none,体力低于1/2时造成的伤害增加15%
+3436,破防,mark,replace,-1,auto_remove=true,下[value]次受到的伤害增加35%
+3437,蓝宝石,mark,block,-1,none,使对手的红宝石之光附带200点伤害
+3438,沙鹤之力,mark,replace,-1,auto_remove=true,下[value]次造成的伤害增加35%
+3439,红宝石,mark,block,-1,none,使对手的蓝宝石之力附带200点伤害
+3440,砂毒,chance,block,-1,keep=false,下次攻击反弹一半伤害给自己，最高不超过对手的最大体力
+3441,已使用砂毒穿刺,mark,block,-1,hide=true,已使用砂毒穿刺
+3442,喷嚏,mark,stack,-1,max_val=3&auto_remove=true,每层增加5%暴击率，最高3层[ENDL]当前为[value]层
+3443,仕切势,mark,replace,-1,group=133,下次攻击伤害增加50%
+3444,尘手势,mark,replace,-1,group=133,免疫并反弹物攻伤害的1/2，最高不超过自身最大体力
+3445,蹲踞势,mark,replace,-1,group=133,免疫并反弹特攻伤害的1/2，最高不超过自身最大体力
+3446,无双势,mark,replace,-1,group=133,下次受到伤害的1/2转化为威力增加
+3447,威力增加,mark,replace,-1,res=3014,下次攻击技能威力增加[value]点
 100001,终结,feature,replace,-1,none,体力低于1/4时，消耗弱点记号的技能伤害增加25%，且使水泡必中并附加30点伤害
 100004,炎火,feature,replace,-1,none,体力低于1/4时，火系技能造成的伤害增加25%，且使火焰必中并附加30点伤害
 100007,坚韧,feature,replace,-1,none,体力低于1/4时，受到的伤害减少25%，且使种子爆弹必中并附加30点伤害
@@ -708,6 +725,9 @@ id,name,type,copyType,turn,options,description
 100072,蓄水,feature,replace,-1,none,水量充足时伤害增加5%，水量饱和时伤害增加10%
 100074,火环,feature,replace,-1,none,回合结束时若自身具有火环之心则会增加1层
 100077,鹰眼,feature,replace,-1,none,先出手时伤害增加10%，后出手时受到伤害减少10%
+100079,破防,feature,replace,-1,none,对手被破防时自身伤害增加10%
+100081,沙化,feature,replace,-1,none,闪避物理攻击的概率增加10%
+100083,喷嚏,feature,replace,-1,none,拥有喷嚏时攻击附带15点伤害
 100086,石化,feature,replace,-1,none,对手处于异常状态时暴击率增加15%
 100088,催眠,feature,replace,-1,none,催眠可使对手造成的伤害减少10%
 100090,雷神,feature,replace,-1,none,每次出场时使环境转变为雷暴天
@@ -722,13 +742,15 @@ id,name,type,copyType,turn,options,description
 100099,连携,feature,replace,-1,none,威力低于50的技能必中
 100100,好战,feature,replace,-1,none,回合结束时若怒气低于对手则会恢复自身15点怒气
 100109,戏法,feature,replace,-1,none,每3次技能中任意命中2次戏法类技能时使对手混乱[ENDL]当前已命中[value]次戏法[ENDL]当前已使用[option[value]]次技能
+100111,柔性,feature,replace,-1,none,受到的特殊伤害减少10%
 100113,灵巧,feature,replace,-1,none,对手的属性技能命中率减少10%
 100119,后劲,feature,replace,-1,none,后出手时造成的伤害增加10%
-100122,冰固,feature,replace,-1,none,最大体力＞550时受到伤害减少10%
+100122,冰固,feature,replace,-1,none,最大体力高于550时受到伤害减少10%
 100124,幻想,feature,replace,-1,none,具有幻想时受到伤害减少15%
 100126,冰雪,feature,replace,-1,none,普通系伤害增加15% 暴风雪时所有伤害额外增加10%
-100128,咆哮,feature,replace,-1,none,对手体力＜1/2时自身伤害增加15%
+100128,咆哮,feature,replace,-1,none,对手体力低于1/2时自身伤害增加15%
 100130,暴击,feature,replace,-1,none,暴击伤害增加15%
+100133,角力,feature,replace,-1,none,拥有速度能力变化时伤害提升15%
 100135,分裂,feature,replace,-1,none,回合结束时若具有砂分身则会分裂1个砂分身
 100138,强化,feature,replace,-1,none,强化特攻时随机强化1项能力1级
 100140,虚空,feature,replace,-1,max_val=10,每次技能命中后会增加10%闪避率，闪避后获得虚空感应
@@ -825,6 +847,8 @@ id,name,type,copyType,turn,options,description
 100982,灵脉,feature,replace,-1,none,免疫不良状态，回合结束时体力为1会怒气回满，血衣状态下对手暴击-1
 100983,灵幻,feature,replace,-1,none,免疫不良状态，怒气上限提升为200点
 100984,灵沁,feature,replace,-1,none,免疫不良状态，暴击时回复10点怒气
+100985,灵月,feature,replace,-1,none,免疫不良状态，受到暴击时使用月灵之助反击且不消耗怒气
+100986,灵爪,feature,replace,-1,none,免疫不良状态，暴击时使用爪灵召唤进行追击且不消耗怒气
 100987,灵翼,feature,replace,-1,none,免疫不良状态，成功闪避时恢复35点体力
 100988,灵影,feature,replace,-1,none,免疫不良状态，被对手技能命中时生成1枚影钩
 100989,最强,feature,replace,-1,none,全能力值提升100点
@@ -910,6 +934,9 @@ id,name,type,copyType,turn,options,description
 200072,潮水,emblem,replace,-1,none,潮水技能使对手中溺水的几率提升10%
 200074,火心,emblem,replace,-1,none,每层火环之心的伤害提升由6%转变为10%
 200077,夜视,emblem,replace,-1,none,夜幕时伤害增加15%且必中
+200079,必破,emblem,replace,-1,none,使莫古破防一击必中
+200081,沙鹤,emblem,replace,-1,none,使沙鹤之光技能的伤害增加10%
+200083,发丝,emblem,replace,-1,none,使发丝类技能不消耗怒气
 200086,蝎毒,emblem,replace,-1,none,对手处于不良状态时主动换场会延迟至回合结束生效
 200088,暗示,emblem,replace,-1,none,使催眠暗示技能先制+1
 200090,雷祭,emblem,replace,-1,none,命中麻痹的对手会回复自身5点怒气
@@ -924,6 +951,7 @@ id,name,type,copyType,turn,options,description
 200099,虫群,emblem,replace,-1,none,连击技能伤害增加10%
 200100,斗魂,emblem,replace,-1,none,使斗战之魂消耗怒气附加的固定伤害翻倍
 200109,魔术,emblem,replace,-1,none,戏法类技能伤害增加10%
+200111,柔软,emblem,replace,-1,none,使用砂之柔软技能时有40%几率恢复10点怒气
 200113,会心,emblem,replace,-1,none,先出手时暴击率增加10%
 200119,坚韧,emblem,replace,-1,none,具有寒冰坚韧时受到伤害减少20点
 200122,冻气,emblem,replace,-1,none,具有冻气附体时暴击率增加5%
@@ -931,6 +959,7 @@ id,name,type,copyType,turn,options,description
 200126,安抚,emblem,replace,-1,none,对手具有安抚时攻击威力增加10点
 200128,怪笑,emblem,replace,-1,none,后出手时必中
 200130,刻印,emblem,replace,-1,none,使火花刻印、炽热刻印技能的暴击率增加5%
+200133,力士,emblem,replace,-1,none,拥有势类印记时伤害提升10%
 200135,分砂,emblem,replace,-1,none,每个砂分身可以使自身受到的伤害减少5%
 200138,保暖,emblem,replace,-1,none,保暖20%效果2倍
 200140,感应,emblem,replace,-1,none,具有虚空感应时造成的伤害增加10%
@@ -1027,6 +1056,8 @@ id,name,type,copyType,turn,options,description
 200982,潮汐,emblem,replace,-1,none,战斗时全队附带潮汐领域
 200983,烈火,emblem,replace,-1,none,战斗时全队附带烈火领域
 200984,寒霜,emblem,replace,-1,none,战斗时全队附带寒霜领域
+200985,地盾,emblem,replace,-1,none,战斗时全队附带地盾领域
+200986,沙漠,emblem,replace,-1,none,战斗时全队附带沙漠领域
 200987,天空,emblem,replace,-1,none,战斗时全队附带天空领域
 200988,幻视,emblem,replace,-1,none,战斗时全队附带幻视领域
 200989,王者,emblem,replace,-1,none,首次出场时附带王者体质
@@ -1199,7 +1230,7 @@ id,name,type,copyType,turn,options,description
 610000,PVP极品资质120,mark,replace,-1,none,[ffbb33]【PVP对战规则】[-][ENDL]双方精灵资质为120
 610001,PVP无禽12星,mark,replace,-1,none,[ffbb33]【PVP对战规则】[-][ENDL]背包必须带满6只精灵，且星数总和不能超过12[ENDL]不能携带4星以上精灵，且3星精灵最多携带2只
 620000,精灵大乱斗,mark,replace,-1,res=-18,[ffbb33]【特殊规则】[-][ENDL]双方精灵随机交换使用，PVP对战时背包必须且只能携带3只精灵
-620001,竞技之门,mark,replace,-1,res=-18,[ffbb33]【特殊规则】[-][ENDL]双方精灵和技能全部随机，PVP对战时无效
+620001,随机乱斗,mark,replace,-1,res=-18,[ffbb33]【特殊规则】[-][ENDL]双方精灵和技能全部随机，PVP对战时无效
 -11,商店,mark,blcok,-1,none,可以购买各式道具和加成
 -12,战斗（终极）,mark,block,-1,none,本层的最终战斗！
 -13,起始点,mark,block,-1,none,选择你的伊特吧！
@@ -1297,3 +1328,5 @@ id,name,type,copyType,turn,options,description
 -3081,七宗炼狱,turn,block,8,res=-3042,每回合依序获得一种七宗罪印记，结束时变身为正常冥王
 -3082,无限护罩,mark,replace,-1,hide=true,每回合开始时获得99999点护罩
 -3083,里奥斯神迹挑战,mark,replace,-1,hide=true,首次出场时获得限伤1/2，体力低于1/3时使用火光烛天且先制+2
+-3084,地震级数,mark,stack,-1,max_val=20,初始地震级数为0级，每3回合提升1级[ENDL]每级减少5%受到伤害，最高20级[ENDL]当前为[value]级
+-3085,黄沙暴,mark,stack,-1,none,每回合使对手损失[value]点体力，每回合提升10点

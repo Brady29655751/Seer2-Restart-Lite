@@ -16,6 +16,7 @@ public class BattlePetAnimView : BattleBaseView
     [SerializeField] private bool isMyView;
     [SerializeField] private IAnimator powerSkillAnim;
 
+    private int cursorOffset = 0;
     private PetUI currentPetUI; //仅限有动画的精灵使用这个字段,如果不为null,说明这个精灵有动画
     private GameObject currentPetAnim;
 
@@ -39,12 +40,13 @@ public class BattlePetAnimView : BattleBaseView
     }
 
 
-    public void SetPet(BattlePet pet)
+    public void SetPet(BattlePet pet, int cursorOffset = 0)
     {
         GameObject tmp;
 
+        this.cursorOffset = cursorOffset;
         this.defalutSuperTrigger = (pet.battleStatus.atk >= pet.battleStatus.mat) ? "physic" : "special";
-        if ((tmp = pet.ui.GetBattleAnim(PetAnimationType.Physic)) !=
+        if ((cursorOffset == 0) && (tmp = pet.ui.GetBattleAnim(PetAnimationType.Physic)) !=
             null) //检测是否有物攻动画,如果有,说明这个精灵有动画,但是需要立刻关闭,否则直接出现在舞台上
         {
             this.currentPetAnim = tmp;
@@ -59,25 +61,25 @@ public class BattlePetAnimView : BattleBaseView
             // GameObject == null 不代表真的是Null，僅為Unity認定的Null
             // 此時無法做SetActive，但使用 ?. 會檢測到非Null而繼續執行導致報錯
             if (this.currentPetAnim != null)
-                this.currentPetAnim.SetActive(false);  
+                this.currentPetAnim.SetActive(false);
 
             this.currentPetUI = null; //当前精灵没有动画,但是上一只换场过来的精灵有动画,所以要把这个设为null,并且把动画关闭
             this.currentPetAnim = null;
 
             battlePetSprite.sprite = pet.ui.battleImage;
             battlePetSprite.gameObject.transform.localScale = new Vector3(1920 / pet.ui.battleImage.rect.width,
-                1080 / pet.ui.battleImage.rect.height, 1);
+                1080 / pet.ui.battleImage.rect.height, 1) / (cursorOffset + 1);
             battlePetSprite.gameObject.SetActive(true);
 
             // 修正位置
-            battlePetSprite.transform.position = new Vector3((isMyView ? -1 : 1) * 9.6f, -5.8f, 
-                battlePetSprite.transform.position.z);    
+            battlePetSprite.transform.position = new Vector3((isMyView ? -1 : 1) * 9.6f / (cursorOffset + 1), -5.8f / (cursorOffset + 1),
+                battlePetSprite.transform.position.z);
         }
     }
 
     private void SetPetPresent()
     {
-        if ((this.currentPetAnim = this.currentPetUI.GetBattleAnim(PetAnimationType.Present)) != null)
+        if ((battle.settings.parallelCount == 1) && (this.currentPetAnim = this.currentPetUI.GetBattleAnim(PetAnimationType.Present)) != null)
         {
             //检测是否有出场动画,如果有,播放出场动画.如果没有,直接播放待机动画
             CheckIfAnimUsed(); //防止抢动画
@@ -116,7 +118,7 @@ public class BattlePetAnimView : BattleBaseView
             this.currentPetAnim = tmp;
             //如果两个都不为null,说明这个精灵有动画,执行这个
             SwfClipController controller = this.currentPetAnim.GetComponent<SwfClipController>();
-            controller.clip.sortingOrder = 2; //攻击动画在2层,其他精灵动画都在1层,但捕捉动画在UI层在上面的
+            controller.clip.sortingOrder = 2 * (6 - cursorOffset); //攻击动画在2层,其他精灵动画都在1层,但捕捉动画在UI层在上面的
             this.currentPetAnim.transform.position = new Vector3(this.currentPetAnim.transform.position.x,
                 this.currentPetAnim.transform.position.y, 2);
             controller.rateScale = skillAnimSpeed;
@@ -137,12 +139,13 @@ public class BattlePetAnimView : BattleBaseView
                 }
             }
 
-            _ = SetOnHit((int)(this.currentPetUI.hitInfo.GetFrameByType(type) * 1000 / (24 * skillAnimSpeed)), () => {  
+            _ = SetOnHit((int)(this.currentPetUI.hitInfo.GetFrameByType(type) * 1000 / (24 * skillAnimSpeed)), () =>
+            {
                 // 若不為必殺技則擊中才有音效
                 if (!isSuperSkill)
-                    PlaySkillSound(sound); 
+                    PlaySkillSound(sound);
 
-                OnPetHit(); 
+                OnPetHit();
             });
             controller.GotoAndPlay(0);
         }
@@ -159,7 +162,8 @@ public class BattlePetAnimView : BattleBaseView
             };
             skillAnim.anim.SetFloat("speed", skillAnimSpeed);
             skillAnim.transform.SetAsLastSibling();
-            skillAnim.onAnimHitEvent.SetListener(() => {
+            skillAnim.onAnimHitEvent.SetListener(() =>
+            {
                 if (!isSuperSkill)
                     PlaySkillSound(sound);
 
@@ -202,7 +206,7 @@ public class BattlePetAnimView : BattleBaseView
         {
             this.currentPetAnim = tmp;
             SwfClipController controller = this.currentPetAnim.GetComponent<SwfClipController>();
-            controller.clip.sortingOrder = 1;
+            controller.clip.sortingOrder = 1 * (6 - cursorOffset);
             this.currentPetAnim.transform.position = new Vector3(this.currentPetAnim.transform.position.x,
                 this.currentPetAnim.transform.position.y, 0);
             controller.rateScale = animSpeed;
@@ -226,7 +230,7 @@ public class BattlePetAnimView : BattleBaseView
         {
             this.currentPetAnim = tmp;
             SwfClipController controller = this.currentPetAnim.GetComponent<SwfClipController>();
-            controller.clip.sortingOrder = 1;
+            controller.clip.sortingOrder = 1 * (6 - cursorOffset);
             this.currentPetAnim.transform.position = new Vector3(this.currentPetAnim.transform.position.x,
                 this.currentPetAnim.transform.position.y, 0);
             controller.autoPlay = false;
@@ -249,7 +253,7 @@ public class BattlePetAnimView : BattleBaseView
         this.currentPetAnim = this.currentPetUI.GetBattleAnim(PetAnimationType.Idle);
         CheckIfAnimUsed();
         SwfClipController controller = this.currentPetAnim.GetComponent<SwfClipController>();
-        controller.clip.sortingOrder = 1;
+        controller.clip.sortingOrder = 1 * (6 - cursorOffset);
         this.currentPetAnim.transform.position = new Vector3(this.currentPetAnim.transform.position.x,
             this.currentPetAnim.transform.position.y, 0);
         this.ApplyAnimation();
@@ -257,7 +261,7 @@ public class BattlePetAnimView : BattleBaseView
     }
 
     private void CheckIfAnimUsed() //如果两边是相同id精灵,那就不妙啦,两边会抢动画,还好只有出场,待机,濒死和失败(两边同时死亡不是没有可能)动画有可能两边同时发生
-        //因此做一个检测,如果当前动画是活跃状态,动画的容器不为null是其他的容器,就说明这个动画在被对方使用,我们需要克隆一个对象,并缓存起来
+                                   //因此做一个检测,如果当前动画是活跃状态,动画的容器不为null是其他的容器,就说明这个动画在被对方使用,我们需要克隆一个对象,并缓存起来
     {
         if (this.currentPetAnim.activeInHierarchy && this.currentPetAnim.transform.parent != null &&
             this.currentPetAnim.transform.parent != this.battlePetAnimContainer)
@@ -272,11 +276,13 @@ public class BattlePetAnimView : BattleBaseView
         }
     }
 
-    private void PlaySkillSound(string soundId) {
+    private void PlaySkillSound(string soundId)
+    {
         if (string.IsNullOrEmpty(soundId) || (soundId == "0") || (soundId == "none"))
             return;
-        
-        ResourceManager.instance.GetLocalAddressables<AudioClip>("BGM/skill/" + soundId, false, (sound) => {
+
+        ResourceManager.instance.GetLocalAddressables<AudioClip>("BGM/skill/" + soundId, false, (sound) =>
+        {
             AudioSystem.instance.PlaySound(sound, AudioVolumeType.BattleSE);
         });
     }
@@ -320,7 +326,8 @@ public class BattlePetAnimView : BattleBaseView
 
     protected void OnPetCapture(bool isSuccess)
     {
-        if (isSuccess) {
+        if (isSuccess)
+        {
             battlePetSprite.gameObject.SetActive(false);
             return;
         }

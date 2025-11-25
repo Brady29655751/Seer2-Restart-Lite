@@ -157,12 +157,15 @@ public class TitleManager : Manager<TitleManager>
         if (VersionData.Compare(resourceVersion, GameManager.versionData.resourceVersion) >= 0)
             return true;
 
+        /*
         var hintbox = Hintbox.OpenHintbox();
         hintbox.SetTitle("资源更新");
         hintbox.SetContent("检测到游戏资源需要更新\n是否联网下载游戏资源？\n（需要梯子并建议预留500MB以上空间）", 16, FontOption.Arial);
         hintbox.SetOptionNum(2);
         hintbox.SetOptionCallback(OnDownloadBasicResources);
         hintbox.SetOptionCallback(OnResourceFail, false);
+        */
+        OnResourceFail();
         return false;
     }
 
