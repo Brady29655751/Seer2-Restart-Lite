@@ -31,6 +31,8 @@ public static class EffectDatabase {
         {"on_remove_buff", EffectTiming.OnRemoveBuff},
         {"on_before_pet_change", EffectTiming.OnBeforePetChange},
         {"on_after_pet_change", EffectTiming.OnAfterPetChange},
+        {"on_round_start", EffectTiming.OnRoundStart},
+        {"on_round_end", EffectTiming.OnRoundEnd},
     };
 
     private static Dictionary<string, EffectTarget> targetConvDict = new Dictionary<string, EffectTarget>() {
@@ -78,6 +80,7 @@ public static class EffectDatabase {
         {"set_player", EffectAbility.SetPlayer},
         {"poker", EffectAbility.Poker},
         {"set_pet_bag", EffectAbility.SetPetBag},
+        {"card", EffectAbility.Card},
     };
 
     public static EffectTiming ToEffectTiming(this string timing) {
@@ -120,9 +123,8 @@ public enum EffectTiming {
     OnBeforeDamageCalculate = 8, OnDamageCalculate = 9, OnAfterDamageCalculate = 10, OnFinalDamageCalculate = 11,
     OnAttack = 12, OnAfterAttack = 13, OnAttackEnd = 14, OnTurnEnd = 15, OnBattleEnd = 999,
 
-    OnPassivePetChange = -1, OnSelectTarget = -2,
-    OnAddBuff = -3, OnRemoveBuff = -4,
-    OnBeforePetChange = -5, OnAfterPetChange = -6,
+    OnPassivePetChange = -1,    OnSelectTarget = -2,    OnAddBuff = -3,     OnRemoveBuff = -4,
+    OnBeforePetChange = -5,     OnAfterPetChange = -6,  OnRoundStart =-7,   OnRoundEnd = -8,
 }
 
 public enum EffectTarget
@@ -172,4 +174,5 @@ public enum EffectAbility
     SetPlayer,
     Poker,
     SetPetBag,
+    Card,
 }

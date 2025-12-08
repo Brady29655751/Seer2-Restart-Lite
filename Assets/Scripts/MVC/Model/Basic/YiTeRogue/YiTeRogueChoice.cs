@@ -123,7 +123,7 @@ public class YiTeRogueChoice
             var normalEnemyList = petDict.Where(x => x.element != Element.精灵王).ToList();
             if (mapId == 82) {
                 var bossId = battleNum switch {
-                    7   => 990,
+                    7   => 811,
                     14  => 1990,
                     21  => 989,
                     _   => normalEnemyList.Random().id,
@@ -132,7 +132,7 @@ public class YiTeRogueChoice
                 return new BattleInfo(){ enemyInfo = randomEnemyInfo.SingleToList() };
             }
             if (mapId >= 85) {
-                var bossId = (battleNum % 7 == 0) ? new List<int>(){ 990, 1990, 989, 990, 1990, 989 } 
+                var bossId = (battleNum % 7 == 0) ? new List<int>(){ 811, 1990, 989, 811, 1990, 989 } 
                     : normalEnemyList.Random(6, false).Select(x => x.id).ToList();
                 var randomEnemyInfo = bossId.Select(x => BossInfo.GetRandomEnemyInfo(x.SingleToList())).ToList();
                 return new BattleInfo(){ enemyInfo = randomEnemyInfo };

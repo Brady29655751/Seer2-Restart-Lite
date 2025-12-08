@@ -336,23 +336,32 @@ public class Skill
         return plainText.Replace("[ENDL]", "\n").Replace("[-]", "</color>").Replace("[", "<color=#").Replace("]", ">");
     }
 
-    public string GetDescription(string plainText)
+    public string GetDescription(string plainText, string mode = "skill")
     {
         string desc;
         desc = plainText.Trim();
+
         if ((critical <= 100) && (critical != 5))
         {
-            desc = "[ff50d0]【暴击率 " + critical + "%】[-][ENDL]" + desc;
+            desc = $"[ff50d0]【暴击率 {critical}%】[-][ENDL]{desc}";
         }
+
         if ((accuracy <= 100) && (accuracy != (isAttack ? 95 : 100)))
         {
-            desc = "[52e5f9]【命中率 " + accuracy + "%】[-][ENDL]" + desc;
+            desc = $"[52e5f9]【命中率 {accuracy}%】[-][ENDL]{desc}";
         }
+
         if (priority != 0)
         {
             var priDesc = "[77e20c]【先制" + ((priority > 0) ? "+" : string.Empty) + priority + "】[-][ENDL]";
             desc = priDesc + desc;
         }
+
+        if (mode == "card")
+        {
+            desc = GetAdditionalCardDescription(desc);
+        }
+
         if (!ListHelper.IsNullOrEmpty(referBuffList))
         {
             for (int i = 0; i < referBuffList.Count; i++)
@@ -360,7 +369,7 @@ public class Skill
                 var buffValueList = referBuffList[i].TrimParenthesesLoop();
                 bool isWithValue = !ListHelper.IsNullOrEmpty(buffValueList);
                 var buffId = int.Parse(isWithValue ? referBuffList[i].Substring(0, referBuffList[i].IndexOf('[')) : referBuffList[i]);
-                var buffValue = isWithValue ? int.Parse(buffValueList.FirstOrDefault(x => !x.Contains(":"))) : 0;
+                var buffValue = isWithValue ? int.Parse(buffValueList.FirstOrDefault(x => !x.Contains(":")) ?? "0") : 0;
                 var buff = new Buff(buffId, -2, buffValue);
 
                 buffValueList?.RemoveAll(x => !x.Contains(":"));
@@ -372,6 +381,32 @@ public class Skill
         return Skill.GetSkillDescriptionPreview(desc);
     }
 
+    public string GetAdditionalCardDescription(string desc, bool withBasicInfo = true)
+    {
+        var spAbility = new List<string>(){ "token", "keep" };
+
+        for (int id = -101; id > -200; id--)
+        {
+            var buffInfo = Buff.GetBuffInfo(id);
+            if (buffInfo == null)
+                break;
+
+            if (GetSkillIdentifier($"option[{spAbility.Get(-id - 101)}]") != 0)
+            {
+                desc = $"[ff8cff]【{buffInfo.name}】[-][ENDL]{desc}";       
+                referBuffList = referBuffList?.Union(id.ToString().SingleToList()).ToList() ?? new List<string>(){ id.ToString() };
+            }
+        }
+
+        if (!withBasicInfo)
+            return desc;
+
+        var elementColor = PetElementSystem.elementColorList.Get((int)element, "#ffffff").TrimStart('#');
+        desc = $"<size=4>[ENDL]</size><size=16>[{elementColor}]{element.GetElementName()}系[-][ffbb33]【{type}】[-]威力 {power}</size>[ENDL][ENDL]{desc}";
+
+        return desc;
+    }
+
     public void SetEffects(Effect _effect)
     {
         _effect.source = this;
@@ -380,11 +415,9 @@ public class Skill
 
     public void SetEffects(List<Effect> _effects)
     {
-        foreach (var e in _effects)
-        {
+        effects = Effect.SetEffects(_effects);
+        foreach (var e in effects)
             e.source = this;
-        }
-        effects = _effects;
     }
 
     public void SetParallelIndex(int parallelSourceIndex = 0, int parallelTargetIndex = 0)

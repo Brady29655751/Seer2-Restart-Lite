@@ -25,7 +25,7 @@ public class MapSceneView : UIModule
 
     public void SetMap(Map map) {
         this.map = map;
-        bool refreshBGM = (!SceneLoader.IsCurrentSceneSameAsLast()) || (lastMap == null) || (!map.music.ValueEquals(lastMap?.music));
+        bool refreshBGM = (SceneLoader.instance.GetLastScene() != SceneId.Map) || (lastMap == null) || (!map.music.ValueEquals(lastMap?.music));
         
         SetResources(map.resources, refreshBGM);
         SetEntites(map.entities);
@@ -161,7 +161,7 @@ public class MapSceneView : UIModule
         List<Action> actionList = new List<Action>();
 
         if (result.isMyWin) { 
-            actionList = battleInfo.winHandler.Select(x => NpcHandler.GetNpcEntity(npc, x, npcDict)).ToList();
+            actionList = battleInfo.winHandler?.Select(x => NpcHandler.GetNpcEntity(npc, x, npcDict)).ToList();
 
             // 1周年争霸赛特殊活動
             if ((map.id.IsInRange(82, 90)) && ((npc?.GetInfo()?.id ?? 0) >= 8200)) {
@@ -171,11 +171,11 @@ public class MapSceneView : UIModule
             }
             
         } else if (result.isOpWin) {
-            actionList = battleInfo.loseHandler.Select(x => NpcHandler.GetNpcEntity(npc, x, npcDict)).ToList();
+            actionList = battleInfo.loseHandler?.Select(x => NpcHandler.GetNpcEntity(npc, x, npcDict)).ToList();
         }
 
-        foreach (var action in actionList) {
-            action.Invoke();
+        foreach (var action in actionList ?? new List<Action>()) {
+            action?.Invoke();
         }
 
         Player.instance.currentNpcId = 0;

@@ -70,7 +70,15 @@ public class PetCurrentSkillController : Module
             SetInfoPromptActive(false);
             return;
         }
-        currentSkillView.SetSkillInfoPromptContent(currentSkillModel.normalSkills[index]);
+        currentSkillView.SetSkillInfoPromptContent(currentSkillModel.normalSkills[index], index % 2 == 0);
+    }
+
+    public void SetNormalSkillInfoInSwapMode(int index) {
+        if (!index.IsInRange(0, currentSkillModel.normalSkills.Length)) {
+            SetInfoPromptActive(false);
+            return;
+        }
+        currentSkillView.SetSkillInfoPromptContent(currentSkillModel.normalSkills[index], index < 2);
     }
 
     public void SetSuperSkillInfo() {

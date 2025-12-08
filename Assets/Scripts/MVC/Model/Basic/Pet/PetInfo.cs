@@ -16,7 +16,7 @@ public class PetInfo
     public PetFeatureInfo feature;
     public PetExpInfo exp;
     public PetTalentInfo talent;
-    public PetSkillInfo skills;
+    public PetSkillInfo skills, cards;
     public PetUIInfo ui;
 
     public static bool IsMod(int id) => (id < 0);

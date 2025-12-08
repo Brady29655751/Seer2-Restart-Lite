@@ -84,6 +84,9 @@ public class PassivePetChangePhase : BattlePhase
 
                 if ((!UIState.settings.isItemOK) || (UIState.myUnit.pet.isDead))
                 {
+                    if (UIState.myUnit.pet.isDead)
+                        UI.SetOptionActive(0, false);
+
                     UI.SetOptionActive(2, false);
                     UI.SetOptionActive(3, false);
                 }
@@ -94,8 +97,9 @@ public class PassivePetChangePhase : BattlePhase
         {
             var cursor = opUnit.petSystem.cursor;
             var defaultSkill = opUnit.pet.isDead
-                ? Skill.GetPetChangeSkill(cursor, opUnit.petSystem.petBag.FindIndex(x => !x.isDead), true)
+                ? Skill.GetPetChangeSkill(cursor, opUnit.petSystem.petBag.FindIndex(x => (x != null) && !x.isDead), true)
                 : opUnit.pet.GetDefaultSkill();
+
             SetSkill(defaultSkill, false);
         }
     }

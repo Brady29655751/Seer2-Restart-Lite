@@ -31,7 +31,11 @@ public static class PetElementSystem {
     };
 
     public static List<string> elementColorList = new List<string>() {
-        "#ffffff", "#73c652", "#65ffff", "#fd0100",
+        "#ffffff", "#73c652", "#65ffff", "#fd0100", "#d7e9eb",
+        "#965983", "#e5eeeb", "#ffe53d", "#cca681", "#55d9e8",
+        "#c24ec9", "#ba8551", "#f9e805", "#fffc01", "#a428a4",
+        "#595271", "#981c65", "#a56741", "#01beff", "#ed780e",
+        "#fff699", "#706283",
     };
 
     public static Dictionary<Element, List<float>> elementDefenseRelation = new Dictionary<Element, List<float>>() {
@@ -96,10 +100,18 @@ public static class PetElementSystem {
         return "普通";
     }
 
+    public static float GetElementRelation(int atkElmentId, Element defElement) {
+        return elementDefenseRelation.Get(defElement)?.Get(atkElmentId, 1) ?? 1;
+    }
+
+    public static float GetElementRelation(int atkElementId, Element defElement, Element defSubElement) {
+        var defenseRelation = GetElementRelation(atkElementId, defElement);
+        var subDefenseRelation = GetElementRelation(atkElementId, defSubElement);
+        return defenseRelation * ((defSubElement == Element.普通) ? 1 : subDefenseRelation);
+    }
+
     public static float GetElementRelation(int elementId, BattlePet rhs) {
-        var defenseRelation = elementDefenseRelation.Get(rhs.battleElement)?.Get(elementId, 1) ?? 1;
-        var subDefenseRelation = elementDefenseRelation.Get(rhs.subBattleElement)?.Get(elementId, 1) ?? 1;
-        return defenseRelation * ((rhs.subBattleElement == Element.普通) ? 1 : subDefenseRelation);
+        return GetElementRelation(elementId, rhs.battleElement, rhs.subBattleElement);
     }
 
     public static float GetElementRelation(Skill lhs, BattlePet rhs) {
@@ -125,7 +137,7 @@ public static class PetElementSystem {
 
     public static Color GetElementColor(Element element)
     {
-        var code = elementColorList.Get((int)element, "#ffffff").TrimStart("#");
+        var code = elementColorList.Get((int)element, "#ffffff");
         if (ColorUtility.TryParseHtmlString(code, out var color))
             return color;
 

@@ -117,7 +117,18 @@ public class ItemShopPanel : Panel
                 SetCurrencyType(currency[0], currency[1]);
                 break;
             case "item":
-                var itemList = param.ToIntList('/');
+                var itemList = new List<int>();
+                if (param.TryTrimParentheses(out _, '(', ')'))
+                {
+                    var itemFilter = Parser.ParseConditionFilter<ItemInfo>(param, (type, info) => 
+                        info.TryGetItemInfoIdentifier(type, out var num) ? num : Identifier.GetNumIdentifier(type)
+                    );
+                    itemList = ItemInfo.database.Where(itemFilter).Select(x => x.id).ToList();
+                }
+                else
+                {
+                    itemList = param.ToIntList('/');
+                }
                 shopItemIdDict.Set(ItemShopType.Others, itemList);
                 SetShopType(ItemShopType.Others);
                 break;

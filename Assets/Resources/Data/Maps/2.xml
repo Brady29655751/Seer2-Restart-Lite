@@ -5,31 +5,34 @@
 		<bgm>BGM_2</bgm>
 	</music>
 	<entities>
-		<npc id="201" resId="Pets/pet/990.png" name="【希望之光】约瑟" size="217,296" pos="355,150" namePos="30,-20">
+		<npc id="201" resId="Pets/pet/990.png" name="约瑟" size="217,296" pos="355,150" namePos="30,-20">
 			<description><![CDATA[北半球的精灵王]]></description>
 			<dialog>
-				<branch id="default" name="【希望之光】约瑟" icon="Pets/pet/990.png" size="108,148" pos="10,35">
-					<content><![CDATA[虽然我只是一道希望之光，但五千年前的那场大战，至今记忆犹新]]></content>
+				<branch id="default" name="约瑟" icon="Pets/pet/990.png" size="108,148" pos="10,35">
+					<content><![CDATA[你是谁？]]></content>
 					<functionHandler>
 						<func type="click">
-							<description><![CDATA[精灵王之战（剧情）]]></description>
-							<action>battle</action>
-							<param>default</param>
+							<description><![CDATA[精灵王挑战]]></description>
+							<action>openPanel</action>
+							<param>SpriteKing</param>
 						</func>
+						<!--
 						<func type="click">
 							<description><![CDATA[自我挑战（测试）]]></description>
 							<action>battle</action>
 							<param>test</param>
 						</func>
+						-->
 					</functionHandler>
 					<replyHandler>
 						<reply type="click">
-							<description><![CDATA[好强大阿]]></description>
+							<description><![CDATA[别回头，我是奎尔斯]]></description>
 							<action>openDialog</action>
 							<param>null</param>
 						</reply>
 					</replyHandler>
 				</branch>
+				<!--
 				<branch id="miracle" name="【希望之光】约瑟" icon="Pets/pet/990.png" size="108,148" pos="10,35">
 					<content><![CDATA[当年的大战要是发生如此奇迹，阿卡迪亚如今会是怎样的面貌？]]></content>
 					<replyHandler>
@@ -50,6 +53,7 @@
 						</reply>
 					</replyHandler>
 				</branch>
+				-->
 			</dialog>
 			<battle>
 				<branch id="default">
@@ -97,7 +101,7 @@
 						<mode>4</mode>
 					</settings>
 					<enemy>
-						<pet id="990" level="105">
+						<pet id="811" level="105">
 							<status>
 								<atk>1</atk>
 								<mat>1</mat>
@@ -106,6 +110,8 @@
 								<spd>400</spd>
 								<hp>135000</hp>
 							</status>
+							<emblem>false</emblem>
+							<initBuff>-3089</initBuff>
 							<loopSkill>-1003</loopSkill>
 						</pet>
 					</enemy>

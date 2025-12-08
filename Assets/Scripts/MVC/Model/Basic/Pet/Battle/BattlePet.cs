@@ -304,7 +304,7 @@ public class BattlePet : Pet
                 continue;
 
             var buff = new Buff(id, -1, Mathf.Abs(powerup));
-            buffController.AddBuff(buff, lhsUnit, state);
+            buffController.AddBuff(buff, lhsUnit, null, state);
         }
     }
 
@@ -316,25 +316,6 @@ public class BattlePet : Pet
             return;
 
         stayTurn += 1;
-        buffController.OnTurnStart(thisUnit, state);
-    }
-
-    public bool IsSkillCostEnough(int skillId, BattleRule rule)
-    {
-        var skill = skillController.FindSkill(skillId);
-        if (skill == null)
-            return false;
-
-        switch (rule)
-        {
-            default:
-                return true;
-
-            case BattleRule.Anger:
-                return (statusController.anger >= skill.anger) || (buffController.GetBuff(61) != null);
-
-            case BattleRule.PP:
-                return skill.PP > 0;
-        }
+        buffController.ReduceBuffTurn(thisUnit, state);
     }
 }

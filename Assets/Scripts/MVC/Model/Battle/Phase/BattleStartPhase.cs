@@ -48,15 +48,20 @@ public class BattleStartPhase : BattlePhase
             if (pet == null)
                 continue;
 
-            List<Buff> buffs = new List<Buff>(pet.buffController.buffs);
-            buffs.Add(Buff.GetFeatureBuff(pet));
-            buffs.Add(pet.hasEmblem ? Buff.GetEmblemBuff(pet) : null);
+            List<Buff> buffs = new List<Buff>(pet.buffController.buffs) { Buff.GetFeatureBuff(pet) };
+            if (pet.hasEmblem)
+                buffs.Add(Buff.GetEmblemBuff(pet));
+
             buffs.AddRange(pet.initBuffs);
             if (state.stateBuffs.Exists(x => x.Value.id == 600000))
-                buffs.RemoveAll(x => x.info.type == BuffType.Item);
+                buffs.RemoveAll(x => (x != null) && x.IsType(BuffType.Item));
 
             pet.buffController.RemoveRangeBuff(x => true, null, null);
             pet.buffController.AddRangeBuff(buffs, thisUnit, state);
+
+            pet.skillController.allSkills.Where(x => x != null).SelectMany(x => x.effects)
+                .Where(x => (x != null) && (x.timing == EffectTiming.OnAddBuff)).OrderBy(x => x.priority).ToList()
+                .ForEach(x => x.CheckAndApply(thisUnit, state, false));
         }
         thisUnit.petSystem.cursor = 0;
     }

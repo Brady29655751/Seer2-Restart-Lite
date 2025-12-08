@@ -102,21 +102,4 @@ public class PetBattleSkillController
 
         return allSkills.Find(x => (x?.id ?? 0) == id);
     }
-
-    public void TakeSkillCost(Skill skill, BattleRule rule)
-    {
-        if ((skill == null) || skill.isAction)
-            return;
-
-        switch (rule)
-        {
-            case BattleRule.Anger:
-                break;
-            case BattleRule.PP:
-                var realSkill = FindSkill(skill.id);
-                if (realSkill != null)
-                    realSkill.PP--;
-                break;
-        }
-    }
 }

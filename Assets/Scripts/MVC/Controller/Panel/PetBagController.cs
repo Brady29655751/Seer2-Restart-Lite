@@ -49,6 +49,9 @@ public class PetBagController : Module
     }
 
     public void SetPetDrop(int dropIndex, RectTransform rectTransform = null) {
+        if (mode != PetBagMode.Normal && mode != PetBagMode.YiTeRogue)
+            return;
+            
         buttonModel.SetPetDrop(dropIndex);
     }
 

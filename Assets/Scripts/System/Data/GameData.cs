@@ -93,9 +93,9 @@ public class GameData
             new Pet(1, 10),
             new Pet(4, 10),
             new Pet(7, 10),
-            null,
-            null,
-            null,
+            new Pet(10001, 10),
+            new Pet(10004, 10),
+            new Pet(10007, 10),
         };
         gameData.itemStorage.Add(new Item(Item.COIN_ID, initCoin));
         gameData.itemStorage.Add(new Item(Item.DIAMOND_ID, initDiamond));

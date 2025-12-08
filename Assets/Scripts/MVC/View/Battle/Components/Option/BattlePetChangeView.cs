@@ -103,6 +103,8 @@ public class BattlePetChangeView : BattleBaseView
         if (!index.IsInRange(0, changeBlockViews.Length))
             return;
 
+        SetDescriptionBoxActive(false);
+
         index += page * 6;
         if (UI.isSkillSelectMode)
         {

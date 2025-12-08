@@ -15,6 +15,7 @@ public class ResourceManager : Singleton<ResourceManager>
 {
     private string mapUrl => GameManager.serverUrl + "Maps/";
     private string petUrl => GameManager.serverUrl + "Pets/";
+    private string effectUrl => GameManager.serverUrl + "Effects/";
     private string skillUrl => GameManager.serverUrl + "Skills/";
     private string buffUrl => GameManager.serverUrl + "Buffs/";
     private string itemUrl => GameManager.serverUrl + "Items/";
@@ -294,7 +295,10 @@ public class ResourceManager : Singleton<ResourceManager>
                 resDict.Set(bundlePath, assetBundle);
             }
 
-            GameObject prefab = assetBundle.LoadAsset<GameObject>(fileName); //获取精灵的某个特定动画
+            var typeName = fileName.Substring(fileName.LastIndexOf('-') + 1);
+            var allAssetNames = assetBundle.GetAllAssetNames().Select(x => x.Substring(x.LastIndexOf('/') + 1).TrimEnd(".prefab"));
+            var assetName = allAssetNames.FirstOrDefault(x => x.Substring(x.LastIndexOf('-') + 1).ToLower() == typeName.ToLower());
+            GameObject prefab = assetBundle.LoadAsset<GameObject>(assetName); //获取精灵的某个特定动画
             if (prefab == null) //说明精灵的某个特定动画没有
             {
                 return null;
@@ -322,6 +326,10 @@ public class ResourceManager : Singleton<ResourceManager>
         }
 
         GetPetAnimAssetBundleAsync(petID, assetBundle => {
+            var typeName = fileName.Substring(fileName.LastIndexOf('-') + 1);
+            var allAssetNames = assetBundle.GetAllAssetNames().Select(x => x.Substring(x.LastIndexOf('/') + 1).TrimEnd(".prefab"));
+            var assetName = allAssetNames.FirstOrDefault(x => x.Substring(x.LastIndexOf('-') + 1).ToLower() == typeName.ToLower());
+
             GameObject prefab = assetBundle?.LoadAsset<GameObject>(fileName); //获取精灵的某个特定动画
             if (prefab == null) //说明精灵的某个特定动画没有
             {
@@ -425,7 +433,6 @@ public class ResourceManager : Singleton<ResourceManager>
             onSuccess?.Invoke(null);
             yield break;
         }
-
         resDict.Set(bundlePath, assetBundle);
         onSuccess?.Invoke(assetBundle);
     }
@@ -626,6 +633,8 @@ public class ResourceManager : Singleton<ResourceManager>
                 {
                     Effect effect = new Effect(effectData[0][j], effectData[1][j], effectData[2][j],
                         effectData[3][j], effectData[4][j], effectData[5][j], effectData[6][j]);
+
+                    effect.id = effectId;
                     effectLists[i - 1].Add(effect);
                 }
             } catch (Exception) {
@@ -636,9 +645,39 @@ public class ResourceManager : Singleton<ResourceManager>
         return effectLists;
     }
 
-    public List<List<Effect>> LoadEffectLists(string path)
+    public Dictionary<int, Effect> GetEffectDict(string[] data)
     {
-        return GetEffectLists(LoadCSV(path));
+        var effectDict = new Dictionary<int, Effect>();
+        var effectList = GetEffectLists(data);
+        
+        for (int i = 0; i < effectList.Count; i++)
+        {
+            var e = effectList[i].FirstOrDefault();
+            if (e == null)
+                continue;
+            effectDict.Add(e.id, e);
+        }
+
+        return effectDict;
+    }
+
+    public void LoadEffects(Action<Dictionary<int, Effect>> onSuccess = null)
+    {
+        LoadCSV(effectUrl + "effect.csv", (data) => {
+            var originalDict = GetEffectDict(data);
+            if (SaveSystem.TryLoadEffectMod(out var error, out var modDict))
+            {
+                foreach (var entry in modDict)
+                    originalDict.Set(entry.Key, entry.Value);
+            } else {
+                if (error != string.Empty) {
+                    var hintbox = Hintbox.OpenHintboxWithContent(error, 16);
+                    hintbox.SetTitle("加载自制的预制效果失败");
+                    hintbox.SetSize(720, 360);
+                }
+            }
+            onSuccess?.Invoke(originalDict);
+        });
     }
 
     public Dictionary<int, Skill> GetSkill(string[] info, string[] effects, string[] sounds = null)
@@ -709,6 +748,7 @@ public class ResourceManager : Singleton<ResourceManager>
         Dictionary<int, PetFeatureInfo> featureInfo = null;
         Dictionary<int, PetExpInfo> expInfo = null;
         Dictionary<int, PetSkillInfo> skillInfo = null;
+        Dictionary<int, PetSkillInfo> cardInfo = null;
         Dictionary<int, PetUIInfo> uiInfo = null;
         Dictionary<int, PetHitInfo> hitInfo = new Dictionary<int, PetHitInfo>();
         Dictionary<int, PetSoundInfo> soundInfo = new Dictionary<int, PetSoundInfo>();
@@ -719,6 +759,7 @@ public class ResourceManager : Singleton<ResourceManager>
         LoadCSV(petUrl + "feature.csv", (data) => featureInfo = GetPetFeatureInfo(data), (error) => isFailed = true);
         LoadCSV(petUrl + "exp.csv", (data) => expInfo = GetPetExpInfo(data), (error) => isFailed = true);
         LoadCSV(petUrl + "skill.csv", (data) => skillInfo = GetPetSkillInfo(data), (error) => isFailed = true);
+        LoadCSV(petUrl + "card.csv", (data) => cardInfo = GetPetSkillInfo(data), (error) => isFailed = true);
         LoadCSV(petUrl + "ui.csv", (data) => uiInfo = GetPetUIInfo(data), (error) => isFailed = true);
         // LoadCSV(petUrl + "hit.csv", (data) => hitInfo = GetPetHitInfo(data), (error) => isFailed = true);
         // LoadCSV(petUrl + "sound.csv", (data) => soundInfo = GetPetSoundInfo(data), (error) => isFailed = true);
@@ -732,7 +773,8 @@ public class ResourceManager : Singleton<ResourceManager>
         if (FileBrowserHelpers.FileExists(soundInfoPath))
             soundInfo = GetPetSoundInfo(GetCSV(FileBrowserHelpers.ReadTextFromFile(soundInfoPath)));
 
-        while ((basicInfo == null) || (featureInfo == null) || (expInfo == null) || (skillInfo == null) || (uiInfo == null))
+        while ((basicInfo == null) || (featureInfo == null) || (expInfo == null) || (skillInfo == null) ||
+            (cardInfo == null) || (uiInfo == null))
         {
             if (isFailed)
             {
@@ -751,6 +793,8 @@ public class ResourceManager : Singleton<ResourceManager>
                 var ui = uiInfo.Get(basic.id, new PetUIInfo(basic.id, basic.baseId));
                 PetInfo info = new PetInfo(basic, featureInfo.Get(ui.defaultFeatureId), expInfo.Get(basic.id),
                     new PetTalentInfo(), skillInfo.Get(basic.id), ui);
+
+                info.cards = cardInfo.Get(basic.id, skillInfo.Get(basic.id));
                 petInfos.Set(info.id, info);
             }
 

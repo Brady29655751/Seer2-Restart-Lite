@@ -8,6 +8,8 @@ public class PetBattleBuffController
 {
     public Element element { get; private set; }
     public Element subElement { get; private set; }
+
+    private Dictionary<string, int> blockBuffSps = new Dictionary<string, int>();
     private List<int> blockBuffIds = new List<int>();
     private List<int> copyBuffIds = new List<int>();
     private List<BuffType> blockBuffTypes = new List<BuffType>();
@@ -25,6 +27,7 @@ public class PetBattleBuffController
     public PetBattleBuffController(PetBattleBuffController rhs) {
         element = rhs.element;
         subElement = rhs.subElement;
+        blockBuffSps = new Dictionary<string, int>(rhs.blockBuffSps);
         blockBuffIds = new List<int>(rhs.blockBuffIds);
         copyBuffIds = new List<int>(rhs.copyBuffIds);
         blockBuffTypes = new List<BuffType>(rhs.blockBuffTypes);
@@ -116,14 +119,17 @@ public class PetBattleBuffController
         OnAddBuff(newBuff, buffUnit, state);
     }
 
-    public bool AddBuff(Buff newBuff, Unit buffUnit, BattleState state, bool triggerCopy = true) {
+    public bool AddBuff(Buff newBuff, Unit buffUnit, Unit invokeUnit, BattleState state, bool triggerCopy = true) {
         if (newBuff == null)
             return false;
 
         if (triggerCopy && IsBuffCopied(newBuff) && !newBuff.IsPower()) {
             var rhsUnit = state?.GetRhsUnitById(buffUnit.id);
-            rhsUnit?.pet.buffController.AddBuff(newBuff, rhsUnit, state, false);
+            rhsUnit?.pet.buffController.AddBuff(newBuff, rhsUnit, buffUnit, state, false);
         }
+
+        if ((invokeUnit != null) && (invokeUnit.id != buffUnit.id) && (blockBuffSps.Get("op", 0) > 0))
+            return false;
 
         if (IsBuffBlocked(newBuff) && !newBuff.IsPower())
             return false;
@@ -186,7 +192,18 @@ public class PetBattleBuffController
 
         var isSuccess = false;
         foreach (var buff in buffRange)
-            isSuccess |= AddBuff(buff, buffUnit, state);
+            isSuccess |= AddBuff(buff, buffUnit, buffUnit, state);
+
+        return isSuccess;
+    }
+
+    public bool AddRangeBuff(IEnumerable<Buff> buffRange, Unit buffUnit, Unit invokeUnit, BattleState state) {
+        if (buffRange == null)
+            return false;
+
+        var isSuccess = false;
+        foreach (var buff in buffRange)
+            isSuccess |= AddBuff(buff, buffUnit, invokeUnit, state);
 
         return isSuccess;
     }
@@ -241,12 +258,38 @@ public class PetBattleBuffController
         blockBuffTypes.AddRange(typeList);
     }
 
+    public void BlockBuffWithString(string str)
+    {
+        if (string.IsNullOrEmpty(str))
+            return;
+
+        switch (str)
+        {
+            default:
+                blockBuffSps.Set(str, blockBuffSps.Get(str, 0) + 1);
+                break;
+        }
+    }
+
     public void UnblockBuff(List<int> idList) {
         blockBuffIds.RemoveRange(idList);
     }
 
     public void UnblockBuffWithType(List<BuffType> typeList) {
         blockBuffTypes.RemoveRange(typeList);
+    }
+
+    public void UnblockBuffWithString(string str)
+    {
+        if (string.IsNullOrEmpty(str))
+            return;
+
+        switch (str)
+        {
+            case "op":
+                blockBuffSps.Set(str, blockBuffSps.Get(str, 0) - 1);
+                break;
+        }
     }
 
     public void CopyBuff(List<int> idList) {
@@ -265,16 +308,19 @@ public class PetBattleBuffController
         copyBuffTypes.RemoveRange(typeList);
     }
 
-    public void OnTurnStart(Unit thisUnit, BattleState state) {
+    public void ReduceBuffTurn(Unit thisUnit, BattleState state, string turnIdentifier = "turn") {
         if (state.turn == 1)
             return;
         
+        var candidates = new List<Buff>();
         foreach (var buff in buffs) {
-            if (buff.turn > 0) {
-                buff.turn--;
+            var turn = buff.GetBuffIdentifier(turnIdentifier);
+            if (turn > 0) {
+                buff.SetBuffIdentifier(turnIdentifier, turn - 1);
+                candidates.Add(buff);
             }
         }
-        RemoveRangeBuff(x => x.turn == 0, thisUnit, state);
+        RemoveRangeBuff(x => candidates.Contains(x) && (x.GetBuffIdentifier(turnIdentifier) == 0), thisUnit, state);
     }
 
 }

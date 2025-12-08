@@ -12,13 +12,16 @@ public class BattleOptionView : BattleBaseView
     [SerializeField] private IText recordText;
     [SerializeField] private BattleOptionSelectView optionSelectView;
     [SerializeField] private BattlePetSkillView skillView;
+    [SerializeField] private BattleCardHandView cardHandView;
+        
     [SerializeField] private BattlePetItemController captureController;
     [SerializeField] private BattlePetItemController itemController;
     [SerializeField] private BattlePetChangeView changeView, opChangeView;
     [SerializeField] private Hintbox escapeView;
     [SerializeField] private BattleAutoView autoView;
 
-    private Module[] options => new Module[] { skillView, changeView, captureController, itemController, escapeView, opChangeView };
+    private Module[] options => new Module[] { skillView, changeView, captureController, itemController, escapeView, opChangeView, cardHandView };
+    private int defaultOptionIndex => battle.settings.mode == BattleMode.Card ? 6 : 0;
 
     private ScrollRect recordScrollRect;
     private bool isRecordPanelActive => (recordPanel != null) && recordPanel.activeSelf;
@@ -28,7 +31,7 @@ public class BattleOptionView : BattleBaseView
         base.Awake();
         for (int i = 0; i < options.Length; i++) {
             options[i]?.gameObject.SetActive(true);
-            options[i]?.gameObject.SetActive(i == 0);
+            options[i]?.gameObject.SetActive(i == defaultOptionIndex);
         }
 
         autoView?.gameObject.SetActive(battle.settings.isAutoOK);
@@ -65,6 +68,9 @@ public class BattleOptionView : BattleBaseView
         }
 
         optionSelectView.Select(index);
+
+        index = (index == 0) ? defaultOptionIndex : index;
+
         for (int i = 0; i < options.Length; i++) {
             options[i]?.gameObject.SetActive(i == index);
         }
@@ -97,23 +103,33 @@ public class BattleOptionView : BattleBaseView
         int parallelCount = currentState.settings.parallelCount;
         Unit myUnit = currentState.myUnit;
         Unit opUnit = currentState.opUnit;
+        
         var myBag = myUnit.petSystem.petBag;
         var opBag = opUnit.petSystem.petBag;
+        
         var petBag = (parallelCount > 1) ? myBag.Take(parallelCount).Concat(Enumerable.Repeat(default(BattlePet), 6 - 2 * parallelCount))
             .Concat(opBag.Take(parallelCount).Reverse()).ToArray() : myBag;
+    
         var parallelCursor = (parallelCount > 1) ? opUnit.petSystem.cursor : -1;
+
         var itemBag = (currentState.settings.mode == BattleMode.YiTeRogue) ? YiTeRogueData.instance.itemBag : Player.instance.gameData.itemBag;
+        var anger = (myUnit.pet.buffController.GetBuff(61) != null) ? int.MaxValue : myUnit.pet.anger;
 
         if (recordPanel != null)
         {
             recordText.SetText(currentState.reports.ConcatToString("\n"));
             recordScrollRect.verticalNormalizedPosition = 0;
         }
+
         skillView.SetPetSystem(myUnit.petSystem);
+        cardHandView.SetHand(anger, myUnit.cardSystem.hand);
+
         changeView.SetPetBag(petBag);
         changeView.SetCursor(myUnit.petSystem.cursor, parallelCursor);
+
         opChangeView.SetPetBag(opBag);
         opChangeView.SetCursor(opUnit.petSystem.cursor, -1);
+
         captureController.SetItemBag(itemBag);
         itemController.SetItemBag(itemBag);
 

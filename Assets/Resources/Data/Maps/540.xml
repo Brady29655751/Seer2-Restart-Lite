@@ -1,0 +1,146 @@
+<map name="禁食山脚"  category="8"  id="540">
+	<!-- <resource>10011</resource> -->
+	<initialPoint>540,70</initialPoint>
+	<music category="8">
+		<bgm>BGM_540</bgm>
+	</music>
+	<entities>
+		<npc id="54001" resId="54001" name="法海" size="79,122" pos="500,200" namePos="-10,-20">
+			<description>雷峰塔会掉下来</description>
+			<dialog>
+				<branch id="default" name="法海" icon="54001" size="79,122" pos="0,45">
+					<content><![CDATA[进了禁食山就要遵守这里的战斗规则！]]></content>
+					<functionHandler>
+						<func type="click">
+							<description><![CDATA[测试卡牌战斗]]></description>
+							<action>battle</action>
+							<param>test</param>
+						</func>
+						<func type="click">
+							<description><![CDATA[了解规则]]></description>
+							<action>openDialog</action>
+							<param>tutor_1</param>
+						</func>
+						<!--
+						<func type="click">
+							<description><![CDATA[兑换道具]]></description>
+							<action>openPanel</action>
+							<param>ItemShop</param>
+							<param>mode=buy</param>
+							<param>currency=400014/2</param>
+							<param>item=300188/400014</param>
+							<param>title=兑换道具</param>
+						</func>
+						-->
+					</functionHandler>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[法海你不懂爱]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+					</replyHandler>
+				</branch>
+				<branch id="tutor_1" name="" icon="54011" size="567,318" pos="-0.6,-150">
+				    <content><![CDATA[story=卡牌战斗以<b><color=#ffbb33>【轮次】</color></b>为单位，一轮中有多个回合，玩家每次出手就算一个回合]]></content>
+				    <replyHandler>
+				        <reply type="click">
+				            <description><![CDATA[啊？卡牌战斗？]]></description>
+				            <action>openDialog</action>
+				            <param>tutor_2</param>
+				        </reply>
+				    </replyHandler>
+				</branch>
+				<branch id="tutor_2" name="" icon="54011" size="567,318" pos="-0.6,-150">
+				    <content><![CDATA[story=每次出手可以选择向上拖动使用卡片、使用道具、切换精灵，或者点击按钮释放必杀技。轮次结束时按下右边的绿色<b><color=#00ff00>【结束回合】</color></b>按钮]]></content>
+				    <replyHandler>
+				        <reply type="click">
+				            <description><![CDATA[一轮能释放多次技能？]]></description>
+				            <action>openDialog</action>
+				            <param>tutor_3</param>
+				        </reply>
+				    </replyHandler>
+				</branch>
+				<branch id="tutor_3" name="" icon="54012" size="246,304" pos="-0.6,-150">
+				    <content><![CDATA[story=这是一张卡牌。左上角是消耗的怒气，鼠标停留在卡片上可以查看卡片资讯。使用卡片时，需要消耗对应的怒气，否则无法使用]]></content>
+				    <replyHandler>
+				        <reply type="click">
+				            <description><![CDATA[攻击能获得15怒气吗？]]></description>
+				            <action>openDialog</action>
+				            <param>tutor_4</param>
+				        </reply>
+				    </replyHandler>
+				</branch>
+				<branch id="tutor_4" name="" icon="54011" size="567,318" pos="-0.6,-150">
+				    <content><![CDATA[story=但是只有轮次开始和轮次结束会各获得15怒气，你的攻击不会获得怒气。反而对手只要怒气达标就会立刻进行攻击！]]></content>
+				    <replyHandler>
+				        <reply type="click">
+				            <description><![CDATA[那得控管怒气了]]></description>
+				            <action>openDialog</action>
+				            <param>tutor_5</param>
+				        </reply>
+				    </replyHandler>
+				</branch>
+				<branch id="tutor_5" name="" icon="54011" size="567,318" pos="-0.6,-150">
+				    <content><![CDATA[story=<color=#ffbb33>【小技巧】</color>对于死亡换场这类被动换场，换场后那个回合使用的卡片不会消耗哦！]]></content>
+				    <replyHandler>
+				        <reply type="click">
+				            <description><![CDATA[这肯定是bug吧？]]></description>
+				            <action>openDialog</action>
+				            <param>tutor_6</param>
+				        </reply>
+				    </replyHandler>
+				</branch>
+				<branch id="tutor_6" name="" icon="54011" size="567,318" pos="-0.6,-150">
+				    <content><![CDATA[story=每轮结束会丢弃所有手牌，而每轮开始会抽取四张卡片。善用卡牌击败对手吧！]]></content>
+				    <replyHandler>
+				        <reply type="click">
+				            <description><![CDATA[教学好短]]></description>
+				            <action>teleport</action>
+				            <param>540</param>
+				        </reply>
+				    </replyHandler>
+				</branch>
+			</dialog>
+			<battle>
+				<branch id="test">
+					<settings count="3" item="false" simulate="true">
+						<mode>6</mode>
+					</settings>
+					<player>
+						<pet id="3" level="100">
+							<initBuff>12</initBuff>
+						</pet>
+						<pet id="6" level="100">
+							<initBuff>12</initBuff>
+						</pet>
+						<pet id="9" level="100">
+							<initBuff>12</initBuff>
+						</pet>
+					</player>
+					<enemy>
+						<pet id="12" level="100">
+							<status>
+								<atk>300</atk>
+								<mat>300</mat>
+								<hp>3000</hp>
+							</status>
+							<superSkill>10062</superSkill>
+						</pet>
+					</enemy>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>openDialog</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<!-- <teleport id="1" name="禁食山顶" pos="80,60" targetMapId="419"/> -->
+		<teleport id="2" name="种植园" pos="700,100" targetMapId="990"/>
+	</entities>
+
+
+</map>
+

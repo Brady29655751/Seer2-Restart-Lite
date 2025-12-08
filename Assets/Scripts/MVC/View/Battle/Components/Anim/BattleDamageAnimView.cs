@@ -10,8 +10,6 @@ public class BattleDamageAnimView : Module
     [SerializeField] private GameObject damageBackgroundPrefab;
     [SerializeField] private GameObject healAnchoredObject;
     [SerializeField] private GameObject healNumberPrefab;
-    [SerializeField] private Color32 healPositiveColor;
-    [SerializeField] private Color32 healNegativeColor;
     [SerializeField] private FightCamaraController camara;
 
     private SettingsData settingsData => Player.instance.gameData.settingsData;
@@ -20,21 +18,44 @@ public class BattleDamageAnimView : Module
     {
         if ((info.Heal == 0) && (!info.IsForceShowHeal))
             return;
+
         GameObject obj = Instantiate(healNumberPrefab, healAnchoredObject.transform);
         Text num = obj.GetComponent<Text>();
-        num.text = ((info.Heal >= 0) ? "+" : string.Empty) + info.Heal.ToString();
-        num.color = info.Heal > 0 ? healPositiveColor : healNegativeColor;
-        StartCoroutine(SetHealAnim(num.rectTransform));
+        num.text = info.HealText;
+        num.color = info.TypeColor;
+        StartCoroutine(SetHealAnim(num.rectTransform, string.IsNullOrEmpty(info.Type) || info.Type == "item"));
     }
 
-    private IEnumerator SetHealAnim(RectTransform healRect)
+    /// <summary>
+    /// Set heal animation.
+    /// </summary>
+    /// <param name="healRect">Object</param>
+    /// <param name="dir">True for down. False for up.</param>
+    /// <returns>IEnumerator for coroutine use.</returns>
+    private IEnumerator SetHealAnim(RectTransform healRect, bool dir = true)
     {
-        float speed = -0.5f, time = 0;
-        while ((healRect.anchoredPosition.y > -50) && (time < 2.2f))
+        // float time = 0;
+        float speed = dir ? -1.5f : 3f;
+
+        if (dir)
         {
-            healRect.anchoredPosition = new Vector2(healRect.anchoredPosition.x, healRect.anchoredPosition.y + speed);
-            time += Time.deltaTime;
-            yield return null;
+            while (healRect.anchoredPosition.y > -50)
+            {
+                healRect.anchoredPosition = new Vector2(healRect.anchoredPosition.x, healRect.anchoredPosition.y + speed);
+                yield return new WaitForSeconds(0.02f);
+            }   
+        } 
+        else
+        {   
+            healRect.anchoredPosition = new Vector2(healRect.anchoredPosition.x, healRect.anchoredPosition.y - 50);
+
+            yield return new WaitForSeconds(0.2f);
+
+            while (healRect.anchoredPosition.y < 25)
+            {
+                healRect.anchoredPosition = new Vector2(healRect.anchoredPosition.x, healRect.anchoredPosition.y + speed);
+                yield return new WaitForSeconds(0.02f);
+            }    
         }
 
         yield return new WaitForSeconds(0.8f);

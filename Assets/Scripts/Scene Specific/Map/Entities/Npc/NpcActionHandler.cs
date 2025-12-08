@@ -338,25 +338,7 @@ public static class NpcActionHandler
             return;
         }
 
-        bool isPlayerPetBag = (battleInfo.playerInfo == null) || (battleInfo.playerInfo.Count == 0);
-        bool isFirstPetDead = (Player.instance.petBag[0] == null) || (Player.instance.petBag[0].currentStatus.hp == 0);
-        if (isPlayerPetBag && isFirstPetDead)
-        {
-            Hintbox hintbox = Hintbox.OpenHintbox();
-            hintbox.SetTitle("提示");
-            hintbox.SetContent("首发精灵血量耗尽，快去恢复精灵吧！", 14, FontOption.Arial);
-            hintbox.SetOptionNum(1);
-            return;
-        }
-
-        if ((battleInfo.settings.starLimit > 0) && Player.instance.petBag.Any(x => (x != null) && (x.info.star > battleInfo.settings.starLimit)))
-        {
-            Hintbox.OpenHintboxWithContent("不能携带超过" + battleInfo.settings.starLimit + "星的精灵进行挑战哦", 16);
-            return;
-        }
-
-        Battle battle = new Battle(battleInfo);
-        SceneLoader.instance.ChangeScene(SceneId.Battle);
+        Battle.StartBattle(battleInfo);
     }
 
     public static void SetMail(NpcButtonHandler handler)

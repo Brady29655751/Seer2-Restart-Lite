@@ -88,8 +88,13 @@ public class PetDemoView : Module
     public void SetFeatureInfoPromptContent(Feature feature) {
         string text = feature.description;
         infoPrompt.SetInfoPromptWithAutoSize(text, TextAnchor.MiddleLeft);
-        if (featurePromptLeft) {
+        if (featurePromptLeft) 
+        {
             infoPrompt.SetPosition(new Vector2(-infoPrompt.size.x, 2));
+        } 
+        else
+        {
+            infoPrompt.SetPosition(new Vector2(infoPrompt.zeroFixPos.x, -infoPrompt.size.y / 2 - 2));
         }
     } 
 

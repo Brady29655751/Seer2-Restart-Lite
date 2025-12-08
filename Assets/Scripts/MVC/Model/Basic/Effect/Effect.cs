@@ -11,6 +11,7 @@ public class Effect {
     public object source = null;
     public object invokeUnit = null;
 
+    public int id = 0;
     public EffectTiming timing { get; private set; }
     public int priority { get; private set; }
     public EffectTarget target { get; private set; }
@@ -55,6 +56,7 @@ public class Effect {
     }
 
     public Effect(Effect rhs) {
+        id = rhs.id;
         timing = rhs.timing;
         priority = rhs.priority;
         target = rhs.target;
@@ -101,14 +103,55 @@ public class Effect {
         return dict.Select(entry => entry.Key + "=" + entry.Value).ConcatToString("&");
     }
 
+    public static Effect GetEffect(int id)
+    {
+        var e = Database.instance.GetEffect(id);
+        return (e == null) ? null : new Effect(e);
+    }
+
+    /// <summary>
+    /// Format the effects and return
+    /// </summary>
+    /// <param name="effectsBeforeFormat"></param>
+    /// <returns>Effects after formatting {1}, {2}, ... in options</returns>
+    public static List<Effect> SetEffects(List<Effect> effectsBeforeFormat, EffectAbility formatAbility = EffectAbility.SetSkill)
+    {
+        var effects = new List<Effect>();
+
+        foreach (var e in effectsBeforeFormat)
+        {
+            if ((e.timing == EffectTiming.Resident) && (e.ability == formatAbility) && (e.abilityOptionDict.Get("type") == "effect"))
+            {
+                var value = e.abilityOptionDict.Get("value");
+                if (value == null)
+                    continue;
+
+                var split = value.TrimParenthesesLoop('(', ')');
+                for (int i = 0; i < split.Count; i++)
+                {
+                    var startIndex = split[i].IndexOf('{');
+                    var id = split[i].Substring(0, (startIndex == -1) ? split[i].Length : startIndex);
+                    var options = split[i].TrimParenthesesLoop('{', '}');
+                    var r = Effect.GetEffect(int.Parse(id));
+
+                    r.Format(options);
+                    effects.Add(r);
+                }
+            }
+            else
+            {
+                effects.Add(e);   
+            }
+        }
+
+        return effects;
+    }
+
     public static Effect GetDefaultEffect() {
         return new Effect(EffectTiming.None, -1, EffectTarget.None, EffectCondition.None, null, EffectAbility.None, null);
     }
 
-    public static Effect GetEscapeEffect() {
-        return new Effect(EffectTiming.OnBeforeAttack, -1, EffectTarget.None, EffectCondition.None, null, EffectAbility.Escape, null);
-    }
-
+    public static Effect GetEscapeEffect() => Effect.GetEffect(-4);
     public static Effect GetPetChangeEffect(int sourceIndex, int targetIndex, bool passive) {
         Dictionary<string, string> ability_option = new Dictionary<string, string>() { 
             { "source_index", sourceIndex.ToString() },
@@ -121,6 +164,21 @@ public class Effect {
 
     public void SetTiming(EffectTiming timing) {
         this.timing = timing;
+    }
+
+    /// <summary>
+    /// Format the {0}, {1}, {2} ... text in effect options with given options.
+    /// </summary>
+    public void Format(List<string> options)
+    {
+        if (ListHelper.IsNullOrEmpty(options))
+            return;
+
+        for (int i = 0; i < options.Count; i++)
+        {
+            condOptionDictList = condOptionDictList.Select(x => x.ToDictionary(entry => entry.Key.Replace("{" + i + "}", options[i]), entry => entry.Value.Replace("{" + i + "}", options[i]))).ToList();
+            abilityOptionDict = abilityOptionDict.ToDictionary(entry => entry.Key.Replace("{" + i + "}", options[i]), entry => entry.Value.Replace("{" + i + "}", options[i]));
+        }
     }
 
     public bool IsSelect() {
@@ -221,6 +279,7 @@ public class Effect {
                 EffectAbility.SetPlayer => this.SetPlayer(state),
                 EffectAbility.Poker => this.Poker(state),
                 EffectAbility.SetPetBag => this.SetPetBag(state),
+                EffectAbility.Card => this.Card(state),
                 _ => true
             });
         }

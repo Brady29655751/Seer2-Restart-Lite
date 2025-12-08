@@ -52,7 +52,9 @@ public class TurnEndPhase : BattlePhase
         var masterPetBag = masterUnit.petSystem.GetParallelPetBag(parallelCount);
         var clientPetBag = clientUnit.petSystem.GetParallelPetBag(parallelCount);
 
-        masterPetBag.ForEach(x => x.anger += 15);
+        if (battle.settings.mode != BattleMode.Card)
+            masterPetBag.ForEach(x => x.anger += 15);
+            
         clientPetBag.ForEach(x => x.anger += 15);
     }
 

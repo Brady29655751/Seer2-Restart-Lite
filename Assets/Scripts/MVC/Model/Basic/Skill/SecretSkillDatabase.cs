@@ -18,7 +18,7 @@ public class LearnSkillInfo {
 
     public LearnSkillInfo(Skill skill, int learnLevel) {
         this.skill = (skill == null) ? null : new Skill(skill);
-        this.secretType = (learnLevel < 0) ? SecretType.Others : (SecretType)(learnLevel / 10000);
+        this.secretType = (learnLevel < 0) ? (SecretType)learnLevel : (SecretType)(learnLevel / 10000);
         this.value = learnLevel % 10000;
     }
 
@@ -35,6 +35,7 @@ public class LearnSkillInfo {
             SecretType.GreaterThanDamage => this.GreaterThanDamage,
             SecretType.SpecialPet => this.SpecialPet,
             SecretType.Others => ((p, s) => false),
+            SecretType.True => ((p, s) => true),
             _ => this.GreaterThanLevel,
         };
         return GetCondition(pet, endState);
@@ -53,12 +54,15 @@ public class LearnSkillInfo {
             SecretType.GreaterThanDamage => this.GreaterThanDamage(),
             SecretType.SpecialPet => this.SpecialPet(),
             SecretType.Others => this.Others(),
+            SecretType.True => this.True(),
             _ => this.GreaterThanLevel(),
         };
     }
+
 }
 
 public enum SecretType {
+    True = -2,
     Others = -1,
     GreaterThanLevel = 0,
     WinFightNum = 1,

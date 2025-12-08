@@ -14,6 +14,7 @@ public static class SecretSkillDescriptionHandler
         "卡特罗、卡罗特",
         "菲亚斯、卡多斯",
         "飞伊特、沙伊特、虫伊特",
+        "约瑟、奎尔斯",
     };
 
     public static string GreaterThanLevel(this LearnSkillInfo secretSkillInfo) {
@@ -62,5 +63,9 @@ public static class SecretSkillDescriptionHandler
 
     public static string Others(this LearnSkillInfo secretSkillInfo) {
         return "透过特别的方式习得";
+    }
+
+    public static string True(this LearnSkillInfo secretSkillInfo) {
+        return "自动习得";
     }
 }

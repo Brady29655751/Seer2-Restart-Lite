@@ -50,7 +50,7 @@ public class BattlePetBuffView : BattleBaseView
     }
 
     public void SetBuff(List<Buff> buffs, Action<Buff> onPointerClick = null) {
-        List<Buff> newBuffList = buffs.Where(x => !x.info.hide).OrderBy(x => x.info.sortPriority).ToList();
+        List<Buff> newBuffList = buffs.Where(x => !x.hide).OrderBy(x => x.info.sortPriority).ToList();
         if (newBuffList.Count >= numLimitExtend)
             newBuffList.Add(Buff.GetExtendUIBuff(!isExtendMode));
 
@@ -125,12 +125,7 @@ public class BattlePetBuffView : BattleBaseView
 
     private void OnPointerOver(int index) {
         var buff = buffList[index];
-        var ignoreHint = buff.ignore ? "（失效中）" : string.Empty;
-        string header = "<size=18><color=#52e5f9>" + buff.name + ignoreHint + "</color></size><size=4>\n\n</size>";
-        string text = buff.description;
-        Vector2 size = text.GetPreferredSize(15, 14, 21, 21 + 40);
-        Vector2 fixPos = anchoredAtLeft ? new Vector2(12, -size.y + 24) : new Vector2(-size.x - 2, -size.y + 24);
-        infoPrompt.SetInfoPrompt(size, header + text, fixPos, TextAnchor.MiddleLeft);
+        infoPrompt.SetBuff(buff, anchoredAtLeft);
     }
 
     private void OnPointerExit() {

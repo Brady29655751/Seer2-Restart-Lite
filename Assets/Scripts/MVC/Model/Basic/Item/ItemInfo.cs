@@ -129,6 +129,15 @@ public class ItemInfo
     }
 
     public float GetItemInfoIdentifier(string id) {
+        if (id.TryTrimStart("option", out var trimId) && trimId.TryTrimParentheses(out trimId))
+        {
+            var split = trimId.Split(':');
+            if (split.Length == 1)
+                return Identifier.GetNumIdentifier(options.Get(split[0], "0"));
+
+            return options.Get(split[0], "0") == split[1] ? 1 : 0;
+        }
+
         return id switch {
             "id"        => this.id,
             "getId"     => getId,

@@ -17,7 +17,7 @@ public class BattleSettings
     [XmlAttribute("item")] public bool isItemOK = true;
     [XmlElement("captureLevel")] public int captureLevel = 1;
     [XmlIgnore] public bool isPVP => GetSettingsIdentifier("mode") == (float)BattleMode.PVP;
-    [XmlIgnore] public bool isAutoOK => (!isPVP) && (parallelCount <= 1);
+    [XmlIgnore] public bool isAutoOK => (!isPVP) && (parallelCount <= 1) && (mode != BattleMode.Card);
     [XmlIgnore] public bool isReveal => (mode != BattleMode.PVP) || ((bool)PhotonNetwork.CurrentRoom.CustomProperties["reveal"]);
 
 
@@ -125,6 +125,7 @@ public enum BattleMode
     SPT = 3,
     Special = 4,
     YiTeRogue = 5,
+    Card = 6,
 }
 
 public enum BattleRule

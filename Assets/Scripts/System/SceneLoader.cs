@@ -17,6 +17,11 @@ public class SceneLoader : Singleton<SceneLoader>
     public LoadingScreen defaultLoadingScreen, transparentLoadingScreen;
     public LoadingScreen[] loadingScreens = new LoadingScreen[sceneNum];
 
+    public SceneId GetLastScene()
+    {
+        return (SceneId)lastSceneId;
+    }
+
     public static bool IsCurrentSceneSameAsLast() {
         return instance.lastSceneId == instance.nextSceneId;
     }

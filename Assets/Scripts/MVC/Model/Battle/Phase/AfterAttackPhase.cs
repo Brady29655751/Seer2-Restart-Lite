@@ -26,6 +26,9 @@ public class AfterAttackPhase : BattlePhase
     }
 
     private void RaiseAnger() {
+        if (battle.settings.mode == BattleMode.Card)
+            return;
+
         var atkUnit = state.atkUnit;
         if (atkUnit.skill.isAttack && atkUnit.skillSystem.isHit) {
             atkUnit.pet.anger += 15;

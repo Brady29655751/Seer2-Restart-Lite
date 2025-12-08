@@ -10,18 +10,23 @@ using TMPro;
 [RequireComponent(typeof(TMP_Text))]
 public class IText : IMonoBehaviour, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler
 {
-    public TMP_Text text { get; protected set; }
+    private TMP_Text _text;
+    public TMP_Text text 
+    { 
+        get
+        {
+            if (_text == null)
+                _text = GetComponent<TMP_Text>();
+
+            return _text;
+        }
+    }
+    
     public Color color => text.color;
     public Vector2 size => GetSize();
     [SerializeField] public UnityEvent<string> onPointerClickEvent = new UnityEvent<string>();
     [SerializeField] public UnityEvent<string> onPointerEnterEvent = new UnityEvent<string>();
     [SerializeField] public UnityEvent<string> onPointerExitEvent = new UnityEvent<string>();
-
-    protected override void Awake()
-    {
-        base.Awake();
-        text = gameObject.GetComponent<TMP_Text>(); 
-    }
 
     private void OnDestroy() {
         onPointerClickEvent?.RemoveAllListeners();

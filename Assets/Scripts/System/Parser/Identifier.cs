@@ -26,7 +26,7 @@ public static class Identifier
                 return Player.instance.random;
             }
 
-            return trimId.ToIntRange().Random();
+            return trimId.TrimParentheses().ToIntRange().Random();
         }
 
         return float.TryParse(id, out num) ? num : 0;
@@ -142,6 +142,21 @@ public static class Identifier
         if (id.TryTrimStart("random", out var trimId) && trimId.TryTrimParentheses(out trimId))
             return trimId.ToIntRange(x => (int)Parser.ParseEffectOperation(x, effect, lhsUnit, rhsUnit, otherSource, useOtherSourceOnlyWhenTarget)).Random();
 
+        if (id.TryTrimStart("elementRelation", out trimId))
+        {
+            var elements = trimId.TrimParenthesesLoop();
+            if ((!ListHelper.IsNullOrEmpty(elements)) && (elements.Count >= 2))
+            {
+                var elementDict = new Dictionary<string, int>();
+                for (int i = 0; i < elements.Count; i++)
+                {
+                    var split = elements[i].Split(':');
+                    elementDict[split[0]] = (int)Parser.ParseEffectOperation(split[1], effect, lhsUnit, rhsUnit, otherSource, useOtherSourceOnlyWhenTarget);
+                }
+                return PetElementSystem.GetElementRelation(elementDict.Get("atk"), (Element)elementDict.Get("def"), (Element)elementDict.Get("def.sub"));
+            }
+        }
+
         return idSource switch
         {
             BattlePet battlePet => isOtherSourceAvailable ? GetPetIdentifier(id, lhsUnit.petSystem, battlePet) :
@@ -177,9 +192,7 @@ public static class Identifier
                 return trimId switch
                 {
                     "order" => ListHelper.IsNullOrEmpty(state.actionOrder) ? 0 : (state.IsGoFirst(lhsUnit) ? 1 : 2),
-                    "pet.defElementRelation[op.pet.element]" => PetElementSystem.GetElementRelation(rhsUnit.pet.battleElementId, lhsUnit.pet),
-                    "pet.defElementRelation[op.pet.subElement]" => PetElementSystem.GetElementRelation(rhsUnit.pet.subBattleElementId, lhsUnit.pet),
-                    _ => GetUnitIdentifier(trimId, lhsUnit)
+                    _ => GetBattleIdentifier("me." + trimId, lhsUnit, rhsUnit),
                 };
             }
 
@@ -188,9 +201,7 @@ public static class Identifier
                 return trimId switch
                 {
                     "order" => ListHelper.IsNullOrEmpty(state.actionOrder) ? 0 : (state.IsGoFirst(rhsUnit) ? 1 : 2),
-                    "pet.defElementRelation[me.pet.element]" => PetElementSystem.GetElementRelation(lhsUnit.pet.battleElementId, rhsUnit.pet),
-                    "pet.defElementRelation[me.pet.subElement]" => PetElementSystem.GetElementRelation(lhsUnit.pet.subBattleElementId, rhsUnit.pet),
-                    _ => GetUnitIdentifier(trimId, rhsUnit)
+                    _ => GetBattleIdentifier("op." + trimId, lhsUnit, rhsUnit),
                 };
             }
 
@@ -236,6 +247,9 @@ public static class Identifier
 
         if (id.TryTrimStart("skill.", out trimId))
             return GetSkillIdentifier(trimId, unit.skillSystem);
+
+        if (id.TryTrimStart("card.", out trimId))
+            return GetCardIdentifier(trimId, unit.cardSystem);
 
         return GetNumIdentifier(id);
     }
@@ -415,5 +429,10 @@ public static class Identifier
             };
         }
         return GetNumIdentifier(id);
+    }
+
+    public static float GetCardIdentifier(string id, UnitCardSystem cardSystem)
+    {
+        return cardSystem.GetCardIdentifier(id);
     }
 }

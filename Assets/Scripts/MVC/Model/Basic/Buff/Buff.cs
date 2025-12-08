@@ -3,6 +3,7 @@ using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Text.RegularExpressions;
 
 public class Buff
 {
@@ -33,6 +34,8 @@ public class Buff
     }
     public int turn;
     public bool ignore;
+    public bool hide => options.TryGet("hide", out var value) ? (float.Parse(value) != 0) : info.hide;
+    public bool removable => options.TryGet("removable", out var value) ? (float.Parse(value) != 0) : info.removable;
     public List<Effect> effects = new List<Effect>();
     public Dictionary<string, string> options = new Dictionary<string, string>();
 
@@ -74,7 +77,8 @@ public class Buff
     }
 
     public bool IsUneffectable() {
-        return (id <= 0) && (!BuffInfo.IsMod(id));
+        int[] idList = new int[]{ 90, 91, 99, 100 };
+        return ((id <= 0) && (!BuffInfo.IsMod(id))) || idList.Contains(id) || (!removable);
     }
 
     public bool IsPower() {
@@ -168,28 +172,75 @@ public class Buff
 
         referenceBuff ??= new Buff(-1, 0, 0);
 
-        var pokerValue = referenceBuff.value switch {
-            11  => "J",
-            12  => "Q",
-            13  => "K",
-            1   => "A",
-            _   => referenceBuff.value.ToString()
+        string GetPokerValue(int value)
+        {
+            return value switch
+            {
+                11  => "J",
+                12  => "Q",
+                13  => "K",
+                1   => "A",
+                _   => value.ToString()
+            };
         };
 
+        string ReplaceValue(string str, string key)
+        {
+            var split = key.Split(':');
+            var type = "value";
+            var value = "value";
+
+            type = split[0];
+
+            if (split.Length == 2)
+                value = split[1];
+
+            if (type.TryTrimStart("option", out var optionName)
+                && optionName.TryTrimParentheses(out optionName)
+                && (!referenceBuff.options.ContainsKey(optionName)))
+            {
+                return str.Replace($"[{key}]", "空栏位");
+            }
+
+            var buffValue = (int)referenceBuff.GetBuffIdentifier(type);
+            var valueName = value switch
+            {
+                "pet"   => Pet.GetPetInfo(buffValue)?.name ?? "精灵信息错误",
+                "skill" => Skill.GetSkill(buffValue, false)?.name ?? "技能信息错误",
+                "buff"  => Buff.GetBuffInfo(buffValue)?.name ?? "印记信息错误",
+                "poker" => GetPokerValue(buffValue),
+                _       => buffValue.ToString(),  
+            };
+            return str.Replace($"[{key}]", valueName.ToString());
+        }
+
+        // Match [xxx:yyy] or [option[xxx]:yyy] or [option[xxx]]
+        Regex regex = new Regex(@"\[(?:option\[(?<key>[^\]]+)\](?::(?<value>[^\]]+))?|(?<left>[^:\]]+):(?<right>[^\]]+))\]");
+        var matches = regex.Matches(desc).GroupBy(m => m.Value).Select(g => g.First()).ToList();
+
+        foreach (Match match in matches)
+        {
+            desc = ReplaceValue(desc, match.Value.TrimParentheses());
+        }
+
+        /*
         int index = 0;
         while (true)
         {
             index = desc.IndexOf("[option[", index);
             if (index < 0)
                 break;
-
             var optionKey = desc.Substring(index + 1).TrimParentheses();
-            desc = desc.Replace($"[option[{optionKey}]]", referenceBuff.options.Get(optionKey, $"空栏位"));
+            desc = ReplaceValue(desc, $"option[{optionKey}]");
+            // desc = desc.Replace($"[option[{optionKey}]]", referenceBuff.options.Get(optionKey, $"空栏位"));
         }
-
-        desc = desc.Replace("[value]", referenceBuff.value.ToString()).Replace("[poker]", pokerValue);
+        */
+        
         desc = desc.Replace("[pet]", Pet.GetPetInfo(referenceBuff.value)?.name ?? "精灵信息错误");
         desc = desc.Replace("[skill]", Skill.GetSkill(referenceBuff.value, false)?.name ?? "技能信息错误");
+        desc = desc.Replace("[buff]", Buff.GetBuffInfo(referenceBuff.value)?.name ?? "印记信息错误");
+        desc = desc.Replace("[poker]", GetPokerValue(referenceBuff.value));
+        desc = desc.Replace("[value]", referenceBuff.value.ToString());
         desc = desc.Replace("[ENDL]", "\n").Replace("[-]", "</color>").Replace("[", "<color=#").Replace("]", ">");
         return desc;
     }
@@ -208,6 +259,10 @@ public class Buff
         
         if (turn > 0)
             desc += $"\n持续 {turn} 回合";
+
+        var round = GetBuffIdentifier("round");
+        if (round > 0)
+            desc += $"\n持续 {round} 轮次";
         
         return desc;
     }
@@ -223,7 +278,10 @@ public class Buff
             "type" => (float)info.type,
             "value" => value,
             "turn" => turn,
+            "round" => GetBuffIdentifier("option[round]"),
             "ignore" => ignore ? 1 : 0,
+            "hide" => hide ? 1 : 0,
+            "removable" => removable ? 1 : 0,
             _ => float.MinValue,
         };
     }
@@ -249,8 +307,15 @@ public class Buff
             case "turn":
                 turn = (int)num;
                 return;
+            case "round":
+                SetBuffIdentifier("option[round]", num);
+                return;
             case "ignore":
                 ignore = num != 0;
+                return;
+            case "hide":
+            case "removable":
+                SetBuffIdentifier($"option[{id}]", num);
                 return;
         }
     }

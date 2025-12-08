@@ -234,16 +234,38 @@ public class BattlePetSkillView : BattleBaseView
             _ => true,
         };
         bool isAnySkillUsable = isNormalSkillUsable || isSuperSkillUsable;
-        noOpSkillButton.SetInteractable(interactable && (!isAnySkillUsable));
+        noOpSkillButton.SetInteractable(interactable && ((battle.settings.mode == BattleMode.Card) || (!isAnySkillUsable)));
     }
 
     public void SelectNoOpSkill()
     {
+        var isCardMode = battle.settings.mode == BattleMode.Card;
+        var isPassivePetChangePhase = (battle.currentPhase?.phase ?? EffectTiming.None) == EffectTiming.OnPassivePetChange;
+
+        if (isCardMode && !isPassivePetChangePhase)
+        {
+            var roundEndPhase = new RoundEndPhase();
+            battle.currentPhase = roundEndPhase;
+            battle.NextPhase();
+        }
+
         battle.SetSkill(Skill.GetNoOpSkill(), true);
+
+        if (isCardMode && !isPassivePetChangePhase)
+        {
+            var roundStartPhase = new RoundStartPhase();
+            battle.currentPhase = roundStartPhase;
+            battle.NextPhase();
+        }
     }
 
     public void ShowNoOpSkillInfo()
     {
+        if (battle.settings.mode == BattleMode.Card)
+        {
+            SetInfoPromptContentAtLeft("结束本轮");
+            return;
+        }
         infoPrompt.SetSkill(Skill.GetNoOpSkill(), false);
     }
 

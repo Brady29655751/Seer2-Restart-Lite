@@ -24,16 +24,22 @@ public class UnitSkillSystem
 
     // damage to op, buff damage to me, heal to me.
     public Dictionary<string, int> damageDict = new Dictionary<string, int>();
+    public Dictionary<string, int> healDict = new Dictionary<string, int>();
 
     public int skillDamage = 0, skillHeal = 0;
     public int itemDamage = 0, itemHeal = 0;
     public int buffDamage = 0, buffHeal = 0;
 
-    public int totalSkillDamage => Mathf.Max(skillDamage, 0) + damageDict.Where(entry => entry.Key.StartsWith("skill")).Sum(entry => Mathf.Max(entry.Value, 0));
-    public int totalItemDamage => Mathf.Max(itemDamage, 0) + damageDict.Where(entry => entry.Key.StartsWith("item")).Sum(entry => Mathf.Max(entry.Value, 0));
-    public int totalBuffDamage => Mathf.Max(buffDamage, 0) + damageDict.Where(entry => entry.Key.StartsWith("buff")).Sum(entry => Mathf.Max(entry.Value, 0));
+    public int totalSkillDamage => Mathf.Max(skillDamage, 0) + GetTypeDamage(type => type.StartsWith("skill"));
+    public int totalItemDamage => Mathf.Max(itemDamage, 0) + GetTypeDamage(type => type.StartsWith("item"));
+    public int totalBuffDamage => Mathf.Max(buffDamage, 0) + GetTypeDamage(type => type.StartsWith("buff"));
+
+    public int totalSkillHeal => skillHeal + GetTypeHeal(type => type.StartsWith("skill"));
+    public int totalItemHeal => itemHeal + GetTypeHeal(type => type.StartsWith("item"));
+    public int totalBuffHeal => buffHeal + GetTypeHeal(type => type.StartsWith("buff"));
+    
     public int damage => totalSkillDamage + totalItemDamage;
-    public int heal => skillHeal + itemHeal;
+    public int heal => totalSkillHeal + totalItemHeal;
 
     public UnitSkillSystem() {
         OnTurnStart();
@@ -53,6 +59,7 @@ public class UnitSkillSystem
         isCritical = rhs.isCritical;
 
         damageDict = new Dictionary<string, int>(rhs.damageDict);
+        healDict = new Dictionary<string, int>(rhs.healDict);
 
         skillDamage = rhs.skillDamage;
         buffDamage = rhs.buffDamage;
@@ -78,6 +85,16 @@ public class UnitSkillSystem
         counterSkill ??= Skill.GetNoOpSkill();
     }
 
+    public int GetTypeDamage(Func<string, bool> filter)
+    {
+        return damageDict.Where(entry => filter(entry.Key)).Sum(entry => Mathf.Max(entry.Value, 0));
+    }
+
+    public int GetTypeHeal(Func<string, bool> filter)
+    {
+        return healDict.Where(entry => filter(entry.Key)).Sum(entry => entry.Value);
+    }
+    
     public void OnTurnStart() {
         skill = null;
         counterSkill = null;
@@ -89,6 +106,7 @@ public class UnitSkillSystem
         isCritical = false;
 
         damageDict.Clear();
+        healDict.Clear();
 
         skillDamage = itemDamage = buffDamage = 0;
         skillHeal = itemHeal = buffHeal = 0;
@@ -102,6 +120,7 @@ public class UnitSkillSystem
         
         skillDamage = skillHeal = 0;
         damageDict = damageDict.Where(x => !x.Key.StartsWith("skill")).ToDictionary(x => x.Key, x => x.Value);
+        healDict = healDict.Where(x => !x.Key.StartsWith("skill")).ToDictionary(x => x.Key, x => x.Value);
     }
 
     public void SwapCounterSkill(bool isCounterStart)
@@ -165,6 +184,16 @@ public class UnitSkillSystem
             };
         }
 
+        if (id.TryTrimStart("heal", out trimId) && 
+            trimId.TryTrimParentheses(out var healType)) 
+        {
+            return healType switch {
+                "item" => totalItemHeal,
+                "buff" => totalBuffHeal,
+                _ => healDict.Get(healType, 0),
+            };
+        }
+
         return id switch {
             "level" => level,
             "atk" => atk,
@@ -173,9 +202,7 @@ public class UnitSkillSystem
             "sameElement" => sameElementBuff,
             "elementRelation" => elementRelation,
             "damage" => totalSkillDamage,
-            "heal" => skillHeal,
-            "heal[item]" => itemHeal,
-            "heal[buff]" => buffHeal,
+            "heal" => totalSkillHeal,
             "counter" => isCounter ? 1 : 0,
             "hit" => isHit ? 1 : 0,
             "criticalResult" => isCritical ? 1 : 0,

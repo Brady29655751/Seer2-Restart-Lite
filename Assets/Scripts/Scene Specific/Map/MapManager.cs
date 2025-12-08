@@ -44,7 +44,7 @@ public class MapManager : Manager<MapManager>
         //Item.Add(new Item(10205, 1000));
         //Player.instance.gameData.petStorage.Add(new Pet(1,1));
         //Panel.OpenPanel("Noob");
-        //Player.instance.gameData.petStorage.Add(new Pet(301,100));
+        //Player.instance.gameData.petStorage.Add(Pet.GetExamplePet(14761));
     }
 
     public void SetPlantPanelActive(bool active) {

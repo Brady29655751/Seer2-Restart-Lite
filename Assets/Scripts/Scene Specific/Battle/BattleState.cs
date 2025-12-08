@@ -232,8 +232,10 @@ public class BattleState
             return GetEffectHandler(masterUnit, addSkillEffect).Concat(GetEffectHandler(clientUnit, addSkillEffect));
 
         var unitEffects = invokeUnit.unitBuffs.Where(x => !x.ignore).Select(x => x.effects);
-        var skillEffects = invokeUnit.pet.skillController.allSkills.Where(x => (x != null) && (x.type == SkillType.被动))
-            .Where(x => invokeUnit.pet.IsSkillCostEnough(x.id, settings.rule)).Select(x => x.effects);
+
+        var passiveSkills = (settings.mode == BattleMode.Card && invokeUnit.IsMyUnit()) ? invokeUnit.cardSystem.hand : invokeUnit.pet.skillController.allSkills;
+        var skillEffects = passiveSkills.Where(x => (x != null) && (x.type == SkillType.被动))
+            .Where(x => invokeUnit.IsSkillCostEnough(x.id, settings)).Select(x => x.effects);
         var buffEffects = invokeUnit.pet.buffs.Where(x => !x.ignore).Select(x => x.effects);
         var handler = new EffectHandler();
 

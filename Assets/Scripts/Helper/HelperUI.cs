@@ -176,6 +176,11 @@ namespace UnityEngine.UI
             image.material = material;
         }
 
+        public static Sprite GetCardFrameSprite(this Element element)
+        {
+            return RM.instance.GetSprite($"Fight/Card/frame_{(int)element}") ?? RM.instance.GetSprite("Fight/Card/frame_0");
+        }
+
         /// <summary>
         /// Get icon according to the special pattern. <br/>
         /// Eg. pet[60] returns the icon of the pet with id 60. <br/>

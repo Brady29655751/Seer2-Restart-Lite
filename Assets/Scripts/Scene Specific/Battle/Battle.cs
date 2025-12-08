@@ -101,6 +101,21 @@ public class Battle
         Player.instance.currentBattle = this;
         Random.InitState(settings.seed);
 
+        //TODO: Ver 3.5 测试版补丁
+        if (settings.mode == BattleMode.Card)
+        {
+            foreach (var pet in masterPetBag)
+            {
+                if (pet == null)
+                    continue;
+
+                pet.statusController.anger = 35;
+                pet.skills.ownSkillId = pet.info.cards.skillIdList.ToArray();
+                pet.normalSkill = pet.ownSkill.Where(x => x.positionType != SkillType.必杀).ToList().Random(4).ToArray();
+                pet.skillController.superSkill = pet.ownSkill.FirstOrDefault(x => x.positionType == SkillType.必杀);
+            }
+        }
+
         // 精靈大亂鬥模式
         if (settings.initBuffs.Exists(x => (x.Value != null) && (x.Value.id == Buff.BUFFID_PET_EXCHANGE)))
         {
@@ -162,7 +177,33 @@ public class Battle
         SaveSystem.SaveData();        
     }
 
-    private void NextPhase() {
+    public static void StartBattle(BattleInfo battleInfo)
+    {
+        if (battleInfo == null)
+            return;
+
+        bool isPlayerPetBag = (battleInfo.playerInfo == null) || (battleInfo.playerInfo.Count == 0);
+        bool isFirstPetDead = (Player.instance.petBag[0] == null) || (Player.instance.petBag[0].currentStatus.hp == 0);
+        if (isPlayerPetBag && isFirstPetDead)
+        {
+            Hintbox hintbox = Hintbox.OpenHintbox();
+            hintbox.SetTitle("提示");
+            hintbox.SetContent("首发精灵血量耗尽，快去恢复精灵吧！", 14, FontOption.Arial);
+            hintbox.SetOptionNum(1);
+            return;
+        }
+
+        if ((battleInfo.settings.starLimit > 0) && Player.instance.petBag.Any(x => (x != null) && (x.info.star > battleInfo.settings.starLimit)))
+        {
+            Hintbox.OpenHintboxWithContent("不能携带超过" + battleInfo.settings.starLimit + "星的精灵进行挑战哦", 16);
+            return;
+        }
+
+        Battle battle = new Battle(battleInfo);
+        SceneLoader.instance.ChangeScene(SceneId.Battle);
+    }
+
+    public void NextPhase() {
         while (currentPhase != null) {
             currentPhase.DoWork();
             if (currentPhase == null)
@@ -174,7 +215,8 @@ public class Battle
         }
     }
 
-    public void OnBattleStart() {
+    public void OnBattleStart() 
+    {
         NextPhase();
     }
 
@@ -192,10 +234,13 @@ public class Battle
         {
             var sourceIndex = int.Parse(skill.options.Get("parallel_source_index", "0"));
             unit.parallelSkillSystems[sourceIndex].skill = skill;
-            unit.petSystem.petBag[sourceIndex].skillController.TakeSkillCost(skill, settings.rule);
+            unit.TakeSkillCost(skill, settings, sourceIndex);
         }
         else
+        {
             unit.SetSkill(skill);
+        }
+            
 
         if (isMe) {
             if (!skill.IsSelectReady()) {

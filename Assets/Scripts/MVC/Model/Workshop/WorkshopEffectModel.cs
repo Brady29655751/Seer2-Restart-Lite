@@ -46,7 +46,7 @@ public class WorkshopEffectModel : Module
     }
 
     public EffectTiming GetEffectTiming() {
-        const int beforeResident = 5, atTurnEnd = 20;
+        const int beforeResident = 7, atTurnEnd = ((int)EffectTiming.OnTurnEnd) + beforeResident;
 
         if (timingDropdown.value.IsWithin(1, beforeResident))
             return (EffectTiming)(-timingDropdown.value - 1);

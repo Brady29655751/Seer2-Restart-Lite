@@ -144,6 +144,19 @@ public class IButton : IMonoBehaviour, IPointerEnterHandler, IPointerExitHandler
         image.color = interactable ? new Color(1, 1, 1, a) : new Color(0.5f ,0.5f, 0.5f, a);
     }
 
+    public virtual UnityEvent GetButtonEvent(string type)
+    {
+        return type switch
+        {
+            "click" => onPointerClickEvent,
+            "over"  => onPointerOverEvent,
+            "enter" => onPointerEnterEvent,
+            "exit"  => onPointerExitEvent,
+            "hold"  => onPointerHoldEvent,
+            _       => null,
+        };
+    }
+
     public void SetInteractable(bool interactable, bool grayWhenDisabled = true) {
         if (button == null)
             return;
@@ -181,5 +194,13 @@ public class IButton : IMonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 
     public virtual void SetMaterial(Material material) {
         image?.SetMaterial(material);
+    }
+
+    public virtual void SetCallback(Action callback, string type = "click")
+    {
+        if (callback == null)
+            return;
+
+        GetButtonEvent(type)?.AddListener(callback.Invoke);
     }
 }

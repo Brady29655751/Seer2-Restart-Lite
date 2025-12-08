@@ -21,6 +21,8 @@ public class BattlePetItemController : Module
         if (item == null)
             return;
 
+        itemView.SetDescriptionBoxActive(false);
+
         if (!item.IsUsable(state.myUnit, state)) {
             Hintbox hintbox = Hintbox.OpenHintbox();
             hintbox.SetTitle("使用失败");

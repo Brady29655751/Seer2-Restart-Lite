@@ -76,22 +76,23 @@ public static class ListHelper {
         return list[index];
     }
 
-    public static void Set<T>(this IList<T> list, int index, T value) {
+    public static int Set<T>(this IList<T> list, int index, T value) {
         if (list == null)
-            return;
+            return -1;
             
         if (!index.IsInRange(0, list.Count)) {
             list.Add(value);
-            return;
+            return list.Count - 1;
         }
             
         list[index] = value;
+        return index;
     }
 
     public static T Random<T>(this List<T> values, List<int> weights = null) {
         if (weights == null) {
             int index = UnityEngine.Random.Range(0, values.Count);
-            return values[index];
+            return values.Get(index);
         }
 
         var w = weights.Take(values.Count).ToList();

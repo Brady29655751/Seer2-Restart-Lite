@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class UnitHudSystem
@@ -65,7 +66,7 @@ public class UnitHudSystem
             if (isApplyHeal)
             {
                 this.CurHealInfo = new HealInfo(thisUnit.skillSystem.heal, thisUnit.IsMyUnit(),
-                    thisUnit.skill.type == SkillType.道具);
+                    (thisUnit.skill.type == SkillType.道具) ? "item" : null);
             }
         }
         else
@@ -97,21 +98,21 @@ public class UnitHudSystem
         this.petAnimType = PetAnimationType.Idle;
     }
 
-    public void OnHit(Unit thisUnit, bool isAtkUnit)
+    public void OnHit(Unit thisUnit, bool isAtkUnit, int damage, int heal)
     {
         if (isAtkUnit)
         {
-            if (thisUnit.skillSystem.skill.isAttack || (!thisUnit.skillSystem.isHit))
+            if (thisUnit.skillSystem.skill.isAttack || (!thisUnit.skillSystem.isHit) || (damage > 0))
             {
-                this.CurDamageInfo = new DamageInfo(thisUnit.IsMyUnit(), true, thisUnit.skillSystem.totalSkillDamage,
+                this.CurDamageInfo = new DamageInfo(thisUnit.IsMyUnit(), true, damage,
                     thisUnit.skillSystem.isHit, thisUnit.skillSystem.isCritical, thisUnit.skillSystem.elementRelation);
                 this.CurOtherSidePetReactionInfo = new OtherSidePetReactionInfo(this.CurDamageInfo);
             }
 
-            if (thisUnit.skillSystem.heal != 0)
+            if (heal != 0)
             {
-                this.CurHealInfo = new HealInfo(thisUnit.skillSystem.heal, thisUnit.IsMyUnit(),
-                    thisUnit.skill.type == SkillType.道具);
+                this.CurHealInfo = new HealInfo(heal, thisUnit.IsMyUnit(),
+                    (thisUnit.skill.type == SkillType.道具) ? "item" : null);
             }
         }
     }
@@ -127,15 +128,16 @@ public class UnitHudSystem
 
     public void OnTurnEnd(Unit thisUnit, Unit rhsUnit)
     {
-        int thisResult = thisUnit.skillSystem.buffHeal - thisUnit.skillSystem.totalBuffDamage;
-        int rhsResult = rhsUnit.skillSystem.buffHeal - rhsUnit.skillSystem.totalBuffDamage;
+        int thisResult = thisUnit.skillSystem.totalBuffHeal - thisUnit.skillSystem.totalBuffDamage;
+        int rhsResult = rhsUnit.skillSystem.totalBuffHeal - rhsUnit.skillSystem.totalBuffDamage;
         if (rhsResult < 0)
         {
             this.CurDamageInfo = new DamageInfo(thisUnit.IsMyUnit(), false, Mathf.Abs(rhsResult));
         }
         if (thisResult > 0)
         {
-            this.CurHealInfo = new HealInfo(thisResult, thisUnit.IsMyUnit(), thisUnit.skill.type == SkillType.道具);
+            this.CurHealInfo = new HealInfo(thisResult, thisUnit.IsMyUnit(),
+                (thisUnit.skill.type == SkillType.道具) ? "item" : null);
         }
 
         if (thisUnit.pet.isDead)
@@ -229,16 +231,33 @@ public class UnitHudSystem
     public class HealInfo
     {
         public readonly int Heal; //治疗值
-
+        public readonly string Type; // 类型
         public readonly bool IsMe;
+        public bool IsForceShowHeal => !string.IsNullOrEmpty(Type);
+        public string HealText => GetHealText(Heal);
+        public Color TypeColor => GetHealTypeColor(Type);
 
-        public readonly bool IsForceShowHeal;
-
-        public HealInfo(int heal, bool isMe, bool isForceShowHeal = false)
+        public HealInfo(int heal, bool isMe, string type = null)
         {
             this.Heal = heal;
             this.IsMe = isMe;
-            this.IsForceShowHeal = isForceShowHeal;
+            this.Type = type ?? string.Empty;
         }
+
+        public string GetHealText(int heal)
+        {
+            return ((heal >= 0) ? "+" : string.Empty) + heal.ToString();
+        }
+
+        public Color GetHealTypeColor(string type)
+        {
+            return type switch
+            {
+                "pink" => new Color32(255, 64, 255, 255),
+                "white" => Color.white,
+                _ => Heal >= 0 ? new Color32(119, 226, 12, 255) : Color.red,
+            };
+        }
+
     };
 }

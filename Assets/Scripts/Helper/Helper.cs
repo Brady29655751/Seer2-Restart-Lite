@@ -186,7 +186,7 @@ namespace System {
             if (string.IsNullOrEmpty(str) || (str == "none"))
                 return new List<int>();
 
-            var strRanges = str.Replace("－", "-").TrimParentheses().Split('|');
+            var strRanges = str.Replace("－", "-").Split('|');
             var allRanges = new List<int>();
             
             parseFunc ??= int.Parse;

@@ -65,10 +65,10 @@ public class Activity
         GameData gameData = Player.instance.gameData;
         string activityDataVersion = gameData.version;
 
-        if (VersionData.Compare(activityDataVersion, "lite_2.9.2") < 0)
+        if (VersionData.Compare(activityDataVersion, "lite_3.4.5") < 0)
         {
             gameData.activityStorage.RemoveAll(x => x.id == "noob_reward");
-            activityDataVersion = "lite_2.9.2";
+            activityDataVersion = "lite_3.4.5";
         }
     }
 

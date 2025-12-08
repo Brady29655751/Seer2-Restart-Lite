@@ -10,6 +10,7 @@ public class Database : Singleton<Database>
     private ResourceManager RM => ResourceManager.instance;
 
     public Dictionary<int, Map> mapDict = new Dictionary<int, Map>();
+    public Dictionary<int, Effect> effectDict = new Dictionary<int, Effect>();
     public Dictionary<int, Skill> skillDict = new Dictionary<int, Skill>();
     public Dictionary<int, PetFeatureInfo> featureInfoDict = new Dictionary<int, PetFeatureInfo>();
     public Dictionary<int, PetHitInfo> hitInfoDict = new Dictionary<int, PetHitInfo>();
@@ -26,6 +27,7 @@ public class Database : Singleton<Database>
     public void Init()
     {
         RM.LoadPetInfo((x) => petInfoDict = x, (y) => featureInfoDict = y, (z) => hitInfoDict = z, (w) => soundInfoDict = w);
+        RM.LoadEffects((x) => effectDict = x);
         RM.LoadSkill((x) =>
         { 
             skillDict = x;
@@ -76,6 +78,12 @@ public class Database : Singleton<Database>
             return false;
         }
 
+        if (effectDict.Count == 0)
+        {
+            error = "获取预制效果失败";
+            return false;
+        }
+
         if (skillDict.Count == 0)
         {
             error = "获取技能档案失败";
@@ -94,14 +102,6 @@ public class Database : Singleton<Database>
             return false;
         }
 
-        /*
-        if (hitInfoDict.Count == 0)
-        {
-            error = "获取精灵打击帧数档案失败";
-            return false;
-        }
-        */
-
         error = string.Empty;
         return true;
     }
@@ -116,6 +116,11 @@ public class Database : Singleton<Database>
             onSuccess?.Invoke(map);
         }, onFail);
         return map;
+    }
+
+    public Effect GetEffect(int id)
+    {
+        return (id == 0) ? null : effectDict.Get(id);
     }
 
     public Skill GetSkill(int id)

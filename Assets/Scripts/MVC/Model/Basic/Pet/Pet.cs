@@ -55,7 +55,10 @@ public class Pet
     public uint maxExp => exp.maxExp;   // 滿級所需EXP
 
     /* Skill */
-    [XmlIgnore] public List<Skill> ownSkill => skills.ownSkill;  // 當前習得的所有技能
+    [XmlIgnore] public List<Skill> ownSkill {     // 當前習得的所有技能
+        get => skills.ownSkill;
+        set => skills.ownSkill = value;
+    }
     [XmlIgnore] public Skill[] normalSkill {    // 配備的四個普通技能
         get => skills.normalSkill; 
         set => skills.normalSkill = value;
@@ -131,6 +134,18 @@ public class Pet
             return;
         }
         Player.instance.petBag[index] = pet;
+    }
+
+    public static ItemHintbox OpenHintbox(Pet pet)
+    {
+        if (pet == null)
+            return null;
+
+        var itemHintbox = Hintbox.OpenHintbox<ItemHintbox>();
+        itemHintbox.SetIcon(pet.ui.icon);
+        itemHintbox.SetContent($"获得了【{pet.name}】！", 16, FontOption.Arial);
+        itemHintbox.SetOptionNum(1);
+        return itemHintbox;
     }
 
     public Pet() {}

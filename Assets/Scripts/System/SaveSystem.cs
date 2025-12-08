@@ -442,6 +442,28 @@ public static class SaveSystem
         return true;
     }
 
+    public static bool TryLoadEffectMod(out string error, out Dictionary<int, Effect> effectDict) {
+        effectDict = null;
+        error = string.Empty;
+
+        var filePath = Application.persistentDataPath + "/Mod/Effects/";
+        try {
+            string infoPath = filePath + "info.csv";
+            string effectPath = filePath + "effect.csv";
+            if (/* (!FileBrowserHelpers.FileExists(infoPath)) || */(!FileBrowserHelpers.FileExists(effectPath)))
+                return false;
+
+            var data = ResourceManager.GetCSV(FileBrowserHelpers.ReadTextFromFile(infoPath));
+            var effect = ResourceManager.GetCSV(FileBrowserHelpers.ReadTextFromFile(effectPath));
+
+            effectDict = ResourceManager.instance.GetEffectDict(effect);
+        } catch (Exception e) {
+            error = e.ToString();
+            return false;
+        }
+        return true;
+    }
+
     public static bool TrySavePetMod(PetInfo info, Dictionary<string, byte[]> bytesDict, Dictionary<string, Sprite> spriteDict, out string error, int deletePetId = 0) {
         var petPath = Application.persistentDataPath + "/Mod/Pets/";
         var emblemPath = Application.persistentDataPath + "/Mod/Emblems/";
@@ -570,6 +592,7 @@ public static class SaveSystem
             var featurePath = petPath + "feature.csv";
             var expPath = petPath + "exp.csv";
             var skillPath = petPath + "skill.csv";
+            var cardPath = petPath + "card.csv";
             var uiPath = petPath + "ui.csv";
             var hitPath = petPath + "hit.csv";
             var soundPath = petPath + "sound.csv";
@@ -585,6 +608,7 @@ public static class SaveSystem
             var featureData = ResourceManager.GetCSV(FileBrowserHelpers.ReadTextFromFile(featurePath));
             var expData = ResourceManager.GetCSV(FileBrowserHelpers.ReadTextFromFile(expPath));
             var skillData = ResourceManager.GetCSV(FileBrowserHelpers.ReadTextFromFile(skillPath));
+            var cardData = FileBrowserHelpers.FileExists(cardPath) ? ResourceManager.GetCSV(FileBrowserHelpers.ReadTextFromFile(cardPath)) : null;
             var uiData = ResourceManager.GetCSV(FileBrowserHelpers.ReadTextFromFile(uiPath));
             var hitData = FileBrowserHelpers.FileExists(hitPath) ? ResourceManager.GetCSV(FileBrowserHelpers.ReadTextFromFile(hitPath)) : null;
             var soundData = FileBrowserHelpers.FileExists(soundPath) ? ResourceManager.GetCSV(FileBrowserHelpers.ReadTextFromFile(soundPath)) : null;
@@ -594,6 +618,7 @@ public static class SaveSystem
             Dictionary<int, PetFeatureInfo> featureInfo = ResourceManager.instance.GetPetFeatureInfo(featureData);
             Dictionary<int, PetExpInfo> expInfo = ResourceManager.instance.GetPetExpInfo(expData);
             Dictionary<int, PetSkillInfo> skillInfo = ResourceManager.instance.GetPetSkillInfo(skillData);
+            Dictionary<int, PetSkillInfo> cardInfo = (cardData == null) ? null : ResourceManager.instance.GetPetSkillInfo(cardData);
             Dictionary<int, PetUIInfo> uiInfo = ResourceManager.instance.GetPetUIInfo(uiData);
             Dictionary<int, PetHitInfo> hitInfo = ResourceManager.instance.GetPetHitInfo(hitData);
             Dictionary<int, PetSoundInfo> soundInfo = ResourceManager.instance.GetPetSoundInfo(soundData);
@@ -603,6 +628,10 @@ public static class SaveSystem
                 var basic = basicInfo[i];
                 var ui = uiInfo.Get(basic.id, new PetUIInfo(basic.id, basic.baseId));
                 PetInfo info = new PetInfo(basic, featureInfo.Get(ui.defaultFeatureId), expInfo.Get(basic.id), new PetTalentInfo(), skillInfo.Get(basic.id), ui);
+
+                if (cardInfo != null)
+                    info.cards = cardInfo.Get(basic.id, skillInfo.Get(basic.id));
+                
                 petDict.Set(info.id, info);
             }
 

@@ -27,6 +27,7 @@ public class BuffInfo
     public bool hide { get; private set; }  // 不予顯示
     public bool autoRemove { get; private set; }    // value為0以下時自動移除
     public bool movable { get; private set; }    // 可否行動 (異常類判斷)
+    public bool removable {get; private set; }  // 可否被影響或移除
     public string description { get; private set; }
     public Dictionary<string, string> options { get; private set; } = new Dictionary<string, string>();
     
@@ -73,6 +74,7 @@ public class BuffInfo
         inherit = ((type == BuffType.Feature) || (type == BuffType.Emblem)) ? false : bool.Parse(options.Get("inherit", "false"));
         legacy = bool.Parse(options.Get("legacy", "false"));
         hide = bool.Parse(options.Get("hide", "false"));
+        removable = bool.Parse(options.Get("removable", "true"));
         autoRemove = bool.Parse(options.Get("auto_remove", "false"));
         minValue = int.Parse(options.Get("min_val", int.MinValue.ToString()));
         maxValue = int.Parse(options.Get("max_val", int.MaxValue.ToString()));
@@ -90,7 +92,7 @@ public class BuffInfo
     }
 
     public void SetEffects(List<Effect> _effects) {
-        effects = _effects;
+        effects = Effect.SetEffects(_effects);
     }
 
     public string[] GetRawInfoStringArray() {

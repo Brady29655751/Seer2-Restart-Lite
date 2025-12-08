@@ -9,6 +9,7 @@ public class IContainer : IMonoBehaviour, IDropHandler
 {
     [SerializeField] public int index = 0;
     [SerializeField] protected RectTransform rectTransform;
+    [SerializeField] protected Vector2 centerOffset = Vector2.zero;
 
     /// <summary>
     /// The invoked index is this container.
@@ -20,7 +21,7 @@ public class IContainer : IMonoBehaviour, IDropHandler
     {
         if (eventData.pointerDrag != null) {
             var dragRect = eventData.pointerDrag.GetComponent<RectTransform>();
-            dragRect.anchoredPosition = rectTransform.anchoredPosition;
+            dragRect.anchoredPosition = rectTransform.anchoredPosition + centerOffset;
             onDropEvent?.Invoke(index, dragRect);
         }
     }

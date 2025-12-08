@@ -55,5 +55,11 @@ public class PetCurrentSkillView : Module
         }
 
         infoPrompt.SetSkill(skill, showAtRight);
+
+        var size = infoPrompt.size;
+        var fixX = showAtRight ? infoPrompt.zeroFixPos.x : -size.x - 2;
+        var fixY = -size.y / 2 - 2;
+
+        infoPrompt.SetPosition(new Vector2(fixX, fixY));
     }
 }

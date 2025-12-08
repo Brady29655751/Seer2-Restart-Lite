@@ -104,8 +104,11 @@ public class BattleManager : Manager<BattleManager>
             SelectOption(currentUIState.myUnit.pet.isDead ? 1 : 0);
             SetOptionActive(2, currentUIState.settings.isCaptureOK);
                 
-            if ((!currentUIState.settings.isItemOK) || (currentUIState.myUnit.pet.isDead))
+            if ((!currentUIState.settings.isItemOK) || currentUIState.myUnit.pet.isDead)
             {
+                if (currentUIState.myUnit.pet.isDead)
+                    SetOptionActive(0, false);
+                    
                 SetOptionActive(2, false);
                 SetOptionActive(3, false);
             }
