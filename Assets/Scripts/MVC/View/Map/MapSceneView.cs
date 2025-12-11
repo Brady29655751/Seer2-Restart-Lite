@@ -25,7 +25,9 @@ public class MapSceneView : UIModule
 
     public void SetMap(Map map) {
         this.map = map;
-        bool refreshBGM = (SceneLoader.instance.GetLastScene() != SceneId.Map) || (lastMap == null) || (!map.music.ValueEquals(lastMap?.music));
+        bool refreshBGM = (SceneLoader.instance.GetLastScene() != SceneId.Map) ||
+            (lastMap == null) || (!map.music.ValueEquals(lastMap?.music)) ||
+            ((Player.instance.currentBattle != null) && (Player.instance.currentBattle.settings.mode == BattleMode.PVP));
         
         SetResources(map.resources, refreshBGM);
         SetEntites(map.entities);

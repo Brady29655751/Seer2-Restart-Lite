@@ -11,12 +11,14 @@ public class PetSelectController : Module
     [SerializeField] private PageView pageView;
 
     public event Action onSetStorageEvent;
+    public event Action onSetSelectionsEvent;
     public event Action<Pet> onSelectPetEvent;
     public event Action<int> onSelectIndexEvent;
 
     protected override void Awake()
     {
         base.Awake();
+        selectModel.onSetSelectionsEvent += () => onSetSelectionsEvent?.Invoke();
     }
 
     public override void Init()
@@ -44,6 +46,11 @@ public class PetSelectController : Module
     public void SetStorage(List<Pet> storage, int defaultSelectPage = 0) {
         selectModel.SetStorage(storage, defaultSelectPage);
         onSetStorageEvent?.Invoke();
+    }
+
+    public void SetGetMarks(List<bool> getMarks = null) {
+        getMarks ??= Enumerable.Repeat(false, selectModel.selections.Length).ToList();
+        selectView.SetGetMarks(getMarks);
     }
 
     public void Select(int index) {

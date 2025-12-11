@@ -20,3 +20,5 @@ id,timing,priority,target,condition,cond_option,effect,effect_option
 1008,on_before_attack,-1,skill,none,none,set_skill,name=设定技能数值&type={0}&op={1}&value={2}
 1009,on_before_attack,-1,skill,status,status_type={0}&op={1}&cmp_value={2},set_skill,name=能力值{0}比起{2}为{1}时，设定技能数值&type={3}&op={4}&value={5}
 1010,on_final_dmg_cal,100,skill,none,none,set_damage,name=造成伤害不低于{0}&op=[MAX]&value={1}
+3001,on_add_buff,-1,pet,none,none,rage,name=添加印记时，怒气不低于{0}&min={0}
+3002,on_remove_buf,-1,pet,none,none,rage,name=移除印记时，怒气最低为{0}&min={0}

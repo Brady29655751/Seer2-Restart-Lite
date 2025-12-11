@@ -143,7 +143,7 @@ public class SpriteKingPanel : Panel
         {
             petCount = 6,
             mode = BattleMode.SPT,
-            starLimit = 4,
+            starLimit = 3,
         };
 
         var pets = new int[] { 981, 982, 983, 984, 987, 988 };
@@ -191,7 +191,7 @@ public class SpriteKingPanel : Panel
             petCount = 2,
             parallelCount = 2,
             mode = BattleMode.SPT,
-            starLimit = 4,
+            starLimit = 3,
         };
 
         var boss1 = new BossInfo()

@@ -35,7 +35,7 @@ public class LearnSkillInfo {
             SecretType.GreaterThanDamage => this.GreaterThanDamage,
             SecretType.SpecialPet => this.SpecialPet,
             SecretType.Others => ((p, s) => false),
-            SecretType.True => ((p, s) => true),
+            SecretType.Auto => ((p, s) => true),
             _ => this.GreaterThanLevel,
         };
         return GetCondition(pet, endState);
@@ -54,7 +54,7 @@ public class LearnSkillInfo {
             SecretType.GreaterThanDamage => this.GreaterThanDamage(),
             SecretType.SpecialPet => this.SpecialPet(),
             SecretType.Others => this.Others(),
-            SecretType.True => this.True(),
+            SecretType.Auto => this.Auto(),
             _ => this.GreaterThanLevel(),
         };
     }
@@ -62,7 +62,7 @@ public class LearnSkillInfo {
 }
 
 public enum SecretType {
-    True = -2,
+    Auto = -2,
     Others = -1,
     GreaterThanLevel = 0,
     WinFightNum = 1,

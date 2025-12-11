@@ -28,6 +28,9 @@ public class SelectModel<T> : Module, IPageHandler
     public int selectionCapacity => capacity;
 
 
+    public Action onSetSelectionsEvent;
+
+
     protected override void Awake() {
         base.Awake();
         selectableArray.SetCapacity(capacity);
@@ -80,6 +83,7 @@ public class SelectModel<T> : Module, IPageHandler
 
     protected virtual void SetSelections(T[] selections) {
         selectableArray.SetArray(selections, selections == this.selections);
+        onSetSelectionsEvent?.Invoke();
     }
 
     protected virtual void SetSelectionsCapacity(int capacity) {

@@ -109,6 +109,36 @@ public class Effect {
         return (e == null) ? null : new Effect(e);
     }
 
+    public static List<Effect> Parse(string value)
+    {
+        if (value == null)
+            return null;
+
+        var effects = new List<Effect>();
+        var split = value.TrimParenthesesLoop('(', ')');
+
+        if (split == null)
+            return null;
+
+        for (int i = 0; i < split.Count; i++)
+        {
+            var startIndex = split[i].IndexOf('{');
+            var id = split[i].Substring(0, (startIndex == -1) ? split[i].Length : startIndex);
+            var options = split[i].TrimParenthesesLoop('{', '}');
+            var r = Effect.GetEffect(int.Parse(id));
+            r.Format(options);
+            effects.Add(r);
+        }
+
+        return effects;
+    }
+
+    public static bool TryParse(string value, out List<Effect> effects)
+    {
+        effects = Parse(value);
+        return value.TryTrimParentheses(out _, '(', ')');
+    }
+
     /// <summary>
     /// Format the effects and return
     /// </summary>
@@ -123,20 +153,10 @@ public class Effect {
             if ((e.timing == EffectTiming.Resident) && (e.ability == formatAbility) && (e.abilityOptionDict.Get("type") == "effect"))
             {
                 var value = e.abilityOptionDict.Get("value");
-                if (value == null)
+                if (string.IsNullOrEmpty(value))
                     continue;
-
-                var split = value.TrimParenthesesLoop('(', ')');
-                for (int i = 0; i < split.Count; i++)
-                {
-                    var startIndex = split[i].IndexOf('{');
-                    var id = split[i].Substring(0, (startIndex == -1) ? split[i].Length : startIndex);
-                    var options = split[i].TrimParenthesesLoop('{', '}');
-                    var r = Effect.GetEffect(int.Parse(id));
-
-                    r.Format(options);
-                    effects.Add(r);
-                }
+                
+                effects.AddRange(Effect.Parse(value));
             }
             else
             {
@@ -285,25 +305,25 @@ public class Effect {
         }
 
         // Post Process
-        var postSkills = abilityOptionDict.Get("on_" + (result ? "success" : "fail")).ToIntList('/');
-        var postEffects = postSkills?.Select(skillId => {
-            // Get Post Effects
-            var effects = Skill.GetSkill(skillId, false)?.effects?.Select(x => new Effect(x)).ToList();
-            if (effects == null)
-                return effects;
+        var postExpr = abilityOptionDict.Get("on_" + (result ? "success" : "fail"));
+        if (string.IsNullOrEmpty(postExpr))
+            return result;
 
-            // Fix timing
-            foreach (var e in effects) {
-                if (e.timing == EffectTiming.None)
-                    e.SetTiming(timing);
-            }
-            
-            return effects;
-        }).ToList();
+        if (!Effect.TryParse(postExpr, out var postEffects))
+        {
+            postEffects = postExpr.ToIntList('/')?.Select(skillId => 
+                Skill.GetSkill(skillId, false)?.effects?.Select(x => new Effect(x)).ToList()
+            ).SelectMany(x => x).ToList();
+        } 
+
+        // Fix timing
+        foreach (var e in postEffects) {
+            if (e.timing == EffectTiming.None)
+                e.SetTiming(timing);
+        }
 
         var effectHandler = new EffectHandler();
-
-        postEffects?.ForEach(e => effectHandler.AddEffects(invokeUnit, e));
+        effectHandler.AddEffects(invokeUnit, postEffects);
         effectHandler.CheckAndApply(state);
 
         return result;

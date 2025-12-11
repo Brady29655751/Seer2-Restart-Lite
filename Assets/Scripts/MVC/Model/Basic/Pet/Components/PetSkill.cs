@@ -96,8 +96,11 @@ public class PetSkill
     }
 
     public void CheckNewSkill(int level) {
-        var newSkillId = info?.learnInfoList.Where(x => !ownSkillId.Contains(x.skill.id)).Where(x => x.secretType == SecretType.GreaterThanLevel)
-            .Where(x => level >= x.value).Select(x => x.skill.id);
+        var newSkillId = info?.learnInfoList
+            .Where(x => !ownSkillId.Contains(x.skill.id))
+            .Where(x => (x.secretType == SecretType.GreaterThanLevel) || (x.secretType == SecretType.Auto))
+            .Where(x => level >= (x.secretType == SecretType.Auto ? 60 : x.value))
+            .Select(x => x.skill.id);
 
         if (ListHelper.IsNullOrEmpty(newSkillId))
             return;

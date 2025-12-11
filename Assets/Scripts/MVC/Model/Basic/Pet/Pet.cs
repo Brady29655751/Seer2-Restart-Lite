@@ -300,8 +300,8 @@ public class Pet
 
         if (id == "own")
         {
-            var allPets = Player.instance.petBag.Concat(Player.instance.gameData.petStorage).Where(x => x != null);
-            return allPets.Any(x => (x.id == this.id) || (x.GetPetIdentifier($"baseId[{this.id}]") == 1)) ? 1 : 0;
+            var allPets = Player.instance.gameData.petDict.GroupBy(x => x.id).Select(x => x.First()).ToList();
+            return allPets.Exists(x => (x.id == this.id) || (x.GetPetIdentifier($"baseId[{this.id}]") == 1)) ? 1 : 0;
         }
 
         return id switch

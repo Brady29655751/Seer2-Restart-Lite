@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -38,5 +40,11 @@ public class PetSelectView : Module
         for (int i = 0; i < selectBlockViews.Length; i++) {
             selectBlockViews[i].SetChosen(i == index);
         }
+    }
+
+    public void SetGetMarks(List<bool> isGet)
+    {
+        for (int i = 0; i < selectBlockViews.Length; i++)
+            selectBlockViews[i].SetGetMark(isGet.Get(i));
     }
 }

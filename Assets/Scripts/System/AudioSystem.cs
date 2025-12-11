@@ -17,6 +17,7 @@ public class AudioSystem : Singleton<AudioSystem>
             AudioVolumeType.BattleSE => settingsData.battleSEVolume,
             _ => 10f,
         };
+
         return volume / 10f;
     }
 
@@ -73,5 +74,5 @@ public class AudioSystem : Singleton<AudioSystem>
 }
 
 public enum AudioVolumeType {
-    BGM, UI, BattleBGM, BattleSE,
+    None, BGM, UI, BattleBGM, BattleSE,
 }

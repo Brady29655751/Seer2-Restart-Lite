@@ -453,7 +453,7 @@ public static class SaveSystem
             if (/* (!FileBrowserHelpers.FileExists(infoPath)) || */(!FileBrowserHelpers.FileExists(effectPath)))
                 return false;
 
-            var data = ResourceManager.GetCSV(FileBrowserHelpers.ReadTextFromFile(infoPath));
+            // var data = ResourceManager.GetCSV(FileBrowserHelpers.ReadTextFromFile(infoPath));
             var effect = ResourceManager.GetCSV(FileBrowserHelpers.ReadTextFromFile(effectPath));
 
             effectDict = ResourceManager.instance.GetEffectDict(effect);

@@ -15,6 +15,12 @@ public class PetDictionaryController : Module
     [SerializeField] private PetSelectController selectController;
     [SerializeField] private PetBagPanel petBagPanel;
 
+    protected override void Awake()
+    {
+        base.Awake();
+        selectController.onSetSelectionsEvent += onSetSelections;
+    }
+
     public override void Init()
     {
         base.Init();
@@ -41,7 +47,8 @@ public class PetDictionaryController : Module
     }
 
     public void SetPetStorage(List<Pet> storage) {
-        if ((mode == PetDictionaryMode.Workshop) && (ListHelper.IsNullOrEmpty(petWorkshop)))
+        bool isWorkshop = (mode == PetDictionaryMode.Workshop) && (ListHelper.IsNullOrEmpty(petWorkshop));
+        if (isWorkshop)
             petWorkshop = storage.Where(x => !x.info.ui.hide).ToList();
 
         var petStorage = (mode == PetDictionaryMode.Workshop) ? petWorkshop : storage.ToList();
@@ -51,6 +58,12 @@ public class PetDictionaryController : Module
 
     public void TestBattle(int mapId) {
         Map.TestBattle(mapId, petBagPanel?.petBag);
+    }
+
+    public void onSetSelections()
+    {
+        var getMarks = selectController.GetPetSelections().Select(x => (x != null) && x.GetPetIdentifier("own") > 0).ToList();
+        selectController.SetGetMarks(getMarks);
     }
 }
 

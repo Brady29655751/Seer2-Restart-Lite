@@ -35,8 +35,8 @@ public class BossInfo
         {
             petId = pet.id,
             level = level,
-            loopSkillIds = pet.ownSkill.Where(x => !x.isSuper).Select(x => x.id.ToString()).ConcatToString(","),
-            normalSkillIds = pet.ownSkill.Where(x => !x.isSuper).Select(x => x.id.ToString()).ToList().Random(4, false).ConcatToString(","),
+            loopSkillIds = pet.ownSkill.Where(x => ((int)x.type).IsWithin(0, 99)).Select(x => x.id.ToString()).ConcatToString(","),
+            normalSkillIds = pet.ownSkill.Where(x => ((int)x.type).IsWithin(0, 99)).Select(x => x.id.ToString()).ToList().Random(4, false).ConcatToString(","),
             superSkillId = pet.ownSkill.FirstOrDefault(x => x.isSuper)?.id ?? 0,
             initBuffIds = "-3",
         };

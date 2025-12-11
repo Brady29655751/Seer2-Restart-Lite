@@ -312,6 +312,16 @@ namespace UnityEngine
             ColorHelper.blue,
         };
 
+        public static Color32 GetSecretSkillColor(this SecretType secretType)
+        {
+            return secretType switch
+            {
+                SecretType.GreaterThanLevel => ColorHelper.normalSkill,
+                // SecretType.Auto => ColorHelper.gold,
+                _ => ColorHelper.secretSkill,  
+            };
+        }
+
         public static Color32 GetStarColor(int star)
         {
             return starColors.Get(star, Color.clear);

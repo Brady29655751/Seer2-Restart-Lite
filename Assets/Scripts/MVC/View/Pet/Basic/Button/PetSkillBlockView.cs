@@ -71,10 +71,9 @@ public class PetSkillBlockView : Module
             innerBackground.gameObject.SetActive(false);
             return;
         }
-        bool isSecret = (secretType != SecretType.GreaterThanLevel);
-        Color skillColor = isSecret ? ColorHelper.secretSkill : ColorHelper.normalSkill;
+        Color skillColor = secretType.GetSecretSkillColor();
         nameText.color = powerText.color = angerText.color = skillColor;
-        innerBackground.gameObject.SetActive(secretType > SecretType.GreaterThanLevel);
+        innerBackground.gameObject.SetActive((secretType > SecretType.GreaterThanLevel) || (secretType < SecretType.Others));
     }
 
 

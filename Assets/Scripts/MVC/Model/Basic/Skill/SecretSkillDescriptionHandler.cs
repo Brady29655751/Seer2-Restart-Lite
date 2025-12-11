@@ -65,7 +65,7 @@ public static class SecretSkillDescriptionHandler
         return "透过特别的方式习得";
     }
 
-    public static string True(this LearnSkillInfo secretSkillInfo) {
-        return "自动习得";
+    public static string Auto(this LearnSkillInfo secretSkillInfo) {
+        return "60级自动习得";
     }
 }

@@ -14,7 +14,7 @@ public class PetSelectBlockView : Module
     [SerializeField] private Sprite chosenFrameSprite;
     [SerializeField] private Sprite notChosenFrameSprite;
     [SerializeField] private Text nameText;
-    [SerializeField] private Image icon;
+    [SerializeField] private Image icon, getMark;
     [SerializeField] private Text levelText;
     [SerializeField] private Text hpText;
     [SerializeField] private RectTransform hpBarRect;
@@ -32,6 +32,10 @@ public class PetSelectBlockView : Module
         SetLevel();
         SetName();
         SetHp();
+    }
+
+    public void SetGetMark(bool isGet) {
+        getMark?.gameObject.SetActive(isGet);
     }
 
     public void SetInteractable(bool interactable) {

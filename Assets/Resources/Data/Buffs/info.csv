@@ -536,7 +536,7 @@ id,name,type,copyType,turn,options,description
 3280,青蜂之舞,turn,replace,3,res=18,闪避率增加50%
 3281,寒冰坚韧,shield,replace,-1,none,受到伤害减少25%
 3282,冻气附体,mark,replace,-1,none,暴击率增加10%
-3283,反射龟壳,turn,replace,3,none,受到伤害时反弹（最大体力-600）点伤害，结束时使自身获得冻气附体
+3283,反射龟壳,turn,replace,3,none,受到伤害时反弹（最大体力-500）点伤害，结束时使自身获得冻气附体
 3284,凝聚冻气,mark,max,-1,res=19,每回合回复1/8体力
 3285,反射,mark,replace,-1,res=47,反弹受到伤害[value]%的伤害，最高不超过[value]0点
 3286,寒冰护甲,shield,max,-1,auto_remove=true,抵挡自身（最大体力-500）的2倍的伤害护盾，结束时使自身获得冻气附体
@@ -707,6 +707,7 @@ id,name,type,copyType,turn,options,description
 3451,巨螯,mark,replace,-1,none,下次水系攻击强化自身物攻1级且必定暴击
 3452,金光叶露,mark,block,-1,res=3073,受到致死攻击时复活并恢复一半体力和30点怒气[ENDL]整场战斗只能发动一次
 3453,金刚烈焰,mark,replace,-1,res=27,每10点技能威力恢复2点血量和1点怒气并提升2%暴击率
+3454,小雪,mark,replace,-1,hide=true,威力增加5点
 100001,终结,feature,replace,-1,none,体力低于1/4时，消耗弱点记号的技能伤害增加25%，且使水泡必中并附加30点伤害
 100004,炎火,feature,replace,-1,none,体力低于1/4时，火系技能造成的伤害增加25%，且使火焰必中并附加30点伤害
 100007,坚韧,feature,replace,-1,none,体力低于1/4时，受到的伤害减少25%，且使种子爆弹必中并附加30点伤害
@@ -832,6 +833,7 @@ id,name,type,copyType,turn,options,description
 100538,破甲,feature,replace,-1,none,首次出场时自带破甲
 100593,苍穹,feature,replace,-1,none,受到暴击时使自身下次攻击必定暴击
 100606,影神,feature,replace,-1,none,使用分裂技能会使环境转变为夜幕
+100607,光子,feature,repalce,-1,none,回合开始时若体力低于1/2则会恢复1/12体力
 100641,幻神,feature,replace,-1,none,攻击技能15%附带100点固定伤害，若本回合未受到伤害则概率3倍
 100658,龙王,feature,replace,-1,none,攻击龙系精灵伤害2倍，受到龙系伤害减半
 100735,斗神,feature,replace,-1,none,先出手时附带35点伤害，后出手时恢复35点体力
@@ -839,10 +841,11 @@ id,name,type,copyType,turn,options,description
 100761,固态,feature,replace,-1,none,固态化状态下受到的克制系伤害不超过200
 100762,液态,feature,replace,-1,none,液态化状态下受到的暴击伤害减少25%
 100763,气态,feature,replace,-1,none,气态化状态下攻击无视对手防御类强化
+100808,素域,feature,replace,-1,none,每次出场时若为暴风雪或飓风则获得【免疫弱化】
 100809,万灵,feature,replace,-1,none,体力上限提高10%，但受到的伤害增加10%
 100810,武钢,feature,replace,-1,none,具有物攻强化时暴击率增加15%
 100811,幼王,feature,replace,-1,removable=false,怒气不低于30，自身无法被对手添加任何印记
-100824,圣免,feature,replace,-1,none,使用攻击技能时有20%的清除自身能力被弱效果
+100824,圣免,feature,replace,-1,none,攻击技能20%清除自身能力弱化
 100826,五味,feature,replace,-1,none,属性技能命中后有15%几率恢复1/6体力
 100845,割裂,feature,replace,-1,none,特攻技能使自身物攻值增加25点，物攻技能使自身特防值增加25点，可叠加3次[ENDL]（这只精灵视为埃鲁达克的对应型态）
 100940,神米,feature,replace,-1,none,[ffbb33]【专属动作】[-]神迹觉醒[ENDL][ffbb33]【时点】[-]决定技能时[ENDL][ffbb33]【条件】[-]晴天环境
@@ -915,7 +918,7 @@ id,name,type,copyType,turn,options,description
 114731,皮神,feature,replace,-1,none,[ffbb33]【专属动作】[-]神迹觉醒[ENDL][ffbb33]【时点】[-]攻击后[ENDL][ffbb33]【条件】[-]本回合攻击暴击
 114732,皮神,feature,replace,-1,none,[ffbb33]【专属动作】[-]神迹觉醒[ENDL][ffbb33]【时点】[-]攻击后[ENDL][ffbb33]【条件】[-]本回合攻击暴击
 114750,始祖,feature,replace,-1,none,[ffbb33]【专属动作】[-]神迹觉醒[ENDL][ffbb33]【时点】[-]决定技能时[ENDL][ffbb33]【条件】[-]森林场地
-114761,琉梦,feature,replace,-1,none,空栏位
+114761,梦还,feature,replace,-1,none,战斗开始时自身种下[FFBB33]希望之花[-][ENDL]每次登场首回合结束时解除自身所有[FFBB33]异常状态[-]，解除成功则恢复自身最大体力的[FFBB33]1/3[-]，若自身同时处于[FFBB33]不良状态[-]则下3回合自身免疫并反弹所有受到的[FFBB33]异常状态[-]和[FFBB33]不良状态[-][ENDL]回合开始时，若对手克制自身则当回合自身受到的攻击伤害、[FF0033]固定伤害[-]和[FF0033]百分比伤害[-]减少[FFBB33]30%[-]，若自身克制对手则恢复自身[FFBB33]10点[-]怒气且当回合自身所有技能先制+1
 114760,光子,feature,replace,-1,none,[ffbb33]【专属动作】[-]神迹觉醒[ENDL][ffbb33]【时点】[-]决定技能时[ENDL][ffbb33]【条件】[-]具有火花躯体状态
 114780,海龟,feature,replace,-1,none,[ffbb33]【专属动作】[-]神迹觉醒[ENDL][ffbb33]【时点】[-]决定技能时[ENDL][ffbb33]【条件】[-]具有水之波动状态
 114798,狂鲛,feature,replace,-1,none,[ffbb33]【专属动作】[-]神迹觉醒[ENDL][ffbb33]【时点】[-]决定技能时[ENDL][ffbb33]【条件】[-]具有暴怒状态
@@ -1044,6 +1047,7 @@ id,name,type,copyType,turn,options,description
 200538,历战,emblem,replace,-1,none,使用战斗系技能会恢复20点体力
 200593,天霸,emblem,replace,-1,none,击败对手时使环境转变为古战场
 200606,夜影,emblem,replace,-1,none,分身出手后恢复本体1/8体力
+200607,圣芒,emblem,replace,-1,none,回合开始时若体力高于1/2则会恢复5点怒气
 200641,赤瞳,emblem,replace,-1,none,回合结束时自动解除不良状态
 200658,三色,emblem,replace,-1,none,龙系攻击命中后会依照当前回合数使用绿光珠、水流弹、炎火球其中之一进行追击
 200735,天武,emblem,replace,-1,none,受到攻击时反弹1/6伤害，最高不超过自身最大体力的6倍
@@ -1051,6 +1055,7 @@ id,name,type,copyType,turn,options,description
 200761,冰晶,emblem,replace,-1,none,冰晶类技能命中后会消除对手5点怒气
 200762,变幻,emblem,replace,-1,none,使用威力为0的技能会在决定技能时恢复5点怒气
 200763,蒸气,emblem,replace,-1,none,使用连击技能会恢复5点怒气
+200808,小雪,emblem,replace,-1,none,节气为小雪时本方攻击威力增加5点
 200809,蛇蜕,emblem,replace,-1,none,回合开始时自动解除不良状态
 200810,装甲,emblem,replace,-1,none,具有物防强化时受到的暴击伤害降低25%
 200811,幼权,emblem,replace,-1,none,首次登场时使常规技能转变为精灵王系
@@ -1128,7 +1133,7 @@ id,name,type,copyType,turn,options,description
 214732,创世,emblem,replace,-1,none,自己每存活1只精灵使受到的伤害减少5%、攻击伤害提升5%、造成伤害的5%恢复自身体力。若存活的精灵为[ffbb33]波克尔[-]（闪光视同），则上述效果提升为12%[ENDL]首次出场时全队获得7片[ffbb33]【神羽】[-][ENDL]首次出场时自身获得[ffbb33]【神之体质】[-](PVP无效)
 214750,云境,emblem,replace,-1,none,攻击结束时若自身体力高于回合开始时，则自身全能力强化1级，且自身体力高于1/2时额外使对手获得[ffbb33]【琼花仙荼】[-]3回合[ENDL]若自身体力不高于回合开始时，则回合结束时恢复自身1/3体力，且自身体力低于1/2时效果2倍并造成等量伤害[ENDL][ENDL]本回合开始时自身体力为[value]
 214760,阳舞,emblem,replace,-1,none,免疫异常和能力下降状态[ENDL]回合开始时恢复30点怒气[ENDL]攻击伤害低于对手最大体力的1/2时使对手损失300点体力，否则造成伤害的1/2恢复自身体力
-214761,记忆,emblem,replace,-1,none,怒气不低于25点，登场时获得1点危机感
+214761,记忆,emblem,replace,-1,none,自身被击败时立刻使[FFBB33]希望之花[-]绽放[ENDL]怒气不低于[FFBB33]25点[-]
 214780,念动,emblem,replace,-1,none,回合开始时若自身处于[ffbb33]【瘫痪】[-]状态则获得[ffbb33]【吸收】[-]状态1回合，并使对手[ffbb33]【失神】[-]1回合[ENDL]攻击时若对手不处于异常状态则伤害提升50%，否则吸取对手最大体力的1/3，最高不超过自身最大体力的1/3
 214798,霸颚,emblem,replace,-1,none,能力强化上限提升至12级[ENDL]回合开始时强化自身物攻和速度2级[ENDL]回合结束时若自身没有能力强化则会使对手[ffbb33]【流血】[-]和[ffbb33]【冻伤】[-]
 300354,海牙,emblem,replace,-1,none,冰系技能暴击率提升25%，超能系技能暴击伤害提升15%
@@ -1213,7 +1218,7 @@ id,name,type,copyType,turn,options,description
 430000,商城礼券,item,replace,-1,none,伊特大乱斗途中的商店买一送二
 430001,蘑菇果实,item,replace,-1,item=23001&group=exclude,[ffbb33]【随身物品】[-][ENDL]威力低于自身体重的技能连击数+1，但会有50%概率使自身在出手前陷入昏迷1回合
 430002,伊萨晶石,item,replace,-1,item=23002&group=exclude,[ffbb33]【随身物品】[-][ENDL]每回合恢复双方1/12体力
-430003,黑水结晶,item,replace,-1,item=23003&group=exclude,[ffbb33]【随身物品】[-][ENDL]命中率和暴击率提高15%，受到的伤害提升15%
+430003,黑水结晶,item,replace,-1,item=23003&group=exclude,[ffbb33]【随身物品】[-][ENDL]命中率提高15%，受到的伤害提升15%
 430004,草目璞玉,item,replace,-1,item=23004&group=exclude,[ffbb33]【随身物品】[-][ENDL]技能暴击时使天气转变为晴天
 430005,茶叶包,item,replace,-1,item=23005&group=exclude,[ffbb33]【随身物品】[-][ENDL]回合开始时若自身为满体力则使对手当回合【禁疗】
 430006,水脉璞玉,item,replace,-1,item=23006&group=exclude,[ffbb33]【随身物品】[-][ENDL]技能暴击时使天气转变为雨天
@@ -1351,11 +1356,11 @@ id,name,type,copyType,turn,options,description
 -3084,地震级数,mark,stack,-1,max_val=20,初始地震级数为0级，每3回合提升1级[ENDL]每级减少5%受到伤害，最高20级[ENDL]当前为[value]级
 -3085,黄沙暴,mark,stack,-1,none,每回合使对手损失[value]点体力，每回合提升10点
 -3086,精灵王,mark,replace,-1,none,所有技能都适用本系加成，且属性相克系数不低于1
--3087,王权领域,mark,replace,-1,value_1=-1001&value_2=-1003,拥有全部灵兽领域的效果
+-3087,王权领域,mark,replace,-1,none,拥有全部灵兽领域的效果
 -3088,希望之光,mark,replace,-1,hide=true,属性相克系数最高为2
 -3089,木桩,mark,replace,-1,hide=true,移除811特性
--3090,危机感,mark,stack,-1,none,当前危机感为[value]点
--3091,希望之花,mark,stack,-1,none,回合结束时我方每有1点[FFBB33]危机感[-]成长[FFBB33]2[-]点，成长至100点时转化为[FFBB33]希望[-][ENDL]我方精灵被秒杀效果击败时希望之花摧毁且消除对手100点怒气
--3092,希望,mark,replace,-1,none,免疫秒杀效果[ENDL]己方受到的攻击伤害、[FF0033]固定伤害[-]、[FF0033]百分比伤害[-]额外减少25%[ENDL]己方每回合首次进入[FFBB33]异常状态[-]时消除对手回合类效果
+-3090,模仿反击,mark,none,-1,hide=true,使用对手的技能反击
+-3091,希望之花,mark,stack,-1,max_val=30,每回合获得[FFBB33]1[-]点成长值，拥有[FFBB33]30[-]点成长值后绽放为[FFBB33]希望[-][ENDL]当前成长值：[FFBB33][value]点[-]
+-3092,希望,mark,replace,-1,none,获得王者体质[ENDL]受到的攻击伤害、[FF0033]固定伤害[-]和[FF0033]百分比伤害[-]减少[FFBB33]20%[-]%[ENDL]对手出手后若自身处于[FFBB33]异常状态[-]则消除对手回合类效果
 10001,海啸,mark,replace,-1,none,下次使用卡片时生成1张[ffbb33]【海啸连击】[-]
 10002,再生,mark,replace,-1,res=19,每轮恢复1/8体力

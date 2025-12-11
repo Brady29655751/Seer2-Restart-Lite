@@ -88,7 +88,8 @@ public class TitleManager : Manager<TitleManager>
         backgroundImage.SetSprite(modBackgroundSprite);
         backgroundImage.color = Color.white;
         backgroundGadgetObjectList.ForEach(x => x?.SetActive(false));
-        AudioSystem.instance.StopMusic();
+        
+        ResourceManager.instance.GetLocalAddressables<AudioClip>("BGM/FirstPage.mp3", true, (bgm) => AudioSystem.instance.PlayMusic(bgm, AudioVolumeType.None));
     }
 
     public void GameStart() {

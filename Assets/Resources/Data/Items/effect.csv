@@ -199,6 +199,7 @@ id,timing,priority,target,condition,cond_option,effect,effect_option
 210009,resident,-1,state,none,none,none,recipe=2[100]
 210010,resident,-1,state,none,none,none,recipe=2[100]
 210011,resident,-1,state,none,none,none,recipe=2[100]
+210012,resident,-1,state,none,none,none,recipe=400010[1]/400011[1]/400012[1]/400013[1]
 290001,resident,-1,state,none,none,none,pet=10003/10027&base=10001/10027&item=1101[20]/1201[5]/610002[100]/620001[5]&result=10301
 290002,resident,-1,state,none,none,none,pet=10006/10198&base=10004/10198&item=1102[20]/1202[5]/1006[50]/1010[5]&result=10304
 290003,resident,-1,state,none,none,none,pet=10009/10035&base=10007/10035&item=1101[20]/1203[5]/1012[50]/1016[5]&result=10307
@@ -243,6 +244,9 @@ id,timing,priority,target,condition,cond_option,effect,effect_option
 320761,resident\resident\resident,-1\-1\-1,pet\pet\pet,pet\pet\pet,type=id&id_cmp=761\type=id&id_cmp=762\type=id&id_cmp=763,set_pet\set_pet\set_pet,type=id&op=SET&value=762&keep_skill=false\type=id&op=SET&value=763&keep_skill=false\type=id&op=SET&value=761&keep_skill=false
 320810,resident,-1,pet,pet,type=id/level&id_cmp=91&level_op=GTE&level_cmp=25,set_pet,type=id&op=SET&value=810
 320970,resident,-1,pet,pet,type=baseId/maxLevel&baseId_cmp=970&maxLevel_op=<&maxLevel_cmp=105,set_pet,type=maxLevel&op=SET&value=105
+332189,resident,-1,pet,pet,type=uid/level&uid_cmp=10303&level_op=GTE&level_cmp=100,set_pet,type=id&op=SET&value=12189
+332220,resident,-1,pet,pet,type=uid/level&uid_cmp=10306&level_op=GTE&level_cmp=100,set_pet,type=id&op=SET&value=12220
+332221,resident,-1,pet,pet,type=uid/level&uid_cmp=10309&level_op=GTE&level_cmp=100,set_pet,type=id&op=SET&value=12221
 333145,resident,-1,pet,pet,type=uid/level&uid_cmp=12197&level_op=GTE&level_cmp=100,set_pet,type=id&op=SET&value=13145
 333147,resident,-1,pet,pet,type=uid/level&uid_cmp=11836&level_op=GTE&level_cmp=100,set_pet,type=id&op=SET&value=13147
 334198,resident,-1,pet,pet,type=uid/level&uid_cmp=11216&level_op=GTE&level_cmp=100,set_pet,type=id&op=SET&value=12798
@@ -299,6 +303,7 @@ id,timing,priority,target,condition,cond_option,effect,effect_option
 500492,resident\resident,-1\-1,state\state,none\none,none\none,set_player\set_player,param_count=1&action=getPet&param[0]=492\param_count=5&action=openHintbox&param[0]=type＝Item&param[1]=title＝提示&param[2]=content＝【晨璨】已经放入精灵仓库&param[3]=item_icon＝pet[492]&param[4]=option_num＝1
 500538,resident\resident,-1\-1,state\state,none\none,none\none,set_player\set_player,param_count=1&action=getPet&param[0]=538\param_count=5&action=openHintbox&param[0]=type＝Item&param[1]=title＝提示&param[2]=content＝【凯迪】已经放入精灵仓库&param[3]=item_icon＝pet[538]&param[4]=option_num＝1
 500761,resident\resident,-1\-1,state\state,none\none,none\none,set_player\set_player,param_count=1&action=getPet&param[0]=761\param_count=5&action=openHintbox&param[0]=type＝Item&param[1]=title＝提示&param[2]=content＝【迦拉特】已经放入精灵仓库&param[3]=item_icon＝pet[761]&param[4]=option_num＝1
+500808,resident\resident,-1\-1,state\state,none\none,none\none,set_player\set_player,param_count=1&action=getPet&param[0]=808\param_count=5&action=openHintbox&param[0]=type＝Item&param[1]=title＝提示&param[2]=content＝【漱玉】已经放入精灵仓库&param[3]=item_icon＝pet[808]&param[4]=option_num＝1
 500809,resident\resident,-1\-1,state\state,none\none,none\none,set_player\set_player,param_count=1&action=getPet&param[0]=809\param_count=5&action=openHintbox&param[0]=type＝Item&param[1]=title＝提示&param[2]=content＝【蛇诗曼】已经放入精灵仓库&param[3]=item_icon＝pet[809]&param[4]=option_num＝1
 500811,resident\resident,-1\-1,state\state,none\none,none\none,set_player\set_player,param_count=1&action=getPet&param[0]=811\param_count=5&action=openHintbox&param[0]=type＝Item&param[1]=title＝提示&param[2]=content＝【小约瑟】已经放入精灵仓库&param[3]=item_icon＝pet[811]&param[4]=option_num＝1
 500826,resident\resident,-1\-1,state\state,none\none,none\none,set_player\set_player,param_count=1&action=getPet&param[0]=826\param_count=5&action=openHintbox&param[0]=type＝Item&param[1]=title＝提示&param[2]=content＝【萌萌大月饼】已经放入精灵仓库&param[3]=item_icon＝pet[826]&param[4]=option_num＝1

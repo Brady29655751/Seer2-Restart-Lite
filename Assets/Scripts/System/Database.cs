@@ -48,7 +48,7 @@ public class Database : Singleton<Database>
             activityInfos = activityInfoDict.Select(entry => entry.Value)
                 .OrderByDescending(x => ActivityInfo.IsMod(x.id) ? 1 : 0).ThenByDescending(x => x.releaseDate).ToList();
         });
-        for (int id = 81; id <= 89; id++)
+        for (int id = 81; id < 89; id++)
             RM.LoadMap(id, map => mapDict.Set(id, map));
     }
 
