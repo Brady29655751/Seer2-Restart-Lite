@@ -13,6 +13,8 @@ public class Buff
     public const int BUFFID_PET_RANDOM = 62_0001;
     public const int BUFFID_PROTECT_POWERUP = -2003;
     public const int BUFFID_PROTECT_POWERDOWN = -2004;
+    public const int BUFFID_RESIST_BUFF = -2005;
+    // public const int BUFFID_RESIST_DAMAGE = -2006;
     public static List<int> powerupBuffIds => new List<int>() { 1, 3, 5, 7, 9, -9 };
     public static List<int> powerdownBuffIds => new List<int>(){ 2, 4, 6, 8, 10, -10 }; 
     public static List<Buff> yiteEndBuffDatabse => BuffInfo.database.Where(x => x.id.IsInRange(410000, 420000)).Select(x => new Buff(x.id)).ToList();
@@ -71,6 +73,8 @@ public class Buff
             BuffType.Power      => IsPower(),
             BuffType.Powerup    => IsPowerUp(),
             BuffType.Powerdown  => IsPowerDown(),
+            BuffType.Unhealthy  => IsUnhealthy(),
+            BuffType.Abnormal   => IsAbnormal(),
             BuffType.TurnBased  => (turn > 0) && (!IsUnhealthy()) && (!IsAbnormal()),
             _                   => info.type == type,
         };
@@ -79,6 +83,11 @@ public class Buff
     public bool IsUneffectable() {
         int[] idList = new int[]{ 90, 91, 99, 100 };
         return ((id <= 0) && (!BuffInfo.IsMod(id))) || idList.Contains(id) || (!removable);
+    }
+
+    public bool IsCopyable()
+    {
+        return !IsPower();
     }
 
     public bool IsPower() {
@@ -91,10 +100,10 @@ public class Buff
         return powerdownBuffIds.Contains(id);
     }
     public bool IsAbnormal() {
-        return info.type == BuffType.Abnormal;
+        return (info.type == BuffType.Abnormal) || (id == 199);
     }
     public bool IsUnhealthy() {
-        return info.type == BuffType.Unhealthy;
+        return (info.type == BuffType.Unhealthy) || (id == 1999);
     }
 
     public bool IsUnmovable() {
@@ -103,6 +112,7 @@ public class Buff
 
         return !info.movable;
     }
+
     public bool IsYiTeMedicineItem() {
         return id.IsInRange(400005, 400015);
     }
@@ -184,33 +194,51 @@ public class Buff
             };
         };
 
+        string GetPowerupValue()
+        {
+            var result = string.Empty;
+            for (int i = 0; i < Status.powerupNames.Length; i++)
+            {
+                var typeName = Status.powerupNames[i];
+                var powerup = referenceBuff.GetBuffIdentifier($"option[{typeName}]");
+                if (powerup != 0)
+                {
+                    result += $"{Status.powerupNamesChinese[i]}{powerup.ToString("+#;-#")}，";
+                }
+            }
+            result = result.TrimEnd("，");
+            return result;
+        }
+
+        Dictionary<string, Func<int, string>> valueTypeFuncDict = new Dictionary<string, Func<int, string>>()
+        {
+            { "pet",        (buffValue) => Pet.GetPetInfo(buffValue)?.name ?? "精灵信息错误" },
+            { "skill",      (buffValue) => Skill.GetSkill(buffValue, false)?.name ?? "技能信息错误" },
+            { "buff",       (buffValue) => Buff.GetBuffInfo(buffValue)?.name ?? "印记信息错误" },
+            { "poker",      (buffValue) => GetPokerValue(buffValue) },
+            { "powerup",    (buffValue) => GetPowerupValue() },
+            { "who",        (buffValue) => (buffValue == 1) ? "自身" : "对方" },
+            { "num",        (buffValue) => buffValue.ToString("+#;-#;0") },
+            { "+num",       (buffValue) => buffValue.ToString("+#;-#;+0") },
+            { "-num",       (buffValue) => buffValue.ToString("+#;-#;-0") },
+            { "value",      (buffValue) => buffValue.ToString() },
+        };
+
         string ReplaceValue(string str, string key)
         {
             var split = key.Split(':');
-            var type = "value";
-            var value = "value";
+            var optionKey = split.Get(0, "value");
+            var valueType = split.Get(1, "value");
 
-            type = split[0];
-
-            if (split.Length == 2)
-                value = split[1];
-
-            if (type.TryTrimStart("option", out var optionName)
+            if (optionKey.TryTrimStart("option", out var optionName)
                 && optionName.TryTrimParentheses(out optionName)
                 && (!referenceBuff.options.ContainsKey(optionName)))
             {
                 return str.Replace($"[{key}]", "空栏位");
             }
 
-            var buffValue = (int)referenceBuff.GetBuffIdentifier(type);
-            var valueName = value switch
-            {
-                "pet"   => Pet.GetPetInfo(buffValue)?.name ?? "精灵信息错误",
-                "skill" => Skill.GetSkill(buffValue, false)?.name ?? "技能信息错误",
-                "buff"  => Buff.GetBuffInfo(buffValue)?.name ?? "印记信息错误",
-                "poker" => GetPokerValue(buffValue),
-                _       => buffValue.ToString(),  
-            };
+            var buffValue = (int)referenceBuff.GetBuffIdentifier(optionKey);
+            var valueName = valueTypeFuncDict.Get(valueType, (v) => v.ToString()).Invoke(buffValue);
             return str.Replace($"[{key}]", valueName.ToString());
         }
 
@@ -235,12 +263,10 @@ public class Buff
             // desc = desc.Replace($"[option[{optionKey}]]", referenceBuff.options.Get(optionKey, $"空栏位"));
         }
         */
+
+        foreach (var key in valueTypeFuncDict.Keys)
+            desc = desc.Replace($"[{key}]", valueTypeFuncDict.Get(key, (v) => v.ToString()).Invoke(referenceBuff.value));
         
-        desc = desc.Replace("[pet]", Pet.GetPetInfo(referenceBuff.value)?.name ?? "精灵信息错误");
-        desc = desc.Replace("[skill]", Skill.GetSkill(referenceBuff.value, false)?.name ?? "技能信息错误");
-        desc = desc.Replace("[buff]", Buff.GetBuffInfo(referenceBuff.value)?.name ?? "印记信息错误");
-        desc = desc.Replace("[poker]", GetPokerValue(referenceBuff.value));
-        desc = desc.Replace("[value]", referenceBuff.value.ToString());
         desc = desc.Replace("[ENDL]", "\n").Replace("[-]", "</color>").Replace("[", "<color=#").Replace("]", ">");
         return desc;
     }
@@ -300,6 +326,16 @@ public class Buff
         switch (id)
         {
             default:
+                return;
+            case "id":
+                if (Buff.GetBuffInfo((int)num) == null)
+                    return;
+
+                this.id = (int)num;
+                effects = info.effects.Select(x => new Effect(x)).ToList();
+                foreach (var e in effects)
+                    e.source = this;
+                
                 return;
             case "value":
                 this.value = (int)num;

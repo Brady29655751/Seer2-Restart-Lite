@@ -73,7 +73,7 @@ public class PetSkillBlockView : Module
         }
         Color skillColor = secretType.GetSecretSkillColor();
         nameText.color = powerText.color = angerText.color = skillColor;
-        innerBackground.gameObject.SetActive((secretType > SecretType.GreaterThanLevel) || (secretType < SecretType.Others));
+        innerBackground.gameObject.SetActive(secretType > SecretType.GreaterThanLevel);
     }
 
 

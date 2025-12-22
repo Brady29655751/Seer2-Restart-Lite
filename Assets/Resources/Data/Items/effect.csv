@@ -200,6 +200,7 @@ id,timing,priority,target,condition,cond_option,effect,effect_option
 210010,resident,-1,state,none,none,none,recipe=2[100]
 210011,resident,-1,state,none,none,none,recipe=2[100]
 210012,resident,-1,state,none,none,none,recipe=400010[1]/400011[1]/400012[1]/400013[1]
+210013,resident,-1,state,none,none,none,recipe=400010[2]/400011[2]/400012[2]/400013[2]
 290001,resident,-1,state,none,none,none,pet=10003/10027&base=10001/10027&item=1101[20]/1201[5]/610002[100]/620001[5]&result=10301
 290002,resident,-1,state,none,none,none,pet=10006/10198&base=10004/10198&item=1102[20]/1202[5]/1006[50]/1010[5]&result=10304
 290003,resident,-1,state,none,none,none,pet=10009/10035&base=10007/10035&item=1101[20]/1203[5]/1012[50]/1016[5]&result=10307
@@ -240,10 +241,14 @@ id,timing,priority,target,condition,cond_option,effect,effect_option
 320098,resident,-1,pet,pet,type=id/level&id_cmp=91&level_op=GTE&level_cmp=25,set_pet,type=id&op=SET&value=98
 320099,resident,-1,pet,pet,type=id/level&id_cmp=91&level_op=GTE&level_cmp=25,set_pet,type=id&op=SET&value=99
 320100,resident,-1,pet,pet,type=id/level&id_cmp=91&level_op=GTE&level_cmp=25,set_pet,type=id&op=SET&value=100
+320101,resident,-1,pet,pet,type=id/level&id_cmp=91&level_op=GTE&level_cmp=25,set_pet,type=id&op=SET&value=101
+320102,resident,-1,pet,pet,type=id/level&id_cmp=91&level_op=GTE&level_cmp=25,set_pet,type=id&op=SET&value=102
+320609,resident,-1,pet,pet,type=uid/level&uid_cmp=355&level_op=GTE&level_cmp=100,set_pet,type=id&op=SET&value=609
 320757,resident,-1,pet,pet,type=id/level&id_cmp=91&level_op=GTE&level_cmp=25,set_pet,type=id&op=SET&value=757
 320761,resident\resident\resident,-1\-1\-1,pet\pet\pet,pet\pet\pet,type=id&id_cmp=761\type=id&id_cmp=762\type=id&id_cmp=763,set_pet\set_pet\set_pet,type=id&op=SET&value=762&keep_skill=false\type=id&op=SET&value=763&keep_skill=false\type=id&op=SET&value=761&keep_skill=false
 320810,resident,-1,pet,pet,type=id/level&id_cmp=91&level_op=GTE&level_cmp=25,set_pet,type=id&op=SET&value=810
 320970,resident,-1,pet,pet,type=baseId/maxLevel&baseId_cmp=970&maxLevel_op=<&maxLevel_cmp=105,set_pet,type=maxLevel&op=SET&value=105
+331122,resident,-1,pet,pet,type=uid/level&uid_cmp=10999&level_op=GTE&level_cmp=100,set_pet,type=id&op=SET&value=11122
 332189,resident,-1,pet,pet,type=uid/level&uid_cmp=10303&level_op=GTE&level_cmp=100,set_pet,type=id&op=SET&value=12189
 332220,resident,-1,pet,pet,type=uid/level&uid_cmp=10306&level_op=GTE&level_cmp=100,set_pet,type=id&op=SET&value=12220
 332221,resident,-1,pet,pet,type=uid/level&uid_cmp=10309&level_op=GTE&level_cmp=100,set_pet,type=id&op=SET&value=12221
@@ -253,6 +258,7 @@ id,timing,priority,target,condition,cond_option,effect,effect_option
 334731,resident,-1,pet,pet,type=uid/level&uid_cmp=11836&level_op=GTE&level_cmp=100,set_pet,type=id&op=SET&value=14731
 334732,resident,-1,pet,pet,type=uid/level&uid_cmp=12197&level_op=GTE&level_cmp=100,set_pet,type=id&op=SET&value=14732
 334760,resident,-1,pet,pet,type=uid/level&uid_cmp=456&level_op=GTE&level_cmp=100,set_pet,type=id&op=SET&value=12939
+334761,resident\resident,-1\-1,pet\none,pet\none,random_cmp=5&type=uid&uid_cmp=14727\none,set_pet\none,type=id&op=SET&value=14761\none
 334780,resident,-1,pet,pet,type=uid/level&uid_cmp=12698&level_op=GTE&level_cmp=100,set_pet,type=id&op=SET&value=14780
 340940,resident,-1,pet,pet,type=uid/level&uid_cmp=456&level_op=GTE&level_cmp=100,set_pet,type=id&op=SET&value=939
 381757,resident,-1,pet,pet,type=baseId[456]&baseId[456]_cmp=1,set_pet,type=skinId&op=+&value=11757
@@ -275,6 +281,14 @@ id,timing,priority,target,condition,cond_option,effect,effect_option
 400014,none,-1,none,none,none,none,none
 400015,none,-1,none,none,none,none,none
 400016,none,-1,none,none,none,none,none
+400017,none,-1,none,none,none,none,none
+400018,none,-1,none,none,none,none,none
+400019,none,-1,none,none,none,none,none
+400020,none,-1,none,none,none,none,none
+470002,resident,-1,pet,pet,type=baseId[20002]/level/buff[group:Cm]/buff[Cm_type:0]&baseId[20002]_cmp=1&level_op=>&level_cmp=99&buff[group:Cm]_op=<&buff[group:Cm]_cmp=3&buff[Cm_type:0]_op=<&buff[Cm_type:0]_cmp=1,set_pet,type=buff&op=+&value=470002
+470003,resident,-1,pet,pet,type=baseId[20003]/level/buff[group:Cm]/buff[Cm_type:0]&baseId[20003]_cmp=1&level_op=>&level_cmp=99&buff[group:Cm]_op=<&buff[group:Cm]_cmp=3&buff[Cm_type:0]_op=<&buff[Cm_type:0]_cmp=1,set_pet,type=buff&op=+&value=470003
+470004,resident,-1,pet,pet,type=baseId[20004]/level/buff[group:Cm]/buff[Cm_type:0]&baseId[20004]_cmp=1&level_op=>&level_cmp=99&buff[group:Cm]_op=<&buff[group:Cm]_cmp=3&buff[Cm_type:0]_op=<&buff[Cm_type:0]_cmp=1,set_pet,type=buff&op=+&value=470004
+470005,resident,-1,pet,pet,type=baseId[20005]/level/buff[group:Cm]/buff[Cm_type:0]&baseId[20005]_cmp=1&level_op=>&level_cmp=99&buff[group:Cm]_op=<&buff[group:Cm]_cmp=3&buff[Cm_type:0]_op=<&buff[Cm_type:0]_cmp=1,set_pet,type=buff&op=+&value=470005
 483302,resident,-1,pet,pet,type=baseId[113302]/level/buff[group:Cm]/buff[Cm_type:0]&baseId[113302]_cmp=1&level_op=>&level_cmp=99&buff[group:Cm]_op=<&buff[group:Cm]_cmp=3&buff[Cm_type:0]_op=<&buff[Cm_type:0]_cmp=1,set_pet,type=buff&op=+&value=483302
 483309,resident,-1,pet,pet,type=baseId[113309]/level/buff[group:Cm]/buff[Cm_type:0]&baseId[113309]_cmp=1&level_op=>&level_cmp=99&buff[group:Cm]_op=<&buff[group:Cm]_cmp=3&buff[Cm_type:0]_op=<&buff[Cm_type:0]_cmp=1,set_pet,type=buff&op=+&value=483309
 483786,resident,-1,pet,pet,type=baseId[113786]/level/buff[group:Cm]/buff[Cm_type:0]&baseId[113786]_cmp=1&level_op=>&level_cmp=99&buff[group:Cm]_op=<&buff[group:Cm]_cmp=3&buff[Cm_type:0]_op=<&buff[Cm_type:0]_cmp=1,set_pet,type=buff&op=+&value=483786

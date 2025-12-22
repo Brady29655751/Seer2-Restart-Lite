@@ -8,6 +8,7 @@ public class LearnSkillInfo {
     public SecretType secretType;
     public int value;
     public string learnDescription => GetLearnDescription();
+    public bool isAutoLearned => (secretType == SecretType.Auto) || (value == 0);
 
     public override string ToString()
     {
@@ -42,6 +43,9 @@ public class LearnSkillInfo {
     }
 
     public string GetLearnDescription() {
+        if (isAutoLearned)
+            return this.Auto();
+
         return secretType switch {
             SecretType.WinFightNum => this.WinFightNum(),
             SecretType.LoseFightNum => this.LoseFightNum(),

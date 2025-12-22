@@ -69,7 +69,8 @@ public class BattlePetChangeView : BattleBaseView
         this.isSkillSelectMode = isSkillSelectMode;
         if (!isSkillSelectMode)
             return;
-
+        
+        /*
         var skill = battle.currentState.myUnit.skill;
         var isSelectDead = skill.effects.Exists(x => x.targetType.Contains("dead"));
         var isSelectOther = skill.effects.Exists(x => x.targetType.Contains("other"));
@@ -83,6 +84,14 @@ public class BattlePetChangeView : BattleBaseView
             
             changeBlockViews[i].SetFightingTag(false);
             changeBlockViews[i].SetInteractable(interactable, !interactable);
+        }
+        */
+
+        var selectableTargets = battle.currentState.myUnit.skill.GetSelectableTarget(petBag, cursor, battle.settings.parallelCount);
+        for (int i = 0; i < 6; i++)
+        {
+            changeBlockViews[i].SetFightingTag(false);
+            changeBlockViews[i].SetInteractable(selectableTargets[page * 6 + i], !selectableTargets[page * 6 + i]);
         }
     }
 
@@ -134,18 +143,25 @@ public class BattlePetChangeView : BattleBaseView
 
     public void ShowPetChangeInfo(int index)
     {
-        ShowPetChangeInfo(index, false);
+        if (index < 0)
+        {
+            SetInfoPromptContent(GetPetChangeInfo(cursor % 6, false));
+            infoPrompt.SetPositionOffset(new Vector2(infoPrompt.zeroFixPos.x, -infoPrompt.size.y + 24));
+            return;
+        }
+            
+        ShowPetChangeInfo(index, GetPetChangeInfo(index, false));
     }
 
     public void ShowOpPetChangeInfo(int index)
     {
-        ShowPetChangeInfo(index, true);
+        ShowPetChangeInfo(index, GetPetChangeInfo(index, true));
     }
 
-    public void ShowPetChangeInfo(int index, bool isOp)
+    public string GetPetChangeInfo(int index, bool isOp)
     {
         if (!index.IsInRange(0, petBag.Length))
-            return;
+            return null;
 
         var cursor = page * 6 + index;
         var pet = isOp ? UI.currentState.myUnit.pet : petBag[cursor];
@@ -190,9 +206,14 @@ public class BattlePetChangeView : BattleBaseView
                     + PetElementSystem.GetElementRelationNote(subDefense) + " << " + "</color>我方  <color=#ffbb33>" + subDefense.ToString() + "</color>";
         }
 
+        return header + content;
+    }
+
+    public void ShowPetChangeInfo(int index, string text)
+    {        
         descriptionBox.SetBoxSize(new Vector2(220, 170));
         descriptionBox.SetBoxPosition(new Vector2(100 + index * 110, 109));
-        descriptionBox.SetText(header + content);
+        descriptionBox.SetText(text);
     }
 
 }

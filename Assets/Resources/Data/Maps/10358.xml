@@ -1,0 +1,208 @@
+<map name="露希欧星矿脉" category="102" id="10358">
+	<initialPoint>540,70</initialPoint>
+	<music category="102">
+		<bgm>BGM_56</bgm>
+	</music>
+	<entities>
+		<!--
+		<npc id="1035800" resId="1001" name="" size="200,200" pos="95,0" namePos="0,0" color="0,0,0,0">
+			<description>海洋星海底</description>
+			<transport>215,80</transport>
+			<eventHandler>
+				<button type="click">
+					<action>teleport</action>
+					<param>10022</param>
+				</button>
+			</eventHandler>
+		</npc>
+		-->
+		<npc id="1035801" resId="1035801" name="" size="267,360" pos="355,180" namePos="0,0" color="255,255,255,255">
+			<description>超大黄晶矿</description>
+			<dialog>
+				<branch id="default" name="我" icon="7004" size="136,125" pos="0,35">
+					<content>总觉得这片黄晶矿好熟悉...和一位精灵朋友有关的样子——但又不是小豆芽</content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[好奇怪啊，想不起来]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+						<reply type="click">
+							<description><![CDATA[好像有点印象]]></description>
+							<action>battle</action>
+							<param>default</param>
+						</reply>
+					</replyHandler>
+				</branch>
+				<branch id="special" name="黄晶矿" icon="1035801" size="133,180" pos="0,35">
+					<content>...你是谁？</content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[建国以后不许成精]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+						<reply type="click">
+							<description><![CDATA[卧槽，黄晶矿成精了]]></description>
+							<action>openDialog</action>
+							<param>mine</param>
+						</reply>
+					</replyHandler>
+				</branch>
+				<branch id="mine" name="黄晶矿？" icon="Pets/pet/14761" size="143,153" pos="0,35">
+					<content>...我的本质是信息生物，也就是像你们所说的黄晶矿之类的东西。为了方便称呼，你可以叫我——？唔，想不起来了</content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[我的本质是复读机]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+						<reply type="click">
+							<description><![CDATA[帮助黄晶矿回想记忆]]></description>
+							<action>battle</action>
+							<param>default</param>
+						</reply>
+					</replyHandler>
+				</branch>
+				<branch id="win" name="小琉梦" icon="Pets/pet/14727" size="100,84" pos="0,55">
+					<content><![CDATA[想起来了，我的名字是<color=#ffbb33>琉梦</color>...刚刚耗费了一些力量，让我休息一阵子吧——]]></content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[......]]></description>
+							<action>callback</action>
+							<param>win</param>
+						</reply>
+					</replyHandler>
+				</branch>
+			</dialog>
+			<battle>
+				<branch id="default">
+					<settings count="1">
+						<mode>4</mode>
+					</settings>
+					<enemy>
+						<pet id="14761" level="105">
+							<status>
+								<mat>1000</mat>
+								<def>600</def>
+								<mdf>600</mdf>
+								<hp>16000</hp>
+							</status>
+							<initBuff>-8,100,56,61,-3093,-3059</initBuff>
+							<loopSkill>13144,13146,13147,13144,13146,13148</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>openDialog</action>
+							<param>win</param>
+						</button>
+					</winHandler>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>openDialog</action>
+					<param>default</param>
+					<condition>activity[new_yellow_mine].done=[bool]true[default]false</condition>
+				</button>
+				<button type="click">
+					<action>openDialog</action>
+					<param>special</param>
+					<condition>activity[new_yellow_mine].done=[bool]false[default]false</condition>
+				</button>
+			</eventHandler>
+			<callbackHandler>
+				<button type="win">
+					<action>getPet</action>
+					<param>14727</param>
+					<condition>activity[new_yellow_mine].done=[bool]false[default]false</condition>
+				</button>
+				<button type="win">
+					<action>openHintbox</action>
+					<param>type=Item</param>
+					<param>title=提示</param>
+					<param>content=小琉梦已经放入精灵仓库</param>
+					<param>item_icon=pet[14727]</param>
+					<param>option_num=1</param>
+					<condition>activity[new_yellow_mine].done=[bool]false[default]false</condition>
+				</button>
+				<button type="win">
+					<action>setActivity</action>
+					<param>new_yellow_mine</param>
+					<param>done=true</param>
+					<condition>activity[new_yellow_mine].done=[bool]false[default]false</condition>
+				</button>
+				<button type="win">
+					<action>openDialog</action>
+					<param>null</param>
+				</button>
+			</callbackHandler>
+		</npc>
+		<npc id="1035802" resId="1035802" name="" size="152,188" pos="695,330" namePos="0,0" color="255,255,255,255">
+			<description>奇特黄晶矿</description>
+			<dialog>
+				<branch id="default" name="我" icon="7004" size="136,125" pos="0,35">
+					<content>好奇特的黄晶矿，似乎能够吸收其他黄晶矿并结合成一个巨大黄晶矿</content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[还是别看了]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+						<reply type="click">
+							<description><![CDATA[事已至此，先看看吧]]></description>
+							<action>openPanel</action>
+							<param>ItemShop</param>
+							<param>mode=buy</param>
+							<param>currency=1101/0</param>
+							<param>item=334761</param>
+							<param>title=特殊转化</param>
+						</reply>
+					</replyHandler>
+				</branch>
+			</dialog>
+			<eventHandler>
+				<button type="click">
+					<action>openDialog</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<npc id="1035803" resId="1035803" name="" size="162,199" pos="70,280" namePos="0,0" color="255,255,255,255">
+			<description>普通黄晶矿</description>
+			<eventHandler>
+				<button type="click">
+					<action>openHintbox</action>
+					<param>type=Item</param>
+					<param>title=提示</param>
+					<param>content=矿脉需要合理开发，明天再来吧！</param>
+					<param>item_icon=item[1101]</param>
+					<param>option_num=1</param>
+					<condition>activity[mine].done[10358]=[bool]true[default]false</condition>
+				</button>
+				<button type="click">
+					<action>setItem</action>
+					<param>add</param>
+					<param>1101,10</param>
+					<condition>activity[mine].done[10358]=[bool]false[default]false</condition>
+				</button>
+				<button type="click">
+					<action>openHintbox</action>
+					<param>type=Item</param>
+					<param>title=提示</param>
+					<param>content=10个黄晶矿已经放入背包</param>
+					<param>item_icon=item[1101]</param>
+					<param>option_num=1</param>
+					<condition>activity[mine].done[10358]=[bool]false[default]false</condition>
+				</button>
+				<button type="click">
+					<action>setActivity</action>
+					<param>mine</param>
+					<param>done[10358]=true</param>
+					<condition>activity[mine].done[10358]=[bool]false[default]false</condition>
+				</button>
+			</eventHandler>
+		</npc>
+	</entities>		
+</map>

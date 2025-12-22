@@ -33,7 +33,8 @@ public class BattleState
     public Unit atkUnit => (whosTurn == 0) ? null : GetUnitById(whosTurn);
     public Unit defUnit => (whosTurn == 0) ? null : GetUnitById(-whosTurn);
 
-    public BattleState(BattleSettings settings, Unit masterTurn, Unit clientTurn) {
+    public BattleState(BattleSettings settings, Unit masterTurn, Unit clientTurn)
+    {
         this.lastTurnState = null;
 
         this.turn = 0;
@@ -52,7 +53,8 @@ public class BattleState
         this.result = new BattleResult(settings);
     }
 
-    public BattleState(BattleState rhs) {
+    public BattleState(BattleState rhs)
+    {
         lastTurnState = (rhs.lastTurnState == null) ? null : new BattleState(rhs.lastTurnState);
 
         turn = rhs.turn;
@@ -72,7 +74,8 @@ public class BattleState
         result = new BattleResult(rhs.result);
     }
 
-    public virtual float GetStateIdentifier(string id) {
+    public virtual float GetStateIdentifier(string id)
+    {
         string trimId = id;
         if (id.TryTrimStart("last.", out trimId))
             return (lastTurnState == null) ? float.MinValue : lastTurnState.GetStateIdentifier(trimId);
@@ -84,7 +87,8 @@ public class BattleState
             return result.GetResultIdentifier(trimId);
 
         if (id.TryTrimStart("buff", out trimId) &&
-            trimId.TryTrimParentheses(out var buffKey)) {
+            trimId.TryTrimParentheses(out var buffKey))
+        {
             var buff = stateBuffs.Find(x => x.Key == buffKey).Value;
             if (buff == null)
                 return float.MinValue;
@@ -93,7 +97,8 @@ public class BattleState
             return buff.TryGetBuffIdentifier(buffExpr, out float num) ? num : Identifier.GetNumIdentifier(buffExpr);
         }
 
-        return trimId switch {
+        return trimId switch
+        {
             "turn" => turn,
             "actionCursor" => actionCursor,
             "phase" => (float)phase,
@@ -103,13 +108,18 @@ public class BattleState
         };
     }
 
-    public virtual void OnTurnStart() {
-        if (turn > 0) {
-            if (lastTurnState != null) {
+    public virtual void OnTurnStart()
+    {
+        if (turn > 0)
+        {
+            if (lastTurnState != null)
+            {
                 lastTurnState.lastTurnState = null;
             }
-            lastTurnState = new BattleState(this){ phase = EffectTiming.OnTurnEnd };
-        } else {
+            lastTurnState = new BattleState(this) { phase = EffectTiming.OnTurnEnd };
+        }
+        else
+        {
             AddReport($"我方<color=#ffbb33>【{myUnit.pet.name}】</color>登场了！");
             AddReport($"敌方<color=#ff0080>【{opUnit.pet.name}】</color>登场了！");
         }
@@ -119,7 +129,8 @@ public class BattleState
         actionOrder.Clear();
         actionCursor = -1;
 
-        for (int i = 0; i < stateBuffs.Count; i++) {
+        for (int i = 0; i < stateBuffs.Count; i++)
+        {
             if (stateBuffs[i].Value.turn > 0)
                 stateBuffs[i].Value.turn--;
         }
@@ -132,22 +143,27 @@ public class BattleState
         clientUnit.OnTurnStart(this);
     }
 
-    public virtual bool IsAllUnitDone() {
-        return actionCursor >= actionOrder.Count; 
+    public virtual bool IsAllUnitDone()
+    {
+        return actionCursor >= actionOrder.Count;
         // masterUnit.isDone && clientUnit.isDone;
     }
 
-    public virtual bool IsAllUnitReady() {
+    public virtual bool IsAllUnitReady()
+    {
         return masterUnit.isReady && clientUnit.isReady;
     }
 
-    public virtual bool IsAnyPetDead() {
+    public virtual bool IsAnyPetDead()
+    {
         return masterUnit.pet.isDead || clientUnit.pet.isDead;
     }
 
-    public virtual void GiveTurnToNextUnit() {
+    public virtual void GiveTurnToNextUnit()
+    {
         actionCursor++;
-        if (actionCursor >= actionOrder.Count) {
+        if (actionCursor >= actionOrder.Count)
+        {
             whosTurn = 0;
             return;
         }
@@ -155,11 +171,19 @@ public class BattleState
         whosTurn = (actionOrder[actionCursor] > 0) ? 1 : -1;
 
         var actionUnit = GetUnitById(whosTurn);
+        var rhsUnit = GetRhsUnitById(actionUnit.id);
         actionUnit.isDone = false;
 
-        if (settings.parallelCount > 1) {
+        if (settings.parallelCount > 1)
+        {
             actionUnit.petSystem.cursor = Mathf.Abs(actionOrder[actionCursor]) - 1;
-            GetRhsUnitById(actionUnit.id).petSystem.cursor = int.Parse(actionUnit.skill?.options.Get("parallel_target_index") ?? "0");
+            rhsUnit.petSystem.cursor = int.Parse(actionUnit.skill?.options.Get("parallel_target_index") ?? "0");
+        }
+
+        if ((actionUnit.pet == null) || (rhsUnit.pet == null))
+        {
+            GiveTurnToNextUnit();
+            return;
         }
 
         /*
@@ -186,7 +210,8 @@ public class BattleState
         */
     }
 
-    public virtual Unit GetUnitById(int id) {
+    public virtual Unit GetUnitById(int id)
+    {
         if (id > 0)
             return masterUnit;
 
@@ -196,11 +221,13 @@ public class BattleState
         return null;
     }
 
-    public virtual Unit GetRhsUnitById(int lhsId) {
+    public virtual Unit GetRhsUnitById(int lhsId)
+    {
         return GetUnitById(-lhsId);
     }
 
-    public virtual bool IsGoFirst(Unit lhsUnit) {
+    public virtual bool IsGoFirst(Unit lhsUnit)
+    {
         int unitId = lhsUnit.id;
         if (settings.parallelCount <= 1)
             return Mathf.Sign(actionOrder.FirstOrDefault()) == unitId;
@@ -208,25 +235,29 @@ public class BattleState
         Unit rhsUnit = GetRhsUnitById(unitId);
         var lhsCursor = actionOrder.IndexOf((int)Mathf.Sign(lhsUnit.id) * (lhsUnit.petSystem.cursor + 1));
         var rhsCursor = actionOrder.IndexOf((int)Mathf.Sign(rhsUnit.id) * (rhsUnit.petSystem.cursor + 1));
-        
+
         lhsCursor = (lhsCursor < 0) ? int.MaxValue : lhsCursor;
         rhsCursor = (rhsCursor < 0) ? int.MaxValue : rhsCursor;
         return lhsCursor < rhsCursor;
     }
 
-    public virtual bool IsGoLast(Unit lhsUnit) {
+    public virtual bool IsGoLast(Unit lhsUnit)
+    {
         return !IsGoFirst(lhsUnit);
     }
 
-    public virtual void ApplySkillsAndBuffs() {
+    public virtual void ApplySkillsAndBuffs()
+    {
         GetEffectHandler(null).CheckAndApply(this);
     }
 
-    public virtual void ApplyBuffs() {
+    public virtual void ApplyBuffs()
+    {
         GetEffectHandler(null, false).CheckAndApply(this);
     }
 
-    public virtual EffectHandler GetEffectHandler(Unit invokeUnit, bool addSkillEffect = true) {
+    public virtual EffectHandler GetEffectHandler(Unit invokeUnit, bool addSkillEffect = true)
+    {
 
         if (invokeUnit == null)
             return GetEffectHandler(masterUnit, addSkillEffect).Concat(GetEffectHandler(clientUnit, addSkillEffect));
@@ -260,7 +291,8 @@ public class BattleState
         return handler;
     }
 
-    public virtual List<Effect> GetEffectsByTiming(EffectTiming timing, EffectHandler handler, Func<Effect, bool> filter = null) {
+    public virtual List<Effect> GetEffectsByTiming(EffectTiming timing, EffectHandler handler, Func<Effect, bool> filter = null)
+    {
         filter ??= (e) => true;
 
         var tmpPhase = phase;
@@ -273,7 +305,8 @@ public class BattleState
         return effects;
     }
 
-    public virtual void AddReport(string report) {
+    public virtual void AddReport(string report)
+    {
         if (reports.Count >= 30)
             reports.Dequeue();
 

@@ -4970,12 +4970,6 @@ MonoBehaviour:
   damageBackgroundPrefab: {fileID: 8620839269926457415, guid: 60128010f6e32cc46937ee051f917c2c, type: 3}
   healAnchoredObject: {fileID: 581757035}
   healNumberPrefab: {fileID: 2971796036874092077, guid: 708b7e54acf2f7a4e98a81ca907651e1, type: 3}
-  healPositiveColor:
-    serializedVersion: 2
-    rgba: 4279034487
-  healNegativeColor:
-    serializedVersion: 2
-    rgba: 4278190335
   camara: {fileID: 745144503}
 --- !u!114 &187305279
 MonoBehaviour:
@@ -5613,12 +5607,6 @@ MonoBehaviour:
   damageBackgroundPrefab: {fileID: 8620839269926457415, guid: 60128010f6e32cc46937ee051f917c2c, type: 3}
   healAnchoredObject: {fileID: 998889657}
   healNumberPrefab: {fileID: 2971796036874092077, guid: 708b7e54acf2f7a4e98a81ca907651e1, type: 3}
-  healPositiveColor:
-    serializedVersion: 2
-    rgba: 4279034487
-  healNegativeColor:
-    serializedVersion: 2
-    rgba: 4278190335
   camara: {fileID: 745144503}
 --- !u!114 &212960034
 MonoBehaviour:
@@ -12426,12 +12414,6 @@ MonoBehaviour:
   damageBackgroundPrefab: {fileID: 8620839269926457415, guid: 60128010f6e32cc46937ee051f917c2c, type: 3}
   healAnchoredObject: {fileID: 1015356288}
   healNumberPrefab: {fileID: 2971796036874092077, guid: 708b7e54acf2f7a4e98a81ca907651e1, type: 3}
-  healPositiveColor:
-    serializedVersion: 2
-    rgba: 4279034487
-  healNegativeColor:
-    serializedVersion: 2
-    rgba: 4278190335
   camara: {fileID: 745144503}
 --- !u!114 &534666825
 MonoBehaviour:
@@ -15581,6 +15563,8 @@ GameObject:
   - component: {fileID: 645188321}
   - component: {fileID: 645188323}
   - component: {fileID: 645188322}
+  - component: {fileID: 645188325}
+  - component: {fileID: 645188324}
   m_Layer: 5
   m_Name: Icon
   m_TagString: Untagged
@@ -15645,6 +15629,116 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 645188320}
   m_CullTransparentMesh: 1
+--- !u!114 &645188324
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 645188320}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 984171ae20b87384fb1a77d356dfd758, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playSoundWhenHover: 0
+  playSoundWhenClick: 1
+  sound: {fileID: 0}
+  onPointerClickEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  onPointerOverEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 578402999}
+        m_TargetAssemblyTypeName: BattlePetChangeView, Assembly-CSharp
+        m_MethodName: ShowPetChangeInfo
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: -1
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  onPointerEnterEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 578402999}
+        m_TargetAssemblyTypeName: BattleBaseView, Assembly-CSharp
+        m_MethodName: SetInfoPromptActive
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+  onPointerExitEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 578402999}
+        m_TargetAssemblyTypeName: BattleBaseView, Assembly-CSharp
+        m_MethodName: SetInfoPromptActive
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  onPointerHoldEvent:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &645188325
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 645188320}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Navigation:
+    m_Mode: 3
+    m_WrapAround: 0
+    m_SelectOnUp: {fileID: 0}
+    m_SelectOnDown: {fileID: 0}
+    m_SelectOnLeft: {fileID: 0}
+    m_SelectOnRight: {fileID: 0}
+  m_Transition: 0
+  m_Colors:
+    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
+    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_ColorMultiplier: 1
+    m_FadeDuration: 0.1
+  m_SpriteState:
+    m_HighlightedSprite: {fileID: 0}
+    m_PressedSprite: {fileID: 0}
+    m_SelectedSprite: {fileID: 0}
+    m_DisabledSprite: {fileID: 0}
+  m_AnimationTriggers:
+    m_NormalTrigger: Normal
+    m_HighlightedTrigger: Highlighted
+    m_PressedTrigger: Pressed
+    m_SelectedTrigger: Selected
+    m_DisabledTrigger: Disabled
+  m_Interactable: 1
+  m_TargetGraphic: {fileID: 645188322}
+  m_OnClick:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &654781758
 GameObject:
   m_ObjectHideFlags: 0
@@ -24920,7 +25014,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 599762319}
   m_Direction: 2
   m_Value: 1
-  m_Size: 0.9595394
+  m_Size: 0.95953953
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -26806,16 +26900,24 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5619237150836451111, guid: 67a5d1c518e77b64abc03041c3851bcd, type: 3}
+      propertyPath: onPointerOverEvent.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5619237150836451111, guid: 67a5d1c518e77b64abc03041c3851bcd, type: 3}
       propertyPath: onPointerClickEvent.m_PersistentCalls.m_Calls.Array.size
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5619237150836451111, guid: 67a5d1c518e77b64abc03041c3851bcd, type: 3}
       propertyPath: onPointerEnterEvent.m_PersistentCalls.m_Calls.Array.size
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5619237150836451111, guid: 67a5d1c518e77b64abc03041c3851bcd, type: 3}
       propertyPath: onPointerExitEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
       value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 5619237150836451111, guid: 67a5d1c518e77b64abc03041c3851bcd, type: 3}
+      propertyPath: onPointerOverEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 5619237150836451111, guid: 67a5d1c518e77b64abc03041c3851bcd, type: 3}
       propertyPath: onPointerClickEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
@@ -26831,6 +26933,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5619237150836451111, guid: 67a5d1c518e77b64abc03041c3851bcd, type: 3}
       propertyPath: onPointerExitEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 754398992}
+    - target: {fileID: 5619237150836451111, guid: 67a5d1c518e77b64abc03041c3851bcd, type: 3}
+      propertyPath: onPointerOverEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 754398992}
     - target: {fileID: 5619237150836451111, guid: 67a5d1c518e77b64abc03041c3851bcd, type: 3}
@@ -26850,6 +26956,10 @@ PrefabInstance:
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 5619237150836451111, guid: 67a5d1c518e77b64abc03041c3851bcd, type: 3}
+      propertyPath: onPointerOverEvent.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5619237150836451111, guid: 67a5d1c518e77b64abc03041c3851bcd, type: 3}
       propertyPath: onPointerClickEvent.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
       value: 2
       objectReference: {fileID: 0}
@@ -26863,7 +26973,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5619237150836451111, guid: 67a5d1c518e77b64abc03041c3851bcd, type: 3}
       propertyPath: onPointerExitEvent.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: SetDescriptionBoxActive
+      value: SetInfoPromptActive
+      objectReference: {fileID: 0}
+    - target: {fileID: 5619237150836451111, guid: 67a5d1c518e77b64abc03041c3851bcd, type: 3}
+      propertyPath: onPointerOverEvent.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: ShowNormalSkillInfo
       objectReference: {fileID: 0}
     - target: {fileID: 5619237150836451111, guid: 67a5d1c518e77b64abc03041c3851bcd, type: 3}
       propertyPath: onPointerClickEvent.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
@@ -26871,7 +26985,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5619237150836451111, guid: 67a5d1c518e77b64abc03041c3851bcd, type: 3}
       propertyPath: onPointerEnterEvent.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: SetDescriptionBoxActive
+      value: SetInfoPromptActive
       objectReference: {fileID: 0}
     - target: {fileID: 5619237150836451111, guid: 67a5d1c518e77b64abc03041c3851bcd, type: 3}
       propertyPath: onPointerEnterEvent.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
@@ -26880,6 +26994,10 @@ PrefabInstance:
     - target: {fileID: 5619237150836451111, guid: 67a5d1c518e77b64abc03041c3851bcd, type: 3}
       propertyPath: onPointerExitEvent.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
       value: BattleBaseView, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 5619237150836451111, guid: 67a5d1c518e77b64abc03041c3851bcd, type: 3}
+      propertyPath: onPointerOverEvent.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: BattlePetSkillView, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 5619237150836451111, guid: 67a5d1c518e77b64abc03041c3851bcd, type: 3}
       propertyPath: onPointerClickEvent.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
@@ -26894,12 +27012,28 @@ PrefabInstance:
       value: BattlePetSkillView, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 5619237150836451111, guid: 67a5d1c518e77b64abc03041c3851bcd, type: 3}
+      propertyPath: onPointerExitEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_IntArgument
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5619237150836451111, guid: 67a5d1c518e77b64abc03041c3851bcd, type: 3}
+      propertyPath: onPointerOverEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_IntArgument
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5619237150836451111, guid: 67a5d1c518e77b64abc03041c3851bcd, type: 3}
       propertyPath: onPointerClickEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_IntArgument
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5619237150836451111, guid: 67a5d1c518e77b64abc03041c3851bcd, type: 3}
+      propertyPath: onPointerEnterEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_IntArgument
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5619237150836451111, guid: 67a5d1c518e77b64abc03041c3851bcd, type: 3}
       propertyPath: onPointerEnterEvent.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_IntArgument
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5619237150836451111, guid: 67a5d1c518e77b64abc03041c3851bcd, type: 3}
+      propertyPath: onPointerExitEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_BoolArgument
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5619237150836451111, guid: 67a5d1c518e77b64abc03041c3851bcd, type: 3}
       propertyPath: onPointerEnterEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_BoolArgument
@@ -26907,6 +27041,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5619237150836451111, guid: 67a5d1c518e77b64abc03041c3851bcd, type: 3}
       propertyPath: onPointerExitEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 5619237150836451111, guid: 67a5d1c518e77b64abc03041c3851bcd, type: 3}
+      propertyPath: onPointerOverEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 5619237150836451111, guid: 67a5d1c518e77b64abc03041c3851bcd, type: 3}
@@ -27378,12 +27516,16 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5619237150836451111, guid: 67a5d1c518e77b64abc03041c3851bcd, type: 3}
+      propertyPath: onPointerOverEvent.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5619237150836451111, guid: 67a5d1c518e77b64abc03041c3851bcd, type: 3}
       propertyPath: onPointerClickEvent.m_PersistentCalls.m_Calls.Array.size
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5619237150836451111, guid: 67a5d1c518e77b64abc03041c3851bcd, type: 3}
       propertyPath: onPointerEnterEvent.m_PersistentCalls.m_Calls.Array.size
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5619237150836451111, guid: 67a5d1c518e77b64abc03041c3851bcd, type: 3}
       propertyPath: onPointerExitEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
@@ -27391,6 +27533,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5619237150836451111, guid: 67a5d1c518e77b64abc03041c3851bcd, type: 3}
       propertyPath: onPointerExitEvent.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 5619237150836451111, guid: 67a5d1c518e77b64abc03041c3851bcd, type: 3}
+      propertyPath: onPointerOverEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
       value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 5619237150836451111, guid: 67a5d1c518e77b64abc03041c3851bcd, type: 3}
@@ -27414,6 +27560,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 754398992}
     - target: {fileID: 5619237150836451111, guid: 67a5d1c518e77b64abc03041c3851bcd, type: 3}
+      propertyPath: onPointerOverEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 754398992}
+    - target: {fileID: 5619237150836451111, guid: 67a5d1c518e77b64abc03041c3851bcd, type: 3}
       propertyPath: onPointerClickEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 754398992}
@@ -27434,6 +27584,10 @@ PrefabInstance:
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 5619237150836451111, guid: 67a5d1c518e77b64abc03041c3851bcd, type: 3}
+      propertyPath: onPointerOverEvent.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5619237150836451111, guid: 67a5d1c518e77b64abc03041c3851bcd, type: 3}
       propertyPath: onPointerClickEvent.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
       value: 2
       objectReference: {fileID: 0}
@@ -27447,10 +27601,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5619237150836451111, guid: 67a5d1c518e77b64abc03041c3851bcd, type: 3}
       propertyPath: onPointerExitEvent.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: SetDescriptionBoxActive
+      value: SetInfoPromptActive
       objectReference: {fileID: 0}
     - target: {fileID: 5619237150836451111, guid: 67a5d1c518e77b64abc03041c3851bcd, type: 3}
       propertyPath: onPointerExitEvent.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
+      value: ShowNormalSkillInfo
+      objectReference: {fileID: 0}
+    - target: {fileID: 5619237150836451111, guid: 67a5d1c518e77b64abc03041c3851bcd, type: 3}
+      propertyPath: onPointerOverEvent.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: ShowNormalSkillInfo
       objectReference: {fileID: 0}
     - target: {fileID: 5619237150836451111, guid: 67a5d1c518e77b64abc03041c3851bcd, type: 3}
@@ -27459,7 +27617,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5619237150836451111, guid: 67a5d1c518e77b64abc03041c3851bcd, type: 3}
       propertyPath: onPointerEnterEvent.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: SetDescriptionBoxActive
+      value: SetInfoPromptActive
       objectReference: {fileID: 0}
     - target: {fileID: 5619237150836451111, guid: 67a5d1c518e77b64abc03041c3851bcd, type: 3}
       propertyPath: onPointerEnterEvent.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
@@ -27471,6 +27629,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5619237150836451111, guid: 67a5d1c518e77b64abc03041c3851bcd, type: 3}
       propertyPath: onPointerExitEvent.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
+      value: BattlePetSkillView, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 5619237150836451111, guid: 67a5d1c518e77b64abc03041c3851bcd, type: 3}
+      propertyPath: onPointerOverEvent.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
       value: BattlePetSkillView, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 5619237150836451111, guid: 67a5d1c518e77b64abc03041c3851bcd, type: 3}
@@ -27486,11 +27648,23 @@ PrefabInstance:
       value: BattlePetSkillView, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 5619237150836451111, guid: 67a5d1c518e77b64abc03041c3851bcd, type: 3}
+      propertyPath: onPointerExitEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_IntArgument
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5619237150836451111, guid: 67a5d1c518e77b64abc03041c3851bcd, type: 3}
       propertyPath: onPointerExitEvent.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_IntArgument
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 5619237150836451111, guid: 67a5d1c518e77b64abc03041c3851bcd, type: 3}
+      propertyPath: onPointerOverEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_IntArgument
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5619237150836451111, guid: 67a5d1c518e77b64abc03041c3851bcd, type: 3}
       propertyPath: onPointerClickEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_IntArgument
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5619237150836451111, guid: 67a5d1c518e77b64abc03041c3851bcd, type: 3}
+      propertyPath: onPointerEnterEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_IntArgument
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 5619237150836451111, guid: 67a5d1c518e77b64abc03041c3851bcd, type: 3}
@@ -27511,6 +27685,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5619237150836451111, guid: 67a5d1c518e77b64abc03041c3851bcd, type: 3}
       propertyPath: onPointerExitEvent.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 5619237150836451111, guid: 67a5d1c518e77b64abc03041c3851bcd, type: 3}
+      propertyPath: onPointerOverEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 5619237150836451111, guid: 67a5d1c518e77b64abc03041c3851bcd, type: 3}
@@ -34076,12 +34254,16 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5619237150836451111, guid: 67a5d1c518e77b64abc03041c3851bcd, type: 3}
+      propertyPath: onPointerOverEvent.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5619237150836451111, guid: 67a5d1c518e77b64abc03041c3851bcd, type: 3}
       propertyPath: onPointerClickEvent.m_PersistentCalls.m_Calls.Array.size
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5619237150836451111, guid: 67a5d1c518e77b64abc03041c3851bcd, type: 3}
       propertyPath: onPointerEnterEvent.m_PersistentCalls.m_Calls.Array.size
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5619237150836451111, guid: 67a5d1c518e77b64abc03041c3851bcd, type: 3}
       propertyPath: onPointerExitEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
@@ -34089,6 +34271,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5619237150836451111, guid: 67a5d1c518e77b64abc03041c3851bcd, type: 3}
       propertyPath: onPointerExitEvent.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 5619237150836451111, guid: 67a5d1c518e77b64abc03041c3851bcd, type: 3}
+      propertyPath: onPointerOverEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
       value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 5619237150836451111, guid: 67a5d1c518e77b64abc03041c3851bcd, type: 3}
@@ -34112,6 +34298,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 754398992}
     - target: {fileID: 5619237150836451111, guid: 67a5d1c518e77b64abc03041c3851bcd, type: 3}
+      propertyPath: onPointerOverEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 754398992}
+    - target: {fileID: 5619237150836451111, guid: 67a5d1c518e77b64abc03041c3851bcd, type: 3}
       propertyPath: onPointerClickEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 754398992}
@@ -34132,6 +34322,10 @@ PrefabInstance:
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 5619237150836451111, guid: 67a5d1c518e77b64abc03041c3851bcd, type: 3}
+      propertyPath: onPointerOverEvent.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5619237150836451111, guid: 67a5d1c518e77b64abc03041c3851bcd, type: 3}
       propertyPath: onPointerClickEvent.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
       value: 2
       objectReference: {fileID: 0}
@@ -34145,10 +34339,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5619237150836451111, guid: 67a5d1c518e77b64abc03041c3851bcd, type: 3}
       propertyPath: onPointerExitEvent.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: SetDescriptionBoxActive
+      value: SetInfoPromptActive
       objectReference: {fileID: 0}
     - target: {fileID: 5619237150836451111, guid: 67a5d1c518e77b64abc03041c3851bcd, type: 3}
       propertyPath: onPointerExitEvent.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
+      value: ShowNormalSkillInfo
+      objectReference: {fileID: 0}
+    - target: {fileID: 5619237150836451111, guid: 67a5d1c518e77b64abc03041c3851bcd, type: 3}
+      propertyPath: onPointerOverEvent.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: ShowNormalSkillInfo
       objectReference: {fileID: 0}
     - target: {fileID: 5619237150836451111, guid: 67a5d1c518e77b64abc03041c3851bcd, type: 3}
@@ -34157,7 +34355,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5619237150836451111, guid: 67a5d1c518e77b64abc03041c3851bcd, type: 3}
       propertyPath: onPointerEnterEvent.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: SetDescriptionBoxActive
+      value: SetInfoPromptActive
       objectReference: {fileID: 0}
     - target: {fileID: 5619237150836451111, guid: 67a5d1c518e77b64abc03041c3851bcd, type: 3}
       propertyPath: onPointerEnterEvent.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
@@ -34169,6 +34367,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5619237150836451111, guid: 67a5d1c518e77b64abc03041c3851bcd, type: 3}
       propertyPath: onPointerExitEvent.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
+      value: BattlePetSkillView, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 5619237150836451111, guid: 67a5d1c518e77b64abc03041c3851bcd, type: 3}
+      propertyPath: onPointerOverEvent.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
       value: BattlePetSkillView, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 5619237150836451111, guid: 67a5d1c518e77b64abc03041c3851bcd, type: 3}
@@ -34184,12 +34386,24 @@ PrefabInstance:
       value: BattlePetSkillView, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 5619237150836451111, guid: 67a5d1c518e77b64abc03041c3851bcd, type: 3}
+      propertyPath: onPointerExitEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_IntArgument
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5619237150836451111, guid: 67a5d1c518e77b64abc03041c3851bcd, type: 3}
       propertyPath: onPointerExitEvent.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_IntArgument
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 5619237150836451111, guid: 67a5d1c518e77b64abc03041c3851bcd, type: 3}
+      propertyPath: onPointerOverEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_IntArgument
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 5619237150836451111, guid: 67a5d1c518e77b64abc03041c3851bcd, type: 3}
       propertyPath: onPointerClickEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_IntArgument
       value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 5619237150836451111, guid: 67a5d1c518e77b64abc03041c3851bcd, type: 3}
+      propertyPath: onPointerEnterEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_IntArgument
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 5619237150836451111, guid: 67a5d1c518e77b64abc03041c3851bcd, type: 3}
       propertyPath: onPointerEnterEvent.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_IntArgument
@@ -34209,6 +34423,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5619237150836451111, guid: 67a5d1c518e77b64abc03041c3851bcd, type: 3}
       propertyPath: onPointerExitEvent.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 5619237150836451111, guid: 67a5d1c518e77b64abc03041c3851bcd, type: 3}
+      propertyPath: onPointerOverEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 5619237150836451111, guid: 67a5d1c518e77b64abc03041c3851bcd, type: 3}
@@ -35204,12 +35422,6 @@ MonoBehaviour:
   damageBackgroundPrefab: {fileID: 8620839269926457415, guid: 60128010f6e32cc46937ee051f917c2c, type: 3}
   healAnchoredObject: {fileID: 581757035}
   healNumberPrefab: {fileID: 2971796036874092077, guid: 708b7e54acf2f7a4e98a81ca907651e1, type: 3}
-  healPositiveColor:
-    serializedVersion: 2
-    rgba: 4279034487
-  healNegativeColor:
-    serializedVersion: 2
-    rgba: 4278190335
   camara: {fileID: 745144503}
 --- !u!114 &1459647694
 MonoBehaviour:
@@ -38569,12 +38781,6 @@ MonoBehaviour:
   damageBackgroundPrefab: {fileID: 8620839269926457415, guid: 60128010f6e32cc46937ee051f917c2c, type: 3}
   healAnchoredObject: {fileID: 998889657}
   healNumberPrefab: {fileID: 2971796036874092077, guid: 708b7e54acf2f7a4e98a81ca907651e1, type: 3}
-  healPositiveColor:
-    serializedVersion: 2
-    rgba: 4279034487
-  healNegativeColor:
-    serializedVersion: 2
-    rgba: 4278190335
   camara: {fileID: 745144503}
 --- !u!114 &1579905348
 MonoBehaviour:
@@ -44940,12 +45146,6 @@ MonoBehaviour:
   damageBackgroundPrefab: {fileID: 8620839269926457415, guid: 60128010f6e32cc46937ee051f917c2c, type: 3}
   healAnchoredObject: {fileID: 663888540}
   healNumberPrefab: {fileID: 2971796036874092077, guid: 708b7e54acf2f7a4e98a81ca907651e1, type: 3}
-  healPositiveColor:
-    serializedVersion: 2
-    rgba: 4279034487
-  healNegativeColor:
-    serializedVersion: 2
-    rgba: 4278190335
   camara: {fileID: 745144503}
 --- !u!114 &1891709580
 MonoBehaviour:
@@ -45133,22 +45333,7 @@ MonoBehaviour:
         m_CallState: 2
   onPointerOverEvent:
     m_PersistentCalls:
-      m_Calls: []
-  onPointerEnterEvent:
-    m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 754398992}
-        m_TargetAssemblyTypeName: BattleBaseView, Assembly-CSharp
-        m_MethodName: SetDescriptionBoxActive
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 1
-        m_CallState: 2
       - m_Target: {fileID: 754398992}
         m_TargetAssemblyTypeName: BattlePetSkillView, Assembly-CSharp
         m_MethodName: ShowSuperSkillInfo
@@ -45156,17 +45341,32 @@ MonoBehaviour:
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 2
+          m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
+        m_CallState: 2
+  onPointerEnterEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 754398992}
+        m_TargetAssemblyTypeName: BattleBaseView, Assembly-CSharp
+        m_MethodName: SetInfoPromptActive
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 2
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
         m_CallState: 2
   onPointerExitEvent:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 754398992}
         m_TargetAssemblyTypeName: BattleBaseView, Assembly-CSharp
-        m_MethodName: SetDescriptionBoxActive
+        m_MethodName: SetInfoPromptActive
         m_Mode: 6
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -49804,12 +50004,16 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5619237150836451111, guid: 67a5d1c518e77b64abc03041c3851bcd, type: 3}
+      propertyPath: onPointerOverEvent.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5619237150836451111, guid: 67a5d1c518e77b64abc03041c3851bcd, type: 3}
       propertyPath: onPointerClickEvent.m_PersistentCalls.m_Calls.Array.size
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5619237150836451111, guid: 67a5d1c518e77b64abc03041c3851bcd, type: 3}
       propertyPath: onPointerEnterEvent.m_PersistentCalls.m_Calls.Array.size
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5619237150836451111, guid: 67a5d1c518e77b64abc03041c3851bcd, type: 3}
       propertyPath: onPointerExitEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
@@ -49818,6 +50022,10 @@ PrefabInstance:
     - target: {fileID: 5619237150836451111, guid: 67a5d1c518e77b64abc03041c3851bcd, type: 3}
       propertyPath: onPointerExitEvent.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5619237150836451111, guid: 67a5d1c518e77b64abc03041c3851bcd, type: 3}
+      propertyPath: onPointerOverEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 5619237150836451111, guid: 67a5d1c518e77b64abc03041c3851bcd, type: 3}
       propertyPath: onPointerClickEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
@@ -49833,6 +50041,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5619237150836451111, guid: 67a5d1c518e77b64abc03041c3851bcd, type: 3}
       propertyPath: onPointerExitEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 754398992}
+    - target: {fileID: 5619237150836451111, guid: 67a5d1c518e77b64abc03041c3851bcd, type: 3}
+      propertyPath: onPointerOverEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 754398992}
     - target: {fileID: 5619237150836451111, guid: 67a5d1c518e77b64abc03041c3851bcd, type: 3}
@@ -49856,6 +50068,10 @@ PrefabInstance:
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 5619237150836451111, guid: 67a5d1c518e77b64abc03041c3851bcd, type: 3}
+      propertyPath: onPointerOverEvent.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5619237150836451111, guid: 67a5d1c518e77b64abc03041c3851bcd, type: 3}
       propertyPath: onPointerClickEvent.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
       value: 2
       objectReference: {fileID: 0}
@@ -49869,7 +50085,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5619237150836451111, guid: 67a5d1c518e77b64abc03041c3851bcd, type: 3}
       propertyPath: onPointerExitEvent.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: SetDescriptionBoxActive
+      value: SetInfoPromptActive
+      objectReference: {fileID: 0}
+    - target: {fileID: 5619237150836451111, guid: 67a5d1c518e77b64abc03041c3851bcd, type: 3}
+      propertyPath: onPointerOverEvent.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: ShowNormalSkillInfo
       objectReference: {fileID: 0}
     - target: {fileID: 5619237150836451111, guid: 67a5d1c518e77b64abc03041c3851bcd, type: 3}
       propertyPath: onPointerClickEvent.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
@@ -49877,7 +50097,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5619237150836451111, guid: 67a5d1c518e77b64abc03041c3851bcd, type: 3}
       propertyPath: onPointerEnterEvent.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: SetDescriptionBoxActive
+      value: SetInfoPromptActive
       objectReference: {fileID: 0}
     - target: {fileID: 5619237150836451111, guid: 67a5d1c518e77b64abc03041c3851bcd, type: 3}
       propertyPath: onPointerEnterEvent.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
@@ -49886,6 +50106,10 @@ PrefabInstance:
     - target: {fileID: 5619237150836451111, guid: 67a5d1c518e77b64abc03041c3851bcd, type: 3}
       propertyPath: onPointerExitEvent.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
       value: BattleBaseView, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 5619237150836451111, guid: 67a5d1c518e77b64abc03041c3851bcd, type: 3}
+      propertyPath: onPointerOverEvent.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: BattlePetSkillView, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 5619237150836451111, guid: 67a5d1c518e77b64abc03041c3851bcd, type: 3}
       propertyPath: onPointerClickEvent.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
@@ -49900,6 +50124,14 @@ PrefabInstance:
       value: BattlePetSkillView, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 5619237150836451111, guid: 67a5d1c518e77b64abc03041c3851bcd, type: 3}
+      propertyPath: onPointerExitEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_IntArgument
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5619237150836451111, guid: 67a5d1c518e77b64abc03041c3851bcd, type: 3}
+      propertyPath: onPointerEnterEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_IntArgument
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5619237150836451111, guid: 67a5d1c518e77b64abc03041c3851bcd, type: 3}
       propertyPath: onPointerExitEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_BoolArgument
       value: 0
       objectReference: {fileID: 0}
@@ -49909,6 +50141,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5619237150836451111, guid: 67a5d1c518e77b64abc03041c3851bcd, type: 3}
       propertyPath: onPointerExitEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 5619237150836451111, guid: 67a5d1c518e77b64abc03041c3851bcd, type: 3}
+      propertyPath: onPointerOverEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 5619237150836451111, guid: 67a5d1c518e77b64abc03041c3851bcd, type: 3}

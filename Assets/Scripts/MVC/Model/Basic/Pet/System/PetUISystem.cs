@@ -14,7 +14,10 @@ public static class PetUISystem
         if (petId == 0)
             return ResourceManager.instance.GetSprite("Emblems/0");
 
-        return ResourceManager.instance.GetLocalAddressables<Sprite>("Emblems/" + petId, PetInfo.IsMod(petId));
+        var sign = PetInfo.IsMod(petId) ? 800000 : 200000;
+        var buffInfo = Buff.GetBuffInfo(Mathf.Abs(petId) + sign);
+
+        return buffInfo?.GetIcon();
     }
 
     public static Sprite GetPetBattleImage(int petId)

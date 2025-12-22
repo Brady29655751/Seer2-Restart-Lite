@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using ExitGames.Client.Photon.StructWrapping;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -65,6 +64,12 @@ public class SpriteKingPanel : Panel
 
     public void Fight(string type)
     {
+
+        if (GameManager.instance.debugMode)
+        {
+            OnConfirmFight(type);
+            return;
+        }
         
         if (Enumerable.Range(1, 8).Any(x => !soulActivity.GetData<bool>($"done[north][{x}]", "false")))
         {

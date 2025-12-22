@@ -52,7 +52,7 @@ public class PetBackupSkillModel : SelectModel<Skill>
         if (skillInfo == null)
             return false;
 
-        return special ^ (skillInfo.secretType != SecretType.Others);
+        return special ^ (skillInfo.secretType > SecretType.Others);
     }
 
     public void SelectNormalSkill(int index) {

@@ -15,7 +15,7 @@ public class MapPetCornerController : UIModule
 
     public void SetInfoPromptText(string content) {
         infoPrompt.SetInfoPromptWithAutoSize(content, TextAnchor.MiddleCenter);
-        infoPrompt.SetPosition(new Vector2(10, -25));
+        infoPrompt.SetPositionOffset(new Vector2(10, -25));
     }
 
     public void OpenPetBagPanel() {

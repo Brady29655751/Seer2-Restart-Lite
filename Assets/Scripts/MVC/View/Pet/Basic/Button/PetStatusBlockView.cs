@@ -9,8 +9,10 @@ public class PetStatusBlockView : Module
     [SerializeField] private Image statusTypeImage, personalityBuffImage;
     [SerializeField] private Text statusText;
     [SerializeField] private Text evText;
+    [SerializeField] private string evTextSuffix;
     [SerializeField] private IButton addButton;
     [SerializeField] private IButton minusButton;
+
 
     public override void Init()
     {
@@ -37,7 +39,8 @@ public class PetStatusBlockView : Module
     public void SetEV(float ev) {
         if (evText == null)
             return;
-        evText.text = ((int)ev).ToString();
+
+        evText.text = $"{(int)ev}{evTextSuffix}";
     }
 
     public void SetEVButtonsActive(bool active, bool positive = true) {

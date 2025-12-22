@@ -38571,6 +38571,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 074d166a248ce9548a8bd1e7d1c09f0a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  selectCount: 1
+  capacity: 4
+  pageMode: 0
   searchInputField: {fileID: 1490105737062071167}
   idInputField: {fileID: 3719331334053966603}
 --- !u!1 &3693990729233221639
@@ -45844,6 +45847,8 @@ MonoBehaviour:
       m_Image: {fileID: 0}
     - m_Text: "\u653B\u51FB\u524D"
       m_Image: {fileID: 0}
+    - m_Text: "\u786E\u8BA4\u547D\u4E2D\u540E"
+      m_Image: {fileID: 0}
     - m_Text: "\u8BA1\u7B97\u4F24\u5BB3\u53C2\u6570\u65F6"
       m_Image: {fileID: 0}
     - m_Text: "\u8BA1\u7B97\u4F24\u5BB3\u524D"
@@ -45853,6 +45858,8 @@ MonoBehaviour:
     - m_Text: "\u8BA1\u7B97\u4F24\u5BB3\u540E"
       m_Image: {fileID: 0}
     - m_Text: "\u5B9E\u884C\u4F24\u5BB3\u65F6"
+      m_Image: {fileID: 0}
+    - m_Text: "\u653B\u51FB\u5F00\u59CB\u65F6"
       m_Image: {fileID: 0}
     - m_Text: "\u653B\u51FB\u65F6"
       m_Image: {fileID: 0}
@@ -64523,6 +64530,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   buffModel: {fileID: 8546064825896625763}
   buffView: {fileID: 8169848703914523224}
+  pageView: {fileID: 0}
 --- !u!1 &6063728675744548611
 GameObject:
   m_ObjectHideFlags: 0
@@ -66771,9 +66779,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   infoPrompt: {fileID: 5999930493873476947}
   descriptionBox: {fileID: 0}
+  mode: 2
   buffBlockView: {fileID: 5928272661861069799}
   selectBuffContentRect: {fileID: 4798333431138428739}
   selectBuffButtonPrefab: {fileID: 2994216440479383503, guid: 89229972d72c2904fa67f764be28a2cf, type: 3}
+  selectBuffButtonList: []
 --- !u!1 &6383040477061004187
 GameObject:
   m_ObjectHideFlags: 0

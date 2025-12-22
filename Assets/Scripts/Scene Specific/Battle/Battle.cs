@@ -204,6 +204,7 @@ public class Battle
     }
 
     public void NextPhase() {
+        int round = 0, maxChain = 100;
         while (currentPhase != null) {
             currentPhase.DoWork();
             if (currentPhase == null)
@@ -212,6 +213,20 @@ public class Battle
             lastState = new BattleState(currentState);
             currentState = currentPhase.state;   
             currentPhase = currentPhase.GetNextPhase();
+
+            round += 1;     // 无限循环检测
+            if ((round > (maxChain * (EffectTiming.OnAfterAttack - EffectTiming.OnBeforeAttack + 1))) || 
+                (currentState.myUnit.pet.chain > maxChain) || currentState.opUnit.pet.chain > maxChain)
+            {
+                currentPhase = new BattleEndPhase();
+                currentState.result.state = BattleResultState.Error;
+                currentState.result.ProcessResult(currentState);
+
+                var hintbox = Hintbox.OpenHintboxWithContent("战斗进入无限循环，已中断战斗\n\n点击确认返回地图", 16);
+                hintbox.SetOptionNum(1);
+                hintbox.SetOptionCallback(() => SceneLoader.instance.ChangeScene(SceneId.Map));
+                return;
+            }
         }
     }
 
@@ -243,10 +258,20 @@ public class Battle
             
 
         if (isMe) {
-            if (!skill.IsSelectReady()) {
-                UI.SetSkillSelectMode(true);
-                UI.SelectOption(1);
-                return false;
+            if (!skill.IsSelectReady())
+            {
+                var targets = skill.GetSelectableTarget(myUnit.petSystem.petBag, myUnit.petSystem.cursor, settings.parallelCount);
+                if (targets.Exists(x => x))
+                {
+                    UI.SetSkillSelectMode(true);
+                    UI.SelectOption(1);
+                    return false;      
+                }
+
+                foreach (var e in skill.effects.Where(x => x.IsSelect()))
+                    e.abilityOptionDict.Set("target_index", "none");
+
+                return SetSkill(skill, isMe);
             }
 
             if (settings.parallelCount > 1) {

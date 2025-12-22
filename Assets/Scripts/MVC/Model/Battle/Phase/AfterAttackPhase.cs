@@ -50,8 +50,9 @@ public class AfterAttackPhase : BattlePhase
             state.actionOrder.Insert(state.actionCursor + 1, (int)Mathf.Sign(state.defUnit.id) * (state.defUnit.petSystem.cursor + 1));
             state.defUnit.skillSystem.SwapCounterSkill(true);
         }
-        // 如果防禦方沒有反擊，且攻擊方還有行動次數，則攻擊方繼續行動
-        else if (state.atkUnit.skill.chain > 0)
+        // 如果防禦方沒有反擊，且攻擊方還有行動次數，則攻擊方繼續行動 (双方无人阵亡且非空过技能)
+        else if ((state.atkUnit.skill.chain > 0) && (!Skill.IsNullOrEmpty(state.atkUnit.skill)) && 
+            (!state.atkUnit.pet.isDead) && (!state.defUnit.pet.isDead))
         {
             state.actionCursor--;
         }

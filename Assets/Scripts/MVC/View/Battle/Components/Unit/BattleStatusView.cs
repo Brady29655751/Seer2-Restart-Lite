@@ -12,7 +12,12 @@ public class BattleStatusView : BattleBaseView
 
     public void SetPet(BattlePet lastPet, BattlePet currentPet) {
         if (currentPet == null)
+        {
+            statusView.SetHp(0, 1);
+            statusView.SetAnger(0, 1);
+            infoView.SetPet(currentPet);
             return;
+        }
 
         if (lastPet == null) {
             statusView.SetHp(currentPet.hp, currentPet.maxHp);

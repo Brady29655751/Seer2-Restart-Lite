@@ -212,7 +212,10 @@ public class BattlePet : Pet
                 trimId = "id";
 
             var allSkills = ListHelper.IsNullOrEmpty(skillController?.loopSkills) ? skillController.normalSkills : skillController.loopSkills;
-            return allSkills?.Get(skillIndex)?.GetSkillIdentifier(trimId) ?? 0;
+            return trimId switch {
+                "position" => allSkills.FindIndex(x => (x != null) && (x.id == skillIndex)),
+                _ => allSkills?.Get(skillIndex)?.GetSkillIdentifier(trimId) ?? 0
+            };
         }
 
         if (id.TryTrimStart("superSkill", out var trimSuperSkill))
@@ -315,7 +318,9 @@ public class BattlePet : Pet
         if (isToken)
             return;
 
-        stayTurn += 1;
+        if (state.turn > 1)
+            stayTurn += 1;
+            
         buffController.ReduceBuffTurn(thisUnit, state);
     }
 }

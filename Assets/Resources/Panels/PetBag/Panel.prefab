@@ -1013,6 +1013,7 @@ MonoBehaviour:
   statusController: {fileID: 3043007106605539294}
   skillController: {fileID: 1036727228222513211}
   swapSkillController: {fileID: 7139345786958946467}
+  resistController: {fileID: 6801066239302337281}
   itemController: {fileID: 1229974093965853417}
   infoController: {fileID: 5755984345287067448}
   skinController: {fileID: 1130187314073840410}
@@ -4835,13 +4836,17 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 754218576108929114, guid: 95533895fda36384786f71f3e5d7a4da, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 839183691404369329, guid: 95533895fda36384786f71f3e5d7a4da, type: 3}
       propertyPath: infoPrompt
       value: 
       objectReference: {fileID: 5501775420078056034}
     - target: {fileID: 1609455624164717420, guid: 95533895fda36384786f71f3e5d7a4da, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1901686548576033388, guid: 95533895fda36384786f71f3e5d7a4da, type: 3}
       propertyPath: selectController
@@ -4931,6 +4936,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3022657614441976971, guid: 95533895fda36384786f71f3e5d7a4da, type: 3}
+      propertyPath: infoPrompt
+      value: 
+      objectReference: {fileID: 5501775420078056034}
     - target: {fileID: 3167598686914663531, guid: 95533895fda36384786f71f3e5d7a4da, type: 3}
       propertyPath: onPointerClickEvent.m_PersistentCalls.m_Calls.Array.data[3].m_Target
       value: 
@@ -4959,6 +4968,10 @@ PrefabInstance:
       propertyPath: demoController
       value: 
       objectReference: {fileID: 9126927676832649357}
+    - target: {fileID: 5253938563445908995, guid: 95533895fda36384786f71f3e5d7a4da, type: 3}
+      propertyPath: infoPrompt
+      value: 
+      objectReference: {fileID: 5501775420078056034}
     - target: {fileID: 5914466243572568758, guid: 95533895fda36384786f71f3e5d7a4da, type: 3}
       propertyPath: infoPrompt
       value: 
@@ -5124,6 +5137,17 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 7849999760323790119, guid: 95533895fda36384786f71f3e5d7a4da, type: 3}
   m_PrefabInstance: {fileID: 3845705767556767236}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &6801066239302337281 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7727205761866063109, guid: 95533895fda36384786f71f3e5d7a4da, type: 3}
+  m_PrefabInstance: {fileID: 3845705767556767236}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1cb9a33fbe95e604c8ae334e4b8db70a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &7139345786958946467 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 6217989149643439783, guid: 95533895fda36384786f71f3e5d7a4da, type: 3}

@@ -127,7 +127,7 @@ public class BuffInfo
         if ((id == -5) || (id == -6))
             return int.MaxValue;
 
-        if ((id == -9) || (id == -10))
+        if ((id == -9) || (id == -10) || (id == -2005))
             return Mathf.Abs(id);
 
         if (type == BuffType.Feature) {
@@ -151,15 +151,17 @@ public class BuffInfo
 
     public Sprite GetIcon() {
         int _type = id / 10_0000;
-        int _pet = id % 10_0000;
-
+        int _pet = id % 10_0000 * (_type < 5 ? 1 : -1);
+        
         var sprite = ResourceManager.instance.GetLocalAddressables<Sprite>("Buffs/" + resId, IsMod(resId));
+        if ((sprite == null) && (id != resId))
+            return Buff.GetBuffInfo(resId)?.GetIcon();
         
         if (type == BuffType.Feature)
-            return sprite ?? PetUISystem.GetPetIcon(_pet * (_type < 5 ? 1 : -1));
+            return sprite ?? PetUISystem.GetPetIcon(_pet);
 
         if (type == BuffType.Emblem)
-            return sprite ?? PetUISystem.GetEmblemIcon(_pet * (_type < 5 ? 1 : -1));
+            return sprite ?? ResourceManager.instance.GetLocalAddressables<Sprite>("Emblems/" + _pet, PetInfo.IsMod(_pet));
 
         return sprite;
     }

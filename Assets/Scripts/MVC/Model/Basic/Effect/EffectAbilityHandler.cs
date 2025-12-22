@@ -10,6 +10,29 @@ public static class EffectAbilityHandler
     public static Player player => Player.instance;
     public static Battle battle => player.currentBattle;
 
+    public static bool DefaultAbility(this Effect effect, BattleState state)
+    {
+        var condExpr = effect.abilityOptionDict.Get("condition");
+        if (string.IsNullOrEmpty(condExpr) || (condExpr == "none"))
+            return true;
+
+        if (!Effect.TryParse(condExpr, out var condEffects))
+        {
+            condEffects = condExpr.ToIntList('/')?.Select(skillId => 
+                Skill.GetSkill(skillId, false)?.effects?.Select(x => new Effect(x)).ToList()
+            ).SelectMany(x => x).ToList();
+        } 
+
+        // Fix timing
+        foreach (var e in condEffects) 
+        {
+            if (e.timing == EffectTiming.None)
+                e.SetTiming(effect.timing);
+        }
+
+        return condEffects.Exists(x => x.Condition(effect.invokeUnit, state));
+    }
+
     public static bool Win(this Effect effect, BattleState state)
     {
         if (state == null)
@@ -241,7 +264,7 @@ public static class EffectAbilityHandler
 
                 foreach (var key in keys)
                 {
-                    if ((!key.StartsWith("buff")) && (who == "me"))
+                    if (key.StartsWith("buff") || (who == "me"))
                     {
                         lhsUnit.skillSystem.healDict[key] = lhsUnit.skillSystem.healDict.Get(key, 0) + healAdd; 
                     }
@@ -327,7 +350,7 @@ public static class EffectAbilityHandler
     public static bool Powerup(this Effect effect, BattleState state)
     {
         Status status = new Status();
-        string[] typeNames = Status.typeNames.Update("hp", "hit").ToArray();
+        string[] typeNames = Status.powerupNames;
 
         string who = effect.abilityOptionDict.Get("who", "me");
         string random = effect.abilityOptionDict.Get("random", "false");
@@ -627,7 +650,7 @@ public static class EffectAbilityHandler
                     }
                     else
                     {
-                        buffIdList = trimId.ToIntRange();
+                        buffIdList = buffTypeExpr.ToIntRange();
                     }
 
                     if (!string.IsNullOrEmpty(key) || buffIdList.Exists(x => Buff.GetBuffInfo(x) == null))
@@ -639,30 +662,28 @@ public static class EffectAbilityHandler
 
                     buffId = buffIdList.Random();
                 }
-                else
+                else if (idExpr[k].TryTrimStart("random", out trimId) && trimId.TryTrimParentheses(out buffTypeExpr))
                 {
-                    if (idExpr[k].TryTrimStart("random", out trimId) && trimId.TryTrimParentheses(out buffTypeExpr))
+                    var buffTypeSplitList = buffTypeExpr.Split('|');
+                    if (buffTypeSplitList.All(x => x.ToBuffType() != BuffType.None))
                     {
-                        var buffTypeSplitList = buffTypeExpr.Split('|');
-                        if (buffTypeSplitList.All(x => x.ToBuffType() != BuffType.None))
+                        foreach (var buffTypeSplit in buffTypeSplitList)
                         {
-                            foreach (var buffTypeSplit in buffTypeSplitList)
-                            {
-                                var buffType = buffTypeSplit.ToBuffType();
-                                buffIdList = buffIdList.Concat(Database.instance.buffInfoDict.Where(entry => entry.Value.type == buffType).Select(entry => entry.Key)).ToList();
-                            }
-                            buffId = buffIdList.Random();
+                            var buffType = buffTypeSplit.ToBuffType();
+                            buffIdList = buffIdList.Concat(Database.instance.buffInfoDict.Where(entry => entry.Value.type == buffType).Select(entry => entry.Key)).ToList();
                         }
-                        else
-                        {
-                            buffId = (int)Parser.ParseEffectOperation(idExpr[k], effect, lhsUnit, rhsUnit);    
-                        }
+                        buffId = buffIdList.Random();
                     }
                     else
                     {
-                        buffId = (int)Parser.ParseEffectOperation(idExpr[k], effect, lhsUnit, rhsUnit);
-                    }   
+                        buffId = (int)Parser.ParseEffectOperation(idExpr[k], effect, lhsUnit, rhsUnit);    
+                    }
                 }
+                else
+                {
+                    buffId = (int)Parser.ParseEffectOperation(idExpr[k], effect, lhsUnit, rhsUnit);
+                }   
+
                 var newBuffInfo = Buff.GetBuffInfo(buffId);
                 if (string.IsNullOrEmpty(key) && (newBuffInfo == null))
                     return false;
@@ -715,6 +736,7 @@ public static class EffectAbilityHandler
         string idList = effect.abilityOptionDict.Get("id", "0");
         string typeList = effect.abilityOptionDict.Get("type", "none");
         string filterList = effect.abilityOptionDict.Get("filter", "none");
+        string randomCountExpr = effect.abilityOptionDict.Get("random_count", "-1");
 
         // The key prefix "rule" is reserved for pvp rules.
         string[] keyRange = keyList.Split('/').Where(x => !x.StartsWith("rule")).ToArray();
@@ -747,6 +769,7 @@ public static class EffectAbilityHandler
 
             return Parser.ParseEffectOperation(id, effect, lhsUnit, rhsUnit, buff, false);
         });
+        int randomCount = (int)Parser.ParseEffectOperation(randomCountExpr, effect, lhsUnit, rhsUnit);
 
         bool isSuccess = false;
 
@@ -780,7 +803,7 @@ public static class EffectAbilityHandler
                 if (buffController.GetBuff(Buff.GetProtectBuffTypeId(type)) != null)
                     continue;
 
-                isSuccess |= buffController.RemoveRangeBuff(x => (!x.IsUneffectable()) && x.IsType(type) && filter(x), lhsUnit, state);
+                isSuccess |= buffController.RemoveRangeBuff(x => (!x.IsUneffectable()) && x.IsType(type) && filter(x), lhsUnit, state, randomCount);
             }
         }
 
@@ -811,7 +834,7 @@ public static class EffectAbilityHandler
                 if ((Mathf.Abs(id) % 2 == 1) ^ (statusController.powerup[buffId] < 0))
                     statusController.SetPowerUp(buffId, 0);
             }
-            isSuccess |= buffController.RemoveRangeBuff(x => idRangeResult.Contains(x.id) && filter(x), lhsUnit, state);
+            isSuccess |= buffController.RemoveRangeBuff(x => idRangeResult.Contains(x.id) && filter(x), lhsUnit, state, randomCount);
         }
 
         return isSuccess;
@@ -978,6 +1001,13 @@ public static class EffectAbilityHandler
             float oldValue = buff.GetBuffIdentifier(type);
             float newValue = Parser.ParseEffectOperation(value, effect, lhsUnit, rhsUnit);
             buff.SetBuffIdentifier(type, Operator.Operate(op, oldValue, newValue));
+
+            if (type == "id")
+            {
+                if (string.IsNullOrEmpty(key))
+                    lhsUnit.pet.buffController.OnAddBuff(buff, lhsUnit, state);
+            }
+
             if (buff.info.autoRemove && buff.value <= 0)
             {
                 if (string.IsNullOrEmpty(key))
@@ -1121,7 +1151,14 @@ public static class EffectAbilityHandler
         lhsSystem.SetSkillSystemIdentifier(type, Operator.Operate(op, oldValue, newValue), key);
 
         if ((battle.settings.parallelCount > 1) && (type == "parallelTargetIndex"))
-            rhsUnit.petSystem.cursor = (int)(lhsSystem.GetSkillByKey(key)?.GetSkillIdentifier("parallelTargetIndex") ?? 0);
+        {
+            var cursor = (int)(lhsSystem.GetSkillByKey(key)?.GetSkillIdentifier("parallelTargetIndex") ?? 0);
+            if (rhsUnit.petSystem.petBag.Get(cursor) == null)
+                return false;
+
+            rhsUnit.petSystem.cursor = cursor;
+        }
+            
 
         return true;
     }
@@ -1176,6 +1213,7 @@ public static class EffectAbilityHandler
                         var evolveId = (int)newValue;
                         if (Pet.GetPetInfo(evolveId) == null)
                             return false;
+                            
                         string keepSkillExpr = effect.abilityOptionDict.Get("keep_skill", "true");
                         if (!bool.TryParse(keepSkillExpr, out var keepSkill))
                             return false;

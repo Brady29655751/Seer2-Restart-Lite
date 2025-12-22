@@ -676,6 +676,15 @@ public class ResourceManager : Singleton<ResourceManager>
                     hintbox.SetSize(720, 360);
                 }
             }
+
+            var LTE1W = originalDict.Where(x => x.Key.IsWithin(0, 10000)).ToList();
+            foreach (var entry in LTE1W)
+            {
+                var e = new Effect(entry.Value);
+                e.SetTiming(EffectTiming.None);
+                originalDict.Set(entry.Key + 10000, e);    
+            }
+
             onSuccess?.Invoke(originalDict);
         });
     }

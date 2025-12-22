@@ -9,7 +9,7 @@ public class MapInfoController : UIModule
 
     public void SetInfoPromptText(string content) {
         infoPrompt.SetInfoPromptWithAutoSize(content, TextAnchor.MiddleCenter);
-        infoPrompt.SetPosition(new Vector2(10, -30));
+        infoPrompt.SetPositionOffset(new Vector2(10, -30));
     }
 
     public void SetMapInfoText(string text) {

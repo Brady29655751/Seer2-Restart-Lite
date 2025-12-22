@@ -73,7 +73,7 @@ public class TurnEndPhase : BattlePhase
                 var skillSystem = unit.parallelSkillSystems[cursor];
                 var buffDamageShield = petBag[i].buffController.GetBuff(2000);
                 var reducedBuffDamage = Mathf.Max(skillSystem.totalBuffDamage - (buffDamageShield?.value ?? 0), 0);
-                petBag[i].hp += skillSystem.buffHeal - reducedBuffDamage;
+                petBag[i].hp += skillSystem.totalBuffHeal - reducedBuffDamage;
 
                 if (buffDamageShield != null)
                 {

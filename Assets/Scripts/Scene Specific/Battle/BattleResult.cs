@@ -62,6 +62,10 @@ public class BattleResult
         Random.InitState((int)DateTime.Now.Ticks);
         Player.instance.random = Random.Range(0, 100);
         this.endState = new BattleState(endState);
+
+        if (state == BattleResultState.Error)
+            return;
+
         if (endState.settings.mode == BattleMode.YiTeRogue) {
             for (int i = 0; i < YiTeRogueData.instance.petBag.Length; i++) {
                 Pet pet = YiTeRogueData.instance.petBag[i];

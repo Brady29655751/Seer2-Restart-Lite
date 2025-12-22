@@ -16,7 +16,7 @@ public class PetDemoView : Module
     [SerializeField] private Text nameText;
     [SerializeField] private GameObject changeNameObject;
 
-    [SerializeField] private IButton featureButton;
+    [SerializeField] private IButton featureButton, featureHighStarButton;
     [SerializeField] private Text featureText;
 
     [SerializeField] private IButton elementButton, subElementButton;
@@ -44,9 +44,9 @@ public class PetDemoView : Module
             return;
         }
         
-        SetName(pet.name);
+        SetName(pet.name, PetInfo.IsMod(pet.id));
         SetElement(pet.element, pet.subElement);
-        SetFeature(pet.feature.feature);
+        SetFeature(pet);
         SetGender(pet.basic.gender);
         SetEmblem(pet.hasEmblem, pet.feature.emblem);
         SetIVRank(pet.talent.IVRank);
@@ -59,8 +59,9 @@ public class PetDemoView : Module
         infoPrompt.SetActive(active);
     }
 
-    public void SetName(string name) {
+    public void SetName(string name, bool isMod) {
         nameText.text = name;
+        nameText.color = isMod ? ColorHelper.gold : Color.cyan;
     }
 
     public void ChangeName(bool isActive)
@@ -81,8 +82,16 @@ public class PetDemoView : Module
         infoPrompt.SetInfoPromptWithAutoSize(text, TextAnchor.MiddleCenter);
     }
 
-    public void SetFeature(Feature feature) {
+    public void SetFeature(Pet pet) {
+        var feature = pet.feature.feature;
+        var buff = Buff.GetFeatureBuff(pet);
+        var isHighStar = (pet.info.star >= 7) && (!PetInfo.IsMod(pet.id)) && (buff?.icon != null);
+        
+        featureButton?.gameObject.SetActive(!isHighStar);
+        featureHighStarButton?.gameObject.SetActive(isHighStar);
+
         featureText.text = feature.name.Substring(0, Mathf.Min(feature.name.Length, 2));
+        featureHighStarButton?.SetSprite(buff.icon);
     }
 
     public void SetFeatureInfoPromptContent(Feature feature) {
@@ -90,11 +99,11 @@ public class PetDemoView : Module
         infoPrompt.SetInfoPromptWithAutoSize(text, TextAnchor.MiddleLeft);
         if (featurePromptLeft) 
         {
-            infoPrompt.SetPosition(new Vector2(-infoPrompt.size.x, 2));
+            infoPrompt.SetPositionOffset(new Vector2(-infoPrompt.size.x, 2));
         } 
         else
         {
-            infoPrompt.SetPosition(new Vector2(infoPrompt.zeroFixPos.x, -infoPrompt.size.y / 2 - 2));
+            infoPrompt.SetPositionOffset(new Vector2(infoPrompt.zeroFixPos.x, -infoPrompt.size.y / 2 - 2));
         }
     } 
 

@@ -4,10 +4,10 @@
 		<bgm>BGM_849</bgm>
 	</music>
 	<entities>
-		<npc id="1172501" resId="Pets/pet/114732" name="Lv105 神迹闪光波克尔" size="254,316" pos="370,110" namePos="0,-10">
+		<npc id="1172501" resId="Pets/pet/114732" name="Lv105 闪光皮神" size="254,316" pos="370,110" namePos="0,-10">
 			<description>皮皮神迹觉醒！</description>
 			<dialog>
-				<branch id="default" name="神迹闪光波克尔" icon="Pets/pet/114732" size="127,158" pos="10,35">
+				<branch id="default" name="闪光皮神" icon="Pets/pet/114732" size="127,158" pos="10,35">
 					<content><![CDATA[需要满级波斯蒂加才能进化哦！]]></content>
 					<functionHandler>
 						<func type="click">
@@ -21,9 +21,24 @@
 							<param>ItemShop</param>
 							<param>mode=buy</param>
 							<param>currency=8/0</param>
-							<param>item=333147/333145/334731/334732</param>
-							<param>limit=1/1/1/1</param>
+							<param>item=333147/333145/334731/334732/470002</param>
+							<param>limit=1/1/1/1/1</param>
 							<param>title=因子商店</param>
+						</func>
+						<func type="click">
+							<description><![CDATA[常态神迹]]></description>
+							<action>battle</action>
+							<param>evolve</param>
+							<condition>firstPet.uid=14732</condition>
+						</func>
+						<func type="branch">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=将神迹闪光波克尔设为首发吧</param>
+							<param>item_icon=pet[14732]</param>
+							<param>option_num=1</param>
+							<condition>firstPet.uidNOT14732</condition>
 						</func>
 					</functionHandler>
 					<replyHandler>
@@ -67,6 +82,40 @@
 							<param>title=提示</param>
 							<param>content=50个精灵因子已经放入背包</param>
 							<param>item_icon=item[8]</param>
+							<param>option_num=1</param>
+						</button>
+					</winHandler>
+				</branch>
+				<branch id="evolve">
+					<settings count="1">
+						<mode>4</mode>
+					</settings>
+					<enemy>
+						<pet id="990" level="105">
+							<status>
+								<hp>13500</hp>
+							</status>
+							<initBuff>-3092</initBuff>
+							<loopSkill>13134,13135,13136</loopSkill>
+							<superSkill>13137</superSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setPet</action>
+							<param>maxLevel=105</param>
+							<param>level=105</param>
+						</button>
+						<button type="auto">
+							<action>evolvePet</action>
+							<param>20002</param>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=神迹闪光波克尔已常驻神迹形态</param>
+							<param>item_icon=pet[114732]</param>
 							<param>option_num=1</param>
 						</button>
 					</winHandler>

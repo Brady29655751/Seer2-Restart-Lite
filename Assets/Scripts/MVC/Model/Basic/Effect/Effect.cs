@@ -214,19 +214,8 @@ public class Effect {
 
         this.invokeUnit = invokeUnit;
 
-        /*
-        if (checkTurn && !condOptionDictList.Select(x => this.IsCorrectTurn(state, x)).Any(x => x))
+        if (checkTurn && !condOptionDictList.Exists(x => this.IsCorrectTurn(state, x)))
             return false;
-
-        if (!condOptionDictList.Select(x => this.IsCorrectWeather(state, x)).Any(x => x))
-            return false;
-
-        if (!condOptionDictList.Select(x => this.IsAttackAndHit(state, x)).Any(x => x))
-            return false;
-
-        if (!condOptionDictList.Select(x => this.RandomNumber(state, x)).Any(x => x))
-            return false;
-        */
 
         Func<Dictionary<string, string>, bool> ConditionFunc = condition switch {
             EffectCondition.CurrentUnit => ((x) => this.UnitCondition(state, x)),
@@ -239,10 +228,9 @@ public class Effect {
             EffectCondition.Poker => ((x) => this.PokerCondition(state, x)),
             _ => ((x) => true)
         };
-
-        var result = condOptionDictList.Select(x => {
+            
+        var result = condOptionDictList.Exists(x => {
             /*
-            var correctTurn = this.IsCorrectTurn(state, x);
             var correctWeather = this.IsCorrectWeather(state, x);
             var hit = this.IsAttackAndHit(state, x);
             var rng = this.RandomNumber(state, x);
@@ -253,11 +241,28 @@ public class Effect {
 
             return ((!checkTurn) || correctTurn) && correctWeather && hit && rng && cond;
             */
-            return ((!checkTurn) || this.IsCorrectTurn(state, x)) && 
-                this.IsCorrectWeather(state, x) && this.IsAttackAndHit(state, x) && 
+            return this.IsCorrectWeather(state, x) && this.IsAttackAndHit(state, x) && 
                 this.RandomNumber(state, x) && ConditionFunc.Invoke(x);
             
-        }).Any(x => x);
+        });
+
+        // 未触发则改变本条效果
+        if (!result)
+        {
+            var postExpr = condOptionDictList.Select(x => x?.Get("on_fail")).FirstOrDefault(x => x != null); 
+            if ((!TryGetPostProcessEffects(postExpr, out var postEffects)) || ListHelper.IsNullOrEmpty(postEffects))
+                return result;            
+        
+            var effect = postEffects.FirstOrDefault();
+            if (effect == null)
+                return result;
+
+            target = effect.target;
+            condOptionDictList.ForEach(x => x?.Remove("on_fail"));
+            ability = effect.ability;
+            abilityOptionDict = effect.abilityOptionDict;
+            result = true;
+        }
 
         return result;
     }
@@ -300,27 +305,14 @@ public class Effect {
                 EffectAbility.Poker => this.Poker(state),
                 EffectAbility.SetPetBag => this.SetPetBag(state),
                 EffectAbility.Card => this.Card(state),
-                _ => true
+                _ => this.DefaultAbility(state),
             });
         }
 
         // Post Process
         var postExpr = abilityOptionDict.Get("on_" + (result ? "success" : "fail"));
-        if (string.IsNullOrEmpty(postExpr))
+        if (!TryGetPostProcessEffects(postExpr, out var postEffects))
             return result;
-
-        if (!Effect.TryParse(postExpr, out var postEffects))
-        {
-            postEffects = postExpr.ToIntList('/')?.Select(skillId => 
-                Skill.GetSkill(skillId, false)?.effects?.Select(x => new Effect(x)).ToList()
-            ).SelectMany(x => x).ToList();
-        } 
-
-        // Fix timing
-        foreach (var e in postEffects) {
-            if (e.timing == EffectTiming.None)
-                e.SetTiming(timing);
-        }
 
         var effectHandler = new EffectHandler();
         effectHandler.AddEffects(invokeUnit, postEffects);
@@ -334,5 +326,27 @@ public class Effect {
             return false;
         
         return Apply(invokeUnit, state);
+    }
+
+    private bool TryGetPostProcessEffects(string postExpr, out List<Effect> postEffects)
+    {
+        postEffects = new List<Effect>();
+        if (string.IsNullOrEmpty(postExpr))
+            return false;
+
+        if (!Effect.TryParse(postExpr, out postEffects))
+        {
+            postEffects = postExpr.ToIntList('/')?.Select(skillId => 
+                Skill.GetSkill(skillId, false)?.effects?.Select(x => new Effect(x)).ToList()
+            ).SelectMany(x => x).ToList();
+        } 
+
+        // Fix timing
+        foreach (var e in postEffects) {
+            if (e.timing == EffectTiming.None)
+                e.SetTiming(timing);
+        }
+
+        return true;
     }
 }

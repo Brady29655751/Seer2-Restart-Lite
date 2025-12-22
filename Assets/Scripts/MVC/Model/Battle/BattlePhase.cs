@@ -96,6 +96,12 @@ public class BattlePhase
         var atkUnit = state.atkUnit;
         var defUnit = state.defUnit;
 
+        if ((atkUnit.pet == null) || (defUnit.pet == null)) {
+            atkUnit.isDone = defUnit.isDone = true;
+            SetUIState(null);
+            return false;
+        }
+
         if (state.whosTurn == 0) {
             ApplySkillsAndBuffs();
             state.myUnit.isDone = state.opUnit.isDone = true;

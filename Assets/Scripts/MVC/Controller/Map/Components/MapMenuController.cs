@@ -16,7 +16,7 @@ public class MapMenuController : UIModule
 
     public void SetInfoPromptText(string content) {
         infoPrompt.SetInfoPromptWithAutoSize(content, TextAnchor.MiddleCenter);
-        infoPrompt.SetPosition(new Vector2(2, 2));
+        infoPrompt.SetPositionOffset(new Vector2(2, 2));
     }
 
     public void GoToStation() {

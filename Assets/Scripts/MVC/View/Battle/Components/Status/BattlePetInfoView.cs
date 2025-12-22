@@ -14,6 +14,16 @@ public class BattlePetInfoView : BattleBaseView
     [SerializeField] private GameObject subElementObject;
 
     public void SetPet(BattlePet pet) {
+        if (pet == null)
+        {
+            icon.SetSprite(SpriteSet.Empty);
+            nameText.SetText("未知");
+            levelText.SetText(string.Empty);
+            elementImage.SetSprite(SpriteSet.Empty);
+            subElementObject.SetActive(false);
+            return;
+        }
+
         var isSubElementActive = pet.subBattleElement != Element.普通;
         icon.sprite =   pet.ui.icon;
         nameText.text = pet.name;

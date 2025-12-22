@@ -181,6 +181,7 @@ public class MapSceneView : UIModule
         }
 
         Player.instance.currentNpcId = 0;
+        Player.instance.currentBattle.info = null;
     }
 
     private void CheckDailyLogin() {

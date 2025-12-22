@@ -7,10 +7,11 @@ public class PetSecretSkillController : Module
 {
     [SerializeField] private PetSecretSkillModel secretSkillModel;
     [SerializeField] private PetSecretSkillView secretSkillView;
-
+    [SerializeField] private PageView pageView;
+    
     public void SetPet(Pet pet) {
         secretSkillModel.SetPet(pet);
-        secretSkillView.SetSecretSkillInfo(secretSkillModel.secretSkillInfos);
+        OnSetPage();
     }
 
     public void SetInfoPromptActive(bool active) {
@@ -18,11 +19,30 @@ public class PetSecretSkillController : Module
     }
 
     public void SetSecretSkillInfo(int index) {
-        if (!index.IsInRange(0, secretSkillModel.secretSkillInfos.Length)) {
+        if (!index.IsInRange(0, secretSkillModel.selections.Length)) {
             SetInfoPromptActive(false);
             return;
         }
-        secretSkillView.SetSkillInfoPromptContent(secretSkillModel.secretSkillInfos[index].skill);
+
+        secretSkillView.SetSkillInfoPromptContent(secretSkillModel.selections[index]?.skill);
+    }
+
+    public void OnSetPage()
+    {
+        secretSkillView.SetSecretSkillInfo(secretSkillModel.selections);
+        pageView.SetPage(secretSkillModel.page, secretSkillModel.lastPage);
+    }
+
+    public void PrevPage()
+    {
+        secretSkillModel.PrevPage();
+        OnSetPage();
+    }
+
+    public void NextPage()
+    {
+        secretSkillModel.NextPage();
+        OnSetPage();
     }
 
     public void OnBuySecretSkill() {

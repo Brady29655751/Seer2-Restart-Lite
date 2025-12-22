@@ -23,6 +23,9 @@ public class BeforeAttackPhase : BattlePhase
         OnChainStart();
         base.DoWork();
         CheckAccuracy();
+
+        phase = EffectTiming.OnAttackStart;
+        ApplySkillsAndBuffs();
     }
 
     public override BattlePhase GetNextPhase()

@@ -174,4 +174,5 @@ public class SelectModel<T> : Module, IPageHandler
 public enum PageMode {
     NewPage = 0,
     Indent = 1,
+    Scroll = 2,
 }

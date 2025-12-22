@@ -19,6 +19,7 @@ public class Pet
     public PetFeature feature;  // 特性、紋章等
     public PetExp exp;  // 經驗值、等級相關等
     public PetTalent talent;    // 個體值、學習力等
+    public PetResist resist;    // 抗性
     public PetSkill skills;     // 技能相關等
     public PetRecord record;   // 精靈紀錄，通常為隱藏技能條件判斷用
     public PetUI ui;  // 皮膚、頭像等UI資源
@@ -45,7 +46,7 @@ public class Pet
     public int subElementId => info.basic.subElementId;
     public Element subElement => info.basic.subElement; // 副屬性
     public bool hasEmblem => feature.hasEmblem;   // 是否佩戴紋章
-    [XmlIgnore] public List<Buff> initBuffs => info.ui.defaultBuffs.Concat(feature.afterwardBuffs).ToList();
+    [XmlIgnore] public List<Buff> initBuffs => info.ui.defaultBuffs.Concat(feature.afterwardBuffs).Concat(resist.resistBuffs).ToList();
 
     /* Exp and Level */
     public int level => exp.level;  // 等級
@@ -106,6 +107,8 @@ public class Pet
 
         pet.skills.LearnAllSkill();
 
+        pet.resist.ToBest();
+
         pet.currentStatus = pet.normalStatus;
 
         return pet;
@@ -164,6 +167,7 @@ public class Pet
         skills = new PetSkill(_copy.skills);
         record = new PetRecord(_copy.record);
         ui = new PetUI(_copy.ui);
+        resist = new PetResist(_copy.resist);
 
         currentStatus = new Status(_copy.currentStatus);
     }
@@ -178,6 +182,7 @@ public class Pet
         skills = new PetSkill(id, initLevel);
         record = new PetRecord();
         ui = new PetUI(info.ui.defaultSkinId, info.ui.baseId);
+        resist = new PetResist(id);
 
         /* Status */
         currentStatus = new Status(normalStatus);
@@ -198,6 +203,9 @@ public class Pet
         skills = new PetSkill(evolvePetId, originalPet.level, originalPet.skills);
         record = new PetRecord(originalPet.record);
         ui = new PetUI(info.ui.defaultSkinId, info.ui.baseId, originalPet.ui.specialSkinList);
+        resist = new PetResist(evolvePetId);
+
+        resist.SetResistDict(originalPet.resist.ToDictionary());
 
         /* Status */
         currentStatus = new Status(normalStatus);
@@ -330,6 +338,7 @@ public class Pet
             "featureType" => info.ui.defaultFeatureList.IndexOf(feature.feature.baseId),
             "emblemId" => feature.emblem.baseId,
             "emblemType" => info.ui.defaultFeatureList.IndexOf(feature.emblem.baseId),
+            "resistLock" => resist.lockState,
             _ => float.MinValue
         };
     }
@@ -413,6 +422,9 @@ public class Pet
                 var emblemList = info.ui.defaultFeatureList;
                 feature.emblemId = info.ui.defaultFeatureList[emblemType % emblemList.Count];
                 return;
+            case "resistLock":
+                resist.lockState = (int)num;
+                return;
         }
     }
 
@@ -444,12 +456,14 @@ public class Pet
             return;
 
         exp.LevelDown(toWhichLevel);
-        if (!keepSkill) {
+        if (!keepSkill) 
+        {
             skills.ownSkill = null;
             skills.normalSkill = null;
             skills.superSkill = null;
-            skills.CheckNewSkill(toWhichLevel);
         }
+        
+        skills.CheckNewSkill(toWhichLevel);
 
         currentStatus = normalStatus;
         SaveSystem.SaveData();
@@ -482,7 +496,8 @@ public class Pet
 
         var specialSkills = skills.ownSkill.Where(x => (!skills.skillList.Exists(y => y.id == x.id)) || skills.secretSkillInfo.Any(y => (y.skill.id == x.id) && (y.secretType == SecretType.Others))).ToList();
         Pet evolvePet = new Pet(evolveId, this);
-        if (!keepSkill) {
+        if (!keepSkill) 
+        {
             evolvePet.LevelDown(evolvePet.level);
             specialSkills.ForEach(skill => evolvePet.skills.LearnNewSkill(skill));
         }
@@ -595,8 +610,7 @@ public class Pet
                 pet.skills.id = newId;
                 pet.ui.id = newId;
                 pet.ui.baseId = pet.basic.baseId;
-            }
-            ;
+            };
 
             petDataVersion = "lite_2.9";
         }
@@ -608,6 +622,14 @@ public class Pet
                     Enumerable.Range(11748, 4).Select(x => Skill.GetSkill(x, false)).ToList().ForEach(x => pet.skills.LearnNewSkill(x));
 
             petDataVersion = "lite_2.9.4";
+        }
+
+        if (VersionData.Compare(petDataVersion, "lite_3.5.1") < 0)
+        {
+            foreach (var pet in allPets)
+                pet.resist = new PetResist(pet.id);
+
+            petDataVersion = "lite_3.5.1";
         }
 
         // Check New Skill

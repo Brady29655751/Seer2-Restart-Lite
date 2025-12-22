@@ -1,0 +1,32 @@
+<map name="神域回廊" category="8" id="570" weather="0">
+	<fightMapColor>64,64,64,255</fightMapColor>
+	<initialPoint>485,150</initialPoint>
+	<music category="8">
+		<bgm>BGM_560</bgm>
+	</music>
+	<entities>
+		<npc id="57001" resId="57001" name="夜王" size="58,110" pos="340,135" namePos="0,0">
+			<description>神秘精灵</description>
+			<dialog>
+				<branch id="default" name="夜王" icon="57001" size="58,110" pos="0,55">
+					<content><![CDATA[我怎么会被放在这里？这一定是奥比休斯的阴谋！我的约伽在哪里？]]></content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[梨很甜~小又肥~]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+					</replyHandler>
+				</branch>
+			</dialog>
+			<eventHandler>
+				<button type="click">
+					<action>openDialog</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+			</npc>
+		<teleport id="1" name="神域天门" pos="100,80" targetMapId="560"/>
+		<teleport id="2" name="神域天尊殿" pos="655,275" targetMapId="580"/>
+	</entities>		
+</map>

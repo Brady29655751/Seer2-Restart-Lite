@@ -1,0 +1,283 @@
+<panel name="MainPetWakeup/Grass" size="860,485">
+    <npc id="0" resId="Panel/MainPetWakeup/Grass/background" size="860,485" pos="0,0" color="255,255,255,255"/>
+	<npc id="-1" resId="Panel/finish_day" size="120,78" pos="145,180">
+        <eventHandler>
+			<button type="auto">
+				<action>setNpcParam</action>
+				<param>-1</param>
+				<param>active=false</param>
+				<condition>activity[main_pet_evolve].done[LaAoHua_1]=[bool]false[default]false</condition>
+			</button>
+		</eventHandler>
+    </npc>
+	<npc id="-2" resId="Panel/finish_day" size="120,78" pos="365,180">
+        <eventHandler>
+			<button type="auto">
+				<action>setNpcParam</action>
+				<param>-2</param>
+				<param>active=false</param>
+				<condition>activity[main_pet_evolve].done[LaAoHua_2]=[bool]false[default]false</condition>
+			</button>
+		</eventHandler>
+    </npc>
+    <npc id="1" resId="Panel/MainPetWakeup/Main/fightBtn" size="60,36" pos="171,120">
+		<description>对战胜利可获得5个【草目进化石】</description>
+        <eventHandler>
+			<button type="click">
+				<action>openHintbox</action>
+				<param>title=提示</param>
+				<param>content=对战胜利可获得5个【草目进化石】</param>
+				<param>option_num=2</param>
+				<param>callback=fight</param>
+				<condition>firstPet.baseId=7</condition>
+				<condition>activity[main_pet_evolve].done[LaAoHua_1]=[bool]false[default]false</condition>
+			</button>
+			<button type="click">
+				<action>openHintbox</action>
+				<param>title=提示</param>
+				<param>content=你今天已经通过技巧试炼了，请明天再来</param>
+				<param>option_num=1</param>
+				<condition>activity[main_pet_evolve].done[LaAoHua_1]=[bool]true[default]false</condition>
+			</button>
+			<button type="click">
+				<action>openPanel</action>
+				<param>PetBag</param>
+				<condition>firstPet.baseIdNOT7</condition>
+				<condition>activity[main_pet_evolve].done[LaAoHua_1]=[bool]false[default]false</condition>
+			</button>
+			<button type="click">
+				<action>openHintbox</action>
+				<param>type=Item</param>
+				<param>title=提示</param>
+				<param>content=请将拉奥叶进行首发再来挑战！</param>
+				<param>item_icon=pet[9]</param>
+				<param>option_num=1</param>
+				<condition>firstPet.baseIdNOT7</condition>
+				<condition>activity[main_pet_evolve].done[LaAoHua_1]=[bool]false[default]false</condition>
+			</button>
+		</eventHandler>
+		<callbackHandler>
+			<button type="fight">
+				<action>battle</action>
+				<param>_fight</param>
+			</button>
+		</callbackHandler>
+		<battle>
+			<branch id="_fight">
+				<settings count="1">
+					<mode>1</mode>
+				</settings>
+				<enemy>
+					<pet id="6" level="80">
+						<status>
+							<atk>500</atk>
+							<mat>500</mat>
+							<def>400</def>
+							<mdf>400</mdf>
+							<spd>1000</spd>
+							<hp>1000</hp>
+						</status>
+						<emblem>false</emblem>
+						<initBuff>17,25,26</initBuff>
+						<headerSkill>10021</headerSkill>
+						<loopSkill>10024,10027,10028</loopSkill>
+						<superSkill>10017</superSkill>
+					</pet>
+				</enemy>
+				<winHandler>
+					<button type="auto">
+						<action>setActivity</action>
+						<param>main_pet_evolve</param>
+						<param>done[LaAoHua_1]=true</param>
+					</button>
+					<button type="auto">
+						<action>openPanel</action>
+						<param>Mod[data=MainPetWakeup/grass]</param>
+					</button>
+					<button type="auto">
+						<action>setItem</action>
+						<param>add</param>
+						<param>400007,5</param>
+					</button>
+					<button type="auto">
+						<action>openHintbox</action>
+						<param>type=Item</param>
+						<param>title=提示</param>
+						<param>content=5个【草目进化石】已经放入你的背包</param>
+						<param>item_icon=item[400007]</param>
+						<param>option_num=1</param>
+					</button>
+				</winHandler>
+				<loseHandler>
+					<button type="auto">
+						<action>openPanel</action>
+						<param>Mod[data=MainPetWakeup/grass]</param>
+					</button>
+				</loseHandler>
+			</branch>
+		</battle>
+	</npc>
+	<npc id="2" resId="Panel/MainPetWakeup/Main/fightBtn" size="60,36" pos="391,120">
+		<description>对战胜利可获得10个【草目进化石】</description>
+        <eventHandler>
+			<button type="click">
+				<action>openHintbox</action>
+				<param>title=提示</param>
+				<param>content=对战胜利可获得10个【草目进化石】</param>
+				<param>option_num=2</param>
+				<param>callback=fight</param>
+				<condition>activity[main_pet_evolve].done[LaAoHua_2]=[bool]false[default]false</condition>
+			</button>
+			<button type="click">
+				<action>openHintbox</action>
+				<param>title=提示</param>
+				<param>content=你今天已经通过战力试炼了，请明天再来</param>
+				<param>option_num=1</param>
+				<condition>activity[main_pet_evolve].done[LaAoHua_2]=[bool]true[default]false</condition>
+			</button>
+		</eventHandler>
+		<callbackHandler>
+			<button type="fight">
+				<action>battle</action>
+				<param>_fight</param>
+			</button>
+		</callbackHandler>
+		<battle>
+			<branch id="_fight">
+				<settings count="3">
+					<mode>3</mode>
+				</settings>
+				<enemy>
+					<pet id="20005" level="100">
+						<status>
+							<atk>600</atk>
+							<mat>600</mat>
+							<def>800</def>
+							<mdf>800</mdf>
+							<hp>5000</hp>
+						</status>
+						<emblem>false</emblem>
+						<initBuff>17,61,-8,-3093</initBuff>
+						<loopSkill>13312,13313,13314,13315,13316,13306</loopSkill>
+					</pet>
+				</enemy>
+				<winHandler>
+					<button type="auto">
+						<action>setActivity</action>
+						<param>main_pet_evolve</param>
+						<param>done[LaAoHua_2]=true</param>
+					</button>
+					<button type="auto">
+						<action>openPanel</action>
+						<param>Mod[data=MainPetWakeup/grass]</param>
+					</button>
+					<button type="auto">
+						<action>setItem</action>
+						<param>add</param>
+						<param>400007,10</param>
+					</button>
+					<button type="auto">
+						<action>openHintbox</action>
+						<param>type=Item</param>
+						<param>title=提示</param>
+						<param>content=10个【草目进化石】已经放入你的背包</param>
+						<param>item_icon=item[400007]</param>
+						<param>option_num=1</param>
+					</button>
+				</winHandler>
+				<loseHandler>
+					<button type="auto">
+						<action>openPanel</action>
+						<param>Mod[data=MainPetWakeup/grass]</param>
+					</button>
+				</loseHandler>
+			</branch>
+		</battle>
+	</npc>
+	<npc id="3" resId="Panel/MainPetWakeup/Grass/Btn" size="80,80" pos="665,130">
+		<description>注入60个草目进化石进行神迹觉醒</description>
+        <eventHandler>
+			<button type="auto">
+				<action>setNpcParam</action>
+				<param>3</param>
+				<param>active=false</param>
+				<condition>activity[main_pet_wakeup].done[LaAoHua]=[bool]true[default]false</condition>
+			</button>
+			<button type="click">
+				<action>openHintbox</action>
+				<param>title=提示</param>
+				<param>content=你的草目进化石已经足够，要进行神迹觉醒吗？</param>
+				<param>option_num=2</param>
+				<param>callback=Wakeup</param>
+				<condition>firstPet.uid=618</condition>
+				<condition>item[400007].numGTE60</condition>
+			</button>
+			<button type="click">
+				<action>openPanel</action>
+				<param>PetBag</param>
+				<condition>firstPet.uidNOT618</condition>
+				<condition>item[400007].numGTE60</condition>
+			</button>
+			<button type="click">
+				<action>openHintbox</action>
+				<param>type=Item</param>
+				<param>title=提示</param>
+				<param>content=请将拉奥花进行首发再来进行觉醒！</param>
+				<param>item_icon=pet[618]</param>
+				<param>option_num=1</param>
+				<condition>firstPet.uidNOT618</condition>
+				<condition>item[400007].numGTE60</condition>
+			</button>
+			<button type="click">
+				<action>openHintbox</action>
+				<param>title=提示</param>
+				<param>content=进行神迹觉醒需要60个草目进化石，你的草目进化石不足无法进行神迹觉醒</param>
+				<param>option_num=1</param>
+				<condition>item[400007].num&lt;60</condition>
+			</button>
+		</eventHandler>
+		<callbackHandler>
+			<button type="Wakeup">
+				<action>evolvePet</action>
+				<param>704</param>
+				<condition>activity[main_pet_wakeup].done[LaAoHua]=[bool]false[default]false</condition>
+			</button>
+			<button type="Wakeup">
+				<action>openHintbox</action>
+				<param>type=Item</param>
+				<param>title=提示</param>
+				<param>content=【拉奥花】已成功神迹觉醒</param>
+				<param>item_icon=pet[704]</param>
+				<param>option_num=1</param>
+				<condition>activity[main_pet_wakeup].done[LaAoHua]=[bool]false[default]false</condition>
+			</button>
+			<button type="Wakeup">
+				<action>setItem</action>
+			    <param>remove</param>
+				<param>400007,60</param>
+				<condition>activity[main_pet_wakeup].done[LaAoHua]=[bool]false[default]false</condition>
+			</button>
+			<button type="Wakeup">
+				<action>setNpcParam</action>
+				<param>3</param>
+				<param>active=false</param>
+				<condition>activity[main_pet_wakeup].done[LaAoHua]=[bool]false[default]false</condition>
+			</button>
+			<button type="Wakeup">
+				<action>setActivity</action>
+				<param>main_pet_wakeup</param>
+				<param>done[LaAoHua]=true</param>
+				<condition>activity[main_pet_wakeup].done[LaAoHua]=[bool]false[default]false</condition>
+			</button>
+		</callbackHandler>
+	</npc>
+	<npc id="10" resId="Panel/petBag" size="35,35" pos="815,395">
+	<description>精灵背包</description>
+        <eventHandler>
+			<button type="click">
+				<action>openPanel</action>
+				<param>PetBag</param>
+			</button>
+		</eventHandler>
+    </npc>
+</panel>

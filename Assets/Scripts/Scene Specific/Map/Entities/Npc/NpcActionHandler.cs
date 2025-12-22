@@ -172,7 +172,7 @@ public static class NpcActionHandler
         if ((handler.param == null) || (handler.param.Count < 2))
             return;
 
-        Action<Item> itemFunc = handler.param[0] switch
+        Action<Item> itemFunc = handler.param[0].TrimEnd("_with_hint") switch
         {
             "add" => Item.Add,
             "remove" => (x) => Item.Remove(x.id, x.num),
@@ -180,10 +180,15 @@ public static class NpcActionHandler
             "remove_from_yite" => (x) => Item.RemoveFrom(x.id, x.num, YiTeRogueData.instance.itemBag),
             _ => null
         };
+        
         for (int i = 1; i < handler.param.Count; i++)
         {
             var itemInfo = handler.param[i].ToIntList();
-            itemFunc?.Invoke(new Item(itemInfo[0], itemInfo[1]));
+            var item = new Item(itemInfo[0], itemInfo[1]);
+            itemFunc?.Invoke(item);
+
+            if (handler.param[0].StartsWith("add") && handler.param[0].EndsWith("with_hint"))
+                Item.OpenHintbox(item);
         }
     }
 
@@ -410,5 +415,21 @@ public static class NpcActionHandler
 
         Player.instance.currentMiniGame = new Activity(handler.param[0]);
         SceneLoader.instance.ChangeScene(SceneId.Game);
+    }
+
+    public static void Callback(NpcController npc, NpcButtonHandler handler, Dictionary<int, NpcController> npcList)
+    {
+        if (npc == null)
+            return;
+
+        var callbackHandler = npc.GetInfo()?.callbackHandler;
+        if (ListHelper.IsNullOrEmpty(callbackHandler))
+            return;
+        
+        var callbacks = callbackHandler.FindAll(x => handler.param.Contains(x.typeId));
+        if (ListHelper.IsNullOrEmpty(callbacks))
+            return;
+        
+        callbacks.ForEach(x => NpcHandler.GetNpcEntity(npc, x, npcList)?.Invoke());
     }
 }

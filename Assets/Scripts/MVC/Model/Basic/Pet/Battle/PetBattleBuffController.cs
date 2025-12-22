@@ -3,6 +3,7 @@ using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class PetBattleBuffController
 {
@@ -99,7 +100,7 @@ public class PetBattleBuffController
         return buffs.FindAll(predicate);
     }
 
-    private void OnAddBuff(Buff newBuff, Unit buffUnit, BattleState state) {
+    public void OnAddBuff(Buff newBuff, Unit buffUnit, BattleState state) {
         if (newBuff == null)
             return;
 
@@ -123,34 +124,64 @@ public class PetBattleBuffController
         if (newBuff == null)
             return false;
 
-        if (triggerCopy && IsBuffCopied(newBuff) && !newBuff.IsPower()) {
+        // 判斷反饋
+        if (triggerCopy && IsBuffCopied(newBuff) && newBuff.IsCopyable()) {
             var rhsUnit = state?.GetRhsUnitById(buffUnit.id);
             rhsUnit?.pet.buffController.AddBuff(newBuff, rhsUnit, buffUnit, state, false);
         }
 
+        // 判斷特殊免疫
         if ((invokeUnit != null) && (invokeUnit.id != buffUnit.id) && (blockBuffSps.Get("op", 0) > 0))
             return false;
 
+        // 判斷正常免疫
         if (IsBuffBlocked(newBuff) && !newBuff.IsPower())
             return false;
 
-        if (state == null) {
-            buffs.Add(newBuff);
-            return true;
+        bool isResisted = false;
+
+        // 判斷抗性
+        var resistBuff = GetBuff(Buff.BUFFID_RESIST_BUFF);
+        if (resistBuff != null)
+        {
+            var buffType = newBuff.info.type.ToRawString();
+            if (resistBuff.TryGetBuffIdentifier($"option[{buffType}Id]", out var resistId) && 
+                (resistId == newBuff.id) && (Random.Range(0, 100) < resistBuff.GetBuffIdentifier($"option[{buffType}Value]")))
+            {
+                var newId = newBuff.info.type switch
+                {
+                    BuffType.Unhealthy => 1999, 
+                    BuffType.Abnormal => 199,
+                    _ => newBuff.id,  
+                };
+
+                newBuff.SetBuffIdentifier("id", newId);  
+                newBuff.SetBuffIdentifier("turn", 1); 
+                newBuff.SetBuffIdentifier("value", resistId); 
+                isResisted = true;
+            }
         }
 
+        // 判斷是否處於戰鬥時
+        if (state == null) {
+            buffs.Add(newBuff);
+            return !isResisted;
+        }
+
+        // 判斷是否重複
         Buff oldBuff = GetBuff(newBuff.id);
 
+        // 添加印記
         if (oldBuff == null) {
             NewBuff(newBuff, buffUnit, state);
-            return true;
+            return !isResisted;
         }
 
         switch (newBuff.info.copyHandleType) {
             default:
             case CopyHandleType.New:
                 NewBuff(newBuff, buffUnit, state);
-                return true;
+                return !isResisted;
             case CopyHandleType.Block:
                 return false;
             case CopyHandleType.Replace:
@@ -159,28 +190,28 @@ public class PetBattleBuffController
                 if (oldBuffTurn <= newBuffTurn) {
                     RemoveBuff(oldBuff, buffUnit, state);
                     NewBuff(newBuff, buffUnit, state);
-                    return true;
+                    return !isResisted;
                 }
                 return false;
             case CopyHandleType.Stack:
                 if (oldBuff.value < oldBuff.info.maxValue) {
                     oldBuff.value += newBuff.value;
                     OnAddBuff(newBuff, buffUnit, state);
-                    return true;
+                    return !isResisted;
                 }
                 return false;
             case CopyHandleType.Max:
                 if (newBuff.value > oldBuff.value) {
                     RemoveBuff(oldBuff, buffUnit, state);
                     NewBuff(newBuff, buffUnit, state);
-                    return true;
+                    return !isResisted;
                 }
                 return false;
             case CopyHandleType.Min:
                 if (newBuff.value < oldBuff.value) {
                     RemoveBuff(oldBuff, buffUnit, state);
                     NewBuff(newBuff, buffUnit, state);
-                    return true;
+                    return !isResisted;
                 }
                 return false;
         }
@@ -246,8 +277,9 @@ public class PetBattleBuffController
         return isSuccess;
     }
 
-    public bool RemoveRangeBuff(Predicate<Buff> pred, Unit buffUnit, BattleState state) {
-        return RemoveRangeBuff(buffs.FindAll(pred), buffUnit, state);
+    public bool RemoveRangeBuff(Predicate<Buff> pred, Unit buffUnit, BattleState state, int randomCount = -1) {
+        var count = randomCount < 0 ? int.MaxValue : randomCount;
+        return RemoveRangeBuff(buffs.FindAll(pred)?.Random(count, false), buffUnit, state);
     }
 
     public void BlockBuff(List<int> idList) {

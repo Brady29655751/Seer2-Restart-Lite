@@ -157,6 +157,10 @@ public class BattlePetSkillView : BattleBaseView
 
         var normalSkill = pet?.skillController?.normalSkills[index];
 
+        infoPrompt.SetSkill(normalSkill);
+        infoPrompt.SetPosition(new Vector2(80 + 175 * index, 109));
+
+        /*
         float boxSizeY = Mathf.Max(150, normalSkill?.description.GetPreferredSize(12, 12, 21, 35).y ?? 0);
         float boxSizeYMedium = Mathf.Max(150, normalSkill?.description.GetPreferredSize(15, 12, 21, 35).y ?? 0);
         float boxSizeYLarge = Mathf.Max(150, normalSkill?.description.GetPreferredSize(24, 12, 21, 35).y ?? 0);
@@ -164,6 +168,7 @@ public class BattlePetSkillView : BattleBaseView
         descriptionBox.SetBoxSize(boxSize);
         descriptionBox.SetText(normalSkill?.description);
         descriptionBox.SetBoxPosition(new Vector2(80 + 175 * index, 109));
+        */
     }
 
     public void SelectSuperSkill()
@@ -207,8 +212,23 @@ public class BattlePetSkillView : BattleBaseView
                 };
                 
             description = addDescription + description;
+
+            var showSkill = new Skill(superSkill)
+            {
+                rawDescription = addDescription + superSkill.rawDescription,
+            };
+            infoPrompt.SetSkill(showSkill);
+            infoPrompt.SetPosition(new Vector2(5, 120));
+        } 
+        else
+        {
+            SetInfoPromptContent("尚未习得必杀技");
+            infoPrompt.SetPosition(new Vector2(5, 120));    
         }
-            
+
+
+
+        /*
         float boxSizeY = Mathf.Max(150, description?.GetPreferredSize(12, 14).y ?? 0);
         float boxSizeYMedium = Mathf.Max(150, description?.GetPreferredSize(15, 14).y ?? 0);
         float boxSizeYLarge = Mathf.Max(150, description?.GetPreferredSize(24, 14).y ?? 0);
@@ -216,6 +236,7 @@ public class BattlePetSkillView : BattleBaseView
         descriptionBox.SetBoxSize(boxSize);
         descriptionBox.SetText(description ?? "尚未习得必杀技");
         descriptionBox.SetBoxPosition(new Vector2(5, 115));
+        */
     }
 
     public void SetNoOpSkillInteractable(bool interactable, int petAnger)

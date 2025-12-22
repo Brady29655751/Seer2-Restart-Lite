@@ -1,0 +1,77 @@
+<map name="神域天尊殿" category="8" id="580" weather="0">
+	<fightMapColor>64,64,64,255</fightMapColor>
+	<initialPoint>485,100</initialPoint>
+	<music category="8">
+		<bgm>BGM_560</bgm>
+	</music>
+	<entities>
+		<npc id="58001" resId="Pets/pet/623.png" name="Lv105 圣兽天尊" size="191,160" pos="380,240" namePos="10,-15">
+			<description>2026马年纪念挑战</description>
+			<dialog>
+				<branch id="default" name="圣兽天尊" icon="Pets/pet/623" size="172,144" pos="10,45">
+					<content><![CDATA[这里是神域天尊殿，在精灵王大战以前就存在的地方。当时阿卡迪亚还是一片荒芜，而这里却已经有智慧生灵居住]]></content>
+					<functionHandler>
+						<func type="click">
+							<description><![CDATA[挑战圣兽天尊]]></description>
+							<action>battle</action>
+							<param>default</param>
+						</func>
+					</functionHandler>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[感觉你很像特质系]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+					</replyHandler>
+				</branch>
+			</dialog>
+			<battle>
+				<branch id="default">
+					<settings count="6"/>
+					<enemy>
+						<pet id="623" level="105">
+							<status>
+								<def>6</def>
+								<mdf>6</mdf>
+								<spd>400</spd>
+								<hp>20260000</hp>
+							</status>
+							<initBuff>-8,61,-3059</initBuff>
+							<loopSkill>13222,13226,13229,13222,13231,13228</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>getPet</action>
+							<param>621</param>
+							<condition>activity[2026].done=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=【天马】已经放入精灵仓库</param>
+							<param>item_icon=pet[621]</param>
+							<param>option_num=1</param>
+							<condition>activity[2026].done=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>2026</param>
+							<param>done=true</param>
+							<condition>activity[2026].done=[bool]false[default]false</condition>
+						</button>
+					</winHandler>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>openDialog</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<teleport id="1" name="神域回廊" pos="75,190" targetMapId="570"/>
+	</entities>		
+</map>

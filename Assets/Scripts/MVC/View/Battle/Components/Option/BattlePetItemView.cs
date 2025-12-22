@@ -21,5 +21,6 @@ public class BattlePetItemView : BattleBaseView
         string content = item.info.effectDescription;
         descriptionBox.SetBoxPosition(new Vector2(100 + index * 80, 109));
         descriptionBox.SetText(header + content);
+        descriptionBox.SetBoxSize(Vector2.one * 150, true, true);
     }
 }

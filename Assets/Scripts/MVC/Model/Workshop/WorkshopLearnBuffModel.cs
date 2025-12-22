@@ -4,15 +4,21 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WorkshopLearnBuffModel : Module
+public class WorkshopLearnBuffModel : SelectModel<BuffInfo>
 {
-    public const int MAX_SEARCH_COUNT = 50;
     [SerializeField] private IInputField searchInputField, idInputField;
 
     public int id => (int.TryParse(idInputField.inputString, out var buffId)) ? buffId : 0;
-
-    public List<BuffInfo> buffInfoList = new List<BuffInfo>();
     public BuffInfo currentBuffInfo => Buff.GetBuffInfo(id);
+
+
+    protected override void Awake()
+    {
+        base.Awake();
+        SetStorage(BuffInfo.database);
+        Sort(x => x.id);
+    }
+
 
     public void Search() {
         if (string.IsNullOrEmpty(searchInputField.inputString)) {
@@ -23,29 +29,25 @@ public class WorkshopLearnBuffModel : Module
         idInputField.SetInputString(string.Empty);
 
         // Try search buffs with same name.
-        var buffInfoDict = Database.instance.buffInfoDict;
-        Func<KeyValuePair<int, BuffInfo>, bool> predicate = int.TryParse(searchInputField.inputString, out var buffId) ?
-            new Func<KeyValuePair<int, BuffInfo>, bool>(x => x.Key == buffId) : 
-            new Func<KeyValuePair<int, BuffInfo>, bool>(x => x.Value.name == searchInputField.inputString);
+        if (int.TryParse(searchInputField.inputString, out var buffId))
+            Filter(x => x.id == buffId);
+        else
+            Filter(x => x.name == searchInputField.inputString);
 
-        buffInfoList = buffInfoDict.Where(predicate)
-            .OrderBy(x => x.Key).Select(x => x.Value).Take(MAX_SEARCH_COUNT).ToList();
-
-        if (buffInfoList.Count > 0)
+        if (count > 0)
             return;
 
         // No buffs with same name. Search similar result.
-        buffInfoList = buffInfoDict.Where(x => x.Value.name.Contains(searchInputField.inputString))
-            .OrderBy(x => x.Key).Select(x => x.Value).Take(MAX_SEARCH_COUNT).ToList();
+        Filter(x => x.name.Contains(searchInputField.inputString));
     }
 
-    public void Select(int index) {
-        if (!index.IsInRange(0, buffInfoList.Count)) {
+    public override void Select(int index) {
+        if (!index.IsInRange(0, selectionSize)) {
             idInputField.SetInputString(string.Empty);
             return;
         }
 
-        idInputField.SetInputString(buffInfoList[index]?.id.ToString() ?? string.Empty);
+        idInputField.SetInputString(selections[index]?.id.ToString() ?? string.Empty);
     }
 
     public bool VerifyDIYLearnBuff(out string error) {

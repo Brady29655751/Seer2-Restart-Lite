@@ -30,10 +30,14 @@ public class InfoPrompt : IMonoBehaviour
         rect.SetAsLastSibling();
     }
 
-    public void SetPosition(Vector2 fixPos) {
+    public void SetPosition(Vector2 pos) {
+        rect.anchoredPosition = pos;
+    }
+
+    public void SetPositionOffset(Vector2 offset) {
         Vector2 mousePos = Input.mousePosition;
         Vector2 canvasPos = mousePos.GetCorrespondingPixel(Utility.GetScreenSize(), canvasRect.rect.size);
-        rect.anchoredPosition = canvasPos + fixPos;
+        rect.anchoredPosition = canvasPos + offset;
     }
 
     public void SetSize(Vector2 size) {
@@ -61,7 +65,7 @@ public class InfoPrompt : IMonoBehaviour
     }
 
     public void SetInfoPrompt(Vector2 size, string content, Vector2 fixPos, TextAnchor align = TextAnchor.MiddleCenter, float lineSpacing = 1.2f) {
-        SetPosition(fixPos);
+        SetPositionOffset(fixPos);
         SetSize(size);
         SetText(content, align, lineSpacing);
     }

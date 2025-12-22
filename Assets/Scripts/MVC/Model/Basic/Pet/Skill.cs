@@ -456,6 +456,22 @@ public class Skill
             (x.abilityOptionDict.Get("target_index", "-1") != "-1"));
     }
 
+    public List<bool> GetSelectableTarget(BattlePet[] petBag, int cursor, int parallelCount)
+    {
+        var result = new List<bool>();
+        var isSelectDead = effects.Exists(x => x.targetType.Contains("dead"));
+        var isSelectOther = effects.Exists(x => x.targetType.Contains("other"));
+        for (int i = 0; i < petBag.Length; i++) {  
+            var index = i; 
+            var isTarget = (petBag[index] != null) && (isSelectDead ^ (!petBag[index].isDead));
+            var isCursor = isSelectOther && (cursor == index);
+            var isParallel = (parallelCount <= 1) || (i < parallelCount);
+            var interactable = isTarget && (!isCursor) && isParallel;
+            result.Add(interactable);
+        }
+        return result;
+    }
+
     public bool IsCapture()
     {
         return effects.Any(x => x.ability == EffectAbility.Capture);

@@ -22,6 +22,7 @@ public class PetBagPanel : Panel
     [SerializeField] private PetStatusController statusController;
     [SerializeField] private PetCurrentSkillController skillController;
     [SerializeField] private PetSwapSkillController swapSkillController;
+    [SerializeField] private PetResistController resistController;
     [SerializeField] private PetItemController itemController;
     [SerializeField] private PetInfoController infoController;
     [SerializeField] private PetSkinController skinController;
@@ -110,6 +111,7 @@ public class PetBagPanel : Panel
         selectController.onSelectPetEvent += statusController.SetPet;
         selectController.onSelectPetEvent += skillController.SetPet;
         selectController.onSelectPetEvent += swapSkillController.SetPet;
+        selectController.onSelectPetEvent += resistController.SetPet;
         selectController.onSelectPetEvent += itemController.SetPet;
         selectController.onSelectPetEvent += infoController.SetPet;
         selectController.onSelectPetEvent += skinController.SetPet;
@@ -122,6 +124,7 @@ public class PetBagPanel : Panel
     {
         demoController.onChangeNameSuccessEvent += OnChangeNameSuccess;
         statusController.onSetEVSuccessEvent += OnSetEVSuccess;
+        resistController.onSetEVSuccessEvent += OnSetEVSuccess;
         itemController.onItemUsedEvent += OnItemUsed;
         skinController.onSetSkinSuccessEvent += OnSetSkinSuccess;
 

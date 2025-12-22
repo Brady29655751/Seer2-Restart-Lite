@@ -1,0 +1,69 @@
+<panel name="MainPetWakeup" size="860,485">
+    <npc id="0" resId="Panel/MainPetWakeup/Main/background" size="860,485" pos="0,0" color="255,255,255,255"/>
+	<npc id="-1" resId="Panel/finish" size="80,52" pos="143,140">
+        <eventHandler>
+			<button type="auto">
+				<action>setNpcParam</action>
+				<param>-1</param>
+				<param>active=false</param>
+				<condition>activity[main_pet_wakeup].done[DiLanTe]=[bool]false[default]false</condition>
+			</button>
+		</eventHandler>
+    </npc>
+	<npc id="-2" resId="Panel/finish" size="80,52" pos="384,243">
+        <eventHandler>
+			<button type="auto">
+				<action>setNpcParam</action>
+				<param>-2</param>
+				<param>active=false</param>
+				<condition>activity[main_pet_wakeup].done[XiuLuoSi]=[bool]false[default]false</condition>
+			</button>
+		</eventHandler>
+    </npc>
+	<npc id="-3" resId="Panel/finish" size="80,52" pos="624,140">
+        <eventHandler>
+			<button type="auto">
+				<action>setNpcParam</action>
+				<param>-3</param>
+				<param>active=false</param>
+				<condition>activity[main_pet_wakeup].done[LaAoHua]=[bool]false[default]false</condition>
+			</button>
+		</eventHandler>
+    </npc>
+    <npc id="1" resId="Panel/MainPetWakeup/Main/Btn_0" size="126,45.5" pos="117,76">
+		<description>前往挑战【神迹迪兰特】</description>
+		<eventHandler>
+			<button type="click">
+				<action>openPanel</action>
+				<param>Mod[data=MainPetWakeup/water]</param>
+			</button>
+		</eventHandler>
+	</npc>
+	<npc id="2" resId="Panel/MainPetWakeup/Main/Btn_1" size="126,45.5" pos="358,179">
+		<description>前往挑战【神迹休罗斯】</description>
+		<eventHandler>
+			<button type="click">
+				<action>openPanel</action>
+				<param>[Mod]XiuLuoSiWakeup</param>
+			</button>
+		</eventHandler>
+	</npc>
+	<npc id="3" resId="Panel/MainPetWakeup/Main/Btn_2" size="126,45.5" pos="598,76">
+		<description>前往挑战【神迹拉奥花】</description>
+		<eventHandler>
+			<button type="click">
+				<action>openPanel</action>
+				<param>[Mod]LaAoHuaWakeup</param>
+			</button>
+		</eventHandler>
+	</npc>
+	<npc id="10" resId="Panel/petBag" size="35,35" pos="815,395">
+	<description>精灵背包</description>
+        <eventHandler>
+			<button type="click">
+				<action>openPanel</action>
+				<param>PetBag</param>
+			</button>
+		</eventHandler>
+    </npc>
+</panel>

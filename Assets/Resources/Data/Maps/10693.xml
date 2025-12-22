@@ -1,0 +1,130 @@
+<map name="拉铂尔星仙境" category="104" id="10693" weather="0">
+	<fightMapColor>64,64,64,255</fightMapColor>
+	<initialPoint>485,100</initialPoint>
+	<music category="104">
+		<bgm>BGM_10060</bgm>
+	</music>
+	<entities>
+		<npc id="1069301" resId="Pets/pet/10999.png" name="珀伽索斯" size="100,96" pos="630,330" namePos="-10,-5">
+			<description>四色羽毛和天马</description>
+			<dialog>
+				<branch id="default" name="珀伽索斯" icon="Pets/pet/10999" size="112,107" pos="10,45">
+					<content><![CDATA[集齐四色羽毛才能获得我！每次挑战随机掉落一种羽毛！]]></content>
+					<functionHandler>
+						<func type="click">
+							<description><![CDATA[挑战天马]]></description>
+							<action>battle</action>
+							<param>default</param>
+						</func>
+						<func type="click">
+							<description><![CDATA[获得天马]]></description>
+							<action>openDialog</action>
+							<param>feather</param>
+							<condition>item[400017].num=0|item[400018].num=0|item[400019].num=0|item[400020].num=0</condition>
+						</func>
+						<func type="branch">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=你已经获取过天马了哦</param>
+							<param>item_icon=pet[10999]</param>
+							<param>option_num=1</param>
+							<condition>item[400017].num&gt;0</condition>
+							<condition>item[400018].num&gt;0</condition>
+							<condition>item[400019].num&gt;0</condition>
+							<condition>item[400020].num&gt;0</condition>
+							<condition>activity[11017].done=[bool]true[default]false</condition>
+						</func>
+						<func type="branch">
+							<action>callback</action>
+							<param>get_pet</param>
+							<condition>item[400017].num&gt;0</condition>
+							<condition>item[400018].num&gt;0</condition>
+							<condition>item[400019].num&gt;0</condition>
+							<condition>item[400020].num&gt;0</condition>
+							<condition>activity[11017].done=[bool]false[default]false</condition>
+						</func>
+						<func type="click">
+							<description><![CDATA[珀伽索斯超进化]]></description>
+							<action>openPanel</action>
+							<param>TwelveRound</param>
+							<param>pet=11122</param>
+							<param>pos=-10,60</param>
+							<param>size=188,256</param>
+							<param>item[2]=10239[1]</param>
+							<param>item[5]=9008[3]</param>
+							<param>item[8]=2[50]</param>
+							<param>item[10]=10242[1]</param>
+							<param>item[12]=331122[1]</param>
+						</func>
+					</functionHandler>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[点灯完了换龙珠，我的老天]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+					</replyHandler>
+				</branch>
+				<branch id="feather" name="珀伽索斯" icon="Pets/pet/10999" size="172,144" pos="10,45">
+					<content><![CDATA[你还没集齐四色羽毛！现在你拥有<color=#ffbb33>【金色羽毛】{expr:item[400017].num}【白色羽毛】{expr:item[400018].num}【青色羽毛】{expr:item[400019].num}【紫色羽毛】{expr:item[400020].num}</color>]]></content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[能不能把羽毛染色啊？]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+					</replyHandler>
+				</branch>
+			</dialog>
+			<battle>
+				<branch id="default">
+					<settings count="6"/>
+					<enemy>
+						<pet id="10999" level="105">
+							<status>
+								<hp>3000</hp>
+							</status>
+							<initBuff>-3,17,61,13,14,99</initBuff>
+							<loopSkill>13243,13241,13245,13238</loopSkill>
+							<superSkill>13242</superSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setItem</action>
+							<param>add_with_hint</param>
+							<param>random[400017~400020],1</param>
+							<condition>activity[11017].done=[bool]false[default]false</condition>
+						</button>
+					</winHandler>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>openDialog</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+			<callbackHandler>
+				<button type="get_pet">
+					<action>getPet</action>
+					<param>10998</param>
+				</button>
+				<button type="get_pet">
+					<action>openHintbox</action>
+					<param>type=Item</param>
+					<param>title=提示</param>
+					<param>content=【乔伊】已经放入精灵仓库</param>
+					<param>item_icon=pet[10998]</param>
+					<param>option_num=1</param>
+				</button>
+				<button type="get_pet">
+					<action>setActivity</action>
+					<param>11017</param>
+					<param>done=true</param>
+				</button>
+			</callbackHandler>
+		</npc>
+	</entities>		
+</map>

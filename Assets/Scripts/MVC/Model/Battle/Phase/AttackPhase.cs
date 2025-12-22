@@ -8,7 +8,7 @@ public class AttackPhase : BattlePhase
 {
     public AttackPhase() {
         this.state = new BattleState(battle.currentState);
-        this.phase = EffectTiming.OnAttack;
+        this.phase = EffectTiming.OnAttackReady;
     }
 
     public override void DoWork()
@@ -18,8 +18,12 @@ public class AttackPhase : BattlePhase
 
         if (!IsAttackLegal())
             return;
-        
+
         ApplySkillsAndBuffs();
+
+        phase = EffectTiming.OnAttack;
+        ApplySkillsAndBuffs();
+
         ConsumeAnger();
         AddReport();
         OnHit();

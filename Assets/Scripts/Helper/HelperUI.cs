@@ -235,7 +235,7 @@ namespace UnityEngine.UI
         {
             int index = 0;
 
-            if (secretType != SecretType.Others)
+            if (secretType > SecretType.Others)
                 index = (isSuper ? (isChosen ? 3 : 2) : (isChosen ? 1 : 0));
             else
                 index = isChosen ? 3 : 8;
