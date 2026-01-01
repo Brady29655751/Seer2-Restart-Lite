@@ -291,8 +291,15 @@ public static class Identifier
             if (count <= 0)
                 return float.MinValue;
 
-            pet = petBag.First();
-            id = trimId;
+            var func = trimId.Split('.')[0];
+            var funcId = trimId.TrimStart(func + ".");
+            return func switch
+            {
+                "sum" => petBag.Sum(x => GetPetIdentifier(funcId, petSystem, x)),
+                "max" => petBag.Max(x => GetPetIdentifier(funcId, petSystem, x)),
+                "min" => petBag.Min(x => GetPetIdentifier(funcId, petSystem, x)),                
+                _ => GetPetIdentifier(trimId, petSystem, petBag.First()),
+            };
         }
 
         //TODO Extend this with variable, such as op.pet.element
@@ -317,6 +324,15 @@ public static class Identifier
 
         if (id.TryTrimStart("ev.", out trimId))
             return pet.talent.ev[trimId];
+
+        if (id.TryTrimStart("token.", out trimId))
+        {
+            var token = petSystem.tokenPetBag.Get(petSystem.petBag.IndexOf(pet));
+            if (token == null)
+                return 0;
+
+            return GetPetIdentifier(trimId, petSystem, token);
+        }
 
         return pet.TryGetPetIdentifier(id, out num) ? num : GetNumIdentifier(id);
     }

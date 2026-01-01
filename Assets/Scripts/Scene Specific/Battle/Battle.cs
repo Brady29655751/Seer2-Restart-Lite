@@ -101,6 +101,7 @@ public class Battle
         Player.instance.currentBattle = this;
         Random.InitState(settings.seed);
 
+        /*
         //TODO: Ver 3.5 测试版补丁
         if (settings.mode == BattleMode.Card)
         {
@@ -115,6 +116,7 @@ public class Battle
                 pet.skillController.superSkill = pet.ownSkill.FirstOrDefault(x => x.positionType == SkillType.必杀);
             }
         }
+        */
 
         // 精靈大亂鬥模式
         if (settings.initBuffs.Exists(x => (x.Value != null) && (x.Value.id == Buff.BUFFID_PET_EXCHANGE)))
@@ -261,7 +263,7 @@ public class Battle
             if (!skill.IsSelectReady())
             {
                 var targets = skill.GetSelectableTarget(myUnit.petSystem.petBag, myUnit.petSystem.cursor, settings.parallelCount);
-                if (targets.Exists(x => x))
+                if (skill.isAction || targets.Exists(x => x))
                 {
                     UI.SetSkillSelectMode(true);
                     UI.SelectOption(1);

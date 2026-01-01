@@ -1,0 +1,134 @@
+<map name="神龙火圈" category="9" id="-1160" resId="1160" switch="-1">
+	<fightMap>100008</fightMap>
+	<music category="9">
+		<bgm>BGM_1160</bgm>
+	</music>
+	<initialPoint>375,180</initialPoint>
+	<entities>
+		<npc id="-116001" resId="Pets/pet/163" name="雷克萨斯" size="170,224" pos="510,275" namePos="20,0">
+			<description>雷克萨斯</description>
+			<dialog>
+				<branch id="default" name="雷克萨斯" icon="Pets/pet/163" size="129,168" pos="0,35">
+					<content><![CDATA[嘎呜！别过来，吃你哦！]]></content>
+					<functionHandler>
+						<func type="click">
+							<description><![CDATA[挑战雷克萨斯]]></description>
+							<action>battle</action>
+							<param>default</param>
+						</func>
+						<func type="click">
+							<description><![CDATA[神龙火圈单抽]]></description>
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=<![CDATA[确定要掷 1 枚龙鳞抽奖吗？(阿财无效)]]></param>
+							<param>item_icon=item[400021]</param>
+							<param>option_num=2</param>
+							<param>callback=gacha</param>
+							<condition>item[400021].num&gt;0</condition>
+						</func>
+						<func type="branch">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=<![CDATA[你没有龙鳞可以抽奖哦]]></param>
+							<param>item_icon=item[400021]</param>
+							<param>option_num=1</param>
+							<condition>item[400021].num=0</condition>
+						</func>
+						<func type="click">
+							<description><![CDATA[神龙火圈十连抽]]></description>
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=<![CDATA[确定要掷 10 枚龙鳞抽奖吗？(阿财无效)]]></param>
+							<param>item_icon=item[400021]</param>
+							<param>option_num=2</param>
+							<param>callback=gacha_10</param>
+							<condition>item[400021].numGTE10</condition>
+						</func>
+						<func type="branch">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=<![CDATA[你的龙鳞不足10个哦]]></param>
+							<param>item_icon=item[400021]</param>
+							<param>option_num=1</param>
+							<condition>item[400021].num&lt;10</condition>
+						</func>
+					</functionHandler>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[神龙火圈是看龙族跳火圈表演吗]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+					</replyHandler>
+				</branch>
+			</dialog>
+			<battle>
+				<branch id="default">
+					<settings count="3" star="4">
+						<mode>3</mode>
+					</settings>
+					<enemy>
+						<pet id="163" level="100">
+							<status>
+								<atk>600</atk>
+								<mat>600</mat>
+								<hp>3000</hp>
+							</status>
+							<initBuff>-8,20,-3028,-3029,-3094</initBuff>
+							<loopSkill>13360,13362,13368,12424</loopSkill>
+							<superSkill>13365</superSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setItem</action>
+							<param>add_with_hint</param>
+							<param>400021,1</param>
+						</button>
+					</winHandler>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>openDialog</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+			<callbackHandler>
+				<button type="gacha">
+					<action>setItem</action>
+					<param>add_with_hint</param>
+					<param>random[500161|8001~8008|9006|9015~9018|10001~10004|9010|9011],1</param>
+				</button>
+				<button type="gacha">
+					<action>setItem</action>
+					<param>remove</param>
+					<param>400021,1</param>
+				</button>
+				<button type="gacha_10">
+					<action>setItem</action>
+					<param>add_with_hint</param>
+					<param>random[500161|8001~8008|9006|9015~9018|10001~10004|9010|9011],1</param>
+					<param>random[500161|8001~8008|9006|9015~9018|10001~10004|9010|9011],1</param>
+					<param>random[500161|8001~8008|9006|9015~9018|10001~10004|9010|9011],1</param>
+					<param>random[500161|8001~8008|9006|9015~9018|10001~10004|9010|9011],1</param>
+					<param>random[500161|8001~8008|9006|9015~9018|10001~10004|9010|9011],1</param>
+					<param>random[500161|8001~8008|9006|9015~9018|10001~10004|9010|9011],1</param>
+					<param>random[500161|8001~8008|9006|9015~9018|10001~10004|9010|9011],1</param>
+					<param>random[500161|8001~8008|9006|9015~9018|10001~10004|9010|9011],1</param>
+					<param>random[500161|8001~8008|9006|9015~9018|10001~10004|9010|9011],1</param>
+					<param>random[500161|8001~8008|9006|9015~9018|10001~10004|9010|9011],1</param>
+				</button>
+				<button type="gacha_10">
+					<action>setItem</action>
+					<param>remove</param>
+					<param>400021,10</param>
+				</button>			
+			</callbackHandler>
+		</npc>
+	</entities>
+</map>

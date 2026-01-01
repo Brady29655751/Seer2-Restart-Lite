@@ -12,9 +12,22 @@
 					<content><![CDATA[这里是神域天尊殿，在精灵王大战以前就存在的地方。当时阿卡迪亚还是一片荒芜，而这里却已经有智慧生灵居住]]></content>
 					<functionHandler>
 						<func type="click">
-							<description><![CDATA[挑战圣兽天尊]]></description>
+							<description><![CDATA[新春挑战（2v2）]]></description>
 							<action>battle</action>
-							<param>default</param>
+							<param>2v2</param>
+						</func>
+						<func type="click">
+							<description><![CDATA[新春挑战（6v6）]]></description>
+							<action>battle</action>
+							<param>6v6</param>
+						</func>
+						<func type="click">
+							<description><![CDATA[纪念商店]]></description>
+							<action>openPanel</action>
+							<param>Cook</param>
+							<param>recipe=210101/210102/210104/210105/210106/210107</param>
+							<param>title=纪念商店</param>
+							<param>cookText=兑 换</param>
 						</func>
 					</functionHandler>
 					<replyHandler>
@@ -23,11 +36,16 @@
 							<action>openDialog</action>
 							<param>null</param>
 						</reply>
+						<reply type="click">
+							<description><![CDATA[获取羽毛]]></description>
+							<action>teleport</action>
+							<param>10693</param>
+						</reply>
 					</replyHandler>
 				</branch>
 			</dialog>
 			<battle>
-				<branch id="default">
+				<branch id="6v6">
 					<settings count="6"/>
 					<enemy>
 						<pet id="623" level="105">
@@ -61,6 +79,39 @@
 							<param>2026</param>
 							<param>done=true</param>
 							<condition>activity[2026].done=[bool]false[default]false</condition>
+						</button>
+					</winHandler>
+				</branch>
+				<branch id="2v2">
+					<settings count="2" parallel="2"/>
+					<enemy>
+						<pet id="623" level="100">
+							<status>
+								<hp>2026</hp>
+							</status>
+							<initBuff>-8,61</initBuff>
+							<loopSkill>13222,13226,13229,13222,13231,13228</loopSkill>
+						</pet>
+						<pet id="10999" level="100">
+							<status>
+								<hp>2026</hp>
+							</status>
+							<initBuff>-8,61</initBuff>
+							<loopSkill>13243,13241,13245,13238,13242</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setItem</action>
+							<param>add_with_hint</param>
+							<param>4,3</param>
+							<condition>activity[2026].done[2v2]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>2026</param>
+							<param>done[2v2]=true</param>
+							<condition>activity[2026].done[2v2]=[bool]false[default]false</condition>
 						</button>
 					</winHandler>
 				</branch>

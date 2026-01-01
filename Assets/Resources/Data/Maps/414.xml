@@ -10,6 +10,13 @@
 		    <dialog>
 		        <branch id="default" name="库贝萨" icon="Pets/pet/595.png" size="120,150" pos="5,35">
 					<content>吾乃上古魔王库贝萨！</content>
+					<functionHandler>
+						<func type="click">
+							<description><![CDATA[库贝萨超进化]]></description>
+							<action>battle</action>
+							<param>evolve</param>
+						</func>
+					</functionHandler>
 					<replyHandler>
 						<reply type="click">
 							<description><![CDATA[那么上古勇者在哪里？]]></description>
@@ -63,6 +70,31 @@
 						</button>
 					</winHandler>
 				</branch>
+				<branch id="evolve">
+					<settings count="3" star="6">
+						<mode>3</mode>
+						<weather>11</weather>
+						<initBuff>(field:600020)</initBuff>
+					</settings>
+					<enemy>
+						<pet id="913" level="105">
+							<status>
+								<hp>30000</hp>
+							</status>
+							<initBuff>-8,100,61,-3094</initBuff>
+							<loopSkill>13391,13385,13392</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=PetSelect</param>
+						    <param>title=选择要进化的库贝萨</param>
+						    <param>option_num=2</param>
+						    <param>callback=evolve</param>
+						</button>
+					</winHandler>
+				</branch>
 			</battle>
 			<eventHandler>
 				<button type="click">
@@ -70,6 +102,43 @@
 					<param>default</param>
 				</button>
 			</eventHandler>
+			<callbackHandler>
+				<button type="choose">
+					<action>openHintbox</action>
+					<param>type=PetSelect</param>
+				    <param>title=选择要进化的库贝萨</param>
+				    <param>option_num=2</param>
+					<param>callback=evolve</param>
+				    <condition>data.PetSelect.uidNOT595|data.PetSelect.level&lt;100</condition>
+				</button>
+				<button type="evolve">
+				    <action>openHintbox</action>
+				    <param>type=Item</param>
+				    <param>title=提示</param>
+				    <param>content=必须选择等级100的库贝萨！</param>
+				    <param>item_icon=pet[595]</param>
+				    <param>option_num=1</param>
+					<param>callback=choose</param>
+				    <condition>data.PetSelect.uidNOT595|data.PetSelect.level&lt;100</condition>
+				</button>
+				<button type="evolve">
+				    <action>openHintbox</action>
+				    <param>type=Item</param>
+				    <param>title=提示</param>
+				    <param>content=库贝萨已成功超进化</param>
+				    <param>item_icon=pet[913]</param>
+				    <param>option_num=1</param>
+				    <condition>data.PetSelect.uid=595</condition>
+				    <condition>data.PetSelect.levelGTE100</condition>
+				</button>
+				<button type="evolve">
+				    <action>evolvePet</action>
+				    <param>index=data.PetSelectIndex</param>
+				    <param>913</param>
+				    <condition>data.PetSelect.uid=595</condition>
+				    <condition>data.PetSelect.levelGTE100</condition>
+				</button>
+			</callbackHandler>
 		</npc>
 			<teleport id="1" name="雪之溶洞" pos="535,95" targetMapId="410"/>
 

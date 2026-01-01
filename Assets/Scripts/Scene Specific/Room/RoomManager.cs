@@ -142,6 +142,7 @@ public class RoomManager : Manager<RoomManager>
         hash["ev"] = petBagPanel.petBag.Where(x => x != null).Select(x => x.talent.ev.ToArray()).ToArray();
         hash["skill"] = petBagPanel.petBag.Where(x => x != null).Select(x => x.normalSkill.Select(x => x?.id ?? 0).ToArray()).ToArray();
         hash["super"] = petBagPanel.petBag.Where(x => x != null).Select(x => x.superSkill?.id ?? 0).ToArray();
+        hash["resist"] = petBagPanel.petBag.Where(x => x != null).Select(x => x.resist.ToArray()).ToArray();
         
         PhotonNetwork.LocalPlayer.SetCustomProperties(hash);
 

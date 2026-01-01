@@ -26,6 +26,11 @@ public class BattleStartPhase : BattlePhase
         SetInitBuffs(state.masterUnit);
         SetInitBuffs(state.clientUnit);
         SetAchievement();
+
+        if (state.settings.mode == BattleMode.Card)
+        {
+            state.masterUnit.pet.anger += 15;
+        }
     }
 
     private void SetAchievement() {

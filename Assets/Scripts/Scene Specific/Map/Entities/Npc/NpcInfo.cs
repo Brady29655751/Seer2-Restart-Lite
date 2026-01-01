@@ -29,6 +29,7 @@ public class NpcInfo
     public Quaternion rotation => npcRotation.ToQuaternion();
     [XmlAttribute("namePos")] public string npcNamePos = "0,5";
     public Vector2 namePos => npcNamePos.ToVector2();
+    [XmlAttribute("nameSize")] public int nameSize = 0;
 
     [XmlElement("transport")] public string transport;
     public Vector2 transportPos => transport.ToVector2(pos);

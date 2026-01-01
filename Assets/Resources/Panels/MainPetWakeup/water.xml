@@ -68,7 +68,7 @@
 					<mode>1</mode>
 				</settings>
 				<enemy>
-					<pet id="632" level="80">
+					<pet id="9" level="80">
 						<status>
 							<atk>500</atk>
 							<mat>500</mat>
@@ -205,7 +205,7 @@
 				<param>content=你的水脉进化石已经足够，要进行神迹觉醒吗？</param>
 				<param>option_num=2</param>
 				<param>callback=Wakeup</param>
-				<condition>firstPet.uid=632</condition>
+				<condition>firstPet.baseId=1</condition>
 				<condition>item[400008].numGTE60</condition>
 			</button>
 			<button type="click">

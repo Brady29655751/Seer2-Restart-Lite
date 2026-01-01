@@ -9,29 +9,27 @@
 			<description>雷峰塔会掉下来</description>
 			<dialog>
 				<branch id="default" name="法海" icon="54001" size="79,122" pos="0,45">
-					<content><![CDATA[进了禁食山就要遵守这里的战斗规则！]]></content>
+					<content><![CDATA[进了禁食山就要遵守这里的战斗规则！来一场禁食牌吧！]]></content>
 					<functionHandler>
 						<func type="click">
-							<description><![CDATA[测试卡牌战斗]]></description>
+							<description><![CDATA[挑战多摩桑]]></description>
 							<action>battle</action>
-							<param>test</param>
+							<param>default</param>
+						</func>
+						<func type="click">
+							<description><![CDATA[兑换精灵]]></description>
+							<action>openPanel</action>
+							<param>ItemShop</param>
+							<param>mode=buy</param>
+							<param>currency=400022/0</param>
+							<param>item=500049</param>
+							<param>title=兑换精灵</param>
 						</func>
 						<func type="click">
 							<description><![CDATA[了解规则]]></description>
 							<action>openDialog</action>
 							<param>tutor_1</param>
 						</func>
-						<!--
-						<func type="click">
-							<description><![CDATA[兑换道具]]></description>
-							<action>openPanel</action>
-							<param>ItemShop</param>
-							<param>mode=buy</param>
-							<param>currency=400014/2</param>
-							<param>item=300188/400014</param>
-							<param>title=兑换道具</param>
-						</func>
-						-->
 					</functionHandler>
 					<replyHandler>
 						<reply type="click">
@@ -103,6 +101,50 @@
 				</branch>
 			</dialog>
 			<battle>
+				<branch id="default">
+					<settings count="3" item="false" simulate="true">
+						<mode>6</mode>
+					</settings>
+					<player>
+						<pet id="3" level="100">
+							<normalSkill>100001,100002,100003,100004</normalSkill>
+							<superSkill>100009</superSkill>
+						</pet>
+						<pet id="6" level="100">
+							<normalSkill>100011,100012,100013,100014</normalSkill>
+							<superSkill>100019</superSkill>
+						</pet>
+						<pet id="9" level="100">
+							<normalSkill>100021,100022,100023,100024</normalSkill>
+							<superSkill>100029</superSkill>
+						</pet>
+					</player>
+					<enemy>
+						<pet id="50" level="60">
+							<superSkill>13380</superSkill>
+						</pet>
+						<pet id="50" level="80">
+							<status>
+								<hp>1000</hp>
+							</status>
+							<superSkill>13380</superSkill>
+						</pet>
+						<pet id="50" level="100">
+							<status>
+								<hp>2000</hp>
+							</status>
+							<initBuff>-3095</initBuff>
+							<superSkill>13380</superSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setItem</action>
+							<param>add_with_hint</param>
+							<param>400022,1</param>
+						</button>
+					</winHandler>
+				</branch>
 				<branch id="test">
 					<settings count="3" item="false" simulate="true">
 						<mode>6</mode>

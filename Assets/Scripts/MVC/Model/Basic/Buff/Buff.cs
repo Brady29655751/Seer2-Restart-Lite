@@ -68,7 +68,12 @@ public class Buff
     }
 
     public bool IsType(BuffType type) {
-        return type switch {
+        var overrideType = options.Get("type", info.overrideType);   
+        if (!string.IsNullOrEmpty(overrideType))
+            return overrideType.ToBuffType() == type;
+
+        return type switch 
+        {
             BuffType.All        => !IsPower(),
             BuffType.Power      => IsPower(),
             BuffType.Powerup    => IsPowerUp(),
@@ -162,9 +167,13 @@ public class Buff
     }
 
     public static Buff GetFeatureBuff(Pet pet) {
-        var featureId = pet.feature.feature.baseId;
-        Buff featureBuff = new Buff((featureId > 0 ? 10_0000 : 90_0000) + Mathf.Abs(featureId));
-        return featureBuff;
+        var featureId = pet.feature.feature?.baseId ?? 0;
+        int id = (featureId > 0 ? 10_0000 : 90_0000) + Mathf.Abs(featureId);
+        
+        if (GetBuffInfo(id) == null)
+            return null;
+
+        return new Buff(id);
     }
 
     public static Buff GetEmblemBuff(Pet pet) {
@@ -237,9 +246,9 @@ public class Buff
                 return str.Replace($"[{key}]", "空栏位");
             }
 
-            var buffValue = (int)referenceBuff.GetBuffIdentifier(optionKey);
-            var valueName = valueTypeFuncDict.Get(valueType, (v) => v.ToString()).Invoke(buffValue);
-            return str.Replace($"[{key}]", valueName.ToString());
+            var buffValue = referenceBuff.GetBuffIdentifier(optionKey);
+            var valueName = valueTypeFuncDict.Get(valueType, (v) => v.ToString()).Invoke((int)buffValue);
+            return str.Replace($"[{key}]", (valueType == "float") ? buffValue.ToString() : valueName);
         }
 
         // Match [xxx:yyy] or [option[xxx]:yyy] or [option[xxx]]

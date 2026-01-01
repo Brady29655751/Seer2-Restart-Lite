@@ -1,10 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Xml.Serialization;
 using UnityEngine;
 
 public class PetResist
 {
+    public static string[] resistKeyNames => new string[] { "critical", "fix", "per", "abnormal.key", "unhealthy.key", "abnormal.value", "unhealthy.value" };
+
     public int id;
     public int lockState = -1;
     public int criResist, fixResist, perResist; // 暴伤抗性，固伤抗性，百分比抗性
@@ -68,6 +71,20 @@ public class PetResist
         return new List<Buff>(){ resistBuff };
     }
 
+    public int[] ToArray()
+    {
+        return new int[]
+        {
+            criResist,
+            fixResist,
+            perResist,
+            abnormalResist.key,
+            unhealthyResist.key,
+            abnormalResist.value,
+            unhealthyResist.value,
+        };
+    }
+
     public Dictionary<string, int> ToDictionary()
     {
         return new Dictionary<string, int>()
@@ -80,6 +97,15 @@ public class PetResist
             {"abnormal.value", abnormalResist.value},
             {"unhealthy.value", unhealthyResist.value},
         };
+    }
+
+    public void SetResistArray(int[] array)
+    {
+        if (array == null || array.Length != resistKeyNames.Length)
+            return;
+        
+        for (int i = 0; i < resistKeyNames.Length; i++)
+            SetResistValue(resistKeyNames[i], array[i]);
     }
 
     public void SetResistDict(Dictionary<string, int> dict)
@@ -135,6 +161,15 @@ public class PetResist
         lockState = (star < 6) ? -1 : 1;
         criResist = fixResist = perResist = 35;
         abnormalResist.value = unhealthyResist.value = 55;
+    }
+
+    public void Reset()
+    {
+        criResist = 0;
+        fixResist = 0;
+        perResist = 0;
+        abnormalResist = new IKeyValuePair<int, int>(0, 0);
+        unhealthyResist = new IKeyValuePair<int, int>(0, 0);
     }
 
 }

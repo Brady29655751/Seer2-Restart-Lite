@@ -180,6 +180,11 @@ public static class Parser {
         if (targetType.Contains("other"))
             targetList.Remove(petUnit.pet);
 
+        if (targetType.Contains("dead"))
+            targetList.RemoveAll(x => !x.isDead);
+        else
+            targetList.RemoveAll(x => x.isDead);
+
         if (targetType.Contains("random"))
             targetList = targetList.Random(targetNum, false);
         else if (targetType.Contains("index") && targetIndex.IsInRange(0, petBag.Length))

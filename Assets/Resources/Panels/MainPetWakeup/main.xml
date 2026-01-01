@@ -6,7 +6,7 @@
 				<action>setNpcParam</action>
 				<param>-1</param>
 				<param>active=false</param>
-				<condition>activity[main_pet_wakeup].done[DiLanTe]=[bool]false[default]false</condition>
+				<condition>activity[main_pet_wakeup].done[DiLanTe_Miracle]=[bool]false[default]false</condition>
 			</button>
 		</eventHandler>
     </npc>
@@ -16,7 +16,7 @@
 				<action>setNpcParam</action>
 				<param>-2</param>
 				<param>active=false</param>
-				<condition>activity[main_pet_wakeup].done[XiuLuoSi]=[bool]false[default]false</condition>
+				<condition>activity[main_pet_wakeup].done[XiuLuoSi_Miracle]=[bool]false[default]false</condition>
 			</button>
 		</eventHandler>
     </npc>
@@ -26,34 +26,217 @@
 				<action>setNpcParam</action>
 				<param>-3</param>
 				<param>active=false</param>
-				<condition>activity[main_pet_wakeup].done[LaAoHua]=[bool]false[default]false</condition>
+				<condition>activity[main_pet_wakeup].done[LaAoHua_Miracle]=[bool]false[default]false</condition>
 			</button>
 		</eventHandler>
     </npc>
     <npc id="1" resId="Panel/MainPetWakeup/Main/Btn_0" size="126,45.5" pos="117,76">
-		<description>前往挑战【神迹迪兰特】</description>
+		<description>常态神迹挑战</description>
+		<battle>
+			<branch id="evolve">
+				<settings count="1">
+					<mode>4</mode>
+				</settings>
+				<enemy>
+					<pet id="990" level="105">
+						<status>
+							<hp>13500</hp>
+						</status>
+						<initBuff>72,17,20,-3092</initBuff>
+						<loopSkill>13134,13135,13136</loopSkill>
+						<superSkill>13137</superSkill>
+					</pet>
+				</enemy>
+				<winHandler>
+					<button type="auto">
+						<action>setPet</action>
+						<param>maxLevel=105</param>
+						<param>level=105</param>
+						<condition>activity[main_pet_wakeup].done[DiLanTe_Miracle]=[bool]false[default]false</condition>
+					</button>
+					<button type="auto">
+						<action>evolvePet</action>
+						<param>20003</param>
+						<condition>activity[main_pet_wakeup].done[DiLanTe_Miracle]=[bool]false[default]false</condition>
+					</button>
+					<button type="auto">
+						<action>setItem</action>
+						<param>add_with_hint</param>
+						<param>470003,1</param>
+						<condition>activity[main_pet_wakeup].done[DiLanTe_Miracle]=[bool]false[default]false</condition>
+					</button>
+					<button type="auto">
+						<action>openHintbox</action>
+						<param>type=Item</param>
+						<param>title=提示</param>
+						<param>content=神迹迪兰特已常驻神迹形态</param>
+						<param>item_icon=pet[649]</param>
+						<param>option_num=1</param>
+						<condition>activity[main_pet_wakeup].done[DiLanTe_Miracle]=[bool]false[default]false</condition>
+					</button>
+					<button type="auto">
+						<action>setActivity</action>
+						<param>main_pet_wakeup</param>
+						<param>done[DiLanTe_Miracle]=true</param>
+						<condition>activity[main_pet_wakeup].done[DiLanTe_Miracle]=[bool]false[default]false</condition>
+					</button>
+				</winHandler>
+			</branch>
+		</battle>
 		<eventHandler>
 			<button type="click">
-				<action>openPanel</action>
-				<param>Mod[data=MainPetWakeup/water]</param>
+				<action>battle</action>
+				<param>evolve</param>
+				<condition>firstPet.uid=649</condition>
+			</button>
+			<button type="click">
+				<action>openHintbox</action>
+				<param>type=Item</param>
+				<param>title=提示</param>
+				<param>content=请将神迹迪兰特进行首发再来挑战！</param>
+				<param>item_icon=pet[649]</param>
+				<param>option_num=1</param>
+				<condition>firstPet.uidNOT649</condition>
 			</button>
 		</eventHandler>
 	</npc>
 	<npc id="2" resId="Panel/MainPetWakeup/Main/Btn_1" size="126,45.5" pos="358,179">
-		<description>前往挑战【神迹休罗斯】</description>
+		<description>常态神迹挑战</description>
+		<battle>
+			<branch id="evolve">
+				<settings count="1">
+					<mode>4</mode>
+				</settings>
+				<enemy>
+					<pet id="990" level="105">
+						<status>
+							<hp>13500</hp>
+						</status>
+						<initBuff>72,17,20,-3092</initBuff>
+						<loopSkill>13134,13135,13136</loopSkill>
+						<superSkill>13137</superSkill>
+					</pet>
+				</enemy>
+				<winHandler>
+					<button type="auto">
+						<action>setPet</action>
+						<param>maxLevel=105</param>
+						<param>level=105</param>
+						<condition>activity[main_pet_wakeup].done[XiuLuoSi_Miracle]=[bool]false[default]false</condition>
+					</button>
+					<button type="auto">
+						<action>evolvePet</action>
+						<param>20004</param>
+						<condition>activity[main_pet_wakeup].done[XiuLuoSi_Miracle]=[bool]false[default]false</condition>
+					</button>
+					<button type="auto">
+						<action>setItem</action>
+						<param>add_with_hint</param>
+						<param>470004,1</param>
+						<condition>activity[main_pet_wakeup].done[XiuLuoSi_Miracle]=[bool]false[default]false</condition>
+					</button>
+					<button type="auto">
+						<action>openHintbox</action>
+						<param>type=Item</param>
+						<param>title=提示</param>
+						<param>content=神迹休罗斯已常驻神迹形态</param>
+						<param>item_icon=pet[681]</param>
+						<param>option_num=1</param>
+						<condition>activity[main_pet_wakeup].done[XiuLuoSi_Miracle]=[bool]false[default]false</condition>
+					</button>
+					<button type="auto">
+						<action>setActivity</action>
+						<param>main_pet_wakeup</param>
+						<param>done[XiuLuoSi_Miracle]=true</param>
+						<condition>activity[main_pet_wakeup].done[XiuLuoSi_Miracle]=[bool]false[default]false</condition>
+					</button>
+				</winHandler>
+			</branch>
+		</battle>
 		<eventHandler>
 			<button type="click">
-				<action>openPanel</action>
-				<param>[Mod]XiuLuoSiWakeup</param>
+				<action>battle</action>
+				<param>evolve</param>
+				<condition>firstPet.uid=681</condition>
+			</button>
+			<button type="click">
+				<action>openHintbox</action>
+				<param>type=Item</param>
+				<param>title=提示</param>
+				<param>content=请将神迹休罗斯进行首发再来挑战！</param>
+				<param>item_icon=pet[681]</param>
+				<param>option_num=1</param>
+				<condition>firstPet.uidNOT681</condition>
 			</button>
 		</eventHandler>
 	</npc>
 	<npc id="3" resId="Panel/MainPetWakeup/Main/Btn_2" size="126,45.5" pos="598,76">
-		<description>前往挑战【神迹拉奥花】</description>
+		<description>常态神迹挑战</description>
+		<battle>
+			<branch id="evolve">
+				<settings count="1">
+					<mode>4</mode>
+				</settings>
+				<enemy>
+					<pet id="990" level="105">
+						<status>
+							<hp>13500</hp>
+						</status>
+						<initBuff>-3092</initBuff>
+						<loopSkill>13134,13135,13136</loopSkill>
+						<superSkill>13137</superSkill>
+					</pet>
+				</enemy>
+				<winHandler>
+					<button type="auto">
+						<action>setPet</action>
+						<param>maxLevel=105</param>
+						<param>level=105</param>
+						<condition>activity[main_pet_wakeup].done[LaAoHua_Miracle]=[bool]false[default]false</condition>
+					</button>
+					<button type="auto">
+						<action>evolvePet</action>
+						<param>20005</param>
+						<condition>activity[main_pet_wakeup].done[LaAoHua_Miracle]=[bool]false[default]false</condition>
+					</button>
+					<button type="auto">
+						<action>setItem</action>
+						<param>add_with_hint</param>
+						<param>470005,1</param>
+						<condition>activity[main_pet_wakeup].done[LaAoHua_Miracle]=[bool]false[default]false</condition>
+					</button>
+					<button type="auto">
+						<action>openHintbox</action>
+						<param>type=Item</param>
+						<param>title=提示</param>
+						<param>content=神迹拉奥花已常驻神迹形态</param>
+						<param>item_icon=pet[704]</param>
+						<param>option_num=1</param>
+						<condition>activity[main_pet_wakeup].done[LaAoHua_Miracle]=[bool]false[default]false</condition>
+					</button>
+					<button type="auto">
+						<action>setActivity</action>
+						<param>main_pet_wakeup</param>
+						<param>done[LaAoHua_Miracle]=true</param>
+						<condition>activity[main_pet_wakeup].done[LaAoHua_Miracle]=[bool]false[default]false</condition>
+					</button>
+				</winHandler>
+			</branch>
+		</battle>
 		<eventHandler>
 			<button type="click">
-				<action>openPanel</action>
-				<param>[Mod]LaAoHuaWakeup</param>
+				<action>battle</action>
+				<param>evolve</param>
+				<condition>firstPet.uid=704</condition>
+			</button>
+			<button type="click">
+				<action>openHintbox</action>
+				<param>type=Item</param>
+				<param>title=提示</param>
+				<param>content=请将神迹拉奥花进行首发再来挑战！</param>
+				<param>item_icon=pet[704]</param>
+				<param>option_num=1</param>
+				<condition>firstPet.uidNOT704</condition>
 			</button>
 		</eventHandler>
 	</npc>

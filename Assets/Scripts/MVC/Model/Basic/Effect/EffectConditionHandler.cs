@@ -177,13 +177,13 @@ public static class EffectConditionHandler
             return !bool.Parse(condOptions.Get("own", "true"));
 
         for (int i = 0; i < typeList.Length; i++)
-            {
-                string op = condOptions.Get(typeList[i] + "_op", "=");
-                string cmpValue = condOptions.Get(typeList[i] + "_cmp", "0");
-                float value = Parser.ParseEffectOperation(cmpValue, effect, lhsUnit, rhsUnit);
-                if (!Operator.Condition(op, Identifier.GetPetIdentifier(typeList[i], lhsUnit.petSystem, battlePet), value))
-                    return false;
-            }
+        {
+            string op = condOptions.Get(typeList[i] + "_op", "=");
+            string cmpValue = condOptions.Get(typeList[i] + "_cmp", "0");
+            float value = Parser.ParseEffectOperation(cmpValue, effect, lhsUnit, rhsUnit);
+            if (!Operator.Condition(op, Identifier.GetPetIdentifier(typeList[i], lhsUnit.petSystem, battlePet), value))
+                return false;
+        }
 
         return true;
     }

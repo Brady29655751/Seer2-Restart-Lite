@@ -221,6 +221,8 @@ public class PetBattleBuffController
         if (buffRange == null)
             return false;
 
+        buffRange = buffRange.OrderBy(x => x?.info.addPriority ?? int.MinValue);
+
         var isSuccess = false;
         foreach (var buff in buffRange)
             isSuccess |= AddBuff(buff, buffUnit, buffUnit, state);
@@ -232,6 +234,8 @@ public class PetBattleBuffController
         if (buffRange == null)
             return false;
 
+        buffRange = buffRange.OrderBy(x => x?.info.addPriority ?? int.MinValue);
+
         var isSuccess = false;
         foreach (var buff in buffRange)
             isSuccess |= AddBuff(buff, buffUnit, invokeUnit, state);
@@ -239,7 +243,7 @@ public class PetBattleBuffController
         return isSuccess;
     }
 
-    private void OnRemoveBuff(Buff buff, Unit buffUnit, BattleState state) {
+    public void OnRemoveBuff(Buff buff, Unit buffUnit, BattleState state) {
         if (buff == null)
             return;
         

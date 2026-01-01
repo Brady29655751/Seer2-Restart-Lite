@@ -1000,6 +1000,13 @@ public static class EffectAbilityHandler
 
             float oldValue = buff.GetBuffIdentifier(type);
             float newValue = Parser.ParseEffectOperation(value, effect, lhsUnit, rhsUnit);
+
+            if (type == "id")
+            {
+                // if (string.IsNullOrEmpty(key))
+                //     lhsUnit.pet.buffController.OnRemoveBuff(buff, lhsUnit, state);
+            }
+
             buff.SetBuffIdentifier(type, Operator.Operate(op, oldValue, newValue));
 
             if (type == "id")

@@ -4,6 +4,32 @@
 		<bgm>BGM_3</bgm>
 	</music>
 	<entities>
+		<npc id="1000701" resId="none" name="每日补给" size="120,110" pos="165,55" namePos="0,-5" color="0,0,0,0">
+			<description>每日补给</description>
+			<eventHandler>
+				<button type="click">
+					<action>openHintbox</action>
+					<param>type=Item</param>
+					<param>title=提示</param>
+					<param>content=你已经获取过今日补给了哦</param>
+					<param>item_icon=item[1]</param>
+					<param>option_num=1</param>
+					<condition>activity[daily_login].done[10007]=[bool]true[default]false</condition>
+				</button>
+				<button type="click">
+					<action>setItem</action>
+					<param>add_with_hint</param>
+					<param>10201,5</param>
+					<condition>activity[daily_login].done[10007]=[bool]false[default]false</condition>
+				</button>
+				<button type="click">
+					<action>setActivity</action>
+					<param>daily_login</param>
+					<param>done[10007]=true</param>
+					<condition>activity[daily_login].done[10007]=[bool]false[default]false</condition>
+				</button>
+			</eventHandler>
+		</npc>
 		<teleport id="1" name="传送室" pos="100,250" targetMapId="10001"/>
 	</entities>		
 </map>

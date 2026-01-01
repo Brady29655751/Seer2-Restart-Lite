@@ -33,7 +33,8 @@ public class UnitCardSystem
 
         foreach (var pet in pets)
         {
-            deck.AddRange(pet.ownSkill.Where(x => !Skill.IsNullOrEmpty(x))
+            var petCards = pet.info.cards?.skillIdList?.Select(x => Skill.GetSkill(x, false)) ?? pet.ownSkill;
+            deck.AddRange(petCards.Where(x => !Skill.IsNullOrEmpty(x))
                 .Where(x => (x.positionType != SkillType.必杀) && !hand.Exists(y => x.id == y.id))
                 .Select(x =>
             {

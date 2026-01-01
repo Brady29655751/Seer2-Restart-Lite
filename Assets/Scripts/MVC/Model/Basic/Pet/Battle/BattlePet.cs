@@ -104,7 +104,7 @@ public class BattlePet : Pet
     /// Get battle pet for PVP mode.
     /// This automatically heal the pet to prevent player forgot it.
     /// </summary>
-    public static BattlePet GetBattlePet(int id, int personality, int feature, int emblem, int[] buff, int iv, float[] ev, int[] normalSkill, int superSkill)
+    public static BattlePet GetBattlePet(int id, int personality, int feature, int emblem, int[] buff, int iv, float[] ev, int[] normalSkill, int superSkill, int[] resist)
     {
         Pet pet = Pet.GetExamplePet(id, iv: iv);
         if (pet == null)
@@ -118,6 +118,7 @@ public class BattlePet : Pet
         pet.skills.normalSkillId = normalSkill;
         pet.skills.superSkillId = superSkill;
         pet.currentStatus = new Status(pet.normalStatus);
+        pet.resist.SetResistArray(resist);
         return new BattlePet(pet);
     }
 
@@ -131,9 +132,10 @@ public class BattlePet : Pet
         var ev = (float[][])hash["ev"];
         var normalSkill = (int[][])hash["skill"];
         var superSkill = (int[])hash["super"];
+        var resist = (int[][])hash["resist"];
 
         return Enumerable.Range(0, petCount).Select(i => (i >= id.Length) ? null :
-            BattlePet.GetBattlePet(id[i], personality[i], feature[i], emblem[i], buff[i], iv, ev[i], normalSkill[i], superSkill[i]
+            BattlePet.GetBattlePet(id[i], personality[i], feature[i], emblem[i], buff[i], iv, ev[i], normalSkill[i], superSkill[i], resist[i]
         )).ToArray();
     }
 

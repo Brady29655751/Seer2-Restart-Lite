@@ -172,9 +172,10 @@ public static class NpcActionHandler
         if ((handler.param == null) || (handler.param.Count < 2))
             return;
 
-        Action<Item> itemFunc = handler.param[0].TrimEnd("_with_hint") switch
+        Action<Item> itemFunc = handler.param[0] switch
         {
             "add" => Item.Add,
+            "add_with_hint" => (x) => { Item.Add(x); Item.OpenHintbox(x); },
             "remove" => (x) => Item.Remove(x.id, x.num),
             "add_to_yite" => (x) => Item.AddTo(x, YiTeRogueData.instance.itemBag),
             "remove_from_yite" => (x) => Item.RemoveFrom(x.id, x.num, YiTeRogueData.instance.itemBag),
@@ -186,9 +187,6 @@ public static class NpcActionHandler
             var itemInfo = handler.param[i].ToIntList();
             var item = new Item(itemInfo[0], itemInfo[1]);
             itemFunc?.Invoke(item);
-
-            if (handler.param[0].StartsWith("add") && handler.param[0].EndsWith("with_hint"))
-                Item.OpenHintbox(item);
         }
     }
 

@@ -33,7 +33,9 @@ public class BuffInfo
     
     public int minValue = int.MinValue, maxValue = int.MaxValue;
     public int sortPriority => GetSortPriority();
+    public int addPriority => int.Parse(options.Get("priority", int.MinValue.ToString()));
     public string position => options.Get("position", "none");
+    public string overrideType => options.Get("type");
     public List<Effect> effects { get; private set; }
     public Sprite icon => GetIcon();
 
@@ -149,19 +151,19 @@ public class BuffInfo
         return id;
     }
 
-    public Sprite GetIcon() {
+    public Sprite GetIcon(bool defaultIfNull = true) {
         int _type = id / 10_0000;
         int _pet = id % 10_0000 * (_type < 5 ? 1 : -1);
         
         var sprite = ResourceManager.instance.GetLocalAddressables<Sprite>("Buffs/" + resId, IsMod(resId));
         if ((sprite == null) && (id != resId))
-            return Buff.GetBuffInfo(resId)?.GetIcon();
+            return Buff.GetBuffInfo(resId)?.GetIcon(defaultIfNull);
         
         if (type == BuffType.Feature)
-            return sprite ?? PetUISystem.GetPetIcon(_pet);
+            return defaultIfNull ? (sprite ?? PetUISystem.GetPetIcon(_pet)) : sprite;
 
         if (type == BuffType.Emblem)
-            return sprite ?? ResourceManager.instance.GetLocalAddressables<Sprite>("Emblems/" + _pet, PetInfo.IsMod(_pet));
+            return defaultIfNull ? (sprite ?? ResourceManager.instance.GetLocalAddressables<Sprite>("Emblems/" + _pet, PetInfo.IsMod(_pet))) : sprite;
 
         return sprite;
     }

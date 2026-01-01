@@ -85,13 +85,14 @@ public class PetDemoView : Module
     public void SetFeature(Pet pet) {
         var feature = pet.feature.feature;
         var buff = Buff.GetFeatureBuff(pet);
-        var isHighStar = (pet.info.star >= 7) && (!PetInfo.IsMod(pet.id)) && (buff?.icon != null);
+        var icon = buff?.info?.GetIcon(false);
+        var isIconExist = icon != null;
         
-        featureButton?.gameObject.SetActive(!isHighStar);
-        featureHighStarButton?.gameObject.SetActive(isHighStar);
+        featureButton?.gameObject.SetActive(!isIconExist);
+        featureHighStarButton?.gameObject.SetActive(isIconExist);
 
         featureText.text = feature.name.Substring(0, Mathf.Min(feature.name.Length, 2));
-        featureHighStarButton?.SetSprite(buff.icon);
+        featureHighStarButton?.SetSprite(icon);
     }
 
     public void SetFeatureInfoPromptContent(Feature feature) {
@@ -116,7 +117,7 @@ public class PetDemoView : Module
     public void SetEmblem(bool hasEmblem, Emblem emblem) {
         Sprite nullEmblem = Emblem.GetNullEmblemSprite();
         emblemButton.gameObject.SetActive(emblem != null);
-        emblemButton.SetSprite(hasEmblem ? emblem.GetSprite() : nullEmblem);
+        emblemButton.SetSprite(hasEmblem ? (emblem?.GetSprite() ?? nullEmblem) : nullEmblem);
     }
 
     public void SetEmblemInfoPromptContent(Emblem emblem, int index = 0) {

@@ -30,6 +30,7 @@ public class NpcView : Module
         SetRect(info.pos, info.size, info.rotation);
         SetName(info.name);
         SetNamePos(info.namePos);
+        SetNameSize(info.nameSize);
         SetIcon(info.resId);
         SetColor(info.color);
     }
@@ -66,6 +67,14 @@ public class NpcView : Module
 
     public void SetNamePos(Vector2 namePos) {
         nameText.rectTransform.anchoredPosition = namePos;
+    }
+
+    public void SetNameSize(int nameSize)
+    {
+        if (nameSize <= 0)
+            return;
+
+        nameText.fontSize = nameSize;
     }
 
     public void SetIcon(string resId) {
