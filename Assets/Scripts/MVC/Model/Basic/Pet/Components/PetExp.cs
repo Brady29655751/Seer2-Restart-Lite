@@ -15,7 +15,7 @@ public class PetExp
     public int expType => info.expType;
     public int evolveLevel => info.evolveLevel;
     public uint levelUpExp => (PetExpSystem.GetTotalExp(level + 1, expType) - totalExp);    // 距離升級所需EXP
-    public int maxLevel => (fixedMaxLevel == 0) ? 100 : fixedMaxLevel;  // 最高等級 
+    public int maxLevel => GetMaxLevel();  // 最高等級 
     public uint maxExp => (PetExpSystem.GetTotalExp(maxLevel, expType));
 
     public PetExp() {}
@@ -31,6 +31,17 @@ public class PetExp
         level = rhs.level;
         fixedMaxLevel = rhs.fixedMaxLevel;
         totalExp = rhs.totalExp;
+    }
+
+    public int GetMaxLevel()
+    {
+        if (fixedMaxLevel > 0)
+            return fixedMaxLevel;
+
+        if (id.IsInRange(20001, 30000))
+            return 105;
+
+        return 100;
     }
 
     /// <summary>

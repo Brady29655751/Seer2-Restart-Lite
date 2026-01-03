@@ -424,7 +424,7 @@ public class Pet
                 return;
             case "resistLock":
                 resist.lockState = (int)num;
-                if (resist.lockState < 0)
+                if (resist.lockState <= 0)
                     resist.Reset();
                 
                 return;
