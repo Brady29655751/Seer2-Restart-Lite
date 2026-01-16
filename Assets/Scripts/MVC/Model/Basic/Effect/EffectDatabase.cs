@@ -116,6 +116,11 @@ public static class EffectDatabase {
     public static string ToRawString(this EffectAbility ability) {
         return typeConvDict.ContainsValue(ability) ? typeConvDict.First(x => x.Value == ability).Key : "none";
     }
+
+    public static bool IsAttackPhase(this EffectTiming timing)
+    {
+        return (timing == EffectTiming.OnAttackStart) || (timing == EffectTiming.OnAttack) || (timing == EffectTiming.OnAfterAttack);
+    }
 }
 
 public enum EffectTiming {

@@ -44,8 +44,7 @@ public class UnitCardSystem
             }));
         }
 
-        // deck = Enumerable.Range(100001, 30).Select(x => new Skill(Skill.GetSkill(x), false)).ToList();
-        // Draw(4);
+        Draw(MAX_HAND_COUNT, x => x.GetSkillIdentifier("option[first]") != 0);
 
         options = new Dictionary<string, string>();
     }
@@ -76,7 +75,7 @@ public class UnitCardSystem
             return Identifier.GetNumIdentifier(options.Get(trimId, "0"));
         }
 
-        if (id.TryTrimStart("turn.", out _))
+        if (id.TryTrimStart("round.", out _))
         {
             return GetCardIdentifier($"option[{id}]");
         }
@@ -141,7 +140,7 @@ public class UnitCardSystem
 
     public void SetCardIdentifier(string id, float value)
     {
-        if (id.TryTrimStart("turn.", out _))
+        if (id.TryTrimStart("round.", out _))
         {
             SetCardIdentifier($"option[{id}]", value);
             return;
@@ -155,7 +154,7 @@ public class UnitCardSystem
 
     public void OnRoundStart()
     {
-        options = options.Where(x => !x.Key.StartsWith("turn.")).ToDictionary(x => x.Key, x => x.Value);
+        options = options.Where(x => !x.Key.StartsWith("round.")).ToDictionary(x => x.Key, x => x.Value);
 
         Draw(4);
     }
@@ -235,12 +234,12 @@ public class UnitCardSystem
         if (skill.GetSkillIdentifier("option[token]") == 0)
             grave.Add(skill);
 
-        SetCardIdentifier($"turn.usedCardCount", GetCardIdentifier($"turn.usedCardCount") + 1);
+        SetCardIdentifier($"round.usedCardCount", GetCardIdentifier($"round.usedCardCount") + 1);
     }
 
     public void GetToken(List<Skill> tokens)
     {
-        tokens.ForEach(x => x.SetSkillIdentifier("option[token]", 1));
+        // tokens.ForEach(x => x.SetSkillIdentifier("option[token]", 1));
         hand.AddRange(tokens.Take(MAX_HAND_COUNT - hand.Count));
     }
 

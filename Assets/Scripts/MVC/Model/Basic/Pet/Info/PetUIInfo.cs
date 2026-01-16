@@ -9,6 +9,7 @@ public class PetUIInfo
 {
     public const int DATA_COL = 4;
     public int id, subId, baseId, star;
+    public int generation => int.Parse(options.Get("generation", "1"));
 
     public int defaultId, defaultAnimId;
 

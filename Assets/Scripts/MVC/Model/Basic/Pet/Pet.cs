@@ -51,7 +51,7 @@ public class Pet
     /* Exp and Level */
     public int level => exp.level;  // 等級
     public int maxLevel => exp.maxLevel;    // 最高等級
-    public uint totalExp => exp.totalExp;   // 目前總計獲得EXP
+    public uint totalExp => exp.expSum;   // 目前總計獲得EXP
     public uint levelUpExp => exp.levelUpExp;   // 距離升級所需EXP
     public uint maxExp => exp.maxExp;   // 滿級所需EXP
 
@@ -98,7 +98,7 @@ public class Pet
         pet.basic.ToBestPersonality();
 
         pet.exp.level = level;
-        pet.exp.totalExp = PetExpSystem.GetTotalExp(level, pet.exp.expType);
+        pet.exp.expSum = PetExpSystem.GetTotalExp(level, pet.exp.expType);
 
         pet.feature.hasEmblem = true;
 
@@ -319,6 +319,7 @@ public class Pet
             "subId" => info.ui.subId,
             "baseId" => basic.baseId,
             "star" => info.ui.star,
+            "generation" => info.ui.generation,
             "skinId" => ui.skinId,
             "element" => elementId,
             "subElement" => subElementId,
@@ -362,7 +363,18 @@ public class Pet
                 ui.skinId = (int)num;
                 return;
             case "skill":
+            case "skill+":
                 skills.LearnNewSkill(Skill.GetSkill((int)num, false));
+                return;
+            case "skill-":
+                skills.RemoveOldSkill(Skill.GetSkill((int)num, false));
+                return;
+            case "buff":
+            case "buff+":
+                feature.afterwardBuffIds.Add((int)num);
+                return;
+            case "buff-":
+                feature.afterwardBuffIds.Remove((int)num);
                 return;
             case "gender":
                 basic.gender = (int)num;
@@ -379,7 +391,7 @@ public class Pet
                 if (toLevel <= level)
                     LevelDown(toLevel);
                 else
-                    GainExp(PetExpSystem.GetTotalExp(Mathf.Min(toLevel, exp.maxLevel), exp.expType) - exp.totalExp);
+                    GainExp(PetExpSystem.GetTotalExp(Mathf.Min(toLevel, exp.maxLevel), exp.expType) - totalExp);
                 return;
             case "maxLevel":
                 exp.fixedMaxLevel = Mathf.Max((int)num, 0);
@@ -504,6 +516,8 @@ public class Pet
             evolvePet.LevelDown(evolvePet.level);
             specialSkills.ForEach(skill => evolvePet.skills.LearnNewSkill(skill));
         }
+
+        evolvePet.skills.CheckNewSkill(evolvePet.level);
 
         if (cursor.IsInRange(0, Player.instance.petBag.Length))
             Player.instance.petBag[cursor] = evolvePet;

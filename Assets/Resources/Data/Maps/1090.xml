@@ -1,0 +1,77 @@
+<map name="隐居木屋" category="10" id="1090">
+	<music category="9">
+		<bgm>BGM_1000</bgm>
+	</music>
+	<initialPoint>680,125</initialPoint>
+	<entities>
+		<npc id="109003" resId="Pets/pet/496" name="撒旦的雕像" size="200,270" pos="125,125" namePos="0,-5" color="0,0,0,0">
+			<description>神秘的雕像</description>
+			<dialog>
+				<branch id="default" name="武装昔洛" icon="Pets/pet/627" size="98,105" pos="0,45">
+					<content><![CDATA[(将武器对准你，示意你不准触碰雕像)]]></content>
+					<functionHandler>
+						<func type="click">
+							<description><![CDATA[挑战武装昔洛]]></description>
+							<action>battle</action>
+							<param>default</param>
+						</func>
+					</functionHandler>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[哪来的刺客！？]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+					</replyHandler>
+				</branch>
+			</dialog>
+			<battle>
+				<branch id="default">
+					<settings count="3" star="3">
+						<mode>3</mode>
+						<initBuff>(field:600021)</initBuff>
+					</settings>
+					<enemy>
+						<pet id="627" level="100">
+							<status>
+								<hp>5000</hp>
+							</status>
+							<initBuff>-8,-3082,-3045,93,92</initBuff>
+							<loopSkill>13476,13478,13481,13484,13488</loopSkill>
+							<superSkill>13485</superSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>getPet</action>
+							<param>625,1</param>
+							<condition>activity[hell].done[10][story]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=【昔洛】已经放入精灵仓库</param>
+							<param>item_icon=pet[625]</param>
+							<param>option_num=1</param>
+							<condition>activity[hell].done[10][story]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>hell</param>
+							<param>done[10][story]=true</param>
+							<condition>activity[hell].done[10][story]=[bool]false[default]false</condition>
+						</button>
+					</winHandler>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>openDialog</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<teleport id="1" name="异蘑小径" pos="810,200" targetMapId="123"/>
+	</entities>
+</map>

@@ -276,13 +276,14 @@ public class Skill
         }
     }
 
-    public static Skill GetNoOpSkill()
+    public static Skill GetNoOpSkill(int parallelSourceIndex = -1)
     {
         Skill skill = new Skill(SkillType.空过);
         skill.name = "空过";
         skill.rawDescription = "跳过自己的回合";
         skill.critical = 5;
         skill.accuracy = 100;
+        skill.options.Set("parallel_source_index", parallelSourceIndex.ToString());
         return skill;
     }
 
@@ -383,7 +384,8 @@ public class Skill
 
     public string GetAdditionalCardDescription(string desc, bool withBasicInfo = true)
     {
-        var spAbility = new List<string>(){ "token", "keep" };
+        var spAbility = new List<string>(){ "token", "keep", "first" };
+        var prefix = string.Empty;
 
         for (int id = -101; id > -200; id--)
         {
@@ -393,10 +395,13 @@ public class Skill
 
             if (GetSkillIdentifier($"option[{spAbility.Get(-id - 101)}]") != 0)
             {
-                desc = $"[ff8cff]【{buffInfo.name}】[-][ENDL]{desc}";       
+                prefix += $"[ff8cff]【{buffInfo.name}】[-]";       
                 referBuffList = referBuffList?.Union(id.ToString().SingleToList()).ToList() ?? new List<string>(){ id.ToString() };
             }
         }
+
+        if (!string.IsNullOrEmpty(prefix))
+            desc = $"{prefix}[ENDL]{desc}";
 
         if (!withBasicInfo)
             return desc;

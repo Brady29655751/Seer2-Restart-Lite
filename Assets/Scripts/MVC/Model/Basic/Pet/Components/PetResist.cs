@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class PetResist
 {
-    public static string[] resistKeyNames => new string[] { "critical", "fix", "per", "abnormal.key", "unhealthy.key", "abnormal.value", "unhealthy.value" };
+    public static string[] resistKeyNames => new string[] { "critical", "fix", "per", "abnormal.id", "unhealthy.id", "abnormal.value", "unhealthy.value" };
 
     public int id;
     public int lockState = -1;

@@ -363,60 +363,64 @@
 						</button>
 					</winHandler>
 				</branch>
-				<!--
 				<branch id="5">
 					<settings count="6" star="4">
 						<mode>1</mode>
 					</settings>
 					<enemy>
-						<pet id="27" level="100">
+						<pet id="64" level="100">
 				            <status>
-								<mat>600</mat>
-				                <hp>5000</hp>
+								<atk>600</atk>
+				                <hp>6000</hp>
 				            </status>
-				            <initBuff>13,14,17,20,100,420010,-3016,-3022</initBuff>
-							<loopSkill>10675,10674,10676</loopSkill>
-							<superSkill>10672</superSkill>
+				            <initBuff>-8,20,100,420025</initBuff>
+							<loopSkill>12907</loopSkill>
+							<superSkill>12911</superSkill>
 						</pet>
-						<pet id="29" level="100">
+						<pet id="69" level="100">
 						    <status>
 								<atk>600</atk>
-						        <hp>5000</hp>
+								<mat>600</mat>
+						        <hp>6000</hp>
 						    </status>
-						    <initBuff>13,14,17,20,61,99,420011,-3000,-3007</initBuff>
-							<loopSkill>10414,10411</loopSkill>
+						    <initBuff>-8,20,100,420026,-3062,992,994</initBuff>
+							<loopSkill>12972,12968</loopSkill>
+							<superSkill>12970</superSkill>
 						</pet>
-						<pet id="42" level="100">
+						<pet id="85" level="100">
 						    <status>
-						        <hp>5000</hp>
+								<def>99999</def>
+								<mdf>99999</mdf>
+						        <hp>6000</hp>
 						    </status>
-						    <initBuff>13,14,17,20,23,420021,980,985,950,991</initBuff>
-							<loopSkill>10635,10644</loopSkill>
-							<superSkill>10642</superSkill>
+						    <initBuff>14,17,20,-3059,-3022</initBuff>
+							<loopSkill>13094,13098</loopSkill>
 						</pet>
-				        <pet id="52" level="100">
-				            <status>
-				                <hp>5000</hp>
-				            </status>
-				            <initBuff>-8,45,61,-2003</initBuff>
-				        	<loopSkill>11741,11740,11742</loopSkill>
-				        </pet>
-				        <pet id="73" level="100">
+				        <pet id="87" level="100">
 				            <status>
 								<def>600</def>
 								<mdf>600</mdf>
-				                <hp>5000</hp>
+				                <hp>6000</hp>
 				            </status>
-				            <initBuff>13,14,17,20,100,-3016,-3076,978,964</initBuff>
-				        	<loopSkill>10740,10737</loopSkill>
-							<superSkill>10742</superSkill>
+				            <initBuff>-8,20,100,77,-3059,-3022</initBuff>
+				        	<loopSkill>12845,12851</loopSkill>
 				        </pet>
-						<pet id="141" level="100">
+				        <pet id="89" level="100">
+				            <status>
+								<def>600</def>
+								<mdf>600</mdf>
+				                <hp>6000</hp>
+				            </status>
+				            <initBuff>-8,61,-3059,-3022,-3018</initBuff>
+				        	<loopSkill>12864</loopSkill>
+				        </pet>
+						<pet id="114" level="100">
 						    <status>
-						        <hp>5000</hp>
+						        <hp>6000</hp>
 						    </status>
-						    <initBuff>100,-3054,61,-3012,-3059</initBuff>
-							<loopSkill>10807,10800,10804</loopSkill>
+						    <initBuff>-8,-3079,-3080,77</initBuff>
+							<headerSkill>12956,12953,12956,12953,12956,12953,12956,12953</headerSkill>
+							<loopSkill>12958</loopSkill>
 						</pet>
 					</enemy>
 					<winHandler>
@@ -436,17 +440,16 @@
 						<button type="auto">
 							<action>setActivity</action>
 							<param>door</param>
-							<param>king[floor]=4</param>
+							<param>king[floor]=6</param>
 						</button>
 						<button type="auto">
 							<action>setActivity</action>
 							<param>door</param>
-							<param>king[max]=3</param>
-							<condition>activity[door].king[max]=[int]2[default]0</condition>
+							<param>king[max]=5</param>
+							<condition>activity[door].king[max]=[int]4[default]0</condition>
 						</button>
 					</winHandler>
 				</branch>
-				-->
 			</battle>
 			<eventHandler>
 				<button type="click">

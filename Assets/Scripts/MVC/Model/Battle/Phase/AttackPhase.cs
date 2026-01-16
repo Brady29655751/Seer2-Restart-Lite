@@ -163,7 +163,7 @@ public class AttackPhase : BattlePhase
             report += $"但是没有命中<color={defColor}>【{defUnit.pet.name}】</color>！";
         }
 
-        if (atkUnit.skillSystem.totalSkillDamage > 0)
+        if ((atkUnit.skill.type > SkillType.属性) || (atkUnit.skillSystem.totalSkillDamage > 0))
         {
             report += $"對<color={defColor}>【{defUnit.pet.name}】</color>总共造成了 <color=#ff4444><size=13>{atkUnit.skillSystem.totalSkillDamage}</size></color> 點傷害！";   
 

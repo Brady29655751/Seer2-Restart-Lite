@@ -5,6 +5,113 @@
 		<bgm>BGM_4</bgm>
 	</music>
 	<entities>
-	<teleport id="1" name="瞭望仓" pos="120,130" targetMapId="10004"/>
+		<npc id="1000801" resId="none" name="神奇扭蛋机" size="100,140" pos="705,185" namePos="0,-5" color="0,0,0,0">
+			<description>神奇扭蛋机</description>
+			<dialog>
+				<branch id="default" name="我" icon="7004" size="136,125" pos="0,40">
+					<content><![CDATA[神奇扭蛋第一期，大奖是祖拉精元蛋！]]></content>
+					<functionHandler>
+						<func type="click">
+							<description><![CDATA[单抽]]></description>
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=<![CDATA[确定要花费 1 枚扭蛋牌抽奖吗？(阿财无效)]]></param>
+							<param>item_icon=item[400023]</param>
+							<param>option_num=2</param>
+							<param>callback=gacha</param>
+							<condition>item[400023].num&gt;0</condition>
+						</func>
+						<func type="branch">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=<![CDATA[你没有扭蛋牌可以抽奖哦]]></param>
+							<param>item_icon=item[400023]</param>
+							<param>option_num=1</param>
+							<condition>item[400023].num=0</condition>
+						</func>
+						<func type="click">
+							<description><![CDATA[十连抽]]></description>
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=<![CDATA[确定要花费 10 枚扭蛋牌抽奖吗？(阿财无效)]]></param>
+							<param>item_icon=item[400023]</param>
+							<param>option_num=2</param>
+							<param>callback=gacha_10</param>
+							<condition>item[400023].numGTE10</condition>
+						</func>
+						<func type="branch">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=<![CDATA[你的扭蛋牌不足10个哦]]></param>
+							<param>item_icon=item[400023]</param>
+							<param>option_num=1</param>
+							<condition>item[400023].num&lt;10</condition>
+						</func>
+					</functionHandler>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[一发入魂！]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+					</replyHandler>
+				</branch>
+			</dialog>
+			<eventHandler>
+				<button type="click">
+					<action>openDialog</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+			<callbackHandler>
+				<button type="gacha">
+					<action>setItem</action>
+					<param>add_with_hint</param>
+					<param>random[510196|8001~8008|9006|9015~9018|10001~10004|9010|9011],1</param>
+				</button>
+				<button type="gacha">
+					<action>setItem</action>
+					<param>remove</param>
+					<param>400023,1</param>
+				</button>
+				<button type="gacha_10">
+					<action>setItem</action>
+					<param>add_with_hint</param>
+					<param>random[510196|8001~8008|9006|9015~9018|10001~10004|9010|9011],1</param>
+					<param>random[510196|8001~8008|9006|9015~9018|10001~10004|9010|9011],1</param>
+					<param>random[510196|8001~8008|9006|9015~9018|10001~10004|9010|9011],1</param>
+					<param>random[510196|8001~8008|9006|9015~9018|10001~10004|9010|9011],1</param>
+					<param>random[510196|8001~8008|9006|9015~9018|10001~10004|9010|9011],1</param>
+					<param>random[510196|8001~8008|9006|9015~9018|10001~10004|9010|9011],1</param>
+					<param>random[510196|8001~8008|9006|9015~9018|10001~10004|9010|9011],1</param>
+					<param>random[510196|8001~8008|9006|9015~9018|10001~10004|9010|9011],1</param>
+					<param>random[510196|8001~8008|9006|9015~9018|10001~10004|9010|9011],1</param>
+					<param>random[510196|8001~8008|9006|9015~9018|10001~10004|9010|9011],1</param>
+				</button>
+				<button type="gacha_10">
+					<action>setItem</action>
+					<param>remove</param>
+					<param>400023,10</param>
+				</button>			
+			</callbackHandler>
+		</npc>
+		<npc id="1000802" resId="none" name="扭蛋商店" size="80,80" pos="780,125" namePos="5,-5" color="0,0,0,0">
+			<description>购买扭蛋牌</description>
+			<eventHandler>
+				<button type="click">
+					<action>openPanel</action>
+					<param>ItemShop</param>
+					<param>mode=buy</param>
+					<param>currency=400023/3</param>
+					<param>item=400023/331473</param>
+					<param>title=扭蛋商店</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<teleport id="1" name="瞭望仓" pos="120,130" targetMapId="10004"/>
 	</entities>		
 </map>

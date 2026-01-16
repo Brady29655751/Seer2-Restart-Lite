@@ -555,7 +555,7 @@ public class ResourceManager : Singleton<ResourceManager>
     public void LoadMap(int id, Action<Map> onSuccess = null, Action<string> onFail = null)
     {
         if (!Map.IsMod(id))
-            LoadXML<Map>(mapUrl + id + ".xml", (map) => LoadMapResources(map, onSuccess, onFail), error => onFail?.Invoke("地图加载失败，请重新启动游戏"));
+            LoadXML<Map>(mapUrl + id + ".xml", (map) => LoadMapResources(map, onSuccess, onFail), error => onFail?.Invoke("加载地图失败，地图不存在"));
         else
             SaveSystem.TryLoadMapMod(id, onSuccess, onFail);
     }
@@ -576,13 +576,13 @@ public class ResourceManager : Singleton<ResourceManager>
 
         // Audio only accepts mp3
         GetLocalAddressables<AudioClip>("BGM/" + map.music.category + "/" + map.music.bgm + ".mp3", isMod,
-            (clip) => { bgm = clip; doneRequestCount++; }, (message) => { error = message; doneRequestCount++; });
+            (clip) => { bgm = clip; doneRequestCount++; }, (message) => { error = "加载地图失败，BGM不存在"; doneRequestCount++; });
 
         if (string.IsNullOrEmpty(map.music.fx))
             doneRequestCount++;
         else {
             GetLocalAddressables<AudioClip>("BGM/fx/" + map.music.fx + ".mp3", isMod,
-            (clip) => { fx = clip; doneRequestCount++; }, (message) => { error = message; doneRequestCount++; });
+            (clip) => { fx = clip; doneRequestCount++; }, (message) => { error = "加载地图失败，FX不存在"; doneRequestCount++; });
         }
 
         Sprite bg = GetLocalAddressables<Sprite>("Maps/bg/" + resId, isMod);

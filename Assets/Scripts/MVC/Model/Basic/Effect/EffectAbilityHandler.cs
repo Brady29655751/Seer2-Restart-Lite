@@ -1276,25 +1276,14 @@ public static class EffectAbilityHandler
                     if (skill == null)
                         return false;
 
-                    if (op == "+")
+                    Func<Skill, bool> skillFunc = op switch
                     {
-                        if (!pet.skills.LearnNewSkill(skill))
-                            return false;
-                    }
-                    else if (op == "-")
-                    {
-                        if (!pet.skills.ownSkillId.Contains(skill.id))
-                            return false;
+                        "+" => pet.skills.LearnNewSkill,
+                        "-" => pet.skills.RemoveOldSkill,
+                        _   => pet.skills.LearnNewSkill,
+                    };
 
-                        var backupSuperSkill = pet.backupSuperSkill;
-                        pet.skills.ownSkill = pet.ownSkill.Where(x => x.id != skill.id).ToList();
-                        if (pet.normalSkill.Any(x => x.id == skill.id))
-                            pet.skills.normalSkillId.Update(skill.id, pet.backupNormalSkill.FirstOrDefault()?.id ?? 0);
-
-                        if ((pet.superSkill != null) && (pet.superSkill.id == skill.id))
-                            pet.superSkill = backupSuperSkill;
-                    }
-                    return true;
+                    return skillFunc(skill);
                 }
                 if (type == "buff")
                 {

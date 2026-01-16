@@ -137,6 +137,21 @@ public class PetSkill
         superSkill = skillList.FirstOrDefault(x => (!Skill.IsNullOrEmpty(x)) && (x.positionType == SkillType.必杀));
     }
 
+    public bool RemoveOldSkill(Skill skill)
+    {
+        if ((skill == null) || (!ownSkillId.Contains(skill.id)))
+            return false;
+
+        ownSkill = ownSkill.Where(x => x.id != skill.id).ToList();
+        if (normalSkill.Any(x => x.id == skill.id))
+            normalSkillId = normalSkillId.Update(skill.id, backupNormalSkill.FirstOrDefault()?.id ?? 0).ToArray();
+
+        if ((superSkill != null) && (superSkill.id == skill.id))
+            superSkill = backupSuperSkill;
+
+        return true;
+    }
+
     public Skill[] GetNormalSkill() {
         Skill[] ret = normalSkillId.Distinct().Select(x => Skill.GetSkill(x, false)).Where(x => x != null)
             .Where(x => (!Skill.IsNullOrEmpty(x)) && (x.positionType != SkillType.必杀)).ToArray(); 

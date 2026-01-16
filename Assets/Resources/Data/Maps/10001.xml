@@ -16,8 +16,24 @@
 			</eventHandler>
 		</npc>
 		<npc id="1000102" resId="1000101" size="106,214" pos="550,330" rotation="0,0,-5" color="0,0,0,0">
-			<description>超时空通道（暂未开放）</description>
+			<description>超时空通道</description>
 			<transport>570,265</transport>
+			<eventHandler>
+				<button type="click">
+					<action>teleport</action>
+					<param>10103</param>
+					<condition>firstPet.featureId=10499</condition>
+				</button>
+				<button type="click">
+					<action>openHintbox</action>
+					<param>type=Item</param>
+					<param>title=提示</param>
+					<param>content=<![CDATA[将时空特性的精灵设为首发才能进入超时空通道]]></param>
+					<param>item_icon=pet[10499]</param>
+					<param>option_num=1</param>
+					<condition>firstPet.featureIdNOT10499</condition>
+				</button>
+			</eventHandler>
 		</npc>
 		<npc id="1000103" resId="1000101" size="106,214" pos="430,330" rotation="0,0,5" color="0,0,0,0">
 			<description>SPT</description>

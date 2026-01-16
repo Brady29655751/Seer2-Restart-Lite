@@ -56,49 +56,49 @@ public class Database : Singleton<Database>
     {
         if (missionInfoDict.Count != GameManager.versionData.missionData.totalMissionCount)
         {
-            error = "获取任务档案失败";
+            error = $"正在获取任务档案 {missionInfoDict.Count} / {GameManager.versionData.missionData.totalMissionCount}";
             return false;
         }
 
         if (activityInfoDict.Count == 0)
         {
-            error = "获取活动资讯档案失败";
+            error = $"正在获取活动资讯档案 {activityInfoDict.Count}";
             return false;
         }
 
         if (itemInfoDict.Count == 0)
         {
-            error = "获取道具档案失败";
+            error = $"正在获取道具档案 {itemInfoDict.Count}";
             return false;
         }
 
         if (buffInfoDict.Count == 0)
         {
-            error = "获取战斗印记档案失败";
+            error = $"正在获取战斗印记档案 {buffInfoDict.Count}";
             return false;
         }
 
         if (effectDict.Count == 0)
         {
-            error = "获取预制效果失败";
+            error = $"正在获取预制效果 {effectDict.Count}";
             return false;
         }
 
         if (skillDict.Count == 0)
         {
-            error = "获取技能档案失败";
+            error = $"正在获取技能档案 {skillDict.Count}";
             return false;
         }
 
         if (featureInfoDict.Count == 0)
         {
-            error = "获取特性档案失败";
+            error = $"正在获取特性档案 {featureInfoDict.Count}";
             return false;
         }
 
         if (petInfoDict.Count == 0)
         {
-            error = "获取精灵档案失败";
+            error = $"正在获取精灵档案 {petInfoDict.Count}";
             return false;
         }
 

@@ -68,9 +68,8 @@ public class Buff
     }
 
     public bool IsType(BuffType type) {
-        var overrideType = options.Get("type", info.overrideType);   
-        if (!string.IsNullOrEmpty(overrideType))
-            return overrideType.ToBuffType() == type;
+        if (!string.IsNullOrEmpty(info.overrideType))
+            return info.overrideType.ToBuffType() == type;
 
         return type switch 
         {
@@ -87,7 +86,8 @@ public class Buff
 
     public bool IsUneffectable() {
         int[] idList = new int[]{ 90, 91, 99, 100 };
-        return ((id <= 0) && (!BuffInfo.IsMod(id))) || idList.Contains(id) || (!removable);
+        int[] excludeIdList = new int[]{ -2003, -2004, };
+        return ((id <= 0) && (!excludeIdList.Contains(id)) && (!BuffInfo.IsMod(id))) || (!removable) || idList.Contains(id);
     }
 
     public bool IsCopyable()

@@ -5,19 +5,19 @@
 	</music>
 	<initialPoint>375,180</initialPoint>
 	<entities>
-		<npc id="-116001" resId="Pets/pet/163" name="雷克萨斯" size="170,224" pos="510,275" namePos="20,0">
-			<description>雷克萨斯</description>
+		<npc id="-116001" resId="Pets/pet/300" name="玛莎拉蒂" size="189,207" pos="460,275" namePos="40,0">
+			<description>玛莎拉蒂</description>
 			<dialog>
-				<branch id="default" name="雷克萨斯" icon="Pets/pet/163" size="129,168" pos="0,35">
-					<content><![CDATA[嘎呜！别过来，吃你哦！]]></content>
+				<branch id="default" name="玛莎拉蒂" icon="Pets/pet/300" size="151,166" pos="-10,35">
+					<content><![CDATA[<color=#ffbb33>【蓝色龙鳞】</color>可以在商店兑换大奖！]]></content>
 					<functionHandler>
 						<func type="click">
-							<description><![CDATA[挑战雷克萨斯]]></description>
+							<description><![CDATA[获取红色龙鳞]]></description>
 							<action>battle</action>
 							<param>default</param>
 						</func>
 						<func type="click">
-							<description><![CDATA[神龙火圈单抽]]></description>
+							<description><![CDATA[单抽]]></description>
 							<action>openHintbox</action>
 							<param>type=Item</param>
 							<param>title=提示</param>
@@ -37,7 +37,7 @@
 							<condition>item[400021].num=0</condition>
 						</func>
 						<func type="click">
-							<description><![CDATA[神龙火圈十连抽]]></description>
+							<description><![CDATA[十连抽]]></description>
 							<action>openHintbox</action>
 							<param>type=Item</param>
 							<param>title=提示</param>
@@ -56,6 +56,15 @@
 							<param>option_num=1</param>
 							<condition>item[400021].num&lt;10</condition>
 						</func>
+						<func type="click">
+							<description><![CDATA[兑换商店]]></description>
+							<action>openPanel</action>
+							<param>ItemShop</param>
+							<param>mode=buy</param>
+							<param>currency=9/0</param>
+							<param>item=500298/500161</param>
+							<param>title=大奖兑换</param>
+						</func>
 					</functionHandler>
 					<replyHandler>
 						<reply type="click">
@@ -72,15 +81,15 @@
 						<mode>3</mode>
 					</settings>
 					<enemy>
-						<pet id="163" level="100">
+						<pet id="300" level="100">
 							<status>
 								<atk>600</atk>
 								<mat>600</mat>
 								<hp>3000</hp>
 							</status>
-							<initBuff>-8,20,-3028,-3029,-3094</initBuff>
-							<loopSkill>13360,13362,13368,12424</loopSkill>
-							<superSkill>13365</superSkill>
+							<initBuff>-8,17,20,-3059,-3022,-3007</initBuff>
+							<loopSkill>13428,13426,13426,13426</loopSkill>
+							<superSkill>13432</superSkill>
 						</pet>
 					</enemy>
 					<winHandler>
@@ -102,7 +111,7 @@
 				<button type="gacha">
 					<action>setItem</action>
 					<param>add_with_hint</param>
-					<param>random[500161|8001~8008|9006|9015~9018|10001~10004|9010|9011],1</param>
+					<param>random[9|8001~8008|9006|9015~9018|10001~10004|9010|9011],1</param>
 				</button>
 				<button type="gacha">
 					<action>setItem</action>
@@ -112,16 +121,16 @@
 				<button type="gacha_10">
 					<action>setItem</action>
 					<param>add_with_hint</param>
-					<param>random[500161|8001~8008|9006|9015~9018|10001~10004|9010|9011],1</param>
-					<param>random[500161|8001~8008|9006|9015~9018|10001~10004|9010|9011],1</param>
-					<param>random[500161|8001~8008|9006|9015~9018|10001~10004|9010|9011],1</param>
-					<param>random[500161|8001~8008|9006|9015~9018|10001~10004|9010|9011],1</param>
-					<param>random[500161|8001~8008|9006|9015~9018|10001~10004|9010|9011],1</param>
-					<param>random[500161|8001~8008|9006|9015~9018|10001~10004|9010|9011],1</param>
-					<param>random[500161|8001~8008|9006|9015~9018|10001~10004|9010|9011],1</param>
-					<param>random[500161|8001~8008|9006|9015~9018|10001~10004|9010|9011],1</param>
-					<param>random[500161|8001~8008|9006|9015~9018|10001~10004|9010|9011],1</param>
-					<param>random[500161|8001~8008|9006|9015~9018|10001~10004|9010|9011],1</param>
+					<param>random[9|8001~8008|9006|9015~9018|10001~10004|9010|9011],1</param>
+					<param>random[9|8001~8008|9006|9015~9018|10001~10004|9010|9011],1</param>
+					<param>random[9|8001~8008|9006|9015~9018|10001~10004|9010|9011],1</param>
+					<param>random[9|8001~8008|9006|9015~9018|10001~10004|9010|9011],1</param>
+					<param>random[9|8001~8008|9006|9015~9018|10001~10004|9010|9011],1</param>
+					<param>random[9|8001~8008|9006|9015~9018|10001~10004|9010|9011],1</param>
+					<param>random[9|8001~8008|9006|9015~9018|10001~10004|9010|9011],1</param>
+					<param>random[9|8001~8008|9006|9015~9018|10001~10004|9010|9011],1</param>
+					<param>random[9|8001~8008|9006|9015~9018|10001~10004|9010|9011],1</param>
+					<param>random[9|8001~8008|9006|9015~9018|10001~10004|9010|9011],1</param>
 				</button>
 				<button type="gacha_10">
 					<action>setItem</action>

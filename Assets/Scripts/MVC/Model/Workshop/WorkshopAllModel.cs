@@ -16,7 +16,7 @@ public class WorkshopAllModel : Module
     
     public void OnImportMod() {
         var hintbox = Hintbox.OpenHintbox();
-        hintbox.SetContent("导入其他mod会覆盖当前mod资料\n也会失去目前所有获得的mod精灵\n请先确定当前mod和存档已经导出保存\n若已保存请点击【确认】继续导入mod", 16, FontOption.Arial);
+        hintbox.SetContent("导入其他mod会覆盖当前mod资料\n也会失去目前所有获得的mod精灵\n<color=#ffbb33>请先确定当前mod和存档已经导出保存</color>\n若已保存请点击【确认】继续导入mod", 16, FontOption.Arial);
         hintbox.SetOptionNum(2);
         hintbox.SetOptionCallback(() => {
             FileBrowser.ShowLoadDialog(OnImportSuccess, OnCancel, FileBrowser.PickMode.Folders, title: "选择要导入的mod（手机端请先点击左边的Browse才能浏览）");

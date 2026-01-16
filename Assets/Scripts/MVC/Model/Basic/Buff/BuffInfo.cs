@@ -72,25 +72,15 @@ public class BuffInfo
     private void InitOptionsProperty() {
         resId = int.Parse(options.Get("res", id.ToString()));
         itemId = int.Parse(options.Get("item", "0"));
-        keep = GetKeepInfo();
-        inherit = ((type == BuffType.Feature) || (type == BuffType.Emblem)) ? false : bool.Parse(options.Get("inherit", "false"));
+        keep = bool.Parse(options.Get("keep", ((type != BuffType.Unhealthy) && (type != BuffType.Abnormal)).ToString()));
+        inherit = bool.Parse(options.Get("inherit", "false"));
         legacy = bool.Parse(options.Get("legacy", "false"));
         hide = bool.Parse(options.Get("hide", "false"));
         removable = bool.Parse(options.Get("removable", "true"));
         autoRemove = bool.Parse(options.Get("auto_remove", "false"));
         minValue = int.Parse(options.Get("min_val", int.MinValue.ToString()));
         maxValue = int.Parse(options.Get("max_val", int.MaxValue.ToString()));
-        movable = (type != BuffType.Abnormal) || (bool.Parse(options.Get("movable", "false")));
-    }
-
-    private bool GetKeepInfo() {
-        if ((type == BuffType.Unhealthy) || (type == BuffType.Abnormal))
-            return false;
-
-        if ((type == BuffType.Feature) || (type == BuffType.Emblem))
-            return true;
-
-        return bool.Parse(options.Get("keep", "true"));
+        movable = bool.Parse(options.Get("movable", (type != BuffType.Abnormal).ToString()));
     }
 
     public void SetEffects(List<Effect> _effects) {

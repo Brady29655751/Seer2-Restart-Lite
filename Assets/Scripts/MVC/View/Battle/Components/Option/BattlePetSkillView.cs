@@ -270,7 +270,8 @@ public class BattlePetSkillView : BattleBaseView
             battle.NextPhase();
         }
 
-        battle.SetSkill(Skill.GetNoOpSkill(), true);
+        var parallelSourceIndex = (battle.settings.parallelCount > 1) ? battle.currentState.myUnit.petSystem.cursor : -1;
+        battle.SetSkill(Skill.GetNoOpSkill(parallelSourceIndex), true);
 
         if (isCardMode && !isPassivePetChangePhase)
         {

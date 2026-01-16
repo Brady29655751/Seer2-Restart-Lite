@@ -6,7 +6,62 @@
 		<fx>FX_103</fx>
 	</music>
 	<entities>
+		<npc id="12301" resId="Pets/pet/210.png" name="Lv16 弗格" size="36,38" pos="580,150" namePos="0,0">
+			<battle>
+				<branch id="default">
+					<settings count="6" capture="true"/>
+					<enemy>
+						<pet id="210" level="16">
+							<loopSkill>13452,13453</loopSkill>
+						</pet>
+					</enemy>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>battle</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<npc id="12302" resId="Pets/pet/210.png" name="Lv17 弗格" size="36,38" pos="410,100" namePos="0,0">
+			<battle>
+				<branch id="default">
+					<settings count="6" capture="true"/>
+					<enemy>
+						<pet id="210" level="17">
+							<loopSkill>13452,13453</loopSkill>
+						</pet>
+					</enemy>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>battle</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<npc id="12303" resId="Pets/pet/210.png" name="Lv18 弗格" size="36,38" pos="290,80" namePos="0,0">
+			<battle>
+				<branch id="default">
+					<settings count="6" capture="true"/>
+					<enemy>
+						<pet id="210" level="18">
+							<loopSkill>13452,13453</loopSkill>
+						</pet>
+					</enemy>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>battle</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
 		<teleport id="1" name="朽木桥" pos="640,300" targetMapId="122"/>
 		<teleport id="2" name="异蘑谷" pos="75,140" targetMapId="124"/>
+		<teleport id="3" name="隐居木屋" pos="235,230" targetMapId="1090"/>
 	</entities>
 </map>

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PetUI
 {
@@ -46,10 +47,10 @@ public class PetUI
         }
     }
 
-    [XmlIgnore] public Sprite icon => PetUISystem.GetPetIcon(skinId);
+    [XmlIgnore] public Sprite icon => PetUISystem.GetPetIcon(skinId) ?? SpriteSet.Empty;
     [XmlIgnore] public Sprite emblemIcon => PetUISystem.GetEmblemIcon(skinBaseId);
-    [XmlIgnore] public Sprite battleImage => PetUISystem.GetPetBattleImage(skinId);
-    [XmlIgnore] public Sprite idleImage => PetUISystem.GetPetIdleImage(skinId);
+    [XmlIgnore] public Sprite battleImage => PetUISystem.GetPetBattleImage(skinId) ?? SpriteSet.Empty;
+    [XmlIgnore] public Sprite idleImage => PetUISystem.GetPetIdleImage(skinId) ?? SpriteSet.Empty;
 
 
     public GameObject GetBattleAnim(PetAnimationType type)

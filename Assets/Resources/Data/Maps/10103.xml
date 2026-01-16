@@ -1,0 +1,46 @@
+<map name="灵蛇地窖" category="104" id="10103">
+	<fightMapColor>64,64,64,255</fightMapColor>
+	<initialPoint>470,120</initialPoint>
+	<music category="104">
+		<bgm>BGM_10103</bgm>
+	</music>
+	<entities>
+		<npc id="1067001" resId="Pets/pet/809" name="Lv100 蛇诗曼" size="123,132" pos="510,285" namePos="0,-160">
+			<description>摇啊摇</description>
+			<dialog>
+				<branch id="default" name="蛇诗曼" icon="Pets/pet/809" size="164,176" pos="0,0">
+					<content>（看着你的钻石，感觉好像不是很够的样子）</content>
+					<functionHandler>
+						<func type="click">
+							<description><![CDATA[蛇诗曼超进化]]></description>
+							<action>openPanel</action>
+							<param>TwelveRound</param>
+							<param>pet=813</param>
+							<param>pos=-10,70</param>
+							<param>size=307,267</param>
+							<param>item[2]=10239[1]</param>
+							<param>item[5]=9008[3]</param>
+							<param>item[8]=2[50]</param>
+							<param>item[10]=10242[1]</param>
+							<param>item[12]=320813[1]</param>
+						</func>	
+					</functionHandler>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[啊啊啊要榨干了！]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+					</replyHandler>
+				</branch>
+			</dialog>
+			<eventHandler>
+				<button type="click">
+					<action>openDialog</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<!-- <teleport id="1" name="传送室" pos="300,120" targetMapId="10001"/> -->
+	</entities>		
+</map>

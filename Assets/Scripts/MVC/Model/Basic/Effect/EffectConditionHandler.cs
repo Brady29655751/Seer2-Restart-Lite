@@ -54,7 +54,7 @@ public static class EffectConditionHandler
         Unit invokeUnit = (Unit)effect.invokeUnit;
         Unit lhsUnit = (who == "me") ? state.GetUnitById(invokeUnit.id) : state.GetRhsUnitById(invokeUnit.id);
 
-        bool isAttackPhase = (state.phase == EffectTiming.OnAttack) || (state.phase == EffectTiming.OnAfterAttack);
+        bool isAttackPhase = state.phase.IsAttackPhase();
         bool isPetChangePhase = (state.phase == EffectTiming.OnBeforePetChange) || (state.phase == EffectTiming.OnAfterPetChange);
         if (isPetChangePhase)
             return (lhsUnit.skill?.type ?? SkillType.空过) == SkillType.換场;
