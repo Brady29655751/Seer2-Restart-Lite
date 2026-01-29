@@ -12,7 +12,7 @@
 					<content><![CDATA[进了禁食山就要遵守这里的战斗规则！来一场禁食牌吧！]]></content>
 					<functionHandler>
 						<func type="click">
-							<description><![CDATA[挑战多摩桑]]></description>
+							<description><![CDATA[挑战雷金纳德]]></description>
 							<action>battle</action>
 							<param>default</param>
 						</func>
@@ -22,7 +22,7 @@
 							<param>ItemShop</param>
 							<param>mode=buy</param>
 							<param>currency=400022/0</param>
-							<param>item=500049/500206</param>
+							<param>item=320171/500043/500049/500070/500206</param>
 							<param>title=兑换精灵</param>
 						</func>
 						<func type="click">
@@ -116,22 +116,29 @@
 						<mode>6</mode>
 					</settings>
 					<player>
-						<pet id="207" level="100">
-							<status>
-								<hp>3000</hp>
-							</status>
-							<initBuff>17</initBuff>
-							<normalSkill>100031,100032,100033,100034</normalSkill>
-							<superSkill>100039</superSkill>
+						<pet id="3" level="100">
+							<initBuff>12</initBuff>
+							<normalSkill>100001,100002,100003,100004</normalSkill>
+							<superSkill>100020</superSkill>
+						</pet>
+						<pet id="6" level="100">
+							<initBuff>12</initBuff>
+							<normalSkill>100011,100012,100013,100014</normalSkill>
+							<superSkill>100020</superSkill>
+						</pet>
+						<pet id="9" level="100">
+							<initBuff>12</initBuff>
+							<normalSkill>100021,100022,100023,100024</normalSkill>
+							<superSkill>100020</superSkill>
 						</pet>
 					</player>
 					<enemy>
-						<pet id="50" level="100">
+						<pet id="207" level="80">
 							<status>
-								<hp>5000</hp>
+								<hp>1500</hp>
 							</status>
 							<initBuff>77</initBuff>
-							<superSkill>13380</superSkill>
+							<superSkill>13449</superSkill>
 						</pet>
 					</enemy>
 					<winHandler>
@@ -141,12 +148,14 @@
 							<param>400022,1</param>
 						</button>
 					</winHandler>
+					<!--
 					<loseHandler>
 						<button type="auto">
 							<action>openDialog</action>
 							<param>lose</param>
 						</button>
 					</loseHandler>
+					-->
 				</branch>
 				<branch id="test">
 					<settings count="3" item="false" simulate="true">

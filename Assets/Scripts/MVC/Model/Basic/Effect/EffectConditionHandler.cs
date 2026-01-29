@@ -17,7 +17,7 @@ public static class EffectConditionHandler
         string turn = condOptions.Get("turn_num", "all");
         bool isTurnNumCorrect = (turn == "all") || ((turn == "odd") && (state.turn % 2 == 1)) || ((turn == "even") && (state.turn % 2 == 0));
 
-        if (state.whosTurn == 0)
+        if ((state.whosTurn == 0) || (!isTurnNumCorrect))
             return isTurnNumCorrect;
 
         string who = condOptions.Get("whos_turn", "me");
@@ -95,7 +95,7 @@ public static class EffectConditionHandler
                 Player.instance.random = Random.Range(0, 100);
         } else {
             var invokeUnitId = ((Unit)effect.invokeUnit).id;
-            lhsUnit = (who == "me") ? state.GetUnitById(invokeUnitId) : state.GetRhsUnitById(invokeUnitId);
+            lhsUnit = state.GetUnitById(invokeUnitId);
             rhsUnit = state.GetRhsUnitById(lhsUnit.id);
             
             random = (type == "rng") ? Random.Range(0, 100) : lhsUnit.random;

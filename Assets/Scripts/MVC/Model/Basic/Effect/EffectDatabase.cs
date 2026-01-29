@@ -119,7 +119,9 @@ public static class EffectDatabase {
 
     public static bool IsAttackPhase(this EffectTiming timing)
     {
-        return (timing == EffectTiming.OnAttackStart) || (timing == EffectTiming.OnAttack) || (timing == EffectTiming.OnAfterAttack);
+        bool isAttackPhase = (timing > EffectTiming.OnBeforeAttack) && (timing < EffectTiming.OnAttackEnd);
+        bool isDamagePhase = (timing >= EffectTiming.OnDamageParamCalculate) && (timing <= EffectTiming.OnFinalDamageCalculate);
+        return isAttackPhase && (!isDamagePhase);
     }
 }
 

@@ -86,7 +86,7 @@ public class PetDemoView : Module
         var feature = pet.feature.feature;
         var buff = Buff.GetFeatureBuff(pet);
         var icon = buff?.info?.GetIcon(false);
-        var isIconExist = (icon != null) && ((!PetInfo.IsMod(pet.id)) || buff.options.ContainsKey("res"));
+        var isIconExist = (icon != null) && ((!PetInfo.IsMod(pet.id)) || buff.info.options.ContainsKey("res"));
         
         featureButton?.gameObject.SetActive(!isIconExist);
         featureHighStarButton?.gameObject.SetActive(isIconExist);

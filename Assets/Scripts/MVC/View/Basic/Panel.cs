@@ -50,12 +50,12 @@ public class Panel : UIModule
         if (prefab == null)
             return null;
 
+        if (trimPanelName.TryTrimStart("[Refresh]", out trimPanelName))
+            ClosePanel<ModPanel>();
+
         GameObject obj = Instantiate(prefab, canvas.transform);
         obj.transform.SetAsLastSibling();
         Panel panel = obj.GetComponentInChildren<Panel>();
-
-        if ((panel.GetType() == typeof(ModPanel)) && trimPanelName.TryTrimStart("[Refresh]", out trimPanelName))
-            ClosePanel<ModPanel>();
 
         if (isModPanel)
         {

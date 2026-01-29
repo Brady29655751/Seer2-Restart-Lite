@@ -33,7 +33,7 @@ public class BuffInfo
     
     public int minValue = int.MinValue, maxValue = int.MaxValue;
     public int sortPriority => GetSortPriority();
-    public int addPriority => int.Parse(options.Get("priority", int.MinValue.ToString()));
+    public int addPriority => int.Parse(options.Get("priority", "0"));
     public string position => options.Get("position", "none");
     public string overrideType => options.Get("type");
     public List<Effect> effects { get; private set; }

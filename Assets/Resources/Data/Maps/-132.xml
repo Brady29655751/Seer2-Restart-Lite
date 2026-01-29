@@ -54,6 +54,21 @@
 							<condition>firstPet.id=685</condition>
 							<condition>firstPet.levelLTE99</condition>
 						</func>
+						<func type="click">
+							<description><![CDATA[常驻神迹]]></description>
+							<action>battle</action>
+							<param>fuxiao</param>
+							<condition>firstPet.uid=946</condition>
+						</func>
+						<func type="branch">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=将神迹拂晓兔设为首发再来挑战吧</param>
+							<param>item_icon=pet[946]</param>
+							<param>option_num=1</param>
+							<condition>firstPet.uidNOT946</condition>
+						</func>
 					</functionHandler>
 					<replyHandler>
 						<reply type="click">
@@ -240,6 +255,55 @@
 							<param>miracle_lose</param>
 						</button>
 					</loseHandler>
+				</branch>
+				<branch id="fuxiao">
+					<settings count="1">
+						<mode>4</mode>
+					</settings>
+					<enemy>
+						<pet id="20009" level="105">
+							<status>
+								<spd>1</spd>
+								<hp>2000</hp>
+							</status>
+							<initBuff>13,20,72,-3097</initBuff>
+							<loopSkill>-1</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setPet</action>
+							<param>maxLevel=105</param>
+							<param>level=105</param>
+							<condition>activity[20001].done[fuxiao]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>evolvePet</action>
+							<param>20009</param>
+							<condition>activity[20001].done[fuxiao]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=神迹拂晓兔已常驻神迹形态</param>
+							<param>item_icon=pet[20009]</param>
+							<param>option_num=1</param>
+							<condition>activity[20001].done[fuxiao]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>setItem</action>
+							<param>add_with_hint</param>
+							<param>470009,1</param>
+							<condition>activity[20001].done[fuxiao]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>20001</param>
+							<param>done[fuxiao]=true</param>
+							<condition>activity[20001].done[fuxiao]=[bool]false[default]false</condition>
+						</button>
+					</winHandler>
 				</branch>
 			</battle>
 			<eventHandler>

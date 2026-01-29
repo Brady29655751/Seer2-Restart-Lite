@@ -1656,9 +1656,27 @@ public static class EffectAbilityHandler
     {
         string action = effect.abilityOptionDict.Get("action", "none");
         string value = effect.abilityOptionDict.Get("param_count", "0");
+        string mod = effect.abilityOptionDict.Get("mod", "false");
+        string path = effect.abilityOptionDict.Get("path", string.Empty);
 
         if (!int.TryParse(value, out var count))
             return false;
+
+        switch (action)
+        {
+            default:
+                break;
+
+            case "set_bgm":
+                state.options.Set("bgm_path", path);
+                state.options.Set("bgm_mod", mod);
+                return true;
+
+            case "set_background":
+                state.options.Set("background_path", path);
+                state.options.Set("background_mod", mod);
+                return true;
+        }
 
         // 對玩家的進行的效果，PVP不生效
         if ((state != null) && (state.settings.mode == BattleMode.PVP))

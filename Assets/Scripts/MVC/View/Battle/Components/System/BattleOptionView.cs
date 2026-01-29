@@ -113,6 +113,7 @@ public class BattleOptionView : BattleBaseView
         var parallelCursor = (parallelCount > 1) ? opUnit.petSystem.cursor : -1;
 
         var itemBag = (currentState.settings.mode == BattleMode.YiTeRogue) ? YiTeRogueData.instance.itemBag : Player.instance.gameData.itemBag;
+        var potionBag = currentState.settings.isPVP ? Item.pvpPotionItemDatabase : itemBag;
         var anger = (myUnit.pet.buffController.GetBuff(61) != null) ? int.MaxValue : myUnit.pet.anger;
 
         if (recordPanel != null)
@@ -131,7 +132,7 @@ public class BattleOptionView : BattleBaseView
         opChangeView.SetCursor(opUnit.petSystem.cursor, -1);
 
         captureController.SetItemBag(itemBag);
-        itemController.SetItemBag(itemBag);
+        itemController.SetItemBag(potionBag);
 
         if (parallelCount > 1)
             for (int i = 0; i < parallelCount; i++)

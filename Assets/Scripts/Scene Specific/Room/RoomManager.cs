@@ -80,7 +80,7 @@ public class RoomManager : Manager<RoomManager>
         }).Select(x => (x == null) ? null : Pet.ToBestPet(new Pet(x), buffs.Contains(Buff.BUFFID_PVP_IV_120) ? 120 : 31));
         
         petBagPanel.SetPetBag(myPets.ToArray());
-        petBagPanel.SetItemBag(isItemOK ? Item.pvpItemDatabase : new List<Item>(){ new Item(10239, 9999) });
+        petBagPanel.SetItemBag(isItemOK ? Item.pvpItemDatabase : new List<Item>(){ new Item(10239, 9999), new Item(10240, 9999) });
         roomSettingsView.SetPet(myPets.ToList(), true);
         roomSettingsView.SetPet(Enumerable.Repeat(Pet.GetExamplePet(0), petCount).ToList(), false);
     }

@@ -17,6 +17,7 @@ public class BattleState
     public Buff weatherBuff => Buff.GetWeatherBuff(weather);
     public List<KeyValuePair<string, Buff>> stateBuffs = new List<KeyValuePair<string, Buff>>();
     public Queue<string> reports = new Queue<string>(30);
+    public Dictionary<string, string> options = new Dictionary<string, string>();
 
     public Unit masterUnit, clientUnit;
     public List<int> actionOrder = new List<int>();
@@ -43,6 +44,7 @@ public class BattleState
         this.weather = settings.weather;
         this.stateBuffs = settings.initBuffs;
         this.reports = new Queue<string>(30);
+        this.options = new Dictionary<string, string>();
 
         this.masterUnit = new Unit(masterTurn);
         this.clientUnit = new Unit(clientTurn);
@@ -64,6 +66,7 @@ public class BattleState
         weather = rhs.weather;
         stateBuffs = rhs.stateBuffs.Select(x => new KeyValuePair<string, Buff>(x.Key, new Buff(x.Value))).ToList();
         reports = new Queue<string>(rhs.reports);
+        options = new Dictionary<string, string>(rhs.options);
 
         masterUnit = new Unit(rhs.masterUnit);
         clientUnit = new Unit(rhs.clientUnit);

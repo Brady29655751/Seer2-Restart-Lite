@@ -514,9 +514,9 @@ public class Pet
         if (!keepSkill) 
         {
             evolvePet.LevelDown(evolvePet.level);
-            specialSkills.ForEach(skill => evolvePet.skills.LearnNewSkill(skill));
         }
 
+        specialSkills.ForEach(skill => evolvePet.skills.LearnNewSkill(skill));
         evolvePet.skills.CheckNewSkill(evolvePet.level);
 
         if (cursor.IsInRange(0, Player.instance.petBag.Length))

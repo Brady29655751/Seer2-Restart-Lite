@@ -129,9 +129,11 @@ public class BattleSystemView : BattleBaseView
         if (currentState.weather != 0)
             stateBuffs.Insert(0, currentState.weatherBuff);
 
+        resourceView.SetState(lastState, currentState);
         optionView.SetState(lastState, currentState);
         weatherView.SetState(lastState, currentState);
         stateBuffView.SetBuff(stateBuffs);
+        audioView.SetState(lastState, currentState);
     }
 
 }

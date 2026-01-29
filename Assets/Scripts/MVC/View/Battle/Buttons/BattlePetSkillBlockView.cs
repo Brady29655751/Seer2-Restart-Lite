@@ -29,7 +29,9 @@ public class BattlePetSkillBlockView : Module
     }
 
     private void SetName() {
+        int length = isNull ? 0 : currentSkill.name.Length;
         nameText.text = isNull ? string.Empty : currentSkill.name;
+        nameText.fontSize = 20 - Mathf.Max(length, 6);
     }
 
     private void SetElement() {

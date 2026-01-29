@@ -310,6 +310,9 @@ public static class Identifier
             return PetElementSystem.GetElementRelation(elementId, pet);
         }
 
+        if (id == "position")
+            return petSystem.petBag.IndexOf(pet);
+
         if (id.StartsWith("status") || id.StartsWith("powerup"))
             return GetPetStatusIdentifier(id, pet.statusController);
 

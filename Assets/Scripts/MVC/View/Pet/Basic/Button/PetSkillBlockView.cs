@@ -36,7 +36,9 @@ public class PetSkillBlockView : Module
     }
 
     private void SetName() {
+        int length = isNull ? 0 : currentSkill.name.Length;
         nameText.text = isNull ? string.Empty : currentSkill.name;
+        nameText.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, length > 6 ? 100 : 75);
     }
 
     private void SetElement() {

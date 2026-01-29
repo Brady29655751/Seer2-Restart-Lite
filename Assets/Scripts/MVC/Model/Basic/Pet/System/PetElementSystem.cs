@@ -21,13 +21,13 @@ public static class PetElementSystem {
         Element.地面,   Element.冰,     Element.超能,   Element.战斗,
         Element.特质,   Element.光,     Element.神秘,   Element.暗影,
         Element.龙,     Element.沙漠,   Element.圣灵,   Element.精灵王,
-        Element.上古,   Element.机械
+        Element.上古,   Element.机械,   Element.邪灵
     };
 
     public static List<string> elementNameList = new List<string>() {
         "普通", "草", "水", "火", "风", "虫", "飞行", "电", "地面", "冰",
         "超能", "战斗", "特质", "光", "神秘", "暗影", "龙", "沙漠", "圣灵",
-        "精灵王", "上古", "机械"
+        "精灵王", "上古", "机械", "邪灵"
     };
 
     public static List<string> elementColorList = new List<string>() {
@@ -35,32 +35,32 @@ public static class PetElementSystem {
         "#965983", "#e5eeeb", "#ffe53d", "#cca681", "#55d9e8",
         "#c24ec9", "#ba8551", "#f9e805", "#fffc01", "#a428a4",
         "#595271", "#981c65", "#a56741", "#01beff", "#ed780e",
-        "#fff699", "#706283",
-    };
-
+        "#fff699", "#706283", "#073e00"
+    };        
     public static Dictionary<Element, List<float>> elementDefenseRelation = new Dictionary<Element, List<float>>() {
-        { Element.普通, new List<float>() { N, N, N, N, N, N, N, N, N, N, N, N, N, N, N, N, N, N, N, N, N, N } },
-        { Element.草, new List<float>()   { N, R, R, W, N, W, W, R, R, N, N, N, R, O, N, N, N, R, W, W, W, W } },
-        { Element.水, new List<float>()   { N, W, R, R, N, N, N, W, N, R, N, R, R, N, N, R, W, N, W, W, N, R } },
-        { Element.火, new List<float>()   { N, R, W, R, N, R, N, N, W, R, N, N, R, N, N, N, N, W, W, W, N, R } },
-        { Element.风, new List<float>()   { N, N, N, W, R, N, R, R, R, W, W, R, R, N, N, N, N, R, N, W, W, N } },
-        { Element.虫, new List<float>()   { N, R, N, W, N, N, W, N, N, R, R, W, W, R, W, R, N, N, R, W, N, R } },
-        { Element.飞行, new List<float>() { N, R, N, N, R, R, N, W, O, W, N, N, R, N, W, N, R, R, N, W, W, W } },
-        { Element.电, new List<float>()   { N, N, N, N, N, N, R, R, W, N, R, N, R, N, N, N, R, W, W, W, N, R } },
-        { Element.地面, new List<float>() { N, N, W, N, W, N, W, O, N, N, R, N, W, N, R, R, N, N, N, W, N, W } },
-        { Element.冰, new List<float>()   { N, R, N, W, O, R, N, N, N, R, N, W, R, R, N, N, W, R, W, W, R, W } },
-        { Element.超能, new List<float>() { N, N, N, N, N, W, N, N, R, N, R, R, R, W, N, W, R, N, N, W, N, W } },
-        { Element.战斗, new List<float>() { N, N, N, R, W, R, N, N, N, R, W, R, R, N, R, N, N, N, R, W, N, N } },
-        { Element.特质, new List<float>() { N, R, R, R, R, W, R, R, W, R, R, R, R, W, R, W, W, W, W, W, W, N } },
-        { Element.光, new List<float>()   { N, W, N, N, N, N, R, N, W, N, R, N, W, R, N, R, N, N, N, W, N, R } },
-        { Element.神秘, new List<float>() { N, N, R, N, R, N, N, R, R, N, W, N, R, W, R, N, W, R, R, W, W, O } },
-        { Element.暗影, new List<float>() { N, N, W, N, N, R, R, W, R, N, N, N, W, W, N, W, R, N, N, W, N, N } },
-        { Element.龙, new List<float>()   { N, N, N, R, R, W, R, N, R, N, N, W, W, N, R, W, N, N, R, W, W, N } },
-        { Element.沙漠, new List<float>() { N, W, R, R, W, N, N, N, N, W, N, N, W, R, W, N, N, R, N, W, N, N } },
-        { Element.圣灵, new List<float>() { N, R, R, R, N, W, N, R, R, R, N, W, W, R, W, R, W, R, N, W, R, N } },
-        { Element.精灵王, new List<float>() { N, R, R, R, R, R, R, R, R, R, R, R, R, R, R, R, R, R, R, W, R, R } },
-        { Element.上古, new List<float>() { N, R, N, N, N, N, N, N, N, N, W, N, W, N, R, N, R, N, W, W, N, W } },
-        { Element.机械, new List<float>() { N, R, W, W, R, W, R, W, N, R, W, N, N, N, O, R, N, W, N, W, R, N } },
+        { Element.普通, new List<float>() { N, N, N, N, N, N, N, N, N, N, N, N, N, N, N, N, N, N, N, N, N, N, N } },
+        { Element.草, new List<float>()   { N, R, R, W, N, W, W, R, R, N, N, N, R, O, N, N, N, R, W, W, W, W, N } },
+        { Element.水, new List<float>()   { N, W, R, R, N, N, N, W, N, R, N, R, R, N, N, R, W, N, W, W, N, R, N } },
+        { Element.火, new List<float>()   { N, R, W, R, N, R, N, N, W, R, N, N, R, N, N, N, N, W, W, W, N, R, N } },
+        { Element.风, new List<float>()   { N, N, N, W, R, N, R, R, R, W, W, R, R, N, N, N, N, R, N, W, W, N, W } },
+        { Element.虫, new List<float>()   { N, R, N, W, N, N, W, N, N, R, R, W, W, R, W, R, N, N, R, W, N, R, N } },
+        { Element.飞行, new List<float>() { N, R, N, N, R, R, N, W, O, W, N, N, R, N, W, N, R, R, N, W, W, W, N } },
+        { Element.电, new List<float>()   { N, N, N, N, N, N, R, R, W, N, R, N, R, N, N, N, R, W, W, W, N, R, N } },
+        { Element.地面, new List<float>() { N, N, W, N, W, N, W, O, N, N, R, N, W, N, R, R, N, N, N, W, N, W, N } },
+        { Element.冰, new List<float>()   { N, R, N, W, O, R, N, N, N, R, N, W, R, R, N, N, W, R, W, W, R, W, R } },
+        { Element.超能, new List<float>() { N, N, N, N, N, W, N, N, R, N, R, R, R, W, N, W, R, N, N, W, N, W, R } },
+        { Element.战斗, new List<float>() { N, N, N, R, W, R, N, N, N, R, W, R, R, N, R, N, N, N, R, W, N, N, N } },
+        { Element.特质, new List<float>() { N, R, R, R, R, W, R, R, W, R, R, R, R, W, R, W, W, W, W, W, W, N, W } },
+        { Element.光, new List<float>()   { N, W, N, N, N, N, R, N, W, N, R, N, W, R, N, R, N, N, N, W, N, R, W } },
+        { Element.神秘, new List<float>() { N, N, R, N, R, N, N, R, R, N, W, N, R, W, R, N, W, R, R, W, W, O, W } },
+        { Element.暗影, new List<float>() { N, N, W, N, N, R, R, W, R, N, N, N, W, W, N, W, R, N, N, W, N, N, W } },
+        { Element.龙, new List<float>()   { N, N, N, R, R, W, R, N, R, N, N, W, W, N, R, W, N, N, R, W, W, N, N } },
+        { Element.沙漠, new List<float>() { N, W, R, R, W, N, N, N, N, W, N, N, W, R, W, N, N, R, N, W, N, N, W } },
+        { Element.圣灵, new List<float>() { N, R, R, R, N, W, N, R, R, R, N, W, W, R, W, R, W, R, N, W, R, N, R } },
+        { Element.精灵王,new List<float>(){ N, R, R, R, R, R, R, R, R, R, R, R, R, R, R, R, R, R, R, W, R, R, R } },
+        { Element.上古, new List<float>() { N, R, N, N, N, N, N, N, N, N, W, N, W, N, R, N, R, N, W, W, N, W, N } },
+        { Element.机械, new List<float>() { N, R, W, W, R, W, R, W, N, R, W, N, N, N, O, R, N, W, N, W, R, N, R } },
+        { Element.邪灵, new List<float>() { N, N, N, N, R, N, R, N, N, N, N, R, W, R, R, R, W, R, N, W, N, W, N } },
     };
 
     public static bool IsMod() => isMod;
@@ -151,6 +151,6 @@ public enum Element {
     飞行 = 6, 电 = 7, 地面 = 8, 冰 = 9, 超能 = 10, 
     战斗 = 11, 特质 = 12, 光 = 13, 神秘 = 14, 暗影 = 15, 
     龙 = 16, 沙漠 = 17, 圣灵 = 18, 精灵王 = 19, 上古 = 20, 
-    机械 = 21,
+    机械 = 21, 邪灵 = 22,
 }
 

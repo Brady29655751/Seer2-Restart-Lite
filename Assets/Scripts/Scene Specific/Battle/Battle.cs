@@ -67,6 +67,7 @@ public class Battle
         var petCount = (int)roomHash["count"];
         var time = (int)roomHash["time"];
         var buffList = (int[])roomHash["buff"];
+        var item = (bool)roomHash["item"];
         var iv = buffList.Contains(Buff.BUFFID_PVP_IV_120) ? 120 : 31;
 
         var roomSettings = new BattleSettings() {
@@ -80,7 +81,7 @@ public class Battle
             weather = 0,
             isSimulate = true,
             isEscapeOK = true,
-            isItemOK = false,
+            isItemOK = item,
             isCaptureOK = false,
         };
             

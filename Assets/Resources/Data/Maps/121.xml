@@ -252,6 +252,35 @@
 							<action>battle</action>
 							<param>evolve</param>
 						</func>
+						<func type="click">
+							<description><![CDATA[神迹觉醒]]></description>
+							<action>battle</action>
+							<param>miracle</param>
+						</func>
+						<func type="click">
+							<description><![CDATA[常驻神迹]]></description>
+							<action>battle</action>
+							<param>meimou</param>
+							<condition>firstPet.uid=1136</condition>
+						</func>
+						<func type="branch">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=将神迹法伊娜设为首发再来挑战吧</param>
+							<param>item_icon=pet[1136]</param>
+							<param>option_num=1</param>
+							<condition>firstPet.uidNOT1136</condition>
+						</func>
+						<func type="click">
+							<description><![CDATA[因子商店]]></description>
+							<action>openPanel</action>
+							<param>ItemShop</param>
+							<param>mode=buy</param>
+							<param>currency=8/2</param>
+							<param>item=321136/470008</param>
+							<param>limit=1/1</param>
+						</func>
 					</functionHandler>
 					<replyHandler>
 						<reply type="click">
@@ -281,6 +310,81 @@
 						    <param>title=选择要进化的法伊娜</param>
 						    <param>option_num=2</param>
 						    <param>callback=evolve</param>
+						</button>
+					</winHandler>
+				</branch>
+				<branch id="miracle">
+					<settings count="6">
+						<mode>4</mode>
+						<weather>1</weather>
+					</settings>
+					<enemy>
+						<pet id="101136" level="105">
+							<status>
+								<hp>30000</hp>
+							</status>
+							<initBuff>-8,61</initBuff>
+							<loopSkill>13504,13506,13505,13508,13507</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setItem</action>
+							<param>add</param>
+							<param>8,50</param>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=50个精灵因子已经放入背包</param>
+							<param>item_icon=item[8]</param>
+							<param>option_num=1</param>
+						</button>
+					</winHandler>
+				</branch>
+				<branch id="meimou">
+					<settings count="1">
+						<mode>4</mode>
+						<weather>1</weather>
+					</settings>
+					<enemy>
+						<pet id="20008" level="105">
+							<status>
+								<mat>1200</mat>
+								<spd>1</spd>
+								<hp>10000</hp>
+							</status>
+							<initBuff>12,13,61,72,-3028,-3097</initBuff>
+							<loopSkill>13504,13506,13505,13508,13507</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setPet</action>
+							<param>maxLevel=105</param>
+							<param>level=105</param>
+							<condition>activity[evolve_608].done=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>evolvePet</action>
+							<param>20008</param>
+							<condition>activity[evolve_608].done=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=神迹法伊娜已常驻神迹形态</param>
+							<param>item_icon=pet[20008]</param>
+							<param>option_num=1</param>
+							<condition>activity[evolve_608].done=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>evolve_608</param>
+							<param>done=true</param>
+							<condition>activity[evolve_608].done=[bool]false[default]false</condition>
 						</button>
 					</winHandler>
 				</branch>

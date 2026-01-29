@@ -6,6 +6,7 @@ public class BattleAudioView : BattleBaseView
 {
     [SerializeField] private AudioClip endLoadingSound;
     [SerializeField] private AudioClip[] battleBGM;
+    private Dictionary<string, string> options = new Dictionary<string, string>();
 
     public override void Init()
     {
@@ -26,8 +27,8 @@ public class BattleAudioView : BattleBaseView
             yield break;
         }
         */
-
-        ResourceManager.instance.GetLocalAddressables<AudioClip>("BGM/fight/BGM_" + GetWorldId(battle.settings.mode) + GetBattleBGMId(battle.settings.mode) + ".mp3", battle.settings.isMod,
+        var path = "BGM/fight/BGM_" + GetWorldId(battle.settings.mode) + GetBattleBGMId(battle.settings.mode) + ".mp3";
+        ResourceManager.instance.GetLocalAddressables<AudioClip>(path, battle.settings.isMod,
             (bgm) => AudioSystem.instance.PlayMusic(bgm, AudioVolumeType.BattleBGM));
     }
 
@@ -53,5 +54,24 @@ public class BattleAudioView : BattleBaseView
             BattleMode.Card => 4,
             _ => (int)mode,
         };
+    }
+
+    public void SetState(BattleState lastState, BattleState currentState)
+    {
+        if (currentState == null)
+            return;
+
+        var path = currentState.options.Get("bgm_path");
+        var mod = currentState.options.Get("bgm_mod");
+
+        if (path == options.Get("bgm_path") && (mod == options.Get("bgm_mod")))
+            return;
+
+        ResourceManager.instance.GetLocalAddressables<AudioClip>(path, bool.Parse(mod), (clip) =>
+        {
+            options.Set("bgm_path", path);
+            options.Set("bgm_mod", mod);
+            AudioSystem.instance.PlayMusic(clip, AudioVolumeType.BattleBGM);
+        });
     }
 }

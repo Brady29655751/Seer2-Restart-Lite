@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PetElementModel : Module
 {
-    [SerializeField] private int elementNumInOnePage = 22;
+    [SerializeField] private int elementNumInOnePage = 23;
     public int page { get; private set; }= 0;
     public int lastPage => (PetElementSystem.elementNum - 1) / elementNumInOnePage;
     public Element element { get; private set; }

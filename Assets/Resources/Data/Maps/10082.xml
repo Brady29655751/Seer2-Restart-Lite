@@ -14,6 +14,74 @@
 				</button>
 			</eventHandler>
 		</npc>
+		<npc id="1008202" resId="Pets/pet/12362" name="妖王摩哥斯" size="138,159" pos="90,260" namePos="5,0">
+			<description>妖王摩哥斯</description>
+			<dialog>
+				<branch id="default" name="妖王摩哥斯" icon="Pets/pet/12362" size="92,106" pos="10,35">
+					<content><![CDATA[哈哈哈！我是首位邪灵系精灵！]]></content>
+					<functionHandler>
+						<func type="click">
+							<description><![CDATA[挑战摩哥斯]]></description>
+							<action>battle</action>
+							<param>default</param>
+						</func>
+					</functionHandler>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[死鸭子嘴硬]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+					</replyHandler>
+				</branch>
+			</dialog>
+			<battle>
+				<branch id="default">
+					<settings count="1" star="3">
+						<mode>3</mode>
+					</settings>
+					<enemy>
+						<pet id="12362" level="100">
+							<status>
+								<atk>600</atk>
+								<mat>600</mat>
+								<hp>3000</hp>
+							</status>
+							<initBuff>-8,61,-3059,3017,-3098,-3099,78</initBuff>
+							<loopSkill>13572,13571</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>getPet</action>
+							<param>12360,10</param>
+							<condition>activity[20012].done[22]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=【摩托托】已经放入精灵仓库</param>
+							<param>item_icon=pet[12360]</param>
+							<param>option_num=1</param>
+							<condition>activity[20012].done[22]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>20012</param>
+							<param>done[22]=true</param>
+							<condition>activity[20012].done[22]=[bool]false[default]false</condition>
+						</button>
+					</winHandler>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>openDialog</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
 		<teleport id="2" name="勇者之塔神秘领域" pos="410,425" targetMapId="10083"/>
 	</entities>		
 </map>

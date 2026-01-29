@@ -19,7 +19,7 @@ id,timing,priority,target,condition,cond_option,effect,effect_option
 1007,on_after_attack,-1,pet,none,is_hit=false,rage,name=未命中时怒气&add={0}&{1}={2}
 1008,on_before_attack,-1,skill,none,none,set_skill,name=设定技能数值&type={0}&op={1}&value={2}&{3}={4}
 1009,on_before_attack,-1,skill,status,status_type={0}&op={1}&cmp_value={2},set_skill,name=能力值比较后，设定技能数值&type={3}&op={4}&value={5}
-1010,on_final_dmg_cal,100,skill,none,none,set_damage,name=造成伤害不低于{0}&op=[MAX]&value={1}
+1010,on_final_dmg_cal,100,skill,none,none,set_damage,name=造成伤害不低于{0}&op=[MAX]&value={0}
 1011,on_after_attack,-1,pet,none,none,set_buff,name=设定印记数值&id={0}&type={1}&op={2}&value={3}&{4}={5}
 1012,on_turn_end,-1,skill,none,none,set_skill,name=回合结束时，设定技能数值&type={0}&op={1}&value={2}&{3}={4}
 1013,on_turn_end,-1,pet,none,none,set_buff,name=回合结束时，设定印记数值&id={0}&type={1}&op={2}&value={3}&{4}={5}
@@ -32,6 +32,12 @@ id,timing,priority,target,condition,cond_option,effect,effect_option
 1020,on_turn_start,-1,pet,unit,type={0}&type[0].op={1}&type[0].cmp={2},rage,name=回合开始时，当前玩家条件设定怒气数值&add={3}&{4}={5}
 1021,on_decide_pri,-1,skill,unit,type={0}/me.skill.type&type[0].op={1}&type[0].cmp={2}&type[1].op=GTE&type[1].cmp=0,set_skill,name=选择技能时，当前玩家条件设定技能先制&type=priority&op={3}&value={4}&{5}={6}
 1022,on_after_attack,-1,pet,buff,whos_turn=op&whos_attack=op&id={0},remove_buff,name=若自身有印记{0}则移除印记&{1}={2}&{3}={4}&{5}={6}&{7}={8}&{9}={10}&{11}={12}
+2001,none,-1,pet,none,none,powerup,name=强化&{0}={1}&{2}={3}&{4}={5}&{6}={7}&{8}={9}&{10}={11}
+2002,none,-1,pet,none,none,add_buff,name=添加印记&{0}={1}&{2}={3}&{4}={5}&{6}={7}&{8}={9}&{10}={11}
+2003,none,-1,pet,none,none,remove_buff,name=移除印记&{0}={1}&{2}={3}&{4}={5}&{6}={7}&{8}={9}&{10}={11}
+2004,none,-1,pet,none,none,heal,name=恢复&add={0}&{1}={2}
+2005,none,-1,pet,none,is_hit=false,heal,name=未命中时恢复&add={0}&{1}={2}
+2006,none,-1,pet,none,none,rage,name=怒气&add={0}&{1}={2}
 3001,on_add_buff,-1,pet,none,none,rage,name=添加印记时，怒气不低于{0}&min={0}
 3002,on_remove_buf,-1,pet,none,none,rage,name=移除印记时，怒气最低为{0}&min={0}
 3003,on_final_dmg_cal,-1,skill,skill,who=op&whos_turn=op&type=type&type_op=>&type_cmp=0,set_damage,name=受到的攻击伤害乘算&who=op&op=*&value={0}
