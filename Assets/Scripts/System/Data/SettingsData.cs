@@ -10,6 +10,7 @@ public class SettingsData
     public float battleBGMVolume, battleSEVolume;  
     public float battleAnimSpeed;
     public bool shakeWhenBigDamage, flashWhenBigDamage;
+    public bool autoHealAfterBattle;
     public int initMapId = -70;
     public int ruleId;
     [XmlIgnore] public BattleRule rule => (BattleRule)ruleId;
@@ -22,6 +23,7 @@ public class SettingsData
         battleAnimSpeed = 1;
         shakeWhenBigDamage = true;
         flashWhenBigDamage = true;
+        autoHealAfterBattle = false;
         initMapId = -70;
         ruleId = 0;
     }

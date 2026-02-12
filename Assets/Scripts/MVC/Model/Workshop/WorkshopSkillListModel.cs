@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class WorkshopSkillListModel : Module
+public class WorkshopSkillListModel : SelectModel<Skill>
 {
     [SerializeField] private IInputField searchInputField;
     public string searchString => searchInputField?.inputString;
@@ -15,30 +15,34 @@ public class WorkshopSkillListModel : Module
     private bool sortByDescendOrder = false;
     private Func<Skill, float> sorter => GetSorter();
 
-    private List<Skill> skillDatabase = new List<Skill>();
-    private IEnumerable<Skill> filteredSkillList => skillDatabase.Where(searchFilter);
-    private IEnumerable<Skill> orderedSkillList => sortByDescendOrder ? filteredSkillList.OrderByDescending(sorter) : filteredSkillList.OrderBy(sorter);
-    public List<Skill> resultSkillList => orderedSkillList.ToList();
 
     public void SetActive(bool active) {
         if (active)
             return;
 
         searchInputField.SetInputString(string.Empty);
+        Reset();
     }
 
-    public void SetSkillList(List<Skill> skillList) {
-        skillDatabase = skillList;
+    public void Search()
+    {
+        Filter(searchFilter);
+        Sort(sorter, sortByDescendOrder);
     }
 
-    public void Sort(string type) {
-        if (type == sortType) {
+    public void Sort(string type)
+    {
+        if (type == sortType) 
+        {
             sortByDescendOrder = !sortByDescendOrder;
-            return;
+        } 
+        else
+        {
+            sortType = type;
+            sortByDescendOrder = true;   
         }
-        
-        sortType = type;
-        sortByDescendOrder = true;
+
+        Search();
     }
 
     private Func<Skill, bool> GetSearchFilter() {

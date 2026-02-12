@@ -17,27 +17,27 @@ public class CookController : UIModule
 
     public int currentCookNum => selectNumController.GetInputValue();
     public Item currentCookItem => cookItemController.GetSelectedItem()[0];
-    public List<Item> currentCookRecipe => GetCurrentCookRecipe();
+    public FusionRecipe currentCookRecipe => GetCurrentCookRecipe();
+    public List<Item> currentCookMaterials => currentCookRecipe?.items ?? new List<Item>();
 
     protected override void Awake() {
         selectNumController.onValueChangedEvent += OnCurrentCookNumChanged;
     }
 
     private void OnCurrentCookNumChanged(int num) {
-        cookItemDetailView.SetOtherInfo(currentCookRecipe.Select(x => x.name + " x " + (x.num * currentCookNum)).ConcatToString("\n"));
+        cookItemDetailView.SetOtherInfo(currentCookMaterials.Select(x => x.name + " x " + (x.num * currentCookNum)).ConcatToString("\n"));
     }
 
-    public List<Item> GetCurrentCookRecipe() {
-        var recipe = currentCookItem.effects[0]?.abilityOptionDict.Get("recipe", string.Empty).Split('/');
-        var materials = new List<Item>();
+    public FusionRecipe GetCurrentCookRecipe() {
+        var recipeKeys = new Dictionary<string, string>()
+        {
+            {"item", "recipe"},
+        };
 
-        for (int i = 0; i < recipe.Length; i++) {
-            var id = int.Parse(recipe[i].Substring(0, recipe[i].IndexOf('[')));
-            var num = int.Parse(recipe[i].TrimParentheses());
-            materials.Add(new Item(id, num));
-        }
+        var effect = new Effect(currentCookItem.effects[0]);
+        effect.abilityOptionDict.Set("result", effect.abilityOptionDict.Get("result") ?? currentCookItem.info.getId.ToString());
 
-        return materials;
+        return FusionRecipe.Parse(effect, recipeKeys);
     }
 
     public void SetMode(bool isSelectMode) {
@@ -59,15 +59,20 @@ public class CookController : UIModule
     }
 
     public void Cook() {
-        var item = new Item(currentCookItem.id, currentCookNum);
-        if (currentCookRecipe.Exists(x => (Item.Find(x.id)?.num ?? 0) < (x.num * item.num))) {
+        if (currentCookMaterials.Exists(x => (Item.Find(x.id)?.num ?? 0) < (x.num * currentCookNum))) {
             Hintbox.OpenHintboxWithContent("材料不足无法制作", 16);
             return;
         }
 
-        currentCookRecipe.ForEach(x => Item.Remove(x.id, x.num * currentCookNum));
-        Item.Add(item);
-        Item.OpenHintbox(item);
+        currentCookMaterials.ForEach(x => Item.Remove(x.id, x.num * currentCookNum));
+        var results = currentCookRecipe.resultIds.Random(currentCookNum, true, currentCookRecipe.resultWeights)
+            .GroupBy(x => x).Select(x => new Item(x.Key, x.Count()));
+
+        foreach (var item in results)
+        {
+            Item.Add(item);
+            Item.OpenHintbox(item);
+        }   
 
         OnSetCurrentCookItem();
     }
@@ -75,7 +80,7 @@ public class CookController : UIModule
     public void OnSetCurrentCookItem() {
         cookItemBlockView.SetItem(currentCookItem);
         cookItemDetailView.SetItem(currentCookItem);
-        cookMaterialController.SetItemBag(currentCookRecipe.Select(x => new Item(x.id, Item.Find(x.id)?.num ?? 0)).ToList());
+        cookMaterialController.SetItemBag(currentCookMaterials.Select(x => new Item(x.id, Item.Find(x.id)?.num ?? 0)).ToList());
 
         selectNumController.SetMaxValue(99);
         OnCurrentCookNumChanged(currentCookNum);

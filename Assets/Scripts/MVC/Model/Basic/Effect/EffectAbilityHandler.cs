@@ -376,11 +376,14 @@ public static class EffectAbilityHandler
             // Prepare Powerup Status
             for (int type = 0; type < typeNames.Length; type++)
             {
-                string add = effect.abilityOptionDict.Get(typeNames[type], "0");
+                var set = effect.abilityOptionDict.Get("set");
+                var powerup = pet.statusController.powerup[type];
+                var defaultValue = (set == "true") ? powerup : 0;
+                var add = effect.abilityOptionDict.Get(typeNames[type], defaultValue.ToString());
+
                 if (effect.abilityOptionDict.TryGet("all", out var specialValue))
                     add = specialValue;
-
-                var powerup = pet.statusController.powerup[type];
+                
                 if (effect.abilityOptionDict.TryGet("pos", out specialValue) && (powerup > 0))
                     add = specialValue;
 
@@ -390,10 +393,13 @@ public static class EffectAbilityHandler
                 status[type] = (add == "op") ? rhsUnit.pet.statusController.powerup[type]
                     : Parser.ParseEffectOperation(add, effect, lhsUnit, rhsUnit, pet);
 
-                if (effect.abilityOptionDict.TryGet("set", out specialValue))
+                if (!string.IsNullOrEmpty(set))
                 {
-                    var setValue = (specialValue == "op") ? rhsUnit.pet.statusController.powerup[type] 
-                        : Parser.ParseEffectOperation(specialValue, effect, lhsUnit, rhsUnit, pet);
+                    var setValue = set switch
+                    {
+                        "true" => status[type],
+                        _ => Parser.ParseEffectOperation(set, effect, lhsUnit, rhsUnit, pet),
+                    };
 
                     status[type] = setValue - powerup;   
                 }
@@ -1802,7 +1808,10 @@ public static class EffectAbilityHandler
                         var unit = (myIndex >= 0) ? lhsUnit : rhsUnit;
                         var index = (myIndex >= 0) ? myIndex : opIndex;
 
-                        unit.petSystem.petBag[index] = null;
+                        if (unit.petSystem.alivePetNum > 1)
+                            unit.petSystem.petBag[index] = null;
+                        else
+                            unit.petSystem.petBag[index].hp = 0;
 
                         isSuccess |= (index >= 0);
                     }

@@ -7,13 +7,15 @@ public class WorkshopItemListController : Module
 {
     [SerializeField] private WorkshopItemListModel itemListModel;
     [SerializeField] private WorkshopItemListView itemListView;
+    [SerializeField] private PageView pageView;
     [SerializeField] private WorkshopAllController allController;
 
     public override void Init()
     {
         base.Init();
-        itemListModel.SetItemInfoList(ItemInfo.database);
+        itemListModel.SetStorage(ItemInfo.database);
         itemListView.CreateItemInfoList(ItemInfo.database, OnEditItem);
+        OnSetPage();
     }
 
     private void OnEditItem(ItemInfo itemInfo) {
@@ -24,15 +26,37 @@ public class WorkshopItemListController : Module
     public void SetActive(bool active) {
         itemListModel.SetActive(active);
         if (!active) 
-            itemListView.SetItemInfoList(ItemInfo.database);
+            OnSetPage();
     }
 
-    public void Search() {
-        itemListView.ShowResult(itemListModel.resultItemInfoList, itemListModel.isIdFilter);
+    public void Search() 
+    {
+        itemListModel.Search();
+        OnSetPage();
     }
 
-    public void Sort(string type) {
-        itemListModel.Sort(type);
-        itemListView.ShowResult(itemListModel.resultItemInfoList, false);
+    public void Sort(string key)
+    {
+        itemListModel.Sort(key);
+        OnSetPage();
     }
+
+    private void OnSetPage()
+    {
+        itemListView.SetItemInfoList(itemListModel.selections.ToList());
+        pageView.SetPage(itemListModel.page, itemListModel.lastPage);
+    }
+
+    public void PrevPage()
+    {
+        itemListModel.PrevPage();
+        OnSetPage();
+    }
+
+    public void NextPage()
+    {
+        itemListModel.NextPage();
+        OnSetPage();
+    }
+
 }

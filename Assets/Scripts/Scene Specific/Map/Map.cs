@@ -30,13 +30,13 @@ public class Map
     public Vector2 initPoint => initialPoint.ToVector2();
     
     //------------
-    [XmlElement("anim")] public MapAnim anim; 
+    [XmlElement("anim")] public AnimInfo anim; 
     [XmlElement("music")] public MapMusic music;
     [XmlElement("entities")] public MapEntities entities;
     [XmlIgnore] public MapResources resources;
     [XmlIgnore] public Vector2Int pathSize => resources.pathSize;
 
-    public static bool IsMod(int id) => id < -50000;
+    public static bool IsMod(int id) => (id < -50000) || (id == 0);
 
     /// <summary>
     /// Load the map async and return the cached map. <br/>

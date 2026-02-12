@@ -6,6 +6,7 @@
 	<initialPoint>375,180</initialPoint>
 	<entities>
 		<npc id="116001" resId="Pets/pet/659" name="Lv 80 哈莫雷特" size="194,238" pos="480,250" namePos="10,-40">
+			<anim id="659" pos="-0.6,0.6" scale="1,1"/>
 			<description>哈莫雷特</description>
 			<dialog>
 				<branch id="default" name="哈莫雷特" icon="Pets/pet/659" size="145,179" pos="0,35">
@@ -15,6 +16,11 @@
 							<description><![CDATA[挑战哈莫雷特]]></description>
 							<action>battle</action>
 							<param>default</param>
+						</func>
+						<func type="click">
+							<description><![CDATA[哈莫超进化]]></description>
+							<action>battle</action>
+							<param>evolve</param>
 						</func>
 					</functionHandler>
 					<replyHandler>
@@ -63,6 +69,29 @@
 						</button>
 					</winHandler>
 				</branch>
+				<branch id="evolve">
+					<settings count="3">
+						<mode>3</mode>
+					</settings>
+					<enemy>
+						<pet id="750" level="100">
+							<status>
+								<hp>20000</hp>
+							</status>
+							<initBuff>13,14,61,-3022,-3059,-3066,-3094</initBuff>
+							<loopSkill>13676,13678,13679,13684,13682,13680</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=PetSelect</param>
+						    <param>title=选择要进化的哈莫雷特</param>
+						    <param>option_num=2</param>
+						    <param>callback=evolve</param>
+						</button>
+					</winHandler>
+				</branch>
 			</battle>
 			<eventHandler>
 				<button type="click">
@@ -70,6 +99,43 @@
 					<param>default</param>
 				</button>
 			</eventHandler>
+			<callbackHandler>
+				<button type="choose">
+					<action>openHintbox</action>
+					<param>type=PetSelect</param>
+				    <param>title=选择要进化的哈莫雷特</param>
+				    <param>option_num=2</param>
+					<param>callback=evolve</param>
+				    <condition>data.PetSelect.uidNOT659|data.PetSelect.level&lt;100</condition>
+				</button>
+				<button type="evolve">
+				    <action>openHintbox</action>
+				    <param>type=Item</param>
+				    <param>title=提示</param>
+				    <param>content=必须选择等级100的哈莫雷特！</param>
+				    <param>item_icon=pet[659]</param>
+				    <param>option_num=1</param>
+					<param>callback=choose</param>
+				    <condition>data.PetSelect.uidNOT659|data.PetSelect.level&lt;100</condition>
+				</button>
+				<button type="evolve">
+				    <action>openHintbox</action>
+				    <param>type=Item</param>
+				    <param>title=提示</param>
+				    <param>content=哈莫雷特已成功超进化</param>
+				    <param>item_icon=pet[750]</param>
+				    <param>option_num=1</param>
+				    <condition>data.PetSelect.uid=659</condition>
+				    <condition>data.PetSelect.levelGTE100</condition>
+				</button>
+				<button type="evolve">
+				    <action>evolvePet</action>
+				    <param>index=data.PetSelectIndex</param>
+				    <param>750</param>
+				    <condition>data.PetSelect.uid=659</condition>
+				    <condition>data.PetSelect.levelGTE100</condition>
+				</button>
+			</callbackHandler>
 		</npc>
 	</entities>
 </map>

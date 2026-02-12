@@ -1,12 +1,17 @@
+using System;
 using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Xml.Serialization;
 
 public class PetRecord
 {
     public int winFightNum = 0;
     public int loseFightNum = 0;
+    [XmlIgnore] public int kizuna => (winFightNum * 5 + loseFightNum * 2) / 7 + GetRecord<int>("kizuna", "0");
+    [XmlIgnore] public int minKizuna => GetRecord<int>("minKizuna", "-255");
+    [XmlIgnore] public int maxKizuna => GetRecord<int>("maxKizuna", "255");
 
     public List<IKeyValuePair<string, string>> recordDict;
 
@@ -34,6 +39,11 @@ public class PetRecord
             "loseFightNum" => loseFightNum.ToString(),
             _ => recordDict.Find(x => x.key == key)?.value ?? defaultValue
         };
+    }
+
+    public T GetRecord<T>(string key, string defaultValue = null)
+    {
+        return (T)Convert.ChangeType(GetRecord(key, defaultValue), typeof(T));
     }
 
     public bool TryGetRecord(string key, out string value) {

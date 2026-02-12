@@ -14,6 +14,7 @@ public class NpcView : Module
     [SerializeField] private Image image;
     [SerializeField] private IButton button;
     [SerializeField] private Text nameText;
+    [SerializeField] private AnimCamera animCamera;
 
     public object GetIdentifier(string id)
     {
@@ -31,8 +32,11 @@ public class NpcView : Module
         SetName(info.name);
         SetNamePos(info.namePos);
         SetNameSize(info.nameSize);
+        SetNameColor(info.nameColor);
+        SetNameFont(info.nameFont);
         SetIcon(info.resId);
         SetColor(info.color);
+        SetAnim(info.anim, info.animInfo);
     }
 
     public void SetRaycastTarget(bool isRaycastTarget) {
@@ -62,6 +66,15 @@ public class NpcView : Module
     }
 
     public void SetName(string name) {
+        if (string.IsNullOrEmpty(name))
+        {
+            nameText.text = name;
+            return;
+        }
+
+        if (name.TryTrimStart("[expr]", out var expr))
+            name = Parser.ParseOperation(expr).ToString();
+
         nameText.text = name;
     }
 
@@ -75,14 +88,56 @@ public class NpcView : Module
             return;
 
         nameText.fontSize = nameSize;
+        nameText.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, Mathf.Max(30, nameSize + 10));
+    }
+
+    public void SetNameColor(Color nameColor) {
+        nameText.color = nameColor;
+    }
+
+    public void SetNameFont(string fontOption) {
+        if (string.IsNullOrEmpty(fontOption))
+            return;
+
+        nameText.font = ResourceManager.instance.GetFont(fontOption);
     }
 
     public void SetIcon(string resId) {
-        button.SetSprite(  NpcInfo.GetIcon(resId));
+        SetSprite(NpcInfo.GetIcon(resId));
     }
 
     public void SetSprite(Sprite sprite) {
         button.SetSprite(sprite);
+    }
+
+    public void SetAnim(string animId)
+    {
+        var anim = NpcInfo.GetAnim(animId);
+        SetAnim(anim);
+    }
+
+    public void SetAnim(GameObject prefab, AnimInfo animInfo = null)
+    {
+        foreach (Transform t in animCamera.transform)
+        {
+            if (t.name == "Pet Anim")   
+                continue;
+
+            Destroy(t);
+        }
+
+        if (prefab == null)
+            return;
+
+        SetColor(Color.clear);
+
+        var anim = Instantiate(prefab, animCamera.transform);
+        if (animInfo == null)
+            return;
+
+        anim.transform.localScale = animInfo.animScale / (animCamera.canvas?.scaleFactor ?? 1);
+        anim.transform.localPosition = animInfo.animPos / (animCamera.canvas?.scaleFactor ?? 1);
+        anim.transform.localRotation = animInfo.animRot;
     }
 
     public void SetBGM(AudioClip bgm) {

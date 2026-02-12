@@ -7,12 +7,15 @@ using UnityEngine.UI;
 using RM = ResourceManager;
 using System.Threading.Tasks;
 using UnityEngine.AddressableAssets;
+using System.Linq;
 
 public class NpcInfo
 {
     [XmlAttribute] public int id;
     [XmlAttribute] public string resId;
     public Sprite icon => GetIcon(resId);
+    public GameObject anim => GetAnim(animInfo?.id);
+    [XmlElement("anim")] public AnimInfo animInfo;
 
     [XmlAttribute] public string name;
     [XmlElement] public string description;
@@ -30,6 +33,10 @@ public class NpcInfo
     [XmlAttribute("namePos")] public string npcNamePos = "0,5";
     public Vector2 namePos => npcNamePos.ToVector2();
     [XmlAttribute("nameSize")] public int nameSize = 0;
+    [XmlAttribute("nameColor")] public string nameRgba = "0,64,255,255";
+    public Color nameColor => nameRgba.ToColor(new Color32(0, 64, 255, 255));
+    [XmlAttribute("nameFont")] public string nameFont;
+
 
     [XmlElement("transport")] public string transport;
     public Vector2 transportPos => transport.ToVector2(pos);
@@ -63,5 +70,15 @@ public class NpcInfo
         bool isMod = IsMod(resId);
         var iconId = isMod ? resId.TrimStart("Mod/") : resId;
         return ResourceManager.instance.GetLocalAddressables<Sprite>(iconId, isMod);
+    }
+
+    public static GameObject GetAnim(string animId)
+    {
+        if (string.IsNullOrEmpty(animId) || (animId == "0") || (animId == "null") || (animId == "none")) 
+            return null;
+
+        var petIdExpr = animId.TrimStart("Pets/anim/");
+        var split = petIdExpr.Split('-');
+        return ResourceManager.instance.GetPetAnimPrefab(int.Parse(split[0]), split.Length == 1 ? petIdExpr + "-idle" : petIdExpr);
     }
 }

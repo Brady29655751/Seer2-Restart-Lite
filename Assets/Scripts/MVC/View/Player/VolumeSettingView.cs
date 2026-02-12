@@ -8,7 +8,7 @@ public class VolumeSettingView : Module
 {
     [SerializeField] private Hintbox confirmSettingsHintbox;
     [SerializeField] private List<ISlider> sliderBlockViews;    
-    [SerializeField] private Toggle flashToggle, shakeToggle;
+    [SerializeField] private Toggle flashToggle, shakeToggle, autoHealToggle;
     [SerializeField] private Text battleAnimSpeedText, initMapText;
 
     public void SetSliderVolume(SettingsData settingsData)
@@ -19,6 +19,7 @@ public class VolumeSettingView : Module
         sliderBlockViews[(int)VolumeOrder.UI]?.SetSliderValue(settingsData.UIVolume);
         SetFlashToggle(settingsData.flashWhenBigDamage);
         SetShakeToggle(settingsData.shakeWhenBigDamage);
+        SetAutoHealToggle(settingsData.autoHealAfterBattle);
         SetBattleAnimSpeedText(settingsData.battleAnimSpeed);
         SetInitMapText(settingsData.initMapId);
     }
@@ -48,6 +49,10 @@ public class VolumeSettingView : Module
 
     public void SetShakeToggle(bool isOn) {
         shakeToggle.isOn = isOn;
+    }
+
+    public void SetAutoHealToggle(bool isOn) {
+        autoHealToggle.isOn = isOn;
     }
 
     public void SetBattleAnimSpeedText(float value) {

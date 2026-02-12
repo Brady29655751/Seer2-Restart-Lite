@@ -121,6 +121,9 @@ id,name,type,price,option,description,effect
 10242,异能重组剂,personality,50[D],none,一位神秘发明家的研究成果，临床实验证明可以改变精灵拥有的奇异能力,使已觉醒异能的精灵随机改变异能
 10243,异能芯片,personality,500[D],none,一位神秘发明家的研究成果，临床实验证明可以引导精灵体内的奇异能力,使已觉醒异能的精灵指定改变异能（暂未实装）
 10301,赛尔豆礼包（小）,package,2000,none,none,打开可获得2000赛尔豆
+11001,黑焦炸黄鱼,package,1000,none,你怎么敢把炸焦的黄鱼送给精灵啊？先去提升你的厨艺好吗？,[ff0033]降低[-]精灵1点好感度，赠送给普通系精灵效果2倍
+12001,炸黄鱼,package,5[D],none,由小黄鱼、蘑菇果实、粘液烹饪而成，味道鲜美，通常被用作精灵的晚餐,提升精灵1点好感度，赠送给普通系精灵效果2倍
+13001,黄金炸黄鱼,package,50[D],none,金黄酥脆的炸黄鱼。你对油炸时间的把控非常精准，精灵非常喜欢！,提升精灵2点好感度，赠送给普通系精灵效果2倍
 20001,镇静剂,buff,1000,resId=Buffs/400003&habitat=道具商店&linkId=ItemShop,[ffbb33]【可回收】[-][ENDL]让精灵携带在身上可以使其精神安定，将爆发力转换为平稳持续的力量,使精灵的暴击率降低为0并转换为对应的伤害倍率强化
 20002,神秘果实,buff,50[D],resId=Buffs/400004&habitat=道具商店&linkId=ItemShop,[ffbb33]【可回收】[-][ENDL]让精灵携带在身上可以压制体内的进化能量,使精灵无法自然进化（仍可以透过其他方式进化）
 21000,万钧星魂,buff,50[D],resId=Buffs/410000,[ffbb33]【星魂】[-][ENDL]让精灵携带在身上会使其拳脚攻击如有万钧之力,物攻值提升25%
@@ -169,6 +172,9 @@ id,name,type,price,option,description,effect
 22024,温暖之心,buff,50[D],resId=Buffs/420024&habitat=黄金之路&linkId=360,[ffbb33]【随身物品】[-][ENDL]温暖的心可以战胜恐惧，使自己不受负面干扰！,免疫恐惧和药剂反噬状态，鲁卜哈利携带时回合开始自动获得1层砂分身
 22025,捕捉绳,buff,50[D],resId=Buffs/420025&habitat=地道之路&linkId=510,[ffbb33]【随身物品】[-][ENDL]捕捉绳可以训练精灵面对禁锢时该怎么突破束缚，但绑太紧反而会让精灵选择躺平不动,免疫禁锢和术牢状态，格尔西克携带时首次出场会获得5层蓄力
 22026,蛋壳碎片,buff,50[D],resId=Buffs/420026&habitat=黄金之路&linkId=360,[ffbb33]【随身物品】[-][ENDL]抢了蛋壳鸡的帽子才发现他们不是秃头，而且大部分蛋壳鸡的头发比你还多,攻击50%使对手流血，蛋壳鸡携带时回合开始自动获得1个蛋壳碎片
+22027,纯净之水,buff,10[400008],resId=Buffs/420027&habitat=教官室&linkId=-60,[ffbb33]【随身物品】[-][ENDL]这是神迹迪兰特领悟水龙流派时，随手将受到污染的水源净化后的产物,免疫速度和命中弱化，迪兰特携带时攻击技能额外造成[FFBB33]30点[-][24FCFC]水系[-]属性伤害
+22028,不灭之火,buff,10[400009],resId=Buffs/420028&habitat=教官室&linkId=-60,[ffbb33]【随身物品】[-][ENDL]这是神迹休罗斯觉醒力量时，无意间重燃周围火苗的产物,免疫攻击类弱化，休罗斯携带时造成攻击伤害数值的[FFBB33]15%[-]恢复自身体力
+22029,绽放之花,buff,10[400007],resId=Buffs/420029&habitat=教官室&linkId=-60,[ffbb33]【随身物品】[-][ENDL]这是神迹拉奥花照顾小精灵时，他们为了表达感谢而制作的礼物,免疫防御类弱化，拉奥叶携带时每回合恢复[FFBB33]35点[-]体力
 23001,蘑菇果实,buff,50[D],resId=Buffs/430001&habitat=种植园&linkId=990,[ffbb33]【随身物品】[-][ENDL]蘑菇果实能让轻盈的攻击更容易发挥出效果，但有时会受到迷幻成分影响,威力低于自身体重的技能连击数+1，但会有50%概率使自身在出手前陷入昏迷1回合
 23002,伊萨晶石,buff,50[D],resId=Buffs/430002&habitat=VIP乐园&linkId=89,[ffbb33]【随身物品】[-][ENDL]伊萨之意为生命。它不仅给予阿卡迪亚的居民们力量、影响着当地生物的发展，更直接关系着精灵的成长,每回合恢复双方1/12体力
 23003,黑水结晶,buff,50[D],resId=Buffs/430003&habitat=VIP乐园&linkId=89,[ffbb33]【随身物品】[-][ENDL]在被污染的水源之心发现的结晶，混杂了黑色的杂质能让居民和精灵躁动，浓度太高的话甚至会使其发狂,命中率提高15%，受到的伤害提升15%
@@ -207,6 +213,7 @@ id,name,type,price,option,description,effect
 210014,尼古进化能量,recipe,100[D],resId=Pets/icon/366&getId=320366,none,使100级以上的尼禄进化成尼古拉斯
 210101,天马精元蛋,recipe,2026[D],resId=Pets/icon/621&getId=500621,none,在精灵背包中使用后可以获得天马
 210102,小木马精元蛋,recipe,10[610003],resId=Pets/icon/631&getId=500631,none,在精灵背包中使用后可以获得小木马
+210103,花焰精元蛋,recipe,10[610003],resId=Pets/icon/427&getId=500427,none,在精灵背包中使用后可以获得花焰
 210104,荇藻微光之块,recipe,10[D],resId=10206&getId=10206,none,使精灵等级提升1级
 210105,赛尔豆礼包（小）,recipe,2000,resId=10301&getId=10301,none,打开可获得2000赛尔豆
 210106,灵华凝素幼果,recipe,2000,resId=10222&getId=10222,尚未发育完全的灵华凝素果实，虽然苦涩但富含大量营养精华,5%使精灵成为极品资质，且资质必为良以上
@@ -328,6 +335,7 @@ id,name,type,price,option,description,effect
 500000,新春紅包,package,1[4],resId=610003,none,打开可获得50星钻
 500043,啾啾精元蛋,package,5[400022],resId=Pets/icon/43,none,在精灵背包中使用后可以获得啾啾
 500049,多摩精元蛋,package,5[400022],resId=Pets/icon/49,none,在精灵背包中使用后可以获得多摩
+500065,浣浣精元蛋,package,5[400022],resId=Pets/icon/65,none,在精灵背包中使用后可以获得浣浣
 500070,嘟嘟精元蛋,package,5[400022],resId=Pets/icon/70,none,在精灵背包中使用后可以获得嘟嘟
 500091,伊特精元蛋,package,50[5],resId=Pets/icon/91,none,在精灵背包中使用后可以获得伊特
 500158,因吉精元蛋,package,1[4],resId=Pets/icon/158,none,在精灵背包中使用后可以获得因吉
@@ -342,8 +350,10 @@ id,name,type,price,option,description,effect
 500347,元蛋精元蛋,package,1[4],resId=Pets/icon/347,none,在精灵背包中使用后可以获得元蛋
 500354,娜娜精元蛋,package,2025[D],resId=Pets/icon/354,none,在精灵背包中使用后可以获得娜娜
 500356,咔咔精元蛋,package,10[610003],resId=Pets/icon/356,none,在精灵背包中使用后可以获得咔咔
+500358,兰博精元蛋,package,1[9],resId=Pets/icon/358,none,在精灵背包中使用后可以获得兰博
 500385,暗月兔精元蛋,package,1[4],resId=Pets/icon/385,none,在精灵背包中使用后可以获得暗月兔
 500389,月神精元蛋,package,1[4],resId=Pets/icon/389,none,在精灵背包中使用后可以获得月神
+500427,花焰精元蛋,package,10[610003],resId=Pets/icon/427,none,在精灵背包中使用后可以获得花焰
 500436,哥布林精元蛋,package,1[4],resId=Pets/icon/436,none,在精灵背包中使用后可以获得哥布
 500459,昭华精元蛋,package,1[4],resId=Pets/icon/459,none,在精灵背包中使用后可以获得昭华
 500492,晨璨精元蛋,package,1[4],resId=Pets/icon/492,none,在精灵背包中使用后可以获得晨璨

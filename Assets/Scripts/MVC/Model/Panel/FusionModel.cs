@@ -88,7 +88,7 @@ public class FusionModel : Module
             return false;
         }
 
-        resultPetId = currentRecipe.resultPets.Random(currentRecipe.resultWeights);
+        resultPetId = currentRecipe.resultIds.Random(currentRecipe.resultWeights);
         return true;
     }
 

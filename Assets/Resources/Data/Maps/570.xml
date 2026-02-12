@@ -1,18 +1,18 @@
-<map name="神域回廊" category="8" id="570" weather="0">
+<map name="神域回廊" category="8" id="570" weather="14">
 	<fightMapColor>64,64,64,255</fightMapColor>
-	<initialPoint>485,150</initialPoint>
+	<initialPoint>550,160</initialPoint>
 	<music category="8">
 		<bgm>BGM_560</bgm>
 	</music>
 	<entities>
 		<npc id="57001" resId="57001" name="夜王" size="58,110" pos="340,135" namePos="0,0">
-			<description>神秘精灵</description>
+			<description>神秘人物</description>
 			<dialog>
 				<branch id="default" name="夜王" icon="57001" size="58,110" pos="0,55">
-					<content><![CDATA[我怎么会被放在这里？这一定是奥比休斯的阴谋！我的约伽在哪里？]]></content>
+					<content><![CDATA[你说，我和旁边那位精灵是什么关系？]]></content>
 					<replyHandler>
 						<reply type="click">
-							<description><![CDATA[梨很甜~小又肥~]]></description>
+							<description><![CDATA[有关系就没关系]]></description>
 							<action>openDialog</action>
 							<param>null</param>
 						</reply>
@@ -25,7 +25,74 @@
 					<param>default</param>
 				</button>
 			</eventHandler>
-			</npc>
+		</npc>
+		<npc id="57002" resId="Pets/pet/461" name="神秘精灵" size="109,102" pos="400,135" namePos="10,-10">
+			<description>神秘精灵</description>
+			<dialog>
+				<branch id="default" name="神秘精灵" icon="Pets/pet/461" size="109,102" pos="0,45">
+					<content><![CDATA[问群臣那万岁，可呼到？]]></content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[诺！诺！皆称道！]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+						<reply type="click">
+							<description><![CDATA[彼可取而代之]]></description>
+							<action>battle</action>
+							<param>default</param>
+						</reply>
+					</replyHandler>
+				</branch>
+			</dialog>
+			<battle>
+				<branch id="default">
+					<settings count="6" star="7" item="false">
+						<mode>3</mode>
+						<weather>14</weather>
+					</settings>
+					<enemy>
+						<pet id="461" level="100">
+							<status>
+								<atk>600</atk>
+								<mat>600</mat>
+								<hp>13500</hp>
+							</status>
+							<initBuff>-8,61,-3100,-3101,23,-3093</initBuff>
+							<loopSkill>13622</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>getPet</action>
+							<param>460</param>
+							<condition>activity[20010].done[461]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=【离恨】已经放入精灵仓库</param>
+							<param>item_icon=pet[460]</param>
+							<param>option_num=1</param>
+							<condition>activity[20010].done[461]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>20010</param>
+							<param>done[461]=true</param>
+							<condition>activity[20010].done[461]=[bool]false[default]false</condition>
+						</button>
+					</winHandler>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>openDialog</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
 		<teleport id="1" name="神域天门" pos="100,80" targetMapId="560"/>
 		<teleport id="2" name="神域天尊殿" pos="655,275" targetMapId="580"/>
 	</entities>		

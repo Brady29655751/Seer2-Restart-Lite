@@ -10,6 +10,7 @@ using System;
 public class NetworkManager : PhotonSingleton<NetworkManager>
 {
     public NetworkData networkData = null;
+    public static bool IsMasterClient;
     public event Action<Photon.Realtime.Player> onOtherPlayerJoinedRoomEvent;
     public event Action<Photon.Realtime.Player> onOtherPlayerLeftRoomEvent;
     public event Action<Photon.Realtime.Player> onPlayerPropsUpdateEvent;
@@ -38,6 +39,7 @@ public class NetworkManager : PhotonSingleton<NetworkManager>
     }
 
     private void ConnectToNetwork() {
+        NetworkManager.IsMasterClient = networkData.networkAction == NetworkAction.Create;
         PhotonNetwork.LocalPlayer.NickName = Player.instance.nickname;
         PhotonNetwork.ConnectUsingSettings();
     }
@@ -51,6 +53,8 @@ public class NetworkManager : PhotonSingleton<NetworkManager>
             case NetworkAction.Create:
                 RoomOptions roomOptions = new RoomOptions() {
                     MaxPlayers = 2,
+                    PlayerTtl = 5000,
+                    EmptyRoomTtl = 5000,
                     CustomRoomProperties = networkData.roomProperty,
                 };
                 PhotonNetwork.CreateRoom(networkData.roomName, roomOptions);
@@ -131,8 +135,8 @@ public class NetworkManager : PhotonSingleton<NetworkManager>
             return;
 
         string message = disconnectCause switch {
-            DisconnectCause.ClientTimeout => "连线已逾时 (Timeout)",
-            DisconnectCause.ServerTimeout => "连线已逾时 (Timeout)",
+            DisconnectCause.ClientTimeout => "Client连线已逾时",
+            DisconnectCause.ServerTimeout => "Server连线已逾时",
             _ => disconnectCause.ToString(),
         };
 

@@ -113,7 +113,7 @@ public class Unit
 
     public bool IsMyUnit()
     {
-        return PhotonNetwork.IsConnected ? (PhotonNetwork.IsMasterClient == IsMasterUnit()) : IsMasterUnit();
+        return PhotonNetwork.IsConnected ? (NetworkManager.IsMasterClient == IsMasterUnit()) : IsMasterUnit();
     }
 
     public float RNG()

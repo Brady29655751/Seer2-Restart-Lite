@@ -61,8 +61,8 @@ public class MapSceneView : UIModule
         }
 
         var anim = Instantiate(prefab, Camera.main.transform);
-        anim.transform.localScale = map.anim?.animScale ?? Vector2.zero;
-        anim.transform.localPosition = map.anim?.animPos ?? Vector2.one;
+        anim.transform.localScale = map.anim?.animScale ?? Vector2.one;
+        anim.transform.localPosition = map.anim?.animPos ?? Vector2.zero;
         background.color = Color.clear;
     }
 

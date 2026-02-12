@@ -9,7 +9,6 @@ using UnityEngine.UI;
 using Object = UnityEngine.Object;
 using System.Threading.Tasks;
 using SimpleFileBrowser;
-using WebSocketSharp;
 
 public class ResourceManager : Singleton<ResourceManager>
 {
@@ -31,6 +30,7 @@ public class ResourceManager : Singleton<ResourceManager>
     public string panelPath => "Panels/";
     public string miniGamePath => "Games/";
     public string mapPath => "Maps/";
+    public string bundlePath => "Bundles/";
 
     public string numString => "0123456789%";
 
@@ -191,6 +191,16 @@ public class ResourceManager : Singleton<ResourceManager>
         return (prefab == null) ? LoadPrefab(item) : prefab;
     }
 
+    public AssetBundle GetAssetBundle(string path, string resPath = null)
+    {
+        AssetBundle bundle = (AssetBundle)resDict.Get(resPath);
+        return (bundle == null) ? LoadAssetBundle(path, resPath) : bundle;
+    }
+
+    public void GetAssetBundleAsync(string path, string resPath, Action<AssetBundle> onSuccess, Action<float> onProgress = null) {
+        StartCoroutine(LoadAssetBundleAsync(path, resPath, onSuccess, onProgress));    
+    }
+
     private IEnumerator CheckAnimIsDone(TaskCompletionSource<GameObject> task, dynamic animInfo)
     {
         while (animInfo.stuckTime <= 2f)
@@ -206,48 +216,27 @@ public class ResourceManager : Singleton<ResourceManager>
         }
     }
 
-    public GameObject GetMapAnimInstance(int mapID, string fileName)
+    public GameObject GetMapAnimPrefab(int mapID, string fileName)
     {
         try
         {
-            var bundlePath = mapPath + "bundle/" + mapID;
-            var animPath = mapPath + "anim/" + fileName;
-            AssetBundle assetBundle = null;
+            var bundlePath = mapPath + "bundle/map_" + mapID;
+            var folderPath = Map.IsMod(mapID) ? ("Mod/Maps/anim/" + GameManager.platform) : "PetAnimation/map";
+            var mapAnimPath = folderPath + "/map_" + mapID;
+            var prefabPath = mapPath + "anim/" + fileName;
 
-            if (resDict.TryGetValue(animPath, out var value) && (value != null))
+            if (resDict.TryGetValue(prefabPath, out var value) && (value != null))
                 return (GameObject)value;
 
-            if (resDict.TryGetValue(bundlePath, out var value1) && (value1 != null))
-            {
-                assetBundle = (AssetBundle)value1; //缓存中有已经加载的AssetBundle,含有该地图的所有动画
-            }
-            else
-            {
-                var folderPath = Map.IsMod(mapID) ? ("/Mod/Maps/anim/" + GameManager.platform) : "/PetAnimation/map";
-                var mapAnimPath = Application.persistentDataPath + folderPath + "/map_" + mapID;
+            AssetBundle assetBundle = GetAssetBundle(mapAnimPath, bundlePath);
+            if (assetBundle == null)
+                return null;
 
-                loadingAssetBundlesList.Add(bundlePath);
-
-                if (FileBrowserHelpers.FileExists(mapAnimPath))
-                    assetBundle = AssetBundle.LoadFromFile(mapAnimPath);
-
-                loadingAssetBundlesList.Remove(bundlePath);
-        
-                if (assetBundle == null) //说明地图的所有动画都没有
-                {
-                    return null;
-                }
-
-                resDict.Set(bundlePath, assetBundle);
-            }
-        
             GameObject prefab = assetBundle.LoadAsset<GameObject>(fileName); //获取地图的某个特定动画
             if (prefab == null) //说明地图的某个特定动画没有
-            {
                 return null;
-            }
         
-            resDict.Set(animPath, prefab);
+            resDict.Set(prefabPath, prefab);
             return prefab;
         }
         catch (Exception)
@@ -257,52 +246,62 @@ public class ResourceManager : Singleton<ResourceManager>
     }
 
     private readonly Dictionary<int, AssetBundle> petAssetBundleDictionary = new Dictionary<int, AssetBundle>();
-
-    public GameObject GetPetAnimInstance(int petID, string fileName)
+    public AssetBundle GetPetAnimAssetBundle(int petID)
     {
-        var bundlePath = "Pets/bundle/" + petID;
-        var animPath = "Pets/anim/" + fileName;
+        var bundlePath = "Pets/bundle/pfa_" + petID;
 
-        if (resDict.TryGetValue(animPath, out var value) && (value != null))
+        try
+        {
+            var folderPath = PetInfo.IsMod(petID) ? ("Mod/Pets/anim/" + GameManager.platform) : "PetAnimation/pet";
+            var petAnimPath = folderPath + "/pfa_" + petID;
+
+            return GetAssetBundle(petAnimPath, bundlePath);
+        }
+        catch (Exception)
+        {
+            return null;
+        }
+    }
+
+    public GameObject GetPetAnimPrefab(int petID, string fileName)
+    {
+        var prefabPath = "Pets/prefab/" + petID + "/" + fileName;
+
+        if (resDict.TryGetValue(prefabPath, out var value) && (value != null))
         {
             return (GameObject)value;
         }
 
         try
         {
-            AssetBundle assetBundle = null;
-            if (resDict.TryGetValue(bundlePath, out var value1) && (value1 != null))
-            {
-                assetBundle = (AssetBundle)value1; //缓存中有已经加载的AssetBundle,含有该精灵的所有动画
-            }
-            else
-            {
-                var folderPath = PetInfo.IsMod(petID) ? ("/Mod/Pets/anim/" + GameManager.platform) : "/PetAnimation/pet";
-                var petAnimPath = Application.persistentDataPath + folderPath + "/pfa_" + petID;
-
-                loadingAssetBundlesList.Add(petAnimPath);
-
-                if (FileBrowserHelpers.FileExists(petAnimPath))
-                    assetBundle = AssetBundle.LoadFromFile(petAnimPath);
-
-                loadingAssetBundlesList.Remove(petAnimPath);
-
-                if (assetBundle == null) //说明精灵的所有动画都没有
-                {
-                    return null;
-                }
-
-                resDict.Set(bundlePath, assetBundle);
-            }
+            AssetBundle assetBundle = GetPetAnimAssetBundle(petID);
+            if (assetBundle == null)
+                return null;
 
             var typeName = fileName.Substring(fileName.LastIndexOf('-') + 1);
             var allAssetNames = assetBundle.GetAllAssetNames().Select(x => x.Substring(x.LastIndexOf('/') + 1).TrimEnd(".prefab"));
             var assetName = allAssetNames.FirstOrDefault(x => x.Substring(x.LastIndexOf('-') + 1).ToLower() == typeName.ToLower());
             GameObject prefab = assetBundle.LoadAsset<GameObject>(assetName); //获取精灵的某个特定动画
-            if (prefab == null) //说明精灵的某个特定动画没有
-            {
+            
+            resDict.Set(prefabPath, prefab);
+
+            return prefab;
+        }
+        catch (Exception)
+        {
+            return null;
+        }
+    }
+
+    public GameObject GetPetAnimInstance(int petID, string fileName)
+    {
+        var animPath = "Pets/anim/" + fileName;
+
+        try
+        {
+            var prefab = GetPetAnimPrefab(petID, fileName);
+            if (prefab == null)
                 return null;
-            }
 
             GameObject anim = Object.Instantiate(prefab);
             anim.transform.localScale = prefab.transform.localScale;
@@ -316,6 +315,40 @@ public class ResourceManager : Singleton<ResourceManager>
         }
     }
 
+    public void GetPetAnimAssetBundleAsync(int petID, Action<AssetBundle> onSuccess, Action<float> onProgress = null) {
+        var bundlePath = "Pets/bundle/pfa_" + petID;
+        var folderPath = PetInfo.IsMod(petID) ? ("Mod/Pets/anim/" + GameManager.platform) : "PetAnimation/pet";
+        var petAnimPath = folderPath + "/pfa_" + petID;
+
+        GetAssetBundleAsync(petAnimPath, bundlePath, onSuccess, onProgress);
+    }
+
+    private void GetPetAnimPrefabAsync(int petID, string fileName, Action<GameObject> onSuccess, Action<float> onProgress = null) {
+        var prefabPath = "Pets/prefab/" + petID + "/" + fileName;
+
+        if (resDict.TryGetValue(prefabPath, out var value) && (value != null))
+        {
+            onSuccess?.Invoke((GameObject)value);
+            return;
+        }
+
+        GetPetAnimAssetBundleAsync(petID, assetBundle => 
+        {
+            if (assetBundle == null)
+            {
+                onSuccess?.Invoke(null);
+                return;
+            }
+
+            var typeName = fileName.Substring(fileName.LastIndexOf('-') + 1);
+            var allAssetNames = assetBundle.GetAllAssetNames().Select(x => x.Substring(x.LastIndexOf('/') + 1).TrimEnd(".prefab"));
+            var assetName = allAssetNames.FirstOrDefault(x => x.Substring(x.LastIndexOf('-') + 1).ToLower() == typeName.ToLower());
+            GameObject prefab = assetBundle.LoadAsset<GameObject>(fileName); //获取精灵的某个特定动画
+            resDict.Set(prefabPath, prefab);
+            onSuccess?.Invoke(prefab);
+        }, onProgress);
+    }
+
     public void GetPetAnimInstanceAsync(int petID, string fileName, Action<GameObject> onSuccess, Action<float> onProgress = null) {
         var animPath = "Pets/anim/" + fileName;
 
@@ -325,13 +358,8 @@ public class ResourceManager : Singleton<ResourceManager>
             return;
         }
 
-        GetPetAnimAssetBundleAsync(petID, assetBundle => {
-            var typeName = fileName.Substring(fileName.LastIndexOf('-') + 1);
-            var allAssetNames = assetBundle.GetAllAssetNames().Select(x => x.Substring(x.LastIndexOf('/') + 1).TrimEnd(".prefab"));
-            var assetName = allAssetNames.FirstOrDefault(x => x.Substring(x.LastIndexOf('-') + 1).ToLower() == typeName.ToLower());
-
-            GameObject prefab = assetBundle?.LoadAsset<GameObject>(fileName); //获取精灵的某个特定动画
-            if (prefab == null) //说明精灵的某个特定动画没有
+        GetPetAnimPrefabAsync(petID, fileName, prefab => {
+            if (prefab == null)
             {
                 onSuccess?.Invoke(null);
                 return;
@@ -343,98 +371,6 @@ public class ResourceManager : Singleton<ResourceManager>
             resDict.Set(animPath, anim);
             onSuccess?.Invoke(anim);
         }, onProgress);
-    }
-
-    public AssetBundle GetPetAnimAssetBundle(int petID) {
-        var bundlePath = "Pets/bundle/" + petID;
-        AssetBundle assetBundle = null;
-
-        if (resDict.TryGetValue(bundlePath, out var value1) && (value1 != null))
-        {
-            return (AssetBundle)value1;
-        }
-
-        var folderPath = PetInfo.IsMod(petID) ? ("/Mod/Pets/anim/" + GameManager.platform) : "/PetAnimation/pet";
-        var petAnimPath = Application.persistentDataPath + folderPath + "/pfa_" + petID;
-
-        try 
-        {
-            loadingAssetBundlesList.Add(petAnimPath);
-
-            if (FileBrowserHelpers.FileExists(petAnimPath))
-                assetBundle = AssetBundle.LoadFromFile(petAnimPath);
-
-            loadingAssetBundlesList.Remove(petAnimPath);
-
-            if (assetBundle == null)
-            {
-                return null;
-            }
-
-            resDict.Set(bundlePath, assetBundle);
-            return assetBundle;
-        } 
-        catch (Exception) 
-        {
-            return null;
-        }
-
-    }
-
-    public void GetPetAnimAssetBundleAsync(int petID, Action<AssetBundle> onSuccess, Action<float> onProgress = null) {
-        StartCoroutine(GetPetAnimAssetBundleCoroutine(petID, onSuccess, onProgress));
-    }
-
-    private IEnumerator GetPetAnimAssetBundleCoroutine(int petID, Action<AssetBundle> onSuccess, Action<float> onProgress = null) {
-        var bundlePath = "Pets/bundle/" + petID;
-        AssetBundle assetBundle = null;
-
-        if (resDict.TryGetValue(bundlePath, out var value1) && (value1 != null))
-        {
-            onSuccess?.Invoke((AssetBundle)value1);
-            yield break;
-        }
-
-        var folderPath = PetInfo.IsMod(petID) ? ("/Mod/Pets/anim/" + GameManager.platform) : "/PetAnimation/pet";
-        var petAnimPath = Application.persistentDataPath + folderPath + "/pfa_" + petID;
-        AssetBundleCreateRequest request = null;
-
-        try 
-        {
-            if (loadingAssetBundlesList.Contains(petAnimPath))
-            {
-                onSuccess?.Invoke(null);
-                yield break;
-            }
-                
-            loadingAssetBundlesList.Add(petAnimPath);
-            
-            if (FileBrowserHelpers.FileExists(petAnimPath))
-                request = AssetBundle.LoadFromFileAsync(petAnimPath);
-            else
-                throw new FileNotFoundException();
-        } 
-        catch (Exception) 
-        {
-            loadingAssetBundlesList.Remove(petAnimPath);
-            onSuccess?.Invoke(null);
-            yield break;
-        }
-
-        while (!request.isDone) {
-            onProgress?.Invoke(request.progress);
-            yield return null;
-        }
-
-        loadingAssetBundlesList.Remove(petAnimPath);
-
-        if ((assetBundle = request.assetBundle) == null) //说明精灵的所有动画都没有
-        {
-            onSuccess?.Invoke(null);
-            yield break;
-        }
-        resDict.Set(bundlePath, assetBundle);
-        onSuccess?.Invoke(assetBundle);
     }
 
     public GameObject GetPanel(string item)
@@ -486,6 +422,83 @@ public class ResourceManager : Singleton<ResourceManager>
     public GameObject LoadMiniGame(string path)
     {
         return Load<GameObject>(miniGamePath + path + "/Game");
+    }
+
+    public AssetBundle LoadAssetBundle(string path, string resPath = null)
+    {
+        var bundlePath = resPath ?? (this.bundlePath + path);
+
+        try
+        {
+            AssetBundle assetBundle = null;
+            if (resDict.TryGetValue(bundlePath, out var value1) && (value1 != null))
+            {
+                assetBundle = (AssetBundle)value1; //缓存中有已经加载的AssetBundle,含有该精灵的所有动画
+            }
+            else
+            {
+                var filePath = Application.persistentDataPath + "/" + path;
+
+                loadingAssetBundlesList.Add(filePath);
+
+                if (FileBrowserHelpers.FileExists(filePath))
+                    assetBundle = AssetBundle.LoadFromFile(filePath);
+
+                loadingAssetBundlesList.Remove(filePath);
+                resDict.Set(bundlePath, assetBundle);
+            }
+
+            return assetBundle;
+        }
+        catch (Exception)
+        {
+            return null;
+        }
+    }
+
+    private IEnumerator LoadAssetBundleAsync(string path, string resPath, Action<AssetBundle> onSuccess, Action<float> onProgress = null)
+    {
+        var bundlePath = resPath ?? (this.bundlePath + path);
+        AssetBundle assetBundle = null;
+        if (resDict.TryGetValue(bundlePath, out var value1) && (value1 != null))
+        {
+            onSuccess?.Invoke((AssetBundle)value1);
+            yield break;
+        }
+
+        var filePath = Application.persistentDataPath + "/" + path;
+        AssetBundleCreateRequest request = null;
+        try 
+        {
+            if (loadingAssetBundlesList.Contains(filePath))
+            {
+                onSuccess?.Invoke(null);
+                yield break;
+            }
+            loadingAssetBundlesList.Add(filePath);
+            if (FileBrowserHelpers.FileExists(filePath))
+                request = AssetBundle.LoadFromFileAsync(filePath);
+            else
+                throw new FileNotFoundException();
+        } 
+        catch (Exception) 
+        {
+            loadingAssetBundlesList.Remove(filePath);
+            onSuccess?.Invoke(null);
+            yield break;
+        }
+        while (!request.isDone) {
+            onProgress?.Invoke(request.progress);
+            yield return null;
+        }
+        loadingAssetBundlesList.Remove(filePath);
+        if ((assetBundle = request.assetBundle) == null)
+        {
+            onSuccess?.Invoke(null);
+            yield break;
+        }
+        resDict.Set(bundlePath, assetBundle);
+        onSuccess?.Invoke(assetBundle);
     }
 
     public static T GetXML<T>(string text)
@@ -571,32 +584,45 @@ public class ResourceManager : Singleton<ResourceManager>
 
         int doneRequestCount = 0;
 
+        Sprite bg = null, pathSprite = null;
         AudioClip bgm = null, fx = null;
         string error = string.Empty;
 
-        // Audio only accepts mp3
-        GetLocalAddressables<AudioClip>("BGM/" + map.music.category + "/" + map.music.bgm + ".mp3", isMod,
-            (clip) => { bgm = clip; doneRequestCount++; }, (message) => { error = "加载地图失败，BGM不存在"; doneRequestCount++; });
+        void OnLoadBGMSuccess(AudioClip clip){ bgm = clip; doneRequestCount++; }
+        void OnLoadBGMFail(string message){ error = "加载地图失败，BGM不存在"; doneRequestCount++; }
 
-        if (string.IsNullOrEmpty(map.music.fx))
+        // Audio only accepts mp3
+        GetLocalAddressables<AudioClip>($"BGM/{map.music?.category}/{map.music?.bgm}.mp3", isMod, OnLoadBGMSuccess, 
+            (message) => 
+            { 
+                if (resId == 0)
+                    GetLocalAddressables<AudioClip>($"BGM/FirstPage.mp3", isMod, OnLoadBGMSuccess, OnLoadBGMFail);
+                else
+                    OnLoadBGMFail(message);
+            });
+
+        if (string.IsNullOrEmpty(map.music?.fx))
             doneRequestCount++;
         else {
             GetLocalAddressables<AudioClip>("BGM/fx/" + map.music.fx + ".mp3", isMod,
             (clip) => { fx = clip; doneRequestCount++; }, (message) => { error = "加载地图失败，FX不存在"; doneRequestCount++; });
-        }
+        }   
 
-        Sprite bg = GetLocalAddressables<Sprite>("Maps/bg/" + resId, isMod);
-        Sprite pathSprite = GetLocalAddressables<Sprite>("Maps/path/" + pathResId, isMod);
+        bg = GetLocalAddressables<Sprite>($"Maps/bg/{resId}", isMod);
+        pathSprite = GetLocalAddressables<Sprite>("Maps/path/" + pathResId, isMod);
+
+        if ((resId == 0) && (bg == null))
+            bg = GetLocalAddressables<Sprite>("Activities/FirstPage", isMod);
 
         while (doneRequestCount < 2)
             yield return null;
 
-        if (!string.IsNullOrEmpty(error)) {
+        if (!string.IsNullOrEmpty(error) && (resId != 0)) {
             onFail?.Invoke(error);
             yield break;
         }
 
-        var anim = GetMapAnimInstance(resId, $"{resId}-idle");
+        var anim = GetMapAnimPrefab(resId, $"{resId}-idle");
 
         MapResources mapResources = new MapResources(bg, pathSprite, bgm, fx, anim);
         mapResources.anim = anim;

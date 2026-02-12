@@ -42,16 +42,35 @@ public class Buff
     public Dictionary<string, string> options = new Dictionary<string, string>();
 
 
-    public Buff(int _id, int _turn = -1, int _value = 0) {
+    public Buff(int _id, int _turn = -1, int? _value = null) {
         id = _id;
         turn = (_turn == -1) ? info.turn : _turn;
-        value = _value;
+        value = _value ?? 0;
         ignore = false;
         effects = info.effects.Select(x => new Effect(x)).ToList();
 
-        foreach (var e in effects) {
+        foreach (var e in effects)
             e.source = this;
-        }
+
+        var data = BuffReferData.ParseDict(info.options.Get("ref_buff"))?.Get(id);
+        if (data == null)
+            return;
+
+        value = _value ?? data.value;
+        options.Merge(data.options);
+    }
+
+    public Buff(BuffReferData data) {
+        id = data.id;
+        turn = info.turn;
+        value = data.value;
+        ignore = false;
+        effects = info.effects.Select(x => new Effect(x)).ToList();
+
+        foreach (var e in effects)
+            e.source = this;
+
+        options.Merge(data.options);
     }
 
     public Buff(Buff rhs) {
@@ -306,6 +325,11 @@ public class Buff
         if (id.TryTrimStart("option", out var trimId)) {
             trimId = trimId.TrimParentheses();
             return Identifier.GetNumIdentifier(options.Get(trimId, info.options.Get(trimId, "0")));
+        }
+
+        if (id.TryTrimStart("group", out trimId)) {
+            trimId = trimId.TrimParentheses();
+            return (options.Get("group", info.options.Get("group")) == trimId) ? 1 : 0;
         }
 
         return id switch {

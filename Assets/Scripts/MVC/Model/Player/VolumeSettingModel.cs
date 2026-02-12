@@ -13,6 +13,7 @@ public class VolumeSettingModel : Module
     public bool shakeWhenBigDamage { get; private set; }
 
     public float battleAnimSpeed { get; private set; }
+    public bool autoHealAfterBattle { get; private set; }
     public int initMapId { get; private set; }
 
     public void InitVolume()
@@ -24,6 +25,7 @@ public class VolumeSettingModel : Module
         flashWhenBigDamage = settingsData.flashWhenBigDamage;
         shakeWhenBigDamage = settingsData.shakeWhenBigDamage;
         battleAnimSpeed = settingsData.battleAnimSpeed;
+        autoHealAfterBattle = settingsData.autoHealAfterBattle;
         initMapId = settingsData.initMapId;
     }
 
@@ -36,6 +38,7 @@ public class VolumeSettingModel : Module
         settingsData.flashWhenBigDamage = flashWhenBigDamage;
         settingsData.shakeWhenBigDamage = shakeWhenBigDamage;
         settingsData.battleAnimSpeed = battleAnimSpeed;
+        settingsData.autoHealAfterBattle = autoHealAfterBattle;
         settingsData.initMapId = initMapId;
         SaveSystem.SaveData();
     }
@@ -70,6 +73,11 @@ public class VolumeSettingModel : Module
     public void SetBattleAnimSpeed(float value)
     {
         battleAnimSpeed = value;
+    }
+
+    public void SetAutoHealAfterBattle(bool isOn)
+    {
+        autoHealAfterBattle = isOn;
     }
 
     public void SetInitMapId(int value)

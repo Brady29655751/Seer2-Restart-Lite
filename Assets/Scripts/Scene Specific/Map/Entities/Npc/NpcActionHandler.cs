@@ -29,7 +29,19 @@ public static class NpcActionHandler
                     toNpc.SetRaycastTarget(bool.Parse(option[1]));
                     break;
                 case "name":
-                    toNpc.SetName(option[1].TryTrimStart("[expr]", out expr) ? Parser.ParseOperation(expr).ToString() : option[1]);
+                    toNpc.SetName(option[1]);
+                    break;
+                case "namePos":
+                    toNpc.SetNamePos(option[1].ToVector2());
+                    break;
+                case "nameSize":
+                    toNpc.SetNameSize((int)Identifier.GetNumIdentifier(option[1]));
+                    break;
+                case "nameColor":
+                    toNpc.SetNameColor(option[1].ToColor(new Color32(0, 64, 255, 255)));
+                    break;
+                case "nameFont":
+                    toNpc.SetNameFont(option[1]);
                     break;
                 case "sprite":
                     var path = option[1].TrimEnd(".png").Split('/').Select(x => x.TryTrimStart("[expr]", out expr) ?
@@ -41,9 +53,6 @@ public static class NpcActionHandler
                     break;
                 case "bgm":
                     toNpc.SetBGM(option[1]);
-                    break;
-                case "namePos":
-                    toNpc.SetNamePos(option[1].ToVector2());
                     break;
                 case "pos":
                     toNpc.SetPosition(option[1].ToVector2());

@@ -65,7 +65,7 @@ public class FightLoadingScreen : LoadingScreen
 
         float progress = 0;
         if (PhotonNetwork.IsConnected) {
-            if (PhotonNetwork.IsMasterClient) {
+            if (NetworkManager.IsMasterClient) {
                 PhotonNetwork.LoadLevel(sceneIndex);
             }
             while ((progress = PhotonNetwork.LevelLoadingProgress) < 1) {

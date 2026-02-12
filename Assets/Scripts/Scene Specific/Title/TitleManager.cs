@@ -22,74 +22,33 @@ public class TitleManager : Manager<TitleManager>
     }
 
     private void SetBackgroundPageImage() {
-        var modBackgroundSprite = ResourceManager.instance.GetLocalAddressables<Sprite>("Activities/FirstPage", true);
-
-        if (modBackgroundSprite == null)
+        ResourceManager.instance.LoadMap(0, SetBackground, (error) =>
         {
-            /*
-            var path = $"{Application.persistentDataPath}/Resources/Activities/{GameManager.platform}/";
-            var backgroundPath = path + "map_423";
-            var petPath = path + "pfa_940";
-            if (!FileBrowserHelpers.FileExists(backgroundPath) || !FileBrowserHelpers.FileExists(petPath))
-                return;
+            Map map = new Map(){ id = 0 };
+            ResourceManager.instance.LoadMapResources(map, SetBackground, (error) => SetBackground(map));
+        });
+    }
 
-            var mapBundle = AssetBundle.LoadFromFile(backgroundPath);
-            var petBundle = AssetBundle.LoadFromFile(petPath);
-            if ((mapBundle == null) || (petBundle == null))
-                return;
+    private void SetBackground(Map map)
+    {
+        var res = map.resources;
+        if (res.bgm != null)
+            AudioSystem.instance.PlayMusic(res.bgm, AudioVolumeType.None); 
 
-            var map = mapBundle.LoadAsset<GameObject>("423-idle");
-            var petPresent = petBundle.LoadAsset<GameObject>("940-Present");
-            var petIdle = petBundle.LoadAsset<GameObject>("940-Idle");
-
-            if ((map == null) || (petIdle == null))
-                return;
-
-            var obj = Instantiate(petIdle, Camera.main.transform);
-            var obj1 = (petPresent == null) ? null : Instantiate(petPresent, Camera.main.transform);
-
-            obj.transform.localScale = petIdle.transform.localScale * 1.5f;
-            obj.transform.position = new Vector3(petIdle.transform.position.x, petIdle.transform.position.y + 0.75f, 5);
-            // TransformHelper.Flip(obj.transform);
-            obj.SetActive(obj1 == null);
-
-            if (obj1 != null)
-            {
-                obj1.transform.localScale = petPresent.transform.localScale * 1.5f;
-                obj1.transform.position = new Vector3(petPresent.transform.position.x - 4.5f, petPresent.transform.position.y + 4f, 5);
-                // TransformHelper.Flip(obj1.transform);
-
-                var swf = obj1.GetComponent<SwfClipController>();
-                if (swf != null)
-                {
-                    swf.loopMode = SwfClipController.LoopModes.Once;
-                    swf.OnStopPlayingEvent += (controller) =>
-                    {
-                        obj1.SetActive(false);
-                        obj.SetActive(true);
-                    };
-                    swf.GotoAndPlay(0);
-                }
-            }
-
-            //
-            var obj2 = Instantiate(map, Camera.main.transform);
-            if (obj2 == null)
-                return;
-
-            obj2.transform.localScale = new Vector3(1.5f, 1.45f, 1);
-            obj2.transform.localPosition = new Vector3(-4.75f, -1.6f, 10);
-            //
-            backgroundImage.gameObject.SetActive(false);
-            */
-            return;
+        if (res.bg != null)
+        {
+            backgroundImage.SetSprite(res.bg);
+            backgroundImage.color = Color.white;
+            backgroundGadgetObjectList.ForEach(x => x?.SetActive(false));   
         }
-        
-        backgroundImage.SetSprite(modBackgroundSprite);
-        backgroundImage.color = Color.white;
-        backgroundGadgetObjectList.ForEach(x => x?.SetActive(false));
-        
-        ResourceManager.instance.GetLocalAddressables<AudioClip>("BGM/FirstPage.mp3", true, (bgm) => AudioSystem.instance.PlayMusic(bgm, AudioVolumeType.None));
+
+        if (res.anim != null)
+        {
+            var obj = Instantiate(res.anim, Camera.main.transform);
+            obj.transform.localScale = map.anim.animScale;
+            obj.transform.position = map.anim.animPos;
+            backgroundImage.gameObject.SetActive(false);
+        }
     }
 
     public void GameStart() {

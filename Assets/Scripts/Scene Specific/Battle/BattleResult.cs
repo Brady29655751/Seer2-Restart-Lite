@@ -114,7 +114,10 @@ public class BattleResult
 
     private void SetBasic(BattleState endState) {
         DoWork(endState, (state, battlePet, pet) => {
-            pet.currentStatus.hp = Mathf.Min(pet.normalStatus.hp, battlePet.hp);
+            if (Player.instance.gameData.settingsData.autoHealAfterBattle)
+                pet.currentStatus.hp = pet.normalStatus.hp;
+            else
+                pet.currentStatus.hp = Mathf.Min(pet.normalStatus.hp, battlePet.hp);
         });
     }
 
@@ -202,7 +205,10 @@ public class BattleResult
 
     private void SetSkill(BattleState endState) {
         var cursor = endState.myUnit.petSystem.cursor;
-        Pet pet = Player.instance.petBag[cursor];
+        Pet pet = Player.instance.petBag.Get(cursor);
+
+        if (pet == null)
+            return;
         
         if (pet.level < 60)
             return;

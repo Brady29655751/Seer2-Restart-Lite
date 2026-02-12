@@ -304,7 +304,7 @@ public class BattlePetSkillView : BattleBaseView
             critical = 5,
             accuracy = 100,
             rawDescription = "手动点击使用当前精灵的专属动作[ENDL]次数全队共用（当前剩余 [ffbb33]" + petSystem.specialChance + "[-] 次）[ENDL][ENDL]"
-                + "[ffbb33]【神迹觉醒】[-]消耗1次[ENDL][ffbb33]【暴走】[-]不消耗次数，需要特殊道具"
+                + "[ffbb33]【神迹觉醒】[-]消耗1次，不同精灵需要满足不同条件[ENDL][ffbb33]【暴走】[-]不消耗次数，需要特殊道具"
         });
     }
 

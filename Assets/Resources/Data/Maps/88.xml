@@ -450,6 +450,83 @@
 						</button>
 					</winHandler>
 				</branch>
+				<branch id="6">
+					<settings count="6" star="4">
+						<mode>1</mode>
+					</settings>
+					<enemy>
+						<pet id="168" level="100">
+				            <status>
+				                <hp>6000</hp>
+				            </status>
+				            <initBuff>-3,-8,61,20,100,-3076,-3090,-3094</initBuff>
+							<loopSkill>11964,11965,11966,11967,11968,11969,11970,11971,11972,11973,11974,11975,11976,11977,11978</loopSkill>
+						</pet>
+						<pet id="183" level="100">
+						    <status>
+								<atk>600</atk>
+								<mat>600</mat>
+						        <hp>6000</hp>
+						    </status>
+						    <initBuff>-3,-8,61,20,100,-3076,-3090,-3094</initBuff>
+							<loopSkill>11979,11980,11981,11982,11983,11984,11985,11986,11987,11988,11989,11990,11991,11992</loopSkill>
+						</pet>
+						<pet id="213" level="100">
+						    <status>
+								<atk>600</atk>
+								<mat>600</mat>
+						        <hp>6000</hp>
+						    </status>
+						    <initBuff>-3,-8,61,20,100,-3076,-3090,-3094</initBuff>
+							<loopSkill>12246,12247,12248,12249,12250,12251,12252,12253,12254,12255,12256,12257,12258,12259</loopSkill>
+						</pet>
+				        <pet id="195" level="100">
+				            <status>
+								<atk>600</atk>
+								<mat>600</mat>
+				                <hp>6000</hp>
+				            </status>
+				            <initBuff>-3,-8,61,20,100,-3076,-3090,-3094</initBuff>
+				        	<loopSkill>12046,12047,12048,12049,12050,12051,12052,12053,12054,12055,12056,12057,12058,12059</loopSkill>
+				        </pet>
+				        <pet id="197" level="100">
+				            <status>
+								<atk>600</atk>
+								<mat>600</mat>
+				                <hp>6000</hp>
+				            </status>
+				            <initBuff>-3,-8,61,20,100,-3076,-3090,-3094</initBuff>
+				        	<loopSkill>12061,12062,12063,12064,12065,12066,12067,12068,12069,12070,12071,12072,12073,12074</loopSkill>
+				        </pet>
+						<pet id="199" level="100">
+						    <status>
+								<atk>600</atk>
+								<mat>600</mat>
+						        <hp>6000</hp>
+						    </status>
+						    <initBuff>-3,-8,61,20,100,-3076,-3090,-3094</initBuff>
+							<loopSkill>12077,12078,12079,12080,12081,12082,12083,12084,12085,12086,12087,12088,12089</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setItem</action>
+							<param>add_with_hint</param>
+							<param>3,100</param>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>door</param>
+							<param>king[floor]=7</param>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>door</param>
+							<param>king[max]=6</param>
+							<condition>activity[door].king[max]=[int]5[default]0</condition>
+						</button>
+					</winHandler>
+				</branch>
 			</battle>
 			<eventHandler>
 				<button type="click">

@@ -12,7 +12,7 @@ public static class DictionaryHelper {
     }
 
     public static bool TryGet<TKey, TValue>(this IDictionary<TKey, TValue> dict, TKey key, out TValue value, TValue defaultReturn = default(TValue)) {
-        bool isKeyExist = dict.ContainsKey(key);
+        bool isKeyExist = (key != null) && dict.ContainsKey(key);
         if (isKeyExist)
             value = dict[key];
         else
@@ -43,9 +43,14 @@ public static class DictionaryHelper {
         */
     }
 
-    public static void AddRange<TKey, TValue>(this IDictionary<TKey, TValue> dict, IDictionary<TKey, TValue> rhs) {
+    public static IDictionary<TKey, TValue> Merge<TKey, TValue>(this IDictionary<TKey, TValue> dict, IDictionary<TKey, TValue> rhs) {
+        if (ListHelper.IsNullOrEmpty(rhs))
+            return dict;
+            
         foreach (var item in rhs)
             dict.Set(item.Key, item.Value);
+
+        return dict;
     }
 }
 

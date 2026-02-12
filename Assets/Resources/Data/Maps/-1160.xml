@@ -5,10 +5,11 @@
 	</music>
 	<initialPoint>375,180</initialPoint>
 	<entities>
-		<npc id="-116001" resId="Pets/pet/261" name="英菲尼迪" size="187,192" pos="480,290" namePos="40,0">
-			<description>英菲尼迪</description>
+		<npc id="-116001" resId="Pets/pet/360" name="兰博基尼" size="214,141" pos="480,290" namePos="0,-10">
+			<anim id="Pets/anim/360" pos="1,0.4" scale="1,1" rotation="0,180,0"/>
+			<description>兰博基尼</description>
 			<dialog>
-				<branch id="default" name="英菲尼迪" icon="Pets/pet/261" size="165,170" pos="0,35">
+				<branch id="default" name="兰博基尼" icon="Pets/pet/360" size="143,94" pos="0,55">
 					<content><![CDATA[<color=#ffbb33>【蓝色龙鳞】</color>可以在商店兑换大奖！]]></content>
 					<functionHandler>
 						<func type="click">
@@ -62,7 +63,7 @@
 							<param>ItemShop</param>
 							<param>mode=buy</param>
 							<param>currency=9/0</param>
-							<param>item=500161/500259/500298</param>
+							<param>item=500161/500259/500298/500358</param>
 							<param>title=大奖兑换</param>
 						</func>
 					</functionHandler>
@@ -81,15 +82,15 @@
 						<mode>3</mode>
 					</settings>
 					<enemy>
-						<pet id="261" level="100">
+						<pet id="360" level="100">
 							<status>
 								<atk>600</atk>
 								<mat>600</mat>
 								<hp>3000</hp>
 							</status>
-							<initBuff>-8,17,20,-3059,-3022,-3062</initBuff>
-							<loopSkill>13536,13546,13538,13547</loopSkill>
-							<superSkill>13543</superSkill>
+							<initBuff>-8,17,20,-3022,-3059,-3086</initBuff>
+							<loopSkill>13659,13660</loopSkill>
+							<superSkill>13656</superSkill>
 						</pet>
 					</enemy>
 					<winHandler>

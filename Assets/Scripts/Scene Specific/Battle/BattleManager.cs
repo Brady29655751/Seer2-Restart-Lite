@@ -33,7 +33,7 @@ public class BattleManager : Manager<BattleManager>
         base.Awake();
         if (PhotonNetwork.IsConnected)
         {
-            var photonView = PhotonNetwork.IsMasterClient ? masterView : clientView;
+            var photonView = NetworkManager.IsMasterClient ? masterView : clientView;
             photonView.RequestOwnership();
 
             NetworkManager.instance.onDisconnectEvent += OnLocalPlayerDisconnect;
@@ -273,13 +273,13 @@ public class BattleManager : Manager<BattleManager>
         if (battle.result.isBattleEnd)
             return;
 
-        OpenDisconnectHintbox("我方连线已中断");
+        OpenDisconnectHintbox($"我方{failedMessage}");
         NetworkManager.instance.onDisconnectEvent -= OnLocalPlayerDisconnect;
     }
 
     public void OnOtherPlayerDisconnect(Photon.Realtime.Player player)
     {
-        if (battle.result.isBattleEnd)
+        if (battle.result.isBattleEnd || player.IsInactive)
             return;
 
         OpenDisconnectHintbox("对手连线已中断");

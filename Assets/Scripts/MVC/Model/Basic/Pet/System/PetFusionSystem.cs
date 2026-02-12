@@ -7,7 +7,8 @@ using UnityEngine;
 public static class PetFusionSystem
 {
     public static string[] fusionRecipeKeys => new string[] { "pet", "base", "item", "result" };
-    public static List<FusionRecipe> fusionRecipes => ItemInfo.database.Where(x => x.type == ItemType.Recipe).Select(x => x.effects.Select(FusionRecipe.Parse)).SelectMany(x => x).Where(x => x != null).ToList();
+    public static Dictionary<string, string> fusionRecipeKeyDict => fusionRecipeKeys.ToDictionary(x => x, x => x);
+    public static List<FusionRecipe> fusionRecipes => ItemInfo.database.Where(x => x.type == ItemType.Recipe).Select(x => x.effects.Select(effect => FusionRecipe.Parse(effect))).SelectMany(x => x).Where(x => x != null).ToList();
 
     public static List<FusionRecipe> GetFusionRecipeList(Pet mainPet, Pet subPet)
     {
@@ -30,44 +31,57 @@ public class FusionRecipe
     public (int, int) petId = (0, 0);
     public (int, int) baseId = (0, 0);
     public List<Item> items = new List<Item>() { null, null, null, null };
-    public List<int> resultPets = new List<int>();
+    public List<int> resultIds = new List<int>();
     public List<int> resultWeights = new List<int>();
 
-    public static FusionRecipe Parse(Effect effect)
+    public static FusionRecipe Parse(Effect effect, IDictionary<string, string> recipeKeys = null)
     {
-        var options = effect.abilityOptionDict;
-        if (!PetFusionSystem.fusionRecipeKeys.All(options.ContainsKey))
+        if (effect == null)
             return null;
 
-        var petIdList = options.Get("pet").ToIntList('/');
-        var baseIdList = options.Get("base").ToIntList('/');
-        var itemList = options.Get("item").Split('/');
-        var resultPdf = options.Get("result").Split('/');
+        var mergedKeys = PetFusionSystem.fusionRecipeKeyDict.Merge(recipeKeys);
+        var options = effect.abilityOptionDict;
+
+        var petIdList = options.Get(mergedKeys.Get("pet"))?.ToIntList('/');
+        var baseIdList = options.Get(mergedKeys.Get("base"))?.ToIntList('/');
+        var itemList = options.Get(mergedKeys.Get("item"))?.Split('/');
+        var resultPdf = options.Get(mergedKeys.Get("result"))?.Split('/');
+        
         var recipe = new FusionRecipe();
 
-        recipe.petId = (petIdList[0], petIdList[1]);
-        recipe.baseId = (baseIdList[0], baseIdList[1]);
-        recipe.items = itemList.Select(itemExpr =>
+        if (!ListHelper.IsNullOrEmpty(petIdList))
+            recipe.petId = (petIdList[0], petIdList[1]);
+        
+        if (!ListHelper.IsNullOrEmpty(baseIdList))
+            recipe.baseId = (baseIdList[0], baseIdList[1]);
+        
+        if (!ListHelper.IsNullOrEmpty(itemList))
         {
-            var index = itemExpr.IndexOf('[');
-            var id = (int)Identifier.GetNumIdentifier((index < 0) ? itemExpr : itemExpr.Substring(0, index));
-            var num = (index < 0) ? 1 : (int)Identifier.GetNumIdentifier(itemExpr.TrimParentheses());
+            recipe.items = itemList.Select(itemExpr =>
+            {
+                var index = itemExpr.IndexOf('[');
+                var id = (int)Identifier.GetNumIdentifier((index < 0) ? itemExpr : itemExpr.Substring(0, index));
+                var num = (index < 0) ? 1 : (int)Identifier.GetNumIdentifier(itemExpr.TrimParentheses());
 
-            return new Item(id, num);
-        }).ToList();
+                return new Item(id, num);
+            }).ToList();   
+        }
 
-        for (int i = 0; i < resultPdf.Length; i++)
+        if (!ListHelper.IsNullOrEmpty(resultPdf))
         {
-            var index = resultPdf[i].IndexOf('[');
-            var id = (int)Identifier.GetNumIdentifier((index < 0) ? resultPdf[i] : resultPdf[i].Substring(0, index));
-            var probability = (index < 0) ? 1 : (int)Identifier.GetNumIdentifier(resultPdf[i].TrimParentheses());
+            for (int i = 0; i < resultPdf.Length; i++)
+            {
+                var index = resultPdf[i].IndexOf('[');
+                var id = (int)Identifier.GetNumIdentifier((index < 0) ? resultPdf[i] : resultPdf[i].Substring(0, index));
+                var probability = (index < 0) ? 1 : (int)Identifier.GetNumIdentifier(resultPdf[i].TrimParentheses());
 
-            recipe.resultPets.Add(id);
-            recipe.resultWeights.Add(probability);
+                recipe.resultIds.Add(id);
+                recipe.resultWeights.Add(probability);
+            }   
         }
 
         return recipe;
     }
 
-    public bool IsEmpty() => ListHelper.IsNullOrEmpty(resultPets);
+    public bool IsEmpty() => ListHelper.IsNullOrEmpty(resultIds);
 }

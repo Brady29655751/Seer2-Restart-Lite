@@ -60,6 +60,18 @@ public class NpcController : Module
         npcView.SetNamePos(pos);
     }
 
+    public void SetNameSize(int size) {
+        npcView.SetNameSize(size);
+    }
+
+    public void SetNameColor(Color nameColor) {
+        npcView.SetNameColor(nameColor);
+    }
+
+    public void SetNameFont(string fontOption) {
+        npcView.SetNameFont(fontOption);
+    }
+
     public void SetRaycastTarget(bool isRaycastTarget)
     {
         npcView.SetRaycastTarget(isRaycastTarget);

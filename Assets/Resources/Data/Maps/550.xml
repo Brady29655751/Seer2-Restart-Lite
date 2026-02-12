@@ -1,0 +1,201 @@
+<map name="禁食山顶"  category="8"  id="550">
+	<!-- <resource>10011</resource> -->
+	<initialPoint>540,70</initialPoint>
+	<music category="8">
+		<bgm>BGM_540</bgm>
+	</music>
+	<entities>
+		<npc id="55001" resId="Pets/pet/165" animId="165" name="Lv 100 米奇林" size="153,149" pos="500,210" namePos="0,0">
+			<anim id="Pets/anim/165" pos="0,0" scale="1,1" rotation="0,180,0"/>
+			<description>山大王米奇林</description>
+			<dialog>
+				<branch id="default" name="米奇林" icon="Pets/pet/165" size="102,99" pos="10,45">
+					<content><![CDATA[哇哈哈哈哈！无视规则的米奇林大王！]]></content>
+					<functionHandler>
+						<func type="click">
+							<description><![CDATA[普通挑战]]></description>
+							<action>battle</action>
+							<param>default</param>
+						</func>
+						<func type="click">
+							<description><![CDATA[挑战1]]></description>
+							<action>battle</action>
+							<param>challenge_1</param>
+							<condition>firstPet.baseId=164</condition>
+						</func>
+						<func type="branch">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=把米奇林设为首发之后再来挑战吧</param>
+							<param>option_num=1</param>
+							<param>item_icon=pet[165]</param>
+							<condition>firstPet.baseIdNOT164</condition>
+						</func>
+						<func type="click">
+							<description><![CDATA[挑战2]]></description>
+							<action>battle</action>
+							<param>challenge_2</param>
+						</func>
+					</functionHandler>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[像个轮胎似的]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+					</replyHandler>
+				</branch>
+			</dialog>
+			<battle>
+				<branch id="default">
+					<settings count="6" item="false" simulate="true">
+						<mode>3</mode>
+					</settings>
+					<player>
+						<pet id="45" level="100">
+							<normalSkill>13549,13551,13552,13556</normalSkill>
+							<superSkill>13553</superSkill>
+						</pet>
+						<pet id="50" level="100">
+							<normalSkill>13378,13379,13383,13374</normalSkill>
+							<superSkill>13380</superSkill>
+						</pet>
+						<pet id="66" level="100">
+							<normalSkill>13598,13599,13600,13601</normalSkill>
+							<superSkill>13597</superSkill>
+						</pet>
+						<pet id="71" level="100">
+							<normalSkill>13585,13586,13588,13583</normalSkill>
+							<superSkill>13584</superSkill>
+						</pet>
+						<pet id="171" level="100">
+							<normalSkill>13563,13562,13557,13555</normalSkill>
+							<superSkill>13561</superSkill>
+						</pet>
+						<pet id="207" level="100">
+							<normalSkill>13450,13443,13444,13449</normalSkill>
+							<superSkill>13446</superSkill>
+						</pet>
+					</player>
+					<enemy>
+						<pet id="165" level="100">
+							<status>
+								<hp>5000</hp>
+							</status>
+							<initBuff>17,-3022</initBuff>
+							<normalSkill>13609,13610,13611,13612</normalSkill>
+							<superSkill>13608</superSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>getPet</action>
+							<param>164,10,0</param>
+							<condition>activity[spt].done[north][10][default]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=【米米】已经放入精灵仓库</param>
+							<param>item_icon=pet[164]</param>
+							<param>option_num=1</param>
+							<condition>activity[spt].done[north][10][default]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>spt</param>
+							<param>done[north][10][default]=true</param>
+							<condition>activity[spt].done[north][10][default]=[bool]false[default]false</condition>
+						</button>
+					</winHandler>
+				</branch>
+				<branch id="challenge_1">
+					<settings count="3" simulate="true">
+						<mode>3</mode>
+					</settings>
+					<enemy>
+						<pet id="165" level="100">
+							<status>
+								<hp>5000</hp>
+							</status>
+							<initBuff>13,14,17,-3022</initBuff>
+							<normalSkill>13607</normalSkill>
+							<superSkill>13608</superSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setPet</action>
+							<param>emblem=1</param>
+							<condition>activity[spt].done[north][10][challenge_1]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=【米奇林】获得了【崩坏】纹章</param>
+							<param>item_icon=emblem[164]</param>
+							<param>option_num=1</param>
+							<condition>activity[spt].done[north][10][challenge_1]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>spt</param>
+							<param>done[north][10][challenge_1]=true</param>
+							<condition>activity[spt].done[north][10][challenge_1]=[bool]false[default]false</condition>
+						</button>
+					</winHandler>
+				</branch>
+				<branch id="challenge_2">
+					<settings count="6">
+						<mode>6</mode>
+					</settings>
+					<enemy>
+						<pet id="165" level="100">
+							<status>
+								<hp>30000</hp>
+							</status>
+							<initBuff>-8,-3059</initBuff>
+							<superSkill>13608</superSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setItem</action>
+							<param>add</param>
+							<param>2,50</param>
+							<condition>activity[spt].done[north][10][challenge_2]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=50 星钻已经放入背包</param>
+							<param>item_icon=item[2]</param>
+							<param>option_num=1</param>
+							<condition>activity[spt].done[north][10][challenge_2]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>spt</param>
+							<param>done[north][10][challenge_2]=true</param>
+							<condition>activity[spt].done[north][10][challenge_2]=[bool]false[default]false</condition>
+						</button>
+					</winHandler>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>openDialog</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<teleport id="1" name="禁食山脚" pos="330,50" targetMapId="540"/> 
+	</entities>
+
+
+</map>
+

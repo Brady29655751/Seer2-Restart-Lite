@@ -90,20 +90,19 @@ public class Activity
         return (T)Convert.ChangeType(GetData(key, defaultValue), typeof(T));
     }
 
-    public void SetData(string key, string value)
+    public void SetData(string key, object value) 
     {
+        var str = value.ToString();
+
         // Handle Value.
         // For example, [expr]200+activity[10001].damage[default]123
-        if (value.TryTrimStart("[expr]", out var expr))
-            value = Parser.ParseOperation(expr).ToString();
-
+        if (str.TryTrimStart("[expr]", out var expr))
+            str = Parser.ParseOperation(expr).ToString();
         var entry = data.Find(x => x.key == key);
         if (entry == null)
-            data.Add(new IKeyValuePair<string, string>(key, value));
+            data.Add(new IKeyValuePair<string, string>(key, str));
         else
-            entry.value = value;
+            entry.value = str;
     }
-
-    public void SetData(string key, object value) => SetData(key, value.ToString());
 
 }

@@ -71,19 +71,22 @@ public class BattlePetChangeView : BattleBaseView
             return;
         
         /*
-        var skill = battle.currentState.myUnit.skill;
-        var isSelectDead = skill.effects.Exists(x => x.targetType.Contains("dead"));
-        var isSelectOther = skill.effects.Exists(x => x.targetType.Contains("other"));
+        if (battle.settings.isPVP)
+        {
+            var skill = battle.currentState.myUnit.skill;
+            var isSelectDead = skill.effects.Exists(x => x.targetType.Contains("dead"));
+            var isSelectOther = skill.effects.Exists(x => x.targetType.Contains("other"));
+            for (int i = 0; i < 6; i++) {  
+                var index = page * 6 + i;  
+                var isTarget = (petBag[index] != null) && (isSelectDead ^ (!petBag[index].isDead));
+                var isCursor = isSelectOther && (cursor == index);
+                var isParallel = (battle.settings.parallelCount <= 1) || (i < battle.settings.parallelCount);
+                var interactable = isTarget && (!isCursor) && isParallel;
 
-        for (int i = 0; i < 6; i++) {  
-            var index = page * 6 + i;  
-            var isTarget = (petBag[index] != null) && (isSelectDead ^ (!petBag[index].isDead));
-            var isCursor = isSelectOther && (cursor == index);
-            var isParallel = (battle.settings.parallelCount <= 1) || (i < battle.settings.parallelCount);
-            var interactable = isTarget && (!isCursor) && isParallel;
-            
-            changeBlockViews[i].SetFightingTag(false);
-            changeBlockViews[i].SetInteractable(interactable, !interactable);
+                changeBlockViews[i].SetFightingTag(false);
+                changeBlockViews[i].SetInteractable(interactable, !interactable);
+            }   
+            return;
         }
         */
 

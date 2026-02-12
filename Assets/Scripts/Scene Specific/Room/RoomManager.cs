@@ -46,7 +46,7 @@ public class RoomManager : Manager<RoomManager>
         bool isItemOK = (bool)(room["item"]);
         int[] buffs = (int[])(room["buff"]);
 
-        if (PhotonNetwork.IsMasterClient) {
+        if (NetworkManager.IsMasterClient) {
             room["seed"] = seed;
             PhotonNetwork.CurrentRoom?.SetCustomProperties(room);
         }
@@ -88,7 +88,8 @@ public class RoomManager : Manager<RoomManager>
     public void LeaveRoom() {
         RemoveSubscriptions();
         SetMyReadyProperty(false);
-        NetworkData networkData = new NetworkData() {
+        NetworkData networkData = new NetworkData() 
+        {
             networkAction = NetworkAction.Leave,
         };
         NetworkManager.instance.StartNetworkAction(networkData);
@@ -99,6 +100,10 @@ public class RoomManager : Manager<RoomManager>
     }
 
     private void OnOtherPlayerLeft(Photon.Realtime.Player player) {
+        if (player.IsInactive)
+            return;
+
+        NetworkManager.IsMasterClient = true;
         roomSettingsView.SetName(string.Empty, false);
     }
 

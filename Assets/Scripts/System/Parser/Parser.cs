@@ -135,8 +135,8 @@ public static class Parser {
 
             foreach (var filter in filterLoop) {
                 var op = "=";
-                var options = filter.Split(':');
-                if (options.Length != 2) {
+                var options = filter.Split(':', 2).Select(x => x.Replace('：', ':')).ToArray();
+                if (options.Length < 2) {
                     var split = Operator.SplitCondition(filter, out op);
                     options = new string[] { split.Key, split.Value };  
                 }
@@ -166,8 +166,6 @@ public static class Parser {
     }
 
     public static List<BattlePet> GetBattlePetTargetListFromPetBag(Effect effect, Unit lhsUnit, Unit rhsUnit) {
-        var targetList = new List<BattlePet>();
-        
         var targetType = effect.targetType;
         var targetFilter = Parser.ParseConditionFilter<BattlePet>(effect.targetFilter, (id, pet) => Identifier.GetPetIdentifier(id, lhsUnit.petSystem, pet)); 
         var targetNum = (int)Parser.ParseEffectOperation(effect.abilityOptionDict.Get("target_num", "-1"), effect, lhsUnit, rhsUnit);
@@ -175,7 +173,7 @@ public static class Parser {
 
         var petUnit = lhsUnit; 
         var petBag = petUnit.petSystem.petBag;
-        targetList = petBag.Where(x => x != null).Where(targetFilter).ToList();
+        var targetList = petBag.Where(x => x != null).Where(targetFilter).ToList();
 
         if (targetType.Contains("other"))
             targetList.Remove(petUnit.pet);

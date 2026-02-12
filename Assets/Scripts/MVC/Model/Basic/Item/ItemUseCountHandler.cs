@@ -42,7 +42,12 @@ public static class ItemUseCountHandler
         if (ListHelper.IsNullOrEmpty(item.effects))
             return int.MaxValue;
 
-        return item.effects.Select(x => int.Parse(x.abilityOptionDict.Get("max_use", "1"))).Min();
+        if (state == null)
+            return item.effects.Min(x => Mathf.CeilToInt(Parser.ParseEffectOperation(x.abilityOptionDict.Get("max_use", "1"), x, null, null, invokeUnit, false)));
+        
+        Unit lhsUnit = (Unit)invokeUnit;
+        Unit rhsUnit = state.GetRhsUnitById(lhsUnit.id);
+        return item.effects.Min(x => Mathf.CeilToInt(Parser.ParseEffectOperation(x.abilityOptionDict.Get("max_use", "1"), x, lhsUnit, rhsUnit)));
     }
     
 }

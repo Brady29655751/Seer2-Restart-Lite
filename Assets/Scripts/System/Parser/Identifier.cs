@@ -233,10 +233,7 @@ public static class Identifier
                 return lhsUnit.RNG();
         }
 
-        if (id.TryTrimStart("date.", out trimId))
-            return GetIdentifier(id);
-
-        return GetNumIdentifier(id);
+        return GetIdentifier(id);
     }
 
     public static float GetUnitIdentifier(string id, Unit unit)

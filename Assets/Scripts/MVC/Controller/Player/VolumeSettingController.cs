@@ -62,6 +62,12 @@ public class VolumeSettingController : Module
         volumeView.SetBattleAnimSpeedText(volumeModel.battleAnimSpeed);
     }
 
+    public void OnAutoHealChanged(bool isOn)
+    {
+        volumeModel.SetAutoHealAfterBattle(isOn);
+        volumeModel.OnConfirmSettings();
+    }
+
     public void OnInitMapChanged()
     {
         int initMapId = (volumeModel.initMapId == -70) ? 10001 : -70;

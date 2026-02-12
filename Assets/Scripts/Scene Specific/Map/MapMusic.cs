@@ -18,11 +18,14 @@ public class MapMusic
     }
 }
 
-public class MapAnim
+public class AnimInfo
 {
+    [XmlAttribute("id")] public string id;
     [XmlAttribute("pos")] public string pos;
     [XmlAttribute("scale")] public string scale;
+    [XmlAttribute("rotation")] public string npcRotation = "0,0,0";
 
-    public Vector3 animPos => string.IsNullOrEmpty(pos) ? Vector3.zero : new Vector3(pos.ToVector2().x, pos.ToVector2().y, 10);
-    public Vector3 animScale => string.IsNullOrEmpty(scale) ? Vector3.zero : new Vector3(scale.ToVector2().x, scale.ToVector2().y, 1);
+    public Vector3 animPos => string.IsNullOrEmpty(pos) ? new Vector3(0, 0, 1) : new Vector3(pos.ToVector2().x, pos.ToVector2().y, 1);
+    public Vector3 animScale => string.IsNullOrEmpty(scale) ? Vector3.one : new Vector3(scale.ToVector2().x, scale.ToVector2().y, 1);
+    public Quaternion animRot => npcRotation.ToQuaternion();
 }

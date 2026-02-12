@@ -39,6 +39,7 @@ public class Pet
         get => string.IsNullOrEmpty(basic.name) ? info.basic.name : basic.name;
         set => basic.name = value;
     }
+    public int kizuna => Mathf.Clamp((DateTime.Now - basic.getPetDate).Days * 2 / 7 + record.kizuna, record.minKizuna, record.maxKizuna);
 
     /* Feature */
     public int elementId => info.basic.elementId;
@@ -320,6 +321,9 @@ public class Pet
             "baseId" => basic.baseId,
             "star" => info.ui.star,
             "generation" => info.ui.generation,
+            "kizuna" => kizuna,
+            "minKizuna" => record.minKizuna,
+            "maxKizuna" => record.maxKizuna,
             "skinId" => ui.skinId,
             "element" => elementId,
             "subElement" => subElementId,

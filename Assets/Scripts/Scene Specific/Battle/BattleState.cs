@@ -29,8 +29,8 @@ public class BattleState
     public bool isAllUnitDone => IsAllUnitDone();
     public bool isAllUnitReady => IsAllUnitReady();
     public bool isAnyPetDead => IsAnyPetDead();
-    public Unit myUnit => (settings.mode == BattleMode.PVP) ? (PhotonNetwork.IsMasterClient ? masterUnit : clientUnit) : masterUnit;
-    public Unit opUnit => (settings.mode == BattleMode.PVP) ? (PhotonNetwork.IsMasterClient ? clientUnit : masterUnit) : clientUnit;
+    public Unit myUnit => (settings.mode == BattleMode.PVP) ? (NetworkManager.IsMasterClient ? masterUnit : clientUnit) : masterUnit;
+    public Unit opUnit => (settings.mode == BattleMode.PVP) ? (NetworkManager.IsMasterClient ? clientUnit : masterUnit) : clientUnit;
     public Unit atkUnit => (whosTurn == 0) ? null : GetUnitById(whosTurn);
     public Unit defUnit => (whosTurn == 0) ? null : GetUnitById(-whosTurn);
 

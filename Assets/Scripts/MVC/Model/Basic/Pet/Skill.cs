@@ -367,15 +367,7 @@ public class Skill
         {
             for (int i = 0; i < referBuffList.Count; i++)
             {
-                var buffValueList = referBuffList[i].TrimParenthesesLoop();
-                bool isWithValue = !ListHelper.IsNullOrEmpty(buffValueList);
-                var buffId = int.Parse(isWithValue ? referBuffList[i].Substring(0, referBuffList[i].IndexOf('[')) : referBuffList[i]);
-                var buffValue = isWithValue ? int.Parse(buffValueList.FirstOrDefault(x => !x.Contains(":")) ?? "0") : 0;
-                var buff = new Buff(buffId, -2, buffValue);
-
-                buffValueList?.RemoveAll(x => !x.Contains(":"));
-                buffValueList?.ForEach(x => buff.options.Set(x.Split(':')[0], x.Split(':')[1]));
-
+                var buff = new Buff(BuffReferData.Parse(referBuffList[i])){ turn = -2 };
                 desc += ("[ENDL][ENDL][ffbb33]【" + buff.name + "】[-]：" + buff.description);
             }
         }
@@ -518,7 +510,10 @@ public class Skill
 
     public float GetSkillIdentifier(string id)
     {
-        if (id.TryTrimStart("option", out var trimId))
+        if (id.TryTrimStart("description", out var trimId) && trimId.TryTrimParentheses(out var desc))
+            return rawDescription.Contains(desc) ? 1 : 0;
+
+        if (id.TryTrimStart("option", out trimId))
             return Identifier.GetNumIdentifier(options.Get(trimId.TrimParentheses(), "0"));
 
         if (id.TryTrimStart("powerup.", out trimId))

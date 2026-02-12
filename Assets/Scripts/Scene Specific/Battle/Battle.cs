@@ -6,7 +6,6 @@ using UnityEngine;
 using Random = UnityEngine.Random;
 using Photon.Pun;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
-using ExitGames.Client.Photon.StructWrapping;
 
 public class Battle
 {
@@ -91,11 +90,11 @@ public class Battle
         myPetBag.ForEach((x, i) => x?.SetPetIdentifier("skinId", ((int[])myHash["skin"])[i]));
         opPetBag.ForEach((x, i) => x?.SetPetIdentifier("skinId", ((int[])opHash["skin"])[i]));
 
-        var masterPetBag = PhotonNetwork.IsMasterClient ? myPetBag : opPetBag;
-        var clientPetBag = PhotonNetwork.IsMasterClient ? opPetBag : myPetBag;
+        var masterPetBag = NetworkManager.IsMasterClient ? myPetBag : opPetBag;
+        var clientPetBag = NetworkManager.IsMasterClient ? opPetBag : myPetBag;
         Init(masterPetBag, clientPetBag, roomSettings);
         // RecordBattle(masterPetBag.Select(x => (x == null) ? null : new Pet(x)).ToArray(), 
-        //     clientPetBag.Select(x => (x == null) ? null : new Pet(x)).ToArray(), roomSettings, PhotonNetwork.IsMasterClient);
+        //     clientPetBag.Select(x => (x == null) ? null : new Pet(x)).ToArray(), roomSettings, NetworkManager.IsMasterClient);
     }
 
     private void Init(BattlePet[] masterPetBag, BattlePet[] clientPetBag, BattleSettings settings) {
@@ -294,8 +293,8 @@ public class Battle
             UI.SetSkillSelectMode(false);
             UI.SetBottomBarInteractable(false);
             UI.PVPSetSkillToOthers(skill);
-        } else if (settings.mode == BattleMode.PVP)
-            Player.instance.gameData.battleRecordStorage?.LastOrDefault()?.AddAction(skill.ToRPCData(settings), false);
+        } // else if (settings.mode == BattleMode.PVP)
+          //   Player.instance.gameData.battleRecordStorage?.LastOrDefault()?.AddAction(skill.ToRPCData(settings), false);
 
         if ((settings.parallelCount <= 1) && (currentState.isAnyPetDead)) {
             unit.SetSkill(null);
@@ -309,7 +308,7 @@ public class Battle
             return false;
         }
 
-        if ((settings.mode != BattleMode.PVP) && (settings.mode != BattleMode.Record) && (opUnit.skill == null)) {
+        if ((!settings.isPVP) && (opUnit.skill == null)) {
             var parallelCount = Mathf.Min(settings.parallelCount, opUnit.petSystem.alivePetNum);
             for (int i = 0; i < parallelCount; i++) {
                 var cursor = opUnit.petSystem.cursor;

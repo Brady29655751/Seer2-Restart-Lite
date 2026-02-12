@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class WorkshopItemListModel : Module
+public class WorkshopItemListModel : SelectModel<ItemInfo>
 {
     [SerializeField] private IInputField searchInputField;
     public string searchString => searchInputField?.inputString;
@@ -15,30 +15,32 @@ public class WorkshopItemListModel : Module
     private bool sortByDescendOrder = false;
     private Func<ItemInfo, float> sorter => GetSorter();
 
-    private List<ItemInfo> itemInfoDatabase = new List<ItemInfo>();
-    private IEnumerable<ItemInfo> filteredItemInfoList => itemInfoDatabase.Where(searchFilter);
-    private IEnumerable<ItemInfo> orderedItemInfoList => sortByDescendOrder ? filteredItemInfoList.OrderByDescending(sorter) : filteredItemInfoList.OrderBy(sorter);
-    public List<ItemInfo> resultItemInfoList => orderedItemInfoList.ToList();
-
     public void SetActive(bool active) {
         if (active)
             return;
 
         searchInputField.SetInputString(string.Empty);
+        Reset();
     }
 
-    public void SetItemInfoList(List<ItemInfo> itemInfoList) {
-        itemInfoDatabase = itemInfoList;
+    public void Search()
+    {
+        Filter(searchFilter);
+        Sort(sorter, sortByDescendOrder);
     }
-
-    public void Sort(string type) {
-        if (type == sortType) {
+    
+    public void Sort(string type)
+    {
+        if (type == sortType) 
+        {
             sortByDescendOrder = !sortByDescendOrder;
-            return;
+        } 
+        else
+        {
+            sortType = type;
+            sortByDescendOrder = true;   
         }
-        
-        sortType = type;
-        sortByDescendOrder = true;
+        Search();
     }
 
     private Func<ItemInfo, bool> GetSearchFilter() {

@@ -7,13 +7,15 @@ public class WorkshopSkillListController : Module
 {
     [SerializeField] private WorkshopSkillListModel skillListModel;
     [SerializeField] private WorkshopSkillListView skillListView;
+    [SerializeField] private PageView pageView;
     [SerializeField] private WorkshopAllController allController;
 
     public override void Init()
     {
         base.Init();
-        skillListModel.SetSkillList(Skill.database);
+        skillListModel.SetStorage(Skill.database);
         skillListView.CreateSkillList(Skill.database, OnEditSkill);
+        OnSetPage();
     }
 
     private void OnEditSkill(Skill skill) {
@@ -23,16 +25,37 @@ public class WorkshopSkillListController : Module
 
     public void SetActive(bool active) {
         skillListModel.SetActive(active);
-        if (!active) 
-            skillListView.SetSkillList(Skill.database);
+        if (!active)
+            OnSetPage();  
     }
 
-    public void Search() {
-        skillListView.ShowResult(skillListModel.resultSkillList, skillListModel.isIdFilter);
+    public void Search() 
+    {
+        skillListModel.Search();
+        OnSetPage();
     }
 
-    public void Sort(string type) {
-        skillListModel.Sort(type);
-        skillListView.ShowResult(skillListModel.resultSkillList, false);
+    public void Sort(string key)
+    {
+        skillListModel.Sort(key);
+        OnSetPage();
+    }
+
+    private void OnSetPage()
+    {
+        skillListView.SetSkillList(skillListModel.selections.ToList());
+        pageView.SetPage(skillListModel.page, skillListModel.lastPage);
+    }
+
+    public void PrevPage()
+    {
+        skillListModel.PrevPage();
+        OnSetPage();
+    }
+
+    public void NextPage()
+    {
+        skillListModel.NextPage();
+        OnSetPage();
     }
 }
