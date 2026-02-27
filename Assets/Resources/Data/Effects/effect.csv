@@ -38,6 +38,8 @@ id,timing,priority,target,condition,cond_option,effect,effect_option
 2004,none,-1,pet,none,none,heal,name=恢复&add={0}&{1}={2}
 2005,none,-1,pet,none,is_hit=false,heal,name=未命中时恢复&add={0}&{1}={2}
 2006,none,-1,pet,none,none,rage,name=怒气&add={0}&{1}={2}
+2008,none,-1,skill,none,none,set_skill,name=设定技能数值&type={0}&op={1}&value={2}&{3}={4}
+2010,none,-1,skill,none,none,set_damage,name=附带{0}点固定伤害&op=+&value={0}&{1}={2}
 3001,on_add_buff,-1,pet,none,none,rage,name=添加印记时，怒气不低于{0}&min={0}
 3002,on_remove_buf,-1,pet,none,none,rage,name=移除印记时，怒气最低为{0}&min={0}
 3003,on_final_dmg_cal,-1,skill,skill,who=op&whos_turn=op&type=type&type_op=>&type_cmp=0,set_damage,name=受到的攻击伤害乘算&who=op&op=*&value={0}

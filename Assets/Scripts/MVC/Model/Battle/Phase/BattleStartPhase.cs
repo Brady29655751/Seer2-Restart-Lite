@@ -66,7 +66,7 @@ public class BattleStartPhase : BattlePhase
 
             pet.skillController.allSkills.Where(x => x != null).SelectMany(x => x.effects)
                 .Where(x => (x != null) && (x.timing == EffectTiming.OnAddBuff)).OrderBy(x => x.priority).ToList()
-                .ForEach(x => x.CheckAndApply(thisUnit, state, false));
+                .ForEach(x => x.CheckAndApply(thisUnit, state, false, sourcePet: pet));
         }
         thisUnit.petSystem.cursor = 0;
     }

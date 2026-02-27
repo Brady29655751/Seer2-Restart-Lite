@@ -8,7 +8,7 @@ public static class PetFusionSystem
 {
     public static string[] fusionRecipeKeys => new string[] { "pet", "base", "item", "result" };
     public static Dictionary<string, string> fusionRecipeKeyDict => fusionRecipeKeys.ToDictionary(x => x, x => x);
-    public static List<FusionRecipe> fusionRecipes => ItemInfo.database.Where(x => x.type == ItemType.Recipe).Select(x => x.effects.Select(effect => FusionRecipe.Parse(effect))).SelectMany(x => x).Where(x => x != null).ToList();
+    public static List<FusionRecipe> fusionRecipes => ItemInfo.database.Where(x => x.type == ItemType.Recipe).Select(x => x.effects.Select(effect => FusionRecipe.Parse(effect, checkAllKeys: true))).SelectMany(x => x).Where(x => x != null).ToList();
 
     public static List<FusionRecipe> GetFusionRecipeList(Pet mainPet, Pet subPet)
     {
@@ -34,13 +34,16 @@ public class FusionRecipe
     public List<int> resultIds = new List<int>();
     public List<int> resultWeights = new List<int>();
 
-    public static FusionRecipe Parse(Effect effect, IDictionary<string, string> recipeKeys = null)
+    public static FusionRecipe Parse(Effect effect, IDictionary<string, string> recipeKeys = null, bool checkAllKeys = false)
     {
         if (effect == null)
             return null;
 
         var mergedKeys = PetFusionSystem.fusionRecipeKeyDict.Merge(recipeKeys);
         var options = effect.abilityOptionDict;
+
+        if (checkAllKeys && !mergedKeys.All(x => options.ContainsKey(x.Value)))
+            return null;
 
         var petIdList = options.Get(mergedKeys.Get("pet"))?.ToIntList('/');
         var baseIdList = options.Get(mergedKeys.Get("base"))?.ToIntList('/');
@@ -84,4 +87,5 @@ public class FusionRecipe
     }
 
     public bool IsEmpty() => ListHelper.IsNullOrEmpty(resultIds);
+    public bool IsPetEmpty() => petId.Item1 == 0 || petId.Item2 == 0;
 }

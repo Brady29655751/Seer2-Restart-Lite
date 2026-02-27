@@ -1,0 +1,457 @@
+<map name="云霄星地面层" category="102" id="10025" weather="8">
+	<initialPoint>540,240</initialPoint>
+	<music category="102">
+		<bgm>BGM_25</bgm>
+	</music>
+	<entities>
+		<!--
+		<npc id="1002500" resId="1001" name="" size="200,200" pos="120,0" namePos="0,0" color="0,0,0,0">
+			<description>海洋星深水区</description>
+			<transport>240,80</transport>
+			<eventHandler>
+				<button type="click">
+					<action>teleport</action>
+					<param>10021</param>
+				</button>
+			</eventHandler>
+		</npc>
+		-->
+		<npc id="1002501" resId="Maps/mine/CH4" name="" size="350,200" pos="590,90" namePos="0,0" color="0,0,0,0">
+			<description>甲烷燃气</description>
+			<eventHandler>
+				<button type="click">
+					<action>openHintbox</action>
+					<param>type=Item</param>
+					<param>title=提示</param>
+					<param>content=甲烷需要合理开发，明天再来吧！</param>
+					<param>item_icon=item[1102]</param>
+					<param>option_num=1</param>
+					<condition>activity[mine].done[10025]=[bool]true[default]false</condition>
+				</button>
+				<button type="click">
+					<action>setItem</action>
+					<param>add</param>
+					<param>1102,5</param>
+					<condition>activity[mine].done[10025]=[bool]false[default]false</condition>
+				</button>
+				<button type="click">
+					<action>openHintbox</action>
+					<param>type=Item</param>
+					<param>title=提示</param>
+					<param>content=5瓶甲烷燃气已经放入背包</param>
+					<param>item_icon=item[1102]</param>
+					<param>option_num=1</param>
+					<condition>activity[mine].done[10025]=[bool]false[default]false</condition>
+				</button>
+				<button type="click">
+					<action>setActivity</action>
+					<param>mine</param>
+					<param>done[10025]=true</param>
+					<condition>activity[mine].done[10025]=[bool]false[default]false</condition>
+				</button>
+			</eventHandler>
+		</npc>
+		<npc id="1002502" resId="Pets/pet/10022" name="Lv31 毛毛" size="40,48" pos="440,115" namePos="0,0">
+			<anim id="Pets/anim/10022" pos="2.4,0" scale="0.8,0.8" />
+			<battle>
+				<branch id="default">
+					<settings count="6" capture="true">
+						<weather>8</weather>
+					</settings>
+					<enemy>
+						<pet id="10022" level="31">
+							<loopSkill>10050</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setItem</action>
+							<param>add</param>
+							<param>1206,1</param>
+							<condition>random[old]&lt;10</condition>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=1个空气结晶已经放入背包</param>
+							<param>item_icon=item[1206]</param>
+							<param>option_num=1</param>
+							<condition>random[old]&lt;10</condition>
+						</button>
+					</winHandler>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>battle</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<npc id="1002503" resId="Pets/pet/10022" name="Lv32 毛毛" size="40,48" pos="360,335" namePos="0,0">
+			<anim id="Pets/anim/10022" pos="2.4,0" scale="0.8,0.8" />
+			<battle>
+				<branch id="default">
+					<settings count="6" capture="true">
+						<weather>8</weather>
+					</settings>
+					<enemy>
+						<pet id="10022" level="32">
+							<loopSkill>10050</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setItem</action>
+							<param>add</param>
+							<param>1206,1</param>
+							<condition>random[old]&lt;10</condition>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=1个空气结晶已经放入背包</param>
+							<param>item_icon=item[1206]</param>
+							<param>option_num=1</param>
+							<condition>random[old]&lt;10</condition>
+						</button>
+					</winHandler>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>battle</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<npc id="1002504" resId="Pets/pet/10053" name="Lv40 莫比" size="45,49" pos="650,450" namePos="0,-5" active="false">
+			<description>神秘的精灵</description>
+			<dialog>
+				<branch id="default" name="莫比" icon="Pets/pet/10053" size="90,98" pos="0,45">
+					<content><![CDATA[莫比...莫比...]]></content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[莫比...乌斯环？]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+						<reply type="click">
+							<description><![CDATA[带莫比飞天！]]></description>
+							<action>battle</action>
+							<param>default</param>
+						</reply>
+					</replyHandler>
+				</branch>
+			</dialog>
+			<battle>
+				<branch id="default">
+					<settings count="6" capture="true">
+						<weather>8</weather>
+					</settings>			
+					<enemy>
+						<pet id="10053" level="40">
+							<initBuff>-2</initBuff>
+							<loopSkill>10242,10242,10242,10242,-4</loopSkill>
+						</pet>
+					</enemy>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="auto">
+					<action>setNpcParam</action>
+					<param>1002504</param>
+					<param>active=true</param>
+					<condition>random[new]LTE5</condition>
+				</button>
+				<button type="click">
+					<action>openDialog</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<npc id="1002505" resId="Pets/pet/10261" name="Lv70 盖亚" size="97,160" pos="810,220" namePos="0,0">
+			<anim id="Pets/anim/10261" pos="0,-1.2" scale="1,1" rotation="0,180,0" />
+			<description>盖亚</description>
+			<dialog>
+				<branch id="default" name="盖亚" icon="Pets/pet/10261" size="97,160" pos="10,35">
+					<content><![CDATA[我的目标是成为精灵战斗大师，我对战斗有着独特的见解，只有力量与智慧都达到一定境界的对手才会得到我的认同。]]></content>
+					<functionHandler>
+						<func type="click">
+							<description><![CDATA[挑战盖亚]]></description>
+							<action>openDialog</action>
+							<param>challenge</param>
+						</func>
+						<func type="click">
+							<description><![CDATA[战神之怒]]></description>
+							<action>battle</action>
+							<param>evolve</param>
+							<condition>firstPet.id=10261</condition>
+						</func>
+						<func type="branch">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=把盖亚设为首发之后再来挑战吧</param>
+							<param>option_num=1</param>
+							<param>item_icon=pet[10261]</param>
+							<condition>firstPet.idNOT10261</condition>
+						</func>
+						<!--
+						<func type="click">
+							<description><![CDATA[征伐]]></description>
+							<action>openDialog</action>
+							<param>war</param>
+						</func>
+						<func type="click">
+							<description><![CDATA[王之传承]]></description>
+							<action>battle</action>
+							<param>king</param>
+							<condition>firstPet.id=12780</condition>
+						</func>
+						<func type="branch">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=把征伐战神·盖亚设为首发之后再来挑战吧</param>
+							<param>option_num=1</param>
+							<param>item_icon=pet[12780]</param>
+							<condition>firstPet.idNOT12780</condition>
+						</func>
+						-->
+					</functionHandler>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[站在毒气上说话就是硬气]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+					</replyHandler>
+				</branch>
+				<branch id="challenge" name="盖亚" icon="Pets/pet/10261" size="97,160" pos="10,35">
+					<content><![CDATA[如果你能以1对1的形式在<b><color=#ffbb33>两个回合内</color></b>战胜我，我就做你的伙伴。]]></content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[怎么五回合变成两回合啊？]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+						<reply type="click">
+							<description><![CDATA[一言为定]]></description>
+							<action>battle</action>
+							<param>default</param>
+						</reply>
+					</replyHandler>
+				</branch>
+				<branch id="war" name="盖亚" icon="Pets/pet/10261" size="97,160" pos="10,35">
+					<content><![CDATA[挑战前背包请记得携带战神盖亚]]></content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[我先去带上]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+						<reply type="click">
+							<description><![CDATA[准备就绪]]></description>
+							<action>battle</action>
+							<param>war</param>
+						</reply>
+					</replyHandler>
+				</branch>
+			</dialog>
+			<battle>
+				<branch id="default">
+					<settings count="1" star="4">
+						<mode>4</mode>
+						<rule>1</rule>
+						<weather>8</weather>
+					</settings>
+					<enemy>
+						<pet id="10261" level="70">
+							<status>
+								<atk>600</atk>
+								<mat>600</mat>
+								<def>400</def>
+								<mdf>400</mdf>
+								<hp>2000</hp>
+							</status>
+							<initBuff>-8,61,-3000,-3103</initBuff>
+							<loopSkill>10821,12720</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>getPet</action>
+							<param>10260</param>
+							<condition>activity[new_evolve_10261].done=[bool]false[default]false</condition>
+							<condition>battle.turnLTE2</condition>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=获得了提坦！</param>
+							<param>item_icon=pet[10260]</param>
+							<param>option_num=1</param>
+							<condition>activity[new_evolve_10261].done=[bool]false[default]false</condition>
+							<condition>battle.turnLTE2</condition>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>new_evolve_10261</param>
+							<param>done=true</param>
+							<condition>activity[new_evolve_10261].done=[bool]false[default]false</condition>
+							<condition>battle.turnLTE2</condition>
+						</button>
+					</winHandler>
+				</branch>
+				<branch id="evolve">
+					<settings count="1">
+						<mode>1</mode>
+						<weather>8</weather>
+						<initBuff>(rule:600000)</initBuff>
+					</settings>
+					<enemy>
+						<pet id="11845" level="105">
+							<status>
+								<atk>500</atk>
+								<mat>500</mat>
+								<def>300</def>
+								<mdf>300</mdf>
+								<spd>375</spd>
+								<hp>2000</hp>
+							</status>
+							<emblem>false</emblem>
+							<initBuff>-8,57,-3052,-3056,-3058</initBuff>
+							<headerSkill>10818,10812</headerSkill>
+							<loopSkill>10823,10816,10816</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>evolvePet</action>
+							<param>11845</param>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=【盖亚】已成功超进化</param>
+							<param>item_icon=pet[11845]</param>
+							<param>option_num=1</param>
+						</button>
+					</winHandler>
+				</branch>
+				<branch id="war">
+					<settings count="6" star="7">
+						<mode>4</mode>
+						<weather>8</weather>
+					</settings>
+					<enemy>
+						<pet id="12780" level="105">
+							<status>
+								<hp>30000</hp>
+							</status>
+							<initBuff>-8,61,3000,100</initBuff>
+							<loopSkill>13794,13795,13796,13797,13798</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=PetSelect</param>
+						    <param>title=选择要进化的战神盖亚</param>
+						    <param>option_num=2</param>
+							<param>callback=evolve</param>
+						</button>
+					</winHandler>
+				</branch>
+				<branch id="king">
+					<settings count="1">
+						<mode>1</mode>
+						<weather>8</weather>
+						<initBuff>(rule[0]:600000)(rule[1]:410010)</initBuff>
+					</settings>
+					<enemy>
+						<pet id="13242" level="105">
+							<status>
+								<def>600</def>
+								<mdf>600</mdf>
+								<spd>99999</spd>
+								<hp>5000</hp>
+							</status>
+							<initBuff>13,14,17,29,61,100,3530,3531,3532</initBuff>
+							<headerSkill>10818</headerSkill>
+							<loopSkill>13799,13800,13801,13803,13799,13800,13801,13739,13802,13803</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>evolvePet</action>
+							<param>13242</param>
+						</button>
+						<button type="auto">
+							<action>setPet</action>
+							<param>maxLevel=105</param>
+							<param>level=105</param>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=你的盖亚获得了战斗的传承！</param>
+							<param>item_icon=pet[13242]</param>
+							<param>option_num=1</param>
+						</button>
+					</winHandler>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>openDialog</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+			<callbackHandler>
+				<button type="choose">
+					<action>openHintbox</action>
+					<param>type=PetSelect</param>
+				    <param>title=选择要进化的战神盖亚</param>
+				    <param>option_num=2</param>
+					<param>callback=evolve</param>
+				    <condition>data.PetSelect.uidNOT11845|data.PetSelect.level&lt;100</condition>
+				</button>
+				<button type="evolve">
+				    <action>openHintbox</action>
+				    <param>type=Item</param>
+				    <param>title=提示</param>
+				    <param>content=必须选择等级100的战神盖亚！</param>
+				    <param>item_icon=pet[11845]</param>
+				    <param>option_num=1</param>
+					<param>callback=choose</param>
+				    <condition>data.PetSelect.uidNOT11845|data.PetSelect.level&lt;100</condition>
+				</button>
+				<button type="evolve">
+				    <action>openHintbox</action>
+				    <param>type=Item</param>
+				    <param>title=提示</param>
+				    <param>content=你的盖亚成功突破了自我！</param>
+				    <param>item_icon=pet[12780]</param>
+				    <param>option_num=1</param>
+				    <condition>data.PetSelect.uid=11845</condition>
+				    <condition>data.PetSelect.levelGTE100</condition>
+				</button>
+				<button type="evolve">
+				    <action>evolvePet</action>
+				    <param>index=data.PetSelectIndex</param>
+				    <param>12780</param>
+				    <condition>data.PetSelect.uid=11845</condition>
+				    <condition>data.PetSelect.levelGTE100</condition>
+				</button>
+			</callbackHandler>
+		</npc>
+		<teleport id="1" name="传送室" pos="80,335" targetMapId="10001"/>
+	</entities>		
+</map>

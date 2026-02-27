@@ -6,7 +6,8 @@ using UnityEngine;
 
 public static class SecretSkillConditionHandler
 {
-    public static List<List<int>> specialPetIdList = new List<List<int>>() {
+    public static List<List<int>> specialPetIdList = new List<List<int>>() 
+    {
         new List<int>(),
         new List<int>(){ 3, 6, 9 },
         new List<int>(){ 15 },
@@ -18,6 +19,8 @@ public static class SecretSkillConditionHandler
         new List<int>(){ 97, 98, 99 },
         new List<int>(){ 990, 1990 },
         new List<int>(){ 101, 102 },
+        new List<int>(){ 103, 104 },
+        new List<int>(){ 10070, 10261, 10798, 10875, 11633 },
     };
 
     public static bool GreaterThanLevel(this LearnSkillInfo secretSkillInfo, Pet pet, BattleState endState) {

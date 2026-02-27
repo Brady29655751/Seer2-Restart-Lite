@@ -175,6 +175,13 @@ namespace System {
             return list;
         }
 
+        public static List<short> ToShortList(this string str, char delimeter = ',') {
+            if (string.IsNullOrEmpty(str) || (str == "none"))
+                return new List<short>();
+
+            return str.ToFloatList(delimeter)?.Select(x => (short)x).ToList();
+        }
+
         public static List<int> ToIntList(this string str, char delimeter = ',') {
             if (string.IsNullOrEmpty(str) || (str == "none"))
                 return new List<int>();

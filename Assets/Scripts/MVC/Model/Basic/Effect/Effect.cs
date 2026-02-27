@@ -9,6 +9,7 @@ public class Effect {
     public const int DATA_COL = 7;
 
     public object source = null;
+    public BattlePet sourcePet = null;
     public object invokeUnit = null;
 
     public int id = 0;
@@ -250,7 +251,7 @@ public class Effect {
         if (!result)
         {
             var postExpr = condOptionDictList.Select(x => x?.Get("on_fail")).FirstOrDefault(x => x != null); 
-            if ((!TryGetPostProcessEffects(postExpr, out var postEffects)) || ListHelper.IsNullOrEmpty(postEffects))
+            if ((!TryGetPostProcessEffects(postExpr, state, out var postEffects)) || ListHelper.IsNullOrEmpty(postEffects))
                 return result;            
         
             var effect = postEffects.FirstOrDefault();
@@ -311,7 +312,7 @@ public class Effect {
 
         // Post Process
         var postExpr = abilityOptionDict.Get("on_" + (result ? "success" : "fail"));
-        if (!TryGetPostProcessEffects(postExpr, out var postEffects))
+        if (!TryGetPostProcessEffects(postExpr, state, out var postEffects))
             return result;
 
         var effectHandler = new EffectHandler();
@@ -321,14 +322,15 @@ public class Effect {
         return result;
     }
 
-    public bool CheckAndApply(object invokeUnit, BattleState state = null, bool checkPhase = true, bool checkTurn = true) {
+    public bool CheckAndApply(object invokeUnit, BattleState state = null, bool checkPhase = true, bool checkTurn = true, BattlePet sourcePet = null) {
+        this.sourcePet = sourcePet;
         if (!Condition(invokeUnit, state, checkPhase, checkTurn))
-            return false;
+            return false;   
         
         return Apply(invokeUnit, state);
     }
 
-    private bool TryGetPostProcessEffects(string postExpr, out List<Effect> postEffects)
+    private bool TryGetPostProcessEffects(string postExpr, BattleState state, out List<Effect> postEffects)
     {
         postEffects = new List<Effect>();
         if (string.IsNullOrEmpty(postExpr))
@@ -336,7 +338,10 @@ public class Effect {
 
         if (!Effect.TryParse(postExpr, out postEffects))
         {
-            postEffects = postExpr.ToIntList('/')?.Select(skillId => 
+            var effectIdList = (state == null) ? postExpr.ToIntList('/') : postExpr.Split('/').Select(x => 
+                (int)Parser.ParseEffectOperation(x, this, state.GetUnitById(((Unit)invokeUnit).id), state.GetRhsUnitById(((Unit)invokeUnit).id))).ToList();
+
+            postEffects = effectIdList?.Select(skillId => 
                 Skill.GetSkill(skillId, false)?.effects?.Select(x => new Effect(x)).ToList()
             ).SelectMany(x => x).ToList();
         } 

@@ -6,9 +6,13 @@ using FTRuntime;
 using UnityEngine;
 using UnityEngine.UI;
 using Object = UnityEngine.Object;
+using UnityEngine.Video;
+using FTRuntime.Yields;
 
 public class BattlePetAnimView : BattleBaseView
 {
+    [SerializeField] private VideoPlayer videoPlayer;
+    [SerializeField] private RawImage videoRenderImage;
     [SerializeField] private IAnimator skillAnim, captureAnim;
     [SerializeField] private SpriteRenderer battlePetSprite;
     [SerializeField] private Transform battlePetAnimContainer;
@@ -31,12 +35,24 @@ public class BattlePetAnimView : BattleBaseView
     private Dictionary<GameObject, GameObject>
         cloneDictionary = new Dictionary<GameObject, GameObject>(); //当遇到抢动画事件时,克隆体存在这里面.通过本体来寻找保存的克隆体
 
+    protected override void Awake()
+    {
+        base.Awake();
+        videoPlayer.loopPointReached += (x) => RenderTexture.ReleaseTemporary(x.targetTexture);
+    }
+
     public override void Init()
     {
         base.Init();
         captureAnim.anim.runtimeAnimatorController = (RuntimeAnimatorController)Player.GetSceneData("captureAnim");
         captureAnim.anim.SetFloat("speed", this.animSpeed);
         skillAnim.anim.SetFloat("speed", this.animSpeed);
+    }
+
+    private void OnDestroy() 
+    {
+        if (videoPlayer?.targetTexture != null)
+            RenderTexture.ReleaseTemporary(videoPlayer.targetTexture);
     }
 
 
@@ -84,12 +100,15 @@ public class BattlePetAnimView : BattleBaseView
             //检测是否有出场动画,如果有,播放出场动画.如果没有,直接播放待机动画
             CheckIfAnimUsed(); //防止抢动画
             isPetDone = false; //如果为false,说明动画还在播放,播完了变成idle状态,这个变量就会变成true,进行下一步
+            
             SwfClipController controller = this.currentPetAnim.GetComponent<SwfClipController>();
             controller.rateScale = this.animSpeed;
             controller.autoPlay = false;
             controller.loopMode = SwfClipController.LoopModes.Once;
             controller.OnStopPlayingEvent += SetPetIdle; //注册一个事件监听,当动画播放完毕后,回到idle状态
+
             this.ApplyAnimation();
+
             controller.GotoAndPlay(0);
         }
         else
@@ -116,16 +135,19 @@ public class BattlePetAnimView : BattleBaseView
         if (this.currentPetUI != null && (tmp = this.currentPetUI.GetBattleAnim(type)) != null)
         {
             this.currentPetAnim = tmp;
+            
             //如果两个都不为null,说明这个精灵有动画,执行这个
             SwfClipController controller = this.currentPetAnim.GetComponent<SwfClipController>();
             controller.clip.sortingOrder = 2 * (6 - cursorOffset); //攻击动画在2层,其他精灵动画都在1层,但捕捉动画在UI层在上面的
-            this.currentPetAnim.transform.position = new Vector3(this.currentPetAnim.transform.position.x,
-                this.currentPetAnim.transform.position.y, 2);
+            
+            this.currentPetAnim.transform.position = new Vector3(this.currentPetAnim.transform.position.x, this.currentPetAnim.transform.position.y, 2);
+
             controller.rateScale = skillAnimSpeed;
             controller.autoPlay = false;
             controller.loopMode = SwfClipController.LoopModes.Once;
-            controller.OnStopPlayingEvent += SetPetIdle; //注册一个事件监听,当动画播放完毕后,回到idle状态
+
             this.ApplyAnimation(false);
+
             if (type is PetAnimationType.Super or PetAnimationType.SecondSuper)
             {
                 this.camara.ScreenShake(0.4f);
@@ -139,7 +161,34 @@ public class BattlePetAnimView : BattleBaseView
                 }
             }
 
-            _ = SetOnHit((int)(this.currentPetUI.hitInfo.GetFrameByType(type) * 1000 / (24 * skillAnimSpeed)), () =>
+            var videoStartFrame = this.currentPetUI.hitInfo.GetVideoStartFrameByType(type);
+            if (videoStartFrame >= 0)
+            {
+                videoPlayer.url = this.currentPetUI.hitInfo.GetVideoUrl(type);
+                videoPlayer.playbackSpeed = skillAnimSpeed;
+                videoRenderImage.texture = videoPlayer.targetTexture = RenderTexture.GetTemporary(1920, 1080);
+                videoPlayer.Prepare();
+
+                void OnVideoEnd(VideoPlayer vp)
+                {
+                    videoPlayer.loopPointReached -= OnVideoEnd;
+                    controller.OnStopPlayingEvent += SetPetIdle;
+                    controller.Play(false);
+                }
+
+                _ = SetDelayCallback((int)(videoStartFrame * 1000 / (24 * skillAnimSpeed)), () =>
+                {
+                    videoPlayer.loopPointReached += OnVideoEnd;
+                    controller.Stop(false);
+                    videoPlayer.Play();
+                });   
+            } 
+            else
+            {
+                controller.OnStopPlayingEvent += SetPetIdle; //注册一个事件监听,当动画播放完毕后,回到idle状态    
+            }
+
+            _ = SetDelayCallback((int)(this.currentPetUI.hitInfo.GetFrameByType(type) * 1000 / (24 * skillAnimSpeed)), () =>
             {
                 // 若不為必殺技則擊中才有音效
                 if (!isSuperSkill)
@@ -147,6 +196,7 @@ public class BattlePetAnimView : BattleBaseView
 
                 OnPetHit();
             });
+
             controller.GotoAndPlay(0);
         }
         else //为null,说明这个精灵没有动画,执行通用技能动画
@@ -176,7 +226,7 @@ public class BattlePetAnimView : BattleBaseView
         StartCoroutine(PreventAnimStuckCoroutine(24));
     }
 
-    private async Task SetOnHit(int delay, Action action)
+    private async Task SetDelayCallback(int delay, Action action)
     {
         await Task.Delay(delay);
         action();

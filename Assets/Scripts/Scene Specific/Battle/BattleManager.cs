@@ -204,35 +204,37 @@ public class BattleManager : Manager<BattleManager>
             yield break;
         }
 
-        var isNormalSkill = cursor.IsWithin(0, 4);
-        var item = isNormalSkill ? null : new Item(cursor, (Item.Find(cursor) == null) ? 0 : 1);
-        var skill = isNormalSkill ? (pet.normalSkill.Get(cursor - 1) ?? Skill.GetNoOpSkill()) : Skill.GetItemSkill(item);
         var superSkill = pet.superSkill;
         var isAnySkillOK = pet.buffController.GetBuff(61) != null;
-        var isSuper = battle.isAutoSuperSkill && (superSkill != null)
-            && ((superSkill.anger <= pet.anger) || isAnySkillOK);
+        var isSuperSkill = (battle.isAutoSuperSkill || (cursor == 0)) && (superSkill != null) && ((superSkill.anger <= pet.anger) || isAnySkillOK);
+        var isNormalSkill = cursor.IsWithin(1, 4);
+        var item = (isNormalSkill || isSuperSkill) ? null : new Item(cursor, (Item.Find(cursor) == null) ? 0 : 1);
+        Skill skill = null;
 
-        if (!isNormalSkill)
+        if (item != null)
         {
             var usable = item.IsUsable(battle?.currentState.myUnit, battle?.currentState);
             var isTimingOk = item.effects.Exists(x => (x.timing >= EffectTiming.OnBattleStart) && (x.timing <= EffectTiming.OnBattleEnd));
             var isCaptureOK = battle.settings.isCaptureOK || (item.info.type != ItemType.Capture);
             if (usable && isTimingOk && isCaptureOK)
             {
+                skill = Skill.GetItemSkill(item);
                 if (!battle.settings.isSimulate)
                     Item.Remove(item.id);
             }
             else
                 skill = Skill.GetNoOpSkill();
-        }
-
-        if (isSuper)
+        } 
+        else if (isSuperSkill)
             skill = superSkill;
-        else if ((skill.anger > pet.anger) && (!isAnySkillOK))
+        else
+            skill = pet.normalSkill.Get(cursor - 1) ?? Skill.GetNoOpSkill();
+        
+        if ((skill.anger > pet.anger) && (!isAnySkillOK))
             skill = Skill.GetNoOpSkill();
 
         systemView.SetAutoBattleActive(true);
-        if (!isSuper)
+        if ((!isSuperSkill) || (cursor == 0))
             battle.autoSkillCursor = (battle.autoSkillCursor + 1) % battle.autoSkillOrder.Count;
             
         battle.SetSkill(skill, true);

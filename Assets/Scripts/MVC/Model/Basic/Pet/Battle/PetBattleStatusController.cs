@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class PetBattleStatusController
 {
+    public BattlePet parent;
+
     private Status _initStatus, _addStatus, _multStatus, _hiddenStatus;
     private Status _powerup, _maxPowerUp, _minPowerUp;
 

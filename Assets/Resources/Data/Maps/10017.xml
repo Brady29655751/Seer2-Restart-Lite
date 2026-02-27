@@ -14,18 +14,6 @@
 				</button>
 			</eventHandler>
 		</npc>
-		<!--
-		<npc id="1001701" resId="1001" name="" size="250,180" pos="640,300" namePos="0,0" color="0,0,0,0">
-			<description>海洋星浅水区</description>
-			<transport>780,340</transport>
-			<eventHandler>
-				<button type="click">
-					<action>teleport</action>
-					<param>10020</param>
-				</button>
-			</eventHandler>
-		</npc>
-		-->
 		<npc id="1001702" resId="Pets/pet/10062" name="Lv30 格林" size="48,50" pos="320,150" namePos="0,-5" active="false">
 			<description>神秘的精灵</description>
 			<dialog>
@@ -360,6 +348,61 @@
 					<param>color=255,255,255,255</param>
 					<param>pos=455,42.5</param>
 					<condition>player.shoot=7002</condition>
+				</button>
+			</eventHandler>
+		</npc>
+		<npc id="1001701" resId="Pets/pet/10409" name="Lv35 闪光格林" size="42,45" pos="515,375" namePos="0,-5" active="false">
+			<description>神秘的精灵</description>
+			<dialog>
+				<branch id="default" name="闪光格林" icon="Pets/pet/10409" size="84,90" pos="0,45">
+					<content><![CDATA[你有看到我的朋友吗？]]></content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[为什么一定要闪光布鲁啊？]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+						<reply type="click">
+							<description><![CDATA[我带来了！]]></description>
+							<action>battle</action>
+							<param>default</param>
+							<condition>firstPet.baseId=12186</condition>
+						</reply>
+						<reply type="branch">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=先将格林的朋友设为首发吧！</param>
+							<param>item_icon=pet[12186]</param>
+							<param>option_num=1</param>
+							<condition>firstPet.baseIdNOT12186</condition>
+						</reply>
+					</replyHandler>
+				</branch>
+			</dialog>
+			<battle>
+				<branch id="default">
+					<settings count="6" capture="true">
+						<weather>3</weather>
+					</settings>			
+					<enemy>
+						<pet id="10409" level="35">
+							<initBuff>-2</initBuff>
+							<loopSkill>12547,12548,12547,12548,-4</loopSkill>
+						</pet>
+					</enemy>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="auto">
+					<action>setNpcParam</action>
+					<param>1001701</param>
+					<param>active=true</param>
+					<condition>random[0~256]&lt;1</condition>
+				</button>
+				<button type="click">
+					<action>openDialog</action>
+					<param>default</param>
 				</button>
 			</eventHandler>
 		</npc>

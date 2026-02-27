@@ -121,6 +121,15 @@ public class UnitSkillSystem
         skillDamage = skillHeal = 0;
         damageDict = damageDict.Where(x => !x.Key.StartsWith("skill")).ToDictionary(x => x.Key, x => x.Value);
         healDict = healDict.Where(x => !x.Key.StartsWith("skill")).ToDictionary(x => x.Key, x => x.Value);
+
+        if (!Skill.IsNullOrEmpty(skill) && !skill.isAction)
+        {
+            var testSkill = new Skill(Skill.GetSkill(skill.id));
+            skill.critical = testSkill.critical;
+            skill.combo = testSkill.combo;
+            skill.accuracy = testSkill.accuracy;
+            skill.power = testSkill.power;
+        }
     }
 
     public void SwapCounterSkill(bool isCounterStart)
@@ -136,7 +145,12 @@ public class UnitSkillSystem
     {
         float _random = Random.Range(0f, 100f);
         var accuracyBuff = atkPet.statusController.GetCurrentPowerup(skill.powerup, skill.powerdown).accuracyBuff;
-        isHit = (skill.accuracy + accuracyBuff + atkPet.battleStatus.hit - defPet.battleStatus.eva) >= _random;
+        var accuracy = skill.accuracy + accuracyBuff + atkPet.battleStatus.hit - defPet.battleStatus.eva;
+
+        if (skill.options.TryGet("accuracy", out var finalAccuracy))
+            accuracy = Identifier.GetNumIdentifier(finalAccuracy);
+
+        isHit = accuracy >= _random;
         return isHit;
     }
 
@@ -180,6 +194,7 @@ public class UnitSkillSystem
             return damageType switch {
                 "item" => totalItemDamage,
                 "buff" => totalBuffDamage,
+                "skill" => skillDamage,
                 _ => damageDict.Get(damageType, 0),
             };
         }
@@ -190,6 +205,7 @@ public class UnitSkillSystem
             return healType switch {
                 "item" => totalItemHeal,
                 "buff" => totalBuffHeal,
+                "skill" => skillHeal,
                 _ => healDict.Get(healType, 0),
             };
         }

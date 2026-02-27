@@ -106,7 +106,7 @@ public static class Identifier
         if (id.TryTrimStart("battle.", out trimId))
         {
             var battle = Player.instance.currentBattle;
-            return GetBattleIdentifier("state." + trimId, battle?.currentState?.myUnit, battle?.currentState?.opUnit);
+            return GetBattleIdentifier("state." + trimId, null, battle?.currentState?.myUnit, battle?.currentState?.opUnit);
         }
 
         if (id.TryTrimStart("item", out trimId))
@@ -160,15 +160,15 @@ public static class Identifier
         return idSource switch
         {
             BattlePet battlePet => isOtherSourceAvailable ? GetPetIdentifier(id, lhsUnit.petSystem, battlePet) :
-                (battlePet.TryGetPetIdentifier(id, out num) ? num : GetBattleIdentifier(id, lhsUnit, rhsUnit)),
-            Pet pet => pet.TryGetPetIdentifier(id, out num) ? num : GetBattleIdentifier(id, lhsUnit, rhsUnit),
-            Buff buff => buff.TryGetBuffIdentifier(id, out num) ? num : GetBattleIdentifier(id, lhsUnit, rhsUnit),
-            Skill skill => skill.TryGetSkillIdentifier(id, out num) ? num : GetBattleIdentifier(id, lhsUnit, rhsUnit),
-            _ => GetBattleIdentifier(id, lhsUnit, rhsUnit),
+                (battlePet.TryGetPetIdentifier(id, out num) ? num : GetBattleIdentifier(id, effect, lhsUnit, rhsUnit)),
+            Pet pet => pet.TryGetPetIdentifier(id, out num) ? num : GetBattleIdentifier(id, effect, lhsUnit, rhsUnit),
+            Buff buff => buff.TryGetBuffIdentifier(id, out num) ? num : GetBattleIdentifier(id, effect, lhsUnit, rhsUnit),
+            Skill skill => skill.TryGetSkillIdentifier(id, out num) ? num : GetBattleIdentifier(id, effect, lhsUnit, rhsUnit),
+            _ => GetBattleIdentifier(id, effect, lhsUnit, rhsUnit),
         };
     }
 
-    public static float GetBattleIdentifier(string id, Unit lhsUnit, Unit rhsUnit)
+    public static float GetBattleIdentifier(string id, Effect effect, Unit lhsUnit, Unit rhsUnit)
     {
         string trimId = id;
 
@@ -192,7 +192,7 @@ public static class Identifier
                 return trimId switch
                 {
                     "order" => ListHelper.IsNullOrEmpty(state.actionOrder) ? 0 : (state.IsGoFirst(lhsUnit) ? 1 : 2),
-                    _ => GetBattleIdentifier("me." + trimId, lhsUnit, rhsUnit),
+                    _ => GetBattleIdentifier("me." + trimId, effect, lhsUnit, rhsUnit),
                 };
             }
 
@@ -201,7 +201,7 @@ public static class Identifier
                 return trimId switch
                 {
                     "order" => ListHelper.IsNullOrEmpty(state.actionOrder) ? 0 : (state.IsGoFirst(rhsUnit) ? 1 : 2),
-                    _ => GetBattleIdentifier("op." + trimId, lhsUnit, rhsUnit),
+                    _ => GetBattleIdentifier("op." + trimId, effect, lhsUnit, rhsUnit),
                 };
             }
 
@@ -213,7 +213,7 @@ public static class Identifier
             {
                 "pet.defElementRelation[op.pet.element]" => PetElementSystem.GetElementRelation(rhsUnit.pet.battleElementId, lhsUnit.pet),
                 "pet.defElementRelation[op.pet.subElement]" => PetElementSystem.GetElementRelation(rhsUnit.pet.subBattleElementId, lhsUnit.pet),
-                _ => GetUnitIdentifier(trimId, lhsUnit)
+                _ => GetUnitIdentifier(trimId, lhsUnit, effect?.sourcePet)
             };
 
         if (id.TryTrimStart("op.", out trimId))
@@ -236,11 +236,11 @@ public static class Identifier
         return GetIdentifier(id);
     }
 
-    public static float GetUnitIdentifier(string id, Unit unit)
+    public static float GetUnitIdentifier(string id, Unit unit, BattlePet otherSource = null)
     {
         string trimId = id;
         if (id.TryTrimStart("pet.", out trimId))
-            return GetPetIdentifier(trimId, unit.petSystem);
+            return GetPetIdentifier(trimId, unit.petSystem, otherSource);
 
         if (id.TryTrimStart("skill.", out trimId))
             return GetSkillIdentifier(trimId, unit.skillSystem);
@@ -373,6 +373,7 @@ public static class Identifier
     public static float GetBuffIdentifier(string id, PetBattleBuffController buffController)
     {
         List<Buff> buffs = buffController.buffs;
+        Buff buff = null, testBuff = null;
 
         if (id == ".count")
             return buffs.Count;
@@ -432,8 +433,8 @@ public static class Identifier
             }
 
             // Parse success => buffIdExpr is buffId.
-            Buff buff = buffs.Find(x => x.id == buffId) ?? new Buff(-1);
-            Buff testBuff = (Buff.GetBuffInfo(buffId) == null) ? null : new Buff(buffId);
+            buff = buffs.Find(x => x.id == buffId) ?? new Buff(-1);
+            testBuff = (Buff.GetBuffInfo(buffId) == null) ? null : new Buff(buffId);
 
             return id switch
             {
@@ -444,6 +445,35 @@ public static class Identifier
                 _ => buff.TryGetBuffIdentifier(id, out float num) ? num : GetNumIdentifier(id),
             };
         }
+
+        if (id.StartsWith("("))
+        {
+            var filter = Parser.ParseConditionFilter<Buff>(id, (x, buff) => buff.TryGetBuffIdentifier(x, out float num) ? num : Identifier.GetNumIdentifier(x));
+            buffs = buffs.Where(filter).ToList();
+            buff = buffs.FirstOrDefault() ?? new Buff(-1);
+            testBuff = Buff.GetBuffInfo(buff?.id ?? 0) == null ? null : new Buff(buff.id);
+
+            var subStr = id.TrimParenthesesLoop('(', ')')?.ConcatToString(")(");
+            id = id.TrimStart("(" + subStr + ")").TrimStart('.');
+
+            var split = id.Split('.');
+            if (split.Length <= 1)
+                return split[0] switch
+                {
+                    "count" => buffs.Count,
+                    _ => buff?.GetBuffIdentifier(split[0]) ?? float.MinValue,
+                };
+
+
+            return split[1] switch
+            {
+                "sum" => buffs.Sum(x => x.GetBuffIdentifier(split[0])),
+                "max" => buffs.Max(x => x.GetBuffIdentifier(split[0])),
+                "min" => buffs.Min(x => x.GetBuffIdentifier(split[0])),
+                _ => buff.TryGetBuffIdentifier(id, out float num) ? num : GetNumIdentifier(id),
+            };
+        }
+
         return GetNumIdentifier(id);
     }
 

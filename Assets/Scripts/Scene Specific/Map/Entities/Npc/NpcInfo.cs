@@ -77,8 +77,23 @@ public class NpcInfo
         if (string.IsNullOrEmpty(animId) || (animId == "0") || (animId == "null") || (animId == "none")) 
             return null;
 
-        var petIdExpr = animId.TrimStart("Pets/anim/");
-        var split = petIdExpr.Split('-');
-        return ResourceManager.instance.GetPetAnimPrefab(int.Parse(split[0]), split.Length == 1 ? petIdExpr + "-idle" : petIdExpr);
+        if (animId.TryTrimStart("Pets/anim/", out var petIdExpr) || int.TryParse(animId, out _))
+        {
+            var split = petIdExpr.Split('-');
+            return ResourceManager.instance.GetPetAnimPrefab(int.Parse(split[0]), split.Length == 1 ? petIdExpr + "-idle" : petIdExpr);   
+        }
+
+        if (animId.TryTrimStart("Maps/anim/", out var mapIdExpr))
+        {
+            var split = petIdExpr.Split('-');
+            return ResourceManager.instance.GetMapAnimPrefab(int.Parse(split[0]), split.Length == 1 ? mapIdExpr + "-idle" : mapIdExpr);
+        }
+
+        var bundle = ResourceManager.instance.GetAssetBundle(animId.Substring(0, animId.LastIndexOf('-')));
+        if (bundle == null)
+            return null;
+
+        return bundle.LoadAsset<GameObject>(animId.Substring(animId.LastIndexOf('_') + 1));
+
     }
 }

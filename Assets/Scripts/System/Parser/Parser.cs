@@ -151,21 +151,24 @@ public static class Parser {
     }
 
     public static List<BattlePet> GetBattlePetTargetList(BattleState state, Effect effect, Unit lhsUnit, Unit rhsUnit) {
+        var defaultPet = ((Unit)effect.invokeUnit).id == lhsUnit.id ? (effect.sourcePet ?? lhsUnit.pet) : lhsUnit.pet;
+
         return effect.target switch {
-            EffectTarget.CurrentPetBag => GetBattlePetTargetListFromPetBag(effect, lhsUnit, rhsUnit),
+            EffectTarget.CurrentPetBag => GetBattlePetTargetListFromPetBag(effect, lhsUnit, rhsUnit, defaultPet),
             EffectTarget.CurrentToken => lhsUnit.token?.SingleToList() ?? new List<BattlePet>(),
-            _ => GetBattlePetTargetListFromDefault(state, effect, lhsUnit, rhsUnit),
+            _ => GetBattlePetTargetListFromDefault(state, effect, lhsUnit, rhsUnit, defaultPet),
         };
     }
 
-    public static List<BattlePet> GetBattlePetTargetListFromDefault(BattleState state, Effect effect, Unit lhsUnit, Unit rhsUnit) {
+    public static List<BattlePet> GetBattlePetTargetListFromDefault(BattleState state, Effect effect, Unit lhsUnit, Unit rhsUnit, BattlePet defaultPet) {
         var handler = state.GetEffectHandler(lhsUnit, false);
         var lastEffect = state.GetEffectsByTiming(EffectTiming.OnSelectTarget, handler, e => e.ability == effect.ability).LastOrDefault();
-        return (lastEffect == null) ? new List<BattlePet>() { lhsUnit.pet } :
-            Parser.GetBattlePetTargetListFromPetBag(lastEffect, lhsUnit, rhsUnit);
+        
+        return (lastEffect == null) ? new List<BattlePet>() { defaultPet } :
+            Parser.GetBattlePetTargetListFromPetBag(lastEffect, lhsUnit, rhsUnit, defaultPet);
     }
 
-    public static List<BattlePet> GetBattlePetTargetListFromPetBag(Effect effect, Unit lhsUnit, Unit rhsUnit) {
+    public static List<BattlePet> GetBattlePetTargetListFromPetBag(Effect effect, Unit lhsUnit, Unit rhsUnit, BattlePet defaultPet) {
         var targetType = effect.targetType;
         var targetFilter = Parser.ParseConditionFilter<BattlePet>(effect.targetFilter, (id, pet) => Identifier.GetPetIdentifier(id, lhsUnit.petSystem, pet)); 
         var targetNum = (int)Parser.ParseEffectOperation(effect.abilityOptionDict.Get("target_num", "-1"), effect, lhsUnit, rhsUnit);
@@ -176,7 +179,7 @@ public static class Parser {
         var targetList = petBag.Where(x => x != null).Where(targetFilter).ToList();
 
         if (targetType.Contains("other"))
-            targetList.Remove(petUnit.pet);
+            targetList.Remove(defaultPet);
 
         if (targetType.Contains("dead"))
             targetList.RemoveAll(x => !x.isDead);

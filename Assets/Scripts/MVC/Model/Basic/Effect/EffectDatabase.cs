@@ -25,6 +25,7 @@ public static class EffectDatabase {
         {"on_after_attack", EffectTiming.OnAfterAttack},
         {"on_attack_end", EffectTiming.OnAttackEnd},
         {"on_turn_end", EffectTiming.OnTurnEnd},
+        {"on_after_turn_end", EffectTiming.OnAfterTurnEnd},
         {"on_battle_end", EffectTiming.OnBattleEnd},
 
         {"on_passive_pet_change", EffectTiming.OnPassivePetChange},
@@ -130,7 +131,7 @@ public enum EffectTiming {
     None = 0, Resident = 1, OnBattleStart = 2,
     OnTurnStart = 3, OnTurnReady = 4, OnDecidePriority = 5, OnBeforeAttack = 6, OnAttackStart = 7,
     OnDamageParamCalculate = 8, OnBeforeDamageCalculate = 9, OnDamageCalculate = 10, OnAfterDamageCalculate = 11, OnFinalDamageCalculate = 12,
-    OnAttackReady = 13, OnAttack = 14, OnAfterAttack = 15, OnAttackEnd = 16, OnTurnEnd = 17, OnBattleEnd = 999,
+    OnAttackReady = 13, OnAttack = 14, OnAfterAttack = 15, OnAttackEnd = 16, OnTurnEnd = 17, OnAfterTurnEnd = 18, OnBattleEnd = 999,
 
     OnPassivePetChange = -1,    OnSelectTarget = -2,    OnAddBuff = -3,     OnRemoveBuff = -4,
     OnBeforePetChange = -5,     OnAfterPetChange = -6,  OnRoundStart =-7,   OnRoundEnd = -8,

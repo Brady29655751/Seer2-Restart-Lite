@@ -13,7 +13,7 @@
 					<content><![CDATA[吾乃浩瀚星空之主宰！]]></content>
 					<functionHandler>
 						<func type="click">
-							<description><![CDATA[六位星影挑战]]></description>
+							<description><![CDATA[奇异星尘]]></description>
 							<action>openDialog</action>
 							<param>shadow</param>
 						</func>
@@ -21,6 +21,26 @@
 							<description><![CDATA[真身挑战]]></description>
 							<action>openDialog</action>
 							<param>star</param>
+							<condition>activity[20003].done[1]=[bool]true[default]false</condition>
+							<condition>activity[20003].done[2]=[bool]true[default]false</condition>
+							<condition>activity[20003].done[3]=[bool]true[default]false</condition>
+							<condition>activity[20003].done[4]=[bool]true[default]false</condition>
+							<condition>activity[20003].done[5]=[bool]true[default]false</condition>
+							<condition>activity[20003].done[6]=[bool]true[default]false</condition>
+						</func>
+						<func type="branch">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=先各别战胜六位星影再来挑战吧！</param>
+							<param>item_icon=pet[970]</param>
+							<param>option_num=1</param>
+							<condition>activity[20003].done[1]=[bool]false[default]false|activity[20003].done[2]=[bool]false[default]false|activity[20003].done[3]=[bool]false[default]false|activity[20003].done[4]=[bool]false[default]false|activity[20003].done[5]=[bool]false[default]false|activity[20003].done[6]=[bool]false[default]false</condition>
+						</func>
+						<func type="click">
+							<description><![CDATA[超进化挑战]]></description>
+							<action>openDialog</action>
+							<param>evolve</param>
 						</func>
 					</functionHandler>
 					<replyHandler>
@@ -32,7 +52,7 @@
 					</replyHandler>
 				</branch>
 				<branch id="shadow" name="观星者" icon="Pets/pet/970.png" size="158,152" pos="10,35">
-					<content><![CDATA[挑战六位星影可以获得奇异星尘来更换观星者的特性，你准备好了吗？]]></content>
+					<content><![CDATA[奇异星尘可以更换观星者的特性，但挑战比较困难，你准备好了吗？]]></content>
 					<replyHandler>
 						<reply type="click">
 							<description><![CDATA[让我准备一下]]></description>
@@ -58,6 +78,21 @@
 							<description><![CDATA[准备好了]]></description>
 							<action>battle</action>
 							<param>default</param>
+						</reply>
+					</replyHandler>
+				</branch>
+				<branch id="evolve" name="观星者" icon="Pets/pet/970.png" size="158,152" pos="10,35">
+					<content><![CDATA[<b><color=#ffbb33>记得先把观星者放入背包！</color></b>进入战斗前请准备一些复活药剂提高容错率！]]></content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[让我准备一下]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+						<reply type="click">
+							<description><![CDATA[准备好了]]></description>
+							<action>battle</action>
+							<param>evolve</param>
 						</reply>
 					</replyHandler>
 				</branch>
@@ -181,6 +216,30 @@
 						</button>
 					</winHandler>
 				</branch>
+				<branch id="evolve">
+					<settings count="6" star="7">
+						<mode>4</mode>
+						<weather>12</weather>
+					</settings>
+					<enemy>
+						<pet id="980" level="105">
+							<status>
+								<hp>135000</hp>
+							</status>
+							<initBuff>17,20,61,100,-3102,-7,99</initBuff>
+							<loopSkill>13687,13691,13687,13685,13693,13687,13691,13687,13690,13687,13689</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=PetSelect</param>
+						    <param>title=选择要进化的观星者</param>
+						    <param>option_num=2</param>
+						    <param>callback=evolve</param>
+						</button>
+					</winHandler>
+				</branch>
 			</battle>
 			<eventHandler>
 				<button type="click">
@@ -188,6 +247,43 @@
 					<param>default</param>
 				</button>
 			</eventHandler>
+			<callbackHandler>
+				<button type="choose">
+					<action>openHintbox</action>
+					<param>type=PetSelect</param>
+				    <param>title=选择要进化的观星者</param>
+				    <param>option_num=2</param>
+					<param>callback=evolve</param>
+				    <condition>data.PetSelect.uidNOT970|data.PetSelect.level&lt;100</condition>
+				</button>
+				<button type="evolve">
+				    <action>openHintbox</action>
+				    <param>type=Item</param>
+				    <param>title=提示</param>
+				    <param>content=必须选择等级100的观星者！</param>
+				    <param>item_icon=pet[970]</param>
+				    <param>option_num=1</param>
+					<param>callback=choose</param>
+				    <condition>data.PetSelect.uidNOT970|data.PetSelect.level&lt;100</condition>
+				</button>
+				<button type="evolve">
+				    <action>openHintbox</action>
+				    <param>type=Item</param>
+				    <param>title=提示</param>
+				    <param>content=观星者已成功超进化</param>
+				    <param>item_icon=pet[971]</param>
+				    <param>option_num=1</param>
+				    <condition>data.PetSelect.uid=970</condition>
+				    <condition>data.PetSelect.levelGTE100</condition>
+				</button>
+				<button type="evolve">
+				    <action>evolvePet</action>
+				    <param>index=data.PetSelectIndex</param>
+				    <param>980</param>
+				    <condition>data.PetSelect.uid=970</condition>
+				    <condition>data.PetSelect.levelGTE100</condition>
+				</button>
+			</callbackHandler>
 		</npc>
 		<teleport id="1" name="VIP乐园" pos="720,60" targetMapId="89"/>
 	</entities>

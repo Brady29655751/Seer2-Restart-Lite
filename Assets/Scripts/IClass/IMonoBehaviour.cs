@@ -16,4 +16,11 @@ public class IMonoBehaviour : MonoBehaviour
     public virtual void Init() {
 
     }
+
+    public IEnumerator WaitForSecondsCoroutine(float seconds, Action callback = null)
+    {
+        yield return new WaitForSeconds(seconds);
+
+        callback?.Invoke();
+    }
 }

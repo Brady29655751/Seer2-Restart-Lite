@@ -22,6 +22,21 @@ public class TitleManager : Manager<TitleManager>
     }
 
     private void SetBackgroundPageImage() {
+        var modAnim = ResourceManager.instance.GetMapAnimPrefab(0, "0-idle");
+        if (modAnim == null)
+        {
+            void OnLoadBGMFinished(AudioClip modBGM)
+            {
+                var modBg = ResourceManager.instance.GetLocalAddressables<Sprite>("Activities/FirstPage", true);
+                var mapRes = new MapResources(modBg, null, modBGM);
+                var map = new Map(){ id = 0, resources = mapRes };
+                SetBackground(map);
+            }
+            
+            ResourceManager.instance.GetLocalAddressables<AudioClip>("BGM/FirstPage", true, OnLoadBGMFinished, (error) => OnLoadBGMFinished(null));    
+            return;
+        }
+
         ResourceManager.instance.LoadMap(0, SetBackground, (error) =>
         {
             Map map = new Map(){ id = 0 };

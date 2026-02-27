@@ -147,6 +147,9 @@ public class BattlePetSkillView : BattleBaseView
             SetEvolveSkill(false);
         }
 
+        foreach (var e in skill.effects.Where(x => x.isSelect))
+            e.abilityOptionDict.Set("target_index", "-1");
+
         battle.SetSkill(skill, true);
     }
 

@@ -55,9 +55,9 @@ public class BattlePet : Pet
 
         stayTurn = 0;
         chain = 0;
-        statusController = new PetBattleStatusController(normalStatus, currentStatus.hp);
-        buffController = new PetBattleBuffController(element, subElement, null);
-        skillController = new PetBattleSkillController(normalSkill.ToList(), superSkill);
+        statusController = new PetBattleStatusController(normalStatus, currentStatus.hp){ parent = this };
+        buffController = new PetBattleBuffController(element, subElement, null){ parent = this };
+        skillController = new PetBattleSkillController(normalSkill.ToList(), superSkill){ parent = this };
     }
 
     public BattlePet(BossInfo bossInfo) : base(bossInfo.petId, bossInfo.level, bossInfo.hasEmblem)
@@ -69,9 +69,9 @@ public class BattlePet : Pet
         stayTurn = 0;
         chain = 0;
 
-        statusController = new PetBattleStatusController(status);
-        buffController = new PetBattleBuffController(element, subElement, bossInfo.initBuffs);
-        skillController = new PetBattleSkillController(bossInfo.loopSkills, bossInfo.headerSkills, bossInfo.superSkill, bossInfo.normalSkills.ToList());
+        statusController = new PetBattleStatusController(status){ parent = this };
+        buffController = new PetBattleBuffController(element, subElement, bossInfo.initBuffs){ parent = this };
+        skillController = new PetBattleSkillController(bossInfo.loopSkills, bossInfo.headerSkills, bossInfo.superSkill, bossInfo.normalSkills.ToList()){ parent = this };
 
         normalSkill = bossInfo.normalSkills;
         superSkill = bossInfo.superSkill;
@@ -85,9 +85,9 @@ public class BattlePet : Pet
         stayTurn = rhs.stayTurn;
         chain = rhs.chain;
 
-        statusController = new PetBattleStatusController(rhs.statusController);
-        buffController = new PetBattleBuffController(rhs.buffController);
-        skillController = new PetBattleSkillController(rhs.skillController);
+        statusController = new PetBattleStatusController(rhs.statusController){ parent = this };
+        buffController = new PetBattleBuffController(rhs.buffController){ parent = this };
+        skillController = new PetBattleSkillController(rhs.skillController){ parent = this };
     }
 
     public static BattlePet GetBattlePet(Pet pet)
@@ -288,7 +288,7 @@ public class BattlePet : Pet
         return skillController.GetDefaultSkill(petAnger);
     }
 
-    public virtual void PowerUp(Status status, Unit lhsUnit, BattleState state)
+    public virtual void PowerUp(Status status, Unit lhsUnit, BattleState state, bool isSet = false)
     {
 
         buffController.RemoveRangeBuff(x => x.IsPower(), lhsUnit, state);
@@ -297,8 +297,7 @@ public class BattlePet : Pet
         {
             var powerup = (int)status[type];
             var id = Buff.GetPowerUpBuffId(type, powerup);
-
-            if (!buffController.IsBuffIdBlocked(id))
+            if (isSet || !buffController.IsBuffIdBlocked(id))
             {
                 statusController.AddPowerUp(type, powerup);
             }

@@ -78,9 +78,8 @@ public class BattleResourceView : BattleBaseView
         options.Set("background_path", path);
         options.Set("background_mod", mod);
 
-        if (path.TryTrimStart("Maps/", out var mapIDExpr))
+        if (path.TryTrimStart("Maps/", out var mapIDExpr) && int.TryParse(mapIDExpr, out var mapID))
         {
-            var mapID = (int)Identifier.GetNumIdentifier(mapIDExpr);
             Map.GetMap(mapID, (map) => SetBackgroundAnim(map));
             return;
         }

@@ -55,9 +55,7 @@ public static class EffectConditionHandler
         Unit lhsUnit = (who == "me") ? state.GetUnitById(invokeUnit.id) : state.GetRhsUnitById(invokeUnit.id);
 
         bool isAttackPhase = state.phase.IsAttackPhase();
-        bool isPetChangePhase = (state.phase == EffectTiming.OnBeforePetChange) || (state.phase == EffectTiming.OnAfterPetChange);
-        if (isPetChangePhase)
-            return (lhsUnit.skill?.type ?? SkillType.空过) == SkillType.換场;
+        // bool isPetChangePhase = (state.phase == EffectTiming.OnBeforePetChange) || (state.phase == EffectTiming.OnAfterPetChange);
 
         if (!isAttackPhase)
             return true;
@@ -170,7 +168,7 @@ public static class EffectConditionHandler
         Unit rhsUnit = state.GetRhsUnitById(lhsUnit.id);
         BattlePet battlePet = effect.condition switch {
             EffectCondition.CurrentToken => lhsUnit.token,
-            _ => lhsUnit.pet,
+            _ => (who == "me") ? (effect?.sourcePet ?? lhsUnit.pet) : lhsUnit.pet,
         };
 
         if (battlePet == null)

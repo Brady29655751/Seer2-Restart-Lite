@@ -4,7 +4,8 @@ using UnityEngine;
 
 public static class SecretSkillDescriptionHandler
 {
-    public static List<string> specialPetNameList = new List<string>() {
+    public static List<string> specialPetNameList = new List<string>() 
+    {
         "特定精灵",
         "迪兰特、休罗斯、拉奥叶",
         "笑笑葵",
@@ -16,6 +17,8 @@ public static class SecretSkillDescriptionHandler
         "飞伊特、沙伊特、虫伊特",
         "约瑟、奎尔斯",
         "地伊特、龙伊特",
+        "超伊特、神伊特",
+        "战神联盟（新世界）",
     };
 
     public static string GreaterThanLevel(this LearnSkillInfo secretSkillInfo) {

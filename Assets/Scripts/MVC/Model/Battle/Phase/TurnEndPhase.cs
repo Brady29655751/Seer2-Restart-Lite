@@ -22,6 +22,11 @@ public class TurnEndPhase : BattlePhase
         ApplySkillsAndBuffs();
         RaiseAnger();
         OnBuffEffected();
+
+        var lastState = new BattleState(state);
+        state.phase = EffectTiming.OnAfterTurnEnd;
+        ApplySkillsAndBuffs();
+        SetUIState(lastState);
     }
 
     public override BattlePhase GetNextPhase()

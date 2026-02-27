@@ -7,6 +7,7 @@ using Random = UnityEngine.Random;
 
 public class PetBattleBuffController
 {
+    public BattlePet parent;
     public Element element { get; private set; }
     public Element subElement { get; private set; }
 
@@ -107,8 +108,8 @@ public class PetBattleBuffController
         var tmpPhase = state.phase;
         state.phase = EffectTiming.OnAddBuff;
         
-        newBuff.effects.OrderBy(x => x.priority).ToList()
-            .ForEach(x => x.CheckAndApply(buffUnit, state, true, false));
+        newBuff.effects.Where(x => x.timing == EffectTiming.OnAddBuff).OrderBy(x => x.priority).ToList()
+            .ForEach(x => x.CheckAndApply(buffUnit, state, true, false, parent));
         state.phase = tmpPhase;
     }
 
@@ -252,8 +253,8 @@ public class PetBattleBuffController
 
         var tmpPhase = state.phase;
         state.phase = EffectTiming.OnRemoveBuff;
-        buff.effects.OrderBy(x => x.priority).ToList()
-            .ForEach(x => x.CheckAndApply(buffUnit, state, true, false));
+        buff.effects.Where(x => x.timing == EffectTiming.OnRemoveBuff).OrderBy(x => x.priority).ToList()
+            .ForEach(x => x.CheckAndApply(buffUnit, state, true, false, parent));
         state.phase = tmpPhase;
     }
 

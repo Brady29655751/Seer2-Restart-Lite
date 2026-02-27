@@ -9,6 +9,7 @@ using UnityEngine.UI;
 using Object = UnityEngine.Object;
 using System.Threading.Tasks;
 using SimpleFileBrowser;
+using UnityEngine.Video;
 
 public class ResourceManager : Singleton<ResourceManager>
 {

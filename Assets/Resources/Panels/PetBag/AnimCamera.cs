@@ -12,12 +12,17 @@ public class AnimCamera : Module
     protected override void Awake()
     {
         base.Awake();
-        var renderTexture = new RenderTexture(960, 540, 16);
-        renderTexture.Create();
+        var renderTexture = RenderTexture.GetTemporary(1920, 1080);
+        // renderTexture.Create();
         animCamera.targetTexture = renderTexture;
         rawImage.texture = renderTexture;
 
         canvas = GameObject.Find("Canvas")?.GetComponent<Canvas>();
+    }
+
+    private void OnDestroy() 
+    {
+        RenderTexture.ReleaseTemporary(animCamera.targetTexture);    
     }
 
 

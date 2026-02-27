@@ -237,29 +237,39 @@ public class Skill
 
             skill.options.Set("evolve", data[2]);
         }
+        else if (skill.id == (int)SkillType.道具)
+        {
+            var selectEffects = skill.effects.Where(x => x.isSelect).ToList();
+            var targetIndexList = data[2].Split('/');
+            for (int i = 0; i < selectEffects.Count; i++)
+                selectEffects[i].abilityOptionDict.Set("target_index", targetIndexList.Get(i, "-1"));
+        }
 
-        var parallelSourceIndex = int.TryParse(data.Get(len - 2, "0"), out var num) ? num : 0;
-        var parallelTargetIndex = int.TryParse(data.Get(len - 1, "0"), out num) ? num : 0;
-        skill.SetParallelIndex(parallelSourceIndex, parallelTargetIndex);
+        if (Player.instance.currentBattle.settings.parallelCount > 1)
+        {
+            var parallelSourceIndex = int.TryParse(data.Get(len - 2, "0"), out var num) ? num : 0;
+            var parallelTargetIndex = int.TryParse(data.Get(len - 1, "0"), out num) ? num : 0;
+            skill.SetParallelIndex(parallelSourceIndex, parallelTargetIndex);
+        }
 
         return skill;
     }
 
     public string[] ToRPCData(BattleSettings settings)
     {
-        var data = id switch
+        IEnumerable<string> data = id switch
         {
             (int)SkillType.空过 => new string[] { id.ToString() },
-            (int)SkillType.道具 => new string[] { id.ToString(), options.Get("item_id", "0") },
+            (int)SkillType.道具 => new string[] { id.ToString(), options.Get("item_id", "0"), effects.Where(x => x.isSelect).Select(e => e.abilityOptionDict.Get("target_index", "-1")).ConcatToString("/") },
             (int)SkillType.換场 => new string[] { id.ToString(), options.Get("source_index", "0"), options.Get("target_index", "0"), options.Get("passive", "false") },
             (int)SkillType.逃跑 => new string[] { id.ToString() },
             _ => new string[] { id.ToString(), effects.Where(x => x.isSelect).Select(e => e.abilityOptionDict.Get("target_index", "-1")).ConcatToString("/"), options.Get("evolve", "0") }
         };
 
         if (settings.parallelCount > 1)
-            data.Append(options.Get("parallel_source_index", "0")).Append(options.Get("parallel_target_index", "0")).ToArray();
+            data = data.Append(options.Get("parallel_source_index", "0")).Append(options.Get("parallel_target_index", "0"));
 
-        return data;
+        return data.ToArray();
     }
 
     public static Skill GetRandomSkill()
@@ -462,7 +472,7 @@ public class Skill
             var index = i; 
             var isTarget = (petBag[index] != null) && (isSelectDead ^ (!petBag[index].isDead));
             var isCursor = isSelectOther && (cursor == index);
-            var isParallel = (parallelCount <= 1) || (i < parallelCount);
+            var isParallel = (parallelCount <= 1) || (index < parallelCount);
             var interactable = isTarget && (!isCursor) && isParallel;
             result.Add(interactable);
         }
@@ -531,7 +541,7 @@ public class Skill
                 "add" => power.add,
                 _ => Status.zero,
             };
-            return status[split[2]];
+            return status[split.Get(2, "all")];
         }
 
         if (id.TryTrimStart("effect.", out trimId))
@@ -616,7 +626,8 @@ public class Skill
                 "add" => power.add,
                 _ => Status.zero,
             };
-            status[split[2]] = value;
+
+            status[split.Get(2, "all")] = value;
             return;
         }
 

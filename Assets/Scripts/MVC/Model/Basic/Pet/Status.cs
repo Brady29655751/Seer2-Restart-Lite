@@ -151,12 +151,14 @@ public class Status
         return type switch
         {
             "hit"   => hp,
+            "all"   => status.Average(),
             "count" => Count(x => x != 0),
             "posCount" => Count(x => x > 0),
             "negCount" => Count(x => x < 0),
             "sum" => sum,
-            "posSum" => Select(x => Mathf.Max(0, x)).sum,
-            "negSum" => Select(x => Mathf.Min(0, x)).sum,
+            "absSum" => status.Sum(x => Mathf.Abs(x)),
+            "posSum" => status.Sum(x => Mathf.Max(0, x)),
+            "negSum" => status.Sum(x => Mathf.Min(0, x)),
             "max" => max,
             "min" => min,
             "posMax" => posMax,
@@ -170,17 +172,25 @@ public class Status
 
     public virtual void Set(string type, float value)
     {
-        if (type == "hit")
+        switch (type)
         {
-            hp = value;
-            return;
-        }
-        
-        int idx = typeNames.IndexOf(type.ToLower());
-        if (idx == -1)
-            return;
+            default:
+                int idx = typeNames.IndexOf(type.ToLower());
+                if (idx == -1)
+                    return;
 
-        status[idx] = value;
+                status[idx] = value;
+                return;
+            
+            case "all":
+                for (int i = 0; i < status.Length; i++)
+                    status[i] = value;
+                return;
+
+            case "hit":
+                hp = value;
+                return;
+        }
     }
 
     public Status Select(Func<float, float> selector)

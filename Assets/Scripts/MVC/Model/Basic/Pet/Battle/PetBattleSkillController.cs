@@ -6,6 +6,7 @@ using UnityEngine;
 
 public class PetBattleSkillController
 {
+    public BattlePet parent;
     public int cursor = 0;
     public List<Skill> headerSkills;
     public List<Skill> loopSkills;

@@ -126,7 +126,7 @@ public static class NpcConditionHandler
         if (battle == null)
             return op != "=";
 
-        return Operator.Condition(op, Identifier.GetBattleIdentifier("state." + key, battle.currentState.myUnit, battle.currentState.opUnit), float.Parse(value));
+        return Operator.Condition(op, Identifier.GetBattleIdentifier("state." + key, null, battle.currentState.myUnit, battle.currentState.opUnit), float.Parse(value));
     }
 
     public static bool GetItem(Item item, string op, string key, string value) {
