@@ -4,18 +4,16 @@
 		<bgm>BGM_25</bgm>
 	</music>
 	<entities>
-		<!--
-		<npc id="1002500" resId="1001" name="" size="200,200" pos="120,0" namePos="0,0" color="0,0,0,0">
-			<description>海洋星深水区</description>
-			<transport>240,80</transport>
+		<npc id="1002500" resId="1001" name="" size="200,200" pos="120,120" namePos="0,0" color="0,0,0,0">
+			<description>云霄星高空层</description>
+			<transport>240,200</transport>
 			<eventHandler>
 				<button type="click">
 					<action>teleport</action>
-					<param>10021</param>
+					<param>10026</param>
 				</button>
 			</eventHandler>
 		</npc>
-		-->
 		<npc id="1002501" resId="Maps/mine/CH4" name="" size="350,200" pos="590,90" namePos="0,0" color="0,0,0,0">
 			<description>甲烷燃气</description>
 			<eventHandler>
@@ -51,7 +49,7 @@
 				</button>
 			</eventHandler>
 		</npc>
-		<npc id="1002502" resId="Pets/pet/10022" name="Lv31 毛毛" size="40,48" pos="440,115" namePos="0,0">
+		<npc id="1002502" resId="Pets/pet/10022" name="Lv36 毛毛" size="40,48" pos="440,115" namePos="0,0">
 			<anim id="Pets/anim/10022" pos="2.4,0" scale="0.8,0.8" />
 			<battle>
 				<branch id="default">
@@ -59,7 +57,7 @@
 						<weather>8</weather>
 					</settings>
 					<enemy>
-						<pet id="10022" level="31">
+						<pet id="10022" level="36">
 							<loopSkill>10050</loopSkill>
 						</pet>
 					</enemy>
@@ -89,7 +87,7 @@
 				</button>
 			</eventHandler>
 		</npc>
-		<npc id="1002503" resId="Pets/pet/10022" name="Lv32 毛毛" size="40,48" pos="360,335" namePos="0,0">
+		<npc id="1002503" resId="Pets/pet/10022" name="Lv37 毛毛" size="40,48" pos="360,335" namePos="0,0">
 			<anim id="Pets/anim/10022" pos="2.4,0" scale="0.8,0.8" />
 			<battle>
 				<branch id="default">
@@ -97,7 +95,7 @@
 						<weather>8</weather>
 					</settings>
 					<enemy>
-						<pet id="10022" level="32">
+						<pet id="10022" level="37">
 							<loopSkill>10050</loopSkill>
 						</pet>
 					</enemy>
@@ -164,7 +162,7 @@
 					<action>setNpcParam</action>
 					<param>1002504</param>
 					<param>active=true</param>
-					<condition>random[new]LTE5</condition>
+					<condition>random[0~256]&lt;1</condition>
 				</button>
 				<button type="click">
 					<action>openDialog</action>
@@ -199,7 +197,6 @@
 							<param>item_icon=pet[10261]</param>
 							<condition>firstPet.idNOT10261</condition>
 						</func>
-						<!--
 						<func type="click">
 							<description><![CDATA[征伐]]></description>
 							<action>openDialog</action>
@@ -220,7 +217,6 @@
 							<param>item_icon=pet[12780]</param>
 							<condition>firstPet.idNOT12780</condition>
 						</func>
-						-->
 					</functionHandler>
 					<replyHandler>
 						<reply type="click">

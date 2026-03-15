@@ -100,7 +100,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 971234393773754375}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -358,11 +358,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 86624b8d587f19246be2dacdbb7f22ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  interactableWhenNull: 0
   button: {fileID: 5838886462738554716}
   chosenFrameSprite: {fileID: 21300000, guid: f9399c0fb5b008d40af6d32acf8e3295, type: 3}
   notChosenFrameSprite: {fileID: 21300000, guid: fa83f9b21c8a2eb4282a68bb2b80bc35, type: 3}
   nameText: {fileID: 971234395574301977}
   icon: {fileID: 971234393773754373}
+  getMark: {fileID: 0}
   levelText: {fileID: 971234394347016801}
   hpText: {fileID: 971234395107741821}
   hpBarRect: {fileID: 971234394760399066}
@@ -417,6 +419,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   index: 0
   rectTransform: {fileID: 971234394980963205}
+  centerOffset: {x: 0, y: 0}
   onDropEvent:
     m_PersistentCalls:
       m_Calls: []

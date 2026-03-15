@@ -24,7 +24,7 @@ public class NpcView : Module
             _ => null,
         };
     }
-    
+
     public void SetNpcInfo(NpcInfo info)
     {
         SetRaycastTarget(info.raycastTarget);
@@ -39,7 +39,8 @@ public class NpcView : Module
         SetAnim(info.anim, info.animInfo);
     }
 
-    public void SetRaycastTarget(bool isRaycastTarget) {
+    public void SetRaycastTarget(bool isRaycastTarget)
+    {
         if (button?.image == null)
             return;
 
@@ -49,7 +50,8 @@ public class NpcView : Module
     public void SetPosition(Vector2 pos) => rect.anchoredPosition = pos;
     public void SetRotation(Vector3 rotation) => button.rect.rotation = Quaternion.Euler(rotation);
 
-    public void SetRect(Vector2 pos, Vector2 size, Quaternion rotation) {
+    public void SetRect(Vector2 pos, Vector2 size, Quaternion rotation)
+    {
         rect.SetAsLastSibling();
         rect.anchoredPosition = pos;
         rect.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, size.x);
@@ -58,14 +60,16 @@ public class NpcView : Module
         button.rect.rotation = rotation;
     }
 
-    public void SetColor(Color color) {
+    public void SetColor(Color color)
+    {
         if (button?.image == null)
             return;
 
         button.image.color = color;
     }
 
-    public void SetName(string name) {
+    public void SetName(string name)
+    {
         if (string.IsNullOrEmpty(name))
         {
             nameText.text = name;
@@ -78,7 +82,8 @@ public class NpcView : Module
         nameText.text = name;
     }
 
-    public void SetNamePos(Vector2 namePos) {
+    public void SetNamePos(Vector2 namePos)
+    {
         nameText.rectTransform.anchoredPosition = namePos;
     }
 
@@ -91,22 +96,26 @@ public class NpcView : Module
         nameText.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, Mathf.Max(30, nameSize + 10));
     }
 
-    public void SetNameColor(Color nameColor) {
+    public void SetNameColor(Color nameColor)
+    {
         nameText.color = nameColor;
     }
 
-    public void SetNameFont(string fontOption) {
+    public void SetNameFont(string fontOption)
+    {
         if (string.IsNullOrEmpty(fontOption))
             return;
 
         nameText.font = ResourceManager.instance.GetFont(fontOption);
     }
 
-    public void SetIcon(string resId) {
+    public void SetIcon(string resId)
+    {
         SetSprite(NpcInfo.GetIcon(resId));
     }
 
-    public void SetSprite(Sprite sprite) {
+    public void SetSprite(Sprite sprite)
+    {
         button.SetSprite(sprite);
     }
 
@@ -120,7 +129,7 @@ public class NpcView : Module
     {
         foreach (Transform t in animCamera.transform)
         {
-            if (t.name == "Pet Anim")   
+            if (t.name == "Pet Anim")
                 continue;
 
             Destroy(t);
@@ -140,26 +149,31 @@ public class NpcView : Module
         anim.transform.localRotation = animInfo.animRot;
     }
 
-    public void SetBGM(AudioClip bgm) {
+    public void SetBGM(AudioClip bgm)
+    {
         button.SetBGM(bgm);
     }
 
-    public void SetAction(NpcController npc, Dictionary<int, NpcController> npcList, InfoPrompt infoPrompt) {
+    public void SetAction(NpcController npc, Dictionary<int, NpcController> npcList, InfoPrompt infoPrompt)
+    {
         NpcInfo info = npc.GetInfo();
-        if (info.description != null) {
+        if (info.description != null)
+        {
             button.onPointerEnterEvent.AddListener(() => infoPrompt.SetActive(true));
             button.onPointerExitEvent.AddListener(() => infoPrompt.SetActive(false));
             button.onPointerOverEvent.AddListener(() => infoPrompt.SetInfoPromptWithAutoSize(info.description, TextAnchor.MiddleLeft));
         }
 
-        Action onArrive = (() => {});
-        foreach (var handler in info.eventHandler) {
+        Action onArrive = (() => { });
+        foreach (var handler in info.eventHandler)
+        {
             UnityEvent pointerEvent = NpcHandler.GetButtonEvent(button, handler);
             Action handlerAction = NpcHandler.GetNpcEntity(npc, handler, npcList);
-            if (handler.type != ButtonEventType.OnPointerClick) {
+            if (handler.type != ButtonEventType.OnPointerClick)
+            {
                 pointerEvent?.AddListener(handlerAction.Invoke);
                 continue;
-            } 
+            }
             Action onOldArrive = onArrive;
             onArrive = () => { onOldArrive?.Invoke(); handlerAction?.Invoke(); };
         }
@@ -167,35 +181,46 @@ public class NpcView : Module
         button.onPointerClickEvent.AddListener(onClick.Invoke);
     }
 
-    public void SetFarmAction(NpcController npc, Dictionary<int, NpcController> npcList, InfoPrompt infoPrompt) {
+    public void SetFarmAction(NpcController npc, Dictionary<int, NpcController> npcList, InfoPrompt infoPrompt)
+    {
         var info = npc.GetInfo();
         var activity = Activity.Find("farm");
 
-        void ShowPlantInfo() {
+        void ShowPlantInfo()
+        {
             var plant = activity.GetData("land[" + info.id + "].plant", "none");
-            if (int.TryParse(plant, out var plantId)) {
+            if (int.TryParse(plant, out var plantId))
+            {
                 var item = Item.GetItemInfo(plantId);
                 var ripeDate = DateTime.Parse(activity.GetData("land[" + info.id + "].date[ripe]", DateTime.MaxValue.ToString()));
                 var totalTime = TimeSpan.Parse(item.options["time"]);
                 var now = DateTime.Now;
                 var ripeNeedTime = (now >= ripeDate) ? TimeSpan.Zero : (ripeDate - now);
                 infoPrompt.SetPlant(item, ripeNeedTime, totalTime);
-            } else
+            }
+            else
                 infoPrompt.SetPlant(null, TimeSpan.Zero, TimeSpan.MaxValue);
         }
 
-        void PlantAction() {
+        void PlantAction()
+        {
             var now = DateTime.Now;
             var plant = activity.GetData("land[" + info.id + "].plant", "none");
+            var seed = (int)Player.GetSceneData("seed", 0);
+            var seedInfo = Item.GetItemInfo(seed);
 
             // No plant currently.
-            if (!int.TryParse(plant, out var plantId)) {
-                var seed = (int)Player.GetSceneData("seed", 0);
-                // No seed specified. Choose seed.
-                if (seed == 0) {
+            if (!int.TryParse(plant, out var plantId))
+            {
+                if (seedInfo == null)
+                {
                     MapManager.instance.SetPlantPanelActive(true);
                     return;
                 }
+
+                if (seedInfo.type != ItemType.Plant)
+                    return;
+
                 // Plant the seed.
                 var item = Item.GetItemInfo(seed);
                 var totalTime = TimeSpan.Parse(item.options["time"]);
@@ -208,13 +233,49 @@ public class NpcView : Module
             // Not ripe yet.
             var date = DateTime.Parse(activity["land[" + info.id + "].date[ripe]"]);
             if (now < date)
-                return;
-            
+            {
+                if (seedInfo == null)
+                {
+                    MapManager.instance.SetPlantPanelActive(true);
+                    return;
+                }
+
+                if (seedInfo.type == ItemType.Fertilizer)
+                {
+                    if (Item.Find(seed) == null)
+                    {
+                        Hintbox.OpenHintboxWithContent("你没有<color=#ffbb33>" + seedInfo.name + "</color>！先去旁边的木屋购买吧！", 16);
+                        return;
+                    }
+
+                    if (seedInfo.options.TryGet("time", out var speedup))
+                        activity["land[" + info.id + "].date[ripe]"] = (date - TimeSpan.Parse(speedup)).ToString();
+
+                    Item.Remove(seedInfo.id, 1);
+                    MapManager.instance.RefreshPlantPanel();
+                    Player.SetSceneData("seed", seed);
+                    return;
+                }
+                
+                switch (seed)
+                {
+                    default:
+                        return;
+
+                    case 61_0000:
+                        activity["land[" + info.id + "].plant"] = "none";
+                        activity["land[" + info.id + "].date[ripe]"] = "none";
+                        SaveSystem.SaveData(); 
+                        return;      
+                }
+            }
+
             // Ripe.
             var harvestInfo = Item.GetItemInfo(plantId);
             var specialEffect = harvestInfo.effects.Find(x => (x.ability == EffectAbility.None) && x.abilityOptionDict.ContainsKey("plant"));
             var isSpecialSuccess = (specialEffect != null) && specialEffect.Condition(Player.instance.pet, null);
-            if (isSpecialSuccess) {
+            if (isSpecialSuccess)
+            {
                 plant = harvestInfo.name;
                 plantId = int.Parse(specialEffect.abilityOptionDict.Get("plant", harvestInfo.id.ToString()));
                 harvestInfo = Item.GetItemInfo(plantId);
@@ -230,7 +291,8 @@ public class NpcView : Module
             if (isSpecialSuccess)
                 Hintbox.OpenHintboxWithContent("<color=#ffbb33>你的" + plant + "变异了！</color>", 20);
 
-            foreach (var e in harvestInfo.effects.Where(x => x.ability == EffectAbility.SetPlayer)) {
+            foreach (var e in harvestInfo.effects.Where(x => x.ability == EffectAbility.SetPlayer))
+            {
                 if (e.Condition(Player.instance.pet, null))
                     e.SetPlayer(null, npc, null, npcList);
             }

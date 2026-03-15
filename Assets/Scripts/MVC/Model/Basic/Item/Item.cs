@@ -11,10 +11,11 @@ public class Item
 {
     public const int COIN_ID = 1, DIAMOND_ID = 2;
 
-    public static List<Item> petItemDatabase => ItemInfo.database.Where(x => (!skillBookItemDatabase.Select(x => x.id).Contains(x.id)) && 
+    public static List<Item> petItemDatabase => ItemInfo.database.Where(x => (!skillBookItemDatabase.Select(x => x.id).Contains(x.id)) &&
         (x.effects?.All(y => y.ability == EffectAbility.SetPet) ?? false) && (x.id == x.getId)).Select(x => new Item(x.id, 9999)).ToList();
-    public static List<Item> pvpItemDatabase => petItemDatabase.Where(x => (!skillBookItemDatabase.Select(x => x.id).Contains(x.id)) && ((x.effects?.All(y => {
-        var banned = new List<string>(){ "exp", "level", "skinId", "iv", "emblem", "evolve" };
+    public static List<Item> pvpItemDatabase => petItemDatabase.Where(x => (!skillBookItemDatabase.Select(x => x.id).Contains(x.id)) && ((x.effects?.All(y =>
+    {
+        var banned = new List<string>() { "exp", "level", "skinId", "iv", "emblem", "evolve" };
         var type = y.abilityOptionDict.Get("type", "none");
         return (!banned.Contains(type));
     })) ?? false)).ToList();
@@ -36,33 +37,40 @@ public class Item
 
     [XmlIgnore] public List<Effect> effects => GetEffects();
 
-    public Item() {
+    public Item()
+    {
 
     }
 
-    public Item(int itemId, int amount = 1) {
+    public Item(int itemId, int amount = 1)
+    {
         id = itemId;
         num = amount;
     }
 
-    public Item(Item rhs) {
+    public Item(Item rhs)
+    {
         id = rhs.id;
         num = rhs.num;
     }
 
-    public List<Effect> GetEffects() {
+    public List<Effect> GetEffects()
+    {
         var itemEffects = info.effects.Select(x => new Effect(x)).ToList();
-        foreach (var e in itemEffects) {
+        foreach (var e in itemEffects)
+        {
             e.source = this;
         }
         return itemEffects;
     }
 
-    public static ItemInfo GetItemInfo(int id) {
+    public static ItemInfo GetItemInfo(int id)
+    {
         return Database.instance.GetItemInfo(id);
     }
 
-    public static ItemHintbox OpenHintbox(Item item) {
+    public static ItemHintbox OpenHintbox(Item item)
+    {
         ItemHintbox itemHintbox = Hintbox.OpenHintbox<ItemHintbox>();
         itemHintbox.SetTitle("提示");
         itemHintbox.SetContent(item.num + " 个 " + item.name + " 已经放入背包", 14, FontOption.Arial);
@@ -71,62 +79,84 @@ public class Item
         return itemHintbox;
     }
 
-    public static void AddTo(Item item, List<Item> toWhichStorage) {
+    public static void AddTo(Item item, List<Item> toWhichStorage)
+    {
         var addItem = new Item(item.info.getId, item.num);
         int index = toWhichStorage.FindIndex(x => x.id == addItem.id);
-        if (index != -1) {
+        if (index != -1)
+        {
             toWhichStorage[index].num += addItem.num;
-        } else {
+        }
+        else
+        {
             toWhichStorage.Add(addItem);
         }
         SaveSystem.SaveData();
     }
 
-    public static void RemoveFrom(int id, int num, List<Item> toWhichStorage) {
+    public static void RemoveFrom(int id, int num, List<Item> toWhichStorage)
+    {
         int index = toWhichStorage.FindIndex(x => x.id == id);
-        if (index != -1) {
+        if (index != -1)
+        {
             Item item = toWhichStorage[index];
             item.num -= num;
-            if (item.num <= 0) {
+            if (item.num <= 0)
+            {
                 toWhichStorage.Remove(item);
             }
             SaveSystem.SaveData();
             return;
-        } 
+        }
         throw new Exception("Item was not in bag originally.");
     }
 
-    public static Item Find(int id, List<Item> toWhichStorage = null) {
+    public static Item Find(int id, List<Item> toWhichStorage = null)
+    {
         toWhichStorage ??= itemStorage;
         return toWhichStorage.Find(x => x.id == id);
     }
 
-    public static void Add(Item item) {
+    public static List<Item> FindAll(Predicate<Item> predicate, List<Item> toWhichStorage = null)
+    {
+        toWhichStorage ??= itemStorage;
+        return toWhichStorage.FindAll(predicate);
+    }
+
+    public static void Add(Item item)
+    {
         var addItem = new Item(item.info.getId, item.num);
         int index = itemStorage.FindIndex(x => x.id == addItem.id);
-        if (index != -1) {
+        if (index != -1)
+        {
             itemStorage[index].num += addItem.num;
-        } else {
+        }
+        else
+        {
             itemStorage.Add(addItem);
         }
         SaveSystem.SaveData();
     }
 
-    public static void Remove(int id, int num = 1) {
+    public static void Remove(int id, int num = 1)
+    {
         int index = itemStorage.FindIndex(x => x.id == id);
-        if (index != -1) {
+        if (index != -1)
+        {
             Item item = itemStorage[index];
             item.num -= num;
-            if (item.num <= 0) {
+            if (item.num <= 0)
+            {
                 itemStorage.Remove(item);
             }
             SaveSystem.SaveData();
             return;
-        } 
+        }
         throw new Exception("Item was not in bag originally.");
     }
 
-    public static void Buy(int id, int num, Action onAfterBuy = null, List<Item> toWhichStorage = null) {
+    public static void Buy(int id, int num, Action onAfterBuy = null, List<Item> toWhichStorage = null)
+    {
         ItemInfo info = GetItemInfo(id);
         ItemInfo currencyInfo = GetItemInfo(info.currencyType);
         int total = info.price * num;
@@ -135,7 +165,8 @@ public class Item
         hintbox.SetTitle("提示");
 
         Item currency = Item.Find(info.currencyType, toWhichStorage);
-        if ((currency == null) || (currency.num < total)) {
+        if ((currency == null) || (currency.num < total))
+        {
             hintbox.SetContent(currencyInfo.name + "不足无法购买", 14, FontOption.Arial);
             hintbox.SetOptionNum(1);
             return;
@@ -147,13 +178,17 @@ public class Item
         hintbox.SetOptionCallback(() => OnBuySuccess(price, item, onAfterBuy, toWhichStorage));
     }
 
-    private static void OnBuySuccess(Item price, Item item, Action callback, List<Item> toWhichStorage = null) {
-        if (toWhichStorage == null) {
+    private static void OnBuySuccess(Item price, Item item, Action callback, List<Item> toWhichStorage = null)
+    {
+        if (toWhichStorage == null)
+        {
             var bought = int.Parse(Activity.Shop.GetData(item.id.ToString(), "0"));
             Activity.Shop.SetData(item.id.ToString(), (bought + item.num).ToString());
             Item.Remove(price.id, price.num);
             Item.Add(item);
-        } else {
+        }
+        else
+        {
             Item.RemoveFrom(price.id, price.num, toWhichStorage);
             Item.AddTo(item, toWhichStorage);
         }
@@ -166,7 +201,8 @@ public class Item
         successHintbox.SetOptionNum(1);
     }
 
-    public static void Sell(int id, int num, Action onAfterSell = null, List<Item> toWhichStorage = null) {
+    public static void Sell(int id, int num, Action onAfterSell = null, List<Item> toWhichStorage = null)
+    {
         ItemInfo info = GetItemInfo(id);
         int total = info.price * num;
 
@@ -174,7 +210,8 @@ public class Item
         hintbox.SetTitle("提示");
 
         Item item = Item.Find(id, toWhichStorage);
-        if ((item == null) || (item.num < num)) {
+        if ((item == null) || (item.num < num))
+        {
             hintbox.SetContent("物品不足无法出售", 14, FontOption.Arial);
             hintbox.SetOptionNum(1);
             return;
@@ -185,11 +222,15 @@ public class Item
         hintbox.SetOptionCallback(() => OnSellSuccess(price, new Item(item.id, num), onAfterSell, toWhichStorage));
     }
 
-    private static void OnSellSuccess(Item price, Item item, Action callback, List<Item> toWhichStorage = null) {
-        if (toWhichStorage == null) {
+    private static void OnSellSuccess(Item price, Item item, Action callback, List<Item> toWhichStorage = null)
+    {
+        if (toWhichStorage == null)
+        {
             Item.Remove(item.id, item.num);
             Item.Add(price);
-        } else {
+        }
+        else
+        {
             Item.RemoveFrom(item.id, item.num, toWhichStorage);
             Item.AddTo(price, toWhichStorage);
         }
@@ -202,20 +243,23 @@ public class Item
         successHintbox.SetOptionNum(1);
     }
 
-    public bool IsInCategory(ItemCategory category) {
+    public bool IsInCategory(ItemCategory category)
+    {
         return info.type.IsInCategory(category);
     }
 
-    public bool IsUsable(object invokeUnit, BattleState state) {
+    public bool IsUsable(object invokeUnit, BattleState state)
+    {
         if (num <= 0)
             return false;
-        
+
         EffectHandler handler = new EffectHandler();
         handler.AddEffects(invokeUnit, effects);
         return handler.Condition(state, state == null).Any(x => x) && (GetMaxUseCount(invokeUnit, state) > 0);
     }
 
-    public int Use(object invokeUnit, BattleState state, int useCount = 1, PetBagMode petBagMode = PetBagMode.Normal) {
+    public int Use(object invokeUnit, BattleState state, int useCount = 1, PetBagMode petBagMode = PetBagMode.Normal)
+    {
         int count = useCount;
 
         if ((info.type == ItemType.EXP) && (!effects.Exists(x => x.abilityOptionDict.ContainsKey("max_use"))))
@@ -226,22 +270,26 @@ public class Item
         if ((petBagMode != PetBagMode.Normal) && (petBagMode != PetBagMode.YiTeRogue))
             return count;
 
-        if (info.removable) {
+        if (info.removable)
+        {
             if (petBagMode == PetBagMode.Normal)
                 Item.Remove(id, count);
             else
                 Item.RemoveFrom(id, count, YiTeRogueData.instance.itemBag);
-        } else
+        }
+        else
             SaveSystem.SaveData();
-        
+
         return count;
     }
 
-    public int GetMaxUseCount(object invokeUnit, BattleState state) {
+    public int GetMaxUseCount(object invokeUnit, BattleState state)
+    {
         if (effects.Exists(x => x.abilityOptionDict.ContainsKey("max_use")))
             return this.StuffMaxUseCount(invokeUnit, state);
 
-        return info.type switch {
+        return info.type switch
+        {
             ItemType.HpPotion => this.HpPotionMaxUseCount(invokeUnit, state),
             ItemType.Evolve => 1,
             ItemType.Emblem => 1,

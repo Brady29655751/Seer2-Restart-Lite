@@ -6,11 +6,11 @@
 	<initialPoint>515,125</initialPoint>
 	<entities>
 		<npc id="99000" resId="99001" name="" size="64,88" pos="110,300">
-			<description>铲除植物（暂未开放）</description>
+			<description>铲除植物</description>
 			<eventHandler>
 				<button type="click">
-					<action>openDialog</action>
-					<param>null</param>
+					<action>player</action>
+					<param>data.seed=610000</param>
 				</button>
 			</eventHandler>
 		</npc>

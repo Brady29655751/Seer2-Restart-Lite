@@ -1,0 +1,142 @@
+<map name="云霄星最高层" category="102" id="10027" weather="8">
+	<initialPoint>450,120</initialPoint>
+	<music category="102">
+		<bgm>BGM_25</bgm>
+	</music>
+	<entities>
+		<npc id="1002700" resId="1001" name="" size="200,200" pos="760,140" namePos="0,0" color="0,0,0,0">
+			<description>云霄星高空层</description>
+			<transport>860,220</transport>
+			<eventHandler>
+				<button type="click">
+					<action>teleport</action>
+					<param>10026</param>
+				</button>
+				<button type="auto">
+					<action>openHintbox</action>
+					<param>type=Item</param>
+					<param>content=穿戴飞行套装才能在空中维持飞行哦！</param>
+					<param>item_icon=buff[420030]</param>
+					<param>option_num=1</param>
+					<param>callback=teleport</param>
+					<condition>player.shootNOT7006</condition>
+				</button>
+			</eventHandler>
+			<callbackHandler>
+				<button type="teleport">
+					<action>teleport</action>
+					<param>10025</param>
+				</button>
+			</callbackHandler>
+		</npc>
+		<npc id="1002702" resId="Pets/pet/10249" name="Lv41 浮空苗" size="36,33" pos="350,115" namePos="0,0">
+			<battle>
+				<branch id="default">
+					<settings count="6" capture="true">
+						<weather>8</weather>
+					</settings>
+					<enemy>
+						<pet id="10249" level="41">
+							<loopSkill>13827</loopSkill>
+						</pet>
+					</enemy>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>battle</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<npc id="1002703" resId="Pets/pet/10249" name="Lv42 浮空苗" size="36,33" pos="200,90" namePos="0,0">
+			<battle>
+				<branch id="default">
+					<settings count="6" capture="true">
+						<weather>8</weather>
+					</settings>
+					<enemy>
+						<pet id="10249" level="42">
+							<loopSkill>13827</loopSkill>
+						</pet>
+					</enemy>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>battle</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<npc id="1002704" resId="Pets/pet/10069" name="神秘精灵蛋" size="120,100" pos="320,300" namePos="5,-5" color="0,0,0,0">
+			<description>神秘精灵蛋</description>
+			<dialog>
+				<branch id="default" name="提亚斯" icon="Pets/pet/10069" size="158,207" pos="10,35">
+					<content><![CDATA[别碰我的蛋！]]></content>
+					<functionHandler>
+						<func type="click">
+							<description><![CDATA[挑战提亚斯]]></description>
+							<action>battle</action>
+							<param>default</param>
+						</func>
+					</functionHandler>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[每天一颗蛋维持营养均衡]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+					</replyHandler>
+				</branch>
+			</dialog>
+			<battle>
+				<branch id="default">
+					<settings count="6">
+						<mode>4</mode>
+						<weather>8</weather>
+					</settings>
+					<enemy>
+						<pet id="10069" level="100">
+							<status>
+								<hp>5000</hp>
+								<cri>75</cri>
+								<eva>1000</eva>
+							</status>
+							<initBuff>13,14,17,61,-3000,77</initBuff>
+							<loopSkill>13825,13824,13823</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>getPet</action>
+							<param>10068,1</param>
+							<condition>activity[spt].done[new][4][default]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=【米拉美】已经放入精灵仓库</param>
+							<param>item_icon=pet[10068]</param>
+							<param>option_num=1</param>
+							<condition>activity[spt].done[new][4][default]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>spt</param>
+							<param>done[new][4][default]=true</param>
+							<condition>activity[spt].done[new][4][default]=[bool]false[default]false</condition>
+						</button>
+					</winHandler>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>openDialog</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+	</entities>		
+</map>

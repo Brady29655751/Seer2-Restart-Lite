@@ -79,14 +79,22 @@ public class NpcInfo
 
         if (animId.TryTrimStart("Pets/anim/", out var petIdExpr) || int.TryParse(animId, out _))
         {
-            var split = petIdExpr.Split('-');
-            return ResourceManager.instance.GetPetAnimPrefab(int.Parse(split[0]), split.Length == 1 ? petIdExpr + "-idle" : petIdExpr);   
+            var delimIndex = petIdExpr.LastIndexOf('-');
+            if (delimIndex <= 0)
+                return ResourceManager.instance.GetPetAnimPrefab(int.Parse(petIdExpr), petIdExpr + "-idle");
+            
+            var petId = int.Parse(petIdExpr.Substring(0, delimIndex));
+            return ResourceManager.instance.GetPetAnimPrefab(petId, petIdExpr);   
         }
 
         if (animId.TryTrimStart("Maps/anim/", out var mapIdExpr))
         {
-            var split = petIdExpr.Split('-');
-            return ResourceManager.instance.GetMapAnimPrefab(int.Parse(split[0]), split.Length == 1 ? mapIdExpr + "-idle" : mapIdExpr);
+            var delimIndex = mapIdExpr.LastIndexOf('-');
+            if (delimIndex <= 0)
+                return ResourceManager.instance.GetMapAnimPrefab(int.Parse(mapIdExpr), mapIdExpr + "-idle");
+                
+            var mapId = int.Parse(mapIdExpr.Substring(0, delimIndex));
+            return ResourceManager.instance.GetMapAnimPrefab(mapId, mapIdExpr);
         }
 
         var bundle = ResourceManager.instance.GetAssetBundle(animId.Substring(0, animId.LastIndexOf('-')));

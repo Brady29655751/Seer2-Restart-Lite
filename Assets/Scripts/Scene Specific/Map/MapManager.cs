@@ -17,20 +17,23 @@ public class MapManager : Manager<MapManager>
         Init();
     }
 
-    public void Init() {
+    public void Init()
+    {
         PetTest();
         LoadMap();
         LoadPlayer();
         SetPlantPanelActive(false);
     }
 
-    private void LoadMap() {
+    private void LoadMap()
+    {
         playerController.SetMap(map);
         sceneController.SetMap(map);
         UIController.SetMap(map);
     }
 
-    private void LoadPlayer() {
+    private void LoadPlayer()
+    {
         Player.instance.isShootMode = false;
         playerController.SetPlayerName(Player.instance.nickname);
         playerController.SetPlayerAchievement(Item.GetItemInfo(Player.instance.gameData.achievement)?.name ?? string.Empty);
@@ -38,19 +41,26 @@ public class MapManager : Manager<MapManager>
         Vector2 initPos = (Vector2)Player.GetSceneData("mapInitPos", map.initPoint);
         playerController.SetPlayerPosition(initPos);
         Player.RemoveSceneData("mapInitPos");
-    }   
+    }
 
-    private void PetTest() {
+    private void PetTest()
+    {
         //Item.Add(new Item(10205, 1000));
         //Player.instance.gameData.petStorage.Add(new Pet(1,1));
         //Panel.OpenPanel("Noob");
         //Player.instance.gameData.petStorage.Add(Pet.GetExamplePet(14761));
     }
 
-    public void SetPlantPanelActive(bool active) {
+    public void SetPlantPanelActive(bool active)
+    {
         plantController?.gameObject.SetActive(active);
         if (!active)
             Player.SetSceneData("seed", 0);
+    }
+
+    public void RefreshPlantPanel()
+    {
+        plantController?.Refresh();
     }
 
 }

@@ -167,6 +167,7 @@ public class BattlePetAnimView : BattleBaseView
                 videoPlayer.url = this.currentPetUI.hitInfo.GetVideoUrl(type);
                 videoPlayer.playbackSpeed = skillAnimSpeed;
                 videoRenderImage.texture = videoPlayer.targetTexture = RenderTexture.GetTemporary(1920, 1080);
+                videoRenderImage.color = Color.clear;
                 videoPlayer.Prepare();
 
                 void OnVideoEnd(VideoPlayer vp)
@@ -174,11 +175,14 @@ public class BattlePetAnimView : BattleBaseView
                     videoPlayer.loopPointReached -= OnVideoEnd;
                     controller.OnStopPlayingEvent += SetPetIdle;
                     controller.Play(false);
+                    videoRenderImage.color = Color.clear;
+                    RenderTexture.ReleaseTemporary(videoPlayer.targetTexture);
                 }
 
                 _ = SetDelayCallback((int)(videoStartFrame * 1000 / (24 * skillAnimSpeed)), () =>
                 {
                     videoPlayer.loopPointReached += OnVideoEnd;
+                    videoRenderImage.color = Color.white;
                     controller.Stop(false);
                     videoPlayer.Play();
                 });   

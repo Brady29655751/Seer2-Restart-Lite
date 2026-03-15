@@ -79,7 +79,7 @@ public class PlayerView : Module
         GameObject obj = Instantiate(prefab, playerRect.parent);
         NpcController npc = obj.GetComponent<NpcController>();
         var item = Item.GetItemInfo(shootId);
-        var size = item.effects.FirstOrDefault().abilityOptionDict.Get("shootSize")?.ToVector2(delimeter: '/') ?? item.icon.GetResizedSize(Vector2.one * 50);
+        var size = item.effects.FirstOrDefault()?.abilityOptionDict.Get("shootSize")?.ToVector2(delimeter: '/') ?? item.icon.GetResizedSize(Vector2.one * 50);
         var direction = canvasPos - playerRect.anchoredPosition;
         var rotation = new Vector3(0, 0, Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg);
 

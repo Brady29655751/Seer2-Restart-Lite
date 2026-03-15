@@ -117,6 +117,60 @@
 				</button>
 			</eventHandler>
 		</npc>
+		<npc id="42002" resId="Buffs/420030" name="" size="90,90" pos="160,150" namePos="0,0" color="0,0,0,0">
+			<dialog>
+				<branch id="default" name="我" icon="7004" size="136,125" pos="0,45">
+					<content><![CDATA[羽毛似乎在共鸣，指引着其他地方]]></content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[找找其他地方还有没有类似的羽毛]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+						<reply type="branch">
+							<action>setActivity</action>
+							<param>20009</param>
+							<param>done[420]=true</param>
+						</reply>
+						<reply type="branch">
+							<action>setItem</action>
+							<param>add_with_hint</param>
+							<param>22030,1</param>
+						</reply>
+					</replyHandler>
+				</branch>
+				<branch id="complete" name="我" icon="7004" size="136,125" pos="0,45">
+					<content><![CDATA[全部的特殊羽毛都找到了]]></content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[总共只有三根啊...]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+						<reply type="branch">
+							<action>setActivity</action>
+							<param>20009</param>
+							<param>done[420]=true</param>
+						</reply>
+					</replyHandler>
+				</branch>
+			</dialog>
+			<eventHandler>
+				<button type="click">
+					<action>openDialog</action>
+					<param>complete</param>
+					<condition>activity[20009].done[426]=[bool]true[default]false</condition>
+					<condition>activity[20009].done[424]=[bool]true[default]false</condition>
+					<condition>activity[20009].done[420]=[bool]false[default]false</condition>
+				</button>
+				<button type="click">
+					<action>openDialog</action>
+					<param>default</param>
+					<condition>activity[20009].done[426]=[bool]false[default]false|activity[20009].done[424]=[bool]false[default]false</condition>
+					<condition>activity[20009].done[420]=[bool]false[default]false</condition>
+				</button>
+			</eventHandler>
+		</npc>
 		<teleport id="1" name="飞翼氏族主城" pos="650,400" targetMapId="419"/>
 		<teleport id="2" name="诺亚方舟" pos="295,200" targetMapId="413"/>
 	</entities>

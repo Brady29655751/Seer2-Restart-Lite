@@ -70,6 +70,13 @@ public static class NpcActionHandler
         for (int i = 0; i < handler.param.Count; i++)
         {
             var option = handler.param[i].Split('=');
+
+            if (option[0].TryTrimStart("data.", out var key))
+            {
+                Player.SetSceneData(key, Parser.ParseOperation(option[1]));
+                continue;
+            }
+
             switch (option[0])
             {
                 default:

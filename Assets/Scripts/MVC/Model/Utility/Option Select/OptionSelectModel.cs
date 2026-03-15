@@ -8,8 +8,8 @@ public class OptionSelectModel : SelectModel<GameObject>
     {
         base.Awake();
         for (int i = 0; i < selections.Length; i++) {
-            selections[i]?.SetActive(true);
-            selections[i]?.SetActive(false);
+            selections?.Get(i)?.SetActive(true);
+            selections?.Get(i)?.SetActive(false);
         }
     }
 
@@ -17,7 +17,7 @@ public class OptionSelectModel : SelectModel<GameObject>
     {
         base.Select(index);
         for (int i = 0; i < selections.Length; i++) {
-            selections[i]?.SetActive(i == index);
+            selections?.Get(i)?.SetActive(i == index);
         }
     }
 }

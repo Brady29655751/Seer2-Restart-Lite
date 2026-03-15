@@ -31,6 +31,12 @@ public static class Utility {
         }
         SetScreenSize(width, height);
     }
+
+    public static void SetCursor(Texture2D texture)
+    {
+        var hotspot = (texture == null) ? Vector2.zero : UI.SpriteSize.GetTextureSize(texture) / 2;
+        Cursor.SetCursor(texture, hotspot, CursorMode.Auto);
+    }
 }
 
 }

@@ -1,15 +1,18 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 public class Player : Singleton<Player>
 {
     public int gameDataId;
     public GameData gameData = new GameData();
     public string nickname => gameData.nickname;
-    public Pet[] petBag {
+    public Pet[] petBag
+    {
         get => gameData.petBag;
         set => gameData.petBag = value;
     }
@@ -32,42 +35,61 @@ public class Player : Singleton<Player>
     public BattleRecord currentBattleRecord = null;
     private static Dictionary<string, object> sceneData = new Dictionary<string, object>();
 
-    public bool isShootMode {
+    public bool isShootMode
+    {
         get => (bool)GetSceneData("shootMode", false);
-        set => SetShootMode(value);
+        set => SetSceneData("shootMode", value);
     }
 
-    private void Start() {
+    private void Start()
+    {
         gameDataId = -1;
         random = Random.Range(0, 100);
     }
 
-    protected override void OnApplicationQuit() {
+    protected override void OnApplicationQuit()
+    {
         // if (gameDataId != -1) {
         //     SaveSystem.SaveData(gameData);
         // }
         base.OnApplicationQuit();
-    }    
+    }
 
-    public static object GetSceneData(string key, object defaultReturn = null) {
+    public static object GetSceneData(string key, object defaultReturn = null)
+    {
         return sceneData.Get(key, defaultReturn);
     }
-    public static void SetSceneData(string key, object value) {
+    public static void SetSceneData(string key, object value)
+    {
+        switch (key)
+        {
+            default:
+                break;
+
+            case "seed":
+                value = Convert.ToInt32(value);
+                var seed = (int)value;
+                Utility.SetCursor(Item.GetItemInfo(seed)?.icon?.texture);
+                break;
+
+            case "shootMode":
+                value = Convert.ToBoolean(value);
+                var shootMode = (bool)value;
+                if (instance.currentMapId == 990)
+                {
+                    SetSceneData("seed", 0);
+                    return;
+                }
+                Utility.SetCursor(shootMode ? SpriteSet.Aim : null);
+                break;
+        }
+
         sceneData.Set(key, value);
     }
 
-    public static void RemoveSceneData(string key) {
+    public static void RemoveSceneData(string key)
+    {
         sceneData.Remove(key);
-    }
-
-    public void SetShootMode(bool shootMode) {
-        if ((currentMapId == 990) && shootMode)
-            return;
-            
-        var texture = shootMode ? SpriteSet.Aim : null;
-        var hotspot = shootMode ? (texture.GetTextureSize() / 2) : Vector2.zero;
-        Cursor.SetCursor(texture, hotspot, CursorMode.Auto);
-        SetSceneData("shootMode", shootMode);
     }
 
 }

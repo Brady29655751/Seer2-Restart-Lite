@@ -202,21 +202,6 @@ public class ResourceManager : Singleton<ResourceManager>
         StartCoroutine(LoadAssetBundleAsync(path, resPath, onSuccess, onProgress));    
     }
 
-    private IEnumerator CheckAnimIsDone(TaskCompletionSource<GameObject> task, dynamic animInfo)
-    {
-        while (animInfo.stuckTime <= 2f)
-        {
-            if (animInfo.isDone)
-            {
-                task.SetResult(animInfo.anim);
-                yield break;
-            }
-
-            animInfo.stuckTime += 0.5f;
-            yield return new WaitForSeconds(0.5f);
-        }
-    }
-
     public GameObject GetMapAnimPrefab(int mapID, string fileName)
     {
         try
@@ -1120,6 +1105,17 @@ public class ResourceManager : Singleton<ResourceManager>
                 var effect = new Effect("resident", "-1", "pet", "none", "none", "set_pet", $"type=trait&op=SET&value={buffInfo.id}");
                 buffItemInfo.SetEffects(new List<Effect>(){ effect });
                 originalDict[10_0000 + buffInfo.id] = buffItemInfo;
+            }
+
+            for(int id = 7001; id < 8000; id++)
+            {
+                if (!originalDict.TryGet(id, out var itemInfo))
+                    continue;
+
+                var shootCopy = new ItemInfo(30000 + id, itemInfo.name, itemInfo.type, itemInfo.price, itemInfo.currencyType, $"getId={id}", itemInfo.itemDescription, itemInfo.effectDescription);
+                var effect = itemInfo.effects.FirstOrDefault();
+                shootCopy.SetEffects(effect == null ? null : new Effect(effect).SingleToList());
+                originalDict[shootCopy.id] =  shootCopy;
             }
 
             onSuccess?.Invoke(originalDict);

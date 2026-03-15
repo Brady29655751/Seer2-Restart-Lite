@@ -5,11 +5,11 @@
 	</music>
 	<initialPoint>375,180</initialPoint>
 	<entities>
-		<npc id="-116001" resId="Pets/pet/360" name="兰博基尼" size="214,141" pos="480,290" namePos="0,-10">
-			<anim id="Pets/anim/360" pos="1,0.4" scale="1,1" rotation="0,180,0"/>
-			<description>兰博基尼</description>
+		<npc id="-116001" resId="Pets/pet/384" name="法拉利" size="162,147" pos="480,290" namePos="0,-10">
+			<anim id="Pets/anim/384" pos="1,0.4" scale="1,1" rotation="0,180,0"/>
+			<description>法拉利</description>
 			<dialog>
-				<branch id="default" name="兰博基尼" icon="Pets/pet/360" size="143,94" pos="0,55">
+				<branch id="default" name="法拉利" icon="Pets/pet/384" size="108,98" pos="0,55">
 					<content><![CDATA[<b><color=#ffbb33>【蓝色龙鳞】</color></b>可以在商店兑换大奖！]]></content>
 					<functionHandler>
 						<func type="click">
@@ -63,13 +63,13 @@
 							<param>ItemShop</param>
 							<param>mode=buy</param>
 							<param>currency=9/0</param>
-							<param>item=500161/500259/500298/500358/500382</param>
+							<param>item=500161/500259/500298/500358/500382/500392</param>
 							<param>title=大奖兑换</param>
 						</func>
 					</functionHandler>
 					<replyHandler>
 						<reply type="click">
-							<description><![CDATA[怎么过了一个版本还是你啊]]></description>
+							<description><![CDATA[你这家伙不是上版本就该来了吗]]></description>
 							<action>openDialog</action>
 							<param>null</param>
 						</reply>
@@ -82,15 +82,16 @@
 						<mode>3</mode>
 					</settings>
 					<enemy>
-						<pet id="360" level="100">
+						<pet id="384" level="100">
 							<status>
 								<atk>600</atk>
 								<mat>600</mat>
+								<spd>600</spd>
 								<hp>3000</hp>
 							</status>
-							<initBuff>-8,17,20,-3022,-3059,-3086</initBuff>
-							<loopSkill>13659,13660</loopSkill>
-							<superSkill>13656</superSkill>
+							<initBuff>-8,17,20,18,-3022,-3059,-3086</initBuff>
+							<loopSkill>13718,13720</loopSkill>
+							<superSkill>13725</superSkill>
 						</pet>
 					</enemy>
 					<winHandler>
