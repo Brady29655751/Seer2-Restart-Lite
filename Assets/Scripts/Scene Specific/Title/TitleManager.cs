@@ -117,7 +117,7 @@ public class TitleManager : Manager<TitleManager>
     }
 
     private bool CheckBuildVersion() {
-        if (GameManager.versionData.buildVersion == Application.version)
+        if (VersionData.Compare(Application.version, GameManager.versionData.buildVersion) >= 0)
             return true;
 
         startButton?.SetInteractable(false, false);
