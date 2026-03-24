@@ -1,0 +1,333 @@
+name: Unity CI
+
+run-name: 'Unity CI - ${{ github.event_name }} - ${{ github.ref_name }} - #${{ github.run_number }}'
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      runTests:
+        description: Run tests
+        required: false
+        default: true
+        type: boolean
+      buildAndroid:
+        description: Build Android
+        required: false
+        default: false
+        type: boolean
+      buildWindows:
+        description: Build Windows
+        required: false
+        default: true
+        type: boolean
+      buildWebGL:
+        description: Build WebGL
+        required: false
+        default: false
+        type: boolean
+      buildMacOS:
+        description: Build macOS
+        required: false
+        default: false
+        type: boolean
+      refreshLicenseOnly:
+        description: Refresh Unity license only
+        required: false
+        default: false
+        type: boolean
+
+permissions:
+  contents: read
+
+defaults:
+  run:
+    shell: bash
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  UNITY_VERSION: 2022.3.62f2
+  ARTIFACT_RETENTION_DAYS: 14
+
+jobs:
+  refresh_license:
+    name: Refresh Unity license
+    runs-on: ubuntu-latest
+    if: ${{ github.event_name == 'workflow_dispatch' && inputs.refreshLicenseOnly }}
+    permissions:
+      actions: read
+      contents: read
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+        with:
+          lfs: true
+          fetch-depth: 0
+
+      - name: Create directories
+        run: mkdir -p artifacts/license
+
+      - name: Create Unity activation file
+        env:
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
+        run: |
+          docker run --rm \
+            -v "${GITHUB_WORKSPACE}:/project" \
+            -w /project \
+            -e UNITY_EMAIL \
+            -e UNITY_PASSWORD \
+            -e UNITY_LICENSE \
+            -e UNITY_SERIAL \
+            "unityci/editor:ubuntu-${{ env.UNITY_VERSION }}-base-3" \
+            bash -lc '
+              set -euo pipefail
+              mkdir -p artifacts/license
+              /opt/unity/Editor/Unity \
+                -batchmode \
+                -nographics \
+                -quit \
+                -projectPath /project \
+                -createManualActivationFile \
+                -logFile /project/artifacts/license/create-alf.log
+            '
+
+      - name: Validate activation file
+        run: test -f artifacts/license/Unity_v${{ env.UNITY_VERSION }}.alf || test -f Unity_v${{ env.UNITY_VERSION }}.alf
+
+      - name: Normalize activation file path
+        run: |
+          if [[ -f "Unity_v${{ env.UNITY_VERSION }}.alf" ]]; then
+            mv "Unity_v${{ env.UNITY_VERSION }}.alf" "artifacts/license/Unity_v${{ env.UNITY_VERSION }}.alf"
+          fi
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+
+      - name: Install GitHub CLI
+        run: |
+          type -p gh >/dev/null || (
+            (type -p wget >/dev/null || (sudo apt update && sudo apt install wget -y)) && \
+            sudo mkdir -p -m 755 /etc/apt/keyrings && \
+            out=$(mktemp) && wget -nv -O"$out" https://cli.github.com/packages/githubcli-archive-keyring.gpg && \
+            cat "$out" | sudo tee /etc/apt/keyrings/githubcli-archive-keyring.gpg > /dev/null && \
+            sudo chmod go+r /etc/apt/keyrings/githubcli-archive-keyring.gpg && \
+            sudo mkdir -p -m 755 /etc/apt/sources.list.d && \
+            echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null && \
+            sudo apt update && \
+            sudo apt install gh -y
+          )
+
+      - name: Install license tools
+        run: npm install --global unity-license-activate unity-verify-code
+
+      - name: Activate Unity license
+        env:
+          UNITY_TOTP_KEY: ${{ secrets.UNITY_TOTP_KEY }}
+        run: |
+          command=(unity-license-activate "${{ secrets.UNITY_EMAIL }}" "${{ secrets.UNITY_PASSWORD }}" "artifacts/license/Unity_v${{ env.UNITY_VERSION }}.alf")
+
+          if [[ -n "${UNITY_TOTP_KEY:-}" ]]; then
+            command+=(--authenticator-key "$UNITY_TOTP_KEY")
+          fi
+
+          "${command[@]}"
+
+      - name: Read Unity license content
+        id: license_content
+        run: |
+          license_file=$(find . -type f -name '*.ulf' -print -quit)
+          test -n "$license_file"
+          delimiter="UNITY_LICENSE_$(date +%s)_$RANDOM"
+          {
+            echo "content<<$delimiter"
+            cat "$license_file"
+            echo
+            echo "$delimiter"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Update UNITY_LICENSE
+        env:
+          ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+          GH_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+          LICENSE_CONTENT: ${{ steps.license_content.outputs.content }}
+        run: |
+          if [[ -z "${ACCESS_TOKEN:-}" ]]; then
+            echo "ACCESS_TOKEN is required to update UNITY_LICENSE" >&2
+            exit 1
+          fi
+
+          gh secret set UNITY_LICENSE --body "$LICENSE_CONTENT"
+
+  test:
+    name: Test ${{ matrix.testMode }}
+    if: ${{ github.event_name != 'workflow_dispatch' || inputs.runTests }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - testMode: EditMode
+            cacheScope: test-editmode
+          - testMode: PlayMode
+            cacheScope: test-playmode
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+        with:
+          lfs: true
+          fetch-depth: 0
+
+      - name: Cache Library
+        uses: actions/cache@v4
+        with:
+          path: Library
+          key: Library-${{ matrix.cacheScope }}-${{ env.UNITY_VERSION }}-${{ hashFiles('Packages/manifest.json', 'Packages/packages-lock.json', 'ProjectSettings/ProjectVersion.txt') }}
+          restore-keys: |
+            Library-${{ matrix.cacheScope }}-${{ env.UNITY_VERSION }}-
+            Library-${{ matrix.cacheScope }}-
+
+      - name: Run Unity tests
+        uses: game-ci/unity-test-runner@v4
+        env:
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+          UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+        with:
+          projectPath: .
+          unityVersion: ${{ env.UNITY_VERSION }}
+          testMode: ${{ matrix.testMode }}
+          artifactsPath: artifacts/test-results/${{ matrix.testMode }}
+
+      - name: Upload test artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results-${{ matrix.testMode }}
+          path: artifacts/test-results/${{ matrix.testMode }}
+          retention-days: ${{ env.ARTIFACT_RETENTION_DAYS }}
+          if-no-files-found: ignore
+
+      - name: Upload test logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-logs-${{ matrix.testMode }}
+          path: |
+            artifacts/test-results/${{ matrix.testMode }}/**/*.log
+            artifacts/test-results/${{ matrix.testMode }}/**/TestResults.xml
+            artifacts/test-results/${{ matrix.testMode }}/**/test-results.xml
+          retention-days: ${{ env.ARTIFACT_RETENTION_DAYS }}
+          if-no-files-found: ignore
+
+  build:
+    name: Build ${{ matrix.name }}
+    needs:
+      - test
+    if: ${{ always() && (needs.test.result == 'success' || needs.test.result == 'skipped' || (github.event_name == 'workflow_dispatch' && !inputs.runTests)) }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: Android
+            enabled: ${{ github.event_name == 'workflow_dispatch' && inputs.buildAndroid }}
+            cacheScope: build-android
+            targetPlatform: Android
+            artifactName: build-android
+            logsArtifactName: build-logs-android
+            buildPath: build/Android
+            logPath: |
+              build/Android/**/*.log
+              build/Android/**/output.log
+              build/Android/**/UnityPlayer*.txt
+          - name: Windows
+            enabled: ${{ github.event_name != 'workflow_dispatch' || inputs.buildWindows }}
+            cacheScope: build-windows
+            targetPlatform: StandaloneWindows64
+            artifactName: build-windows
+            logsArtifactName: build-logs-windows
+            buildPath: build/StandaloneWindows64
+            logPath: |
+              build/StandaloneWindows64/**/*.log
+              build/StandaloneWindows64/**/output.log
+              build/StandaloneWindows64/**/UnityPlayer*.txt
+          - name: WebGL
+            enabled: ${{ github.event_name == 'workflow_dispatch' && inputs.buildWebGL }}
+            cacheScope: build-webgl
+            targetPlatform: WebGL
+            artifactName: build-webgl
+            logsArtifactName: build-logs-webgl
+            buildPath: build/WebGL
+            logPath: |
+              build/WebGL/**/*.log
+              build/WebGL/**/output.log
+          - name: macOS
+            enabled: ${{ github.event_name == 'workflow_dispatch' && inputs.buildMacOS }}
+            cacheScope: build-macos
+            targetPlatform: StandaloneOSX
+            artifactName: build-macos
+            logsArtifactName: build-logs-macos
+            buildPath: build/StandaloneOSX
+            logPath: |
+              build/StandaloneOSX/**/*.log
+              build/StandaloneOSX/**/output.log
+              build/StandaloneOSX/**/UnityPlayer*.txt
+    steps:
+      - name: Checkout repository
+        if: ${{ matrix.enabled }}
+        uses: actions/checkout@v5
+        with:
+          lfs: true
+          fetch-depth: 0
+
+      - name: Cache Library
+        if: ${{ matrix.enabled }}
+        uses: actions/cache@v4
+        with:
+          path: Library
+          key: Library-${{ matrix.cacheScope }}-${{ env.UNITY_VERSION }}-${{ hashFiles('Packages/manifest.json', 'Packages/packages-lock.json', 'ProjectSettings/ProjectVersion.txt') }}
+          restore-keys: |
+            Library-${{ matrix.cacheScope }}-${{ env.UNITY_VERSION }}-
+            Library-${{ matrix.cacheScope }}-
+
+      - name: Build ${{ matrix.name }} player
+        if: ${{ matrix.enabled }}
+        uses: game-ci/unity-builder@v4
+        env:
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+          UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+        with:
+          projectPath: .
+          unityVersion: ${{ env.UNITY_VERSION }}
+          targetPlatform: ${{ matrix.targetPlatform }}
+          buildsPath: build
+
+      - name: Upload ${{ matrix.name }} artifact
+        if: ${{ matrix.enabled }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.artifactName }}
+          path: ${{ matrix.buildPath }}
+          retention-days: ${{ env.ARTIFACT_RETENTION_DAYS }}
+          if-no-files-found: error
+
+      - name: Upload ${{ matrix.name }} logs
+        if: ${{ always() && matrix.enabled }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.logsArtifactName }}
+          path: ${{ matrix.logPath }}
+          retention-days: ${{ env.ARTIFACT_RETENTION_DAYS }}
+          if-no-files-found: ignore
