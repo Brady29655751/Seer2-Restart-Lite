@@ -313,6 +313,7 @@ jobs:
           unityVersion: ${{ env.UNITY_VERSION }}
           targetPlatform: ${{ matrix.targetPlatform }}
           buildsPath: build
+          versioning: None
 
       - name: Upload ${{ matrix.name }} artifact
         if: ${{ matrix.enabled }}
