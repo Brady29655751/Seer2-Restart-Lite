@@ -148,6 +148,16 @@
 						</reply>
 					</replyHandler>
 				</branch>
+				<branch id="fuxiao_lose" name="拂晓兔" icon="Pets/pet/62.png" size="122,134" pos="0,45">
+					<content><![CDATA[己所不欲，勿施于人。<b><color=#ffbb33>恢复体力不一定要透过技能</color></b>，也可以透过其他方式！]]></content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[我等等再来]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+					</replyHandler>
+				</branch>
 			</dialog>
 			<battle>
 				<branch id="default">
@@ -304,6 +314,12 @@
 							<condition>activity[20001].done[fuxiao]=[bool]false[default]false</condition>
 						</button>
 					</winHandler>
+					<loseHandler>
+						<button type="auto">
+							<action>openDialog</action>
+							<param>fuxiao_lose</param>
+						</button>
+					</loseHandler>
 				</branch>
 			</battle>
 			<eventHandler>

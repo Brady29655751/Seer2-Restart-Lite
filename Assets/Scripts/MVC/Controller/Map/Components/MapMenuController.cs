@@ -14,21 +14,30 @@ public class MapMenuController : UIModule
         mailNewIcon?.gameObject.SetActive(Player.instance.gameData.mailStorage.Any(x => !x.isRead));
     }
 
-    public void SetInfoPromptText(string content) {
+    public void SetInfoPromptText(string content)
+    {
         infoPrompt.SetInfoPromptWithAutoSize(content, TextAnchor.MiddleCenter);
         infoPrompt.SetPositionOffset(new Vector2(2, 2));
     }
 
-    public void GoToStation() {
+    public void GoToStation()
+    {
         GoToMap(Player.instance.currentMap.worldId * 10000 + 81);
     }
 
-    public void OpenSPTPanel() {
+    public void OpenSPTPanel()
+    {
         var panel = Panel.OpenPanel<SPTBossPanel>();
+        var page = Player.instance.currentMap.worldId + 1;
+
+        if (page <= 1)
+            page = Player.instance.currentMap.categoryId <= 10 ? 0 : 1;
+
         panel?.SetPage(Player.instance.currentMap.worldId);
     }
 
-    public void ToggleShootMode() {
+    public void ToggleShootMode()
+    {
         Player.instance.isShootMode = !Player.instance.isShootMode;
     }
 }

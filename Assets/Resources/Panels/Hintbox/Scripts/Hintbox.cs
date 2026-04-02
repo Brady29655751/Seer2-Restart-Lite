@@ -7,10 +7,12 @@ public class Hintbox : Panel
 {
     [SerializeField] protected HintboxController hintboxController;
 
-    public static Hintbox OpenHintbox() {
+    public static Hintbox OpenHintbox()
+    {
         return Hintbox.OpenHintbox<Hintbox>();
     }
-    public static Hintbox OpenHintboxWithContent(string content, int fontsize) {
+    public static Hintbox OpenHintboxWithContent(string content, int fontsize)
+    {
         var hintbox = Hintbox.OpenHintbox();
         hintbox.SetTitle("提示");
         hintbox.SetContent(content, fontsize, FontOption.Arial);
@@ -18,18 +20,22 @@ public class Hintbox : Panel
         return hintbox;
     }
 
-    public static T OpenHintbox<T>() where T : Hintbox {
+    public static T OpenHintbox<T>() where T : Hintbox
+    {
         T panel = Panel.OpenPanel<T>();
-        return panel;        
+        return panel;
     }
 
-    public void SetHintboxActive(bool active) {
+    public void SetHintboxActive(bool active)
+    {
         GameObject topLayer = (background == null) ? gameObject : background.gameObject;
         topLayer.SetActive(active);
     }
 
-    public override void SetPanelIdentifier(string id, string param) {
-        switch (id) {
+    public override void SetPanelIdentifier(string id, string param)
+    {
+        switch (id)
+        {
             default:
                 base.SetPanelIdentifier(id, param);
                 break;
@@ -45,23 +51,28 @@ public class Hintbox : Panel
         }
     }
 
-    public void SetOptionNum(int num) {
+    public void SetOptionNum(int num)
+    {
         hintboxController.SetOptionNum(num);
     }
 
-    public void SetSize(int x, int y) {
+    public void SetSize(int x, int y)
+    {
         hintboxController.SetSize(x, y);
     }
 
-    public void SetTitle(string text = "提示", int fontsize = 20, FontOption font = FontOption.Zongyi) {
+    public void SetTitle(string text = "提示", int fontsize = 20, FontOption font = FontOption.Zongyi)
+    {
         hintboxController.SetTitle(text, fontsize, font);
     }
 
-    public void SetContent(string text, int fontsize, FontOption font) {
+    public void SetContent(string text, int fontsize, FontOption font)
+    {
         hintboxController.SetContent(text, fontsize, font);
     }
 
-    public void SetOptionCallback(Action callback, bool isConfirm = true) {
+    public void SetOptionCallback(Action callback, bool isConfirm = true)
+    {
         hintboxController.SetOptionCallback(callback, isConfirm);
     }
 

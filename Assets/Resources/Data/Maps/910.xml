@@ -1,0 +1,274 @@
+<map name="神风祭台" category="11" id="910" weather="8">
+	<fightMap>100009</fightMap>
+	<music category="11">
+		<bgm>BGM_910</bgm>
+	</music>
+	<initialPoint>500,150</initialPoint>
+	<entities>
+		<npc id="91001" resId="Pets/pet/248.png" name="Lv 95 卡多斯" size="152,206" pos="285,210" namePos="0,-5">
+			<anim id="Pets/anim/248" pos="-1.1,1.4" scale="1.2,1.2" />
+			<description>SPT</description>
+			<dialog>
+				<branch id="default" name="卡多斯" icon="Pets/pet/248.png" size="114,154" pos="0,55">
+					<content><![CDATA[他竟然失约了，不可原谅！]]></content>
+					<functionHandler>
+						<func type="click">
+							<description><![CDATA[普通挑战]]></description>
+							<action>battle</action>
+							<param>default</param>
+						</func>
+						<func type="click">
+							<description><![CDATA[挑战1]]></description>
+							<action>battle</action>
+							<param>challenge_1</param>
+							<condition>firstPet.baseId=247</condition>
+						</func>
+						<func type="branch">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=把卡多斯设为首发之后再来挑战吧</param>
+							<param>option_num=1</param>
+							<param>item_icon=pet[248]</param>
+							<condition>firstPet.baseIdNOT247</condition>
+						</func>
+						<func type="click">
+							<description><![CDATA[挑战2]]></description>
+							<action>battle</action>
+							<param>challenge_2</param>
+						</func>
+						<!--
+						<func type="click">
+							<description><![CDATA[超进化挑战]]></description>
+							<action>battle</action>
+							<param>evolve</param>
+							<condition>firstPet.id=248</condition>
+						</func>
+						<func type="branch">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=把卡多斯设为首发之后再来挑战吧</param>
+							<param>option_num=1</param>
+							<param>item_icon=pet[248]</param>
+							<condition>firstPet.idNOT248</condition>
+						</func>
+						-->
+					</functionHandler>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[你们需要全球定位系统]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+					</replyHandler>
+				</branch>
+				<branch id="default_lose" name="卡多斯" icon="Pets/pet/248.png" size="152,206" pos="0,55">
+					<content><![CDATA[<b><color=#ffbb33>预知未来</color></b>能够预测危险并强化接下来的攻势，做好准备吧！]]></content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[原来如此]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+					</replyHandler>
+				</branch>
+			</dialog>
+			<battle>
+				<branch id="default">
+					<settings count="1" simulate="true" item="false">
+						<mode>3</mode>
+						<weather>8</weather>
+					</settings>
+					<player>
+						<pet id="157" level="80">
+							<status>
+								<atk>1500</atk>
+								<mat>1500</mat>
+								<spd>500</spd>
+								<hp>3000</hp>
+							</status>
+							<normalSkill>11860,11861,11862,11851</normalSkill>
+							<superSkill>11858</superSkill>
+						</pet>
+					</player>
+					<enemy>
+						<pet id="248" level="95">
+							<status>
+								<atk>400</atk>
+								<mat>399</mat>
+								<spd>400</spd>
+								<hp>6000</hp>
+							</status>
+							<initBuff>61</initBuff>
+							<loopSkill>11875,11867,11875,11874</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>getPet</action>
+							<param>247,10,0</param>
+							<condition>activity[spt].done[south][1][default]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=【卡多】已经放入精灵仓库</param>
+							<param>item_icon=pet[247]</param>
+							<param>option_num=1</param>
+							<condition>activity[spt].done[south][1][default]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>spt</param>
+							<param>done[south][1][default]=true</param>
+							<condition>activity[spt].done[south][1][default]=[bool]false[default]false</condition>
+						</button>
+					</winHandler>
+					<loseHandler>
+						<button type="auto">
+							<action>openDialog</action>
+							<param>default_lose</param>
+						</button>
+					</loseHandler>
+				</branch>
+				<branch id="challenge_1">
+					<settings count="1">
+						<mode>3</mode>
+						<weather>8</weather>
+					</settings>
+					<enemy>
+						<pet id="248" level="100">
+							<status>
+								<hp>6000</hp>
+							</status>
+							<initBuff>13,14</initBuff>
+							<loopSkill>11875,11867</loopSkill>
+							<superSkill>11874</superSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setPet</action>
+							<param>emblem=1</param>
+							<condition>activity[spt].done[south][1][challenge_1]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=【卡多斯】获得了【劲风】纹章</param>
+							<param>item_icon=emblem[247]</param>
+							<param>option_num=1</param>
+							<condition>activity[spt].done[south][1][challenge_1]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>spt</param>
+							<param>done[south][1][challenge_1]=true</param>
+							<condition>activity[spt].done[south][1][challenge_1]=[bool]false[default]false</condition>
+						</button>
+					</winHandler>
+				</branch>
+				<branch id="challenge_2">
+					<settings count="2" parallel="2">
+						<mode>3</mode>
+						<weather>8</weather>
+					</settings>
+					<enemy>
+						<pet id="248" level="95">
+							<status>
+								<hp>6000</hp>
+							</status>
+							<initBuff>61,13,14,17</initBuff>
+							<loopSkill>11875,11867,11875,11877,11875,11874</loopSkill>
+						</pet>
+						<pet id="157" level="80">
+							<status>
+								<hp>3000</hp>
+							</status>
+							<initBuff>61,13,14,17</initBuff>
+							<loopSkill>11860,11862,11861,11862,11858,11862</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setItem</action>
+							<param>add</param>
+							<param>2,50</param>
+							<condition>activity[spt].done[south][1][challenge_2]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=50 星钻已经放入背包</param>
+							<param>item_icon=item[2]</param>
+							<param>option_num=1</param>
+							<condition>activity[spt].done[south][1][challenge_2]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>spt</param>
+							<param>done[south][1][challenge_2]=true</param>
+							<condition>activity[spt].done[south][1][challenge_2]=[bool]false[default]false</condition>
+						</button>
+					</winHandler>
+					<loseHandler>
+						<button type="auto">
+							<action>openDialog</action>
+							<param>challenge_2_lose</param>
+						</button>
+					</loseHandler>
+				</branch>
+				<!--
+				<branch id="evolve">
+					<settings count="1">
+						<mode>3</mode>
+					</settings>
+					<enemy>
+						<pet id="691" level="105">
+							<status>
+								<hp>1500</hp>
+							</status>
+							<initBuff>14,20,21,23,-3002</initBuff>
+							<headerSkill>10253</headerSkill>
+							<loopSkill>10248,10257,10257</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>evolvePet</action>
+							<param>691</param>
+							<condition>activity[spt].done[south][1][evolve]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=卡多斯已成功超进化</param>
+							<param>item_icon=pet[691]</param>
+							<param>option_num=1</param>
+							<condition>activity[spt].done[south][1][evolve]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>spt</param>
+							<param>done[south][1][evolve]=true</param>
+							<condition>activity[spt].done[south][1][evolve]=[bool]false[default]false</condition>
+						</button>
+					</winHandler>
+				</branch>
+				-->
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>openDialog</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+        <!-- <teleport id="1" name="风刃氏族主城" pos="130,100" targetMapId="900"/> -->
+	</entities>
+</map>

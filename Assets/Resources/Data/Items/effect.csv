@@ -49,7 +49,7 @@ id,timing,priority,target,condition,cond_option,effect,effect_option
 8000,none,-1,none,none,none,none,none
 8001,resident,-1,pet,pet,type=level&level_op=<&level_cmp=maxLevel,set_pet,type=exp&op=+&value=50000
 8002,resident,-1,pet,pet,type=iv&iv_op=<&iv_cmp=31,set_pet,type=iv&op=+&value=1
-8003,resident,-1,pet,none,none,set_pet,type=evStorage&op=+&value=510
+8003,resident,-1,pet,none,none,set_pet,type=evStorage&op=+&value=150
 8004,on_before_attack,-1,pet,none,none,capture,prob=100
 8005,resident,-1,pet,none,none,set_pet,type=personality&op=SET&value=-1
 8006,resident\on_before_attack,-1\-1,pet\pet_bag,status\none,status_type=hp&cmp_value=0\none,heal\heal,type=item&set=status.battleHp/2\target_type=index_dead_other&type=item&set=target.status.maxHp/2
@@ -189,6 +189,7 @@ id,timing,priority,target,condition,cond_option,effect,effect_option
 24001,on_battle_start,-1,pet,none,none,add_buff,key=unit&id=440001
 24002,on_battle_start,-1,pet,none,none,add_buff,key=unit&id=440002
 30001,none,-1,none,none,none,none,none
+37002,none,-1,none,none,none,none,none
 110050,resident,-1,pet,pet,type=skill[10050]&skill[10050]_cmp=0,set_pet,type=skill&op=+&value=10050
 110454,resident,-1,pet,pet,type=baseId/skill[10454]&baseId_cmp=90&skill[10454]_cmp=0,set_pet,type=skill&op=+&value=10454
 110485,resident,-1,pet,pet,type=baseId/skill[10485]&baseId_cmp=234&skill[10485]_cmp=0,set_pet,type=skill&op=+&value=10485
@@ -285,11 +286,15 @@ id,timing,priority,target,condition,cond_option,effect,effect_option
 332189,resident,-1,pet,pet,type=uid/level&uid_cmp=10303&level_op=GTE&level_cmp=100,set_pet,type=id&op=SET&value=12189
 332220,resident,-1,pet,pet,type=uid/level&uid_cmp=10306&level_op=GTE&level_cmp=100,set_pet,type=id&op=SET&value=12220
 332221,resident,-1,pet,pet,type=uid/level&uid_cmp=10309&level_op=GTE&level_cmp=100,set_pet,type=id&op=SET&value=12221
+332826,resident,-1,pet,pet,type=uid/level&uid_cmp=10003&level_op=GTE&level_cmp=100,set_pet,type=id&op=SET&value=12826
+332845,resident,-1,pet,pet,type=uid/level&uid_cmp=10009&level_op=GTE&level_cmp=100,set_pet,type=id&op=SET&value=12845
+332858,resident,-1,pet,pet,type=uid/level&uid_cmp=10006&level_op=GTE&level_cmp=100,set_pet,type=id&op=SET&value=12858
 333145,resident,-1,pet,pet,type=uid/level&uid_cmp=12197&level_op=GTE&level_cmp=100,set_pet,type=id&op=SET&value=13145
 333147,resident,-1,pet,pet,type=uid/level&uid_cmp=11836&level_op=GTE&level_cmp=100,set_pet,type=id&op=SET&value=13147
 334198,resident,-1,pet,pet,type=uid/level&uid_cmp=11216&level_op=GTE&level_cmp=100,set_pet,type=id&op=SET&value=12798
 334731,resident,-1,pet,pet,type=uid/level&uid_cmp=11836&level_op=GTE&level_cmp=100,set_pet,type=id&op=SET&value=14731
 334732,resident,-1,pet,pet,type=uid/level&uid_cmp=12197&level_op=GTE&level_cmp=100,set_pet,type=id&op=SET&value=14732
+334734,resident,-1,pet,pet,type=uid/level&uid_cmp=110018&level_op=GTE&level_cmp=100,set_pet,type=id&op=SET&value=14734
 334760,resident,-1,pet,pet,type=uid/level&uid_cmp=456&level_op=GTE&level_cmp=100,set_pet,type=id&op=SET&value=12939
 334761,resident\resident,-1\-1,pet\none,pet\none,random_cmp=5&type=uid&uid_cmp=14727\none,set_pet\none,type=id&op=SET&value=14761\none
 334780,resident,-1,pet,pet,type=uid/level&uid_cmp=12698&level_op=GTE&level_cmp=100,set_pet,type=id&op=SET&value=14780
@@ -401,3 +406,5 @@ id,timing,priority,target,condition,cond_option,effect,effect_option
 620001,none,-1,none,none,none,none,none
 620002,none,-1,none,none,none,none,none
 630001,none,-1,none,none,none,none,none
+630002,none,-1,none,none,none,none,none
+630003,none,-1,none,none,none,none,none

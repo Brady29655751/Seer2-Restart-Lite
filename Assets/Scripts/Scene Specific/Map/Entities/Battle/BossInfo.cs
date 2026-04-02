@@ -27,6 +27,21 @@ public class BossInfo
     [XmlElement("superSkill")] public int superSkillId;
     [XmlIgnore] public Skill superSkill => Skill.GetSkill(superSkillId, false);
 
+    public BossInfo(){}
+
+    public BossInfo(BossInfo rhs)
+    {
+        this.petId = rhs.petId;
+        this.level = rhs.level;
+        this.status = rhs.status == null ? null : new BattleStatus(rhs.status.GetBasicStatus(), rhs.status.GetHiddenStatus());
+        this.hasEmblem = rhs.hasEmblem;
+        this.initBuffIds = rhs.initBuffIds;
+        this.headerSkillIds = rhs.headerSkillIds;
+        this.loopSkillIds = rhs.loopSkillIds;
+        this.normalSkillIds = rhs.normalSkillIds;
+        this.superSkillId = rhs.superSkillId;
+    }
+
     public static BossInfo GetRandomEnemyInfo(List<int> enemyIdList, int level = 100) 
     {
         var pet = Pet.GetExamplePet(enemyIdList.Random());

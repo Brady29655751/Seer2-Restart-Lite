@@ -196,7 +196,8 @@ public class NpcView : Module
                 var totalTime = TimeSpan.Parse(item.options["time"]);
                 var now = DateTime.Now;
                 var ripeNeedTime = (now >= ripeDate) ? TimeSpan.Zero : (ripeDate - now);
-                infoPrompt.SetPlant(item, ripeNeedTime, totalTime);
+                var produceMult = float.TryParse(activity.GetData("land[" + info.id + "].produce", "1"), out var produce) ? produce : 1;
+                infoPrompt.SetPlant(item, ripeNeedTime, totalTime, produceMult);
             }
             else
                 infoPrompt.SetPlant(null, TimeSpan.Zero, TimeSpan.MaxValue);
@@ -226,6 +227,7 @@ public class NpcView : Module
                 var totalTime = TimeSpan.Parse(item.options["time"]);
                 activity["land[" + info.id + "].plant"] = seed.ToString();
                 activity["land[" + info.id + "].date[ripe]"] = (now + totalTime).ToString();
+                activity["land[" + info.id + "].produce"] = "1";
                 SaveSystem.SaveData();
                 return;
             }
@@ -251,6 +253,9 @@ public class NpcView : Module
                     if (seedInfo.options.TryGet("time", out var speedup))
                         activity["land[" + info.id + "].date[ripe]"] = (date - TimeSpan.Parse(speedup)).ToString();
 
+                    if (seedInfo.options.TryGet("produce", out var produceUp))
+                        activity["land[" + info.id + "].produce"] = produceUp;
+
                     Item.Remove(seedInfo.id, 1);
                     MapManager.instance.RefreshPlantPanel();
                     Player.SetSceneData("seed", seed);
@@ -265,6 +270,7 @@ public class NpcView : Module
                     case 61_0000:
                         activity["land[" + info.id + "].plant"] = "none";
                         activity["land[" + info.id + "].date[ripe]"] = "none";
+                        activity["land[" + info.id + "].produce"] = "1";
                         SaveSystem.SaveData(); 
                         return;      
                 }
@@ -280,11 +286,13 @@ public class NpcView : Module
                 plantId = int.Parse(specialEffect.abilityOptionDict.Get("plant", harvestInfo.id.ToString()));
                 harvestInfo = Item.GetItemInfo(plantId);
             }
-            var harvestNum = (int)Identifier.GetNumIdentifier(harvestInfo.options["num"]);
+            var produceMult = float.TryParse(activity.GetData("land[" + info.id + "].produce", "1"), out var produce) ? produce : 1;
+            var harvestNum = (int)(Identifier.GetNumIdentifier(harvestInfo.options["num"]) * produceMult);
             var harvest = new Item(plantId, harvestNum);
 
             activity["land[" + info.id + "].plant"] = "none";
             activity["land[" + info.id + "].date[ripe]"] = "none";
+            activity["land[" + info.id + "].produce"] = "1";
             Item.Add(harvest);
             Item.OpenHintbox(harvest);
 

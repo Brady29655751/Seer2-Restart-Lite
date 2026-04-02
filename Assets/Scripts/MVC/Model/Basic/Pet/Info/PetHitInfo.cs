@@ -10,13 +10,13 @@ public class PetHitInfo
 
     public int skinId;
     public string name;
-    public Dictionary<PetAnimationType, short> frameDict = new Dictionary<PetAnimationType, short>();
+    public Dictionary<PetAnimationType, short> hitFrameDict = new Dictionary<PetAnimationType, short>();
     public Dictionary<PetAnimationType, short> videoFrameDict = new Dictionary<PetAnimationType, short>();
-    public short physics => GetFrameByType(PetAnimationType.Physic);
-    public short attribute => GetFrameByType(PetAnimationType.Property);
-    public short special => GetFrameByType(PetAnimationType.Special);
-    public short critical => GetFrameByType(PetAnimationType.Super);
-    public short fit => GetFrameByType(PetAnimationType.SecondSuper);
+    public short physics => GetHitFrameByType(PetAnimationType.Physic);
+    public short attribute => GetHitFrameByType(PetAnimationType.Property);
+    public short special => GetHitFrameByType(PetAnimationType.Special);
+    public short critical => GetHitFrameByType(PetAnimationType.Super);
+    public short fit => GetHitFrameByType(PetAnimationType.SecondSuper);
 
     public PetHitInfo()
     {
@@ -33,7 +33,7 @@ public class PetHitInfo
         {
             var dataIndex = dataIndexes.Get(((int)type) - 9);
             var frameData = _slicedData.Get(dataIndex).ToShortList('/');
-            frameDict.Set(type, frameData.Get(0));
+            hitFrameDict.Set(type, frameData.Get(0));
             videoFrameDict.Set(type, frameData.Get(1, (short)-1));
         }
     }
@@ -42,7 +42,7 @@ public class PetHitInfo
     {
         this.skinId = skinId;
         this.name = name;
-        this.frameDict = new Dictionary<PetAnimationType, short>()
+        this.hitFrameDict = new Dictionary<PetAnimationType, short>()
         {
             {PetAnimationType.Physic, physics},
             {PetAnimationType.Property, attribute},
@@ -52,9 +52,9 @@ public class PetHitInfo
         };
     }
 
-    public short GetFrameByType(PetAnimationType type)
+    public short GetHitFrameByType(PetAnimationType type)
     {
-        return frameDict.Get(type);
+        return hitFrameDict.Get(type);
     }
 
     public short GetVideoStartFrameByType(PetAnimationType type)
@@ -68,12 +68,14 @@ public class PetHitInfo
         return $"{Application.persistentDataPath}/{prefix}/{skinId}-{type}.mp4";
     }
 
+    /*
     public string[] GetRawInfoStringArray()
     {
         return new string[]
         {
-            skinId.ToString(), name, physics.ToString(), attribute.ToString(), special.ToString(), critical.ToString(),
-            fit.ToString()
+            skinId.ToString(), name, 
+            physics.ToString(), attribute.ToString(), special.ToString(), critical.ToString(), fit.ToString()
         };
     }
+    */
 }

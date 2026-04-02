@@ -23,6 +23,19 @@ public class BattleInfo
     [XmlArray("loseHandler"), XmlArrayItem(typeof(NpcButtonHandler), ElementName = "button")] 
     public List<NpcButtonHandler> loseHandler;
 
+    public BattleInfo(){}
+
+    public BattleInfo(BattleInfo rhs)
+    {
+        this.id = rhs.id;
+        this.content = rhs.content;
+        this.settings = new BattleSettings(rhs.settings);
+        this.playerInfo = rhs.playerInfo?.Select(x => new BossInfo(x)).ToList();
+        this.enemyInfo = rhs.enemyInfo?.Select(x => new BossInfo(x)).ToList();
+        this.winHandler = rhs.winHandler?.Select(x => new NpcButtonHandler(x)).ToList();
+        this.loseHandler = rhs.loseHandler?.Select(x => new NpcButtonHandler(x)).ToList();
+    }
+
     public BattleInfo FixToYiTeRogue(YiTeRogueEvent rogueEvent) {
         settings.FixToYiTeRogue();
         playerInfo = null;

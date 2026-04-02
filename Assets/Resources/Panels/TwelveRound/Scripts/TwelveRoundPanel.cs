@@ -13,7 +13,7 @@ public class TwelveRoundPanel : Panel
     [SerializeField] private GameObject challengeButton, finishMark;
 
     private Activity activity => Activity.Find("twelve_round");
-    private int round => activity.GetData<int>($"round[{petId}]", "0");
+    private int round => activity.GetData($"round[{petId}]", 0);
     private bool isFinished => round >= 12;
     private string petName => Pet.GetPetInfo(petId)?.name ?? string.Empty;
     private Sprite petSprite => Pet.GetPetInfo(petId)?.ui.idleImage ?? SpriteSet.Empty;

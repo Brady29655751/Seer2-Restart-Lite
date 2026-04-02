@@ -85,9 +85,13 @@ public class Activity
         return ((entry == null) || (entry.value == null)) ? defaultValue : entry.value;
     }
 
-    public T GetData<T>(string key, string defaultValue = null)
+    public T GetData<T>(string key, T defaultValue)
     {
-        return (T)Convert.ChangeType(GetData(key, defaultValue), typeof(T));
+        var data = GetData(key);
+        if (data == null)
+            return defaultValue;
+
+        return (T)Convert.ChangeType(data, typeof(T));
     }
 
     public void SetData(string key, object value) 

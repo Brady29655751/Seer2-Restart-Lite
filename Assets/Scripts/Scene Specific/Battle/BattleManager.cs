@@ -204,7 +204,7 @@ public class BattleManager : Manager<BattleManager>
             yield break;
         }
 
-        var superSkill = pet.superSkill;
+        var superSkill = pet.skillController.superSkill;
         var isAnySkillOK = pet.buffController.GetBuff(61) != null;
         var isSuperSkill = (battle.isAutoSuperSkill || (cursor == 0)) && (superSkill != null) && ((superSkill.anger <= pet.anger) || isAnySkillOK);
         var isNormalSkill = cursor.IsWithin(1, 4);
@@ -228,7 +228,7 @@ public class BattleManager : Manager<BattleManager>
         else if (isSuperSkill)
             skill = superSkill;
         else
-            skill = pet.normalSkill.Get(cursor - 1) ?? Skill.GetNoOpSkill();
+            skill = pet.skillController.normalSkills?.Get(cursor - 1) ?? Skill.GetNoOpSkill();
         
         if ((skill.anger > pet.anger) && (!isAnySkillOK))
             skill = Skill.GetNoOpSkill();

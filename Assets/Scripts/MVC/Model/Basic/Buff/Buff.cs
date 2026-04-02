@@ -332,6 +332,12 @@ public class Buff
             return (options.Get("group", info.options.Get("group")) == trimId) ? 1 : 0;
         }
 
+        if (id.TryTrimStart("type", out trimId) && trimId.TryTrimParentheses(out trimId))
+        {
+            var type = trimId.ToBuffType();
+            return IsType(type) ? 1 : 0;
+        }
+
         return id switch {
             "id" => this.id,
             "type" => (float)info.type,

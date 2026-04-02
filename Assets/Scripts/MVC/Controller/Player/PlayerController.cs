@@ -48,7 +48,7 @@ public class PlayerController : Manager<PlayerController>
         if ((item != null) && (item.type == ItemType.Equipment))
         {
             nonoView.SetPlayerSprite(item.icon);
-            nonoView.SetPlayerSize(item.icon.GetResizedSize(100 * Vector2.one));
+            nonoView.SetPlayerSize(new Vector2(item.icon.GetResizedWidth(100), 100));
         }
     }
 
@@ -57,9 +57,10 @@ public class PlayerController : Manager<PlayerController>
         if (!Player.instance.isShootMode)
             return;
 
-        var item = Player.instance.gameData.achievement;
         var pos = playerModel.GetCanvasPosByMousePos(Input.mousePosition);
-        playerView.Shoot((item == 0) ? 1 : item, pos, callbacks);
+        var itemId = Player.instance.gameData.achievement;
+        
+        playerView.Shoot((itemId == 0) ? 1 : itemId, pos, callbacks);
     }
 
     public void SetDestinationByMousePos()

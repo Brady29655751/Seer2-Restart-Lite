@@ -192,7 +192,7 @@ public class WorkshopBuffModel : Module
         }
 
         if (type == BuffType.Feature) {
-            if (id.IsWithin(90_0013, 99_9999))
+            if (id.IsWithin(90_0001, 99_9999))
                 return true;
 
             error = "特性类的序号格式不符\n请点击序号右方的问号查看说明";
@@ -200,7 +200,7 @@ public class WorkshopBuffModel : Module
         }
 
         if (type == BuffType.Emblem) {
-            if (id.IsWithin(80_0013, 89_9999))
+            if (id.IsWithin(80_0001, 89_9999))
                 return true;
 
             error = "纹章类的序号格式不符\n请点击序号右方的问号查看说明";

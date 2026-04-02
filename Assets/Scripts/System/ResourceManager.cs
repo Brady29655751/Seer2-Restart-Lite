@@ -1109,7 +1109,7 @@ public class ResourceManager : Singleton<ResourceManager>
 
             for(int id = 7001; id < 8000; id++)
             {
-                if (!originalDict.TryGet(id, out var itemInfo))
+                if ((!originalDict.TryGet(id, out var itemInfo)) || originalDict.TryGet(30000 + id, out _))
                     continue;
 
                 var shootCopy = new ItemInfo(30000 + id, itemInfo.name, itemInfo.type, itemInfo.price, itemInfo.currencyType, $"getId={id}", itemInfo.itemDescription, itemInfo.effectDescription);

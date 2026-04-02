@@ -1,0 +1,198 @@
+<map name="克洛斯星糖果区" category="102" id="11726" weather="0">
+	<initialPoint>390,90</initialPoint>
+	<music category="102">
+		<bgm>BGM_848</bgm>
+	</music>
+	<entities>
+		<npc id="1172601" resId="Pets/pet/14734" name="Lv105 参天巨型仙人掌" size="264,226" pos="160,155" namePos="0,-10">
+			<anim id="Pets/anim/14734" pos="-4,4" scale="1.4,1.4"/>
+			<description>仙人掌神迹觉醒！</description>
+			<dialog>
+				<branch id="default" name="参天巨型仙人掌" icon="Pets/pet/14734" size="132,113" pos="10,45">
+					<content><![CDATA[超进化为参天仙人掌之后才能再进行神迹觉醒]]></content>
+					<functionHandler>
+						<func type="click">
+							<description><![CDATA[超进化]]></description>
+							<action>battle</action>
+							<param>evolve</param>
+						</func>
+						<func type="click">
+							<description><![CDATA[神迹觉醒]]></description>
+							<action>battle</action>
+							<param>miracle</param>
+						</func>
+						<func type="click">
+							<description><![CDATA[因子商店]]></description>
+							<action>openPanel</action>
+							<param>ItemShop</param>
+							<param>mode=buy</param>
+							<param>currency=8/0</param>
+							<param>item=334734</param>
+							<param>limit=1</param>
+							<param>title=因子商店</param>
+						</func>
+						<func type="click">
+							<description><![CDATA[常态神迹]]></description>
+							<action>battle</action>
+							<param>resident_miracle</param>
+							<condition>firstPet.uid=14734</condition>
+						</func>
+						<func type="branch">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=将神迹巨型仙人掌设为首发吧</param>
+							<param>item_icon=pet[14734]</param>
+							<param>option_num=1</param>
+							<condition>firstPet.uidNOT14734</condition>
+						</func>
+					</functionHandler>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[刺也太多了吧]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+						<reply type="click">
+							<description><![CDATA[我先去获得巨型仙人掌]]></description>
+							<action>teleport</action>
+							<param>10037</param>
+						</reply>
+					</replyHandler>
+				</branch>
+			</dialog>
+			<battle>
+				<branch id="evolve">
+					<settings count="6" star="4">
+						<mode>3</mode>
+					</settings>
+					<enemy>
+						<pet id="110018" level="100">
+							<status>
+								<hp>5000</hp>
+							</status>
+							<initBuff>-7,-8,100,-3059,2083</initBuff>
+							<loopSkill>13779,13782</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=PetSelect</param>
+						    <param>title=选择要进化的巨型仙人掌</param>
+						    <param>option_num=2</param>
+						    <param>callback=evolve</param>
+						</button>
+					</winHandler>
+				</branch>
+				<branch id="miracle">
+					<settings count="6">
+						<mode>4</mode>
+					</settings>
+					<enemy>
+						<pet id="20010" level="105">
+							<status>
+								<hp>20000</hp>
+							</status>
+							<initBuff>-7,-8,61,100,-3059,2083,2031</initBuff>
+							<loopSkill>13784,13785,13787,13788</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setItem</action>
+							<param>add</param>
+							<param>8,50</param>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=50个精灵因子已经放入背包</param>
+							<param>item_icon=item[8]</param>
+							<param>option_num=1</param>
+						</button>
+					</winHandler>
+				</branch>
+				<branch id="resident_miracle">
+					<settings count="1">
+						<mode>4</mode>
+					</settings>
+					<enemy>
+						<pet id="20002" level="105">
+							<status>
+								<hp>10000</hp>
+							</status>
+							<initBuff>77</initBuff>
+							<loopSkill>11696,11697,11699</loopSkill>
+							<superSkill>11700</superSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setPet</action>
+							<param>maxLevel=105</param>
+							<param>level=105</param>
+						</button>
+						<button type="auto">
+							<action>evolvePet</action>
+							<param>20010</param>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=神迹巨型仙人掌已常驻神迹形态</param>
+							<param>item_icon=pet[14734]</param>
+							<param>option_num=1</param>
+						</button>
+					</winHandler>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>openDialog</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+			<callbackHandler>
+				<button type="choose">
+					<action>openHintbox</action>
+					<param>type=PetSelect</param>
+				    <param>title=选择要进化的巨型仙人掌</param>
+				    <param>option_num=2</param>
+					<param>callback=evolve</param>
+				    <condition>data.PetSelect.uidNOT10018|data.PetSelect.level&lt;100</condition>
+				</button>
+				<button type="evolve">
+				    <action>openHintbox</action>
+				    <param>type=Item</param>
+				    <param>title=提示</param>
+				    <param>content=必须选择等级100的巨型仙人掌！</param>
+				    <param>item_icon=pet[10018]</param>
+				    <param>option_num=1</param>
+					<param>callback=choose</param>
+				    <condition>data.PetSelect.uidNOT10018|data.PetSelect.level&lt;100</condition>
+				</button>
+				<button type="evolve">
+				    <action>openHintbox</action>
+				    <param>type=Item</param>
+				    <param>title=提示</param>
+				    <param>content=巨型仙人掌已成功超进化</param>
+				    <param>item_icon=pet[110018]</param>
+				    <param>option_num=1</param>
+				    <condition>data.PetSelect.uid=10018</condition>
+				    <condition>data.PetSelect.levelGTE100</condition>
+				</button>
+				<button type="evolve">
+				    <action>evolvePet</action>
+				    <param>index=data.PetSelectIndex</param>
+				    <param>110018</param>
+				    <condition>data.PetSelect.uid=10018</condition>
+				    <condition>data.PetSelect.levelGTE100</condition>
+				</button>
+			</callbackHandler>
+		</npc>
+		<teleport id="1" name="克洛斯星神域" pos="25,170" targetMapId="11725"/>
+	</entities>		
+</map>

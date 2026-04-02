@@ -70,10 +70,13 @@ public class PlayerView : Module
     }
 
     public void Shoot(int shootId, Vector2 canvasPos, List<Action> callbacks = null) {
-        if (Item.Find(shootId) == null) {
+        if (Item.Find(shootId) == null) 
+        {
             Hintbox.OpenHintboxWithContent("射击道具【" + Item.GetItemInfo(shootId).name + "】耗尽了哦", 16);
             return;
         }
+
+        shootId = Item.GetShootId(shootId);
 
         var prefab = ResourceManager.instance.GetPrefab("Map/Npc");
         GameObject obj = Instantiate(prefab, playerRect.parent);

@@ -34,7 +34,8 @@ public class Pet
     // Properties and Shortcut.
     /* Basic */
     public int hashId => GetPetHashId();
-    [XmlIgnore] public string name
+    [XmlIgnore]
+    public string name
     {
         get => string.IsNullOrEmpty(basic.name) ? info.basic.name : basic.name;
         set => basic.name = value;
@@ -57,15 +58,21 @@ public class Pet
     public uint maxExp => exp.maxExp;   // 滿級所需EXP
 
     /* Skill */
-    [XmlIgnore] public List<Skill> ownSkill {     // 當前習得的所有技能
+    [XmlIgnore]
+    public List<Skill> ownSkill
+    {     // 當前習得的所有技能
         get => skills.ownSkill;
         set => skills.ownSkill = value;
     }
-    [XmlIgnore] public Skill[] normalSkill {    // 配備的四個普通技能
-        get => skills.normalSkill; 
+    [XmlIgnore]
+    public Skill[] normalSkill
+    {    // 配備的四個普通技能
+        get => skills.normalSkill;
         set => skills.normalSkill = value;
     }
-    [XmlIgnore] public Skill superSkill {   // 必殺技
+    [XmlIgnore]
+    public Skill superSkill
+    {   // 必殺技
         get => skills.superSkill;
         set => skills.superSkill = value;
     }
@@ -74,19 +81,22 @@ public class Pet
 
     #endregion
 
-    public static PetInfo GetPetInfo(int id) {
+    public static PetInfo GetPetInfo(int id)
+    {
         return Database.instance.GetPetInfo(id);
     }
 
-    public static PetInfo GetRandomPetInfo(bool withMod = false) {
+    public static PetInfo GetRandomPetInfo(bool withMod = false)
+    {
         IEnumerable<KeyValuePair<int, PetInfo>> petInfoDict = Database.instance.petInfoDict;
-        if (!withMod) 
+        if (!withMod)
             petInfoDict = petInfoDict.Where(entry => !PetInfo.IsMod(entry.Key));
-        
+
         return petInfoDict.Select(entry => entry.Value).ToList().Random();
     }
 
-    public static Pet GetExamplePet(int id, int level = 100, int iv = 31) {
+    public static Pet GetExamplePet(int id, int level = 100, int iv = 31)
+    {
         PetInfo info = GetPetInfo(id);
         if (info == null)
             return null;
@@ -115,7 +125,8 @@ public class Pet
         return pet;
     }
 
-    public static Pet ToBestPet(Pet pet, int iv = 31) {
+    public static Pet ToBestPet(Pet pet, int iv = 31)
+    {
         Pet bestPet = (pet.level < 100) ? pet.GainExp(pet.maxExp) : pet;
         PetInfo info = bestPet.info;
 
@@ -125,25 +136,30 @@ public class Pet
         bestPet.talent.iv = iv;
 
         var unlearnedSkills = info.skills.skillList.Where(x => !bestPet.skills.ownSkillId.Contains(x.id));
-        foreach (var skill in unlearnedSkills) {
+        foreach (var skill in unlearnedSkills)
+        {
             bestPet.skills.LearnNewSkill(skill);
         }
         return bestPet;
     }
 
-    public static void Add(Pet pet) {
+    public static void Add(Pet pet)
+    {
         int index = Player.instance.petBag.IndexOf(null);
-        if (index == -1) {
+        if (index == -1)
+        {
             Player.instance.gameData.petStorage.Add(pet);
             return;
         }
         Player.instance.petBag[index] = pet;
     }
 
-    public static ItemHintbox OpenHintbox(Pet pet)
+    public static ItemHintbox OpenHintbox(Pet pet, Action<Pet> onBeforeCallback = null)
     {
         if (pet == null)
             return null;
+
+        onBeforeCallback?.Invoke(pet);
 
         var itemHintbox = Hintbox.OpenHintbox<ItemHintbox>();
         itemHintbox.SetIcon(pet.ui.icon);
@@ -152,9 +168,10 @@ public class Pet
         return itemHintbox;
     }
 
-    public Pet() {}
+    public Pet() { }
 
-    public Pet(Pet _copy) {
+    public Pet(Pet _copy)
+    {
         if (_copy == null)
             return;
 
@@ -173,11 +190,12 @@ public class Pet
         currentStatus = new Status(_copy.currentStatus);
     }
 
-    public Pet(int petId, int initLevel = 1, bool hasEmblem = true) {
+    public Pet(int petId, int initLevel = 1, bool hasEmblem = true)
+    {
         id = petId;
-        
-        basic = new PetBasic(id);  
-        feature = new PetFeature(id, hasEmblem);  
+
+        basic = new PetBasic(id);
+        feature = new PetFeature(id, hasEmblem);
         exp = new PetExp(id, initLevel);
         talent = new PetTalent(id);
         skills = new PetSkill(id, initLevel);
@@ -189,7 +207,8 @@ public class Pet
         currentStatus = new Status(normalStatus);
     }
 
-    public Pet(int evolvePetId, Pet originalPet) {
+    public Pet(int evolvePetId, Pet originalPet)
+    {
         /* Basic */
         id = evolvePetId;
 
@@ -197,7 +216,7 @@ public class Pet
         {
             getPetDate = originalPet.basic.getPetDate,
         };
-        feature = new PetFeature(evolvePetId, originalPet.feature.hasEmblem, 
+        feature = new PetFeature(evolvePetId, originalPet.feature.hasEmblem,
             originalPet.feature.featureId, originalPet.feature.emblemId, originalPet.feature.afterwardBuffIds);
         exp = new PetExp(evolvePetId, originalPet.level, originalPet.totalExp);
         talent = new PetTalent(evolvePetId, originalPet.talent);
@@ -217,17 +236,22 @@ public class Pet
         return "id: " + id.ToString() + " name: " + name;
     }
 
-    public int GetPetHashId() {
-        unchecked {
+    public int GetPetHashId()
+    {
+        unchecked
+        {
             int hash = 17;
             hash = hash * 31 + basic.hashId;
             hash = hash * 31 + ui.hashId;
             return hash;
-        };
+        }
+        ;
     }
 
-    public virtual float GetPetIdentifier(string id) {
-        if (id.TryTrimStart("status.", out var trimStatus)) {
+    public virtual float GetPetIdentifier(string id)
+    {
+        if (id.TryTrimStart("status.", out var trimStatus))
+        {
             trimStatus = trimStatus.ToLower();
             if (trimStatus.TryTrimStart("init", out var trimInitStatus))
                 return normalStatus[trimInitStatus];
@@ -241,14 +265,16 @@ public class Pet
             return currentStatus[trimStatus];
         }
 
-        if (id.TryTrimStart("ev.", out trimStatus)) {
+        if (id.TryTrimStart("ev.", out trimStatus))
+        {
             trimStatus = trimStatus.ToLower();
             return talent.ev[trimStatus];
         }
 
         if (id.TryTrimStart("normalSkill", out var trimNormalSkill) &&
-            trimNormalSkill.TryTrimParentheses(out var skillIndexExpr) && 
-            int.TryParse(skillIndexExpr, out var skillIndex)) {
+            trimNormalSkill.TryTrimParentheses(out var skillIndexExpr) &&
+            int.TryParse(skillIndexExpr, out var skillIndex))
+        {
             var trimId = trimNormalSkill.TrimStart($"[{skillIndexExpr}]").TrimStart('.');
             if (string.IsNullOrEmpty(trimId))
                 trimId = "id";
@@ -256,22 +282,25 @@ public class Pet
             return normalSkill[skillIndex]?.GetSkillIdentifier(trimId) ?? 0;
         }
 
-        if (id.TryTrimStart("superSkill", out var trimSuperSkill)) {
+        if (id.TryTrimStart("superSkill", out var trimSuperSkill))
+        {
             var trimId = trimNormalSkill.TrimStart('.');
             if (string.IsNullOrEmpty(trimId))
                 trimId = "id";
 
             return superSkill?.GetSkillIdentifier(trimId) ?? 0;
         }
-            
 
-        if ((id.TryTrimStart("skill", out var trimSkill)) && 
+
+        if ((id.TryTrimStart("skill", out var trimSkill)) &&
             (trimSkill.TryTrimParentheses(out var skillIdExpr)) &&
-            (int.TryParse(skillIdExpr, out var skillId))) {
+            (int.TryParse(skillIdExpr, out var skillId)))
+        {
             return skills.ownSkillId.Contains(skillId) ? 1 : 0;
         }
 
-        if ((id.TryTrimStart("buff", out var trimBuff))) {
+        if ((id.TryTrimStart("buff", out var trimBuff)))
+        {
             bool correctExpr = trimBuff.TryTrimParentheses(out var buffIdExpr);
             if (!correctExpr)
                 return float.MinValue;
@@ -283,27 +312,30 @@ public class Pet
             return initBuffs.Count(x => x.options.Get(buffOptionExpr[0], x.info.options.Get(buffOptionExpr[0]))?.ToLower() == buffOptionExpr[1]?.ToLower());
         }
 
-        if ((id.TryTrimStart("record", out var trimRecord)) && 
-            (trimRecord.TryTrimParentheses(out var trimRecordKey)) && 
+        if ((id.TryTrimStart("record", out var trimRecord)) &&
+            (trimRecord.TryTrimParentheses(out var trimRecordKey)) &&
             (record.TryGetRecord(trimRecord, out var trimRecordValueExpr)) &&
             float.TryParse(trimRecordValueExpr, out var trimRecordValue))
             return trimRecordValue;
 
         if (id.TryTrimStart("skin", out var trimSkin) &&
-            (trimSkin.TryTrimParentheses(out var skinIdExpr)) && 
-            (int.TryParse(skinIdExpr, out var skinId))) {
+            (trimSkin.TryTrimParentheses(out var skinIdExpr)) &&
+            (int.TryParse(skinIdExpr, out var skinId)))
+        {
             return (info.ui.GetAllSkinList(ui).Contains(skinId) || ui.specialSkinList.Contains(skinId)) ? 1 : 0;
-        } 
+        }
 
-        if (id.TryTrimStart("baseId", out var trimBase) && 
+        if (id.TryTrimStart("baseId", out var trimBase) &&
             (trimBase.TryTrimParentheses(out var trimBaseExpr)) &&
-            int.TryParse(trimBaseExpr, out var baseId)) {
+            int.TryParse(trimBaseExpr, out var baseId))
+        {
             return ListHelper.IsNullOrEmpty(PetExpSystem.GetEvolveChain(baseId, this.id)) ? 0 : 1;
         }
-        
+
         if (id.TryTrimStart("gender", out var trimGender) &&
-            (trimSkin.TryTrimParentheses(out var genderIdExpr)) && 
-            (int.TryParse(genderIdExpr, out var genderId))) {
+            (trimSkin.TryTrimParentheses(out var genderIdExpr)) &&
+            (int.TryParse(genderIdExpr, out var genderId)))
+        {
             return info.basic.genderList.Contains(genderId) ? 1 : 0;
         }
 
@@ -348,19 +380,23 @@ public class Pet
         };
     }
 
-    public virtual bool TryGetPetIdentifier(string id, out float num) {
+    public virtual bool TryGetPetIdentifier(string id, out float num)
+    {
         num = GetPetIdentifier(id);
         return num != float.MinValue;
     }
 
-    public virtual void SetPetIdentifier(string id, float num) {
-        if ((id.TryTrimStart("record", out var trimRecord)) && 
-            (trimRecord.TryTrimParentheses(out var trimRecordKey))) {
+    public virtual void SetPetIdentifier(string id, float num)
+    {
+        if ((id.TryTrimStart("record", out var trimRecord)) &&
+            (trimRecord.TryTrimParentheses(out var trimRecordKey)))
+        {
             record.SetRecord(trimRecordKey, num);
             return;
-        }        
+        }
 
-        switch (id) {
+        switch (id)
+        {
             default:
                 return;
             case "skinId":
@@ -385,7 +421,7 @@ public class Pet
                 return;
             case "personality":
                 basic.personality = (Personality)num;
-                currentStatus = new Status(normalStatus){ hp = currentStatus.hp };
+                currentStatus = new Status(normalStatus) { hp = currentStatus.hp };
                 return;
             case "trait":
                 feature.SetTrait((int)num);
@@ -408,7 +444,7 @@ public class Pet
                 return;
             case "iv":
                 talent.iv = (int)num;
-                currentStatus = new Status(normalStatus){ hp = Mathf.Min(normalStatus.hp, currentStatus.hp) };
+                currentStatus = new Status(normalStatus) { hp = Mathf.Min(normalStatus.hp, currentStatus.hp) };
                 return;
             case "evStorage":
                 talent.SetEVStorage((int)num);
@@ -442,24 +478,28 @@ public class Pet
                 resist.lockState = (int)num;
                 if (resist.lockState <= 0)
                     resist.Reset();
-                
+
                 return;
         }
     }
 
-    public Pet GainExp(uint gainExp, bool healWhenLevelUp = true) {
+    public Pet GainExp(uint gainExp, bool healWhenLevelUp = true)
+    {
         bool isLevelUp = (gainExp >= levelUpExp);
         if (level >= maxLevel)
             return this;
-            
-        if (exp.GainExp(gainExp)) {
+
+        if (exp.GainExp(gainExp))
+        {
             Pet pet = Evolve();
-            if (pet != this) {
+            if (pet != this)
+            {
                 SaveSystem.SaveData();
                 return pet;
             }
         }
-        if (isLevelUp) {
+        if (isLevelUp)
+        {
             var hp = currentStatus.hp;
             currentStatus = new Status(normalStatus);
             if (!healWhenLevelUp)
@@ -470,34 +510,37 @@ public class Pet
         return this;
     }
 
-    public void LevelDown(int toWhichLevel, bool keepSkill = false) {
+    public void LevelDown(int toWhichLevel, bool keepSkill = false)
+    {
         if (level < 1)
             return;
 
         exp.LevelDown(toWhichLevel);
-        if (!keepSkill) 
+        if (!keepSkill)
         {
             skills.ownSkill = null;
             skills.normalSkill = null;
             skills.superSkill = null;
         }
-        
+
         skills.CheckNewSkill(toWhichLevel);
 
         currentStatus = normalStatus;
         SaveSystem.SaveData();
     }
 
-    public Pet Evolve() {
+    public Pet Evolve()
+    {
         int cursor = Player.instance.petBag.IndexOf(this);
         var evolveInfo = info;
         int evolveLevel = info.exp.evolveLevel;
 
-        if (record.TryGetRecord("evolveBan", out var evolveBanExpr) && 
+        if (record.TryGetRecord("evolveBan", out var evolveBanExpr) &&
             int.TryParse(evolveBanExpr, out var evolveBan) && (evolveBan == 1))
             return this;
 
-        while ((evolveInfo.exp.evolvePetId != 0) && (evolveLevel != 0) && (level >= evolveLevel)) {
+        while ((evolveInfo.exp.evolvePetId != 0) && (evolveLevel != 0) && (level >= evolveLevel))
+        {
             evolveInfo = GetPetInfo(evolveInfo.exp.evolvePetId);
             evolveLevel = evolveInfo.exp.evolveLevel;
         }
@@ -507,7 +550,8 @@ public class Pet
         return evolvePet;
     }
 
-    public Pet EvolveTo(int evolveId, bool keepSkill = true) {
+    public Pet EvolveTo(int evolveId, bool keepSkill = true)
+    {
         var allPets = Player.instance.petBag.AllIndexOf(this);
         int cursor = ListHelper.IsNullOrEmpty(allPets) ? -1 : allPets[0];
         if (evolveId == 0)
@@ -515,7 +559,7 @@ public class Pet
 
         var specialSkills = skills.ownSkill.Where(x => (!skills.skillList.Exists(y => y.id == x.id)) || skills.secretSkillInfo.Any(y => (y.skill.id == x.id) && (y.secretType == SecretType.Others))).ToList();
         Pet evolvePet = new Pet(evolveId, this);
-        if (!keepSkill) 
+        if (!keepSkill)
         {
             evolvePet.LevelDown(evolvePet.level);
         }
@@ -525,7 +569,7 @@ public class Pet
 
         if (cursor.IsInRange(0, Player.instance.petBag.Length))
             Player.instance.petBag[cursor] = evolvePet;
-            
+
         return evolvePet;
     }
 
@@ -589,7 +633,7 @@ public class Pet
             {
                 pet.resist = new PetResist(pet.id);
                 if (pet.backupPet != null)
-                    pet.backupPet.resist = new PetResist(pet.backupPet.id);   
+                    pet.backupPet.resist = new PetResist(pet.backupPet.id);
             }
 
             petDataVersion = "lite_3.6.1";

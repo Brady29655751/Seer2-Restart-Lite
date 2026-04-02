@@ -16,7 +16,7 @@ namespace MiniGame
         [SerializeField] private float pipeMaxY = 2f;
         [SerializeField] private IText scoreText;
 
-        private int score => data.GetData<int>("score", "0");
+        private int score => data.GetData("score", 0);
         private float speed => (score < 15) ? 1f : 1.5f;
         private Rigidbody2D birdRb;
         private List<GameObject> pipes = new List<GameObject>();

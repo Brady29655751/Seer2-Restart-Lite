@@ -4,12 +4,120 @@
 		<bgm>BGM_2</bgm>
 	</music>
 	<entities>
-		<npc id="-1001001" resId="2005" name="" size="240,220" pos="660,320" color="0,0,0,0">
+		<npc id="-1001001" resId="2005" name="" size="240,340" pos="0,200" color="0,0,0,0">
 			<description>精灵融合仓</description>
 			<eventHandler>
 				<button type="click">
 					<action>openPanel</action>
 					<param>Fusion</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<npc id="-1001002" resId="Pets/pet/10001" name="布布种子" size="75,110" pos="387,390" namePos="0,-88" color="0,0,0,0">
+			<description><![CDATA[布布花进化]]></description>
+			<dialog>
+				<branch id="default" name="布布种子" icon="Pets/pet/10001" size="88,137" pos="0,50">
+					<content><![CDATA[布布！]]></content>
+					<functionHandler>
+						<func type="click">
+							<description><![CDATA[布布花超进化]]></description>
+							<action>openPanel</action>
+							<param>TwelveRound</param>
+							<param>pet=12826</param>
+							<param>pos=-10,90</param>
+							<param>size=176,236</param>
+							<param>item[2]=10239[1]</param>
+							<param>item[5]=9008[3]</param>
+							<param>item[8]=2[50]</param>
+							<param>item[10]=10242[1]</param>
+							<param>item[12]=332826[1]</param>
+						</func>
+					</functionHandler>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[剪刀剪刀！]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+					</replyHandler>
+				</branch>
+			</dialog>
+			<eventHandler>
+				<button type="click">
+					<action>openDialog</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<npc id="-1001003" resId="Pets/pet/10004" name="伊优" size="75,110" pos="572,390" namePos="0,-88" color="0,0,0,0">
+			<description><![CDATA[巴鲁斯进化]]></description>
+			<dialog>
+				<branch id="default" name="伊优" icon="Pets/pet/10004" size="76,115" pos="0,50">
+					<content><![CDATA[伊优！]]></content>
+					<functionHandler>
+						<func type="click">
+							<description><![CDATA[巴鲁斯超进化]]></description>
+							<action>openPanel</action>
+							<param>TwelveRound</param>
+							<param>pet=12858</param>
+							<param>pos=-10,40</param>
+							<param>size=229,240</param>
+							<param>item[2]=10239[1]</param>
+							<param>item[5]=9008[3]</param>
+							<param>item[8]=2[50]</param>
+							<param>item[10]=10242[1]</param>
+							<param>item[12]=332858[1]</param>
+						</func>
+					</functionHandler>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[资质是极而不是优的话是不是要改叫伊极？]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+					</replyHandler>
+				</branch>
+			</dialog>
+			<eventHandler>
+				<button type="click">
+					<action>openDialog</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<npc id="-1001004" resId="Pets/pet/10007" name="小火猴" size="75,110" pos="480,390" namePos="0,-88" color="0,0,0,0">
+			<description><![CDATA[烈焰猩猩进化]]></description>
+			<dialog>
+				<branch id="default" name="小火猴" icon="Pets/pet/10007" size="110,131" pos="0,50">
+					<content><![CDATA[（发出可爱的吼声）]]></content>
+					<functionHandler>
+						<func type="click">
+							<description><![CDATA[烈焰猩猩超进化]]></description>
+							<action>openPanel</action>
+							<param>TwelveRound</param>
+							<param>pet=12845</param>
+							<param>pos=-20,80</param>
+							<param>size=274,226</param>
+							<param>item[2]=10239[1]</param>
+							<param>item[5]=9008[3]</param>
+							<param>item[8]=2[50]</param>
+							<param>item[10]=10242[1]</param>
+							<param>item[12]=332845[1]</param>
+						</func>
+					</functionHandler>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[小火候慢煮小火猴]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+					</replyHandler>
+				</branch>
+			</dialog>
+			<eventHandler>
+				<button type="click">
+					<action>openDialog</action>
+					<param>default</param>
 				</button>
 			</eventHandler>
 		</npc>

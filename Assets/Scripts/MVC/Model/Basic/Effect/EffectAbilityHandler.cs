@@ -1384,6 +1384,70 @@ public static class EffectAbilityHandler
             return true;
         }
 
+        bool TrySetSkill(string trimType, PetBattleSkillController skillController, int skillIndex)
+        {
+            Skill newSkill = value switch
+            {
+                "-1" => Skill.GetNoOpSkill(),
+                "-4" => Skill.GetEscapeSkill(),
+                "random" => Skill.GetRandomSkill(),
+                _ => Skill.GetSkill((int)newValue, false),
+            };
+
+            newSkill = (newSkill == null) ? null : new Skill(newSkill);
+
+            if (skillIndex < 0)
+            {
+                if (trimType == "id")
+                {
+                    if (newSkill == null)
+                    {
+                        skillController.superSkill?.effects
+                            .Where(x => x.timing == EffectTiming.OnRemoveBuff).OrderBy(x => x.priority).ToList()
+                            .ForEach(x => x.CheckAndApply(lhsUnit, state, false, sourcePet: battlePet));   
+                    }
+                    skillController.superSkill = newSkill; 
+                    skillController.superSkill?.effects
+                        .Where(x => x.timing == EffectTiming.OnAddBuff).OrderBy(x => x.priority).ToList()
+                        .ForEach(x => x.CheckAndApply(lhsUnit, state, false, sourcePet: battlePet));  
+                }
+                else
+                {
+                    if (skillController.superSkill == null)
+                        return true;
+
+                    oldValue = skillController.superSkill.GetSkillIdentifier(trimType);
+                    skillController.superSkill.SetSkillIdentifier(trimType, Operator.Operate(op, oldValue, newValue));
+                }   
+            }
+            else
+            {
+                if (trimType == "id")
+                {
+                    if (newSkill == null)
+                    {
+                        skillController.normalSkills[skillIndex]?.effects
+                            .Where(x => x.timing == EffectTiming.OnRemoveBuff).OrderBy(x => x.priority).ToList()
+                            .ForEach(x => x.CheckAndApply(lhsUnit, state, false, sourcePet: battlePet));   
+                    }
+                    skillController.normalSkills[skillIndex] = newSkill;   
+                    skillController.normalSkills[skillIndex]?.effects
+                        .Where(x => x.timing == EffectTiming.OnAddBuff).OrderBy(x => x.priority).ToList()
+                        .ForEach(x => x.CheckAndApply(lhsUnit, state, false, sourcePet: battlePet));
+                }
+                else
+                {
+                    if (skillController.normalSkills[skillIndex] == null)
+                        return true;
+
+                    oldValue = skillController.normalSkills[skillIndex].GetSkillIdentifier(trimType);
+                    skillController.normalSkills[skillIndex].SetSkillIdentifier(trimType, Operator.Operate(op, oldValue, newValue));
+                }
+            }
+
+            return true;
+        }
+
         if (type == "name")
         {
             // Name.
@@ -1523,67 +1587,10 @@ public static class EffectAbilityHandler
 
             for (int i = 0; i < skillList.Count; i++)
             {
-                bool isSuperSkill = ((skillController.superSkill?.id ?? 0) == skillList[i].id);
+                bool isSuperSkill = (skillController.superSkill?.id ?? 0) == skillList[i].id;
                 int normalSkillIndex = skillController.normalSkills.FindIndex(x => (x?.id ?? 0) == skillList[i].id);
-                Skill newSkill = value switch
-                {
-                    "-1" => Skill.GetNoOpSkill(),
-                    "-4" => Skill.GetEscapeSkill(),
-                    "random" => Skill.GetRandomSkill(),
-                    _ => Skill.GetSkill((int)newValue, false),
-                };
-
-                newSkill = (newSkill == null) ? null : new Skill(newSkill);
-
-                if (isSuperSkill)
-                {
-                    if (trimType == "id")
-                    {
-                        if (newSkill == null)
-                        {
-                            skillController.superSkill?.effects
-                                .Where(x => x.timing == EffectTiming.OnRemoveBuff).OrderBy(x => x.priority).ToList()
-                                .ForEach(x => x.CheckAndApply(lhsUnit, state, false, sourcePet: battlePet));   
-                        }
-                        skillController.superSkill = newSkill; 
-                        skillController.superSkill?.effects
-                            .Where(x => x.timing == EffectTiming.OnAddBuff).OrderBy(x => x.priority).ToList()
-                            .ForEach(x => x.CheckAndApply(lhsUnit, state, false, sourcePet: battlePet));  
-                    }
-                    else
-                    {
-                        oldValue = skillController.superSkill.GetSkillIdentifier(trimType);
-                        skillController.superSkill.SetSkillIdentifier(trimType, Operator.Operate(op, oldValue, newValue));
-                    }
-
-                    isSuccess = true;
-                    continue;
-                }
-
-                if (normalSkillIndex >= 0)
-                {
-                    if (trimType == "id")
-                    {
-                        if (newSkill == null)
-                        {
-                            skillController.normalSkills[normalSkillIndex]?.effects
-                                .Where(x => x.timing == EffectTiming.OnRemoveBuff).OrderBy(x => x.priority).ToList()
-                                .ForEach(x => x.CheckAndApply(lhsUnit, state, false, sourcePet: battlePet));   
-                        }
-                        skillController.normalSkills[normalSkillIndex] = newSkill;   
-                        skillController.normalSkills[normalSkillIndex]?.effects
-                            .Where(x => x.timing == EffectTiming.OnAddBuff).OrderBy(x => x.priority).ToList()
-                            .ForEach(x => x.CheckAndApply(lhsUnit, state, false, sourcePet: battlePet));
-                    }
-                    else
-                    {
-                        oldValue = skillController.normalSkills[normalSkillIndex].GetSkillIdentifier(trimType);
-                        skillController.normalSkills[normalSkillIndex].SetSkillIdentifier(trimType, Operator.Operate(op, oldValue, newValue));
-                    }
-
-                    isSuccess = true;
-                    continue;
-                }
+                int skillIndex = isSuperSkill ? -1 : normalSkillIndex;
+                isSuccess |= TrySetSkill(trimType, skillController, skillIndex);
             }
 
             return isSuccess;
@@ -1595,45 +1602,62 @@ public static class EffectAbilityHandler
             if (trimNormalSkill.TryTrimParentheses(out var skillIndexExpr)
                 && int.TryParse(skillIndexExpr, out var skillIndex))
             {
+                trimNormalSkill = trimNormalSkill.TrimStart("[" + skillIndexExpr + "]").TrimStart(".");
                 var newSkill = normalSkills.Get(skillIndex, normalSkills.FirstOrDefault());
-                if (newSkill == null)
+
+                if (string.IsNullOrEmpty(trimNormalSkill) || trimNormalSkill == "id")
                 {
-                    battlePet.skillController.normalSkills[skillIndex]?.effects
-                        .Where(x => x.timing == EffectTiming.OnRemoveBuff).OrderBy(x => x.priority).ToList()
-                        .ForEach(x => x.CheckAndApply(lhsUnit, state, false, sourcePet: battlePet));
+                    if (newSkill == null)
+                    {
+                        battlePet.skillController.normalSkills[skillIndex]?.effects
+                            .Where(x => x.timing == EffectTiming.OnRemoveBuff).OrderBy(x => x.priority).ToList()
+                            .ForEach(x => x.CheckAndApply(lhsUnit, state, false, sourcePet: battlePet));
+                    }
+
+                    var newIndex = battlePet.skillController.normalSkills.Set(skillIndex, newSkill);
+                    battlePet.skillController.normalSkills[newIndex]?.effects
+                        .Where(x => x.timing == EffectTiming.OnAddBuff).OrderBy(x => x.priority).ToList()
+                        .ForEach(x => x.CheckAndApply(lhsUnit, state, false, sourcePet: battlePet));   
                 }
-
-                var newIndex = battlePet.skillController.normalSkills.Set(skillIndex, newSkill);
-
-                battlePet.skillController.normalSkills[newIndex]?.effects
-                    .Where(x => x.timing == EffectTiming.OnAddBuff).OrderBy(x => x.priority).ToList()
-                    .ForEach(x => x.CheckAndApply(lhsUnit, state, false, sourcePet: battlePet));
+                else
+                {
+                    TrySetSkill(trimNormalSkill, battlePet.skillController, skillIndex);   
+                }
 
                 return true;
             }
 
             battlePet.skillController.normalSkills = normalSkills.ToList();
-            battlePet.skillController.normalSkills.SelectMany(x => x.effects)
+            battlePet.skillController.normalSkills.Where(x => x != null).SelectMany(x => x.effects)
                 .Where(x => x.timing == EffectTiming.OnAddBuff).OrderBy(x => x.priority).ToList()
-                .ForEach(x => x.CheckAndApply(lhsUnit, state, false, sourcePet: battlePet));
+                .ForEach(x => x.CheckAndApply(lhsUnit, state, false, sourcePet: battlePet));   
 
             return true;
         }
 
-        if (type == "superSkill")
+        if (type.TryTrimStart("superSkill", out var trimSuperSkill))
         {
             TryGetShiftedSkills(battlePet, out var normalSkills, out var superSkill, superSkillKey: "value");
-            if (superSkill == null)
-            {
-                battlePet.skillController.superSkill?.effects
-                    .Where(x => x.timing == EffectTiming.OnRemoveBuff).OrderBy(x => x.priority).ToList()
-                    .ForEach(x => x.CheckAndApply(lhsUnit, state, false));
-            }
 
-            battlePet.skillController.superSkill = superSkill;
-            battlePet.skillController.superSkill?.effects
-                .Where(x => x.timing == EffectTiming.OnAddBuff).OrderBy(x => x.priority).ToList()
-                .ForEach(x => x.CheckAndApply(lhsUnit, state, false));
+            trimSuperSkill = trimSuperSkill.TrimStart(".");
+            if (string.IsNullOrEmpty(trimSuperSkill) || trimSuperSkill == "id")
+            {
+                if (superSkill == null)
+                {
+                    battlePet.skillController.superSkill?.effects
+                        .Where(x => x.timing == EffectTiming.OnRemoveBuff).OrderBy(x => x.priority).ToList()
+                        .ForEach(x => x.CheckAndApply(lhsUnit, state, false));
+                }
+
+                battlePet.skillController.superSkill = superSkill;
+                battlePet.skillController.superSkill?.effects
+                    .Where(x => x.timing == EffectTiming.OnAddBuff).OrderBy(x => x.priority).ToList()
+                    .ForEach(x => x.CheckAndApply(lhsUnit, state, false));    
+            }
+            else
+            {
+                TrySetSkill(trimSuperSkill, battlePet.skillController, -1);
+            }
 
             return true;
         }

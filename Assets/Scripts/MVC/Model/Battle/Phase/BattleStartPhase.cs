@@ -34,7 +34,7 @@ public class BattleStartPhase : BattlePhase
     }
 
     private void SetAchievement() {
-        if ((battle.settings.mode == BattleMode.PVP) || (battle.settings.mode == BattleMode.Record))
+        if (battle.settings.isSimulate)
             return;
 
         var item = Item.GetItemInfo(Player.instance.gameData.achievement);

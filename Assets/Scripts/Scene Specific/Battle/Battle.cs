@@ -4,7 +4,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
-using Photon.Pun;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
 
 public class Battle
@@ -188,16 +187,14 @@ public class Battle
         bool isFirstPetDead = (Player.instance.petBag[0] == null) || (Player.instance.petBag[0].currentStatus.hp == 0);
         if (isPlayerPetBag && isFirstPetDead)
         {
-            Hintbox hintbox = Hintbox.OpenHintbox();
-            hintbox.SetTitle("提示");
-            hintbox.SetContent("首发精灵血量耗尽，快去恢复精灵吧！", 14, FontOption.Arial);
-            hintbox.SetOptionNum(1);
+            Hintbox.OpenHintboxWithContent("首发精灵血量耗尽，快去恢复精灵吧！", 14);
             return;
         }
 
-        if ((battleInfo.settings.starLimit > 0) && Player.instance.petBag.Any(x => (x != null) && (x.info.star > battleInfo.settings.starLimit)))
+        var petBag = Player.instance.petBag.Take(battleInfo.settings.petCount);
+        if (!battleInfo.settings.Condition(petBag, out var message))
         {
-            Hintbox.OpenHintboxWithContent("不能携带超过" + battleInfo.settings.starLimit + "星的精灵进行挑战哦", 16);
+            Hintbox.OpenHintboxWithContent(message, 16);
             return;
         }
 

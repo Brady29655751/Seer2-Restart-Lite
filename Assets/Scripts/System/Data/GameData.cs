@@ -34,6 +34,7 @@ public class GameData
     public DateTime firstLoginDate;
     public DateTime lastLoginDate;
     public int achievement;
+    [XmlIgnore] public int shoot => Item.GetShootId(achievement);
 
     public Pet[] petBag = new Pet[6];
     public List<Pet> petStorage = new List<Pet>();

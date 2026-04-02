@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -144,6 +145,17 @@ public class PetBattleStatusController
     public int GetPowerUp(int type)
     {
         return (int)powerup[type];
+    }
+
+    public float GetStatusIdentifier(string id)
+    {
+        if (id.TryTrimStart("init", out var trimId))
+            return initStatus[trimId];
+
+        if (id.TryTrimStart("base", out trimId))
+            return parent?.info.basic.baseStatus[trimId] ?? 0;
+
+        return battleStatus[id];
     }
 
     public void SetPowerUp(int type, int powerup)

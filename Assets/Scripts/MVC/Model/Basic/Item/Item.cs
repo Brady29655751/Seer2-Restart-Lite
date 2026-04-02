@@ -69,8 +69,20 @@ public class Item
         return Database.instance.GetItemInfo(id);
     }
 
-    public static ItemHintbox OpenHintbox(Item item)
+    public static int GetShootId(int id)
     {
+        var itemInfo = Item.GetItemInfo(id);
+        if ((itemInfo == null) || (itemInfo.type != ItemType.Equipment))
+            return id;
+    
+    
+        return (int)Identifier.GetNumIdentifier(itemInfo.options.Get("shoot", id.ToString()));
+    }
+
+    public static ItemHintbox OpenHintbox(Item item, Action<Item> onBeforeCallback = null)
+    {
+        onBeforeCallback?.Invoke(item);
+
         ItemHintbox itemHintbox = Hintbox.OpenHintbox<ItemHintbox>();
         itemHintbox.SetTitle("提示");
         itemHintbox.SetContent(item.num + " 个 " + item.name + " 已经放入背包", 14, FontOption.Arial);

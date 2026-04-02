@@ -141,7 +141,7 @@ public class InfoPrompt : IMonoBehaviour
         }
     }
 
-    public void SetPlant(ItemInfo plant, TimeSpan ripeNeedTime, TimeSpan totalTime) {
+    public void SetPlant(ItemInfo plant, TimeSpan ripeNeedTime, TimeSpan totalTime, float produceMult = 1) {
         if (plant == null) {
             SetInfoPromptWithAutoSize("这片土地还没种植作物哦！", TextAnchor.MiddleLeft);
             return;
@@ -151,7 +151,8 @@ public class InfoPrompt : IMonoBehaviour
         var timeBar = "<size=28><color=#ffbb33>" + "■".Repeat(ratio) + "□".Repeat(10 - ratio) + "</color></size>\n";
         var text = "<size=16>【成熟所需时间】" + ripeNeedTime.ToString(@"hh\:mm\:ss") + "\n";
         var num = "【预计产量】" + plant.options["num"].TrimParentheses() + "</size>";
-        SetInfoPromptWithAutoSize(header + timeBar + text + num, TextAnchor.MiddleLeft);
+        var produce = (produceMult != 1) ? ("\n\n<size=16><color=#77e20c>【施肥信息】</color>" + produceMult + "倍产量</size>") : string.Empty;
+        SetInfoPromptWithAutoSize(header + timeBar + text + num + produce, TextAnchor.MiddleLeft);
     }
 
 }

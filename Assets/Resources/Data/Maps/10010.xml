@@ -121,6 +121,164 @@
 				</button>
 			</eventHandler>
 		</npc>
+		<npc id="1001005" resId="1001000" name="精灵搜集计划" size="130,180" pos="240,360" namePos="0,-70" color="0,0,0,0">
+			<description><![CDATA[精灵搜集计划]]></description>
+			<dialog>
+				<branch id="default" name="博士派特" icon="1001000" size="124,159" pos="0,40">
+					<content><![CDATA[搜集指定精灵即可获得特殊奖励！]]></content>
+					<functionHandler>
+						<func type="click">
+							<description><![CDATA[第一期]]></description>
+							<action>openDialog</action>
+							<param>collect_1</param>
+						</func>
+						<func type="click">
+							<description><![CDATA[第二期]]></description>
+							<action>openDialog</action>
+							<param>collect_2</param>
+						</func>
+					</functionHandler>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[扔胶囊扔的慢的就是精灵]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+					</replyHandler>
+				</branch>
+				<branch id="collect_1" name="博士派特" icon="1001000" size="124,159" pos="0,40">
+					<content><![CDATA[【第一期】搜集<b><color=#ffbb33>皮皮、仙人球、贝尔、小鳍鱼、火炎贝、吉尔</color></b>，并放入精灵背包]]></content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[待我买几个胶囊先]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+						<reply type="click">
+							<description><![CDATA[我都搜集到了]]></description>
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=已经兑换过奖励了哦</param>
+							<param>item_icon=pet[463]</param>
+							<param>option_num=1</param>
+							<condition>activity[20014].done[1]=[bool]true[default]false</condition>
+						</reply>
+						<reply type="branch">
+							<action>openHintbox</action>
+							<param>type=Default</param>
+							<param>title=提示</param>
+							<param>content=背包中缺少特定精灵哦</param>
+							<param>option_num=1</param>
+							<condition>activity[20014].done[1]=[bool]false[default]false</condition>
+							<condition>petBag(baseId[10010]:1).count=0|petBag(baseId[10016]:1).count=0|petBag(baseId[10030]:1).count=0|petBag(baseId[10035]:1).count=0|petBag(baseId[10038]:1).count=0|petBag(baseId[10198]:1).count=0</condition>
+						</reply>
+						<reply type="branch">
+							<action>getPet</action>
+							<param>463,1</param>
+							<condition>activity[20014].done[1]=[bool]false[default]false</condition>
+							<condition>petBag(baseId[10010]:1).count&gt;0</condition>
+							<condition>petBag(baseId[10016]:1).count&gt;0</condition>
+							<condition>petBag(baseId[10030]:1).count&gt;0</condition>
+							<condition>petBag(baseId[10035]:1).count&gt;0</condition>
+							<condition>petBag(baseId[10038]:1).count&gt;0</condition>
+							<condition>petBag(baseId[10198]:1).count&gt;0</condition>
+						</reply>
+						<reply type="branch">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=厄灾蛇已放入精灵仓库</param>
+							<param>item_icon=pet[463]</param>
+							<param>option_num=1</param>
+							<condition>activity[20014].done[1]=[bool]false[default]false</condition>
+							<condition>petBag(baseId[10010]:1).count&gt;0</condition>
+							<condition>petBag(baseId[10016]:1).count&gt;0</condition>
+							<condition>petBag(baseId[10030]:1).count&gt;0</condition>
+							<condition>petBag(baseId[10035]:1).count&gt;0</condition>
+							<condition>petBag(baseId[10038]:1).count&gt;0</condition>
+							<condition>petBag(baseId[10198]:1).count&gt;0</condition>
+						</reply>
+						<reply type="branch">
+							<action>setActivity</action>
+							<param>20014</param>
+							<param>done[1]=true</param>
+							<condition>activity[20014].done[1]=[bool]false[default]false</condition>
+							<condition>petBag(baseId[10010]:1).count&gt;0</condition>
+							<condition>petBag(baseId[10016]:1).count&gt;0</condition>
+							<condition>petBag(baseId[10030]:1).count&gt;0</condition>
+							<condition>petBag(baseId[10035]:1).count&gt;0</condition>
+							<condition>petBag(baseId[10038]:1).count&gt;0</condition>
+							<condition>petBag(baseId[10198]:1).count&gt;0</condition>
+						</reply>
+					</replyHandler>
+				</branch>
+				<branch id="collect_2" name="博士派特" icon="1001000" size="124,159" pos="0,40">
+					<content><![CDATA[【第二期】搜集<b><color=#ffbb33>小豆芽、布鲁、格林</color></b>，并放入精灵背包]]></content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[待我买几个胶囊先]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+						<reply type="click">
+							<description><![CDATA[我都搜集到了]]></description>
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=已经兑换过奖励了哦</param>
+							<param>item_icon=pet[465]</param>
+							<param>option_num=1</param>
+							<condition>activity[20014].done[2]=[bool]true[default]false</condition>
+						</reply>
+						<reply type="branch">
+							<action>openHintbox</action>
+							<param>type=Default</param>
+							<param>title=提示</param>
+							<param>content=背包中缺少特定精灵哦</param>
+							<param>option_num=1</param>
+							<condition>activity[20014].done[2]=[bool]false[default]false</condition>
+							<condition>petBag(baseId[10027]:1).count=0|petBag(baseId[10062]:1).count=0|petBag(baseId[10108]:1).count=0</condition>
+						</reply>
+						<reply type="branch">
+							<action>getPet</action>
+							<param>465,1</param>
+							<condition>activity[20014].done[2]=[bool]false[default]false</condition>
+							<condition>petBag(baseId[10027]:1).count&gt;0</condition>
+							<condition>petBag(baseId[10062]:1).count&gt;0</condition>
+							<condition>petBag(baseId[10108]:1).count&gt;0</condition>
+						</reply>
+						<reply type="branch">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=发条鼠已放入精灵仓库</param>
+							<param>item_icon=pet[465]</param>
+							<param>option_num=1</param>
+							<condition>activity[20014].done[2]=[bool]false[default]false</condition>
+							<condition>petBag(baseId[10027]:1).count&gt;0</condition>
+							<condition>petBag(baseId[10062]:1).count&gt;0</condition>
+							<condition>petBag(baseId[10108]:1).count&gt;0</condition>
+						</reply>
+						<reply type="branch">
+							<action>setActivity</action>
+							<param>20014</param>
+							<param>done[2]=true</param>
+							<condition>activity[20014].done[2]=[bool]false[default]false</condition>
+							<condition>petBag(baseId[10027]:1).count&gt;0</condition>
+							<condition>petBag(baseId[10062]:1).count&gt;0</condition>
+							<condition>petBag(baseId[10108]:1).count&gt;0</condition>
+						</reply>
+					</replyHandler>
+				</branch>
+			</dialog>
+			<eventHandler>
+				<button type="click">
+					<action>openDialog</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
 		<teleport id="1" name="传送室" pos="640,65" targetMapId="10001"/>
 	</entities>		
 </map>

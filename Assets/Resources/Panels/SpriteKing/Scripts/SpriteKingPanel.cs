@@ -24,7 +24,7 @@ public class SpriteKingPanel : Panel
 
     public void GetKing()
     {
-        if (soulActivity.GetData<bool>("done[north][10]", "false"))
+        if (soulActivity.GetData("done[north][10]", false))
         {
             Hintbox.OpenHintboxWithContent("你已经获得过约瑟了哦！\n查看精灵背包或仓库吧！", 16);
             return;    
@@ -71,14 +71,14 @@ public class SpriteKingPanel : Panel
             return;
         }
         
-        if (Enumerable.Range(1, 8).Any(x => !soulActivity.GetData<bool>($"done[north][{x}]", "false")))
+        if (Enumerable.Range(1, 8).Any(x => !soulActivity.GetData($"done[north][{x}]", false)))
         {
             Hintbox.OpenHintboxWithContent("先战胜所有灵兽再来挑战吧！", 16);
             return;
         }
         
 
-        if (kingActivity.GetData<bool>($"done[{type}]", "false"))
+        if (kingActivity.GetData($"done[{type}]", false))
         {
             var hintbox = Hintbox.OpenHintboxWithContent("今日已通过此关卡，确定要再次挑战吗？\n<color=#ffbb33>每日仅首次通关有奖励！</color>" , 14);
             hintbox.SetOptionNum(2);
@@ -109,7 +109,7 @@ public class SpriteKingPanel : Panel
 
     private void OnFightWin(string type)
     {
-        if (kingActivity.GetData<bool>($"done[{type}]", "false"))
+        if (kingActivity.GetData($"done[{type}]", false))
             return;
 
         if (light.Contains('0'))
@@ -134,7 +134,7 @@ public class SpriteKingPanel : Panel
             Hintbox.OpenHintboxWithContent(info.ConcatToString("\n"), 14);
         }
 
-        var item = new Item(ITEM_ID);
+        var item = new Item(ITEM_ID, 3);
         Item.Add(item);
         Item.OpenHintbox(item);
 
@@ -237,6 +237,8 @@ public class SpriteKingPanel : Panel
             petCount = 1,
             mode = BattleMode.Special,
             starLimit = 6,
+            filterLimit = "(id>0)",
+            filterLimitDesc = "不能使用Mod精灵进行对战哦"
         };
 
         var boss = new BossInfo()

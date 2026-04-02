@@ -59,7 +59,7 @@ public static class Identifier
             var gameData = Player.instance.gameData;
             return trimId switch
             {
-                "shoot" => gameData.achievement,
+                "shoot" => gameData.shoot,
                 "achievement" => gameData.achievement,
                 _ => GetNumIdentifier(trimId),
             };
@@ -80,10 +80,54 @@ public static class Identifier
         if (id.TryTrimStart("firstPet.", out trimId))
             return GetIdentifier("petBag[0]." + trimId);
 
-        if (id.TryTrimStart("petBag", out trimId) && trimId.TryTrimParentheses(out var indexExpr))
+        if (id.TryTrimStart("petBag", out trimId))
         {
-            var index = (int)GetIdentifier(indexExpr);
-            return Player.instance.petBag[index]?.GetPetIdentifier(trimId.TrimStart("[" + indexExpr + "].")) ?? 0;
+            if (trimId.StartsWith("["))
+            {
+                var indexExpr = trimId.TrimParentheses();
+                var index = (int)GetIdentifier(indexExpr);
+                return Player.instance.petBag[index]?.GetPetIdentifier(trimId.TrimStart("[" + indexExpr + "].")) ?? 0;   
+            }
+            else
+            {
+                IEnumerable<Pet> petBag = Player.instance.petBag.Where(x => x != null);
+                while (trimId.TryTrimParentheses(out var trimExpr, '(', ')'))
+                {
+                    var op = "=";
+                    var options = trimExpr.Split(':');
+                    if (options.Length != 2)
+                    {
+                        var split = Operator.SplitCondition(trimExpr, out op);
+                        options = new string[] { split.Key, split.Value };
+                    }
+                    petBag = petBag.Where(x => Operator.Condition(op,
+                        x.TryGetPetIdentifier(options[0], out var num1) ? num1 : Identifier.GetNumIdentifier(options[0]),
+                        x.TryGetPetIdentifier(options[1], out var num2) ? num2 : Identifier.GetNumIdentifier(options[1]))
+                    );
+                    trimId = trimId.TrimStart("(" + trimExpr + ")");
+                }
+
+                trimId = trimId.TrimStart(".");
+                var count = petBag.Count();
+
+                if (trimId == "count")
+                    return count;
+
+                if (count <= 0)
+                    return float.MinValue;
+
+                var func = trimId.Split('.')[0];
+                var funcId = trimId.TrimStart(func + ".");
+                var defaultPet = petBag.First();
+                
+                return func switch
+                {
+                    "sum" => petBag.Sum(x => x.TryGetPetIdentifier(funcId, out var num) ? num : Identifier.GetNumIdentifier(funcId)),
+                    "max" => petBag.Max(x => x.TryGetPetIdentifier(funcId, out var num) ? num : Identifier.GetNumIdentifier(funcId)),
+                    "min" => petBag.Min(x => x.TryGetPetIdentifier(funcId, out var num) ? num : Identifier.GetNumIdentifier(funcId)),
+                    _ => (defaultPet == null) ? 0 : (defaultPet.TryGetPetIdentifier(trimId, out var num) ? num : Identifier.GetNumIdentifier(trimId)),
+                };
+            }
         }
 
         if (id.TryTrimStart("activity", out trimId))
@@ -350,7 +394,7 @@ public static class Identifier
                 "minAnger" => statusController.minAnger,
                 "maxAnger" => statusController.maxAnger,
                 "lostAnger"=> statusController.maxAnger - statusController.anger,
-                _ => trimId.TryTrimStart("init", out var statusId) ? statusController.initStatus[statusId] : statusController.battleStatus[trimId],
+                _ => statusController.GetStatusIdentifier(trimId),
             };
         }
 

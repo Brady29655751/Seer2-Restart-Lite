@@ -10,7 +10,7 @@
 
 ## 如何游玩？
 Dropbox因容量接近免费额度上限，未来将不会在dropbox上发布，联网更新功能也已停用  
-现在游玩请加入以下群组：[Discord](https://discord.gg/g9PzpBsbcH)
+现在游玩请加入以下群组：[Discord](https://discord.gg/Z28MxGxREd)
 
 ## 我想自己开发游戏内容和代码，如何部署？
 [参考 Issue #4](https://github.com/Brady29655751/Seer2-Restart-Lite/issues/4)  

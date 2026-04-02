@@ -76,7 +76,7 @@ namespace MiniGame
             if (killedGerm != null)
             {
                 killedGerm.SetActive(false);
-                data.SetData("germ", data.GetData<int>("germ") + 1);
+                data.SetData("germ", data.GetData("germ", 0) + 1);
                 recordText?.SetText(data.GetData("germ"));
             }
 
@@ -89,7 +89,7 @@ namespace MiniGame
         {
             Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
 
-            var germ = data.GetData<int>("germ");
+            var germ = data.GetData("germ", 0);
             var hintbox = Hintbox.OpenHintbox();
             hintbox.SetContent($"你帮助利牙鱼清除了<color=#ffbb33>{germ}</color>个细菌\n它变得更干净啦！", 16, FontOption.Arial);
             hintbox.SetOptionNum(1);
