@@ -9,7 +9,8 @@ public class PetSortingController : Module
 
     public Action<Func<Pet, object>> onSortEvent;
 
-    public void Sort() {
+    public void Sort()
+    {
         onSortEvent?.Invoke(sortingModel.sorter);
     }
-} 
+}

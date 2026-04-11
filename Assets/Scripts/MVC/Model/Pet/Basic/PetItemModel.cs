@@ -17,7 +17,7 @@ public class PetItemModel : SelectModel<Item>
         // filter.SetFilterOptions(x => categories.Any(y => x.IsInCategory(y)));
     }
 
-    public override void SetStorage(List<Item> storage, int defaultSelectPage = 0)
+    public override void SetStorage(List<Item> storage, int defaultSelectPage = 0, bool reset = true)
     {
         this.storage = storage;
         SetPage(defaultSelectPage);

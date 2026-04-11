@@ -17,23 +17,47 @@ public class PetFilterController : Module
         InitSortingSubscriptions();
     }
 
-    private void InitFilterSubscriptions() {
+    private void InitFilterSubscriptions()
+    {
         if (elementController != null)
             elementController.onFilterEvent += Filter;
+            elementController.onFilterEvent += f => { ResetNameController(); };
+
         if (nameController != null)
             nameController.onFilterEvent += Filter;
+            nameController.onFilterEvent += f => { ResetElementController(); };
     }
 
-    private void InitSortingSubscriptions() {
+    private void InitSortingSubscriptions()
+    {
         if (sortingController != null)
             sortingController.onSortEvent += Sort;
     }
 
-    public void Filter(Func<Pet, bool> filter) {
+    public void Reset()
+    {
+        ResetElementController();
+        ResetNameController();
+    }
+
+    private void ResetElementController()
+    {
+        elementController?.SetActive(false);
+        elementController?.SetActive(true);
+    }
+
+    private void ResetNameController()
+    {
+        nameController?.SetActive(false);
+    }
+
+    public void Filter(Func<Pet, bool> filter)
+    {
         selectController.Filter(filter);
     }
 
-    public void Sort(Func<Pet, object> sorter) {
+    public void Sort(Func<Pet, object> sorter)
+    {
         selectController.Sort(sorter);
     }
 

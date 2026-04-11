@@ -5,14 +5,16 @@ using UnityEngine;
 
 public class PetNameFilterModel : FilterModel<Pet>
 {
-    public override Func<Pet, bool> GetFilter() {
+    public override Func<Pet, bool> GetFilter()
+    {
         if (!isWorking)
             return (x) => true;
-        
+
         FilterType filterType = type;
         string input = inputString;
 
-        switch (filterType) {
+        switch (filterType)
+        {
             default:
             case FilterType.Name:
                 return x => x.name.Contains(input);
@@ -20,7 +22,8 @@ public class PetNameFilterModel : FilterModel<Pet>
                 int id = int.Parse(input);
                 return x => x.id == id;
             case FilterType.Parentheses:
-                return Parser.ParseConditionFilter<Pet>(inputString, (id, pet) => {
+                return Parser.ParseConditionFilter<Pet>(inputString, (id, pet) =>
+                {
                     if (pet == null)
                         return float.MinValue;
 

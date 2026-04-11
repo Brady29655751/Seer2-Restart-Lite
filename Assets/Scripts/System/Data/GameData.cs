@@ -11,23 +11,29 @@ public class GameData
     public string version;
     public bool gender;
     public string nickname;
-    [XmlIgnore] public int coin {
+    [XmlIgnore]
+    public int coin
+    {
         get => Item.Find(Item.COIN_ID)?.num ?? 0;
-        set {
+        set
+        {
             var item = Item.Find(Item.COIN_ID);
             if (item == null)
                 Item.Add(new Item(Item.COIN_ID, value));
-            else 
+            else
                 item.num = value;
         }
     }
-    [XmlIgnore] public int diamond {
+    [XmlIgnore]
+    public int diamond
+    {
         get => Item.Find(Item.DIAMOND_ID)?.num ?? 0;
-        set {
+        set
+        {
             var item = Item.Find(Item.DIAMOND_ID);
             if (item == null)
                 Item.Add(new Item(Item.DIAMOND_ID, value));
-            else 
+            else
                 item.num = value;
         }
     }
@@ -36,12 +42,14 @@ public class GameData
     public int achievement;
     [XmlIgnore] public int shoot => Item.GetShootId(achievement);
 
-    public Pet[] petBag = new Pet[6];
+    public Pet[] petBag = new Pet[12];
     public List<Pet> petStorage = new List<Pet>();
     public List<IKeyValuePair<string, Pet[]>> pvpPetTeam = new List<IKeyValuePair<string, Pet[]>>();
     [XmlIgnore] public List<Pet> petDict => petBag.Concat(petStorage).Where(x => x != null).ToList();
-    
-    [XmlIgnore] public List<Item> itemBag { 
+
+    [XmlIgnore]
+    public List<Item> itemBag
+    {
         get => itemStorage.OrderBy(x => x.id).ToList();
         set => itemStorage = value;
     }
@@ -55,19 +63,23 @@ public class GameData
     public YiTeRogueData yiteRogueData;
 
     [XmlIgnore] public NoobCheckPoint noobCheckPoint => NoobController.noobCheckPoint;
-    [XmlIgnore] public int initMapId => noobCheckPoint switch {
-        NoobCheckPoint.PetBag   => 71,
-        NoobCheckPoint.Map      => 71,
-        NoobCheckPoint.Train    => 61,
-        NoobCheckPoint.Battle   => 61,
+    [XmlIgnore]
+    public int initMapId => noobCheckPoint switch
+    {
+        NoobCheckPoint.PetBag => 71,
+        NoobCheckPoint.Map => 71,
+        NoobCheckPoint.Train => 61,
+        NoobCheckPoint.Battle => 61,
         _ => settingsData.initMapId,
     };
 
-    public GameData() {
+    public GameData()
+    {
         InitGameData();
     }
 
-    public void InitGameData() {
+    public void InitGameData()
+    {
         version = string.Empty;
         firstLoginDate = DateTime.Now;
         lastLoginDate = DateTime.Now;
@@ -75,7 +87,7 @@ public class GameData
 
         gender = false;
         nickname = string.Empty;
-        petBag = new Pet[6];
+        petBag = new Pet[12];
         petStorage = new List<Pet>();
         pvpPetTeam = new List<IKeyValuePair<string, Pet[]>>();
         itemStorage = new List<Item>();
@@ -88,9 +100,11 @@ public class GameData
         yiteRogueData = new YiTeRogueData();
     }
 
-    public static GameData GetDefaultData(int initCoin = 2000, int initDiamond = 0) {
+    public static GameData GetDefaultData(int initCoin = 2000, int initDiamond = 0)
+    {
         GameData gameData = new GameData();
-        gameData.petBag = new Pet[6] {
+        var initPet = new Pet[6] 
+        {
             new Pet(1, 10),
             new Pet(4, 10),
             new Pet(7, 10),
@@ -98,6 +112,12 @@ public class GameData
             new Pet(10004, 10),
             new Pet(10007, 10),
         };
+
+        for (int i = 0; i < initPet.Length; i++)
+        {
+            gameData.petBag[i] = initPet[i];
+        }
+
         gameData.itemStorage.Add(new Item(Item.COIN_ID, initCoin));
         gameData.itemStorage.Add(new Item(Item.DIAMOND_ID, initDiamond));
         gameData.itemStorage.Add(new Item(10237, 1));
@@ -105,11 +125,13 @@ public class GameData
         return gameData;
     }
 
-    public bool IsEmpty() {
+    public bool IsEmpty()
+    {
         return string.IsNullOrEmpty(nickname);
     }
 
-    public bool IsNoob() {
+    public bool IsNoob()
+    {
         return NoobController.GetNoobCheckPoint() != NoobCheckPoint.Max;
     }
 

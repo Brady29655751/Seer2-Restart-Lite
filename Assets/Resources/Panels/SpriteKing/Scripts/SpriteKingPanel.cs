@@ -237,7 +237,7 @@ public class SpriteKingPanel : Panel
             petCount = 1,
             mode = BattleMode.Special,
             starLimit = 6,
-            filterLimit = "(id>0)",
+            filterLimit = "(uid>0)",
             filterLimitDesc = "不能使用Mod精灵进行对战哦"
         };
 

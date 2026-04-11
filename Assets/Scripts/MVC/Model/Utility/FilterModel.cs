@@ -11,7 +11,8 @@ public class FilterModel<T> : Module
     public Func<T, bool> filter => GetFilter();
     public FilterType type => GetFilterType();
 
-    public virtual FilterType GetFilterType() {
+    public virtual FilterType GetFilterType()
+    {
         if (IsIDFilter())
             return FilterType.ID;
 
@@ -21,20 +22,29 @@ public class FilterModel<T> : Module
         return FilterType.Name;
     }
 
-    public virtual bool IsIDFilter() {
+    public virtual bool IsIDFilter()
+    {
         return int.TryParse(inputString, out _);
     }
 
-    public virtual bool IsParanthesesFilter() {
+    public virtual bool IsParanthesesFilter()
+    {
         return inputString?.TryTrimParentheses(out _, '(', ')') ?? false;
     }
 
-    public virtual Func<T, bool> GetFilter() {
+    public virtual Func<T, bool> GetFilter()
+    {
         return (x) => true;
+    }
+
+    public virtual void SetActive(bool active)
+    {
+        inputField.SetInputString(string.Empty);
     }
 }
 
-public enum FilterType {
+public enum FilterType
+{
     Name = 0,
     ID = 1,
     Parentheses = 2,

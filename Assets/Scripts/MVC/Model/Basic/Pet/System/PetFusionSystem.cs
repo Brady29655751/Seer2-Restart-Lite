@@ -7,8 +7,9 @@ using UnityEngine;
 public static class PetFusionSystem
 {
     public static string[] fusionRecipeKeys => new string[] { "pet", "base", "item", "result" };
-    public static Dictionary<string, string> fusionRecipeKeyDict => fusionRecipeKeys.ToDictionary(x => x, x => x);
-    public static List<FusionRecipe> fusionRecipes => ItemInfo.database.Where(x => x.type == ItemType.Recipe).Select(x => x.effects.Select(effect => FusionRecipe.Parse(effect, checkAllKeys: true))).SelectMany(x => x).Where(x => x != null).ToList();
+    public static List<FusionRecipe> fusionRecipes => ItemInfo.database.Where(x => x.type == ItemType.Recipe)
+        .Select(x => x.effects.Select(effect => FusionRecipe.Parse(effect, mustIncludeKeys: fusionRecipeKeys)))
+        .SelectMany(x => x).Where(x => x != null).ToList();
 
     public static List<FusionRecipe> GetFusionRecipeList(Pet mainPet, Pet subPet)
     {
@@ -30,25 +31,27 @@ public class FusionRecipe
 
     public (int, int) petId = (0, 0);
     public (int, int) baseId = (0, 0);
+    public (int?, int?) gender = (null, null);
     public List<Item> items = new List<Item>() { null, null, null, null };
     public List<int> resultIds = new List<int>();
     public List<int> resultWeights = new List<int>();
 
-    public static FusionRecipe Parse(Effect effect, IDictionary<string, string> recipeKeys = null, bool checkAllKeys = false)
+    public static FusionRecipe Parse(Effect effect, IDictionary<string, string> recipeKeys = null, IEnumerable<string> mustIncludeKeys = null)
     {
         if (effect == null)
             return null;
 
-        var mergedKeys = PetFusionSystem.fusionRecipeKeyDict.Merge(recipeKeys);
+        var mergedKeys = new Dictionary<string, string>().Merge(recipeKeys);
         var options = effect.abilityOptionDict;
 
-        if (checkAllKeys && !mergedKeys.All(x => options.ContainsKey(x.Value)))
+        if (!ListHelper.IsNullOrEmpty(mustIncludeKeys) && !mustIncludeKeys.All(options.ContainsKey))
             return null;
 
-        var petIdList = options.Get(mergedKeys.Get("pet"))?.ToIntList('/');
-        var baseIdList = options.Get(mergedKeys.Get("base"))?.ToIntList('/');
-        var itemList = options.Get(mergedKeys.Get("item"))?.Split('/');
-        var resultPdf = options.Get(mergedKeys.Get("result"))?.Split('/');
+        var petIdList = options.Get(mergedKeys.Get("pet", "pet"))?.ToIntList('/');
+        var baseIdList = options.Get(mergedKeys.Get("base", "base"))?.ToIntList('/');
+        var genderList = options.Get(mergedKeys.Get("gender", "gender"))?.ToIntList('/');
+        var itemList = options.Get(mergedKeys.Get("item", "item"))?.Split('/');
+        var resultPdf = options.Get(mergedKeys.Get("result", "result"))?.Split('/');
         
         var recipe = new FusionRecipe();
 
@@ -57,6 +60,9 @@ public class FusionRecipe
         
         if (!ListHelper.IsNullOrEmpty(baseIdList))
             recipe.baseId = (baseIdList[0], baseIdList[1]);
+
+        if (!ListHelper.IsNullOrEmpty(genderList))
+            recipe.gender = (genderList[0], genderList[1]);
         
         if (!ListHelper.IsNullOrEmpty(itemList))
         {

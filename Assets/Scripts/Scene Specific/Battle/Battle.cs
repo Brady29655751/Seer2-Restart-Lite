@@ -14,26 +14,29 @@ public class Battle
     public BattleResult result => currentState?.result;
     public BattleState lastState, currentState;
     public BattlePhase currentPhase;
-    
+
     public int autoSkillCursor = 0;
     public List<int> autoSkillOrder = new List<int>();
     public bool isAutoSuperSkill = false;
 
-    public Battle(Pet[] myPetBag, Pet[] opPetBag, BattleSettings settings) {
+    public Battle(Pet[] myPetBag, Pet[] opPetBag, BattleSettings settings)
+    {
         BattlePet[] player = myPetBag.Take(settings.petCount).Select(x => BattlePet.GetBattlePet(x)).ToArray();
         BattlePet[] enemy = opPetBag.Select(x => BattlePet.GetBattlePet(x)).ToArray();
 
         Init(player, enemy, settings);
     }
 
-    public Battle(BattlePet[] player, BattlePet[] enemy, BattleSettings settings) {
+    public Battle(BattlePet[] player, BattlePet[] enemy, BattleSettings settings)
+    {
         Init(player.Take(settings.petCount).ToArray(), enemy, settings);
     }
 
     /// <summary>
     /// Create battle from XML-serialized battle info.
     /// </summary>
-    public Battle(BattleInfo info) {
+    public Battle(BattleInfo info)
+    {
         this.info = info;
 
         List<BossInfo> player = info.playerInfo;
@@ -59,7 +62,8 @@ public class Battle
     /// <param name="roomHash">Room properties</param>
     /// <param name="myHash">Local Player properties</param>
     /// <param name="opHash">Opponent properties</param>
-    public Battle(Hashtable roomHash, Hashtable myHash, Hashtable opHash) {
+    public Battle(Hashtable roomHash, Hashtable myHash, Hashtable opHash)
+    {
         var seed = (int)roomHash["seed"];
         var rule = (int)roomHash["rule"];
         var petCount = (int)roomHash["count"];
@@ -68,7 +72,8 @@ public class Battle
         var item = (bool)roomHash["item"];
         var iv = buffList.Contains(Buff.BUFFID_PVP_IV_120) ? 120 : 31;
 
-        var roomSettings = new BattleSettings() {
+        var roomSettings = new BattleSettings()
+        {
             seed = seed,
             mode = BattleMode.PVP,
             rule = (BattleRule)rule,
@@ -82,7 +87,7 @@ public class Battle
             isItemOK = item,
             isCaptureOK = false,
         };
-            
+
         var myPetBag = BattlePet.GetBattlePetBag(myHash, roomSettings.petCount, iv);
         var opPetBag = BattlePet.GetBattlePetBag(opHash, roomSettings.petCount, iv);
 
@@ -96,7 +101,8 @@ public class Battle
         //     clientPetBag.Select(x => (x == null) ? null : new Pet(x)).ToArray(), roomSettings, NetworkManager.IsMasterClient);
     }
 
-    private void Init(BattlePet[] masterPetBag, BattlePet[] clientPetBag, BattleSettings settings) {
+    private void Init(BattlePet[] masterPetBag, BattlePet[] clientPetBag, BattleSettings settings)
+    {
         Player.instance.currentBattle = this;
         Random.InitState(settings.seed);
 
@@ -163,10 +169,12 @@ public class Battle
         this.currentPhase = new BattleStartPhase();
     }
 
-    private void RecordBattle(Pet[] masterPetBag, Pet[] clientPetBag, BattleSettings settings, bool isMaster) {
-        BattleRecord record = new BattleRecord() {
+    private void RecordBattle(Pet[] masterPetBag, Pet[] clientPetBag, BattleSettings settings, bool isMaster)
+    {
+        BattleRecord record = new BattleRecord()
+        {
             isMaster = isMaster,
-            settings = new BattleSettings(settings){ mode = BattleMode.Record },
+            settings = new BattleSettings(settings) { mode = BattleMode.Record },
             masterPetBag = masterPetBag,
             clientPetBag = clientPetBag,
             date = DateTime.Now,
@@ -175,7 +183,7 @@ public class Battle
         if (Player.instance.gameData.battleRecordStorage.Count > BattleRecord.MAX_RECORD_STORAGE_NUM)
             Player.instance.gameData.battleRecordStorage.RemoveAt(0);
 
-        SaveSystem.SaveData();        
+        SaveSystem.SaveData();
     }
 
     public static void StartBattle(BattleInfo battleInfo)
@@ -202,19 +210,21 @@ public class Battle
         SceneLoader.instance.ChangeScene(SceneId.Battle);
     }
 
-    public void NextPhase() {
+    public void NextPhase()
+    {
         int round = 0, maxChain = 100;
-        while (currentPhase != null) {
+        while (currentPhase != null)
+        {
             currentPhase.DoWork();
             if (currentPhase == null)
                 break;
-                
+
             lastState = new BattleState(currentState);
-            currentState = currentPhase.state;   
+            currentState = currentPhase.state;
             currentPhase = currentPhase.GetNextPhase();
 
             round += 1;     // 无限循环检测
-            if ((round > (maxChain * (EffectTiming.OnAfterAttack - EffectTiming.OnBeforeAttack + 1))) || 
+            if ((round > (maxChain * (EffectTiming.OnAfterAttack - EffectTiming.OnBeforeAttack + 1))) ||
                 (currentState.myUnit.pet.chain > maxChain) || currentState.opUnit.pet.chain > maxChain)
             {
                 currentPhase = new BattleEndPhase();
@@ -229,13 +239,14 @@ public class Battle
         }
     }
 
-    public void OnBattleStart() 
+    public void OnBattleStart()
     {
         NextPhase();
     }
 
     /// <returns>whether all units are ready or not</returns>
-    public bool SetSkill(Skill skill, bool isMe) {
+    public bool SetSkill(Skill skill, bool isMe)
+    {
         if (currentState == null)
             return false;
 
@@ -254,9 +265,10 @@ public class Battle
         {
             unit.SetSkill(skill);
         }
-            
 
-        if (isMe) {
+
+        if (isMe)
+        {
             if (!skill.IsSelectReady())
             {
                 var targets = skill.GetSelectableTarget(myUnit.petSystem.petBag, myUnit.petSystem.cursor, settings.parallelCount);
@@ -264,7 +276,7 @@ public class Battle
                 {
                     UI.SetSkillSelectMode(true);
                     UI.SelectOption(1);
-                    return false;      
+                    return false;
                 }
 
                 foreach (var e in skill.effects.Where(x => x.IsSelect()))
@@ -273,12 +285,15 @@ public class Battle
                 return SetSkill(skill, isMe);
             }
 
-            if (settings.parallelCount > 1) {
-                if (!unit.isReady) {
+            if (settings.parallelCount > 1)
+            {
+                if (!unit.isReady)
+                {
                     UI.PVPSetSkillToOthers(skill);
 
                     var nextCursor = unit.petSystem.GetNextCursorCircular();
-                    if ((skill.type != SkillType.逃跑) && (nextCursor != unit.petSystem.cursor)) {
+                    if ((skill.type != SkillType.逃跑) && (nextCursor != unit.petSystem.cursor))
+                    {
                         unit.petSystem.cursor = nextCursor;
                         UI.SetState(null, currentState);
                         UI.ProcessQuery(true);
@@ -293,7 +308,8 @@ public class Battle
         } // else if (settings.mode == BattleMode.PVP)
           //   Player.instance.gameData.battleRecordStorage?.LastOrDefault()?.AddAction(skill.ToRPCData(settings), false);
 
-        if ((settings.parallelCount <= 1) && (currentState.isAnyPetDead)) {
+        if ((settings.parallelCount <= 1) && (currentState.isAnyPetDead))
+        {
             unit.SetSkill(null);
             currentPhase = currentPhase ?? new PassivePetChangePhase();
             ((PassivePetChangePhase)currentPhase).SetSkill(skill, isMe);
@@ -305,18 +321,20 @@ public class Battle
             return false;
         }
 
-        if ((!settings.isPVP) && (opUnit.skill == null)) {
+        if ((!settings.isPVP) && (opUnit.skill == null))
+        {
             var parallelCount = Mathf.Min(settings.parallelCount, opUnit.petSystem.alivePetNum);
-            for (int i = 0; i < parallelCount; i++) {
+            for (int i = 0; i < parallelCount; i++)
+            {
                 var cursor = opUnit.petSystem.cursor;
                 var nextCursor = opUnit.petSystem.GetNextCursorCircular();
                 var defaultSkill = opUnit.pet.GetDefaultSkill();
                 if (opUnit.pet.isDead)
-                    defaultSkill = (settings.parallelCount > 1) ? null : Skill.GetPetChangeSkill(cursor, nextCursor, true);   
+                    defaultSkill = (settings.parallelCount > 1) ? null : Skill.GetPetChangeSkill(cursor, nextCursor, true);
 
                 if (parallelCount > 1)
                     defaultSkill.SetParallelIndex(cursor, myUnit.petSystem.petBag.FindIndex(x => (x != null) && (!x.isDead)));
-                
+
                 opUnit.SetSkill(defaultSkill);
 
                 if (parallelCount > 1)
@@ -324,7 +342,8 @@ public class Battle
             }
         }
 
-        if (currentState.isAllUnitReady) {
+        if (currentState.isAllUnitReady)
+        {
             myUnit.parallelSkillSystems.ForEach(x => x.EnsureSkillNotNull());
             opUnit.parallelSkillSystems.ForEach(x => x.EnsureSkillNotNull());
             currentPhase = new TurnReadyPhase();
@@ -335,7 +354,8 @@ public class Battle
         return false;
     }
 
-    public virtual float GetBattleIdentifier(string id) {
+    public virtual float GetBattleIdentifier(string id)
+    {
         return currentState.GetStateIdentifier(id);
     }
 

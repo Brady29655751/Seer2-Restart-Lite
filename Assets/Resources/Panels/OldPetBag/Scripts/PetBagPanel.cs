@@ -206,8 +206,10 @@ public class PetBagPanel : Panel
 
     private void RefreshPetBag(Pet[] bag)
     {
+        int page = selectController.GetPage();
         int cursor = selectController.GetCursor().FirstOrDefault();
         SetPetBag(bag);
+        selectController.SetPage(page);
         selectController.Select(cursor);
     }
 

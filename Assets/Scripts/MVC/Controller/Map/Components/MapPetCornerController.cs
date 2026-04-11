@@ -20,7 +20,7 @@ public class MapPetCornerController : UIModule
 
     public void OpenPetBagPanel() {
         PetBagPanel panel = Panel.OpenPanel<PetBagPanel>();
-        panel.onCloseEvent += () => { SetPet(panel.petBag?.FirstOrDefault() ); };
+        panel.onCloseEvent += () => { SetPet(Player.instance.petBag?.FirstOrDefault() ); };
     }
 
     public void Heal() {

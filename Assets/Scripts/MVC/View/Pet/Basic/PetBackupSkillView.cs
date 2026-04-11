@@ -31,7 +31,10 @@ public class PetBackupSkillView : Module
     }
 
     public void SetNormalSkills(LearnSkillInfo[] normalSkillInfos, BattleRule rule = BattleRule.Anger) {
-        Array.Resize(ref normalSkillInfos, 4);
+        if (normalSkillInfos == null)
+            normalSkillInfos = new LearnSkillInfo[4];
+        else
+            Array.Resize(ref normalSkillInfos, 4);
 
         for (int i = 0; i < 4; i++) {
             normalSkillBlockViews[i].SetSkill(normalSkillInfos[i], rule);

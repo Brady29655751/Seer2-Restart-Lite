@@ -25,6 +25,9 @@ public class PetBagModel : Module
     }
 
     public void SetPetSwap(int indexA, int indexB) {
+        indexA += selectModel.page * selectModel.selectionCapacity;
+        indexB += selectModel.page * selectModel.selectionCapacity;
+
         if ((mode == PetBagMode.Normal) || (mode == PetBagMode.YiTeRogue))
         {
             petBag.Swap(indexA, indexB);
@@ -78,14 +81,15 @@ public class PetBagModel : Module
         if (selectModel.cursor.Length <= 0)
             return false;
 
-        int index = selectModel.cursor[0];
+        int index = selectModel.globalCursor[0];
         Pet pet = selectModel.currentSelectedItems[0];
 
         if (mode == PetBagMode.Normal)
             petStorage.Add(pet);
 
-        petBag.MoveRangeTo(index + 1, petBag.Length, index);
-        petBag[petBag.Length - 1] = null;
+        var stop = (selectModel.page + 1) * selectModel.selectionCapacity;
+        petBag.MoveRangeTo(index + 1, stop, index);
+        petBag[stop - 1] = null;
 
         if (mode == PetBagMode.Normal)
             SaveSystem.SaveData();

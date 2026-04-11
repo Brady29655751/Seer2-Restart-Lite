@@ -104,6 +104,21 @@
 							<param>limit=1</param>
 							<param>title=因子商店</param>
 						</func>
+						<func type="click">
+							<description><![CDATA[常态神迹]]></description>
+							<action>battle</action>
+							<param>resident_miracle</param>
+							<condition>firstPet.uid=12798</condition>
+						</func>
+						<func type="branch">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=将神迹魔花仙子设为首发吧</param>
+							<param>item_icon=pet[12798]</param>
+							<param>option_num=1</param>
+							<condition>firstPet.uidNOT12798</condition>
+						</func>
 					</functionHandler>
 					<replyHandler>
 						<reply type="click">
@@ -188,6 +203,43 @@
 							<param>title=提示</param>
 							<param>content=50个精灵因子已经放入背包</param>
 							<param>item_icon=item[8]</param>
+							<param>option_num=1</param>
+						</button>
+					</winHandler>
+				</branch>
+				<branch id="resident_miracle">
+					<settings count="1">
+						<mode>4</mode>
+						<initBuff>(rule[0]:600000)(rule[1]:410010)</initBuff>
+					</settings>
+					<enemy>
+						<pet id="14761" level="105">
+							<status>
+								<mat>1000</mat>
+								<def>600</def>
+								<mdf>600</mdf>
+								<hp>14000</hp>
+							</status>
+							<initBuff>-8,100,56,61,-3059,3007</initBuff>
+							<loopSkill>13144,13146,13147,13144,13146,13148</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setPet</action>
+							<param>maxLevel=105</param>
+							<param>level=105</param>
+						</button>
+						<button type="auto">
+							<action>evolvePet</action>
+							<param>20011</param>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=神迹魔花仙子已常驻神迹形态</param>
+							<param>item_icon=pet[20011]</param>
 							<param>option_num=1</param>
 						</button>
 					</winHandler>

@@ -19,10 +19,12 @@ public class PetFeatureView : Module
         currentPet = pet;
 
         var bornBuffs = (pet == null) ? new List<Buff>() : new List<Buff>(){ Buff.GetFeatureBuff(pet), Buff.GetEmblemBuff(pet) };
+        var defaultBuffs = pet?.info.ui.defaultBuffs ?? new List<Buff>();
         var initBuffs = pet?.feature.afterwardBuffs?.Where(x => (x != null) && (x.info.position == "first")) ?? new List<Buff>();
+        var resistBuffs = pet?.resist?.resistBuffs ?? new List<Buff>();
         var afterwardBuffs = pet?.feature.afterwardBuffs?.Where(x => (x != null) && (x.info.position != "first")).ToList() ?? new List<Buff>();
 
-        SetDefaultBuffs(bornBuffs.Concat(pet.info.ui.defaultBuffs).Concat(initBuffs).Concat(pet.resist.resistBuffs).ToList());
+        SetDefaultBuffs(bornBuffs.Concat(defaultBuffs).Concat(initBuffs).Concat(resistBuffs).ToList());
         SetAfterwardBuffs(afterwardBuffs);
     }
 

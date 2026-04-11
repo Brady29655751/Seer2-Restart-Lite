@@ -39,6 +39,7 @@ id,name,type,price,option,description,effect
 1202,水之精华,mine,50,habitat=海洋星浅水区&linkId=10020,none,可转化为飞船能源，在动力室兑换赛尔豆
 1203,火焰元素,mine,50,habitat=火山星山脚下&linkId=10015,none,可转化为飞船能源，在动力室兑换赛尔豆
 1206,空气结晶,mine,50,habitat=克洛斯星草原&linkId=10036,none,可转化为飞船能源，在动力室兑换赛尔豆
+1207,电容球,mine,50,habitat=赫尔卡星建筑区&linkId=10030,none,可转化为飞船能源，在动力室兑换赛尔豆
 7001,潜水服,equipment,1[22010],resId=37001&removable=false,none,可以潜入深海！
 7002,高压水枪,shoot,1[22007],removable=false,none,可以喷射水流！
 7003,火焰喷射器,shoot,1[22006],removable=false,none,可以发射火焰！
@@ -149,7 +150,7 @@ id,name,type,price,option,description,effect
 21019,V8-07,buff,8[400016],resId=Buffs/410019,[FFBB33]【V8系列】[-][ENDL][FE6D2A]限定：6星以上[-],物攻 32，物防 55，特防 55，速度 23，体力 95
 21020,V8-08,buff,8[400016],resId=Buffs/410020,[FFBB33]【V8系列】[-][ENDL][FE6D2A]限定：6星以上[-],特攻 32，物防 55，特防 55，速度 23，体力 95
 22001,粘液,buff,50[D],resId=Buffs/420001&habitat=异蘑世界&linkId=121,[ffbb33]【随身物品】[-][ENDL]身上沾着粘液使对手在对战中更容易沾染自身的技能效果,使用属性技能会恢复5点怒气，法伊娜携带时额外使属性技能命中提升25%
-22002,笑笑花子,buff,50[D],resId=Buffs/420002&habitat=种植园&linkId=990,[ffbb33]【随身物品】[-][ENDL]让精灵携带在身上会使其更容易接受阳光的能量,晴天时每回合恢复1/16体力，笑笑葵携带时额外使技能威力增加10点（不论天气）
+22002,笑笑花子,buff,50[D],resId=Buffs/420002&habitat=荆棘林&linkId=131,[ffbb33]【随身物品】[-][ENDL]让精灵携带在身上会使其更容易接受阳光的能量,晴天时每回合恢复1/16体力，笑笑葵携带时额外使技能威力增加10点（不论天气）
 22003,破损头盔,buff,50[D],resId=Buffs/420003&habitat=碧玉森林&linkId=101,[ffbb33]【随身物品】[-][ENDL]从萨伦帝国的士兵身上缴获的战利品，虽然有些破烂但能保护精灵的头部以降低异常状态的影响,免疫麻痹和昏迷状态，重甲独角携带时额外使攻击技能命中提升25%
 22004,披风碎片,buff,50[D],resId=Buffs/420004&habitat=碧玉森林&linkId=101,[ffbb33]【随身物品】[-][ENDL]从萨伦帝国的士兵身上缴获的战利品，虽然有些破烂但能保护精灵的身体以降低不良状态的影响,免疫中毒和流血状态，青峰携带时额外使对手攻击技能命中降低25%
 22005,树根巨锤,buff,50[D],resId=Buffs/420005&habitat=巨石洞穴&linkId=142,[ffbb33]【随身物品】[-][ENDL]使用小树根优质木材制作的巨锤，光是这根巨锤就重达50公斤，只有力大无穷的精灵才能举起来,体重增加50kg，布鲁托携带时额外使自身每回合获得1层增重
@@ -233,6 +234,8 @@ id,name,type,price,option,description,effect
 290004,紫色元神珠,recipe,1[290004],none,none,闪光艾斯菲亚=艾斯菲亚+闪光皮皮
 290005,粉色元神珠,recipe,1[290005],none,none,卡鲁耶克=艾斯菲亚+闪光皮皮
 290007,橙色元神珠,recipe,1[290007],none,none,哈尔翼蜂=灵翼蜂+幽浮
+291001,加农葵公式,recipe,1[291001],resId=Pets/icon/1301,none,加农葵=笑笑葵(雄)+乔尼(雌)
+291002,朝天葵公式,recipe,1[291002],resId=Pets/icon/1302,none,朝天葵=乔尼(雄)+笑笑葵(雌)
 300048,辉之纹章,emblem,1000[3],resId=Emblems/46,出场自带星之辉状态,使鲁尼获得辉之纹章
 300058,拳之纹章,emblem,1000[3],resId=Emblems/58,拳类技能伤害增加10%,使长臂猴获得拳之纹章
 300077,夜视纹章,emblem,1000[3],resId=Emblems/77,夜幕时伤害增加15%且必中,使呆目齿轮鹰获得夜视纹章
@@ -371,6 +374,7 @@ id,name,type,price,option,description,effect
 500385,暗月兔精元蛋,package,1[4],resId=Pets/icon/385,none,在精灵背包中使用后可以获得暗月兔
 500389,月神精元蛋,package,1[4],resId=Pets/icon/389,none,在精灵背包中使用后可以获得月神
 500392,沙捷精元蛋,package,1[9],resId=Pets/icon/392,none,在精灵背包中使用后可以获得沙捷
+500408,帕加精元蛋,package,1[9],resId=Pets/icon/408,none,在精灵背包中使用后可以获得帕加
 500427,花焰精元蛋,package,10[610003],resId=Pets/icon/427,none,在精灵背包中使用后可以获得花焰
 500436,哥布林精元蛋,package,1[4],resId=Pets/icon/436,none,在精灵背包中使用后可以获得哥布
 500459,昭华精元蛋,package,1[4],resId=Pets/icon/459,none,在精灵背包中使用后可以获得昭华
@@ -386,6 +390,7 @@ id,name,type,price,option,description,effect
 500826,萌萌大月饼精元蛋,package,1[4],resId=Pets/icon/826,none,在精灵背包中使用后可以获得萌萌大月饼
 500959,洛基精元蛋,package,1[4],resId=Pets/icon/959,none,在精灵背包中使用后可以获得洛基
 501001,普琳精元蛋,package,1[4],resId=Pets/icon/1001,none,在精灵背包中使用后可以获得普琳
+501003,辰兔精元蛋,package,1[4],resId=Pets/icon/1003,none,在精灵背包中使用后可以获得辰兔
 501261,黑桃扑克精元蛋,package,1[4],resId=Pets/icon/1261,none,在精灵背包中使用后可以获得黑桃扑克
 501262,方块扑克精元蛋,package,1[4],resId=Pets/icon/1262,none,在精灵背包中使用后可以获得方块扑克
 510196,祖拉精元蛋,package,20[400023],resId=Pets/icon/10196,none,在精灵背包中使用后可以获得祖拉

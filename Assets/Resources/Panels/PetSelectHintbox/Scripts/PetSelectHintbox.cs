@@ -14,13 +14,16 @@ public class PetSelectHintbox : Hintbox
         base.Init();
     }
 
-    public override void SetPanelIdentifier(string id, string param) {
-        switch (id) {
+    public override void SetPanelIdentifier(string id, string param)
+    {
+        switch (id)
+        {
             default:
                 base.SetPanelIdentifier(id, param);
                 break;
             case "storage":
-                SetStorage(param.Split('/').Select(p => {
+                SetStorage(param.Split('/').Select(p =>
+                {
                     var petInfo = p.ToIntList();
                     if (ListHelper.IsNullOrEmpty(petInfo))
                         return null;
@@ -37,14 +40,15 @@ public class PetSelectHintbox : Hintbox
         }
     }
 
-    public int[] GetCursor() => selectController?.GetCursor();
 
-    public void SetStorage(List<Pet> storage) {
+    public void SetStorage(List<Pet> storage)
+    {
         selectController.SetStorage(storage);
         selectController.Select(0);
     }
 
-    public void SetConfirmSelectCallback(Action<Pet> callback) {
+    public void SetConfirmSelectCallback(Action<Pet> callback)
+    {
         panelController.SetHintboxConfirmCallback(callback);
     }
 

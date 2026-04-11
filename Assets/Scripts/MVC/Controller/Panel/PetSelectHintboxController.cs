@@ -11,7 +11,7 @@ public class PetSelectHintboxController : Module
 
     public void OnConfirmSelectPet() {
         Player.SetSceneData("PetSelect", hintboxModel.currentSelectedPet);
-        Player.SetSceneData("PetSelectIndex", (hintboxModel.cursor));
+        Player.SetSceneData("PetSelectIndex", hintboxModel.globalCursor);
     }
 
     public void SetHintboxConfirmCallback(Action<Pet> callback) {

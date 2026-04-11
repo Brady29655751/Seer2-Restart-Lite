@@ -37,11 +37,11 @@ public class PetBackupSkillModel : SelectModel<Skill>
 
     public void SetPet(Pet pet, int defaultSelectPage = 0, bool active = false) {
         currentPet = pet;
-        SetActive(active);
 
         if (currentPet == null)
             return;
 
+        SetActive(active);
         SetStorage(currentPet.backupNormalSkill.ToList(), defaultSelectPage);
         Filter(SpecialFilter, defaultSelectPage);
         superSkill = currentPet.skills.GetBackupSuperSkill(SpecialFilter);

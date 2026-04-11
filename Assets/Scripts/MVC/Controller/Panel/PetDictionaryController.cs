@@ -13,12 +13,14 @@ public class PetDictionaryController : Module
 
     [SerializeField] private PetDictionaryMode mode = PetDictionaryMode.Topic;
     [SerializeField] private PetSelectController selectController;
+    [SerializeField] private PetFilterController filterController;
     [SerializeField] private PetBagPanel petBagPanel;
 
     protected override void Awake()
     {
         base.Awake();
         selectController.onSetSelectionsEvent += onSetSelections;
+        selectController.onSetStorageEvent += filterController.Reset;
     }
 
     public override void Init()

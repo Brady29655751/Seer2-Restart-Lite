@@ -10,7 +10,7 @@ public class PetPersonalityModel : Module
 
     public void SetPet(Pet pet) {
         currentPet = pet;
-        this.personality = pet.basic.personality;
+        this.personality = pet?.basic.personality ?? Personality.实干;
     }
 
     public void SetPersonality(Personality personality) {

@@ -15,6 +15,7 @@ public class PetEVView : Module
         gameObject.SetActive(pet != null);
         if (pet == null)
             return;
+            
         SetEVStorage(pet.talent.evStorage);
         SetStartButtonSprite(startButtonSprite);
     }

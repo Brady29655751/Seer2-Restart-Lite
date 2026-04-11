@@ -13,7 +13,8 @@ public class ItemShopPanel : Panel
     protected ItemShopMode shopMode = ItemShopMode.Buy;
     protected List<int> itemNumLimit = new List<int>();
 
-    protected Dictionary<ItemShopType, string> shopNameDict = new Dictionary<ItemShopType, string>() {
+    protected Dictionary<ItemShopType, string> shopNameDict = new Dictionary<ItemShopType, string>() 
+    {
         { ItemShopType.None, "道具商店" },
         { ItemShopType.PetPotion, "精灵道具商店" },
         { ItemShopType.Mine, "矿石回收商店" },
@@ -24,16 +25,17 @@ public class ItemShopPanel : Panel
         { ItemShopType.Achievement, "称号商店" },
     };
 
-    protected Dictionary<ItemShopType, List<int>> shopItemIdDict = new Dictionary<ItemShopType, List<int>>() {
+    protected Dictionary<ItemShopType, List<int>> shopItemIdDict = new Dictionary<ItemShopType, List<int>>() 
+    {
         { ItemShopType.None, new List<int>() },
         { ItemShopType.PetPotion, new List<int>() {
-            10101, 10111, 10221, 10238, 10239, 10240, 20001, 10018, 20002, 
+            10101, 10111, 10221, 10238, 10239, 10240, 20001, 10018, 20002,
             10211, 10242, 21006, 21007, 21008, 21009, 21010, 10011, 10012,
             10013, 10014, 10015, 10016, 10001, 10002, 10003, 10004, 10005,
-            320000, 110050, 
+            320000, 110050,
         } },
         { ItemShopType.Mine, ItemInfo.database.Where(x => x.type == ItemType.Mine).Select(x => x.id).ToList() },
-        { ItemShopType.Honor, new List<int>() { 
+        { ItemShopType.Honor, new List<int>() {
             8001,   8002,   8003,   8004,   8005,
             8006,   8007,   8008,
             300048, 300058, 300077, 300133, 300174, 300176,
@@ -42,8 +44,8 @@ public class ItemShopPanel : Panel
             500000, 500178, 500436, 500959, 500826,
             500761, 500280, 500307, 500809, 500179,
             500538, 501261, 501262, 510499, 510370,
-            501001, 500385, 500389, 500492, 500808, 
-            500347, 500459, 500797,
+            501001, 500385, 500389, 500492, 500808,
+            500347, 500459, 500797, 501003,
         } },
         { ItemShopType.YiTe, new List<int>() {
             500091, 24000,  320757, 320092, 320093, 320094,
@@ -54,15 +56,18 @@ public class ItemShopPanel : Panel
         { ItemShopType.Achievement, Item.achievementItemDatabase.Select(x => x.id).ToList() },
     };
 
-    public static bool IsBuy(ItemShopMode shopMode) {
+    public static bool IsBuy(ItemShopMode shopMode)
+    {
         return (shopMode == ItemShopMode.Buy) || (shopMode == ItemShopMode.BuyYiTe);
     }
 
-    public static bool IsSell(ItemShopMode shopMode) {
+    public static bool IsSell(ItemShopMode shopMode)
+    {
         return (shopMode == ItemShopMode.Sell) || (shopMode == ItemShopMode.SellYiTe);
     }
 
-    public static bool IsYite(ItemShopMode shopMode) {
+    public static bool IsYite(ItemShopMode shopMode)
+    {
         return (shopMode == ItemShopMode.BuyYiTe) || (shopMode == ItemShopMode.SellYiTe);
     }
 
@@ -80,8 +85,10 @@ public class ItemShopPanel : Panel
         SetShopType(shopType);
     }
 
-    public override void SetPanelIdentifier(string id, string param) {
-        switch (id) {
+    public override void SetPanelIdentifier(string id, string param)
+    {
+        switch (id)
+        {
             default:
                 base.SetPanelIdentifier(id, param);
                 break;
@@ -90,7 +97,8 @@ public class ItemShopPanel : Panel
                 SetTitle();
                 break;
             case "mode":
-                var mode = param switch {
+                var mode = param switch
+                {
                     "buy" => ItemShopMode.Buy,
                     "sell" => ItemShopMode.Sell,
                     "buy_yite" => ItemShopMode.BuyYiTe,
@@ -100,15 +108,16 @@ public class ItemShopPanel : Panel
                 SetShopMode(mode);
                 break;
             case "type":
-                var type = param switch {
+                var type = param switch
+                {
                     "pet_potion" => ItemShopType.PetPotion,
-                    "mine"  => ItemShopType.Mine,
+                    "mine" => ItemShopType.Mine,
                     "honor" => ItemShopType.Honor,
-                    "sign"  => ItemShopType.Sign,
-                    "yite"  => ItemShopType.YiTe,
+                    "sign" => ItemShopType.Sign,
+                    "yite" => ItemShopType.YiTe,
                     "plant" => ItemShopType.Plant,
                     "achievement" => ItemShopType.Achievement,
-                    "others"=> ItemShopType.Others,
+                    "others" => ItemShopType.Others,
                     _ => ItemShopType.None,
                 };
                 SetShopType(type);
@@ -121,7 +130,7 @@ public class ItemShopPanel : Panel
                 var itemList = new List<int>();
                 if (param.TryTrimParentheses(out _, '(', ')'))
                 {
-                    var itemFilter = Parser.ParseConditionFilter<ItemInfo>(param, (type, info) => 
+                    var itemFilter = Parser.ParseConditionFilter<ItemInfo>(param, (type, info) =>
                         info.TryGetItemInfoIdentifier(type, out var num) ? num : Identifier.GetNumIdentifier(type)
                     );
                     itemList = ItemInfo.database.Where(itemFilter).Select(x => x.id).ToList();
@@ -140,34 +149,40 @@ public class ItemShopPanel : Panel
         }
     }
 
-    public void SetShopMode(ItemShopMode shopMode) {
+    public void SetShopMode(ItemShopMode shopMode)
+    {
         this.shopMode = shopMode;
         buyButton?.gameObject.SetActive(IsBuy(shopMode));
         sellButton?.gameObject.SetActive(IsSell(shopMode));
         shopController.SetShopMode(shopMode);
     }
 
-    public void SetShopType(ItemShopType shopType) {
+    public void SetShopType(ItemShopType shopType)
+    {
         this.shopType = shopType;
         SetTitle();
         SetStorage();
     }
 
-    public void SetCurrencyType(int coinType, int diamondType) {
+    public void SetCurrencyType(int coinType, int diamondType)
+    {
         shopController.SetCurrencyType(coinType, diamondType);
     }
 
-    private void SetTitle() {
+    private void SetTitle()
+    {
         shopController.SetTitle(shopNameDict.Get(shopType, "道具商店"));
     }
 
-    private void SetStorage() {
+    private void SetStorage()
+    {
         var idList = shopItemIdDict.Get(shopType, new List<int>());
         var itemList = idList.Select((x, i) => new Item(x, GetStorageItemCount(x, i))).ToList();
         shopController.SetStorage(itemList);
     }
 
-    private int GetStorageItemCount(int id, int index) {
+    private int GetStorageItemCount(int id, int index)
+    {
         if (!ListHelper.IsNullOrEmpty(itemNumLimit))
             return (itemNumLimit[index] < 0) ? -1 : Mathf.Max(0, itemNumLimit[index] - int.Parse(Activity.Shop.GetData(id.ToString(), "0")));
 
@@ -177,14 +192,16 @@ public class ItemShopPanel : Panel
 
 }
 
-public enum ItemShopMode {
+public enum ItemShopMode
+{
     Buy,
     Sell,
     BuyYiTe,
     SellYiTe,
 }
 
-public enum ItemShopType {
+public enum ItemShopType
+{
     Others = -1,
     None = 0,
     PetPotion = 1,

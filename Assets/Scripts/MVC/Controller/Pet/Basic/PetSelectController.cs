@@ -26,58 +26,81 @@ public class PetSelectController : Module
         base.Init();
     }
 
-    public int[] GetCursor() {
+    public int GetPage() => selectModel.page;
+
+    public int[] GetCursor()
+    {
         return selectModel.cursor;
     }
 
-    public Pet[] GetPetSelections() {
+    public Pet[] GetPetSelections()
+    {
         return selectModel.selections;
     }
 
-    public void RefreshView() {
+    public void RefreshView()
+    {
         selectView.SetSelections(selectModel.selections);
         selectView.SetStorageCountText(selectModel.count);
-        if (selectModel.cursor.Length > 0) {
+        if (selectModel.cursor.Length > 0)
+        {
             selectView.Select(selectModel.cursor[0]);
         }
         pageView?.SetPage(selectModel.page, selectModel.lastPage);
     }
 
-    public void SetStorage(List<Pet> storage, int defaultSelectPage = 0) {
-        selectModel.SetStorage(storage, defaultSelectPage);
+    public void SetStorage(List<Pet> storage, int defaultSelectPage = 0, bool reset = true)
+    {
+        selectModel.SetStorage(storage, defaultSelectPage, reset);
         onSetStorageEvent?.Invoke();
     }
 
-    public void SetGetMarks(List<bool> getMarks = null) {
+    public void SetGetMarks(List<bool> getMarks = null)
+    {
         getMarks ??= Enumerable.Repeat(false, selectModel.selections.Length).ToList();
         selectView.SetGetMarks(getMarks);
     }
 
-    public void Select(int index) {
+    public void Select(int index)
+    {
         selectModel.Select(index);
         RefreshView();
         if (!index.IsInRange(0, selectModel.selections.Length))
             return;
-        
+
         onSelectPetEvent?.Invoke(selectModel.selections[index]);
         onSelectIndexEvent?.Invoke(index);
     }
 
-    public void PrevPage(bool defaultSelect = true) {
+    public void PrevPage(bool defaultSelect = true)
+    {
         selectModel.PrevPage();
-        if ((defaultSelect) && (selectModel.cursor.Length <= 0)) {
+        if ((defaultSelect) && (selectModel.cursor.Length <= 0))
+        {
             Select(0);
         }
     }
 
-    public void NextPage(bool defaultSelect = true) {
+    public void NextPage(bool defaultSelect = true)
+    {
         selectModel.NextPage();
-        if ((defaultSelect) && (selectModel.cursor.Length <= 0)) {
+        if ((defaultSelect) && (selectModel.cursor.Length <= 0))
+        {
             Select(0);
         }
     }
 
-    public void SetPageByInputField(bool defaultSelect = true) {
+    public void SetPage(int page, bool defaultSelect = true)
+    {
+        selectModel.SetPage(page);
+        if (defaultSelect && (selectModel.cursor.Length <= 0))
+        {
+            Select(0);
+        }
+    }
+
+    public void SetPageByInputField(bool defaultSelect = true)
+    {
         if (pageView == null)
             return;
 
@@ -86,35 +109,42 @@ public class PetSelectController : Module
             return;
 
         selectModel.SetPage(page);
-        if ((defaultSelect) && (selectModel.cursor.Length <= 0)) {
+        if (defaultSelect && (selectModel.cursor.Length <= 0))
+        {
             Select(0);
         }
     }
 
-    public void Sort(Func<Pet, object> sorter) {
+    public void Sort(Func<Pet, object> sorter)
+    {
         selectModel.Sort(sorter);
         Select(0);
     }
 
-    public void Filter(Func<Pet, bool> filter) {
+    public void Filter(Func<Pet, bool> filter)
+    {
         selectModel.Filter(filter);
         Select(0);
     }
 
-    public void Filter(Func<Pet, int, bool> filter) {
+    public void Filter(Func<Pet, int, bool> filter)
+    {
         selectModel.Filter(filter);
         Select(0);
     }
 
-    public void StartDrag(int index, RectTransform rectTransform) {
+    public void StartDrag(int index, RectTransform rectTransform)
+    {
         selectModel.StartDrag(index, rectTransform);
     }
 
-    public void EndDrag(int index, RectTransform rectTransform) {
+    public void EndDrag(int index, RectTransform rectTransform)
+    {
         selectModel.EndDrag(index, rectTransform);
     }
 
-    public void Drop(int index, RectTransform rectTransform) {
+    public void Drop(int index, RectTransform rectTransform)
+    {
         selectModel.Drop(index);
         Select(index);
     }

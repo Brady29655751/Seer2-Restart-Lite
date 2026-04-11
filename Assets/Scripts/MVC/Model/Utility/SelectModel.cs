@@ -23,6 +23,7 @@ public class SelectModel<T> : Module, IPageHandler
     public T[] selections => selectableArray.items;
     public T[] currentSelectedItems => selectableArray.currentSelectItems;
     public int[] cursor => selectableArray.currentSelectIndex;
+    public int[] globalCursor => cursor?.Select(x => page * capacity + x).ToArray();
     public int count => resultStorage.Count;
     public int selectionSize => selectableArray.size;
     public int selectionCapacity => capacity;
@@ -76,9 +77,18 @@ public class SelectModel<T> : Module, IPageHandler
         SetPage(page + 1);
     }
 
-    public virtual void SetStorage(List<T> storage, int defaultSelectPage = 0) {
+    public virtual void SetStorage(List<T> storage, int defaultSelectPage = 0, bool reset = true) {
         this.storage = storage;
-        Reset(defaultSelectPage);
+
+        if (reset)
+            Reset(defaultSelectPage);
+        else
+        {
+            if (defaultSelectPage < 0)
+                return;
+            
+            SetPage(defaultSelectPage);
+        }
     }
 
     protected virtual void SetSelections(T[] selections) {

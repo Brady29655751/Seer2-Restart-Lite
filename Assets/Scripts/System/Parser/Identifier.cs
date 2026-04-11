@@ -477,7 +477,7 @@ public static class Identifier
             }
 
             // Parse success => buffIdExpr is buffId.
-            buff = buffs.Find(x => x.id == buffId) ?? new Buff(-1);
+            buff = buffs.Find(x => x.id == buffId);
             testBuff = (Buff.GetBuffInfo(buffId) == null) ? null : new Buff(buffId);
 
             return id switch
@@ -486,7 +486,7 @@ public static class Identifier
                 "own" => buffs.Exists(x => x.id == buffId) ? 1 : 0,
                 "block" => buffController.IsBuffBlocked(testBuff) ? 1 : 0,
                 "copy" => buffController.IsBuffCopied(testBuff) ? 1 : 0,
-                _ => buff.TryGetBuffIdentifier(id, out float num) ? num : GetNumIdentifier(id),
+                _ => (buff?.TryGetBuffIdentifier(id, out float num) ?? false) ? num : GetNumIdentifier(id),
             };
         }
 
@@ -494,8 +494,9 @@ public static class Identifier
         {
             var filter = Parser.ParseConditionFilter<Buff>(id, (x, buff) => buff.TryGetBuffIdentifier(x, out float num) ? num : Identifier.GetNumIdentifier(x));
             buffs = buffs.Where(filter).ToList();
-            buff = buffs.FirstOrDefault() ?? new Buff(-1);
-            testBuff = Buff.GetBuffInfo(buff?.id ?? 0) == null ? null : new Buff(buff.id);
+            buff = buffs.FirstOrDefault();
+            var buffId = buff?.id ?? 0;
+            testBuff = Buff.GetBuffInfo(buffId) == null ? null : new Buff(buffId);
 
             var subStr = id.TrimParenthesesLoop('(', ')')?.ConcatToString(")(");
             id = id.TrimStart("(" + subStr + ")").TrimStart('.');
@@ -505,7 +506,8 @@ public static class Identifier
                 return split[0] switch
                 {
                     "count" => buffs.Count,
-                    _ => buff?.GetBuffIdentifier(split[0]) ?? float.MinValue,
+                    "own" => buffs.Count > 0 ? 1 : 0,
+                    _ => (buff?.TryGetBuffIdentifier(split[0], out float num) ?? false) ? num : GetNumIdentifier(split[0]),
                 };
 
 
@@ -514,7 +516,7 @@ public static class Identifier
                 "sum" => buffs.Sum(x => x.GetBuffIdentifier(split[0])),
                 "max" => buffs.Max(x => x.GetBuffIdentifier(split[0])),
                 "min" => buffs.Min(x => x.GetBuffIdentifier(split[0])),
-                _ => buff.TryGetBuffIdentifier(id, out float num) ? num : GetNumIdentifier(id),
+                _ => (buff?.TryGetBuffIdentifier(id, out float num) ?? false) ? num : GetNumIdentifier(id),
             };
         }
 

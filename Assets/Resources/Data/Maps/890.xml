@@ -1,0 +1,50 @@
+<map name="风暴悬崖" category="11" id="890" weather="8">
+	<fightMap>100009</fightMap>
+	<music category="11">
+		<bgm>BGM_890</bgm>
+	</music>
+	<initialPoint>750,200</initialPoint>
+	<entities>
+		<npc id="89001" resId="Pets/pet/240" name="Lv81 海特尔" size="74,98" pos="440,85" namePos="0,0">
+			<battle>
+				<branch id="default">
+					<settings count="6" capture="true">
+						<weather>8</weather>
+					</settings>
+					<enemy>
+						<pet id="240" level="81">
+							<loopSkill>10050</loopSkill>
+						</pet>
+					</enemy>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>battle</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<npc id="89002" resId="Pets/pet/240" name="Lv82 海特尔" size="74,98" pos="260,235" namePos="0,0">
+			<battle>
+				<branch id="default">
+					<settings count="6" capture="true">
+						<weather>8</weather>
+					</settings>
+					<enemy>
+						<pet id="240" level="82">
+							<loopSkill>10050</loopSkill>
+						</pet>
+					</enemy>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>battle</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+        <teleport id="1" name="风刃氏族主城" pos="140,320" targetMapId="900"/>
+	</entities>
+</map>

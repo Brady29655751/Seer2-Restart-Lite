@@ -654,6 +654,16 @@ public class Pet
         // Check New Skill
         foreach (var pet in allPets)
             pet?.skills?.CheckNewSkill(pet?.level ?? 0);
+
+
+        if (VersionData.Compare(petDataVersion, "lite_4.1") < 0)
+        {
+            var extendLength = 12 - gameData.petBag.Length;
+            if (extendLength > 0)
+                gameData.petBag = gameData.petBag.Concat(Enumerable.Repeat<Pet>(null, extendLength)).ToArray();
+
+            petDataVersion = "lite_4.1";
+        }
     }
 
 }

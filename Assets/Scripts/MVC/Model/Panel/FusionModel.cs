@@ -67,6 +67,22 @@ public class FusionModel : Module
             return false;
         }
 
+        // Check gender
+        if ((currentRecipe.gender.Item1 != null) && (currentRecipe.gender.Item2 != null))
+        {
+            if (currentRecipe.gender.Item1 != mainPet.basic.gender)
+            {
+                Hintbox.OpenHintboxWithContent($"<color=#ffbb33>主精灵</color>性别必须为<color=#ffbb33>{PetIVSystem.GetGenderName(currentRecipe.gender.Item1.Value)}</color>！", 16);
+                return false;
+            }
+
+            if (currentRecipe.gender.Item2 != subPet.basic.gender)
+            {
+                Hintbox.OpenHintboxWithContent($"<color=#ffbb33>副精灵</color>性别必须为<color=#ffbb33>{PetIVSystem.GetGenderName(currentRecipe.gender.Item2.Value)}</color>！", 16);
+                return false;
+            }
+        }
+
         var mainChainCount = PetExpSystem.GetEvolveChain(currentRecipe.petId.Item1, mainPet.id)?.Count ?? 0;
         if (mainChainCount == 0)
         {

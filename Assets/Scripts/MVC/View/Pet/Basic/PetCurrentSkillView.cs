@@ -12,6 +12,7 @@ public class PetCurrentSkillView : Module
     [SerializeField] private PetSkillBlockView[] normalSkillBlockViews = new PetSkillBlockView[4];
     
     public void SetPet(Pet pet, BattleRule rule = BattleRule.Anger) {
+        gameObject.SetActive(pet != null);
         if (pet == null)
             return;
         

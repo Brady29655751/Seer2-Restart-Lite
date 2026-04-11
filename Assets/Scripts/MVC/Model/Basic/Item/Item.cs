@@ -262,6 +262,9 @@ public class Item
 
     public bool IsUsable(object invokeUnit, BattleState state)
     {
+        if (invokeUnit == null)
+            return false;
+
         if (num <= 0)
             return false;
 

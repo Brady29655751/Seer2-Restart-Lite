@@ -7,24 +7,27 @@ public class PetFeatureController : Module
 {
     [SerializeField] private PetFeatureModel featureModel;
     [SerializeField] private PetFeatureView featureView;
-    
+
     public event Action<Buff> onRemoveBuffEvent;
-    
-    public override void Init() {
+
+    public override void Init()
+    {
         featureView.SetOnRemoveCallback(buff => onRemoveBuffEvent?.Invoke(buff));
     }
 
-    public void SetMode(PetBagMode mode) {
+    public void SetMode(PetBagMode mode)
+    {
         featureView.SetMode(mode);
     }
 
-    public void SetPet(Pet pet) {
+    public void SetPet(Pet pet)
+    {
         featureModel.SetPet(pet);
         featureView.SetPet(pet);
     }
-    
-    
-    
-    
-    
+
+
+
+
+
 }

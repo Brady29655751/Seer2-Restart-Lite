@@ -1,0 +1,117 @@
+<map name="风刃氏族主城"  category="11"  id="900" weather="8">
+	<!-- <resource>10011</resource> -->
+	<initialPoint>470,150</initialPoint>
+	<music category="11">
+		<bgm>BGM_900</bgm>
+	</music>
+	<entities>
+		<npc id="90001" resId="90001" name="娜娜" size="94,110" pos="280,260" namePos="10,-5">
+			<description>让你知道我的厉害！</description>
+			<dialog>
+				<branch id="default" name="娜娜" icon="90001" size="94,110" pos="0,45">
+					<content><![CDATA[那个老锅炉就不能换掉吗？？喂你，要么过来帮忙，要么走开！（概率触发捕捉事件）]]></content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[那娜娜那娜哪个娜哪？]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+						<reply type="click">
+							<description><![CDATA[挑战斯缇姆军团]]></description>
+							<action>battle</action>
+							<param>default</param>
+						</reply>
+					</replyHandler>
+				</branch>
+				<branch id="reward" name="娜娜" icon="90001" size="94,110" pos="0,45">
+					<content><![CDATA[我的精灵很欣赏你，他想亲自考验你是否有资格让他跟随]]></content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[那你会一起跟随我吗？]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+						<reply type="click">
+							<description><![CDATA[正合我意！]]></description>
+							<action>battle</action>
+							<param>capture</param>
+						</reply>
+					</replyHandler>
+				</branch>
+			</dialog>
+			<battle>
+				<branch id="default">
+					<settings count="6">
+						<weather>8</weather>
+					</settings>
+					<enemy>
+						<pet id="246" level="85">
+							<loopSkill>14011,14011,14000</loopSkill>
+							<superSkill>14009</superSkill>
+						</pet>
+						<pet id="246" level="86">
+							<loopSkill>14011,14011,14000</loopSkill>
+							<superSkill>14009</superSkill>
+						</pet>
+						<pet id="246" level="87">
+							<loopSkill>14011,14011,14000</loopSkill>
+							<superSkill>14009</superSkill>
+						</pet>
+						<pet id="246" level="88">
+							<loopSkill>14011,14011,14000</loopSkill>
+							<superSkill>14009</superSkill>
+						</pet>
+						<pet id="246" level="89">
+							<loopSkill>14011,14011,14000</loopSkill>
+							<superSkill>14009</superSkill>
+						</pet>
+						<pet id="246" level="90">
+							<loopSkill>14011,14011,14000</loopSkill>
+							<superSkill>14009</superSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setItem</action>
+							<param>add</param>
+							<param>10201,3</param>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=3个砂糖甜饼已经放入背包</param>
+							<param>item_icon=item[10201]</param>
+							<param>option_num=1</param>
+						</button>
+						<button type="auto">
+							<action>openDialog</action>
+							<param>reward</param>
+							<condition>random[old]&lt;5</condition>
+						</button>
+					</winHandler>
+				</branch>
+				<branch id="capture">
+					<settings count="1" capture="true">
+						<weather>8</weather>
+					</settings>
+					<enemy>
+						<pet id="246" level="85">
+							<loopSkill>14011,14011,14011,14011,14011,-4</loopSkill>
+						</pet>
+					</enemy>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>openDialog</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<teleport id="1" name="风暴悬崖" pos="50,115" targetMapId="890"/>
+		<teleport id="2" name="神风祭台" pos="140,310" targetMapId="910"/>
+		<!-- <teleport id="3" name="汲雨之岛" pos="800,130" targetMapId="424"/> -->
+	</entities>
+</map>
+

@@ -5,11 +5,17 @@ using UnityEngine;
 
 public class FilterController<T> : Module
 {
-    [SerializeField] private FilterModel<T> filterModel;
+    [SerializeField] protected FilterModel<T> filterModel;
 
     public event Action<Func<T, bool>> onFilterEvent;
 
-    public void Filter() {
+    public void SetActive(bool active)
+    {
+        filterModel.SetActive(active);
+    }
+
+    public void Filter()
+    {
         onFilterEvent?.Invoke(filterModel.filter);
     }
 }

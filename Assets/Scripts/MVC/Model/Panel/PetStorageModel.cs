@@ -16,21 +16,24 @@ public class PetStorageModel : Module
 
     public int storageSelectRefreshPage => storageSelectModel.GetRefreshPageAfterRemoved();
     public int storageSelectPage => storageSelectModel.page;
-    public int storageSelectCursor => ((storageSelectModel.cursor.Length > 0) ? 
+    public int storageSelectCursor => ((storageSelectModel.cursor.Length > 0) ?
         storageSelectModel.cursor[0] : 0);
 
-    public void SetMode(PetBagMode mode) {
+    public void SetMode(PetBagMode mode)
+    {
         this.mode = mode;
     }
 
-    public bool OnPetTake() {
+    public bool OnPetTake()
+    {
         if (storageSelectModel.cursor.Length <= 0)
             return false;
 
         if (!petBag.Contains(null))
             return false;
-        
-        if (mode == PetBagMode.PVP) {
+
+        if (mode == PetBagMode.PVP)
+        {
             var petCount = (int)PhotonNetwork.CurrentRoom.CustomProperties["count"];
             if (petBag.Count(x => x != null) == petCount)
                 return false;
@@ -39,10 +42,12 @@ public class PetStorageModel : Module
         return true;
     }
 
-    public void SetPetTake(Pet oldPet) {
+    public void SetPetTake(Pet oldPet)
+    {
         Pet newPet = storageSelectModel.currentSelectedItems[0];
-        
-        if (mode != PetBagMode.Normal) {
+
+        if (mode != PetBagMode.Normal)
+        {
             petBag.Update(oldPet, newPet);
             petBagPanel?.RefreshPetBag();
             return;
@@ -50,12 +55,13 @@ public class PetStorageModel : Module
         petStorage.Remove(newPet);
         if (oldPet != null)
             petStorage.Add(oldPet);
-        
+
         petBag.Update(oldPet, newPet);
         SaveSystem.SaveData();
     }
 
-    public void SetPetRelease() {
+    public void SetPetRelease()
+    {
         if (storageSelectModel.cursor.Length <= 0)
             return;
 

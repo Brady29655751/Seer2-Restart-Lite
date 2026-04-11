@@ -26,6 +26,7 @@ public class PetStorageController : Module
 
     private void InitSelectSubscriptions() {
         selectController.onSetStorageEvent += buttonView.OnSetStorage;
+        selectController.onSetStorageEvent += selectController.RefreshView;
         selectController.onSelectPetEvent += buttonView.OnSelect;
     }   
 
@@ -33,7 +34,7 @@ public class PetStorageController : Module
         int page = (mode == PetBagMode.PVP) ? buttonModel.storageSelectPage : buttonModel.storageSelectRefreshPage;
         int cursor = buttonModel.storageSelectCursor;
         var petStorage = buttonModel.petStorage;
-        selectController.SetStorage(petStorage.ToList(), page);
+        selectController.SetStorage(petStorage.ToList(), page, false);
         selectController.Select(cursor);
     }
 

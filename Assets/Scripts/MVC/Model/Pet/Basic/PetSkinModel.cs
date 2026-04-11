@@ -6,13 +6,13 @@ using UnityEngine;
 public class PetSkinModel : SelectModel<int>
 {
     public Pet currentPet;
-    public PetUIInfo uiInfo => currentPet.info.ui;
+    public PetUIInfo uiInfo => currentPet?.info.ui;
     public int[] skinIds => selections;
-    public int currentSkinId => currentSelectedItems[0];
+    public int currentSkinId => currentSelectedItems.FirstOrDefault();
 
     public void SetPet(Pet pet) {
         currentPet = pet;
-        SetStorage(uiInfo.GetAllSkinList(pet.ui));
+        SetStorage(uiInfo?.GetAllSkinList(pet?.ui) ?? new List<int>());
         SetPage(0);
     }
 

@@ -63,12 +63,12 @@ public class LotteryPanel : Panel
             return;
         }
 
-        if ((lastJackpotTime < DateTime.Now.Date) && (thisBuyTime.Date < DateTime.Now.Date))
+        if ((lastJackpotTime <DateTime.Today) && (thisBuyTime.Date <DateTime.Today))
         {
             // 之前购买的彩票，开奖！
             var thisJackpotTicket = candidates.Random(5);
             Lottery.SetData("jackpot", thisJackpotTicket.Select(x => x.ToString()).ConcatToString("/"));
-            Lottery.SetData("jackpotTime", DateTime.Now.Date);
+            Lottery.SetData("jackpotTime",DateTime.Today);
             Lottery.SetData("lastBuy", Lottery.GetData("thisBuy", string.Empty));
             Lottery.SetData("lastBuyTime", thisBuyTime);
             Lottery.SetData("thisBuy", string.Empty);
@@ -95,8 +95,8 @@ public class LotteryPanel : Panel
     {
         var lastBuyTicket = Lottery.GetData("lastBuy")?.ToIntList('/');
         var thisBuyTicket = Lottery.GetData("thisBuy")?.ToIntList('/');
-        var buyDate = Lottery.GetData("thisBuyTime", DateTime.Now.Date.AddDays(-1));
-        var isBuyToday = buyDate.Date >= DateTime.Now.Date;
+        var buyDate = Lottery.GetData("thisBuyTime",DateTime.Today.AddDays(-1));
+        var isBuyToday = buyDate.Date >=DateTime.Today;
 
         buyTicketButton?.gameObject.SetActive(!isBuyToday);
         alreadyBuyText?.gameObject.SetActive(isBuyToday);
@@ -187,7 +187,7 @@ public class LotteryPanel : Panel
     private void OnConfirmBuyTicket()
     {
         Lottery.SetData("thisBuy", thisBuy.GetPetSelections().Select(x => x.id.ToString()).ConcatToString("/"));
-        Lottery.SetData("thisBuyTime", DateTime.Now.Date);
+        Lottery.SetData("thisBuyTime",DateTime.Today);
         SaveSystem.SaveData();
 
         ShowBuySituation();
@@ -195,6 +195,10 @@ public class LotteryPanel : Panel
 
     private void SelectCandidatePet(Pet pet)
     {
+        var thisBuyTime = Lottery.GetData("thisBuyTime", DateTime.MinValue);
+        if (thisBuyTime.Date >= DateTime.Today)
+            return;
+
         var cursor = thisBuy.GetCursor().FirstOrDefault();
         thisBuy.SetStorage(thisBuy.GetPetSelections().UpdateAt(cursor, pet).ToList());
         thisBuy.Select(cursor);

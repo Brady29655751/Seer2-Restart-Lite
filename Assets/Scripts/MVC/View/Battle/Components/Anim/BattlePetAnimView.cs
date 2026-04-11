@@ -21,6 +21,7 @@ public class BattlePetAnimView : BattleBaseView
     [SerializeField] private IAnimator powerSkillAnim;
 
     private int cursorOffset = 0;
+    private Pet currentPet;
     private PetUI currentPetUI; //仅限有动画的精灵使用这个字段,如果不为null,说明这个精灵有动画
     private GameObject currentPetAnim;
 
@@ -61,7 +62,9 @@ public class BattlePetAnimView : BattleBaseView
         GameObject tmp;
 
         this.cursorOffset = cursorOffset;
+        this.currentPet = pet;
         this.defalutSuperTrigger = (pet.battleStatus.atk >= pet.battleStatus.mat) ? "physic" : "special";
+
         if ((cursorOffset == 0) && (tmp = pet.ui.GetBattleAnim(PetAnimationType.Physic)) !=
             null) //检测是否有物攻动画,如果有,说明这个精灵有动画,但是需要立刻关闭,否则直接出现在舞台上
         {
@@ -125,10 +128,10 @@ public class BattlePetAnimView : BattleBaseView
         // 若為必殺技則立刻播放技能音效
         // PetUI 和 SoundInfo 有可能為 Null，必須用?.額外判定
         var skillAnimSpeed = this.animSpeed * (skill?.animSpeed ?? 1);
-        var sound = this.currentPetUI?.soundInfo?.GetSoundByType(type);
+        var sound = string.IsNullOrEmpty(skill?.soundId) ? this.currentPet?.ui?.soundInfo?.GetSoundByType(type) : skill?.soundId;
 
-        var hitFrame = this.currentPetUI?.hitInfo?.GetHitFrameByType(type) ?? 0;
-        var videoStartFrame = this.currentPetUI?.hitInfo?.GetVideoStartFrameByType(type) ?? -1;
+        var hitFrame = this.currentPet?.ui?.hitInfo?.GetHitFrameByType(type) ?? 0;
+        var videoStartFrame = this.currentPet?.ui?.hitInfo?.GetVideoStartFrameByType(type) ?? -1;
 
         bool isSuperSkill = type is PetAnimationType.Super or PetAnimationType.SecondSuper;
         if (isSuperSkill)
@@ -167,8 +170,7 @@ public class BattlePetAnimView : BattleBaseView
 
             if (videoStartFrame >= 0)
             {
-                videoPlayer.url = this.currentPetUI.hitInfo.GetVideoUrl(type);
-                videoPlayer.playbackSpeed = skillAnimSpeed;
+                videoPlayer.url = this.currentPet?.ui?.hitInfo?.GetVideoUrl(type);
                 videoRenderImage.texture = videoPlayer.targetTexture = RenderTexture.GetTemporary(1920, 1080);
                 videoRenderImage.color = Color.clear;
                 videoPlayer.Prepare();
@@ -208,8 +210,7 @@ public class BattlePetAnimView : BattleBaseView
         } 
         else if (videoStartFrame >= 0)
         {
-            videoPlayer.url = this.currentPetUI.hitInfo.GetVideoUrl(type);
-            videoPlayer.playbackSpeed = skillAnimSpeed;
+            videoPlayer.url = this.currentPet?.ui?.hitInfo?.GetVideoUrl(type);
             videoRenderImage.texture = videoPlayer.targetTexture = RenderTexture.GetTemporary(1920, 1080);
             videoRenderImage.color = Color.clear;
             videoPlayer.Prepare();
@@ -369,7 +370,9 @@ public class BattlePetAnimView : BattleBaseView
         if (string.IsNullOrEmpty(soundId) || (soundId == "0") || (soundId == "none"))
             return;
 
-        ResourceManager.instance.GetLocalAddressables<AudioClip>("BGM/skill/" + soundId, false, (sound) =>
+        var trimSoundId = soundId;
+        bool isMod = (!string.IsNullOrEmpty(soundId)) && soundId.TryTrimStart("Mod/", out trimSoundId);
+        ResourceManager.instance.GetLocalAddressables<AudioClip>($"BGM/skill/{trimSoundId}", isMod, (sound) =>
         {
             AudioSystem.instance.PlaySound(sound, AudioVolumeType.BattleSE);
         });
