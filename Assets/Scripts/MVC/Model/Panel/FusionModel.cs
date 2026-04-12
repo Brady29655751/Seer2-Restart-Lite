@@ -61,11 +61,13 @@ public class FusionModel : Module
             return false;
         }
 
+        /*
         if ((currentRecipe.baseId.Item1 != currentRecipe.baseId.Item2) && (currentRecipe.baseId.Item1 == subPet.basic.baseId) && (currentRecipe.baseId.Item2 == mainPet.basic.baseId))
         {
             Hintbox.OpenHintboxWithContent("主副精灵放反了哦！", 16);
             return false;
         }
+        */
 
         // Check gender
         if ((currentRecipe.gender.Item1 != null) && (currentRecipe.gender.Item2 != null))

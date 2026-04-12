@@ -46,8 +46,18 @@ public class FusionRecipePanel : Panel
         if (recipe == null)
             return;
 
-        fusionView.SetMainPet(Pet.GetExamplePet(recipe.petId.Item1));
-        fusionView.SetSubPet(Pet.GetExamplePet(recipe.petId.Item2));
+        var mainPet = Pet.GetExamplePet(recipe.petId.Item1);
+        var subPet = Pet.GetExamplePet(recipe.petId.Item2);
+
+        if (recipe.gender.Item1 != null)
+            mainPet.basic.gender = recipe.gender.Item1.Value;
+
+        if (recipe.gender.Item2 != null)
+            subPet.basic.gender = recipe.gender.Item2.Value;
+
+        fusionView.SetMainPet(mainPet);
+        fusionView.SetSubPet(subPet);
+        fusionView.ShowGender(recipe.gender);
         fusionView.SetItem(recipe.items);
     }
 }

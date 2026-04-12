@@ -256,9 +256,12 @@ public class PetBagPanel : Panel
     }
 }
 
-public enum PetBagMode {
+public enum PetBagMode
+{
+    Mod = -1,
     Normal = 0,
     PVP = 1,
     Dictionary = 2,
     YiTeRogue = 3,
+    Elite = 4,
 }

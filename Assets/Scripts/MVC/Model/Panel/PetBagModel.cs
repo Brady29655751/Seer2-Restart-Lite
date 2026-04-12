@@ -9,24 +9,31 @@ public class PetBagModel : Module
     private PetBagMode mode = PetBagMode.Normal;
     private Pet[] petBag => GetPetBag();
     private List<Pet> petStorage => Player.instance.gameData.petStorage;
-    
+
     [SerializeField] private PetSelectModel selectModel;
 
-    private Pet[] GetPetBag() {
-        return mode switch {
-            PetBagMode.Normal   => Player.instance.gameData.petBag,
-            PetBagMode.YiTeRogue=> YiTeRogueData.instance.petBag,
+    private Pet[] GetPetBag()
+    {
+        return mode switch
+        {
+            PetBagMode.Normal => Player.instance.gameData.petBag,
+            PetBagMode.YiTeRogue => YiTeRogueData.instance.petBag,
             _ => selectModel.selections,
         };
     }
 
-    public void SetMode(PetBagMode newMode) {
+    public void SetMode(PetBagMode newMode)
+    {
         mode = newMode;
     }
 
-    public void SetPetSwap(int indexA, int indexB) {
+    public void SetPetSwap(int indexA, int indexB)
+    {
         indexA += selectModel.page * selectModel.selectionCapacity;
         indexB += selectModel.page * selectModel.selectionCapacity;
+
+        if (petBag[indexA] == null || petBag[indexB] == null)
+            return;
 
         if ((mode == PetBagMode.Normal) || (mode == PetBagMode.YiTeRogue))
         {
@@ -40,32 +47,56 @@ public class PetBagModel : Module
         }
     }
 
-    public void SetPetDrop(int dropIndex) {
+    public void SetPetDrop(int dropIndex)
+    {
         SetPetSwap(selectModel.startDragIndex, dropIndex);
     }
 
-    public void SetPetFirst() {
+    public void SetPetFirst()
+    {
         if (selectModel.cursor.Length <= 0)
             return;
 
         SetPetSwap(0, selectModel.cursor[0]);
     }
 
-    public void SetPetHeal() {
-        foreach (var p in selectModel.selections) {
+    public bool OnPetTake()
+    {
+        if (selectModel.cursor.Length <= 0)
+            return false;
+
+        if (!petBag.Take(6).Contains(null))
+            return false;
+
+        SetPetTake(null);
+        return true;
+    }
+
+    public void SetPetTake(Pet oldPet)
+    {
+        var oldIndex = petBag.IndexOf(oldPet);
+        petBag.Swap(oldIndex, selectModel.globalCursor[0]);
+        SaveSystem.SaveData();
+    }
+
+    public void SetPetHeal()
+    {
+        foreach (var p in selectModel.selections)
+        {
             if (p != null)
                 p.currentStatus.hp = p.normalStatus.hp;
         }
-        
+
         if (mode == PetBagMode.Normal)
             SaveSystem.SaveData();
     }
 
-    public Pet SetPetTrain() {
+    public Pet SetPetTrain()
+    {
         if (selectModel.cursor.Length <= 0)
             return null;
 
-        Pet pet = Pet.ToBestPet(selectModel.currentSelectedItems[0]);        
+        Pet pet = Pet.ToBestPet(selectModel.currentSelectedItems[0]);
 
         if (mode == PetBagMode.Normal)
             SaveSystem.SaveData();
@@ -73,7 +104,8 @@ public class PetBagModel : Module
         return pet;
     }
 
-    public bool SetPetHome() {
+    public bool SetPetHome()
+    {
         int petBagCount = selectModel.selections.Count(x => x != null);
         if (petBagCount <= 1)
             return false;

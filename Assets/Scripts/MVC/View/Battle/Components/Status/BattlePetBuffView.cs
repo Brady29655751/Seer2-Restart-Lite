@@ -50,7 +50,7 @@ public class BattlePetBuffView : BattleBaseView
     }
 
     public void SetBuff(List<Buff> buffs, Action<Buff> onPointerClick = null) {
-        List<Buff> newBuffList = buffs.Where(x => !x.hide).OrderBy(x => x.info.sortPriority).ToList();
+        List<Buff> newBuffList = buffs.Where(x => (x != null) && !x.hide).OrderBy(x => x.info.sortPriority).ToList();
         if (newBuffList.Count >= numLimitExtend)
             newBuffList.Add(Buff.GetExtendUIBuff(!isExtendMode));
 

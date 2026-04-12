@@ -4,15 +4,21 @@ using UnityEngine;
 
 public class PetBagView : Module
 {
-    [SerializeField] private IButton firstButton, trainButton, swapTeamButton;
+    [SerializeField] private IButton firstButton, fightButton, swapTeamButton;
     [SerializeField] private GameObject itemPanelObject;
 
+    public void SetFightButtonInteractable(bool interactable)
+    {
+        fightButton?.SetInteractable(interactable);
+    }
+    
     public void SetSwapButtonActive(bool active)
     {
         swapTeamButton?.gameObject.SetActive(active);
     }
 
-    public void OnSelect(int index) {
+    public void OnSelect(int index) 
+    {
         firstButton.SetInteractable(index != 0);
     }
 

@@ -46,15 +46,16 @@ public class PetStorageModel : Module
     {
         Pet newPet = storageSelectModel.currentSelectedItems[0];
 
-        if (mode != PetBagMode.Normal)
+        if (!PetStoragePanel.IsNormalStorageMode(mode))
         {
             petBag.Update(oldPet, newPet);
             petBagPanel?.RefreshPetBag();
             return;
         }
-        petStorage.Remove(newPet);
+
+        Player.instance.gameData.petStorage.Remove(newPet);
         if (oldPet != null)
-            petStorage.Add(oldPet);
+            Player.instance.gameData.petStorage.Add(oldPet);
 
         petBag.Update(oldPet, newPet);
         SaveSystem.SaveData();
@@ -62,12 +63,46 @@ public class PetStorageModel : Module
 
     public void SetPetRelease()
     {
+        if ((storageSelectModel.cursor.Length <= 0) || !PetStoragePanel.IsNormalStorageMode(mode))
+            return;
+
+        Pet pet = storageSelectModel.currentSelectedItems[0];
+        Player.instance.gameData.petStorage.Remove(pet);
+        SaveSystem.SaveData();
+
+    }
+
+    public void SetPetElite()
+    {
         if (storageSelectModel.cursor.Length <= 0)
             return;
 
         Pet pet = storageSelectModel.currentSelectedItems[0];
-        petStorage.Remove(pet);
-        SaveSystem.SaveData();
+        if (!pet.record.GetRecord("elite", false))
+        {
+            pet.record.SetRecord("elite", true);
+            SaveSystem.SaveData();
+        }
+        else
+        {
+            Hintbox.OpenHintboxWithContent("该精灵已经在精英仓库了哦！", 16);
+        }
+    }
 
+    public void SetPetRemoveElite()
+    {
+        if (storageSelectModel.cursor.Length <= 0)
+            return;
+
+        Pet pet = storageSelectModel.currentSelectedItems[0];
+        if (!pet.record.GetRecord("elite", false))
+        {
+            Hintbox.OpenHintboxWithContent("该精灵本来就不在精英仓库哦！", 16);
+        }
+        else
+        {
+            pet.record.SetRecord("elite", false);
+            SaveSystem.SaveData();
+        }
     }
 }

@@ -20,8 +20,8 @@ public static class PetFusionSystem
             return null;
 
         return fusionRecipes.Where(recipe =>
-            ((recipe.baseId.Item1 == mainPet.basic.baseId) && (recipe.baseId.Item2 == subPet.basic.baseId)) ||
-            ((recipe.baseId.Item1 == subPet.basic.baseId) && (recipe.baseId.Item2 == mainPet.basic.baseId))
+            ((recipe.baseId.Item1 == mainPet.basic.baseId) && (recipe.baseId.Item2 == subPet.basic.baseId))
+            // || ((recipe.baseId.Item1 == subPet.basic.baseId) && (recipe.baseId.Item2 == mainPet.basic.baseId))
         ).ToList();
     }
 }

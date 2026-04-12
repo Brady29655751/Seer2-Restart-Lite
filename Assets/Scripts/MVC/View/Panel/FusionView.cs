@@ -23,6 +23,12 @@ public class FusionView : Module
         subPetBlockView.SetPet(pet);
     }
 
+    public void ShowGender((int?, int?) gender)
+    {
+        mainPetBlockView.SetGenderIconActive(gender.Item1 != null);
+        subPetBlockView.SetGenderIconActive(gender.Item2 != null);
+    }
+
     public void SetItem(List<Item> item) {
         for (int i = 0; i < petItemBlockViews.Count; i++)
             petItemBlockViews[i].SetItem((i < item.Count) ? item[i] : null);

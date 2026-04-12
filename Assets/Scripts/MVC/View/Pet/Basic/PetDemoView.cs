@@ -100,7 +100,7 @@ public class PetDemoView : Module
         infoPrompt.SetInfoPromptWithAutoSize(text, TextAnchor.MiddleLeft);
         if (featurePromptLeft) 
         {
-            infoPrompt.SetPositionOffset(new Vector2(-infoPrompt.size.x, 2));
+            infoPrompt.SetPositionOffset(new Vector2(-infoPrompt.size.x, -infoPrompt.size.y / 2 - 2));
         } 
         else
         {

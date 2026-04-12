@@ -9,6 +9,7 @@ public class PetFilterController : Module
     [SerializeField] private PetSortingController sortingController;
     [SerializeField] private PetElementFilterController elementController;
     [SerializeField] private PetNameFilterController nameController;
+    [SerializeField] private PetStarFilterController starController;
 
     protected override void Awake()
     {
@@ -20,12 +21,34 @@ public class PetFilterController : Module
     private void InitFilterSubscriptions()
     {
         if (elementController != null)
+        {
             elementController.onFilterEvent += Filter;
-            elementController.onFilterEvent += f => { ResetNameController(); };
+            elementController.onFilterEvent += f => 
+            { 
+                ResetNameController(); 
+                ResetStarController(); 
+            };   
+        }
 
         if (nameController != null)
+        {
             nameController.onFilterEvent += Filter;
-            nameController.onFilterEvent += f => { ResetElementController(); };
+            nameController.onFilterEvent += f => 
+            { 
+                ResetElementController(); 
+                ResetStarController(); 
+            };   
+        }
+
+        if (starController != null)
+        {
+            starController.onFilterEvent += Filter;
+            starController.onFilterEvent += f =>
+            {
+                ResetElementController();
+                ResetNameController();
+            };
+        }
     }
 
     private void InitSortingSubscriptions()
@@ -49,6 +72,11 @@ public class PetFilterController : Module
     private void ResetNameController()
     {
         nameController?.SetActive(false);
+    }
+
+    private void ResetStarController()
+    {
+        starController?.SetActive(false);
     }
 
     public void Filter(Func<Pet, bool> filter)

@@ -35,6 +35,7 @@ public class PetBagController : Module
     private void InitSubscriptions()
     {
         selectController.onSelectIndexEvent += buttonView.OnSelect;
+        selectController.onSetSelectionsEvent += () => buttonView.SetFightButtonInteractable(selectController.GetPage() != 0);
     }
 
     private Pet[] GetPetBag()
@@ -86,6 +87,27 @@ public class PetBagController : Module
     {
         buttonModel.SetPetFirst();
         RefreshPetBag();
+    }
+
+    public void SetPetFight()
+    {
+        if (buttonModel.OnPetTake())
+        {
+            RefreshPetBag();
+            return;
+        }
+        
+        Action<Pet> callback = (pet) =>
+        {
+            buttonModel.SetPetTake(pet);
+            RefreshPetBag();
+        };
+
+        PetSelectHintbox hintbox = Hintbox.OpenHintbox<PetSelectHintbox>();
+        hintbox.SetStorage(petBag.Take(6).ToList());
+        hintbox.SetOptionNum(2);
+        hintbox.SetTitle("请选择要交换的精灵");
+        hintbox.SetConfirmSelectCallback(callback);
     }
 
     public void SetPetHeal()

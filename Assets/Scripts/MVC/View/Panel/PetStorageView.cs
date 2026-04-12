@@ -6,30 +6,42 @@ using UnityEngine;
 
 public class PetStorageView : Module
 {
-    [SerializeField] private IButton takeButton;
-    [SerializeField] private IButton releaseButton;
+    [SerializeField] private IButton takeButton, eliteButton, removeEliteButton, releaseButton;
 
-    public void OnSetStorage() {
+    public void OnSetStorage()
+    {
         SetInteractable(false);
     }
 
-    public void OnSelect(Pet pet) {
+    public void OnSelect(Pet pet)
+    {
         SetInteractable(pet != null);
+        if (pet == null)
+            return;
+
+        var elite = pet.record.GetRecord("elite", false);
+        eliteButton.SetInteractable(!elite);
+        removeEliteButton.SetInteractable(elite);
+        releaseButton.SetInteractable(!elite);
     }
 
-    public void SetInteractable(bool interactable) {
+    public void SetInteractable(bool interactable)
+    {
         takeButton.SetInteractable(interactable);
         releaseButton.SetInteractable(interactable);
+        eliteButton.SetInteractable(interactable);
     }
 
-    public void OnAfterPetTake() {
+    public void OnAfterPetTake()
+    {
         Hintbox hintbox = Hintbox.OpenHintbox();
         hintbox.SetOptionNum(1);
         hintbox.SetTitle("提示");
         hintbox.SetContent("携带成功", 16, FontOption.Arial);
     }
 
-    public void OnPetExchange(Pet[] petBag, Action<Pet> onExchangeCallback = null, Action onFailCallback = null) {
+    public void OnPetExchange(Pet[] petBag, Action<Pet> onExchangeCallback = null, Action onFailCallback = null)
+    {
         PetSelectHintbox hintbox = Hintbox.OpenHintbox<PetSelectHintbox>();
         hintbox.SetStorage(petBag.ToList());
         hintbox.SetOptionNum(2);
@@ -38,11 +50,21 @@ public class PetStorageView : Module
         hintbox.SetOptionCallback(onFailCallback, false);
     }
 
-    public void OnPetRelease(Action confirmCallback = null) {
+    public void OnPetRelease(Action confirmCallback = null)
+    {
         Hintbox hintbox = Hintbox.OpenHintbox();
         hintbox.SetOptionNum(2);
         hintbox.SetTitle("放生");
         hintbox.SetContent("确定要放生吗？\n" + "此动作无法复原！", 16, FontOption.Arial);
+        hintbox.SetOptionCallback(confirmCallback);
+    }
+
+    public void OnPetRemoveElite(Action confirmCallback = null)
+    {
+        Hintbox hintbox = Hintbox.OpenHintbox();
+        hintbox.SetOptionNum(2);
+        hintbox.SetTitle("取消收藏");
+        hintbox.SetContent("确定要取消收藏吗？\n" + "取消收藏后才可放生！", 16, FontOption.Arial);
         hintbox.SetOptionCallback(confirmCallback);
     }
 }

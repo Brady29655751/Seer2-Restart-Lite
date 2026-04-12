@@ -24,13 +24,25 @@ public class PetStorageController : Module
         buttonModel.SetMode(mode);
     }
 
-    private void InitSelectSubscriptions() {
+    private void InitSelectSubscriptions()
+    {
         selectController.onSetStorageEvent += buttonView.OnSetStorage;
         selectController.onSetStorageEvent += selectController.RefreshView;
         selectController.onSelectPetEvent += buttonView.OnSelect;
-    }   
+    }
 
-    public void SetPetStorage() {
+    public void SetMode(int mode)
+    {
+        if (this.mode == PetBagMode.PVP)
+            return;
+            
+        this.mode = (PetBagMode)mode;
+        buttonModel.SetMode(this.mode);
+        SetPetStorage();   
+    }
+
+    public void SetPetStorage()
+    {
         int page = (mode == PetBagMode.PVP) ? buttonModel.storageSelectPage : buttonModel.storageSelectRefreshPage;
         int cursor = buttonModel.storageSelectCursor;
         var petStorage = buttonModel.petStorage;
@@ -38,31 +50,52 @@ public class PetStorageController : Module
         selectController.Select(cursor);
     }
 
-    public void OnPetTake() {
+    public void OnPetTake()
+    {
         demoController?.SetPetAnimationActive(false);
-        if (buttonModel.OnPetTake()) {
+        if (buttonModel.OnPetTake())
+        {
             OnAfterPetTake();
             return;
         }
-        Action<Pet> callback = (pet) => {
+        Action<Pet> callback = (pet) =>
+        {
             buttonModel.SetPetTake(pet);
             OnAfterPetTake();
         };
         buttonView.OnPetExchange(buttonModel.petBag, callback, () => demoController?.SetPetAnimationActive(true));
     }
 
-    private void OnAfterPetTake() {
+    private void OnAfterPetTake()
+    {
         SetPetStorage();
         buttonView.OnAfterPetTake();
     }
 
-    public void OnPetRelease() {
+    public void OnPetRelease()
+    {
         buttonView.OnPetRelease(SetPetRelease);
     }
 
-    private void SetPetRelease() {
+    private void SetPetRelease()
+    {
         buttonModel.SetPetRelease();
         SetPetStorage();
+    }
+
+    public void SetPetElite()
+    {
+        buttonModel.SetPetElite();
+        SetPetStorage();
+    }
+
+    public void SetPetRemoveElite()
+    {
+        buttonView.OnPetRemoveElite(() =>
+        {
+            buttonModel.SetPetRemoveElite();
+            SetPetStorage();
+        });
     }
 
 }

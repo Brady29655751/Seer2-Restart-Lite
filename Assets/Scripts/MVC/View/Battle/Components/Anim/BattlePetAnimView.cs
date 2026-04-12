@@ -171,6 +171,7 @@ public class BattlePetAnimView : BattleBaseView
             if (videoStartFrame >= 0)
             {
                 videoPlayer.url = this.currentPet?.ui?.hitInfo?.GetVideoUrl(type);
+                videoPlayer.playbackSpeed = skillAnimSpeed;
                 videoRenderImage.texture = videoPlayer.targetTexture = RenderTexture.GetTemporary(1920, 1080);
                 videoRenderImage.color = Color.clear;
                 videoPlayer.Prepare();
@@ -211,6 +212,7 @@ public class BattlePetAnimView : BattleBaseView
         else if (videoStartFrame >= 0)
         {
             videoPlayer.url = this.currentPet?.ui?.hitInfo?.GetVideoUrl(type);
+            videoPlayer.playbackSpeed = skillAnimSpeed;
             videoRenderImage.texture = videoPlayer.targetTexture = RenderTexture.GetTemporary(1920, 1080);
             videoRenderImage.color = Color.clear;
             videoPlayer.Prepare();
