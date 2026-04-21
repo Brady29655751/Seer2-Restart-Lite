@@ -746,9 +746,15 @@ public static class EffectAbilityHandler
         string filterList = effect.abilityOptionDict.Get("filter", "none");
         string randomCountExpr = effect.abilityOptionDict.Get("random_count", "-1");
 
+        Unit invokeUnit = (Unit)effect.invokeUnit;
+        Unit lhsUnit = (who == "me") ? state.GetUnitById(invokeUnit.id) : state.GetRhsUnitById(invokeUnit.id);
+        Unit rhsUnit = state.GetRhsUnitById(lhsUnit.id);
+        var buffController = lhsUnit.pet.buffController;
+        var statusController = lhsUnit.pet.statusController;
+
         // The key prefix "rule" is reserved for pvp rules.
         string[] keyRange = keyList.Split('/').Where(x => !x.StartsWith("rule")).ToArray();
-        List<int> idRange = idList.ToIntList('/').Where(x => x != 0).ToList();
+        List<int> idRange = idList.Split('/').Select(x => (int)Parser.ParseEffectOperation(x, effect, lhsUnit, rhsUnit)).Where(x => x != 0).ToList();
         List<BuffType> typeRange = typeList.Split('/').Select(x => x.ToBuffType()).Where(x => x != BuffType.None).ToList();
 
         // Switch special type
@@ -765,11 +771,6 @@ public static class EffectAbilityHandler
         bool isId = (idRange.Count > 0) && (!idRange.All(x => x == 0));
         bool isType = typeRange.Count > 0;
 
-        Unit invokeUnit = (Unit)effect.invokeUnit;
-        Unit lhsUnit = (who == "me") ? state.GetUnitById(invokeUnit.id) : state.GetRhsUnitById(invokeUnit.id);
-        Unit rhsUnit = state.GetRhsUnitById(lhsUnit.id);
-        var buffController = lhsUnit.pet.buffController;
-        var statusController = lhsUnit.pet.statusController;
         var filter = Parser.ParseConditionFilter<Buff>(filterList, (id, buff) =>
         {
             if (buff == null)
@@ -1169,6 +1170,15 @@ public static class EffectAbilityHandler
 
         float oldValue = Identifier.GetSkillIdentifier(type, lhsSystem, key);
         float newValue = Parser.ParseEffectOperation(value, effect, lhsUnit, rhsUnit);
+
+        if (type == "order.direction")
+        {
+            float oldOrderDir = state.GetStateIdentifier("order.direction");
+            float newOrderDir = Operator.Operate(op, oldOrderDir, newValue);
+            state.SetStateIdentifier("order.direction", newOrderDir);
+            return true;
+        }
+
         lhsSystem.SetSkillSystemIdentifier(type, Operator.Operate(op, oldValue, newValue), key);
 
         if ((battle.settings.parallelCount > 1) && (type == "parallelTargetIndex"))
@@ -1180,7 +1190,6 @@ public static class EffectAbilityHandler
             rhsUnit.petSystem.cursor = cursor;
         }
             
-
         return true;
     }
 

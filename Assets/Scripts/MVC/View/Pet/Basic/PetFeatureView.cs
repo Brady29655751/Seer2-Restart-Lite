@@ -10,15 +10,17 @@ public class PetFeatureView : Module
     private Pet currentPet;
     private Action<Buff> onRemoveCallback = null;
     [SerializeField] private BattlePetBuffView defaultBuffView, afterwardBuffView;
-    
-    public void SetMode(PetBagMode mode) {
+
+    public void SetMode(PetBagMode mode)
+    {
         petBagMode = mode;
     }
 
-    public void SetPet(Pet pet) {
+    public void SetPet(Pet pet)
+    {
         currentPet = pet;
 
-        var bornBuffs = (pet == null) ? new List<Buff>() : new List<Buff>(){ Buff.GetFeatureBuff(pet), Buff.GetEmblemBuff(pet) };
+        var bornBuffs = (pet == null) ? new List<Buff>() : new List<Buff>() { Buff.GetFeatureBuff(pet), Buff.GetEmblemBuff(pet) };
         var defaultBuffs = pet?.info.ui.defaultBuffs ?? new List<Buff>();
         var initBuffs = pet?.feature.afterwardBuffs?.Where(x => (x != null) && (x.info.position == "first")) ?? new List<Buff>();
         var resistBuffs = pet?.resist?.resistBuffs ?? new List<Buff>();
@@ -28,25 +30,31 @@ public class PetFeatureView : Module
         SetAfterwardBuffs(afterwardBuffs);
     }
 
-    public void SetOnRemoveCallback(Action<Buff> onRemoveCallback) {
+    public void SetOnRemoveCallback(Action<Buff> onRemoveCallback)
+    {
         this.onRemoveCallback = onRemoveCallback;
     }
-    
-    private void SetDefaultBuffs(List<Buff> defaultBuffs) {
+
+    private void SetDefaultBuffs(List<Buff> defaultBuffs)
+    {
         defaultBuffView.SetBuff(defaultBuffs);
     }
-    
-    private void SetAfterwardBuffs(List<Buff> afterwardBuffs) {
-        afterwardBuffView.SetBuff(afterwardBuffs, (buff) => {
+
+    private void SetAfterwardBuffs(List<Buff> afterwardBuffs)
+    {
+        afterwardBuffView.SetBuff(afterwardBuffs, (buff) =>
+        {
             OnRemoveAfterwardBuff(buff);
             onRemoveCallback?.Invoke(buff);
         });
     }
-    
-    private void OnRemoveAfterwardBuff(Buff buff) {
+
+    private void OnRemoveAfterwardBuff(Buff buff)
+    {
         var itemInfo = Item.GetItemInfo(buff.info.itemId);
-        if (itemInfo == null) {
-            Hintbox.OpenHintboxWithContent("该加成无法移除（无对应道具）", 16);    
+        if (itemInfo == null)
+        {
+            Hintbox.OpenHintboxWithContent("该加成无法移除（无对应道具）", 16);
             return;
         }
 
@@ -58,13 +66,15 @@ public class PetFeatureView : Module
 
         currentPet.feature.afterwardBuffIds.Remove(buff.id);
 
-        if (petBagMode == PetBagMode.Normal)
+        if (PetStoragePanel.IsNormalStorageMode(petBagMode))
             Item.Add(item);
 
         SaveSystem.SaveData();
 
         Hintbox.OpenHintboxWithContent("已移除后天加成【" + buff.name + "】\n获得了1个【" + itemInfo.name + "】", 16);
-        SetAfterwardBuffs(currentPet.feature.afterwardBuffs);
+
+        var afterwardBuffs = currentPet?.feature.afterwardBuffs?.Where(x => (x != null) && (x.info.position != "first")).ToList() ?? new List<Buff>();
+        SetAfterwardBuffs(afterwardBuffs);
     }
-    
+
 }

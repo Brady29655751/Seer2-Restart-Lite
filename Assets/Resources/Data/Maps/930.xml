@@ -1,0 +1,47 @@
+<map name="御风中枢" category="11" id="930">
+	<fightMap>100009</fightMap>
+	<music category="11">
+		<bgm>BGM_920</bgm>
+	</music>
+	<initialPoint>125,100</initialPoint>
+	<entities>
+		<npc id="93001" resId="Pets/pet/268" name="Lv91 奥罗吉尔" size="86,99" pos="200,310" namePos="0,0">
+			<battle>
+				<branch id="default">
+					<settings count="6" capture="true"/>
+					<enemy>
+						<pet id="268" level="91">
+							<loopSkill>10050</loopSkill>
+						</pet>
+					</enemy>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>battle</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<npc id="93002" resId="Pets/pet/268" name="Lv92 奥罗吉尔" size="86,99" pos="465,110" namePos="0,0">
+			<battle>
+				<branch id="default">
+					<settings count="6" capture="true"/>
+					<enemy>
+						<pet id="268" level="92">
+							<loopSkill>10050</loopSkill>
+						</pet>
+					</enemy>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>battle</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+        <teleport id="1" name="流离街" pos="80,250" targetMapId="920"/>
+		<teleport id="2" name="风涡工房" pos="830,140" targetMapId="940"/>
+	</entities>
+</map>

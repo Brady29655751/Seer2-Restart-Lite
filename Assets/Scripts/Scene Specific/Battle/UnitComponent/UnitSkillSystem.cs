@@ -210,7 +210,8 @@ public class UnitSkillSystem
             };
         }
 
-        return id switch {
+        return id switch 
+        {
             "level" => level,
             "atk" => atk,
             "def" => def,

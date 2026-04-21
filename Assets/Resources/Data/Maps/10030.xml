@@ -5,7 +5,18 @@
 		<bgm>BGM_30</bgm>
 	</music>
 	<entities>
+		<npc id="1003000" resId="1001" name="" size="200,200" pos="90,340" namePos="0,0" color="0,0,0,0">
+			<description>赫尔卡星遗迹</description>
+			<transport>210,380</transport>
+			<eventHandler>
+				<button type="click">
+					<action>teleport</action>
+					<param>10031</param>
+				</button>
+			</eventHandler>
+		</npc>
 		<npc id="1003001" resId="Pets/pet/10013" name="Lv52 比比鼠" size="36,38" pos="290,90" namePos="0,0">
+			<anim id="Pets/anim/10013" pos="0,0" scale="0.8,0.8" />
 			<battle>
 				<branch id="default">
 					<settings count="6" capture="true"/>
@@ -32,9 +43,10 @@
 			</eventHandler>
 		</npc>
 		<npc id="1003002" resId="Pets/pet/10013" name="Lv51 比比鼠" size="36,38" pos="300,330" namePos="0,0">
+			<anim id="Pets/anim/10013" pos="0,0" scale="0.8,0.8" />
 			<battle>
 				<branch id="default">
-					<settings count="6" capture="true" mod="true"/>
+					<settings count="6" capture="true"/>
 					<enemy>
 						<pet id="10013" level="51">
 							<loopSkill>14016</loopSkill>
@@ -103,6 +115,5 @@
 			</eventHandler>
 		</npc>
 		<teleport id="1" name="传送室" pos="740,145" targetMapId="10001"/>
-		<!-- <teleport id="2" name="赫尔卡星遗迹" pos="150,370" targetMapId="-50031"/> -->
 	</entities>
 </map>

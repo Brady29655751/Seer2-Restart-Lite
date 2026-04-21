@@ -349,7 +349,7 @@ public static class SaveSystem
                 }
 
                 data.petBag = petBag.ToArray();
-                Array.Resize(ref data.petBag, 6);
+                Array.Resize(ref data.petBag, 12);
 
                 if (ListHelper.IsNullOrEmpty(data.petBag) && (!ListHelper.IsNullOrEmpty(data.petStorage)))
                 {

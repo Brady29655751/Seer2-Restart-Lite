@@ -44,10 +44,10 @@ id,timing,priority,target,condition,cond_option,effect,effect_option
 3001,on_add_buff,-1,pet,none,none,rage,name=添加印记时，怒气不低于{0}&min={0}
 3002,on_remove_buf,-1,pet,none,none,rage,name=移除印记时，怒气最低为{0}&min={0}
 3003,on_final_dmg_cal,-1,skill,skill,who=op&whos_turn=op&type=type&type_op=>&type_cmp=0,set_damage,name=受到的攻击伤害乘算&who=op&op=*&value={0}
-3004,on_attack,10,skill,skill,who=op&whos_turn=op&whos_attack=op&type=type&type_op=GTE&type_cmp=0,set_damage,name=受到的技能固定伤害乘算&who=op&type=skill_fix&op=*&value={0}
-3005,on_attack,10,skill,skill,who=op&whos_turn=op&whos_attack=op&type=type&type_op=GTE&type_cmp=0,set_damage,name=受到的技能百分比伤害乘算&who=op&type=skill_per&op=*&value={0}
-3006,on_turn_end,101,pet,none,none,set_damage,name=受到的印记固定伤害乘算&type=buff_fix&op=*&value={0}
-3007,on_turn_end,101,pet,none,none,set_damage,name=受到的印记百分比伤害乘算&type=buff_per&op=*&value={0}
+3004,on_attack,10,skill,skill,is_hit=all&is_move=all&who=op&whos_turn=op&whos_attack=op&type=type&type_op=GTE&type_cmp=0,set_damage,name=受到的技能固定伤害乘算&who=op&type=skill_fix&op=*&value={0}
+3005,on_attack,10,skill,skill,is_hit=all&is_move=all&who=op&whos_turn=op&whos_attack=op&type=type&type_op=GTE&type_cmp=0,set_damage,name=受到的技能百分比伤害乘算&who=op&type=skill_per&op=*&value={0}
+3006,on_turn_end,101,pet,none,is_hit=all&is_move=all,set_damage,name=受到的印记固定伤害乘算&type=buff_fix&op=*&value={0}
+3007,on_turn_end,101,pet,none,is_hit=all&is_move=all,set_damage,name=受到的印记百分比伤害乘算&type=buff_per&op=*&value={0}
 3008,on_final_dmg_cal,-1,skill,unit,whos_turn=op&whos_attack=op&type=me.pet.buff[{1}].{2}/op.skill.type&type[0].op={3}&type[0].cmp={4}&type[1].op=GTE&type[1].cmp=0,set_damage,name=受到的攻击伤害乘算&who=op&op=*&value={0}
 3009,on_attack,10,skill,unit,whos_turn=op&whos_attack=op&type=me.pet.buff[{1}].{2}/op.skill.type&type[0].op={3}&type[0].cmp={4}&type[1].op=GTE&type[1].cmp=0,set_damage,name=受到的技能固定伤害乘算&who=op&type=skill_fix&op=*&value={0}
 3010,on_attack,10,skill,unit,whos_turn=op&whos_attack=op&type=me.pet.buff[{1}].{2}/op.skill.type&type[0].op={3}&type[0].cmp={4}&type[1].op=GTE&type[1].cmp=0,set_damage,name=受到的技能百分比伤害乘算&who=op&type=skill_per&op=*&value={0}

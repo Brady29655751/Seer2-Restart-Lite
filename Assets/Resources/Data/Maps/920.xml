@@ -1,0 +1,47 @@
+<map name="流离街" category="11" id="920">
+	<fightMap>100009</fightMap>
+	<music category="11">
+		<bgm>BGM_920</bgm>
+	</music>
+	<initialPoint>750,200</initialPoint>
+	<entities>
+		<npc id="92001" resId="Pets/pet/254" name="Lv83 海葵" size="88,104" pos="595,175" namePos="0,0">
+			<battle>
+				<branch id="default">
+					<settings count="6" capture="true"/>
+					<enemy>
+						<pet id="254" level="83">
+							<loopSkill>10050</loopSkill>
+						</pet>
+					</enemy>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>battle</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<npc id="92002" resId="Pets/pet/254" name="Lv84 海葵" size="88,104" pos="325,210" namePos="0,0">
+			<battle>
+				<branch id="default">
+					<settings count="6" capture="true"/>
+					<enemy>
+						<pet id="254" level="84">
+							<loopSkill>10050</loopSkill>
+						</pet>
+					</enemy>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>battle</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+        <teleport id="1" name="风刃氏族主城" pos="810,430" targetMapId="900"/>
+		<teleport id="2" name="御风中枢" pos="140,85" targetMapId="930"/>
+	</entities>
+</map>

@@ -8,7 +8,7 @@ using Photon.Pun;
 public class PetStorageModel : Module
 {
     private PetBagMode mode;
-    public Pet[] petBag => (mode == PetBagMode.Normal) ? Player.instance.gameData.petBag : petBagPanel.petBag;
+    public Pet[] petBag => PetStoragePanel.IsNormalStorageMode(mode) ? Player.instance.gameData.petBag : petBagPanel.petBag;
     public List<Pet> petStorage => PetStoragePanel.GetDefaultPetStorage(mode);
 
     [SerializeField] private PetSelectModel storageSelectModel;

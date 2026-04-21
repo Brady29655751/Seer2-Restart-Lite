@@ -28,8 +28,9 @@ public class PetStorageView : Module
     public void SetInteractable(bool interactable)
     {
         takeButton.SetInteractable(interactable);
-        releaseButton.SetInteractable(interactable);
         eliteButton.SetInteractable(interactable);
+        removeEliteButton.SetInteractable(interactable);
+        releaseButton.SetInteractable(interactable);
     }
 
     public void OnAfterPetTake()

@@ -1,0 +1,99 @@
+<map name="风涡工房"  category="11"  id="940" weather="8">
+	<!-- <resource>10011</resource> -->
+	<initialPoint>135,185</initialPoint>
+	<music category="11">
+		<bgm>BGM_920</bgm>
+	</music>
+	<entities>
+		<npc id="94001" resId="94001" name="艾力克" size="86,94" pos="610,360" namePos="0,-5">
+			<description>让你知道我的厉害！</description>
+			<dialog>
+				<branch id="default" name="艾力克" icon="94001" size="86,94" pos="0,55">
+					<content><![CDATA[工房中的恐怖迷雾杀手就是我！你……难道不怕我吗！（概率触发捕捉事件）]]></content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[呃…其实全是障眼法]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+						<reply type="click">
+							<description><![CDATA[挑战双精灵斯莫克]]></description>
+							<action>battle</action>
+							<param>default</param>
+						</reply>
+					</replyHandler>
+				</branch>
+				<branch id="reward" name="艾力克" icon="94001" size="86,94" pos="0,55">
+					<content><![CDATA[斯莫克很欣赏你，他想亲自考验你是否有资格让他跟随]]></content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[连精灵都受不了废物主人了吗？]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+						<reply type="click">
+							<description><![CDATA[正合我意！]]></description>
+							<action>battle</action>
+							<param>capture</param>
+						</reply>
+					</replyHandler>
+				</branch>
+			</dialog>
+			<battle>
+				<branch id="default">
+					<settings count="2" parallel="2">
+						<weather>8</weather>
+					</settings>
+					<enemy>
+						<pet id="258" level="93">
+							<loopSkill>14140,14141</loopSkill>
+							<superSkill>14138</superSkill>
+						</pet>
+						<pet id="258" level="94">
+							<loopSkill>14140,14141</loopSkill>
+							<superSkill>14138</superSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setItem</action>
+							<param>add</param>
+							<param>10201,3</param>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=3个砂糖甜饼已经放入背包</param>
+							<param>item_icon=item[10201]</param>
+							<param>option_num=1</param>
+						</button>
+						<button type="auto">
+							<action>openDialog</action>
+							<param>reward</param>
+							<condition>random[old]&lt;5</condition>
+						</button>
+					</winHandler>
+				</branch>
+				<branch id="capture">
+					<settings count="1" capture="true">
+						<weather>8</weather>
+					</settings>
+					<enemy>
+						<pet id="258" level="80">
+							<loopSkill>14140,14141,14140,14141,14133,-4</loopSkill>
+						</pet>
+					</enemy>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>openDialog</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<teleport id="1" name="御风中枢" pos="385,85" targetMapId="930"/>
+	</entities>
+</map>
+

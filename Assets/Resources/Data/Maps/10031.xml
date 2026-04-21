@@ -1,0 +1,115 @@
+<map name="赫尔卡星遗迹" category="102" id="10031">
+	<fightMapColor>64,64,64,255</fightMapColor>
+	<initialPoint>480,240</initialPoint>
+	<music category="102">
+		<bgm>BGM_30</bgm>
+	</music>
+	<entities>
+		<npc id="1003100" resId="1001" name="" size="300,220" pos="0,0" namePos="0,0" color="0,0,0,0">
+			<description>赫尔卡星建筑区</description>
+			<transport>120,40</transport>
+			<eventHandler>
+				<button type="click">
+					<action>teleport</action>
+					<param>10030</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<npc id="1003101" resId="Pets/pet/10043" name="Lv54 罗奇" size="36,38" pos="345,340" namePos="0,0">
+			<battle>
+				<branch id="default">
+					<settings count="6" capture="true"/>
+					<enemy>
+						<pet id="10043" level="54">
+							<loopSkill>14079,10321,10321,10321</loopSkill>
+						</pet>
+					</enemy>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>battle</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<npc id="1003102" resId="Pets/pet/10043" name="Lv53 罗奇" size="36,38" pos="680,230" namePos="0,0">
+			<battle>
+				<branch id="default">
+					<settings count="6" capture="true"/>
+					<enemy>
+						<pet id="10043" level="53">
+							<loopSkill>14079,10321,10321,10321</loopSkill>
+						</pet>
+					</enemy>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>battle</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<npc id="1003103" resId="Pets/pet/10019" name="Lv55 利利" size="30,60" pos="345,100" namePos="0,0" active="false">
+			<battle>
+				<branch id="default">
+					<settings count="6" capture="true"/>
+					<enemy>
+						<pet id="10019" level="55">
+							<initBuff>-2</initBuff>
+							<loopSkill>14068,14070,14068,14070,-4</loopSkill>
+						</pet>
+					</enemy>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="auto">
+					<action>setNpcParam</action>
+					<param>1003103</param>
+					<param>active=true</param>
+					<condition>random[new]LTE5</condition>
+				</button>
+				<button type="click">
+					<action>battle</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<npc id="1003104" resId="Pets/pet/10284" name="Lv45 闪光利利" size="48,47" pos="540,90" namePos="0,0" active="false">
+			<battle>
+				<branch id="default">
+					<settings count="6" capture="true"/>
+					<enemy>
+						<pet id="10284" level="45">
+						    <initBuff>-2</initBuff>
+							<loopSkill>14068,14070,14068,14070,-4</loopSkill>
+						</pet>
+					</enemy>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="auto">
+				<action>setNpcParam</action>
+				<param>1003104</param>
+				<param>active=true</param>
+				<condition>random[0~256]&lt;1</condition>
+			</button>
+				<button type="click">
+					<action>battle</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<npc id="1003105" resId="1001" name="" size="200,200" pos="760,340" namePos="0,0" color="0,0,0,0">
+			<description>赫尔卡星荒地</description>
+			<transport>720,380</transport>
+			<eventHandler>
+				<button type="click">
+					<action>teleport</action>
+					<param>10032</param>
+				</button>
+			</eventHandler>
+		</npc>
+	</entities>
+</map>

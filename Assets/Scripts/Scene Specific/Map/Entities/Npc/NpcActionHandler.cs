@@ -416,6 +416,14 @@ public static class NpcActionHandler
                 probability = new List<int>() { 25, 40, 15, 10, 7, 3 };
                 itemId = Enumerable.Range(1011, 6).ToList().Random(probability);
                 break;
+            case 9:
+                if (Player.instance.gameData.achievement != 7008)
+                    goto default;
+
+                probability = new List<int>() { 15, 25, 20, 15, 12, 8, 5 };
+                itemId = Enumerable.Range(1005, 6).Append(22032).ToList().Random(probability);
+                break;
+
         }
         var fish = new Item(itemId, 1);
         Item.Add(fish);

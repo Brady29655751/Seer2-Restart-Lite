@@ -1,0 +1,376 @@
+<map name="赫尔卡星荒地" category="102" id="10032" weather="7">
+	<fightMapColor>64,64,64,255</fightMapColor>
+	<initialPoint>300,100</initialPoint>
+	<music category="102">
+		<bgm>BGM_30</bgm>
+	</music>
+	<entities>
+		<npc id="1003200" resId="1001" name="" size="300,220" pos="0,0" namePos="0,0" color="0,0,0,0">
+			<description>赫尔卡星遗迹</description>
+			<transport>120,40</transport>
+			<eventHandler>
+				<button type="click">
+					<action>teleport</action>
+					<param>10031</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<npc id="1003201" resId="Pets/pet/10070" name="Lv 100 雷伊" size="83,164" pos="680,340" namePos="0,-10">
+			<anim id="Pets/anim/10070" pos="0.8,1.4" scale="1.4,1.4" rotation="0,180,0"/>
+			<description>SPT</description>
+			<dialog>
+				<branch id="default" name="雷伊" icon="Pets/pet/10070" size="83,164" pos="10,35">
+					<content><![CDATA[我要秒杀你]]></content>
+					<functionHandler>
+						<func type="click">
+							<description><![CDATA[挑战雷伊]]></description>
+							<action>battle</action>
+							<param>default</param>
+						</func>
+						<func type="click">
+							<description><![CDATA[雷神觉醒]]></description>
+							<action>battle</action>
+							<param>evolve</param>
+							<condition>firstPet.id=10070</condition>
+						</func>
+						<func type="branch">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=把雷伊设为首发之后再来挑战吧</param>
+							<param>option_num=1</param>
+							<param>item_icon=pet[10070]</param>
+							<condition>firstPet.idNOT10070</condition>
+						</func>
+						<func type="click">
+							<description><![CDATA[圣翼]]></description>
+							<action>openDialog</action>
+							<param>wing</param>
+						</func>
+						<!--
+						<func type="click">
+							<description><![CDATA[王之传承]]></description>
+							<action>battle</action>
+							<param>king</param>
+							<condition>firstPet.id=12887</condition>
+						</func>
+						<func type="branch">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=把圣翼雷神·雷伊设为首发之后再来挑战吧</param>
+							<param>option_num=1</param>
+							<param>item_icon=pet[12887]</param>
+							<condition>firstPet.idNOT12887</condition>
+						</func>
+						-->
+					</functionHandler>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[我有王者体质和血液反噬状态]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+					</replyHandler>
+				</branch>
+				<branch id="wing" name="雷伊" icon="Pets/pet/10070" size="83,164" pos="10,35">
+					<content><![CDATA[挑战前背包请记得携带雷神雷伊]]></content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[我先去带上]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+						<reply type="click">
+							<description><![CDATA[准备就绪]]></description>
+							<action>battle</action>
+							<param>wing</param>
+						</reply>
+					</replyHandler>
+				</branch>
+			</dialog>
+			<battle>
+				<branch id="default">
+					<settings count="6">
+						<mode>3</mode>
+						<weather>7</weather>
+					</settings>
+					<enemy>
+						<pet id="10070" level="100">
+							<status>
+								<atk>600</atk>
+								<mat>600</mat>
+								<def>400</def>
+								<mdf>400</mdf>
+								<hp>5000</hp>
+								<cri>15</cri>
+							</status>
+							<initBuff>13,14,20,41,42,98,-3000,-3111,3561</initBuff>
+							<loopSkill>10441,10443,10448,10442,10445</loopSkill>
+							<superSkill>10450</superSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>getPet</action>
+							<param>10070,1</param>
+							<condition>activity[spt].done[new][5][default]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=【雷伊】已经放入精灵仓库</param>
+							<param>item_icon=pet[10070]</param>
+							<param>option_num=1</param>
+							<condition>activity[spt].done[new][5][default]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>spt</param>
+							<param>done[new][5][default]=true</param>
+							<condition>activity[spt].done[new][5][default]=[bool]false[default]false</condition>
+						</button>
+					</winHandler>
+				</branch>
+				<branch id="evolve">
+					<settings count="1">
+						<mode>3</mode>
+						<weather>7</weather>
+						<initBuff>(rule:600000)</initBuff>
+					</settings>
+					<enemy>
+						<pet id="12394" level="105">
+							<status>
+								<hp>2000</hp>
+							</status>
+							<initBuff>13,20,84,98</initBuff>
+							<loopSkill>14059,14062,14061</loopSkill>
+							<superSkill>14063</superSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>evolvePet</action>
+							<param>12394</param>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=【雷伊】已成功超进化</param>
+							<param>item_icon=pet[12394]</param>
+							<param>option_num=1</param>
+						</button>
+					</winHandler>
+				</branch>
+				<branch id="wing">
+					<settings count="6" star="7">
+						<mode>4</mode>
+						<weather>7</weather>
+					</settings>
+					<enemy>
+						<pet id="12887" level="105">
+							<status>
+								<hp>30000</hp>
+							</status>
+							<initBuff>-8,61,23,-3059,84,-3082,-3112</initBuff>
+							<loopSkill>14161,14158</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=PetSelect</param>
+						    <param>title=选择要进化的雷神雷伊</param>
+						    <param>option_num=2</param>
+							<param>callback=evolve</param>
+						</button>
+					</winHandler>
+				</branch>
+				<branch id="king">
+					<settings count="1">
+						<mode>1</mode>
+						<weather>7</weather>
+					</settings>
+					<enemy>
+						<pet id="13142" level="105">
+							<status>
+								<hp>5000</hp>
+							</status>
+							<initBuff>-8,97</initBuff>
+							<loopSkill>14164,14163,14165,14166</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>evolvePet</action>
+							<param>13142</param>
+						</button>
+						<button type="auto">
+							<action>setPet</action>
+							<param>maxLevel=105</param>
+							<param>level=105</param>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=你的雷伊获得了雷电的传承！</param>
+							<param>item_icon=pet[13142]</param>
+							<param>option_num=1</param>
+						</button>
+					</winHandler>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>openDialog</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+			<callbackHandler>
+				<button type="choose">
+					<action>openHintbox</action>
+					<param>type=PetSelect</param>
+				    <param>title=选择要进化的雷神雷伊</param>
+				    <param>option_num=2</param>
+					<param>callback=evolve</param>
+				    <condition>data.PetSelect.uidNOT12394|data.PetSelect.level&lt;100</condition>
+				</button>
+				<button type="evolve">
+				    <action>openHintbox</action>
+				    <param>type=Item</param>
+				    <param>title=提示</param>
+				    <param>content=必须选择等级100的雷神雷伊！</param>
+				    <param>item_icon=pet[12394]</param>
+				    <param>option_num=1</param>
+					<param>callback=choose</param>
+				    <condition>data.PetSelect.uidNOT12394|data.PetSelect.level&lt;100</condition>
+				</button>
+				<button type="evolve">
+				    <action>openHintbox</action>
+				    <param>type=Item</param>
+				    <param>title=提示</param>
+				    <param>content=你的雷伊成功突破了自我！</param>
+				    <param>item_icon=pet[12887]</param>
+				    <param>option_num=1</param>
+				    <condition>data.PetSelect.uid=12394</condition>
+				    <condition>data.PetSelect.levelGTE100</condition>
+				</button>
+				<button type="evolve">
+				    <action>evolvePet</action>
+				    <param>index=data.PetSelectIndex</param>
+				    <param>12887</param>
+				    <condition>data.PetSelect.uid=12394</condition>
+				    <condition>data.PetSelect.levelGTE100</condition>
+				</button>
+			</callbackHandler>
+		</npc>
+		<npc id="1003202" resId="1003202" name="雷伊的倒影" size="67,50" pos="800,310" namePos="0,0">
+			<description>雷伊的倒影</description>
+			<dialog>
+				<branch id="default" name="雷伊" icon="Pets/pet/10070" size="83,164" pos="10,35">
+					<content><![CDATA[只有战胜自己的潜意识，才能激发自己深处的力量。]]></content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[我还没准备好]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+						<reply type="click">
+							<description><![CDATA[我准备好了！]]></description>
+							<action>battle</action>
+							<param>default</param>
+							<condition>firstPet.baseId=10070|firstPet.baseId=90</condition>
+						</reply>
+						<reply type="branch">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=把雷伊设为首发之后再来挑战吧</param>
+							<param>option_num=1</param>
+							<param>item_icon=pet[10070]</param>
+							<condition>firstPet.baseIdNOT90</condition>
+							<condition>firstPet.baseIdNOT10070</condition>
+						</reply>
+					</replyHandler>
+				</branch>
+			</dialog>
+			<battle>
+				<branch id="default">
+					<settings count="1" item="false" simulate="true">
+						<mode>4</mode>
+						<weather>7</weather>
+					</settings>
+					<player>
+						<pet id="10070" level="70">
+							<status>
+								<atk>600</atk>
+								<mat>600</mat>
+								<def>400</def>
+								<mdf>400</mdf>
+								<spd>500</spd>
+								<hp>2000</hp>
+								<cri>-1000</cri>
+							</status>
+							<initBuff>17,20</initBuff>
+							<normalSkill>10451,10452,10453,10448</normalSkill>
+							<superSkill>10450</superSkill>
+						</pet>
+					</player>
+					<enemy>
+						<pet id="14185" level="70">
+							<status>
+								<atk>600</atk>
+								<mat>600</mat>
+								<def>400</def>
+								<mdf>400</mdf>
+								<spd>600</spd>
+								<hp>2000</hp>
+								<cri>-1000</cri>
+							</status>
+							<initBuff>17,20</initBuff>
+							<loopSkill>14090,14093,14096,14089</loopSkill>
+							<superSkill>14095</superSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setItem</action>
+							<param>add_with_hint</param>
+							<param>384185,1</param>
+							<condition>activity[20015].done[1]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>getPet</action>
+							<param>630,1</param>
+							<condition>activity[20015].done[1]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=【雷煞】已经放入精灵仓库</param>
+							<param>item_icon=pet[630]</param>
+							<param>option_num=1</param>
+							<condition>activity[20015].done[1]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>20015</param>
+							<param>done[1]=true</param>
+							<condition>activity[20015].done[1]=[bool]false[default]false</condition>
+						</button>
+					</winHandler>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>openDialog</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+	</entities>		
+</map>

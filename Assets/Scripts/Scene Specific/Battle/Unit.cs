@@ -28,6 +28,7 @@ public class Unit
         set => SetSkill(value);
     }
     public List<Buff> unitBuffs = new List<Buff>();
+    public PetBattleBuffController buffController => new PetBattleBuffController(Element.全部, buffs: unitBuffs);
 
     /* Turn */
     public bool isMovable => (!unitBuffs.Exists(x => x.IsUnmovable())) && (pet != null) && pet.isMovable;

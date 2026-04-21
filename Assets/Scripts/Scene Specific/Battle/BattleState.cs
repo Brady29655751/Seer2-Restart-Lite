@@ -83,6 +83,11 @@ public class BattleState
         if (id.TryTrimStart("last.", out trimId))
             return (lastTurnState == null) ? float.MinValue : lastTurnState.GetStateIdentifier(trimId);
 
+        if (id.TryTrimStart("option", out trimId) && trimId.TryTrimParentheses(out trimId))
+        {
+            return Identifier.GetNumIdentifier(options.Get(trimId, "0"));
+        }
+
         if (id.TryTrimStart("settings.", out trimId))
             return settings.GetSettingsIdentifier(trimId);
 
@@ -104,11 +109,30 @@ public class BattleState
         {
             "turn" => turn,
             "actionCursor" => actionCursor,
+            "order.direction" => Identifier.GetNumIdentifier(options.Get("order_direction", "1")),
             "phase" => (float)phase,
-            "weather" => (float)weather,
+            "weather" => weather,
             "whosTurn" => whosTurn,
             _ => float.MinValue,
         };
+    }
+
+    public virtual void SetStateIdentifier(string id, float value)
+    {
+        if (id.TryTrimStart("option", out var trimId) && trimId.TryTrimParentheses(out trimId))
+        {
+            options[trimId] = value.ToString();
+        }
+
+        switch (id)
+        {
+            default:
+                return;
+
+            case "order.direction":
+                SetStateIdentifier("option[order_direction]", value);
+                return;
+        }
     }
 
     public virtual void OnTurnStart()
@@ -131,6 +155,7 @@ public class BattleState
         whosTurn = 0;
         actionOrder.Clear();
         actionCursor = -1;
+        SetStateIdentifier("order.direction", 1);
 
         for (int i = 0; i < stateBuffs.Count; i++)
         {

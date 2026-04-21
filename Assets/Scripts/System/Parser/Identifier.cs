@@ -257,6 +257,7 @@ public static class Identifier
             {
                 "pet.defElementRelation[op.pet.element]" => PetElementSystem.GetElementRelation(rhsUnit.pet.battleElementId, lhsUnit.pet),
                 "pet.defElementRelation[op.pet.subElement]" => PetElementSystem.GetElementRelation(rhsUnit.pet.subBattleElementId, lhsUnit.pet),
+                "pet.normalSkill[me.skill.id].position" => GetUnitIdentifier($"pet.normalSkill[{lhsUnit.skill?.id ?? 0}].position", lhsUnit, effect?.sourcePet),
                 _ => GetUnitIdentifier(trimId, lhsUnit, effect?.sourcePet)
             };
 
@@ -265,6 +266,7 @@ public static class Identifier
             {
                 "pet.defElementRelation[me.pet.element]" => PetElementSystem.GetElementRelation(lhsUnit.pet.battleElementId, rhsUnit.pet),
                 "pet.defElementRelation[me.pet.subElement]" => PetElementSystem.GetElementRelation(lhsUnit.pet.subBattleElementId, rhsUnit.pet),
+                "pet.normalSkill[op.skill.id].position" => GetUnitIdentifier($"pet.normalSkill[{rhsUnit.skill?.id ?? 0}].position", rhsUnit),
                 _ => GetUnitIdentifier(trimId, rhsUnit)
             };
 
@@ -291,6 +293,9 @@ public static class Identifier
 
         if (id.TryTrimStart("card.", out trimId))
             return GetCardIdentifier(trimId, unit.cardSystem);
+
+        if (id.TryTrimStart("buff", out trimId))
+            return GetBuffIdentifier(trimId, unit.buffController);
 
         return GetNumIdentifier(id);
     }
