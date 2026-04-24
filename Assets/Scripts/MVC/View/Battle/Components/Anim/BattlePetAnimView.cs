@@ -7,7 +7,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Object = UnityEngine.Object;
 using UnityEngine.Video;
-using FTRuntime.Yields;
+using Spine.Unity;
 
 public class BattlePetAnimView : BattleBaseView
 {
@@ -24,6 +24,8 @@ public class BattlePetAnimView : BattleBaseView
     private Pet currentPet;
     private PetUI currentPetUI; //仅限有动画的精灵使用这个字段,如果不为null,说明这个精灵有动画
     private GameObject currentPetAnim;
+    private SwfClipController CurrentPetSwfAnim => currentPetAnim?.GetComponent<SwfClipController>();
+    private SkeletonAnimation CurrentPetSkeletonAnim;
 
     private float animSpeed => //(battle.settings.mode == BattleMode.PVP) ? 1f : 
         Player.instance.gameData.settingsData.battleAnimSpeed;
@@ -33,8 +35,7 @@ public class BattlePetAnimView : BattleBaseView
     protected bool isPetDone = true;
     protected string defalutSuperTrigger = "super";
 
-    private Dictionary<GameObject, GameObject>
-        cloneDictionary = new Dictionary<GameObject, GameObject>(); //当遇到抢动画事件时,克隆体存在这里面.通过本体来寻找保存的克隆体
+    private Dictionary<GameObject, GameObject> cloneDictionary = new Dictionary<GameObject, GameObject>(); //当遇到抢动画事件时,克隆体存在这里面.通过本体来寻找保存的克隆体
 
     protected override void Awake()
     {
@@ -50,7 +51,7 @@ public class BattlePetAnimView : BattleBaseView
         skillAnim.anim.SetFloat("speed", this.animSpeed);
     }
 
-    private void OnDestroy() 
+    private void OnDestroy()
     {
         if (videoPlayer?.targetTexture != null)
             RenderTexture.ReleaseTemporary(videoPlayer.targetTexture);
@@ -65,11 +66,18 @@ public class BattlePetAnimView : BattleBaseView
         this.currentPet = pet;
         this.defalutSuperTrigger = (pet.battleStatus.atk >= pet.battleStatus.mat) ? "physic" : "special";
 
-        if ((cursorOffset == 0) && (tmp = pet.ui.GetBattleAnim(PetAnimationType.Physic)) !=
-            null) //检测是否有物攻动画,如果有,说明这个精灵有动画,但是需要立刻关闭,否则直接出现在舞台上
+        //检测是否有动画,如果有需要立刻关闭,否则直接出现在舞台上
+        if ((cursorOffset == 0) && (tmp = pet.ui.GetBattleAnim(PetAnimationType.Idle)) != null)
         {
+            if (CurrentPetSkeletonAnim != null)
+            {
+                DestroyImmediate(this.currentPetAnim);
+            }
+
             this.currentPetAnim = tmp;
             this.currentPetAnim.transform.SetParent(this.battlePetAnimContainer);
+            this.CurrentPetSkeletonAnim = this.currentPetAnim?.GetComponent<SkeletonAnimation>();
+            this.CurrentPetSkeletonAnim?.Initialize(true);
             this.currentPetAnim.SetActive(false);
             battlePetSprite.gameObject.SetActive(false);
             this.currentPetUI = pet.ui;
@@ -86,33 +94,55 @@ public class BattlePetAnimView : BattleBaseView
             this.currentPetAnim = null;
 
             battlePetSprite.sprite = pet.ui.battleImage;
-            battlePetSprite.gameObject.transform.localScale = new Vector3(1920 / pet.ui.battleImage.rect.width,
-                1080 / pet.ui.battleImage.rect.height, 1) / (cursorOffset + 1);
+            battlePetSprite.gameObject.transform.localScale = new Vector3(1920 / pet.ui.battleImage.rect.width, 1080 / pet.ui.battleImage.rect.height, 1) / (cursorOffset + 1);
             battlePetSprite.gameObject.SetActive(true);
 
             // 修正位置
-            battlePetSprite.transform.position = new Vector3((isMyView ? -1 : 1) * 9.6f / (cursorOffset + 1), -5.8f / (cursorOffset + 1),
-                battlePetSprite.transform.position.z);
+            battlePetSprite.transform.position = new Vector3((isMyView ? -1 : 1) * 9.6f / (cursorOffset + 1), -5.8f / (cursorOffset + 1), battlePetSprite.transform.position.z);
         }
     }
 
     private void SetPetPresent()
     {
-        if ((battle.settings.parallelCount == 1) && (this.currentPetAnim = this.currentPetUI.GetBattleAnim(PetAnimationType.Present)) != null)
+        if (battle.settings.parallelCount == 1)
         {
-            //检测是否有出场动画,如果有,播放出场动画.如果没有,直接播放待机动画
+            // Spine anim
+            if (CurrentPetSkeletonAnim != null)
+            {
+                if (CurrentPetSkeletonAnim.FindAnimation(PetAnimationType.Present) == null)
+                {
+                    this.SetPetIdle(null);
+                    return;
+                }
+
+                CurrentPetSkeletonAnim.SetTimeScale(this.animSpeed);
+                CurrentPetSkeletonAnim.SetSortingOrder(isMyView ? 2 : 1); // spine sorting order 不能双方在同一层
+                this.ApplyAnimation();
+                CurrentPetSkeletonAnim.SetAnimation(0, PetAnimationType.Present, false);
+                CurrentPetSkeletonAnim.AnimationState.Complete += (x) => SetPetIdle(null);
+                return;
+            }
+
+            // Swf anim, but no present anim, directly go to idle
+            if ((this.currentPetAnim = this.currentPetUI.GetBattleAnim(PetAnimationType.Present)) == null)
+            {
+                this.SetPetIdle(null);
+                return;
+            }
+
+            // Swf anim, play present anim
             CheckIfAnimUsed(); //防止抢动画
             isPetDone = false; //如果为false,说明动画还在播放,播完了变成idle状态,这个变量就会变成true,进行下一步
-            
-            SwfClipController controller = this.currentPetAnim.GetComponent<SwfClipController>();
-            controller.rateScale = this.animSpeed;
-            controller.autoPlay = false;
-            controller.loopMode = SwfClipController.LoopModes.Once;
-            controller.OnStopPlayingEvent += SetPetIdle; //注册一个事件监听,当动画播放完毕后,回到idle状态
 
-            this.ApplyAnimation();
-
-            controller.GotoAndPlay(0);
+            if (CurrentPetSwfAnim != null)
+            {
+                CurrentPetSwfAnim.rateScale = this.animSpeed;
+                CurrentPetSwfAnim.autoPlay = false;
+                CurrentPetSwfAnim.loopMode = SwfClipController.LoopModes.Once;
+                CurrentPetSwfAnim.OnStopPlayingEvent += SetPetIdle; //注册一个事件监听,当动画播放完毕后,回到idle状态
+                this.ApplyAnimation();
+                CurrentPetSwfAnim.GotoAndPlay(0);
+            }
         }
         else
         {
@@ -137,78 +167,132 @@ public class BattlePetAnimView : BattleBaseView
         if (isSuperSkill)
             PlaySkillSound(sound);
 
-        //使用技能动画,或者是通用技能动画
-        GameObject tmp;
-        if (this.currentPetUI != null && (tmp = this.currentPetUI.GetBattleAnim(type)) != null)
+        void PlayDefaultAnim()
         {
-            this.currentPetAnim = tmp;
-            
-            //如果两个都不为null,说明这个精灵有动画,执行这个
-            SwfClipController controller = this.currentPetAnim.GetComponent<SwfClipController>();
-            controller.clip.sortingOrder = 2 * (6 - cursorOffset); //攻击动画在2层,其他精灵动画都在1层,但捕捉动画在UI层在上面的
-            
-            this.currentPetAnim.transform.position = new Vector3(this.currentPetAnim.transform.position.x, this.currentPetAnim.transform.position.y, 2);
-
-            controller.rateScale = skillAnimSpeed;
-            controller.autoPlay = false;
-            controller.loopMode = SwfClipController.LoopModes.Once;
-
-            this.ApplyAnimation(false);
-
-            if (type is PetAnimationType.Super or PetAnimationType.SecondSuper)
+            string trigger = type switch
             {
-                this.camara.ScreenShake(0.4f);
-                if (this.isMyView)
-                {
-                    this.powerSkillAnim.anim.SetTrigger("PowerSkillStart");
-                }
-                else
-                {
-                    this.powerSkillAnim.anim.SetTrigger("PowerSkillStartOp");
-                }
-            }
-
-            if (videoStartFrame >= 0)
+                PetAnimationType.Physic => "physic",
+                PetAnimationType.Special => "special",
+                PetAnimationType.Property => "property",
+                PetAnimationType.Super => this.defalutSuperTrigger,
+                PetAnimationType.SecondSuper => this.defalutSuperTrigger,
+                _ => string.Empty
+            };
+            skillAnim.anim.SetFloat("speed", skillAnimSpeed);
+            skillAnim.transform.SetAsLastSibling();
+            skillAnim.onAnimHitEvent.SetListener(() =>
             {
-                videoPlayer.url = this.currentPet?.ui?.hitInfo?.GetVideoUrl(type);
-                videoPlayer.playbackSpeed = skillAnimSpeed;
-                videoRenderImage.texture = videoPlayer.targetTexture = RenderTexture.GetTemporary(1920, 1080);
-                videoRenderImage.color = Color.clear;
-                videoPlayer.Prepare();
-
-                void OnVideoEnd(VideoPlayer vp)
-                {
-                    videoPlayer.loopPointReached -= OnVideoEnd;
-                    controller.OnStopPlayingEvent += SetPetIdle;
-                    controller.Play(false);
-                    videoRenderImage.color = Color.clear;
-                    RenderTexture.ReleaseTemporary(videoPlayer.targetTexture);
-                }
-
-                _ = SetDelayCallback((int)(videoStartFrame * 1000 / (24 * skillAnimSpeed)), () =>
-                {
-                    videoPlayer.loopPointReached += OnVideoEnd;
-                    videoRenderImage.color = Color.white;
-                    controller.Stop(false);
-                    videoPlayer.Play();
-                });   
-            } 
-            else
-            {
-                controller.OnStopPlayingEvent += SetPetIdle; //注册一个事件监听,当动画播放完毕后,回到idle状态    
-            }
-
-            _ = SetDelayCallback((int)(hitFrame * 1000 / (24 * skillAnimSpeed)), () =>
-            {
-                // 若不為必殺技則擊中才有音效
                 if (!isSuperSkill)
                     PlaySkillSound(sound);
 
                 OnPetHit();
             });
+            skillAnim.onAnimEndEvent.SetListener(OnPetEnd);
+            skillAnim.anim.SetTrigger(trigger);   
+        }
 
-            controller.GotoAndPlay(0);
-        } 
+        GameObject tmp;
+
+        //使用技能动画,或者是通用技能动画
+        if (this.currentPetUI != null)
+        {
+            if (CurrentPetSkeletonAnim != null)
+            {
+                if (CurrentPetSkeletonAnim.FindAnimation(type) == null)
+                {
+                    PlayDefaultAnim();
+                }
+                else
+                {
+                    CurrentPetSkeletonAnim.SetSortingOrder(3 * (6 - cursorOffset)); //攻击动画在3层,其他精灵动画都在1层,spine避免抢动画在2层,但捕捉动画在UI层在上面的
+                    CurrentPetSkeletonAnim.SetTimeScale(skillAnimSpeed);
+                    this.ApplyAnimation(false);
+                    this.ScreenShake(type);
+                    CurrentPetSkeletonAnim.SetAnimation(0, type, false);
+                    CurrentPetSkeletonAnim.AnimationState.Complete += (x) => SetPetIdle(null);
+
+                    _ = SetDelayCallback((int)(hitFrame * 1000 / (24 * skillAnimSpeed)), () =>
+                    {
+                        // 若不為必殺技則擊中才有音效
+                        if (!isSuperSkill)
+                            PlaySkillSound(sound);
+
+                        OnPetHit();
+                    });
+                }
+            }
+            else if ((tmp = this.currentPetUI.GetBattleAnim(type)) != null)
+            {
+                this.currentPetAnim = tmp;
+                this.currentPetAnim.transform.position = new Vector3(this.currentPetAnim.transform.position.x, this.currentPetAnim.transform.position.y, 2);
+
+                if (CurrentPetSwfAnim != null)
+                {
+                    CurrentPetSwfAnim.clip.sortingOrder = 3 * (6 - cursorOffset); //攻击动画在3层,其他精灵动画都在1层,spine避免抢动画在2层,但捕捉动画在UI层在上面的
+                    CurrentPetSwfAnim.rateScale = skillAnimSpeed;
+                    CurrentPetSwfAnim.autoPlay = false;
+                    CurrentPetSwfAnim.loopMode = SwfClipController.LoopModes.Once;
+                }
+
+                this.ApplyAnimation(false);
+                this.ScreenShake(type);
+
+                if (videoStartFrame >= 0)
+                {
+                    videoPlayer.url = this.currentPet?.ui?.hitInfo?.GetVideoUrl(type);
+                    videoPlayer.playbackSpeed = skillAnimSpeed;
+                    videoRenderImage.texture = videoPlayer.targetTexture = RenderTexture.GetTemporary(1920, 1080);
+                    videoRenderImage.color = Color.clear;
+                    videoPlayer.Prepare();
+
+                    void OnVideoEnd(VideoPlayer vp)
+                    {
+                        videoPlayer.loopPointReached -= OnVideoEnd;
+
+                        if (CurrentPetSwfAnim != null)
+                        {
+                            CurrentPetSwfAnim.OnStopPlayingEvent += SetPetIdle;
+                            CurrentPetSwfAnim.Play(false);
+                        }
+
+                        videoRenderImage.color = Color.clear;
+                        RenderTexture.ReleaseTemporary(videoPlayer.targetTexture);
+                    }
+
+                    _ = SetDelayCallback((int)(videoStartFrame * 1000 / (24 * skillAnimSpeed)), () =>
+                    {
+                        videoPlayer.loopPointReached += OnVideoEnd;
+                        videoRenderImage.color = Color.white;
+
+                        if (CurrentPetSwfAnim != null)
+                            CurrentPetSwfAnim.Stop(false);
+
+                        videoPlayer.Play();
+                    });
+                }
+                else
+                {
+                    if (CurrentPetSwfAnim != null)
+                        CurrentPetSwfAnim.OnStopPlayingEvent += SetPetIdle; //注册一个事件监听,当动画播放完毕后,回到idle状态    
+                }
+
+                _ = SetDelayCallback((int)(hitFrame * 1000 / (24 * skillAnimSpeed)), () =>
+                {
+                    // 若不為必殺技則擊中才有音效
+                    if (!isSuperSkill)
+                        PlaySkillSound(sound);
+
+                    OnPetHit();
+                });
+
+                if (CurrentPetSwfAnim != null)
+                    CurrentPetSwfAnim.GotoAndPlay(0);
+            }
+            else
+            {
+                PlayDefaultAnim();
+            }
+        }
         else if (videoStartFrame >= 0)
         {
             videoPlayer.url = this.currentPet?.ui?.hitInfo?.GetVideoUrl(type);
@@ -239,38 +323,13 @@ public class BattlePetAnimView : BattleBaseView
 
                 OnPetHit();
             });
-        } 
+        }
         else  //为null,说明这个精灵没有动画,执行通用技能动画
         {
-            string trigger = type switch
-            {
-                PetAnimationType.Physic => "physic",
-                PetAnimationType.Special => "special",
-                PetAnimationType.Property => "property",
-                PetAnimationType.Super => this.defalutSuperTrigger,
-                PetAnimationType.SecondSuper => this.defalutSuperTrigger,
-                _ => string.Empty
-            };
-            skillAnim.anim.SetFloat("speed", skillAnimSpeed);
-            skillAnim.transform.SetAsLastSibling();
-            skillAnim.onAnimHitEvent.SetListener(() =>
-            {
-                if (!isSuperSkill)
-                    PlaySkillSound(sound);
-
-                OnPetHit();
-            });
-            skillAnim.onAnimEndEvent.SetListener(OnPetEnd);
-            skillAnim.anim.SetTrigger(trigger);
+            PlayDefaultAnim();
         }
 
         StartCoroutine(PreventAnimStuckCoroutine(24));
-    }
-
-    private async Task SetDelayCallback(int delay, Action action)
-    {
-        await Task.Delay(delay);
-        action();
     }
 
     public void SetCaptureAnim(PetAnimationType type)
@@ -293,20 +352,40 @@ public class BattlePetAnimView : BattleBaseView
         //包括被打/被暴击/闪避
         this.isPetDone = false;
         GameObject tmp;
-        if (currentPetUI != null && (tmp = this.currentPetUI.GetBattleAnim(type)) != null)
+        if (currentPetUI != null)
         {
-            this.currentPetAnim = tmp;
-            SwfClipController controller = this.currentPetAnim.GetComponent<SwfClipController>();
-            controller.clip.sortingOrder = 1 * (6 - cursorOffset);
-            this.currentPetAnim.transform.position = new Vector3(this.currentPetAnim.transform.position.x,
-                this.currentPetAnim.transform.position.y, 0);
-            controller.rateScale = animSpeed;
-            controller.autoPlay = false;
-            controller.loopMode = SwfClipController.LoopModes.Once;
-            controller.OnStopPlayingEvent += SetPetIdle; //注册一个事件监听,当动画播放完毕后,回到idle状态
-            this.ApplyAnimation();
-            controller.GotoAndPlay(0);
-            //需要播一遍动画,然后回到idle状态,idle状态调用OnPetEnd
+            if (CurrentPetSkeletonAnim != null)
+            {
+                if (CurrentPetSkeletonAnim.FindAnimation(type) == null)
+                {
+                    this.SetPetIdle(null);
+                    return;
+                }
+
+                CurrentPetSkeletonAnim.SetSortingOrder(1 * (6 - cursorOffset));
+                this.currentPetAnim.transform.position = new Vector3(this.currentPetAnim.transform.position.x, this.currentPetAnim.transform.position.y, 0);
+                CurrentPetSkeletonAnim.SetTimeScale(this.animSpeed);
+                this.ApplyAnimation();
+                CurrentPetSkeletonAnim.AnimationState.SetAnimation(0, type.ToString(), false);    
+                CurrentPetSkeletonAnim.AnimationState.Complete += (x) => SetPetIdle(null);
+            }
+            else if ((tmp = this.currentPetUI.GetBattleAnim(type)) != null)
+            {
+                this.currentPetAnim = tmp;
+                CurrentPetSwfAnim.clip.sortingOrder = 1 * (6 - cursorOffset);
+                this.currentPetAnim.transform.position = new Vector3(this.currentPetAnim.transform.position.x, this.currentPetAnim.transform.position.y, 0);
+                CurrentPetSwfAnim.rateScale = animSpeed;
+                CurrentPetSwfAnim.autoPlay = false;
+                CurrentPetSwfAnim.loopMode = SwfClipController.LoopModes.Once;
+                CurrentPetSwfAnim.OnStopPlayingEvent += SetPetIdle; //注册一个事件监听,当动画播放完毕后,回到idle状态
+                this.ApplyAnimation();
+                CurrentPetSwfAnim.GotoAndPlay(0);
+                //需要播一遍动画,然后回到idle状态,idle状态调用OnPetEnd   
+            } 
+            else
+            {
+                this.OnPetEnd();
+            }
         }
         else
         {
@@ -317,16 +396,30 @@ public class BattlePetAnimView : BattleBaseView
     public void SetPetStateAnim(PetAnimationType type) //失败,胜利,濒死
     {
         GameObject tmp;
-        if (currentPetUI != null && (tmp = this.currentPetUI.GetBattleAnim(type)) != null)
+        if (currentPetUI != null)
         {
-            this.currentPetAnim = tmp;
-            SwfClipController controller = this.currentPetAnim.GetComponent<SwfClipController>();
-            controller.clip.sortingOrder = 1 * (6 - cursorOffset);
-            this.currentPetAnim.transform.position = new Vector3(this.currentPetAnim.transform.position.x,
-                this.currentPetAnim.transform.position.y, 0);
-            controller.autoPlay = false;
-            this.ApplyAnimation();
-            controller.GotoAndPlay(0);
+            if (CurrentPetSkeletonAnim != null)
+            {
+                if (CurrentPetSkeletonAnim.FindAnimation(type) == null)
+                {
+                    this.OnPetEnd();
+                    return;
+                }
+
+                CurrentPetSkeletonAnim.SetSortingOrder((isMyView ? 2 : 1) * (6 - cursorOffset)); // spine sorting order 不能双方在同一层
+                this.currentPetAnim.transform.position = new Vector3(this.currentPetAnim.transform.position.x, this.currentPetAnim.transform.position.y, 0);
+                this.ApplyAnimation();
+                CurrentPetSkeletonAnim.AnimationState.SetAnimation(0, type.ToString(), type is PetAnimationType.Dying);
+            }
+            else if ((tmp = this.currentPetUI.GetBattleAnim(type)) != null)
+            {
+                this.currentPetAnim = tmp;
+                CurrentPetSwfAnim.clip.sortingOrder = 1 * (6 - cursorOffset);
+                this.currentPetAnim.transform.position = new Vector3(this.currentPetAnim.transform.position.x, this.currentPetAnim.transform.position.y, 0);
+                CurrentPetSwfAnim.autoPlay = false;
+                this.ApplyAnimation();
+                CurrentPetSwfAnim.GotoAndPlay(0);   
+            } 
         }
 
         this.OnPetEnd();
@@ -341,18 +434,62 @@ public class BattlePetAnimView : BattleBaseView
             otherController.OnStopPlayingEvent -= SetPetIdle;
         }
 
-        this.currentPetAnim = this.currentPetUI.GetBattleAnim(PetAnimationType.Idle);
-        CheckIfAnimUsed();
-        SwfClipController controller = this.currentPetAnim.GetComponent<SwfClipController>();
-        controller.clip.sortingOrder = 1 * (6 - cursorOffset);
-        this.currentPetAnim.transform.position = new Vector3(this.currentPetAnim.transform.position.x,
-            this.currentPetAnim.transform.position.y, 0);
+        if (CurrentPetSkeletonAnim != null)
+        {
+            CheckIfAnimUsed();
+            CurrentPetSkeletonAnim.Initialize(true);
+            CurrentPetSkeletonAnim.SetSortingOrder((isMyView ? 2 : 1) * (6 - cursorOffset)); // spine sorting order 不能双方在同一层
+            CurrentPetSkeletonAnim.SetAnimation(0, PetAnimationType.Idle, true);
+        }
+        else
+        {
+            this.currentPetAnim = this.currentPetUI.GetBattleAnim(PetAnimationType.Idle);
+            CheckIfAnimUsed();
+            if (CurrentPetSwfAnim != null)
+                CurrentPetSwfAnim.clip.sortingOrder = 1 * (6 - cursorOffset);
+        }
+
+        this.currentPetAnim.transform.position = new Vector3(this.currentPetAnim.transform.position.x, this.currentPetAnim.transform.position.y, 0);
         this.ApplyAnimation();
-        this.OnPetEnd();
+        this.OnPetEnd();   
     }
 
-    private void CheckIfAnimUsed() //如果两边是相同id精灵,那就不妙啦,两边会抢动画,还好只有出场,待机,濒死和失败(两边同时死亡不是没有可能)动画有可能两边同时发生
-                                   //因此做一个检测,如果当前动画是活跃状态,动画的容器不为null是其他的容器,就说明这个动画在被对方使用,我们需要克隆一个对象,并缓存起来
+    protected void OnPetCapture(bool isSuccess)
+    {
+        if (isSuccess)
+        {
+            battlePetSprite.gameObject.SetActive(false);
+            return;
+        }
+    }
+    
+    protected void OnPetHit()
+    {
+        UI.ProcessQuery(true);
+    }
+    
+    protected void OnPetEnd()
+    {
+        isPetDone = true;
+        isCaptureDone = true;
+    }
+
+    private void PlaySkillSound(string soundId)
+    {
+        if (string.IsNullOrEmpty(soundId) || (soundId == "0") || (soundId == "none"))
+            return;
+        
+        var trimSoundId = soundId;
+        bool isMod = (!string.IsNullOrEmpty(soundId)) && soundId.TryTrimStart("Mod/", out trimSoundId);
+        ResourceManager.instance.GetLocalAddressables<AudioClip>($"BGM/skill/{trimSoundId}", isMod, (sound) =>
+        {
+            AudioSystem.instance.PlaySound(sound, AudioVolumeType.BattleSE);
+        });
+    }
+
+    //如果两边是相同id精灵,那就不妙啦,两边会抢动画,还好只有出场,待机,濒死和失败(两边同时死亡不是没有可能)动画有可能两边同时发生
+    //因此做一个检测,如果当前动画是活跃状态,动画的容器不为null是其他的容器,就说明这个动画在被对方使用,我们需要克隆一个对象,并缓存起来
+    private void CheckIfAnimUsed()                                    
     {
         if (this.currentPetAnim.activeInHierarchy && this.currentPetAnim.transform.parent != null &&
             this.currentPetAnim.transform.parent != this.battlePetAnimContainer)
@@ -365,19 +502,6 @@ public class BattlePetAnimView : BattleBaseView
                 this.cloneDictionary.Add(originAnim, this.currentPetAnim);
             }
         }
-    }
-
-    private void PlaySkillSound(string soundId)
-    {
-        if (string.IsNullOrEmpty(soundId) || (soundId == "0") || (soundId == "none"))
-            return;
-
-        var trimSoundId = soundId;
-        bool isMod = (!string.IsNullOrEmpty(soundId)) && soundId.TryTrimStart("Mod/", out trimSoundId);
-        ResourceManager.instance.GetLocalAddressables<AudioClip>($"BGM/skill/{trimSoundId}", isMod, (sound) =>
-        {
-            AudioSystem.instance.PlaySound(sound, AudioVolumeType.BattleSE);
-        });
     }
 
     protected IEnumerator PreventAnimStuckCoroutine(float timeout)
@@ -402,9 +526,22 @@ public class BattlePetAnimView : BattleBaseView
         TransformHelper.DisableAllChild(this.battlePetAnimContainer);
 
         if (fixRateScale)
-            this.currentPetAnim.GetComponent<SwfClipController>().rateScale = this.animSpeed;
+        {
+            if (CurrentPetSwfAnim != null)
+                CurrentPetSwfAnim.rateScale = this.animSpeed;
+
+            if (CurrentPetSkeletonAnim != null)
+                CurrentPetSkeletonAnim.SetTimeScale(this.animSpeed);
+        }
 
         this.currentPetAnim.SetActive(true);
+
+        foreach (Transform anim in this.battlePetAnimContainer)
+        {
+            if (!anim.gameObject.activeSelf)
+                Destroy(anim.gameObject);
+        }
+
         if ((!isMyView && this.currentPetAnim.transform.localScale.x > 0) ||
             (isMyView && this.currentPetAnim.transform.localScale.x < 0))
         {
@@ -417,24 +554,20 @@ public class BattlePetAnimView : BattleBaseView
         this.currentPetAnim.transform.Translate(Vector3.back * this.currentPetAnim.transform.position.z);   // Z座標在0以上才看的到
     }
 
-    protected void OnPetCapture(bool isSuccess)
+    private void ScreenShake(PetAnimationType type)
     {
-        if (isSuccess)
+        if (type is PetAnimationType.Super or PetAnimationType.SecondSuper)
         {
-            battlePetSprite.gameObject.SetActive(false);
-            return;
+            this.camara.ScreenShake(0.4f);
+            if (this.isMyView)
+            {
+                this.powerSkillAnim.anim.SetTrigger("PowerSkillStart");
+            }
+            else
+            {
+                this.powerSkillAnim.anim.SetTrigger("PowerSkillStartOp");
+            }
         }
-    }
-
-    protected void OnPetHit()
-    {
-        UI.ProcessQuery(true);
-    }
-
-    protected void OnPetEnd()
-    {
-        isPetDone = true;
-        isCaptureDone = true;
     }
 
 
@@ -444,5 +577,11 @@ public class BattlePetAnimView : BattleBaseView
         GameObject copy = Object.Instantiate(original);
         copy.name = original.name; // 保持名称一致
         return copy;
+    }
+
+    private async Task SetDelayCallback(int delay, Action action)
+    {
+        await Task.Delay(delay);
+        action();
     }
 }

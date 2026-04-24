@@ -10,6 +10,7 @@ using Object = UnityEngine.Object;
 using System.Threading.Tasks;
 using SimpleFileBrowser;
 using UnityEngine.Video;
+using Spine.Unity;
 
 public class ResourceManager : Singleton<ResourceManager>
 {
@@ -270,7 +271,6 @@ public class ResourceManager : Singleton<ResourceManager>
             GameObject prefab = assetBundle.LoadAsset<GameObject>(assetName); //获取精灵的某个特定动画
             
             resDict.Set(prefabPath, prefab);
-
             return prefab;
         }
         catch (Exception)

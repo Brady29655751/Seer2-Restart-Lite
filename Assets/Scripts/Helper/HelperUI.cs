@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using UnityEngine;
 using RM = ResourceManager;
+using Spine.Unity;
 
 namespace UnityEngine.UI
 {
@@ -48,6 +49,45 @@ namespace UnityEngine.UI
         {
             rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, size.x);
             rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, size.y);
+        }
+    }
+
+    public static class SkeletonHelper
+    {
+        public static void SetSortingOrder(this SkeletonAnimation skeletonAnim, int order)
+        {
+            if (skeletonAnim == null)
+                return;
+
+            var meshRenderer = skeletonAnim.GetComponent<MeshRenderer>();
+            if (meshRenderer == null)
+                return;
+
+            meshRenderer.sortingOrder = order;
+        }
+
+        public static void SetTimeScale(this SkeletonAnimation skeletonAnim, float timeScale)
+        {
+            if (skeletonAnim == null)
+                return;
+
+            skeletonAnim.timeScale = timeScale;
+        }
+
+        public static Spine.TrackEntry SetAnimation(this SkeletonAnimation skeletonAnim, int track, object animationName, bool loop = false)
+        {
+            if (skeletonAnim == null)
+                return null;
+
+            return skeletonAnim.AnimationState.SetAnimation(track, animationName.ToString(), loop);
+        }
+
+        public static Spine.Animation FindAnimation(this SkeletonAnimation skeletonAnim, object animationName)
+        {
+            if (skeletonAnim == null)
+                return null;
+
+            return skeletonAnim?.SkeletonDataAsset?.GetSkeletonData(true)?.FindAnimation(animationName.ToString());
         }
     }
 

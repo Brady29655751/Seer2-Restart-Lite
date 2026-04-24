@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
+using Spine.Unity;
 
 public class BattleManager : Manager<BattleManager>
 {

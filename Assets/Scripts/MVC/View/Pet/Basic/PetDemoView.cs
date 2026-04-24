@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using FTRuntime;
+using Spine.Unity;
 
 public class PetDemoView : Module
 {
@@ -23,27 +24,36 @@ public class PetDemoView : Module
 
     [SerializeField] private Image genderImage;
     [SerializeField] private Image specialGenderImage;
-    
+
     [SerializeField] private IButton emblemButton;
-    
+
     [SerializeField] private IButton IVButton;
+    [SerializeField] private TextCell chatbox;
 
     private Canvas canvas;
     private GameObject currentPetAnim;
     private Pet currentPet;
 
-    protected override void Awake() {
+    protected override void Awake()
+    {
         canvas = GameObject.Find("Canvas").GetComponent<Canvas>();
     }
 
-    public void SetPet(Pet pet, bool animMode = true) {
+    private void OnDisable()
+    {
+        chatbox?.gameObject.SetActive(false);
+    }
+
+    public void SetPet(Pet pet, bool animMode = true)
+    {
         gameObject.SetActive(pet != null);
-        if (pet == null) {
+        if (pet == null)
+        {
             SetAnimation(pet, animMode);
             currentPet = pet;
             return;
         }
-        
+
         SetName(pet.name, PetInfo.IsMod(pet.id));
         SetElement(pet.element, pet.subElement);
         SetFeature(pet);
@@ -55,11 +65,13 @@ public class PetDemoView : Module
         currentPet = pet;
     }
 
-    public void SetInfoPromptActive(bool active) {
+    public void SetInfoPromptActive(bool active)
+    {
         infoPrompt.SetActive(active);
     }
 
-    public void SetName(string name, bool isMod) {
+    public void SetName(string name, bool isMod)
+    {
         nameText.text = name;
         nameText.color = isMod ? ColorHelper.gold : Color.cyan;
     }
@@ -76,18 +88,20 @@ public class PetDemoView : Module
         subElementButton?.gameObject.SetActive(subElement != Element.普通);
     }
 
-    public void SetElementInfoPromptContent(Element element) {
+    public void SetElementInfoPromptContent(Element element)
+    {
         string text = element.GetElementName();
         Vector2 size = new Vector2(30 + 10 * text.Length, 30);
         infoPrompt.SetInfoPromptWithAutoSize(text, TextAnchor.MiddleCenter);
     }
 
-    public void SetFeature(Pet pet) {
+    public void SetFeature(Pet pet)
+    {
         var feature = pet.feature.feature;
         var buff = Buff.GetFeatureBuff(pet);
         var icon = buff?.info?.GetIcon(false);
         var isIconExist = (icon != null) && ((!PetInfo.IsMod(pet.id)) || buff.info.options.ContainsKey("res"));
-        
+
         featureButton?.gameObject.SetActive(!isIconExist);
         featureHighStarButton?.gameObject.SetActive(isIconExist);
 
@@ -95,32 +109,36 @@ public class PetDemoView : Module
         featureHighStarButton?.SetSprite(icon);
     }
 
-    public void SetFeatureInfoPromptContent(Feature feature) {
+    public void SetFeatureInfoPromptContent(Feature feature)
+    {
         string text = feature.description;
         infoPrompt.SetInfoPromptWithAutoSize(text, TextAnchor.MiddleLeft);
-        if (featurePromptLeft) 
+        if (featurePromptLeft)
         {
             infoPrompt.SetPositionOffset(new Vector2(-infoPrompt.size.x, -infoPrompt.size.y / 2 - 2));
-        } 
+        }
         else
         {
             infoPrompt.SetPositionOffset(new Vector2(infoPrompt.zeroFixPos.x, -infoPrompt.size.y / 2 - 2));
         }
-    } 
+    }
 
-    public void SetGender(int gender) {
+    public void SetGender(int gender)
+    {
         genderImage.SetGenderSprite(gender);
         genderImage.gameObject.SetActive(gender != -1);
         specialGenderImage.gameObject.SetActive(gender == 2);
     }
 
-    public void SetEmblem(bool hasEmblem, Emblem emblem) {
+    public void SetEmblem(bool hasEmblem, Emblem emblem)
+    {
         Sprite nullEmblem = Emblem.GetNullEmblemSprite();
         emblemButton.gameObject.SetActive(emblem != null);
         emblemButton.SetSprite(hasEmblem ? (emblem?.GetSprite() ?? nullEmblem) : nullEmblem);
     }
 
-    public void SetEmblemInfoPromptContent(Emblem emblem, int index = 0) {
+    public void SetEmblemInfoPromptContent(Emblem emblem, int index = 0)
+    {
         if (emblem == null)
             return;
 
@@ -128,27 +146,31 @@ public class PetDemoView : Module
         infoPrompt.SetInfoPromptWithAutoSize(text, TextAnchor.MiddleLeft);
     }
 
-    public void SetIVRank(IVRanking ranking) {
+    public void SetIVRank(IVRanking ranking)
+    {
         IVButton?.SetSprite(ranking.GetSprite());
     }
 
-    public void SetIVInfoPromptContent(int iv) {
+    public void SetIVInfoPromptContent(int iv)
+    {
         string text = "个体值︰" + iv.ToString();
         Vector2 size = new Vector2(95, 30);
         infoPrompt.SetInfoPromptWithAutoSize(text, TextAnchor.MiddleCenter);
     }
 
-    public void SetAnimation(Pet pet, bool isAnimMode = true) {
+    public void SetAnimation(Pet pet, bool isAnimMode = true)
+    {
         if (this.currentPetAnim != null)
             DestroyImmediate(this.currentPetAnim);
 
-        if (pet == null) {
+        if (pet == null)
+        {
             this.currentPetAnim = null;
             demoImage.gameObject.SetActive(false);
             return;
         }
 
-        if (!isAnimMode) 
+        if (!isAnimMode)
         {
             demoImage.gameObject.SetActive(true);
             demoImage.SetSprite(pet.ui.battleImage);
@@ -161,10 +183,10 @@ public class PetDemoView : Module
             return;
         }
         */
-        
+
         OnPetAnimLoadCompleted(pet.ui.GetBattleAnim(PetAnimationType.Idle));
-        
-        void OnPetAnimLoadCompleted(GameObject anim) 
+
+        void OnPetAnimLoadCompleted(GameObject anim)
         {
             if (this.currentPetAnim != null)
                 DestroyImmediate(this.currentPetAnim);
@@ -179,7 +201,15 @@ public class PetDemoView : Module
                 this.currentPetAnim.transform.SetAsFirstSibling();
 
                 SwfClipController controller = this.currentPetAnim.GetComponent<SwfClipController>();
-                controller.clip.sortingOrder = 1;
+                SkeletonAnimation skeletonAnimation = this.currentPetAnim.GetComponent<SkeletonAnimation>();
+                if (controller != null)
+                    controller.clip.sortingOrder = 1;
+
+                if (skeletonAnimation != null)
+                {
+                    skeletonAnimation.Initialize(false);
+                    skeletonAnimation.AnimationState.SetAnimation(0, PetAnimationType.Idle.ToString(), true);
+                }
 
                 var animPos = this.currentPetAnim.transform.localPosition;
                 this.currentPetAnim.transform.localPosition = new Vector3(animPos.x, animPos.y, 1);
@@ -189,7 +219,7 @@ public class PetDemoView : Module
             // 沒有則使用預設的精靈圖片
             // if (isAnimMode)
             this.currentPetAnim?.SetActive(false);
-            
+
             demoImage.gameObject.SetActive(true);
             demoImage.SetSprite(pet.ui.battleImage);
         }
