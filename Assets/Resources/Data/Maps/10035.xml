@@ -1,0 +1,55 @@
+<map name="精灵圣殿" category="102" id="10035">
+	<fightMapColor>64,64,64,255</fightMapColor>
+	<initialPoint>730,190</initialPoint>
+	<music category="102">
+		<bgm>BGM_33</bgm>
+	</music>
+	<entities>
+		<npc id="1003500" resId="1001" name="" size="250,200" pos="55,0" namePos="0,0" color="0,0,0,0">
+			<description>精灵广场</description>
+			<transport>200,100</transport>
+			<eventHandler>
+				<button type="click">
+					<action>teleport</action>
+					<param>10034</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<npc id="1003501" resId="Pets/pet/10145" name="Lv48 吉斯" size="24,44" pos="530,360" namePos="0,0">
+			<battle>
+				<branch id="default">
+					<settings count="6" capture="true"/>
+					<enemy>
+						<pet id="10145" level="48">
+							<loopSkill>14263,14264,14266</loopSkill>
+						</pet>
+					</enemy>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>battle</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<npc id="1003502" resId="Pets/pet/10145" name="Lv49 吉斯" size="24,44" pos="365,280" namePos="0,0">
+			<battle>
+				<branch id="default">
+					<settings count="6" capture="true"/>
+					<enemy>
+						<pet id="10145" level="49">
+							<loopSkill>14263,14264,14266</loopSkill>
+						</pet>
+					</enemy>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>battle</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+	</entities>
+</map>

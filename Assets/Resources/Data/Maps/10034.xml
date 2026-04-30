@@ -1,0 +1,116 @@
+<map name="精灵广场" category="102" id="10034">
+	<fightMapColor>64,64,64,255</fightMapColor>
+	<initialPoint>680,90</initialPoint>
+	<music category="102">
+		<bgm>BGM_33</bgm>
+	</music>
+	<entities>
+		<npc id="1003400" resId="1001" name="" size="150,100" pos="10,145" namePos="0,0" color="0,0,0,0">
+			<description>神秘通道</description>
+			<transport>100,200</transport>
+			<eventHandler>
+				<button type="click">
+					<action>teleport</action>
+					<param>10033</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<npc id="1003401" resId="1001" name="" size="100,80" pos="435,365" namePos="0,0" color="0,0,0,0">
+			<description>精灵圣殿</description>
+			<transport>510,400</transport>
+			<eventHandler>
+				<button type="click">
+					<action>teleport</action>
+					<param>10035</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<npc id="1003402" resId="1003402" name="" size="250,137" pos="185,135" namePos="0,0" active="false">
+			<battle>
+				<branch id="default">
+					<settings count="6" capture="true"/>
+					<enemy>
+						<pet id="10074" level="46">
+							<initBuff>-2</initBuff>
+							<loopSkill>14249,14249,14249,14249,-4</loopSkill>
+						</pet>
+					</enemy>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="auto">
+					<action>setNpcParam</action>
+					<param>1003402</param>
+					<param>active=true</param>
+					<condition>random[new]LTE5</condition>
+				</button>
+				<button type="shoot">
+					<action>battle</action>
+					<param>default</param>
+					<condition>player.shoot=7009</condition>
+				</button>
+			</eventHandler>
+		</npc>
+		<npc id="1003403" resId="1003402" name="" size="250,137" pos="500,220" namePos="0,0" active="false">
+			<battle>
+				<branch id="default">
+					<settings count="6" capture="true"/>
+					<enemy>
+						<pet id="11248" level="47">
+							<initBuff>-2</initBuff>
+							<loopSkill>14249,14249,14249,14249,-4</loopSkill>
+						</pet>
+					</enemy>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="auto">
+					<action>setNpcParam</action>
+					<param>1003403</param>
+					<param>active=true</param>
+					<condition>random[0~256]&lt;1</condition>
+				</button>
+				<button type="shoot">
+					<action>battle</action>
+					<param>default</param>
+					<condition>player.shoot=7009</condition>
+				</button>
+			</eventHandler>
+		</npc>
+		<npc id="1003404" resId="Items/1103" name="" size="180,150" pos="255,355" namePos="0,0" color="0,0,0,0">
+			<description>藤结晶</description>
+			<eventHandler>
+				<button type="click">
+					<action>openHintbox</action>
+					<param>type=Item</param>
+					<param>title=提示</param>
+					<param>content=矿脉需要合理开发，明天再来吧！</param>
+					<param>item_icon=item[1103]</param>
+					<param>option_num=1</param>
+					<condition>activity[mine].done[10034]=[bool]true[default]false</condition>
+				</button>
+				<button type="click">
+					<action>setItem</action>
+					<param>add</param>
+					<param>1103,3</param>
+					<condition>activity[mine].done[10034]=[bool]false[default]false</condition>
+				</button>
+				<button type="click">
+					<action>openHintbox</action>
+					<param>type=Item</param>
+					<param>title=提示</param>
+					<param>content=3个藤结晶已经放入背包</param>
+					<param>item_icon=item[1103]</param>
+					<param>option_num=1</param>
+					<condition>activity[mine].done[10034]=[bool]false[default]false</condition>
+				</button>
+				<button type="click">
+					<action>setActivity</action>
+					<param>mine</param>
+					<param>done[10034]=true</param>
+					<condition>activity[mine].done[10034]=[bool]false[default]false</condition>
+				</button>
+			</eventHandler>
+		</npc>
+	</entities>
+</map>

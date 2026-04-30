@@ -10,34 +10,41 @@ public class TextCell : Module
     [SerializeField] private IButton button;
     [SerializeField] private Text text;
 
-    public void SetWidth(float width) {
+    public void SetWidth(float width)
+    {
         rectTransform?.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, width);
     }
 
-    public void SetText(string content) {
+    public void SetText(string content)
+    {
         text?.SetText(content);
     }
 
-    public void SetTextColor(Color color) {
+    public void SetTextColor(Color color)
+    {
         text?.SetColor(color);
     }
 
-    public void SetFontSize(int fontsize) {
+    public void SetFontSize(int fontsize)
+    {
         if (text == null)
             return;
 
         text.fontSize = fontsize;
     }
 
-    public void SetFontOption(FontOption font) {
+    public void SetFontOption(FontOption font)
+    {
         if (text == null)
             return;
 
         text.font = ResourceManager.instance.GetFont(font);
     }
 
-    public void SetCallback(Action callback, string type = "click") {
-        switch (type) {
+    public void SetCallback(Action callback, string type = "click")
+    {
+        switch (type)
+        {
             default:
                 break;
             case "click":

@@ -813,9 +813,11 @@ public class ResourceManager : Singleton<ResourceManager>
                 var basic = basicInfo[i];
                 var ui = uiInfo.Get(basic.id, new PetUIInfo(basic.id, basic.baseId));
                 PetInfo info = new PetInfo(basic, featureInfo.Get(ui.defaultFeatureId), expInfo.Get(basic.id),
-                    new PetTalentInfo(), skillInfo.Get(basic.id), ui);
-
-                info.cards = cardInfo.Get(basic.id, skillInfo.Get(basic.id));
+                    new PetTalentInfo(), skillInfo.Get(basic.id), ui)
+                {
+                    cards = cardInfo.Get(basic.id, skillInfo.Get(basic.id)),
+                    kizuna = SaveSystem.LoadXML<PetKizunaInfo>($"Resources/Pets/kizuna/{basic.id}"),
+                };
                 petInfos.Set(info.id, info);
             }
 

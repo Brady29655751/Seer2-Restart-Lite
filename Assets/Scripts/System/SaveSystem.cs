@@ -750,6 +750,9 @@ public static class SaveSystem
                 if (cardInfo != null)
                     info.cards = cardInfo.Get(basic.id, skillInfo.Get(basic.id));
 
+                if (TryLoadXML<PetKizunaInfo>($"{petPath}kizuna/{basic.id}.xml", out var kizunaInfo, out _))
+                    info.kizuna = kizunaInfo;
+
                 petDict.Set(info.id, info);
             }
 

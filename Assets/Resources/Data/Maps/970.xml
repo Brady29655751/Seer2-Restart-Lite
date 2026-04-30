@@ -1,0 +1,78 @@
+<map name="刃魂风库"  category="11"  id="970">
+	<!-- <resource>10011</resource> -->
+	<initialPoint>540,140</initialPoint>
+	<music category="11">
+		<bgm>BGM_970</bgm>
+	</music>
+	<entities>
+		<npc id="12601" resId="Pets/pet/1981" name="Lv 105 刃魂兽" size="224,176" pos="250,300" namePos="0,0">
+			<anim id="Pets/anim/1981" pos="-0.75,0.45" scale="1,1" />
+			<description><![CDATA[刃魂兽]]></description>
+			<dialog>
+				<branch id="default" name="刃魂兽" icon="Pets/pet/1981" size="112,88" pos="0,55">
+					<content><![CDATA[我是精灵王之利刃，风刃氏族不朽的守护者]]></content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[刃魂兽居然不叫瞳魂兽]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+						<reply type="click">
+							<description><![CDATA[挑战刃魂兽]]></description>
+							<action>battle</action>
+							<param>default</param>
+						</reply>
+					</replyHandler>
+				</branch>
+			</dialog>
+			<battle>
+				<branch id="default">
+					<settings count="6">
+						<weather>1</weather>
+					</settings>
+					<enemy>
+						<pet id="1981" level="105">
+							<status>
+								<spd>6000</spd>
+								<hp>35000</hp>
+							</status>
+							<initBuff>13,17,20,-3059,-3086</initBuff>
+							<loopSkill>14175,14177,14182,14181</loopSkill>
+							<superSkill>14180</superSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>getPet</action>
+							<param>1981,100</param>
+							<condition>activity[soul].done[south][1]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=【刃魂兽】已经放入精灵仓库</param>
+							<param>item_icon=pet[1981]</param>
+							<param>option_num=1</param>
+							<condition>activity[soul].done[south][1]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>soul</param>
+							<param>done[south][1]=true</param>
+							<condition>activity[soul].done[south][1]=[bool]false[default]false</condition>
+						</button>
+					</winHandler>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>openDialog</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<teleport id="1" name="风刃氏族主城" pos="750,60" targetMapId="900"/>
+	</entities>
+</map>
+

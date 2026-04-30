@@ -1,0 +1,29 @@
+<map name="神秘通道" category="102" id="10033">
+	<fightMapColor>64,64,64,255</fightMapColor>
+	<initialPoint>680,90</initialPoint>
+	<music category="102">
+		<bgm>BGM_30</bgm>
+	</music>
+	<entities>
+		<npc id="1003300" resId="1001" name="" size="220,240" pos="0,240" namePos="0,0" color="0,0,0,0">
+			<description>赫尔卡星建筑区</description>
+			<transport>140,300</transport>
+			<eventHandler>
+				<button type="click">
+					<action>teleport</action>
+					<param>10030</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<npc id="1003301" resId="1001" name="" size="200,150" pos="380,100" namePos="0,0" color="0,0,0,0">
+			<description>精灵广场</description>
+			<transport>480,150</transport>
+			<eventHandler>
+				<button type="click">
+					<action>teleport</action>
+					<param>10034</param>
+				</button>
+			</eventHandler>
+		</npc>
+	</entities>
+</map>

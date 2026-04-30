@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class PetDemoModel : Module
@@ -26,6 +27,9 @@ public class PetDemoModel : Module
     public int iv => currentPet.talent.iv;
     public IVRanking ivRank => currentPet.talent.IVRank;
 
+    private int kizunaDialogIndex = -1;
+
+
     public void SetPet(Pet pet)
     {
         currentPet = pet;
@@ -48,5 +52,23 @@ public class PetDemoModel : Module
         petName = fixedName;
     }
 
-    
+    public string Interact()
+    {
+        var candidates = currentPet?.info.kizuna?.GetDialogCandidates(currentPet?.kizuna ?? 0);
+        if (ListHelper.IsNullOrEmpty(candidates))
+            return null;
+
+        if (candidates.Count == 1)
+            return candidates.Get(0);
+        
+        while (true)
+        {
+            var index = Random.Range(0, candidates.Count);
+            if (index != kizunaDialogIndex)
+            {
+                kizunaDialogIndex = index;
+                return candidates.Get(index);   
+            }
+        }
+    }    
 }

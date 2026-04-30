@@ -33,6 +33,7 @@ public class PetDemoView : Module
     private Canvas canvas;
     private GameObject currentPetAnim;
     private Pet currentPet;
+    private Coroutine hideChatboxCoroutine;
 
     protected override void Awake()
     {
@@ -47,6 +48,7 @@ public class PetDemoView : Module
     public void SetPet(Pet pet, bool animMode = true)
     {
         gameObject.SetActive(pet != null);
+        ShowInteractDialog(null);
         if (pet == null)
         {
             SetAnimation(pet, animMode);
@@ -79,6 +81,22 @@ public class PetDemoView : Module
     public void ChangeName(bool isActive)
     {
         changeNameObject?.SetActive(isActive);
+    }
+    
+    public void ShowInteractDialog(string dialog)
+    {
+        if (hideChatboxCoroutine != null)
+            StopCoroutine(hideChatboxCoroutine);
+
+        if (string.IsNullOrEmpty(dialog))
+        {
+            chatbox?.gameObject.SetActive(false);
+            return;
+        }
+
+        chatbox?.SetText(dialog);
+        chatbox?.gameObject.SetActive(true);
+        hideChatboxCoroutine = StartCoroutine(WaitForSecondsCoroutine(4f, () => chatbox?.gameObject.SetActive(false)));   
     }
 
     public void SetElement(Element element, Element subElement)

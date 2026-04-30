@@ -9,9 +9,9 @@ public class PetRecord
 {
     public int winFightNum = 0;
     public int loseFightNum = 0;
-    [XmlIgnore] public int kizuna => (winFightNum * 5 + loseFightNum * 2) / 7 + GetRecord("kizuna", 0);
-    [XmlIgnore] public int minKizuna => GetRecord("minKizuna", -255);
-    [XmlIgnore] public int maxKizuna => GetRecord("maxKizuna", -255);
+    [XmlIgnore] public int kizuna => (winFightNum * 5 + loseFightNum * 2) / 7 + (int)GetRecord("kizuna", 0f);
+    [XmlIgnore] public int minKizuna => (int)GetRecord("minKizuna", -255f);
+    [XmlIgnore] public int maxKizuna => (int)GetRecord("maxKizuna", 255f);
 
     public List<IKeyValuePair<string, string>> recordDict;
 

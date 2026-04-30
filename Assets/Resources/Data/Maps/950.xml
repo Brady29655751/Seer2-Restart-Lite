@@ -1,0 +1,37 @@
+<map name="神秘研究院"  category="11"  id="950">
+	<!-- <resource>10011</resource> -->
+	<initialPoint>670,100</initialPoint>
+	<music category="11">
+		<bgm>BGM_920</bgm>
+	</music>
+	<entities>
+		<npc id="95001" resId="Pets/pet/712" name="Lv95 酷奇" size="113,114" pos="765,330" namePos="0,0" active="false">
+			<battle>
+				<branch id="default">
+					<settings count="6" capture="true"/>
+					<enemy>
+						<pet id="712" level="95">
+							<initBuff>-2</initBuff>
+							<loopSkill>14186,14196,14190,14199,14191,-4</loopSkill>
+						</pet>
+					</enemy>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>battle</action>
+					<param>default</param>
+				</button>
+				<button type="auto">
+					<action>setNpcParam</action>
+					<param>95001</param>
+					<param>active=true</param>
+					<condition>random[new]LTE5</condition>
+				</button>
+			</eventHandler>
+		</npc>
+		<teleport id="1" name="御风中枢" pos="880,120" targetMapId="930"/>
+		<teleport id="2" name="研究院地下" pos="355,305" targetMapId="960"/>
+	</entities>
+</map>
+

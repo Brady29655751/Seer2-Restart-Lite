@@ -38,37 +38,53 @@ public class PetDemoController : Module
         }
     }
 
+    public void Interact()
+    {
+        if (mode != PetBagMode.Normal)
+            return;
+
+        string dialog = demoModel.Interact();
+        demoView.ShowInteractDialog(dialog);
+    }
+
     public void SetPetAnimationActive(bool active)
     {
         demoView.SetAnimation(active ? demoModel.currentPet : null, demoModel.animMode);
     }
 
-    public void TogglePetAnimationMode() {
+    public void TogglePetAnimationMode()
+    {
         demoModel.SetAnimMode(!demoModel.animMode);
         SetPetAnimationActive(true);
     }
 
-    public void SetInfoPromptActive(bool active) {
+    public void SetInfoPromptActive(bool active)
+    {
         demoView.SetInfoPromptActive(active);
     }
 
-    public void SetElementInfoPromptContent() {
+    public void SetElementInfoPromptContent()
+    {
         demoView.SetElementInfoPromptContent(demoModel.element);
     }
 
-    public void SetSubElementInfoPromptContent() {
+    public void SetSubElementInfoPromptContent()
+    {
         demoView.SetElementInfoPromptContent(demoModel.subElement);
     }
 
-    public void SetFeatureInfoPromptContent() {
+    public void SetFeatureInfoPromptContent()
+    {
         demoView.SetFeatureInfoPromptContent(demoModel.feature);
     }
 
-    public void SetEmblemInfoPromptContent(int index) {
+    public void SetEmblemInfoPromptContent(int index)
+    {
         demoView.SetEmblemInfoPromptContent(demoModel.emblem, index);
     }
 
-    public void SetIVInfoPromptContent() {
+    public void SetIVInfoPromptContent()
+    {
         demoView.SetIVInfoPromptContent(demoModel.iv);
     }
 }

@@ -10,7 +10,7 @@ public class BattleAnimView : BattleBaseView
     [SerializeField] private BattleDamageAnimView damageView;
     [SerializeField] private BattlePetAnimView otherSidePetView;
 
-    public bool isDone => petView.isDone;
+    public bool isDone => petView.isDone && damageView.isDone;
 
     public void SetUnit(Unit lastUnit, Unit currentUnit, int cursorOffset = 0)
     {

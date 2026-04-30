@@ -18,6 +18,7 @@ public class PetInfo
     public PetTalentInfo talent;
     public PetSkillInfo skills, cards;
     public PetUIInfo ui;
+    public PetKizunaInfo kizuna;
 
     public static bool IsMod(int id) => (id < 0);
     public static List<PetInfo> database => Database.instance.petInfoDict.Select(x => x.Value).Where(x => x != null)

@@ -312,11 +312,14 @@ public class Pet
             return initBuffs.Count(x => x.options.Get(buffOptionExpr[0], x.info.options.Get(buffOptionExpr[0]))?.ToLower() == buffOptionExpr[1]?.ToLower());
         }
 
-        if ((id.TryTrimStart("record", out var trimRecord)) &&
-            (trimRecord.TryTrimParentheses(out var trimRecordKey)) &&
-            (record.TryGetRecord(trimRecord, out var trimRecordValueExpr)) &&
-            float.TryParse(trimRecordValueExpr, out var trimRecordValue))
-            return trimRecordValue;
+        if (id.TryTrimStart("record", out var trimRecord) && trimRecord.TryTrimParentheses(out var trimRecordKey))
+        {
+            if (record.TryGetRecord(trimRecordKey, out var trimRecordValueExpr) && float.TryParse(trimRecordValueExpr, out var trimRecordValue))
+                return trimRecordValue;
+            
+            return 0;   
+        }
+            
 
         if (id.TryTrimStart("skin", out var trimSkin) &&
             (trimSkin.TryTrimParentheses(out var skinIdExpr)) &&
@@ -388,8 +391,7 @@ public class Pet
 
     public virtual void SetPetIdentifier(string id, float num)
     {
-        if ((id.TryTrimStart("record", out var trimRecord)) &&
-            (trimRecord.TryTrimParentheses(out var trimRecordKey)))
+        if (id.TryTrimStart("record", out var trimRecord) && trimRecord.TryTrimParentheses(out var trimRecordKey))
         {
             record.SetRecord(trimRecordKey, num);
             return;
@@ -654,16 +656,6 @@ public class Pet
         // Check New Skill
         foreach (var pet in allPets)
             pet?.skills?.CheckNewSkill(pet?.level ?? 0);
-
-
-        if (VersionData.Compare(petDataVersion, "lite_4.1") < 0)
-        {
-            var extendLength = 12 - gameData.petBag.Length;
-            if (extendLength > 0)
-                gameData.petBag = gameData.petBag.Concat(Enumerable.Repeat<Pet>(null, extendLength)).ToArray();
-
-            petDataVersion = "lite_4.1";
-        }
     }
 
 }

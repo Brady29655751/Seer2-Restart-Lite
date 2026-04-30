@@ -13,6 +13,7 @@ public class BattleDamageAnimView : Module
     [SerializeField] private FightCamaraController camara;
 
     private SettingsData settingsData => Player.instance.gameData.settingsData;
+    public bool isDone = true;
 
     public void SetHealObject(UnitHudSystem.HealInfo info)
     {
@@ -23,6 +24,7 @@ public class BattleDamageAnimView : Module
         Text num = obj.GetComponent<Text>();
         num.text = info.HealText;
         num.color = info.TypeColor;
+        isDone = false;
         StartCoroutine(SetHealAnim(num.rectTransform, string.IsNullOrEmpty(info.Type) || info.Type == "item"));
     }
 
@@ -35,7 +37,7 @@ public class BattleDamageAnimView : Module
     private IEnumerator SetHealAnim(RectTransform healRect, bool dir = true)
     {
         // float time = 0;
-        float speed = dir ? -1.5f : 3f;
+        float speed = (dir ? -1.5f : 3f) * ((settingsData.battleAnimSpeed - 1) / 2f + 1);
 
         if (dir)
         {
@@ -57,6 +59,8 @@ public class BattleDamageAnimView : Module
                 yield return new WaitForSeconds(0.02f);
             }    
         }
+
+        isDone = true;
 
         yield return new WaitForSeconds(0.8f);
         Destroy(healRect.gameObject);
