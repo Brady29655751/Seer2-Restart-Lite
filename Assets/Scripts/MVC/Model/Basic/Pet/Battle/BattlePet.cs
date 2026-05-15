@@ -184,7 +184,16 @@ public class BattlePet : Pet
             }
 
             var filterList = trimSkill.TrimParenthesesLoop('(', ')');
-            var filter = Parser.ParseConditionFilter<Skill>(trimSkill, (expr, skill) => skill?.GetSkillIdentifier(expr) ?? Identifier.GetNumIdentifier(expr));
+            var filter = Parser.ParseConditionFilter<Skill>(trimSkill, (expr, skill) => 
+            {
+                if (skill == null)
+                    return Identifier.GetNumIdentifier(expr);
+
+                if (skill.TryGetSkillIdentifier(expr, out var num))
+                    return num;
+                    
+                return Identifier.GetNumIdentifier(expr);
+            });
             var allSkills = skillController.allSkills.Where(x => x != null).Where(filter).ToList();
 
             trimSkill = trimSkill.TrimStart("(" + filterList?.ConcatToString(")(") + ")").TrimStart('.');

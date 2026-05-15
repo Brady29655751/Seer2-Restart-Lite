@@ -42,7 +42,7 @@ public class GameData
     public int achievement;
     [XmlIgnore] public int shoot => Item.GetShootId(achievement);
 
-    public Pet[] petBag = new Pet[12];
+    public Pet[] petBag = new Pet[PetInfo.PET_BAG_SIZE];
     public List<Pet> petStorage = new List<Pet>();
     public List<IKeyValuePair<string, Pet[]>> pvpPetTeam = new List<IKeyValuePair<string, Pet[]>>();
     [XmlIgnore] public List<Pet> petDict => petBag.Concat(petStorage).Where(x => x != null).ToList();
@@ -87,7 +87,7 @@ public class GameData
 
         gender = false;
         nickname = string.Empty;
-        petBag = new Pet[12];
+        petBag = new Pet[PetInfo.PET_BAG_SIZE];
         petStorage = new List<Pet>();
         pvpPetTeam = new List<IKeyValuePair<string, Pet[]>>();
         itemStorage = new List<Item>();

@@ -6,20 +6,28 @@
 	</music>
 	<entities>
 		<npc id="12601" resId="Pets/pet/981" name="Lv 105 目灵兽" size="180,220" pos="370,180" namePos="0,0">
+			<anim id="Pets/anim/981" pos="-1.8,2.1" scale="1.5,1.5" />
 			<description><![CDATA[目灵兽]]></description>
 			<dialog>
 				<branch id="default" name="目灵兽" icon="Pets/pet/981" size="90,110" pos="0,55">
 					<content><![CDATA[我是精灵王之双目，草目氏族不朽的守护者]]></content>
+					<functionHandler>
+						<func type="click">
+							<description><![CDATA[挑战目灵兽]]></description>
+							<action>battle</action>
+							<param>default</param>
+						</func>
+						<func type="click">
+							<description><![CDATA[超进化]]></description>
+							<action>battle</action>
+							<param>evolve</param>
+						</func>
+					</functionHandler>
 					<replyHandler>
 						<reply type="click">
 							<description><![CDATA[目灵兽居然隐藏在雕像之中]]></description>
 							<action>openDialog</action>
 							<param>null</param>
-						</reply>
-						<reply type="click">
-							<description><![CDATA[挑战目灵兽]]></description>
-							<action>battle</action>
-							<param>default</param>
 						</reply>
 					</replyHandler>
 				</branch>
@@ -77,6 +85,32 @@
 						</button>
 					</winHandler>
 				</branch>
+				<branch id="evolve">
+					<settings count="6">
+						<weather>1</weather>
+						<initBuff>(field:600001)</initBuff>
+						<limit>(elementNOT3)(elementNOT12)</limit>
+						<limitDesc><![CDATA[不可以使用<color=#ffbb33>火系</color>和<color=#ffbb33>特质系</color>精灵进行挑战哦！]]></limitDesc>
+					</settings>
+					<enemy>
+						<pet id="991" level="105">
+							<status>
+								<hp>300000</hp>
+							</status>
+							<initBuff>-8,17,20,3608,3609,61</initBuff>
+							<loopSkill>14303,14304,14305,10498</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="choose">
+							<action>openHintbox</action>
+							<param>type=PetSelect</param>
+						    <param>title=选择要进化的目灵兽</param>
+						    <param>option_num=2</param>
+							<param>callback=evolve</param>
+						</button>
+					</winHandler>
+				</branch>
 			</battle>
 			<eventHandler>
 				<button type="click">
@@ -84,6 +118,43 @@
 					<param>default</param>
 				</button>
 			</eventHandler>
+			<callbackHandler>
+				<button type="choose">
+					<action>openHintbox</action>
+					<param>type=PetSelect</param>
+				    <param>title=选择要进化的目灵兽</param>
+				    <param>option_num=2</param>
+					<param>callback=evolve</param>
+				    <condition>data.PetSelect.uidNOT981|data.PetSelect.level&lt;100</condition>
+				</button>
+				<button type="evolve">
+				    <action>openHintbox</action>
+				    <param>type=Item</param>
+				    <param>title=提示</param>
+				    <param>content=必须选择等级100的目灵兽！</param>
+				    <param>item_icon=pet[981]</param>
+				    <param>option_num=1</param>
+					<param>callback=choose</param>
+				    <condition>data.PetSelect.uidNOT981|data.PetSelect.level&lt;100</condition>
+				</button>
+				<button type="evolve">
+				    <action>openHintbox</action>
+				    <param>type=Item</param>
+				    <param>title=提示</param>
+				    <param>content=目灵兽已成功超进化</param>
+				    <param>item_icon=pet[991]</param>
+				    <param>option_num=1</param>
+				    <condition>data.PetSelect.uid=981</condition>
+				    <condition>data.PetSelect.levelGTE100</condition>
+				</button>
+				<button type="evolve">
+				    <action>evolvePet</action>
+				    <param>index=data.PetSelectIndex</param>
+				    <param>991</param>
+				    <condition>data.PetSelect.uid=981</condition>
+				    <condition>data.PetSelect.levelGTE100</condition>
+				</button>
+			</callbackHandler>
 		</npc>
 		<teleport id="1" name="权力之帐" pos="85,140" targetMapId="110"/>
 	</entities>

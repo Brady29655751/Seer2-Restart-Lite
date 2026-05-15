@@ -1,0 +1,48 @@
+<map name="虫林小径"  category="12"  id="1200">
+	<!-- <resource>10011</resource> -->
+	<initialPoint>470,100</initialPoint>
+	<music category="12">
+		<bgm>BGM_1200</bgm>
+	</music>
+	<entities>
+		<npc id="120001" resId="Pets/pet/403" name="Lv96 彩翼蜓" size="111,105" pos="285,260" namePos="0,0">
+			<battle>
+				<branch id="default">
+					<settings count="6" capture="true"/>
+					<enemy>
+						<pet id="403" level="96">
+							<loopSkill>10187</loopSkill>
+						</pet>
+					</enemy>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>battle</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<npc id="120002" resId="Pets/pet/403" name="Lv97 彩翼蜓" size="111,105" pos="545,150" namePos="0,0">
+			<battle>
+				<branch id="default">
+					<settings count="6" capture="true"/>
+					<enemy>
+						<pet id="403" level="97">
+							<loopSkill>10187</loopSkill>
+						</pet>
+					</enemy>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>battle</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<teleport id="1" name="虫蚀氏族主城" pos="565,300" targetMapId="1210"/>
+		<teleport id="2" name="风暴边际" pos="255,65" targetMapId="980"/>
+	</entities>
+</map>
+

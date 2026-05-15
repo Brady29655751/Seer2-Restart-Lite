@@ -97,11 +97,9 @@ public class GameManager : Singleton<GameManager>
         }
         gameData.version = versionData.gameVersion;
 
-        if (gameData.petBag.Length < 12)
+        if (gameData.petBag.Length < PetInfo.PET_BAG_SIZE)
         {
-            var extendLength = 12 - gameData.petBag.Length;
-            if (extendLength > 0)
-                gameData.petBag = gameData.petBag.Concat(Enumerable.Repeat<Pet>(null, extendLength)).ToArray();
+            Array.Resize(ref gameData.petBag, PetInfo.PET_BAG_SIZE);
         }
 
         if ((DateTime.Now.Date - gameData.lastLoginDate.Date).Days > 0)

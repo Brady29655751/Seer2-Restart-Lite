@@ -32,7 +32,7 @@ public class ItemShopPanel : Panel
             10101, 10111, 10221, 10238, 10239, 10240, 20001, 10018, 20002,
             10211, 10242, 21006, 21007, 21008, 21009, 21010, 10011, 10012,
             10013, 10014, 10015, 10016, 10001, 10002, 10003, 10004, 10005,
-            320000, 110050,
+            320000, 700000, 110050,
         } },
         { ItemShopType.Mine, ItemInfo.database.Where(x => x.type == ItemType.Mine).Select(x => x.id).ToList() },
         { ItemShopType.Honor, new List<int>() {
@@ -53,7 +53,7 @@ public class ItemShopPanel : Panel
             320101, 320102, 320103, 320104, 320810,
         } },
         { ItemShopType.Plant, Item.plantItemDatabase.Select(x => x.id).ToList() },
-        { ItemShopType.Achievement, Item.achievementItemDatabase.Select(x => x.id).ToList() },
+        { ItemShopType.Achievement, Item.achievementItemDatabase.Where(x => x.info.price > 0).Select(x => x.id).ToList() },
     };
 
     public static bool IsBuy(ItemShopMode shopMode)

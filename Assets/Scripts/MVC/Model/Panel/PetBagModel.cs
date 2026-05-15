@@ -107,7 +107,7 @@ public class PetBagModel : Module
     public bool SetPetHome()
     {
         int petBagCount = selectModel.selections.Count(x => x != null);
-        if (petBagCount <= 1)
+        if ((petBagCount == 0) || ((petBagCount == 1) && (selectModel.page == 0)))
             return false;
 
         if (selectModel.cursor.Length <= 0)

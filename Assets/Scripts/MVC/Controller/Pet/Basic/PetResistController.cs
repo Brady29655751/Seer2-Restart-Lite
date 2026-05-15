@@ -48,8 +48,16 @@ public class PetResistController : Module
 
     public void OnSetBuffButtonClick(string type)
     {
+        var buffType = type.ToBuffType();
+        var resistBuffId = buffType switch
+        {
+            BuffType.Unhealthy => 1999,
+            BuffType.Abnormal => 199,
+            _ => 0,  
+        };
         learnBuffPanel.SetActive(true);
-        learnBuffController.SetStorage(BuffInfo.database.Where(x => x.type == type.ToBuffType()).ToList());
+        learnBuffController.SetStorage(BuffInfo.database.Where(x => x.type == buffType).ToList());
+        learnBuffController.SetCurrentBuff(resistBuffId);
         learnBuffController.SetDIYSuccessCallback(buffInfo => SetBuffResistType($"{type}.id", buffInfo?.id ?? 0));
     }
 
@@ -105,7 +113,7 @@ public class PetResistController : Module
     {
         if (Buff.GetBuffInfo(value) == null)
         {
-            Hintbox.OpenHintboxWithContent($"无法设置该印记为为状态抗性", 16);
+            Hintbox.OpenHintboxWithContent($"无法设置该印记为状态抗性", 16);
             return;
         }
 

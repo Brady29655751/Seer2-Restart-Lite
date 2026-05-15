@@ -6,6 +6,8 @@ using System.Linq;
 
 public class PetInfo
 {
+    public const int PET_BAG_SIZE = 12;
+
     public int id => basic.id;
     public int baseId => basic.baseId;
     public List<int> allEvolvePetIds => PetExpSystem.GetEvolveChain(baseId, id);

@@ -148,7 +148,7 @@
 					<action>setNpcParam</action>
 					<param>1003605</param>
 					<param>active=true</param>
-					<condition>random[0~256]&lt;1</condition>
+					<condition>random[0~256]&lt;1|player.achievement=25001</condition>
 				</button>
 				<button type="click">
 					<action>battle</action>

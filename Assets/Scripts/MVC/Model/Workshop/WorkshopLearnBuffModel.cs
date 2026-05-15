@@ -19,6 +19,11 @@ public class WorkshopLearnBuffModel : SelectModel<BuffInfo>
         Sort(x => x.id);
     }
 
+    public void SetCurrentBuff(int id)
+    {
+        idInputField.SetInputString(id.ToString());
+    }
+
 
     public void Search() {
         if (string.IsNullOrEmpty(searchInputField.inputString)) {

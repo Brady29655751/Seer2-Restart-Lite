@@ -25,7 +25,7 @@ public class ItemCell : UIModule
         typeCell.SetTextColor(ColorHelper.gold);
         priceCell.SetText(itemInfo.price.ToString());
         currencyCell.SetText(itemInfo.currencyType.ToString());
-        habitatCell.SetText(itemInfo.habitat);
+        habitatCell.SetText(itemInfo.Habitat);
         habitatCell.SetTextColor(ColorHelper.green);
         habitatCell.SetCallback(GetItem);
         iconImage.SetSprite(itemInfo.icon);
@@ -59,14 +59,14 @@ public class ItemCell : UIModule
         if (currentItemInfo == null)
             return;
 
-        if (currentItemInfo.linkId == "Workshop") {
+        if (currentItemInfo.LinkId == "Workshop") {
             var item = new Item(currentItemInfo.id);
             Item.Add(item);
             Item.OpenHintbox(item);
             return;
         }
             
-        Panel.Link(currentItemInfo.linkId);
+        Panel.Link(currentItemInfo.LinkId);
     }
 
 }

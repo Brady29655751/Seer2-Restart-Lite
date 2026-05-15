@@ -55,7 +55,7 @@ public class ItemShopController : Module
         if (item == null)
             return;
 
-        itemDetailView.SetTotal((uint)(num * item.info.price), item.info.currencyInfo?.name);
+        itemDetailView.SetTotal((uint)(num * item.info.price), item.info.CurrencyInfo?.name);
     }
 
     public void OnBuyItem() {

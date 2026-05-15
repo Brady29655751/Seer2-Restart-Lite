@@ -54,6 +54,12 @@ public class Item
         num = rhs.num;
     }
 
+    public static List<Item> Parse(string text, int defaultNum = 1, string delimeter = "/")
+    {
+        var linear = Linear<int>.Parse(text, x => (int)Identifier.GetNumIdentifier(x), defaultNum, delimeter);
+        return linear?.Select(x => new Item(x.key, x.value)).ToList();
+    }
+
     public List<Effect> GetEffects()
     {
         var itemEffects = info.effects.Select(x => new Effect(x)).ToList();

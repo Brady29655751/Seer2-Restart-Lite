@@ -27,9 +27,9 @@ public class ItemInfo
     public List<Effect> effects { get; private set; } = new List<Effect>();
 
     public Sprite icon => GetIcon(resId);
-    public ItemInfo currencyInfo => Item.GetItemInfo(currencyType);
-    public string habitat => options.Get("habitat", (linkId == "Workshop") ? "点击领取" : "-");
-    public string linkId => options.Get("linkId", "none");
+    public ItemInfo CurrencyInfo => Item.GetItemInfo(currencyType);
+    public string Habitat => options.Get("habitat", (LinkId == "Workshop") ? "点击领取" : "-");
+    public string LinkId => options.Get("linkId", "none");
     public bool removable = true;
 
     public static bool IsMod(int id) => id < 0;
@@ -98,8 +98,8 @@ public class ItemInfo
     public string GetEffectDescription() {
         var effectDesc = effectDescription;
 
-        if (habitat != "-" && habitat != "点击领取")
-            effectDesc += "[ENDL][ENDL][66ccff]【获取方式：" + habitat + "】[-]";
+        if (Habitat != "-" && Habitat != "点击领取")
+            effectDesc += "[ENDL][ENDL][66ccff]【获取方式：" + Habitat + "】[-]";
 
         return effectDesc.ReplaceColorAndNewline();
     }

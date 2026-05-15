@@ -12,7 +12,7 @@ public class PetSkinModel : SelectModel<int>
 
     public void SetPet(Pet pet) {
         currentPet = pet;
-        SetStorage(uiInfo?.GetAllSkinList(pet?.ui) ?? new List<int>());
+        SetStorage(uiInfo?.GetAllSkinList(pet) ?? new List<int>());
         SetPage(0);
     }
 

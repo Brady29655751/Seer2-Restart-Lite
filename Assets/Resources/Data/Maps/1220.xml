@@ -1,0 +1,270 @@
+<map name="虫穴地牢"  category="12"  id="1220" weather="13">
+	<!-- <resource>10011</resource> -->
+	<initialPoint>670,100</initialPoint>
+	<music category="12">
+		<bgm>BGM_1220</bgm>
+	</music>
+	<entities>
+		<npc id="122001" resId="Pets/pet/401" name="Lv 100 特米提" size="200,150" pos="770,290" namePos="-10,0">
+			<description>SPT</description>
+			<dialog>
+				<branch id="default" name="特米提" icon="Pets/pet/401" size="120,90" pos="0,55">
+					<content><![CDATA[你是那位吹笛人吗？]]></content>
+					<functionHandler>
+						<func type="click">
+							<description><![CDATA[普通挑战]]></description>
+							<action>battle</action>
+							<param>default</param>
+						</func>
+						<func type="click">
+							<description><![CDATA[挑战1]]></description>
+							<action>battle</action>
+							<param>challenge_1</param>
+							<condition>firstPet.baseId=399</condition>
+						</func>
+						<func type="branch">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=把特米提设为首发之后再来挑战吧</param>
+							<param>option_num=1</param>
+							<param>item_icon=pet[401]</param>
+							<condition>firstPet.baseIdNOT399</condition>
+						</func>
+						<func type="click">
+							<description><![CDATA[挑战2]]></description>
+							<action>battle</action>
+							<param>challenge_2</param>
+						</func>
+						<!--
+						<func type="click">
+							<description><![CDATA[超进化挑战]]></description>
+							<action>battle</action>
+							<param>evolve</param>
+							<condition>firstPet.id=38</condition>
+						</func>
+						<func type="branch">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=把特米提设为首发之后再来挑战吧</param>
+							<param>option_num=1</param>
+							<param>item_icon=pet[38]</param>
+							<condition>firstPet.idNOT38</condition>
+						</func>
+						-->
+					</functionHandler>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[还好捉三眼蝎的时候有练习吹笛子]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+					</replyHandler>
+				</branch>
+				<branch id="default_lose" name="特米提" icon="Pets/pet/401" size="120,90" pos="0,55">
+					<content><![CDATA[先积攒怒气等待必杀技释放，之后再吹起反攻的笛声]]></content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[原来如此]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+					</replyHandler>
+				</branch>
+			</dialog>
+			<battle>
+				<branch id="default">
+					<settings count="6" simulate="true" item="false">
+						<mode>3</mode>
+						<weather>13</weather>
+					</settings>
+					<player>
+						<pet id="87" level="100">
+							<status>
+								<atk>600</atk>
+								<spd>400</spd>
+								<hp>600</hp>
+							</status>
+							<normalSkill>12849,10034,12843,11264</normalSkill>
+							<superSkill>12850</superSkill>
+						</pet>
+					</player>
+					<enemy>
+						<pet id="401" level="100">
+							<status>
+								<cri>-1000</cri>
+								<spd>500</spd>
+								<hp>8000</hp>
+							</status>
+							<initBuff>17,-3092,-3114</initBuff>
+							<headerSkill>14331,14333,14342,14341,14336,14331,14333,14342,14341,14336,14331,14333,14342,14341,14336</headerSkill>
+							<loopSkill>14331,14334,14342,14337,14336</loopSkill>
+							<superSkill>14339</superSkill>
+						</pet>								
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>getPet</action>
+							<param>399,10,0</param>
+							<condition>activity[spt].done[south][2][default]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=【特特】已经放入精灵仓库</param>
+							<param>item_icon=pet[399]</param>
+							<param>option_num=1</param>
+							<condition>activity[spt].done[south][2][default]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>spt</param>
+							<param>done[south][2][default]=true</param>
+							<condition>activity[spt].done[south][2][default]=[bool]false[default]false</condition>
+						</button>
+					</winHandler>
+					<loseHandler>
+						<button type="auto">
+							<action>openDialog</action>
+							<param>default_lose</param>
+						</button>
+					</loseHandler>
+				</branch>
+				<branch id="challenge_1">
+					<settings count="1">
+						<mode>3</mode>
+						<weather>13</weather>
+					</settings>
+					<enemy>
+						<pet id="401" level="100">
+							<status>
+								<atk>600</atk>
+								<mat>600</mat>
+								<hp>3000</hp>
+							</status>
+							<initBuff>-8</initBuff>
+							<loopSkill>14331,14333,14342,14337,14336</loopSkill>
+							<superSkill>14339</superSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setPet</action>
+							<param>emblem=1</param>
+							<condition>activity[spt].done[south][2][challenge_1]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=【特米提】获得了【蛾刺】纹章</param>
+							<param>item_icon=emblem[399]</param>
+							<param>option_num=1</param>
+							<condition>activity[spt].done[south][2][challenge_1]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>spt</param>
+							<param>done[south][2][challenge_1]=true</param>
+							<condition>activity[spt].done[south][2][challenge_1]=[bool]false[default]false</condition>
+						</button>
+					</winHandler>
+				</branch>
+				<branch id="challenge_2">
+					<settings count="6">
+						<mode>3</mode>
+						<weather>13</weather>
+						<initBuff>(rule:27)</initBuff>
+					</settings>
+					<enemy>
+						<pet id="401" level="100">
+							<status>
+								<mat>6000</mat>
+								<def>600</def>
+								<mdf>600</mdf>
+								<hp>8000</hp>
+							</status>
+							<initBuff>-8,23,28,-3082,-3112,57,93,-3115,100811</initBuff>
+							<loopSkill>14331,14334,14342,14337,14336</loopSkill>
+							<superSkill>14339</superSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setItem</action>
+							<param>add</param>
+							<param>2,50</param>
+							<condition>activity[spt].done[south][2][challenge_2]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=50 星钻已经放入背包</param>
+							<param>item_icon=item[2]</param>
+							<param>option_num=1</param>
+							<condition>activity[spt].done[south][2][challenge_2]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>spt</param>
+							<param>done[south][2][challenge_2]=true</param>
+							<condition>activity[spt].done[south][2][challenge_2]=[bool]false[default]false</condition>
+						</button>
+					</winHandler>
+				</branch>
+				<!--
+				<branch id="evolve">
+					<settings count="1">
+						<mode>3</mode>
+						<weather>3</weather>
+					</settings>
+					<enemy>
+						<pet id="693" level="105">
+							<status>
+								<hp>2000</hp>
+							</status>
+							<initBuff>13,14,17,20</initBuff>
+							<headerSkill>10561</headerSkill>
+							<loopSkill>10562,10566</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>evolvePet</action>
+							<param>693</param>
+							<condition>activity[spt].done[south][2][evolve]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=特米提已成功超进化</param>
+							<param>item_icon=pet[693]</param>
+							<param>option_num=1</param>
+							<condition>activity[spt].done[south][2][evolve]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>spt</param>
+							<param>done[south][2][evolve]=true</param>
+							<condition>activity[spt].done[south][2][evolve]=[bool]false[default]false</condition>
+						</button>
+					</winHandler>
+				</branch>
+				-->
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>openDialog</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<teleport id="1" name="虫蚀氏族主城" pos="130,70" targetMapId="1210"/>
+		<teleport id="2" name="萤火之墓" pos="587,237" targetMapId="1250"/>
+	</entities>
+</map>
+

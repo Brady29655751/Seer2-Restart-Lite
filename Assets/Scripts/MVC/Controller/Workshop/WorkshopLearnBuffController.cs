@@ -28,6 +28,11 @@ public class WorkshopLearnBuffController : Module
         OnSetPage();
     }
 
+    public void SetCurrentBuff(int id)
+    {
+        buffModel.SetCurrentBuff(id);
+    }
+
     public void Search() {
         buffModel.Search();
         OnSetPage();

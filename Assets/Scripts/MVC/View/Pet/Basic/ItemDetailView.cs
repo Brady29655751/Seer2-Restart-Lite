@@ -14,8 +14,8 @@ public class ItemDetailView : Module
 
     public void SetItem(Item item) {
         nameText?.SetText(item.name);
-        priceText?.SetText(item.info.price + " " + item.info.currencyInfo?.name);
-        descriptionText?.SetText(item.info.effectDescription);
+        priceText?.SetText(item.info.price + " " + item.info.CurrencyInfo?.name);
+        descriptionText?.SetText(item.info.GetEffectDescription());
     }
 
     public void SetTitle(string title) {

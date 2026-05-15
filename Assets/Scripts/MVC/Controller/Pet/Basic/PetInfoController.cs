@@ -7,8 +7,14 @@ public class PetInfoController : Module
     [SerializeField] private PetInfoModel infoModel;
     [SerializeField] private PetInfoView infoView;
 
-    public void SetPet(Pet pet) {
+    public void SetPet(Pet pet)
+    {
         infoModel.SetPet(pet);
         infoView.SetPet(pet);
+    }
+
+    public void ShowPetKizuna()
+    {
+        infoView.ShowPetKizuna(infoModel.kizuna);
     }
 }

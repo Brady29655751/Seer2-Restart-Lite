@@ -36,6 +36,9 @@ public static class EffectDatabase {
         {"on_after_pet_change", EffectTiming.OnAfterPetChange},
         {"on_round_start", EffectTiming.OnRoundStart},
         {"on_round_end", EffectTiming.OnRoundEnd},
+        {"on_before_effect", EffectTiming.OnBeforeEffect},
+        {"on_effect", EffectTiming.OnEffect},
+        {"on_after_effect", EffectTiming.OnAfterEffect},
     };
 
     private static Dictionary<string, EffectTarget> targetConvDict = new Dictionary<string, EffectTarget>() {
@@ -135,6 +138,7 @@ public enum EffectTiming {
 
     OnPassivePetChange = -1,    OnSelectTarget = -2,    OnAddBuff = -3,     OnRemoveBuff = -4,
     OnBeforePetChange = -5,     OnAfterPetChange = -6,  OnRoundStart =-7,   OnRoundEnd = -8,
+    OnBeforeEffect = -9,        OnEffect = -10,         OnAfterEffect = -11,
 }
 
 public enum EffectTarget

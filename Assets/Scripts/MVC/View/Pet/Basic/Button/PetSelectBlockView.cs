@@ -9,10 +9,12 @@ public class PetSelectBlockView : Module
     private Pet currentPet = null;
     private bool isNull => currentPet == null;
     private float initHpBarLength;
+    private Vector2 initButtonSize, initIconSize;
     private Sprite overrideFrameSprite = null;
 
     [SerializeField] private bool interactableWhenNull = false;
     [SerializeField] private bool showGender = false;
+    [SerializeField] private bool showIconFrame = true;
     [SerializeField] private IButton button;
     [SerializeField] private Sprite chosenFrameSprite;
     [SerializeField] private Sprite notChosenFrameSprite;
@@ -27,15 +29,25 @@ public class PetSelectBlockView : Module
     {
         base.Awake();
         initHpBarLength = (hpBarRect == null) ? 0 : hpBarRect.rect.size.x;
+        InitButtonAndIconSize();
+    }
+
+    public void InitButtonAndIconSize()
+    {
+        initButtonSize = initButtonSize == Vector2.zero ? (button?.rect?.rect.size ?? Vector2.zero) : initButtonSize;
+        initIconSize = initIconSize == Vector2.zero ? (icon?.rectTransform?.rect.size ?? Vector2.zero) : initIconSize;
     }
 
     public void SetPet(Pet p)
     {
         currentPet = p;
         button.SetInteractable(interactableWhenNull || (!isNull));
-        SetFrameSprite();
+    
+        SetFrame();
         SetMask();
+        SetFrameSprite();
         SetIcon();
+
         SetLevel();
         SetName();
         SetHp();
@@ -54,16 +66,35 @@ public class PetSelectBlockView : Module
 
     public void SetChosen(bool chosen)
     {
-        if ((overrideFrameSprite == null) || (mask == null))
-            button.SetSprite(chosen ? chosenFrameSprite : notChosenFrameSprite);
-        else
-            button.SetSprite(overrideFrameSprite);
+        if (SetFrameSprite())
+            return;
+        
+        button.SetSprite(chosen ? chosenFrameSprite : notChosenFrameSprite);
     }
 
-    public void SetFrameSprite()
+    public void SetFrame()
     {
+        if (!showIconFrame)
+        {
+            overrideFrameSprite = null;
+            button.SetSize(initButtonSize);
+            return;
+        }
+
         var itemId = currentPet?.record?.GetRecord("iconFrame", 0) ?? 0;
+        var buttonSizeOffset = currentPet?.record?.GetRecord("iconFrameSizeOffset", "0,0")?.ToVector2() ?? Vector2.zero;
+
         overrideFrameSprite = Item.GetItemInfo(itemId)?.icon;
+        button.SetSize(initButtonSize + buttonSizeOffset / 90 * initButtonSize);
+    }
+
+    public bool SetFrameSprite()
+    {
+        var isOverride = (overrideFrameSprite != null) && (mask != null);
+        if (isOverride)
+            button.SetSprite(overrideFrameSprite);
+
+        return isOverride;
     }
 
     public void SetMask()
@@ -72,17 +103,20 @@ public class PetSelectBlockView : Module
             return;
 
         var record = currentPet?.record;
-        if (record == null)
+        if ((record == null) || (!showIconFrame))
         {
             mask.SetSprite(null);
+            icon.SetSize(initIconSize);
             return;
         }
             
         var frameId = record.GetRecord("iconFrame", 0);
         var maskId = record.GetRecord("iconMask", frameId);
+        var iconSizeOffset = record.GetRecord("iconSizeOffset", "0,0")?.ToVector2() ?? Vector2.zero;
         var res = Item.GetItemInfo(maskId)?.icon;
 
         mask.SetSprite(res);
+        icon.SetSize(initIconSize + iconSizeOffset / 80 * initIconSize);
     }
 
     private void SetIcon()

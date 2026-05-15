@@ -10,20 +10,25 @@ public class PetSkinView : Module
     [SerializeField] private Image skinImage;
     private GameObject currentPetAnim;
 
-    public void SetSkins(List<int> skinIds) {
-        for (int i = 0; i < petSelectBlockViews.Count; i++) {
+    public void SetSkins(List<int> skinIds)
+    {
+        for (int i = 0; i < petSelectBlockViews.Count; i++)
+        {
             Pet pet = Pet.GetExamplePet((i < skinIds.Count) ? skinIds[i] : 0);
             petSelectBlockViews[i].SetPet(pet);
         }
     }
 
-    public void Select(int index) {
-        for (int i = 0; i < petSelectBlockViews.Count; i++) {
+    public void Select(int index)
+    {
+        for (int i = 0; i < petSelectBlockViews.Count; i++)
+        {
             petSelectBlockViews[i].SetChosen(i == index);
-        }        
+        }
     }
 
-    public void SetPetAnimation(int skinId) {
+    public void SetPetAnimation(int skinId)
+    {
         var uiInfo = Pet.GetPetInfo(skinId)?.ui;
         // 發現會和背包裡的demoView搶動畫
         /*  
@@ -55,10 +60,11 @@ public class PetSkinView : Module
         // 沒有則使用預設的精靈圖片
         this.currentPetAnim?.SetActive(false);
         skinImage.gameObject.SetActive(true);
-        skinImage.SetSprite(uiInfo?.battleImage);
+        skinImage.SetSprite(uiInfo?.battleImage ?? SpriteSet.Empty);
     }
 
-    public void OnSkinConfirm() {
+    public void OnSkinConfirm()
+    {
         // Hintbox hintbox = Hintbox.OpenHintbox();
         // hintbox.SetTitle("提示");
         // hintbox.SetContent("成功替换精灵皮肤", 16, FontOption.Arial);

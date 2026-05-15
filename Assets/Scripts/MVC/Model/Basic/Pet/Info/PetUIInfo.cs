@@ -15,7 +15,8 @@ public class PetUIInfo
 
     public int defaultSkinId;
     public List<int> specialSkinList = new List<int>();
-    
+    public List<int> specialSkinKizunaList = new List<int>();
+
     public int defaultFeatureId => defaultFeatureList.FirstOrDefault();
     public List<int> defaultFeatureList = new List<int>();
 
@@ -41,28 +42,30 @@ public class PetUIInfo
         PetUISystem.GetPetAnimInstanceAsync(defaultSkinId, type, onSuccess, onProgress);
     }
 
-    public void PreloadPetAnimAsync(Action onSuccess = null, Action<float> onProgress = null) 
+    public void PreloadPetAnimAsync(Action onSuccess = null, Action<float> onProgress = null)
     {
         PetUISystem.PreloadPetAnimAsync(defaultSkinId, onSuccess, onProgress);
     }
 
-    public PetUIInfo(int petId, int petBaseId) {
+    public PetUIInfo(int petId, int petBaseId)
+    {
         id = petId;
         subId = 0;
         baseId = petBaseId;
         defaultId = petId;
         defaultSkinId = petId;
         defaultAnimId = petId;
-        defaultFeatureList = new List<int>(){ petBaseId };
+        defaultFeatureList = new List<int>() { petBaseId };
     }
 
-    public PetUIInfo(string[] _data, int startIndex = 0) {
+    public PetUIInfo(string[] _data, int startIndex = 0)
+    {
         string[] _slicedData = new string[DATA_COL];
         Array.Copy(_data, startIndex, _slicedData, 0, _slicedData.Length);
 
         id = int.Parse(_slicedData[0]);
         baseId = int.Parse(_slicedData[1]);
-        specialSkinList = _slicedData[2].ToIntList('/');
+        ParseSpecialSkin(_slicedData[2]);
         options.ParseOptions(_slicedData[3]);
 
         ParseDefaultId(options.Get("default_id", id.ToString()));
@@ -75,10 +78,26 @@ public class PetUIInfo
         star = int.Parse(options.Get("star", "0"));
     }
 
-    private void ParseDefaultId(string idStr) {
+    private void ParseSpecialSkin(string skinStr)
+    {
+        if (string.IsNullOrEmpty(skinStr) || (skinStr == "none"))
+        {
+            specialSkinList = new List<int>();
+            specialSkinKizunaList = new List<int>();
+            return;
+        }
+
+        var linear = Linear<int>.Parse(skinStr, int.Parse, int.MinValue);
+        specialSkinList = linear.Select(x => x.key).ToList();
+        specialSkinKizunaList = linear.Select(x => x.value).ToList();
+    }
+
+    private void ParseDefaultId(string idStr)
+    {
         var split = idStr.Split('.');
         defaultId = int.Parse(split[0]);
-        if (split.Length == 1) {    
+        if (split.Length == 1)
+        {
             subId = 0;
             return;
         }
@@ -86,36 +105,39 @@ public class PetUIInfo
         subId = int.Parse(split[1]);
     }
 
-    public string[] GetRawInfoStringArray() {
+    public string[] GetRawInfoStringArray()
+    {
         // If no info, then no need to write.
         if (ListHelper.IsNullOrEmpty(specialSkinList) && ListHelper.IsNullOrEmpty(options))
             return null;
 
-        var rawSkinList = specialSkinList.Select(x => x.ToString()).ConcatToString("/");
-        
-        return new string[] { id.ToString(), baseId.ToString(), ((specialSkinList.Count == 0) ? "none" : rawSkinList),
-            GetRawOptionString() };
+        var rawSkinList = specialSkinList.Zip(specialSkinKizunaList, (x, y) => y == int.MinValue ? x.ToString() : $"{x}[{y}]").ConcatToString("/");
+        return new string[] { id.ToString(), baseId.ToString(), (specialSkinList.Count == 0) ? "none" : rawSkinList, GetRawOptionString() };
     }
 
-    public string GetRawOptionString() {
+    public string GetRawOptionString()
+    {
         if (options.Count == 0)
             return "none";
 
         return options.Select(entry => entry.Key + "=" + entry.Value).ConcatToString("&");
     }
 
-    public List<int> GetAllSkinList(PetUI currentPetUI) {
+    public List<int> GetAllSkinList(Pet currentPet)
+    {
+        var currentPetUI = currentPet.ui;
         var currentSkinId = currentPetUI.skinId;
         var allEvovlePetIds = PetExpSystem.GetEvolveChain(baseId, id);
         var allDefaultSkinIds = allEvovlePetIds.Select(x => Pet.GetPetInfo(x).ui.defaultSkinId).Distinct().ToList();
         if (!allDefaultSkinIds.Contains(defaultSkinId))
             allDefaultSkinIds.Add(defaultSkinId);
 
-        var allSkinList = specialSkinList.Concat(allDefaultSkinIds).ToList();
+        var allSkinList = specialSkinList.Where((x, i) => currentPet.kizuna >= specialSkinKizunaList.Get(i, int.MinValue)).Concat(allDefaultSkinIds).ToList();
         if (!ListHelper.IsNullOrEmpty(currentPetUI.specialSkinList))
             allSkinList.AddRange(currentPetUI.specialSkinList);
 
-        if (currentSkinId != 0) {
+        if (currentSkinId != 0)
+        {
             allSkinList.Remove(currentSkinId);
             allSkinList.Insert(0, currentSkinId);
         }

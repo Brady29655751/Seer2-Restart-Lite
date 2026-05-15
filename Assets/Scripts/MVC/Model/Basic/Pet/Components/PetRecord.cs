@@ -9,9 +9,6 @@ public class PetRecord
 {
     public int winFightNum = 0;
     public int loseFightNum = 0;
-    [XmlIgnore] public int kizuna => (winFightNum * 5 + loseFightNum * 2) / 7 + (int)GetRecord("kizuna", 0f);
-    [XmlIgnore] public int minKizuna => (int)GetRecord("minKizuna", -255f);
-    [XmlIgnore] public int maxKizuna => (int)GetRecord("maxKizuna", 255f);
 
     public List<IKeyValuePair<string, string>> recordDict;
 
@@ -63,12 +60,15 @@ public class PetRecord
 
         if (value != null)
             recordDict.Add(new IKeyValuePair<string, string>(key, value.ToString()));
-
-        SaveSystem.SaveData();
     }
 
     public void CleanMod()
     {
         recordDict.RemoveAll(x => x.key.StartsWith("icon") && (x.value != null) && int.TryParse(x.value, out var itemId) && ItemInfo.IsMod(itemId));
+    }
+
+    public void CleanIconFrame()
+    {
+        recordDict.RemoveAll(x => x.key.StartsWith("icon") && (x.value != null));
     }
 }

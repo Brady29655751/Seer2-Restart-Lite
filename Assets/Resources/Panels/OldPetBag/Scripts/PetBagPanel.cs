@@ -11,7 +11,7 @@ public class PetBagPanel : Panel
     private Pet[] playerPetBag => Player.instance.petBag;
     private List<Item> playerItemBag => Player.instance.gameData.itemBag;
 
-    public Pet[] petBag => selectController?.GetPetSelections();
+    public Pet[] petBag => GetPetBag();
     public Pet pet => petBag?[selectController.GetCursor()[0]];
 
     [SerializeField] private PetBagMode mode = PetBagMode.Normal;
@@ -224,7 +224,7 @@ public class PetBagPanel : Panel
         {
             PetBagMode.Normal => playerPetBag,
             PetBagMode.YiTeRogue => YiTeRogueData.instance.petBag,
-            _ => petBag,
+            _ => selectController?.GetPetSelections(),
         };
     }
 

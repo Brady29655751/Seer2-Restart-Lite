@@ -92,6 +92,7 @@ id,timing,priority,target,condition,cond_option,effect,effect_option
 10016,resident\on_before_attack,-1\-1,pet\pet,status\status,status_type=hp&op=<&cmp_value=1/1\status_type=hp&op=<&cmp_value=1/1,heal\heal,type=item&add=350\type=item&add=350
 10017,resident\on_before_attack,-1\-1,pet\pet_bag,status\none,status_type=hp&cmp_value=0\none,heal\heal,type=item&set=target.status.initHp/2\target_type=index_dead_other&type=item&set=target.status.maxHp/2
 10018,resident\on_before_attack,-1\-1,pet\pet_bag,status\none,status_type=hp&cmp_value=0\none,heal\heal,type=item&set=target.status.initHp\target_type=index_dead_other&type=item&set=target.status.maxHp
+10019,resident\on_before_attack\on_before_attack,-1\-1\-1,pet\pet\pet,status\status\status,status_type=hp&op=<&cmp_value=1/1\status_type=hp&op=<&cmp_value=1/1\status_type=hp&op=<&cmp_value=1/1,heal\heal\add_buff,max_use=1&type=item&add=target.status.initHp/8\max_use=1&type=item&add=target.status.maxHp/8\id=2023&value=12&turn=3
 10031,on_turn_ready,-1,pet,none,none,rage,type=pp&add=5
 10032,on_turn_ready,-1,pet,none,none,rage,type=pp&add=10
 10033,on_turn_ready,-1,pet,none,none,rage,type=pp&add=20
@@ -127,9 +128,12 @@ id,timing,priority,target,condition,cond_option,effect,effect_option
 10242,resident,-1,pet,pet,type=buff[group:trait]&buff[group:trait]_op=NOT&buff[group:trait]_cmp=0,set_pet,type=trait&op=SET&value=0
 10243,resident,-1,pet,pet,type=buff[group:trait]&buff[group:trait]_op=NOT&buff[group:trait]_cmp=0,set_pet,type=trait&op=SET&value=-1
 10301,resident\resident,-1\-1,state\state,none\none,none\none,set_player\set_player,param_count=2&action=setItem&param[0]=add&param[1]=1，2000\param_count=5&action=openHintbox&param[0]=type＝Item&param[1]=title＝提示&param[2]=content＝获得了 2000 赛尔豆！&param[3]=item_icon＝item[1]&param[4]=option_num＝1
-11001,resident\resident,-1\-1,pet\pet,pet\pet,type=kizuna&kizuna_op=>&kizuna_cmp=minKizuna\type=kizuna/element&kizuna_op=>&kizuna_cmp=minKizuna&element_cmp=0,set_pet\set_pet,max_use=kizuna-minKizuna&type=record[kizuna]&op=-&value=1\max_use=kizuna-minKizuna/2&type=record[kizuna]&op=-&value=1
-12001,resident\resident,-1\-1,pet\pet,pet\pet,type=kizuna&kizuna_op=<&kizuna_cmp=maxKizuna\type=kizuna/element&kizuna_op=<&kizuna_cmp=maxKizuna&element_cmp=0,set_pet\set_pet,max_use=maxKizuna-kizuna&type=record[kizuna]&op=+&value=1\max_use=maxKizuna-kizuna/2&type=record[kizuna]&op=+&value=1
-13001,resident\resident,-1\-1,pet\pet,pet\pet,type=kizuna&kizuna_op=<&kizuna_cmp=maxKizuna\type=kizuna/element&kizuna_op=<&kizuna_cmp=maxKizuna&element_cmp=0,set_pet\set_pet,max_use=maxKizuna-kizuna/2&type=record[kizuna]&op=+&value=2\max_use=maxKizuna-kizuna/4&type=record[kizuna]&op=+&value=2
+11001,resident,-1,pet,pet,type=kizuna/kizuna.tag[bird]&kizuna_op=>&kizuna_cmp=minKizuna&kizuna.tag[bird]_cmp=1,set_pet,max_use=kizuna-minKizuna&type=record[kizuna]&op=-&value=1
+11002,resident,-1,pet,pet,type=kizuna/element&kizuna_op=>&kizuna_cmp=minKizuna&element_cmp=1,set_pet,max_use=kizuna-minKizuna&type=record[kizuna]&op=-&value=1
+12001,resident,-1,pet,pet,type=kizuna/kizuna.tag[bird]&kizuna_op=<&kizuna_cmp=maxKizuna&kizuna.tag[bird]_cmp=1,set_pet,max_use=maxKizuna-kizuna/3&type=record[kizuna]&op=+&value=3
+12002,resident,-1,pet,pet,type=kizuna/element&kizuna_op=<&kizuna_cmp=maxKizuna&element_cmp=1,set_pet,max_use=maxKizuna-kizuna/3&type=record[kizuna]&op=+&value=3
+13001,resident,-1,pet,pet,type=kizuna/kizuna.tag[bird]&kizuna_op=<&kizuna_cmp=maxKizuna&kizuna.tag[bird]_cmp=1,set_pet,max_use=maxKizuna-kizuna/5&type=record[kizuna]&op=+&value=5
+13002,resident,-1,pet,pet,type=kizuna/element&kizuna_op=<&kizuna_cmp=maxKizuna&element_cmp=1,set_pet,max_use=maxKizuna-kizuna/5&type=record[kizuna]&op=+&value=5
 20001,resident,-1,pet,pet,type=buff[400003]&buff[400003]_cmp=0,set_pet,type=buff&op=+&value=400003
 20002,resident\resident\on_remove_buff,-1\-1\-1,pet\pet\pet,pet\pet\none,type=buff[400004]&buff[400004]_cmp=0\type=buff[400004]&buff[400004]_cmp=0\none,set_pet\set_pet\set_pet,type=buff&op=+&value=400004\type=record[evolveBan]&op=SET&value=1\type=record[evolveBan]&op=SET&value=0
 21000,resident,-1,pet,pet,type=buff[410000]/buff[group:star_soul]&buff[410000]_cmp=0&buff[group:star_soul]_op=<&buff[group:star_soul]_cmp=5,set_pet,type=buff&op=+&value=410000
@@ -184,6 +188,8 @@ id,timing,priority,target,condition,cond_option,effect,effect_option
 22030,resident,-1,pet,pet,type=buff[group:exclude]&buff[group:exclude]_cmp=0,set_pet,type=buff&op=+&value=420030
 22031,resident,-1,pet,pet,type=buff[group:exclude]&buff[group:exclude]_cmp=0,set_pet,type=buff&op=+&value=420031
 22032,resident,-1,pet,pet,type=buff[group:exclude]&buff[group:exclude]_cmp=0,set_pet,type=buff&op=+&value=420032
+22033,resident,-1,pet,pet,type=buff[group:exclude]&buff[group:exclude]_cmp=0,set_pet,type=buff&op=+&value=420033
+22034,resident,-1,pet,pet,type=buff[group:exclude]&buff[group:exclude]_cmp=0,set_pet,type=buff&op=+&value=420034
 23001,resident,-1,pet,pet,type=buff[group:exclude]&buff[group:exclude]_cmp=0,set_pet,type=buff&op=+&value=430001
 23002,resident,-1,pet,pet,type=buff[group:exclude]&buff[group:exclude]_cmp=0,set_pet,type=buff&op=+&value=430002
 23003,resident,-1,pet,pet,type=buff[group:exclude]&buff[group:exclude]_cmp=0,set_pet,type=buff&op=+&value=430003
@@ -194,6 +200,8 @@ id,timing,priority,target,condition,cond_option,effect,effect_option
 24000,resident,-1,pet,pet,type=buff[group:exclude]&buff[group:exclude]_cmp=0,set_pet,type=buff&op=+&value=440000
 24001,on_battle_start,-1,pet,none,none,add_buff,key=unit&id=440001
 24002,on_battle_start,-1,pet,none,none,add_buff,key=unit&id=440002
+25001,none\on_battle_start,-1\-1,none\pet,none\none,none\none,none\add_buff,size=45/33\key=unit&id=441001
+25002,none\on_battle_start,-1\-1,none\pet,none\none,none\none,none\add_buff,size=47/53\key=unit&id=441002
 30001,none,-1,none,none,none,none,none
 37002,none,-1,none,none,none,none,none
 110050,resident,-1,pet,pet,type=skill[10050]&skill[10050]_cmp=0,set_pet,type=skill&op=+&value=10050
@@ -208,6 +216,8 @@ id,timing,priority,target,condition,cond_option,effect,effect_option
 200003,resident,-1,state,none,none,none,recipe=1003[5]/610002[50]/10238[2]
 200004,resident,-1,state,none,none,none,recipe=1004[4]/10205[2]/10238[2]
 200005,resident,-1,state,none,none,none,recipe=1002[8]/10234[1]/10238[2]
+201001,resident,-1,state,none,none,none,recipe=1006[5]/23001[3]/22001[4]&result=12001[90]/13001[5]/11001[5]
+201002,resident,-1,state,none,none,none,recipe=1011[5]/22021[3]/22009[2]/22026[3]&result=12002[90]/13002[5]/11002[5]
 210001,resident,-1,state,none,none,none,recipe=2[2025]
 210002,resident,-1,state,none,none,none,recipe=400010[1]/400011[1]/400012[1]/400013[1]
 210003,resident,-1,state,none,none,none,recipe=400010[1]/400011[1]/400012[1]/400013[1]
@@ -239,6 +249,7 @@ id,timing,priority,target,condition,cond_option,effect,effect_option
 290004,resident,-1,state,none,none,none,pet=10079/10164&base=10077/10164&item=1201[10]/1202[10]/1203[10]/1206[10]&result=10310[95]/10313[5]
 290005,resident,-1,state,none,none,none,pet=10079/10164&base=10077/10164&item=400000[1]&result=10313
 290007,resident,-1,state,none,none,none,pet=10155/10025&base=10153/10025&item=1102[20]/1206[5]/610005[200]/620002[10]&result=10319
+290008,resident,-1,state,none,none,none,pet=10147/10133&base=10145/10133&item=1103[10]/1207[5]/1203[5]/12001[1]&result=11448
 291001,resident,-1,state,none,none,none,pet=15/33&base=13/32&gender=0/1&item=1003[20]/1002[30]/22002[10]/22015[10]&result=1301
 291002,resident,-1,state,none,none,none,pet=33/15&base=32/13&gender=0/1&item=1002[30]/1003[20]/22015[10]/22002[10]&result=1302
 300048,resident,-1,pet,pet,type=baseId/emblem&baseId_cmp=46&emblem_cmp=0,set_pet,type=emblem&op=SET&value=1
@@ -390,6 +401,7 @@ id,timing,priority,target,condition,cond_option,effect,effect_option
 500492,resident\resident,-1\-1,state\state,none\none,none\none,set_player\set_player,param_count=1&action=getPet&param[0]=492\param_count=5&action=openHintbox&param[0]=type＝Item&param[1]=title＝提示&param[2]=content＝【晨璨】已经放入精灵仓库&param[3]=item_icon＝pet[492]&param[4]=option_num＝1
 500527,resident\resident,-1\-1,state\state,none\none,none\none,set_player\set_player,param_count=1&action=getPet&param[0]=527\param_count=5&action=openHintbox&param[0]=type＝Item&param[1]=title＝提示&param[2]=content＝【巴赫】已经放入精灵仓库&param[3]=item_icon＝pet[527]&param[4]=option_num＝1
 500538,resident\resident,-1\-1,state\state,none\none,none\none,set_player\set_player,param_count=1&action=getPet&param[0]=538\param_count=5&action=openHintbox&param[0]=type＝Item&param[1]=title＝提示&param[2]=content＝【凯迪】已经放入精灵仓库&param[3]=item_icon＝pet[538]&param[4]=option_num＝1
+500601,resident\resident,-1\-1,state\state,none\none,none\none,set_player\set_player,param_count=1&action=getPet&param[0]=601\param_count=5&action=openHintbox&param[0]=type＝Item&param[1]=title＝提示&param[2]=content＝【布加迪】已经放入精灵仓库&param[3]=item_icon＝pet[601]&param[4]=option_num＝1
 500621,resident\resident,-1\-1,state\state,none\none,none\none,set_player\set_player,param_count=1&action=getPet&param[0]=621\param_count=5&action=openHintbox&param[0]=type＝Item&param[1]=title＝提示&param[2]=content＝【天马】已经放入精灵仓库&param[3]=item_icon＝pet[621]&param[4]=option_num＝1
 500631,resident\resident,-1\-1,state\state,none\none,none\none,set_player\set_player,param_count=1&action=getPet&param[0]=631\param_count=5&action=openHintbox&param[0]=type＝Item&param[1]=title＝提示&param[2]=content＝【小木马】已经放入精灵仓库&param[3]=item_icon＝pet[631]&param[4]=option_num＝1
 500761,resident\resident,-1\-1,state\state,none\none,none\none,set_player\set_player,param_count=1&action=getPet&param[0]=761\param_count=5&action=openHintbox&param[0]=type＝Item&param[1]=title＝提示&param[2]=content＝【迦拉特】已经放入精灵仓库&param[3]=item_icon＝pet[761]&param[4]=option_num＝1
@@ -403,6 +415,8 @@ id,timing,priority,target,condition,cond_option,effect,effect_option
 501003,resident\resident,-1\-1,state\state,none\none,none\none,set_player\set_player,param_count=1&action=getPet&param[0]=1003\param_count=5&action=openHintbox&param[0]=type＝Item&param[1]=title＝提示&param[2]=content＝【辰兔】已经放入精灵仓库&param[3]=item_icon＝pet[1003]&param[4]=option_num＝1
 501261,resident\resident,-1\-1,state\state,none\none,none\none,set_player\set_player,param_count=1&action=getPet&param[0]=1261\param_count=5&action=openHintbox&param[0]=type＝Item&param[1]=title＝提示&param[2]=content＝【黑桃扑克】已经放入精灵仓库&param[3]=item_icon＝pet[1261]&param[4]=option_num＝1
 501262,resident\resident,-1\-1,state\state,none\none,none\none,set_player\set_player,param_count=1&action=getPet&param[0]=1262\param_count=5&action=openHintbox&param[0]=type＝Item&param[1]=title＝提示&param[2]=content＝【方块扑克】已经放入精灵仓库&param[3]=item_icon＝pet[1262]&param[4]=option_num＝1
+510027,resident\resident,-1\-1,state\state,none\none,none\none,set_player\set_player,param_count=1&action=getPet&param[0]=10027\param_count=5&action=openHintbox&param[0]=type＝Item&param[1]=title＝提示&param[2]=content＝【小豆芽】已经放入精灵仓库&param[3]=item_icon＝pet[10027]&param[4]=option_num＝1
+510164,resident\resident,-1\-1,state\state,none\none,none\none,set_player\set_player,param_count=1&action=getPet&param[0]=10164\param_count=5&action=openHintbox&param[0]=type＝Item&param[1]=title＝提示&param[2]=content＝【闪光皮皮】已经放入精灵仓库&param[3]=item_icon＝pet[10164]&param[4]=option_num＝1
 510196,resident\resident,-1\-1,state\state,none\none,none\none,set_player\set_player,param_count=1&action=getPet&param[0]=10196\param_count=5&action=openHintbox&param[0]=type＝Item&param[1]=title＝提示&param[2]=content＝【祖拉】已经放入精灵仓库&param[3]=item_icon＝pet[10196]&param[4]=option_num＝1
 510370,resident\resident,-1\-1,state\state,none\none,none\none,set_player\set_player,param_count=1&action=getPet&param[0]=10370\param_count=5&action=openHintbox&param[0]=type＝Item&param[1]=title＝提示&param[2]=content＝【奎尼】已经放入精灵仓库&param[3]=item_icon＝pet[10370]&param[4]=option_num＝1
 510499,resident\resident,-1\-1,state\state,none\none,none\none,set_player\set_player,param_count=1&action=getPet&param[0]=10499\param_count=5&action=openHintbox&param[0]=type＝Item&param[1]=title＝提示&param[2]=content＝【阿零】已经放入精灵仓库&param[3]=item_icon＝pet[10499]&param[4]=option_num＝1
@@ -412,14 +426,29 @@ id,timing,priority,target,condition,cond_option,effect,effect_option
 600003,none,-1,none,none,none,none,none
 600004,none,-1,none,none,none,none,none
 600005,none,-1,none,none,none,none,none
+600006,none,-1,none,none,none,none,none
 610000,none,-1,none,none,none,none,none
 610001,resident,-1,state,none,random_cmp=3,none,plant=620001
 610002,resident\resident,-1\-1,state\state,none\none,random_type=unit&random_cmp=5\random_cmp=5,set_player\set_player,param_count=2&action=setItem&param[0]=add&param[1]=22002，1\param_count=5&action=openHintbox&param[0]=type＝Item&param[1]=title＝提示&param[2]=content＝你的笑笑花额外产出了1枚【笑笑花子】！&param[3]=item_icon＝buff[420002]&param[4]=option_num＝1
 610003,none,-1,none,none,none,none,none
-610004,resident\resident,-1\-1,state\state,none\none,random_type=unit&random_cmp=1\random_cmp=1,set_player\set_player,param_count=2&action=setItem&param[0]=add&param[1]=23001，1\param_count=5&action=openHintbox&param[0]=type＝Item&param[1]=title＝提示&param[2]=content＝你的亮顶蘑菇额外产出了1枚【蘑菇果实】！&param[3]=item_icon＝buff[430001]&param[4]=option_num＝1
+610004,resident\resident,-1\-1,state\state,none\none,random_type=unit&random_cmp=3\random_cmp=3,set_player\set_player,param_count=2&action=setItem&param[0]=add&param[1]=23001，1\param_count=5&action=openHintbox&param[0]=type＝Item&param[1]=title＝提示&param[2]=content＝你的亮顶蘑菇额外产出了1枚【蘑菇果实】！&param[3]=item_icon＝buff[430001]&param[4]=option_num＝1
 610005,resident,-1,state,none,random_cmp=5,none,plant=620002
+610006,resident\resident,-1\-1,state\state,none\none,random_type=unit&random_cmp=5\random_cmp=5,set_player\set_player,param_count=2&action=setItem&param[0]=add&param[1]=22009，1\param_count=5&action=openHintbox&param[0]=type＝Item&param[1]=title＝提示&param[2]=content＝你的笑笑花额外产出了1枚【藤蔓花子】！&param[3]=item_icon＝buff[420009]&param[4]=option_num＝1
 620001,none,-1,none,none,none,none,none
 620002,none,-1,none,none,none,none,none
 630001,none,-1,none,none,none,none,none
 630002,none,-1,none,none,none,none,none
 630003,none,-1,none,none,none,none,none
+700000,resident,-1,pet,none,none,set_pet,type=record[iconFrame]&op=SET&value=0
+700980,resident\resident\resident,-1\-1\-1,pet\pet\pet,pet\pet\pet,type=baseId[980]&baseId[980]_cmp=1\type=baseId[980]&baseId[980]_cmp=1\type=baseId[980]&baseId[980]_cmp=1,set_pet\set_pet\set_pet,type=record[iconFrame]&op=SET&value=700980&name=调整头像框款式\type=record[iconMask]&op=SET&value=800980&name=调整头像框遮罩\type=record[iconFrameSizeOffset]&op=SET&value=10，10&name=调整头像框大小
+714198,resident\resident\resident\resident,-1\-1\-1\-1,pet\pet\pet\pet,pet\pet\pet\pet,type=baseId[10027]&baseId[10027]_cmp=1\type=baseId[10027]&baseId[10027]_cmp=1\type=baseId[10027]&baseId[10027]_cmp=1\type=baseId[10027]&baseId[10027]_cmp=1,set_pet\set_pet\set_pet\set_pet,type=record[iconFrame]&op=SET&value=714198&name=调整头像框款式\type=record[iconMask]&op=SET&value=814198&name=调整头像框遮罩\type=record[iconFrameSizeOffset]&op=SET&value=3，3&name=调整头像框大小\type=record[iconSizeOffset]&op=SET&value=3，3&name=调整头像大小
+714727,resident\resident\resident,-1\-1\-1,pet\pet\pet,pet\pet\pet,type=baseId[14727]&baseId[14727]_cmp=1\type=baseId[14727]&baseId[14727]_cmp=1\type=baseId[14727]&baseId[14727]_cmp=1,set_pet\set_pet\set_pet,type=record[iconFrame]&op=SET&value=714727&name=调整头像框款式\type=record[iconMask]&op=SET&value=814727&name=调整头像框遮罩\type=record[iconFrameSizeOffset]&op=SET&value=8，8&name=调整头像框大小
+720001,resident\resident\resident,-1\-1\-1,pet\pet\pet,pet\pet\pet,type=baseId[10010]&baseId[10010]_cmp=1|type=baseId[10164]&baseId[10164]_cmp=1\type=baseId[10010]&baseId[10010]_cmp=1|type=baseId[10164]&baseId[10164]_cmp=1\type=baseId[10010]&baseId[10010]_cmp=1|type=baseId[10164]&baseId[10164]_cmp=1,set_pet\set_pet\set_pet,type=record[iconFrame]&op=SET&value=720001&name=调整头像框款式\type=record[iconMask]&op=SET&value=820001&name=调整头像框遮罩\type=record[iconFrameSizeOffset]&op=SET&value=5，5&name=调整头像框大小
+720002,resident\resident\resident,-1\-1\-1,pet\pet\pet,pet\pet\pet,type=baseId[20002]&baseId[20002]_cmp=1\type=baseId[20002]&baseId[20002]_cmp=1\type=baseId[20002]&baseId[20002]_cmp=1,set_pet\set_pet\set_pet,type=record[iconFrame]&op=SET&value=720002&name=调整头像框款式\type=record[iconMask]&op=SET&value=820002&name=调整头像框遮罩\type=record[iconFrameSizeOffset]&op=SET&value=27，10&name=调整头像框大小
+720011,resident\resident\resident,-1\-1\-1,pet\pet\pet,pet\pet\pet,type=baseId[20011]&baseId[20011]_cmp=1\type=baseId[20011]&baseId[20011]_cmp=1\type=baseId[20011]&baseId[20011]_cmp=1,set_pet\set_pet\set_pet,type=record[iconFrame]&op=SET&value=720011&name=调整头像框款式\type=record[iconMask]&op=SET&value=820011&name=调整头像框遮罩\type=record[iconFrameSizeOffset]&op=SET&value=5，5&name=调整头像框大小
+800980,none,-1,none,none,none,none,none
+814198,none,-1,none,none,none,none,none
+814727,none,-1,none,none,none,none,none
+820001,none,-1,none,none,none,none,none
+820002,none,-1,none,none,none,none,none
+820011,none,-1,none,none,none,none,none

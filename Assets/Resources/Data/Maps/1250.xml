@@ -1,0 +1,47 @@
+<map name="萤火之墓"  category="12"  id="1250">
+	<!-- <resource>10011</resource> -->
+	<initialPoint>470,100</initialPoint>
+	<music category="12">
+		<bgm>BGM_1250</bgm>
+	</music>
+	<entities>
+		<npc id="125001" resId="Pets/pet/705" name="Lv98 萤火虫" size="96,84" pos="260,135" namePos="0,0">
+			<battle>
+				<branch id="default">
+					<settings count="6" capture="true"/>
+					<enemy>
+						<pet id="705" level="98">
+							<loopSkill>14345,14348,14357,14349</loopSkill>
+						</pet>
+					</enemy>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>battle</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<npc id="125002" resId="Pets/pet/705" name="Lv99 萤火虫" size="96,84" pos="600,145" namePos="0,0">
+			<battle>
+				<branch id="default">
+					<settings count="6" capture="true"/>
+					<enemy>
+						<pet id="705" level="99">
+							<loopSkill>14345,14348,14357,14349</loopSkill>
+						</pet>
+					</enemy>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>battle</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<teleport id="1" name="虫穴地牢" pos="380,275" targetMapId="1220"/>
+	</entities>
+</map>
+

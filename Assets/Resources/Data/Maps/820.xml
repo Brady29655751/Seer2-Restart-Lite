@@ -6,6 +6,7 @@
 	<initialPoint>650,140</initialPoint>
 	<entities>
 		<npc id="82001" resId="Pets/pet/1100" name="Lv 90 雷切" size="112,140" pos="745,325" namePos="0,-20">
+			<anim id="Pets/anim/1100" pos="-0.75,0.75" scale="1,1" />
 			<description>雷切</description>
 			<dialog>
 				<branch id="default" name="雷切" icon="Pets/pet/1100" size="112,140" pos="0,35">
@@ -174,6 +175,7 @@
 			</callbackHandler>
 		</npc>
 		<npc id="82002" resId="Pets/pet/1101" name="Lv 90 焰爪" size="115,121" pos="615,365" namePos="0,-20">
+			<anim id="Pets/anim/1101" pos="-0.75,0.45" scale="1,1" />
 			<description>焰爪</description>
 			<dialog>
 				<branch id="default" name="焰爪" icon="Pets/pet/1101" size="115,121" pos="0,35">
@@ -188,6 +190,26 @@
 							<description><![CDATA[凯萨器灵进化]]></description>
 							<action>battle</action>
 							<param>evolve</param>
+						</func>
+						<func type="click">
+							<description><![CDATA[凯萨神迹觉醒]]></description>
+							<action>battle</action>
+							<param>miracle</param>
+						</func>
+						<func type="click">
+							<description><![CDATA[凯萨常态神迹]]></description>
+							<action>battle</action>
+							<param>resident_miracle</param>
+							<condition>firstPet.uid=950</condition>
+						</func>
+						<func type="branch">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=把神迹凯萨设为首发之后再来挑战吧</param>
+							<param>option_num=1</param>
+							<param>item_icon=pet[950]</param>
+							<condition>firstPet.uidNOT950</condition>
 						</func>
 					</functionHandler>
 					<replyHandler>
@@ -274,6 +296,67 @@
 						</button>
 					</winHandler>
 				</branch>
+				<branch id="miracle">
+					<settings count="6">
+						<mode>3</mode>
+						<weather>3</weather>
+						<initBuff>(field:600003)</initBuff>
+					</settings>
+					<enemy>
+						<pet id="20012" level="105">
+							<status>
+								<hp>30000</hp>
+							</status>
+							<initBuff>-8,17,20,92,98,-3117,-3118,-3059,3616</initBuff>
+							<loopSkill>14388,14389,14390,14391</loopSkill>
+							<superSkill>14392</superSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=PetSelect</param>
+						    <param>title=选择要进化的炎帝</param>
+						    <param>option_num=2</param>
+						    <param>callback=miracle</param>
+						</button>
+					</winHandler>
+				</branch>
+				<branch id="resident_miracle">
+					<settings count="1">
+						<mode>3</mode>
+						<weather>3</weather>
+						<initBuff>(field:600003)</initBuff>
+					</settings>
+					<enemy>
+						<pet id="999" level="105">
+							<status>
+								<hp>5000</hp>
+							</status>
+							<initBuff>-8,17,92,98,24,61,-3117</initBuff>
+							<loopSkill>12320,12323,12322,12321</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setPet</action>
+							<param>maxLevel=105</param>
+							<param>level=105</param>
+						</button>
+						<button type="auto">
+							<action>evolvePet</action>
+							<param>20012</param>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=神迹凯萨已常驻神迹形态</param>
+							<param>item_icon=pet[951]</param>
+							<param>option_num=1</param>
+						</button>
+					</winHandler>
+				</branch>
 			</battle>
 			<eventHandler>
 				<button type="click">
@@ -325,6 +408,41 @@
 				    <param>skill=12318</param>
 				    <param>skill=12319</param>
 				    <condition>data.PetSelect.uid=234</condition>
+				    <condition>data.PetSelect.levelGTE100</condition>
+				</button>
+				<button type="miracle_choose">
+					<action>openHintbox</action>
+					<param>type=PetSelect</param>
+				    <param>title=选择要进化的炎帝</param>
+				    <param>option_num=2</param>
+					<param>callback=miracle</param>
+				    <condition>data.PetSelect.uidNOT2559|data.PetSelect.level&lt;100</condition>
+				</button>
+				<button type="miracle">
+				    <action>openHintbox</action>
+				    <param>type=Item</param>
+				    <param>title=提示</param>
+				    <param>content=必须选择等级100的炎帝！</param>
+				    <param>item_icon=pet[2559]</param>
+				    <param>option_num=1</param>
+					<param>callback=miracle_choose</param>
+				    <condition>data.PetSelect.uidNOT2559|data.PetSelect.level&lt;100</condition>
+				</button>
+				<button type="miracle">
+				    <action>openHintbox</action>
+				    <param>type=Item</param>
+				    <param>title=提示</param>
+				    <param>content=炎帝已成功神迹觉醒</param>
+				    <param>item_icon=pet[2559]</param>
+				    <param>option_num=1</param>
+				    <condition>data.PetSelect.uid=2559</condition>
+				    <condition>data.PetSelect.levelGTE100</condition>
+				</button>
+				<button type="miracle">
+				    <action>evolvePet</action>
+				    <param>index=data.PetSelectIndex</param>
+				    <param>950</param>
+				    <condition>data.PetSelect.uid=2559</condition>
 				    <condition>data.PetSelect.levelGTE100</condition>
 				</button>
 			</callbackHandler>

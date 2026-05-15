@@ -100,8 +100,8 @@
 							<param>ItemShop</param>
 							<param>mode=buy</param>
 							<param>currency=8/0</param>
-							<param>item=334198/470011</param>
-							<param>limit=1/1</param>
+							<param>item=334198/470011/714198</param>
+							<param>limit=1/1/1</param>
 							<param>title=因子商店</param>
 						</func>
 						<func type="click">
@@ -250,7 +250,7 @@
 					<action>setNpcParam</action>
 					<param>1003703</param>
 					<param>active=true</param>
-					<condition>random[new]LTE5</condition>
+					<condition>random[new]LTE5|player.achievement=25002</condition>
 				</button>
 				<button type="click">
 					<action>openDialog</action>

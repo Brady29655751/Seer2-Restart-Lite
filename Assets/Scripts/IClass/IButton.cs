@@ -7,17 +7,18 @@ using UnityEngine.Events;
 using UnityEngine.EventSystems;
 
 [RequireComponent(typeof(Button), typeof(Image))]
-public class IButton : IMonoBehaviour, IPointerEnterHandler, IPointerExitHandler, 
+public class IButton : IMonoBehaviour, IPointerEnterHandler, IPointerExitHandler,
     IPointerDownHandler, IPointerUpHandler
-{   
-    protected Vector3 initPos;
+{
     protected Image _image = null;
     protected Button _button = null;
 
     public RectTransform rect => image.rectTransform;
     public Image image => _image ??= gameObject.GetComponent<Image>();
-    public Button button => _button ??= gameObject.GetComponent<Button>(); 
-    private Sprite initSprite;
+    public Button button => _button ??= gameObject.GetComponent<Button>();
+    public Vector3 initPos { get; protected set; }
+    public Vector2 initSize { get; protected set; }
+    public Sprite initSprite { get; protected set; }
 
     [SerializeField] protected bool playSoundWhenHover = false;
     [SerializeField] protected bool playSoundWhenClick = true;
@@ -33,26 +34,32 @@ public class IButton : IMonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     public bool isHold { get; private set; } = false;
     public float totalHoldSeconds { get; private set; }
     private float currentHoldSeconds = 0;
-    
+
     public float holdThreshold { get; set; } = 1;
     public float holdSecondsDelta { get; set; } = 0;
 
-    protected override void Awake() {
+    protected override void Awake()
+    {
         base.Awake();
         initSprite = image.sprite;
         initPos = rect.anchoredPosition;
+        initSize = rect.rect.size;
     }
 
-    protected virtual void Update() {
-        if (isPointerOver) {
+    protected virtual void Update()
+    {
+        if (isPointerOver)
+        {
             OnPointerOver();
         }
-        if (isHold) {
+        if (isHold)
+        {
             OnPointerHold();
         }
     }
 
-    protected void OnDestroy() {
+    protected void OnDestroy()
+    {
         onPointerClickEvent.RemoveAllListeners();
         onPointerEnterEvent.RemoveAllListeners();
         onPointerExitEvent.RemoveAllListeners();
@@ -61,7 +68,8 @@ public class IButton : IMonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     }
 
     /* Pointer In, Over, and Out */
-    public virtual void OnPointerEnter(PointerEventData eventData) {
+    public virtual void OnPointerEnter(PointerEventData eventData)
+    {
         if (!button.interactable)
             return;
 
@@ -69,30 +77,35 @@ public class IButton : IMonoBehaviour, IPointerEnterHandler, IPointerExitHandler
         if (playSoundWhenHover)
             AudioSystem.instance.PlaySound(sound);
 
-        if (button.transition == Selectable.Transition.SpriteSwap) {
+        if (button.transition == Selectable.Transition.SpriteSwap)
+        {
             if (button.interactable)
                 button.image.sprite = button.spriteState.highlightedSprite;
         }
         onPointerEnterEvent?.Invoke();
     }
 
-    public virtual void OnPointerOver() {
+    public virtual void OnPointerOver()
+    {
         if (!button.interactable)
             return;
 
         onPointerOverEvent?.Invoke();
     }
 
-    public virtual void OnPointerExit(PointerEventData eventData) {
+    public virtual void OnPointerExit(PointerEventData eventData)
+    {
         isPointerOver = false;
-        if (button.transition == Selectable.Transition.SpriteSwap) {
+        if (button.transition == Selectable.Transition.SpriteSwap)
+        {
             button.image.sprite = initSprite;
         }
         onPointerExitEvent?.Invoke();
     }
 
     /* Pointer Hold */
-    public virtual void OnPointerDown(PointerEventData eventData) {
+    public virtual void OnPointerDown(PointerEventData eventData)
+    {
         if (!button.interactable)
             return;
 
@@ -101,25 +114,30 @@ public class IButton : IMonoBehaviour, IPointerEnterHandler, IPointerExitHandler
         currentHoldSeconds = 0;
     }
 
-    public virtual void OnPointerHold() {
+    public virtual void OnPointerHold()
+    {
         if (!button.interactable)
             return;
 
         totalHoldSeconds += Time.deltaTime;
         currentHoldSeconds += Time.deltaTime;
-        if (totalHoldSeconds >= holdThreshold) {
-            if (currentHoldSeconds >= holdSecondsDelta) {
+        if (totalHoldSeconds >= holdThreshold)
+        {
+            if (currentHoldSeconds >= holdSecondsDelta)
+            {
                 currentHoldSeconds = 0;
                 onPointerHoldEvent?.Invoke();
-            }   
+            }
         }
-    } 
+    }
 
-    public virtual void OnPointerUp(PointerEventData eventData) {
+    public virtual void OnPointerUp(PointerEventData eventData)
+    {
         if (!button.interactable)
             return;
-        
-        if ((button.interactable) && (totalHoldSeconds < holdThreshold) && (eventData.pointerId >= -1)) {
+
+        if ((button.interactable) && (totalHoldSeconds < holdThreshold) && (eventData.pointerId >= -1))
+        {
             OnPointerClick();
         }
         isHold = false;
@@ -128,20 +146,22 @@ public class IButton : IMonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     }
 
     /* Pointer Click */
-    public virtual void OnPointerClick() {
+    public virtual void OnPointerClick()
+    {
         if (!button.interactable)
             return;
-            
+
         if (playSoundWhenClick)
             AudioSystem.instance.PlaySound(sound);
-        
+
         onPointerClickEvent?.Invoke();
     }
 
     /* Interactable */
-    protected virtual void OnInteractable(bool interactable) {
+    protected virtual void OnInteractable(bool interactable)
+    {
         var a = image.color.a;
-        image.color = interactable ? new Color(1, 1, 1, a) : new Color(0.5f ,0.5f, 0.5f, a);
+        image.color = interactable ? new Color(1, 1, 1, a) : new Color(0.5f, 0.5f, 0.5f, a);
     }
 
     public virtual UnityEvent GetButtonEvent(string type)
@@ -149,50 +169,60 @@ public class IButton : IMonoBehaviour, IPointerEnterHandler, IPointerExitHandler
         return type switch
         {
             "click" => onPointerClickEvent,
-            "over"  => onPointerOverEvent,
+            "over" => onPointerOverEvent,
             "enter" => onPointerEnterEvent,
-            "exit"  => onPointerExitEvent,
-            "hold"  => onPointerHoldEvent,
-            _       => null,
+            "exit" => onPointerExitEvent,
+            "hold" => onPointerHoldEvent,
+            _ => null,
         };
     }
 
-    public void SetInteractable(bool interactable, bool grayWhenDisabled = true) {
+    public void SetInteractable(bool interactable, bool grayWhenDisabled = true)
+    {
         if (button == null)
             return;
-            
+
         button.interactable = interactable;
         OnInteractable(interactable);
-        
+
         if (!grayWhenDisabled)
             image.color = new Color(1, 1, 1, image.color.a);
     }
-    
-    public virtual void SetPosition(Vector2 pos) {
+
+    public virtual void SetPosition(Vector2 pos)
+    {
         rect.anchoredPosition = pos;
     }
 
-    public virtual void SetPosition(int pos, RectTransform.Axis axis) {
-        if (axis == RectTransform.Axis.Horizontal) {
+    public virtual void SetPosition(int pos, RectTransform.Axis axis)
+    {
+        if (axis == RectTransform.Axis.Horizontal)
+        {
             rect.anchoredPosition = new Vector2(pos, rect.anchoredPosition.y);
-        } else if (axis == RectTransform.Axis.Vertical) {
+        }
+        else if (axis == RectTransform.Axis.Vertical)
+        {
             rect.anchoredPosition = new Vector2(rect.anchoredPosition.x, pos);
         }
     }
 
-    public virtual void SetSize(Vector2 size) {
+    public virtual void SetSize(Vector2 size)
+    {
         rect.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, size.x);
         rect.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, size.y);
     }
 
-    public virtual void SetSprite(Sprite sprite) {
+    public virtual void SetSprite(Sprite sprite)
+    {
         image.sprite = sprite;
     }
-    public virtual void SetBGM(AudioClip bgm) {
+    public virtual void SetBGM(AudioClip bgm)
+    {
         AudioSystem.instance.PlayMusic(bgm);
     }
 
-    public virtual void SetMaterial(Material material) {
+    public virtual void SetMaterial(Material material)
+    {
         image?.SetMaterial(material);
     }
 

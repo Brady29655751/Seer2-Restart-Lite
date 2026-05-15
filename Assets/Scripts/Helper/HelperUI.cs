@@ -179,6 +179,17 @@ namespace UnityEngine.UI
                 }
             }
         }
+
+        public static void SetSize(this RectTransform rectTransform, Vector2 size)
+        {
+            rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, size.x);
+            rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, size.y);
+        }
+
+        public static void SetSize(this Image image, Vector2 size)
+        {
+            image?.rectTransform?.SetSize(size);
+        }
     }
 
     public static class SpriteSet

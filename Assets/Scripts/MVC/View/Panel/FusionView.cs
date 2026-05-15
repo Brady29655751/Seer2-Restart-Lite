@@ -10,6 +10,8 @@ public class FusionView : Module
     protected override void Awake()
     {
         base.Awake();
+        mainPetBlockView.InitButtonAndIconSize();
+        subPetBlockView.InitButtonAndIconSize();
         mainPetBlockView.SetPet(null);
         subPetBlockView.SetPet(null);
         petItemBlockViews.ForEach(x => x.SetItem(null));

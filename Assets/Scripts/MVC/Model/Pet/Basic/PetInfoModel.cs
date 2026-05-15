@@ -15,8 +15,10 @@ public class PetInfoModel : Module
     public int height => currentPet.basic.height;
     public int weight => currentPet.basic.weight;
     public DateTime getPetDate => currentPet.basic.getPetDate;
+    public int kizuna => currentPet.kizuna;
 
-    public void SetPet(Pet pet) {
+    public void SetPet(Pet pet)
+    {
         currentPet = pet;
     }
 

@@ -40,7 +40,9 @@ public class Pet
         get => string.IsNullOrEmpty(basic.name) ? info.basic.name : basic.name;
         set => basic.name = value;
     }
-    public int kizuna => Mathf.Clamp((DateTime.Now - basic.getPetDate).Days * 2 / 7 + record.kizuna, record.minKizuna, record.maxKizuna);
+    public int kizuna => Mathf.Clamp((int)record.GetRecord("kizuna", 0f), minKizuna, maxKizuna);
+    public int minKizuna => (int)record.GetRecord("minKizuna", float.Parse(info.ui.options.Get("min_kizuna", "-255")));
+    public int maxKizuna => (int)record.GetRecord("maxKizuna", float.Parse(info.ui.options.Get("max_kizuna", "255")));
 
     /* Feature */
     public int elementId => info.basic.elementId;
@@ -262,6 +264,9 @@ public class Pet
             if (trimStatus.TryTrimStart("battle", out var trimBattleStatus))
                 return (normalStatus + extraStatus)[trimBattleStatus];
 
+            if (trimStatus.TryTrimStart("personality", out var trimPersonalityStatus))
+                return Status.GetPersonalityBuff(basic.personality)[trimPersonalityStatus];
+
             return currentStatus[trimStatus];
         }
 
@@ -319,13 +324,34 @@ public class Pet
             
             return 0;   
         }
-            
+
+        if (id.TryTrimStart("kizuna", out var trimKizuna))
+        {
+            trimKizuna = trimKizuna.TrimStart('.');
+            if (string.IsNullOrEmpty(trimKizuna))
+                return kizuna;
+
+            if (trimKizuna.TryTrimStart("tag", out var trimKizunaTagExpr) && trimKizunaTagExpr.TryTrimParentheses(out var trimKizunaTag))
+            {
+                if (info.kizuna?.tagList == null)
+                    return 0;
+
+                return info.kizuna.tagList.Contains(trimKizunaTag) ? 1 : 0;
+            }
+
+            return trimKizuna switch
+            {
+                "min" => minKizuna,
+                "max" => maxKizuna,
+                _ => 0,   
+            };
+        }
 
         if (id.TryTrimStart("skin", out var trimSkin) &&
             (trimSkin.TryTrimParentheses(out var skinIdExpr)) &&
             (int.TryParse(skinIdExpr, out var skinId)))
         {
-            return (info.ui.GetAllSkinList(ui).Contains(skinId) || ui.specialSkinList.Contains(skinId)) ? 1 : 0;
+            return (info.ui.GetAllSkinList(this).Contains(skinId) || ui.specialSkinList.Contains(skinId)) ? 1 : 0;
         }
 
         if (id.TryTrimStart("baseId", out var trimBase) &&
@@ -356,9 +382,8 @@ public class Pet
             "baseId" => basic.baseId,
             "star" => info.ui.star,
             "generation" => info.ui.generation,
-            "kizuna" => kizuna,
-            "minKizuna" => record.minKizuna,
-            "maxKizuna" => record.maxKizuna,
+            "minKizuna" => GetPetIdentifier("kizuna.min"),
+            "maxKizuna" => GetPetIdentifier("kizuna.max"),
             "skinId" => ui.skinId,
             "element" => elementId,
             "subElement" => subElementId,

@@ -10,6 +10,7 @@ public class MapPetCornerView : Module
 
     public void SetPet(Pet pet) {
         blockView.SetPet(pet);
+        blockView.SetChosen(true);
     }
 
     public void OnAfterHeal() {

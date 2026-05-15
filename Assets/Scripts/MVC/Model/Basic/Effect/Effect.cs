@@ -384,4 +384,46 @@ public class Effect
 
         return true;
     }
+
+    public float GetEffectIdentifier(string id)
+    {
+        if (id.TryTrimStart("timing", out var trimId))
+        {
+            if (string.IsNullOrEmpty(trimId))
+                return (float)timing;
+
+            if (trimId.TryTrimParentheses(out trimId, '(', ')'))
+                return timing == trimId.ToEffectTiming() ? 1 : 0;
+
+            return 0;
+        }
+
+        if (id.TryTrimStart("ability", out var trimExpr))
+        {
+            if (string.IsNullOrEmpty(trimExpr))
+                return (float)ability;
+            
+            if (trimExpr == $"({ability.ToRawString()})")
+                return 1;
+
+            if (trimExpr.TryTrimParentheses(out trimExpr))
+            {
+                var split = trimExpr.Split(':');
+                if (split.Length == 1)
+                    return Identifier.GetNumIdentifier(abilityOptionDict.Get(split[0]));
+                else
+                    return abilityOptionDict.Get(split[0]) == split[1] ? 1 : 0;
+            }
+
+            return 0;
+        }
+
+        return float.MinValue;
+    }
+
+    public bool TryGetEffectIdentifier(string id, out float value)
+    {
+        value = GetEffectIdentifier(id);
+        return value != float.MinValue;
+    }
 }

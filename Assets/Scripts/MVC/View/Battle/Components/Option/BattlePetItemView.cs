@@ -18,7 +18,7 @@ public class BattlePetItemView : BattleBaseView
             return;
         
         string header = "<size=4>\n</size><size=16><color=#52e5f9>" + item.name + "</color></size><size=6>\n\n</size>";
-        string content = item.info.effectDescription;
+        string content = item.info.GetEffectDescription();
         descriptionBox.SetBoxPosition(new Vector2(100 + index * 80, 109));
         descriptionBox.SetText(header + content);
         descriptionBox.SetBoxSize(Vector2.one * 150, true, true);

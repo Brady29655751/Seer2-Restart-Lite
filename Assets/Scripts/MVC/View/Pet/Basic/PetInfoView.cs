@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class PetInfoView : Module
+public class PetInfoView : UIModule
 {
     [SerializeField] private bool showPersonalityDetail = false;
     [SerializeField] private Text idText;
@@ -72,4 +72,8 @@ public class PetInfoView : Module
         getPetDateText?.SetText(getPetDate.ToString("yyyy/MM/dd"));
     }
 
+    public void ShowPetKizuna(int kizuna)
+    {
+        infoPrompt?.SetInfoPromptWithAutoSize($"当前好感度: <color=#ffbb33>{kizuna}</color>", TextAnchor.MiddleLeft);
+    }
 }

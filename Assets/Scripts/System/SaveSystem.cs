@@ -349,7 +349,7 @@ public static class SaveSystem
                 }
 
                 data.petBag = petBag.ToArray();
-                Array.Resize(ref data.petBag, 12);
+                Array.Resize(ref data.petBag, PetInfo.PET_BAG_SIZE);
 
                 if (ListHelper.IsNullOrEmpty(data.petBag) && (!ListHelper.IsNullOrEmpty(data.petStorage)))
                 {
@@ -672,7 +672,7 @@ public static class SaveSystem
 
                 data.petStorage.RemoveAll(x => (x?.id ?? 0) == info.id);
                 data.petBag = data.petBag.Where(x => (x?.id ?? 0) != info.id).ToArray();
-                Array.Resize(ref data.petBag, 6);
+                Array.Resize(ref data.petBag, PetInfo.PET_BAG_SIZE);
                 data.pvpPetTeam.RemoveAll(x => x.value.Any(y => (y?.id ?? 0) == info.id));
                 data.battleRecordStorage?.RemoveAll(x => x.masterPetBag.Any(y => (y?.id ?? 0) == info.id) || x.clientPetBag.Any(y => (y?.id ?? 0) == info.id));
                 SaveData(data, id);

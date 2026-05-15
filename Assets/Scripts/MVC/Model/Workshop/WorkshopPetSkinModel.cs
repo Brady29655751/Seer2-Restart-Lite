@@ -22,16 +22,19 @@ public class WorkshopPetSkinModel : Module
     private Action<Sprite> onUploadSpriteCallback;
 
     public List<int> skinList = new List<int>();
+    public List<int> skinKizunaList = new List<int>();
 
     public PetUIInfo GetPetUIInfo(int id, int baseId) {
         var uiInfo = new PetUIInfo(id, baseId);
         uiInfo.specialSkinList = skinList;
+        uiInfo.specialSkinKizunaList = skinKizunaList;
         uiInfo.options.ParseOptions(options.ReplaceSpecialWhiteSpaceCharacters(string.Empty));
         return uiInfo;
     }
 
     public void SetPetUIInfo(PetUIInfo uiInfo) {
         skinList = uiInfo.specialSkinList;
+        skinKizunaList = uiInfo.specialSkinKizunaList;
         optionInputField.SetInputString(uiInfo.GetRawOptionString());
 
         foreach (var key in bytesDict.Keys.ToList())

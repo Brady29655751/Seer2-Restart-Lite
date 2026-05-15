@@ -129,13 +129,16 @@ public class PetBattleStatusController
         if ((powerup == null) && (powerdown == null))
             return basePowerup;
 
+        var linearPowerup = new Linear<Status>(powerup?.mult ?? Status.one, powerup?.add ?? Status.zero);
+        var linearPowerdown = new Linear<Status>(powerdown?.mult ?? Status.one, powerdown?.add ?? Status.zero);
         var currentPowerup = basePowerup.Select((x, i) =>
         {
             if (x > 0)
-                return (int)(x * (powerup?.mult[i] ?? Status.one[i]) + (powerup?.add[i] ?? 0));
-
-            if (x < 0)
-                return (int)(x * (powerdown?.mult[i] ?? Status.one[i]) + (powerdown?.add[i] ?? 0));
+                x = (int)(x * linearPowerup.mult[i] + linearPowerup.add[i]);
+            else if (x < 0)
+                x = (int)(x * linearPowerdown.mult[i] + linearPowerdown.add[i]);
+            else
+                x += linearPowerup.add[i] + linearPowerdown.add[i];
 
             return x;
         });

@@ -6,7 +6,7 @@ using UnityEngine;
 using Random = UnityEngine.Random;
 
 public class UnitSkillSystem
-{   
+{
     public static string[] normalHpType => new string[] { "skill", "item", "buff" };
 
     public Skill skill = null;
@@ -26,28 +26,34 @@ public class UnitSkillSystem
     public Dictionary<string, int> damageDict = new Dictionary<string, int>();
     public Dictionary<string, int> healDict = new Dictionary<string, int>();
 
-    public int skillDamage = 0, skillHeal = 0;
-    public int itemDamage = 0, itemHeal = 0;
+    public int skillDamage = 0, skillHeal = 0, skillOverHeal = 0;
+    public int itemDamage = 0, itemHeal = 0, itemOverHeal = 0;
     public int buffDamage = 0, buffHeal = 0;
 
-    public int totalSkillDamage => Mathf.Max(skillDamage, 0) + GetTypeDamage(type => type.StartsWith("skill"));
-    public int totalItemDamage => Mathf.Max(itemDamage, 0) + GetTypeDamage(type => type.StartsWith("item"));
-    public int totalBuffDamage => Mathf.Max(buffDamage, 0) + GetTypeDamage(type => type.StartsWith("buff"));
+    public int SkillDamage => Mathf.Max(skillDamage, 0);
+    public int ItemDamage => Mathf.Max(itemDamage, 0);
+    public int BuffDamage => Mathf.Max(buffDamage, 0);
+
+    public int totalSkillDamage => SkillDamage + GetTypeDamage(type => type.StartsWith("skill"));
+    public int totalItemDamage => ItemDamage + GetTypeDamage(type => type.StartsWith("item"));
+    public int totalBuffDamage => BuffDamage + GetTypeDamage(type => type.StartsWith("buff"));
 
     public int totalSkillHeal => skillHeal + GetTypeHeal(type => type.StartsWith("skill"));
     public int totalItemHeal => itemHeal + GetTypeHeal(type => type.StartsWith("item"));
     public int totalBuffHeal => buffHeal + GetTypeHeal(type => type.StartsWith("buff"));
-    
+
     public int damage => totalSkillDamage + totalItemDamage;
     public int heal => totalSkillHeal + totalItemHeal;
 
-    public UnitSkillSystem() {
+    public UnitSkillSystem()
+    {
         OnTurnStart();
     }
 
-    public UnitSkillSystem(UnitSkillSystem rhs) {
-        skill = (rhs.skill == null) ?  null : new Skill(rhs.skill);
-        counterSkill = (rhs.counterSkill == null) ?  null : new Skill(rhs.counterSkill);
+    public UnitSkillSystem(UnitSkillSystem rhs)
+    {
+        skill = (rhs.skill == null) ? null : new Skill(rhs.skill);
+        counterSkill = (rhs.counterSkill == null) ? null : new Skill(rhs.counterSkill);
         level = rhs.level;
         atk = rhs.atk;
         def = rhs.def;
@@ -68,6 +74,9 @@ public class UnitSkillSystem
         skillHeal = rhs.skillHeal;
         buffHeal = rhs.buffHeal;
         itemHeal = rhs.itemHeal;
+
+        skillOverHeal = rhs.skillOverHeal;
+        itemOverHeal = rhs.itemOverHeal;
     }
 
     public Skill GetSkillByKey(string key)
@@ -94,8 +103,9 @@ public class UnitSkillSystem
     {
         return healDict.Where(entry => filter(entry.Key)).Sum(entry => entry.Value);
     }
-    
-    public void OnTurnStart() {
+
+    public void OnTurnStart()
+    {
         skill = null;
         counterSkill = null;
 
@@ -110,15 +120,18 @@ public class UnitSkillSystem
 
         skillDamage = itemDamage = buffDamage = 0;
         skillHeal = itemHeal = buffHeal = 0;
+        skillOverHeal = itemOverHeal = 0;
     }
 
-    public void OnChainStart() {
+    public void OnChainStart()
+    {
         level = atk = def = 0;
         weatherBuff = sameElementBuff = elementRelation = 1f;
         isHit = true;
         isCritical = false;
-        
-        skillDamage = skillHeal = 0;
+
+        skillDamage = skillHeal = skillOverHeal = 0;
+        itemDamage = itemHeal = itemOverHeal = 0;
         damageDict = damageDict.Where(x => !x.Key.StartsWith("skill")).ToDictionary(x => x.Key, x => x.Value);
         healDict = healDict.Where(x => !x.Key.StartsWith("skill")).ToDictionary(x => x.Key, x => x.Value);
 
@@ -135,7 +148,7 @@ public class UnitSkillSystem
     public void SwapCounterSkill(bool isCounterStart)
     {
         isCounter = isCounterStart;
-        
+
         var tmp = counterSkill;
         counterSkill = isCounterStart ? skill : Skill.GetNoOpSkill();
         skill = tmp;
@@ -154,7 +167,8 @@ public class UnitSkillSystem
         return isHit;
     }
 
-    public void PrepareDamageParam(BattlePet atkPet, BattlePet defPet) {
+    public void PrepareDamageParam(BattlePet atkPet, BattlePet defPet)
+    {
         if (skill == null)
             return;
 
@@ -167,42 +181,48 @@ public class UnitSkillSystem
             (atkPet.subBattleElement != Element.普通))) ? 1.5f : 1f;
     }
 
-    public int CalculateDamage(BattlePet atkPet, BattlePet defPet) {
-        if (skill == null) {
+    public int CalculateDamage(BattlePet atkPet, BattlePet defPet)
+    {
+        if (skill == null)
+        {
             return skillDamage;
         }
 
-        for (int i = 0; i < skill.combo; i++) {
+        for (int i = 0; i < skill.combo; i++)
+        {
             float _random = Random.Range(0.85f, 1f);
             float _criRandom = Random.Range(0f, 100f);
             bool _isCritical = (skill.critical + atkPet.battleStatus.cri - defPet.battleStatus.cdf) >= _criRandom;
-            float _damage = (level * (atk / def) * skill.power + 2) 
-                * sameElementBuff * elementRelation * weatherBuff * _random * 
+            float _damage = (level * (atk / def) * skill.power + 2)
+                * sameElementBuff * elementRelation * weatherBuff * _random *
                 (_isCritical ? 2 : 1);
 
             skillDamage += (int)Mathf.Ceil(_damage);
             isCritical |= _isCritical;
         }
-        
+
         return skillDamage;
     }
 
-    public float GetSkillSystemIdentifier(string id) {
-        if (id.TryTrimStart("damage", out var trimId) && 
-            trimId.TryTrimParentheses(out var damageType)) 
+    public float GetSkillSystemIdentifier(string id)
+    {
+        if (id.TryTrimStart("damage", out var trimId) &&
+            trimId.TryTrimParentheses(out var damageType))
         {
-            return damageType switch {
+            return damageType switch
+            {
                 "item" => totalItemDamage,
                 "buff" => totalBuffDamage,
-                "skill" => skillDamage,
+                "skill" => SkillDamage,
                 _ => damageDict.Get(damageType, 0),
             };
         }
 
-        if (id.TryTrimStart("heal", out trimId) && 
-            trimId.TryTrimParentheses(out var healType)) 
+        if (id.TryTrimStart("heal", out trimId) &&
+            trimId.TryTrimParentheses(out var healType))
         {
-            return healType switch {
+            return healType switch
+            {
                 "item" => totalItemHeal,
                 "buff" => totalBuffHeal,
                 "skill" => skillHeal,
@@ -210,7 +230,18 @@ public class UnitSkillSystem
             };
         }
 
-        return id switch 
+        if (id.TryTrimStart("overHeal", out trimId) &&
+            trimId.TryTrimParentheses(out var overHealType))
+        {
+            return overHealType switch
+            {
+                "item" => itemOverHeal,
+                "skill" => skillOverHeal,
+                _ => 0,
+            };
+        }
+
+        return id switch
         {
             "level" => level,
             "atk" => atk,
@@ -227,12 +258,14 @@ public class UnitSkillSystem
         };
     }
 
-    public bool TryGetSkillSystemIdentifier(string id, out float num) {
+    public bool TryGetSkillSystemIdentifier(string id, out float num)
+    {
         num = GetSkillSystemIdentifier(id);
         return num != float.MinValue;
     }
 
-    public void SetSkillSystemIdentifier(string id, float num, string key = null) {
+    public void SetSkillSystemIdentifier(string id, float num, string key = null)
+    {
         switch (id)
         {
             default:

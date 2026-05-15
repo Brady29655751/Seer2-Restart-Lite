@@ -33,7 +33,7 @@ public class MapMenuController : UIModule
         if (page <= 1)
             page = Player.instance.currentMap.categoryId <= 10 ? 0 : 1;
 
-        panel?.SetPage(Player.instance.currentMap.worldId);
+        panel?.SetPage(page);
     }
 
     public void ToggleShootMode()
