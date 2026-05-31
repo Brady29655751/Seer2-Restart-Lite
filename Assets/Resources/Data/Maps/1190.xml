@@ -1,0 +1,82 @@
+<map name="碧玉森林(虫)"  category="12"  id="1190">
+	<!-- <resource>10011</resource> -->
+	<initialPoint>437,200</initialPoint>
+	<music category="2">
+		<bgm>BGM_101</bgm>
+		<fx>FX_106</fx>
+	</music>
+	<entities>
+		<npc id="119001" resId="Pets/pet/473" name="针叶虫" size="90,84" pos="437,365" namePos="0,-15" active="false">
+			<description>搁浅的精灵</description>
+			<dialog>
+				<branch id="default" name="针叶虫" icon="Pets/pet/473" size="108,91" pos="10,45">
+					<content><![CDATA[(非常口渴的样子)]]></content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[也许水系精灵能帮你]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+						<reply type="click">
+							<description><![CDATA[我带来了水系精灵]]></description>
+							<action>openDialog</action>
+							<param>water</param>
+							<condition>petBag(element:2).count&gt;0</condition>
+						</reply>
+						<reply type="branch">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=带上水系精灵再来帮忙吧！</param>
+							<param>item_icon=pet[473]</param>
+							<param>option_num=1</param>
+							<condition>petBag(element:2).count=0</condition>
+						</reply>
+					</replyHandler>
+				</branch>
+				<branch id="water" name="针叶虫" icon="Pets/pet/473" size="108,91" pos="10,45">
+					<content><![CDATA[(舒服的样子)]]></content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[真是太好了]]></description>
+							<action>getPet</action>
+							<param>471,1</param>
+						</reply>
+						<reply type="branch">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=获得了【呆叶虫】</param>
+							<param>item_icon=pet[471]</param>
+							<param>option_num=1</param>
+						</reply>
+						<reply type="branch">
+							<action>setNpcParam</action>
+							<param>119001</param>
+							<condition>active=false</condition>
+						</reply>
+						<reply type="branch">
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+					</replyHandler>
+				</branch>
+			</dialog>
+			<eventHandler>
+				<button type="auto">
+					<action>setNpcParam</action>
+					<param>119001</param>
+					<param>active=true</param>
+					<condition>random[new]LTE5</condition>
+				</button>
+				<button type="click">
+					<action>openDialog</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<teleport id="1" name="树洞" pos="437,70" targetMapId="1240"/>
+		<teleport id="2" name="碧玉森林(草)" pos="437,320" targetMapId="101"/>
+	</entities>
+</map>
+

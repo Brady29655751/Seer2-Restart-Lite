@@ -202,6 +202,9 @@ public static class EffectAbilityHandler
                 "rec" => rec,
                 "set" => setHp,
                 "max" => maxHp,
+                "key[skill]" => (type.Split("_").First() == "skill") ? 1 : 0,
+                "key[buff]" => (type.Split("_").First() == "buff") ? 1 : 0,
+                "key[item]" => (type.Split("_").First() == "item") ? 1 : 0,
                 _ => e.TryGetEffectIdentifier(expr.Replace('：', ':'), out var value) ? value : Identifier.GetNumIdentifier(expr),
             })(effect)).OrderBy(x => x.priority).ToList();
 
@@ -215,7 +218,7 @@ public static class EffectAbilityHandler
                     return;
 
                 var effectInvokeUnit = (Unit)x.invokeUnit;
-                var effectLhsUnit = (who == "me") ? state.GetUnitById(invokeUnit.id) : state.GetRhsUnitById(invokeUnit.id);
+                var effectLhsUnit = (who == "me") ? state.GetUnitById(effectInvokeUnit.id) : state.GetRhsUnitById(effectInvokeUnit.id);
                 if (effectLhsUnit.id != lhsUnit.id)
                     return;
 
@@ -278,7 +281,7 @@ public static class EffectAbilityHandler
 
             int healAdd = (int)(heal * ((heal > 0) ? (rec / 100f) : 1));
             var isHealCurrentPet = (who == "me") && (targetList[i] == lhsUnit.pet);
-            var overHeal = healAdd - (targetList[i].maxHp - targetList[i].hp);
+            var overHeal = Mathf.Max(0, healAdd - (targetList[i].maxHp - targetList[i].hp));
 
             if (type == "item")
             {
@@ -1396,7 +1399,7 @@ public static class EffectAbilityHandler
                 // Kizuna
                 if ((petBagMode == PetBagMode.Normal) && type.ToLower().Contains("kizuna"))
                 {
-                    var gifts = pet.info.kizuna.gifts;
+                    var gifts = pet.info.kizuna?.gifts;
                     if (gifts != null)
                     {
                         var hasGift = false;

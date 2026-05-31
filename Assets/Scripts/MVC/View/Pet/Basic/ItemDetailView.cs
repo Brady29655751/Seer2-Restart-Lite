@@ -13,9 +13,11 @@ public class ItemDetailView : Module
     [SerializeField] private Text otherInfoText;
 
     public void SetItem(Item item) {
+        var priceDesc = item.info.price + " " + item.info.CurrencyInfo?.name;
+        var effectDesc = (item.info.removable ? string.Empty : "<color=#ffbb33>【无限再生】</color>\n") + item.info.GetEffectDescription(false);
         nameText?.SetText(item.name);
-        priceText?.SetText(item.info.price + " " + item.info.CurrencyInfo?.name);
-        descriptionText?.SetText(item.info.GetEffectDescription());
+        priceText?.SetText(priceDesc);
+        descriptionText?.SetText(effectDesc);
     }
 
     public void SetTitle(string title) {

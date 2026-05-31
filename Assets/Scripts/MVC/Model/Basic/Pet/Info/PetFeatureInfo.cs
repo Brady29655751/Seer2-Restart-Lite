@@ -42,7 +42,6 @@ public class Feature {
     public int baseId;
     public string name;
     public string rawDescription;
-    public string description => rawDescription.ReplaceColorAndNewline();
 }
 
 [XmlRoot("emblem")]
@@ -50,7 +49,6 @@ public class Emblem {
     public int baseId;
     public string name;
     public string rawDescription;
-    public string description => rawDescription.ReplaceColorAndNewline();
 
     public static Sprite GetNullEmblemSprite() {
         return GetSprite(0);

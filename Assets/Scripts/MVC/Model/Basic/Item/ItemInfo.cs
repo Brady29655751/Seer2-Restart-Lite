@@ -95,10 +95,10 @@ public class ItemInfo
         return itemDesc.ReplaceColorAndNewline();
     }
 
-    public string GetEffectDescription() {
+    public string GetEffectDescription(bool withHabitat = true) {
         var effectDesc = effectDescription;
 
-        if (Habitat != "-" && Habitat != "点击领取")
+        if (withHabitat && (Habitat != "-") && (Habitat != "点击领取"))
             effectDesc += "[ENDL][ENDL][66ccff]【获取方式：" + Habitat + "】[-]";
 
         return effectDesc.ReplaceColorAndNewline();
@@ -136,6 +136,11 @@ public class ItemInfo
                 return Identifier.GetNumIdentifier(options.Get(split[0], "0"));
 
             return options.Get(split[0], "0") == split[1] ? 1 : 0;
+        }
+
+        if (id.TryTrimStart("type", out trimId) && trimId.TryTrimParentheses(out trimId))
+        {
+            return (trimId.ToItemType() == type) ? 1 : 0;
         }
 
         return id switch {

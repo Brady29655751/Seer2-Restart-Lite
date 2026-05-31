@@ -14,21 +14,26 @@ public class DialogView : Module
 
     [SerializeField] private Vector2 stdIconSize = new Vector2(150, 150);
     [SerializeField] private Image icon;
+    [SerializeField] private UniGifImage gif;
     [SerializeField] private IText npcName;
     [SerializeField] private IText content;
     [SerializeField] private RectTransform contentRect;
     [SerializeField] private RectTransform functionRect;
     [SerializeField] private RectTransform replyRect;
 
-    public void OpenDialog(DialogInfo info) {
-        SetIconAndName(  info.icon, info.pos, info.size, info.name);
+    public void OpenDialog(DialogInfo info)
+    {
+        SetIconAndName(info.icon, info.pos, info.size, info.name);
+        SetGif(info.gifInfo, info.icon);
         SetContent(info.content);
         SetFunction(info.functionHandler);
         SetReply(info.replyHandler);
     }
 
-    private void SetIconAndName(Sprite sprite, Vector2 iconPos, Vector2 iconSize, string name) {
-        if (icon != null) {
+    private void SetIconAndName(Sprite sprite, Vector2 iconPos, Vector2 iconSize, string name)
+    {
+        if (icon != null)
+        {
             icon.SetSprite(sprite);
             icon.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, iconSize.x);
             icon.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, iconSize.y);
@@ -37,12 +42,22 @@ public class DialogView : Module
         npcName?.SetText(name);
     }
 
-    private void SetContent(string text) {
+    private void SetGif(AnimInfo gifInfo, Sprite icon = null)
+    {
+        if (gifInfo?.gifPath == null)
+            return;
+        
+        gif.SetGifFromUrl(gifInfo.gifPath, loadingSprite: icon);
+    }
+
+    private void SetContent(string text)
+    {
         content?.SetText(text);
         content?.text.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, content.size.y);
     }
 
-    private void SetFunction(List<NpcButtonHandler> functionHandler) {
+    private void SetFunction(List<NpcButtonHandler> functionHandler)
+    {
         functionRect.DestoryChildren();
 
         float functionY = Mathf.Min(-55, contentRect.anchoredPosition.y - content.size.y - 5);
@@ -51,10 +66,13 @@ public class DialogView : Module
         float handlerX = 0;
         IText lastText = null;
 
-        for (int i = 0; i < functionHandler.Count; i++) {
+        for (int i = 0; i < functionHandler.Count; i++)
+        {
             NpcButtonHandler handler = functionHandler[i];
-            if (handler.typeId == "branch") {
-                lastText?.onPointerClickEvent.AddListener(x => {
+            if (handler.typeId == "branch")
+            {
+                lastText?.onPointerClickEvent.AddListener(x =>
+                {
                     NpcController npc = DialogManager.instance.currentNpc;
                     Dictionary<int, NpcController> npcList = (Dictionary<int, NpcController>)Player.GetSceneData("mapNpcList");
                     NpcHandler.GetNpcEntity(npc, handler, npcList)?.Invoke();
@@ -69,7 +87,8 @@ public class DialogView : Module
             text.SetText("<sprite name=\"settings\"> <u>" + handler.description + "</u>");
             text.onPointerEnterEvent.AddListener(x => text.SetColor(hoverTextColor));
             text.onPointerExitEvent.AddListener(x => text.SetColor(initTextColor));
-            text.onPointerClickEvent.AddListener(x => {
+            text.onPointerClickEvent.AddListener(x =>
+            {
                 NpcController npc = DialogManager.instance.currentNpc;
                 Dictionary<int, NpcController> npcList = (Dictionary<int, NpcController>)Player.GetSceneData("mapNpcList");
                 NpcHandler.GetNpcEntity(npc, handler, npcList)?.Invoke();
@@ -82,18 +101,22 @@ public class DialogView : Module
             lastText = text;
         }
     }
-    
-    private void SetReply(List<NpcButtonHandler> replyHandler) {
+
+    private void SetReply(List<NpcButtonHandler> replyHandler)
+    {
         replyRect.DestoryChildren();
 
         float handlerX = 0;
         float handlerSize = replyRect.rect.size.x / replyHandler.Count(x => x.typeId != "branch");
         IText lastText = null;
 
-        for (int i = 0; i < replyHandler.Count; i++) {
+        for (int i = 0; i < replyHandler.Count; i++)
+        {
             NpcButtonHandler handler = replyHandler[i];
-            if (handler.typeId == "branch") {
-                lastText?.onPointerClickEvent.AddListener(x => {
+            if (handler.typeId == "branch")
+            {
+                lastText?.onPointerClickEvent.AddListener(x =>
+                {
                     NpcController npc = DialogManager.instance.currentNpc;
                     Dictionary<int, NpcController> npcList = (Dictionary<int, NpcController>)Player.GetSceneData("mapNpcList");
                     NpcHandler.GetNpcEntity(npc, handler, npcList)?.Invoke();
@@ -104,11 +127,12 @@ public class DialogView : Module
             GameObject obj = Instantiate(replyTextPrefab, replyRect);
             RectTransform rect = obj.GetComponent<RectTransform>();
             IText text = obj.GetComponent<IText>();
-            
+
             text.SetText("<u>" + handler.description + "</u>");
             text.onPointerEnterEvent.AddListener(x => text.SetColor(hoverTextColor));
             text.onPointerExitEvent.AddListener(x => text.SetColor(initTextColor));
-            text.onPointerClickEvent.AddListener(x => {
+            text.onPointerClickEvent.AddListener(x =>
+            {
                 NpcController npc = DialogManager.instance.currentNpc;
                 Dictionary<int, NpcController> npcList = (Dictionary<int, NpcController>)Player.GetSceneData("mapNpcList");
                 NpcHandler.GetNpcEntity(npc, handler, npcList)?.Invoke();

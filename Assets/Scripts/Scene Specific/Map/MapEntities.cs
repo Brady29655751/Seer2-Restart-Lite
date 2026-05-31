@@ -8,4 +8,5 @@ public class MapEntities
     [XmlElement("teleport")] public List<TeleportInfo> teleports;
     [XmlElement("npc")] public List<NpcInfo> npcs;
     [XmlElement("farm")] public List<NpcInfo> farms;
+    [XmlElement("animal")] public List<NpcInfo> animals;
 }

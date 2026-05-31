@@ -11,6 +11,12 @@ public static class NpcActionHandler
         if ((handler.param == null) || (handler.param.Count < 2))
             return;
 
+        if (handler.param[0] == "animal")
+        {
+            MapManager.instance.SetAnimalPanelActive(true);
+            return;
+        }
+
         int id = int.Parse(handler.param[0]);
         var toNpc = npcList.Get(id, npc);
 
@@ -47,6 +53,12 @@ public static class NpcActionHandler
                     var path = option[1].TrimEnd(".png").Split('/').Select(x => x.TryTrimStart("[expr]", out expr) ?
                         Parser.ParseOperation(expr).ToString() : x).ConcatToString("/");
                     toNpc.SetIcon(path);
+                    break;
+                case "anim":
+                    toNpc.SetAnim(option[1]);
+                    break;
+                case "gif":
+                    toNpc.SetGif(new AnimInfo() { id = option[1] });
                     break;
                 case "color":
                     toNpc.SetColor(option[1].ToColor(Color.white));
@@ -110,7 +122,7 @@ public static class NpcActionHandler
 
         for (int i = 1; i < handler.param.Count; i++)
         {
-            var option = handler.param[i].Split('=');
+            var option = handler.param[i].Split('=', 2);
             if (option[0] == "callback")
             {
                 Action callback = () =>

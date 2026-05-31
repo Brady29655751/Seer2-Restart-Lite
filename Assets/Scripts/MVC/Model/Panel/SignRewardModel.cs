@@ -6,8 +6,8 @@ using UnityEngine;
 public class SignRewardModel : Module
 {
     public string activityId { get; private set; } = "noob_reward";
-    private string rewardIconDataPath => $"Panels/SignReward/Data/rewardIcons/{activityId}";
-    private string rewardItemDataPath => $"Panels/SignReward/Data/rewardItems/{activityId}";
+    private string rewardIconDataPath => $"SignReward/Data/rewardIcons/{activityId}";
+    private string rewardItemDataPath => $"SignReward/Data/rewardItems/{activityId}";
 
     public Activity activity => Activity.Find(activityId);
     public bool isTodaySigned => IsTodaySigned();
@@ -23,8 +23,8 @@ public class SignRewardModel : Module
 
     private void SetRewards()
     {
-        rewardIcons = ResourceManager.LoadCSV(rewardIconDataPath);
-        rewardItems = ResourceManager.LoadCSV(rewardItemDataPath);
+        rewardIcons = ActivityInfo.IsMod(activityId) ? SaveSystem.LoadCSV($"Mod/Panel/{rewardIconDataPath}") : ResourceManager.LoadCSV($"Panels/{rewardIconDataPath}");
+        rewardItems = ActivityInfo.IsMod(activityId) ? SaveSystem.LoadCSV($"Mod/Panel/{rewardItemDataPath}") : ResourceManager.LoadCSV($"Panels/{rewardItemDataPath}");
     }
 
     public bool IsTodaySigned()

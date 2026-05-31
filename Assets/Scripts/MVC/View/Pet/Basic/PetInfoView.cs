@@ -15,6 +15,14 @@ public class PetInfoView : UIModule
     [SerializeField] private Text heightText;
     [SerializeField] private Text weightText;
     [SerializeField] private Text getPetDateText;
+    [SerializeField] private IButton kizunaButton;
+
+    public override void Init()
+    {
+        base.Init();
+        if (kizunaButton != null)
+            kizunaButton.SetSprite(Buff.GetBuffInfo(-22).icon);
+    }
 
     public void SetPet(Pet pet)
     {

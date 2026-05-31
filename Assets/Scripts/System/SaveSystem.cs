@@ -77,6 +77,16 @@ public static class SaveSystem
         return data;
     }
 
+    public static string[] LoadCSV(string path)
+    {
+        string CsvPath = Application.persistentDataPath + "/" + path + ".csv";
+        if (!FileBrowserHelpers.FileExists(CsvPath))
+            return null;
+
+        var text = FileBrowserHelpers.ReadTextFromFile(CsvPath);
+        return ResourceManager.GetCSV(text);
+    }
+
     public static void SaveXML(object item, string path)
     {
         string XmlPath = Application.persistentDataPath + "/" + path + ".xml";
@@ -372,8 +382,19 @@ public static class SaveSystem
                 {
                     var modData = farmActivity.data.Where(entry => entry.key.TryTrimEnd(".plant", out _)
                         && int.TryParse(entry.value, out var plantId) && ItemInfo.IsMod(plantId)).ToList();
-                    modData.ForEach(entry => farmActivity.SetData(entry.key, "none"));
+                    modData.ForEach(entry => farmActivity.SetData(entry.key, 0));
                 }
+
+                /*
+                // Clean animal
+                var animalActivity = data.activityStorage.Find(x => x.id == "animal");
+                if (animalActivity != null)
+                {
+                    var modData = animalActivity.data.Where(entry => entry.key.TryTrimEnd(".animal", out _)
+                        && int.TryParse(entry.value, out var animalId) && ItemInfo.IsMod(animalId)).ToList();
+                    modData.ForEach(entry => animalActivity.SetData(entry.key, "none"));
+                }
+                */
 
                 // Clean yite rogue
                 if ((data.yiteRogueData != null) && (data.yiteRogueData.difficulty == YiTeRogueMode.Mod))

@@ -18,6 +18,7 @@ public class BattlePetInfoView : BattleBaseView
         {
             icon.SetSprite(SpriteSet.Empty);
             nameText.SetText("未知");
+            nameText.SetColor(ColorHelper.normalSkill);
             levelText.SetText(string.Empty);
             elementImage.SetSprite(SpriteSet.Empty);
             subElementObject.SetActive(false);
@@ -27,6 +28,7 @@ public class BattlePetInfoView : BattleBaseView
         var isSubElementActive = pet.subBattleElement != Element.普通;
         icon.sprite =   pet.ui.icon;
         nameText.text = pet.name;
+        nameText.SetColor(PetInfo.IsMod(pet.id) ? ColorHelper.gold : ColorHelper.normalSkill);
         
         if (nameFontSizeFit)
             nameText.fontSize = (pet.name.Length < 6) ? 12 : 10;

@@ -1,0 +1,123 @@
+<map name="后花园"  category="12"  id="1230" weather="13">
+	<!-- <resource>10011</resource> -->
+	<initialPoint>570,100</initialPoint>
+	<music category="12">
+		<bgm>BGM_1230</bgm>
+	</music>
+	<entities>
+		<npc id="123001" resId="Pets/pet/414" name="七星瓢" size="182,170" pos="250,170" namePos="10,-30">
+			<anim id="Pets/anim/414" pos="-0.8,0.7" scale="1.2,1.2" />
+			<description>七星瓢军团</description>
+			<dialog>
+				<branch id="default" name="七星瓢" icon="Pets/pet/414" size="136,127" pos="0,45">
+					<content><![CDATA[你有没有本事让我亮起七颗星斑呢？（概率触发捕捉事件）]]></content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[等我拿黑笔涂掉你身上的星斑]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+						<reply type="click">
+							<description><![CDATA[挑战七星瓢军团]]></description>
+							<action>battle</action>
+							<param>default</param>
+						</reply>
+					</replyHandler>
+				</branch>
+				<branch id="reward" name="七星瓢" icon="Pets/pet/414" size="136,127" pos="0,45">
+					<content><![CDATA[实力不错，我要使出全力了！]]></content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[死鸭子嘴硬]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+						<reply type="click">
+							<description><![CDATA[正合我意！]]></description>
+							<action>battle</action>
+							<param>capture</param>
+						</reply>
+					</replyHandler>
+				</branch>
+			</dialog>
+			<battle>
+				<branch id="default">
+					<settings count="6">
+						<weather>13</weather>
+					</settings>
+					<enemy>
+						<pet id="414" level="95">
+							<headerSkill>14433</headerSkill>
+							<loopSkill>14435,14436,14437</loopSkill>
+							<superSkill>14442</superSkill>
+						</pet>
+						<pet id="414" level="96">
+							<headerSkill>14433</headerSkill>
+							<loopSkill>14435,14436,14437</loopSkill>
+							<superSkill>14442</superSkill>
+						</pet>
+						<pet id="414" level="97">
+							<headerSkill>14433</headerSkill>
+							<loopSkill>14435,14436,14437</loopSkill>
+							<superSkill>14442</superSkill>
+						</pet>
+						<pet id="414" level="98">
+							<headerSkill>14433</headerSkill>
+							<loopSkill>14435,14436,14437</loopSkill>
+							<superSkill>14442</superSkill>
+						</pet>
+						<pet id="414" level="99">
+							<headerSkill>14433</headerSkill>
+							<loopSkill>14435,14436,14437</loopSkill>
+							<superSkill>14442</superSkill>
+						</pet>
+						<pet id="414" level="100">
+							<headerSkill>14433</headerSkill>
+							<loopSkill>14435,14436,14437</loopSkill>
+							<superSkill>14442</superSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setItem</action>
+							<param>add</param>
+							<param>10201,3</param>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=3个砂糖甜饼已经放入背包</param>
+							<param>item_icon=item[10201]</param>
+							<param>option_num=1</param>
+						</button>
+						<button type="auto">
+							<action>openDialog</action>
+							<param>reward</param>
+							<condition>random[old]&lt;5</condition>
+						</button>
+					</winHandler>
+				</branch>
+				<branch id="capture">
+					<settings count="1" capture="true">
+						<weather>13</weather>
+					</settings>
+					<enemy>
+						<pet id="414" level="95">
+							<loopSkill>14433,14435,14436,14437,14435,-4</loopSkill>
+						</pet>
+					</enemy>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>openDialog</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<teleport id="1" name="虫蚀氏族主城" pos="225,270" targetMapId="1210"/>
+		<teleport id="2" name="树洞" pos="580,150" targetMapId="1240"/>
+	</entities>
+</map>
+

@@ -1,0 +1,173 @@
+<map name="树洞"  category="12"  id="1240">
+	<!-- <resource>10011</resource> -->
+	<initialPoint>670,100</initialPoint>
+	<music category="12">
+		<bgm>BGM_1240</bgm>
+	</music>
+	<entities>
+		<npc id="124001" resId="Pets/pet/470" name="希卡迪" size="180,189" pos="410,120" namePos="-5,-5">
+		    <description>蝉蝉蝉蝉蝉</description>
+		    <dialog>
+		        <branch id="default" name="希卡迪" icon="Pets/pet/470.png" size="126,133" pos="0,45">
+		            <content><![CDATA[池塘边的榕树上，知了在声声叫着夏天]]></content>
+					<functionHandler>
+						<func type="click">
+							<description><![CDATA[挑战一]]></description>
+							<action>battle</action>
+							<param>challenge_1</param>
+						</func>
+						<func type="click">
+							<description><![CDATA[挑战二]]></description>
+							<action>battle</action>
+							<param>challenge_2</param>
+							<condition>firstPet.id=470</condition>
+						</func>
+						<func type="branch">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=把希卡迪设为首发之后再来挑战吧</param>
+							<param>option_num=1</param>
+							<param>item_icon=pet[470]</param>
+							<condition>firstPet.idNOT470</condition>
+						</func>
+						<func type="click">
+							<description><![CDATA[挑战三]]></description>
+							<action>battle</action>
+							<param>challenge_3</param>
+						</func>
+					</functionHandler>
+		            <replyHandler>
+		            	<reply type="click">
+		            		<description><![CDATA[这个树洞原来是榕树？]]></description>
+		            		<action>openDialog</action>
+		            		<param>null</param>
+		            	</reply>
+		            </replyHandler>
+		        </branch>
+		    </dialog>
+			<battle>
+				<branch id="challenge_1">
+					<settings count="1"/>
+					<enemy>
+						<pet id="470" level="60">
+							<status>
+								<hp>5000</hp>
+							</status>
+							<initBuff>-4,61,-8</initBuff>
+							<loopSkill>14519</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>getPet</action>
+							<param>469,10,0</param>
+							<condition>activity[11022].done[1]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=【希希】已经放入精灵仓库</param>
+							<param>item_icon=pet[469]</param>
+							<param>option_num=1</param>
+							<condition>activity[11022].done[1]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>11022</param>
+							<param>done[1]=true</param>
+							<condition>activity[11022].done[1]=[bool]false[default]false</condition>
+						</button>
+					</winHandler>
+				</branch>
+				<branch id="challenge_2">
+					<settings count="1">
+						<initBuff>(rule:600000)</initBuff>
+					</settings>
+					<enemy>
+						<pet id="470" level="60">
+							<status>
+								<hp>5000</hp>
+							</status>
+							<initBuff>71,14,17,55,56,20,99,100,-3119,-3121</initBuff>
+							<loopSkill>14520,14521,14522</loopSkill>
+							<superSkill>14519</superSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setPet</action>
+							<param>emblem=1</param>
+							<condition>activity[11022].done[2]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=【希卡迪】获得了【心蝉】纹章</param>
+							<param>item_icon=emblem[469]</param>
+							<param>option_num=1</param>
+							<condition>activity[11022].done[2]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>11022</param>
+							<param>done[2]=true</param>
+							<condition>activity[11022].done[2]=[bool]false[default]false</condition>
+						</button>
+					</winHandler>
+				</branch>
+				<branch id="challenge_3">
+					<settings count="6"/>
+					<enemy>
+						<pet id="470" level="60">
+							<status>
+								<atk>1800</atk>
+								<mat>1800</mat>
+								<def>1800</def>
+								<mdf>1800</mdf>
+								<hp>5000</hp>
+							</status>
+							<initBuff>-8,-3112,-3118,-3022,-3012,-3076,-3023,-3082</initBuff>
+							<loopSkill>14520,14521,14522</loopSkill>
+							<superSkill>14519</superSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setItem</action>
+							<param>add</param>
+							<param>2,100</param>
+							<condition>activity[11022].done[3]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=100 星钻已经放入背包</param>
+							<param>item_icon=item[2]</param>
+							<param>option_num=1</param>
+							<condition>activity[11022].done[3]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>11022</param>
+							<param>done[3]=true</param>
+							<condition>activity[11022].done[3]=[bool]false[default]false</condition>
+						</button>
+					</winHandler>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>openDialog</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<teleport id="1" name="后花园" pos="160,60" targetMapId="1230"/>
+		<teleport id="2" name="碧玉森林(虫)" pos="450,455" targetMapId="1190"/>
+	</entities>
+</map>
+

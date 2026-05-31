@@ -21,6 +21,7 @@ public class DialogInfo
     
 
     [XmlAttribute] public string name;
+    [XmlElement("gif")] public AnimInfo gifInfo;
     [XmlElement("content")] public string rawContent;
     public string content => GetContent();
 

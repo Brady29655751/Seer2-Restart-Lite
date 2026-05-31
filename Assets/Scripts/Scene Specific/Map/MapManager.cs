@@ -11,6 +11,7 @@ public class MapManager : Manager<MapManager>
     [SerializeField] private MapSceneController sceneController;
     [SerializeField] private MapUIController UIController;
     [SerializeField] private MapPlantController plantController;
+    [SerializeField] private MapAnimalController animalController;
 
     private void Start()
     {
@@ -23,6 +24,7 @@ public class MapManager : Manager<MapManager>
         LoadMap();
         LoadPlayer();
         SetPlantPanelActive(false);
+        SetAnimalPanelActive(false);
     }
 
     private void LoadMap()
@@ -58,9 +60,26 @@ public class MapManager : Manager<MapManager>
             Player.SetSceneData("seed", 0);
     }
 
-    public void RefreshPlantPanel()
+    public void SetAnimalPanelActive(bool active)
     {
-        plantController?.Refresh();
+        animalController?.gameObject.SetActive(active);
     }
 
+    public void RefreshPlantPanel(Item seed = null)
+    {
+        plantController?.Refresh();
+        if (seed == null)
+            return;
+
+        plantController?.OnSelectSeed(seed);
+    }
+
+    public void RefreshAnimalPanel(Item animal = null)
+    {
+        animalController?.Refresh();
+        if (animal == null)
+            return;
+        
+        animalController?.OnSelectAnimal(animal);
+    }
 }

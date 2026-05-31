@@ -25,7 +25,23 @@ public class AnimInfo
     [XmlAttribute("scale")] public string scale;
     [XmlAttribute("rotation")] public string npcRotation = "0,0,0";
 
+    public string gifPath => GetGifPath();
     public Vector3 animPos => string.IsNullOrEmpty(pos) ? new Vector3(0, 0, 1) : new Vector3(pos.ToVector2().x, pos.ToVector2().y, 1);
     public Vector3 animScale => string.IsNullOrEmpty(scale) ? Vector3.one : new Vector3(scale.ToVector2().x, scale.ToVector2().y, 1);
     public Quaternion animRot => npcRotation.ToQuaternion();
+
+    public string GetGifPath() 
+    {
+        if (string.IsNullOrEmpty(id))
+            return null;
+
+        var path = id;
+        if (!id.EndsWith(".gif"))
+            path += ".gif";
+
+        if (!id.StartsWith("Mod/"))
+            path = $"Resources/{path}";
+
+        return path;
+    }
 }

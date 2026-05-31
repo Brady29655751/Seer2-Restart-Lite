@@ -49,9 +49,9 @@ public class WorkshopPetAdvanceModel : Module
     public void SetPetFeatureInfo(int baseId, PetFeatureInfo featureInfo) {
         baseIdInputField.SetInputString(baseId.ToString());
         featureInputField.SetInputString(featureInfo.feature.name);
-        featureDescriptionInputField.SetInputString(featureInfo.feature.description);
+        featureDescriptionInputField.SetInputString(featureInfo.feature.rawDescription.Replace("[ENDL]", "\n"));
         emblemInputField.SetInputString(featureInfo.emblem.name);
-        emblemDescriptionInputField.SetInputString(featureInfo.emblem.description);
+        emblemDescriptionInputField.SetInputString(featureInfo.emblem.rawDescription.Replace("[ENDL]", "\n"));
     }    
 
     public void SetPetExpInfo(PetExpInfo expInfo) {

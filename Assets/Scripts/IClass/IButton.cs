@@ -13,7 +13,7 @@ public class IButton : IMonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     protected Image _image = null;
     protected Button _button = null;
 
-    public RectTransform rect => image.rectTransform;
+    public RectTransform rect => image?.rectTransform;
     public Image image => _image ??= gameObject.GetComponent<Image>();
     public Button button => _button ??= gameObject.GetComponent<Button>();
     public Vector3 initPos { get; protected set; }
@@ -191,11 +191,17 @@ public class IButton : IMonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 
     public virtual void SetPosition(Vector2 pos)
     {
+        if (rect == null)
+            return;
+        
         rect.anchoredPosition = pos;
     }
 
     public virtual void SetPosition(int pos, RectTransform.Axis axis)
     {
+        if (rect == null)
+            return;
+
         if (axis == RectTransform.Axis.Horizontal)
         {
             rect.anchoredPosition = new Vector2(pos, rect.anchoredPosition.y);
@@ -208,14 +214,29 @@ public class IButton : IMonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 
     public virtual void SetSize(Vector2 size)
     {
+        if (rect == null)
+            return;
+        
         rect.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, size.x);
         rect.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, size.y);
     }
 
     public virtual void SetSprite(Sprite sprite)
     {
-        image.sprite = sprite;
+        if (image == null)
+            return;
+
+        image.SetSprite(sprite);
     }
+
+    public virtual void SetColor(Color color)
+    {
+        if (image == null)
+            return;
+
+        image.color = color;
+    }
+
     public virtual void SetBGM(AudioClip bgm)
     {
         AudioSystem.instance.PlayMusic(bgm);
@@ -223,7 +244,10 @@ public class IButton : IMonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 
     public virtual void SetMaterial(Material material)
     {
-        image?.SetMaterial(material);
+        if (image == null)
+            return;
+        
+        image.SetMaterial(material);
     }
 
     public virtual void SetCallback(Action callback, string type = "click")

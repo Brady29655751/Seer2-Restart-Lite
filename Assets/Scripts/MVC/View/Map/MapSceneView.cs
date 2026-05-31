@@ -17,6 +17,7 @@ public class MapSceneView : UIModule
     private Map lastMap => Player.instance.lastMap;
     private Dictionary<int, NpcController> npcDict = new Dictionary<int, NpcController>();
     private Dictionary<int, NpcController> farmDict = new Dictionary<int, NpcController>();
+    private Dictionary<int, NpcController> animalDict = new Dictionary<int, NpcController>();
     private Dictionary<int, GameObject> teleportDict = new Dictionary<int, GameObject>();
 
     public Vector2 GetCanvasSize()
@@ -83,11 +84,15 @@ public class MapSceneView : UIModule
     public void SetEntites(MapEntities entities)
     {
         SetFarm(entities.farms);
+        SetAnimal(entities.animals);
         SetNpc(entities.npcs);
         SetTeleport(entities.teleports);
 
         if (!ListHelper.IsNullOrEmpty(entities.farms))
-            StartCoroutine(CheckPlantRipeCoroutine());
+            StartCoroutine(CheckPlantCoroutine());
+
+        if (!ListHelper.IsNullOrEmpty(entities.animals))
+            StartCoroutine(CheckAnimalCoroutine());
     }
 
     public void SetNpc(List<NpcInfo> infos)
@@ -124,30 +129,130 @@ public class MapSceneView : UIModule
         }
     }
 
-    private IEnumerator CheckPlantRipeCoroutine()
+    public void SetAnimal(List<NpcInfo> infos)
     {
-        var activity = Activity.Find("farm");
+        if (ListHelper.IsNullOrEmpty(infos))
+            return;
+
+        foreach (var npcInfo in infos)
+        {
+            var prefab = RM.GetPrefab("Map/Npc");
+            GameObject obj = Instantiate(prefab, transform);
+            NpcController npc = obj.GetComponent<NpcController>();
+            NpcHandler.CreateAnimal(npc, npcInfo, npcDict, infoPrompt);
+            animalDict.Add(npcInfo.id, npc);
+        }
+    }
+
+    private IEnumerator CheckPlantCoroutine()
+    {
         while (true)
         {
             foreach (var land in farmDict)
             {
                 var id = land.Key;
                 var npc = npcDict.Get(id + 100);
-                var plant = activity.GetData("land[" + id + "].plant", "none");
-                var isPlantGrowing = int.TryParse(plant, out var plantId);
+                var plant = Plant.LoadData(id);
+
+                if (Plant.IsNullOrEmpty(plant))
+                {
+                    npc.SetColor(Color.clear);
+                }
+                else
+                {
+                    var icon = plant.GetIcon(out var size, out var posOffset);
+                    npc.SetSprite(icon);
+                    npc.SetColor(Color.white);
+                    npc.SetRect(npc.GetInfo().pos + posOffset, size, Quaternion.identity);   
+                }
+
+                /*
+                var plantExpr = activity.GetData("land[" + id + "].plant", "none");
+                var isPlantGrowing = int.TryParse(plantExpr, out var plantId);
+                
+                var plant = Item.GetItemInfo(plantId);
+                var date = isPlantGrowing ? DateTime.Parse(activity.GetData("land[" + id + "].date[ripe]", DateTime.MaxValue.ToString())) : DateTime.MaxValue;
+                var ripe = DateTime.Now >= date;
+                
+                var seedId = int.Parse(plant?.options.Get("seed", "600000") ?? "600000");
+                var seed = Item.GetItemInfo(seedId);
+
+                var item = ripe ? plant : seed;
+                var size = Vector2.one * 50;
+                var sizeOffset = Vector2.zero;
+
+                var icon = ripe ? plantId : seedId;
+                var overrideIcon = seed.effects.Find(x => x.abilityOptionDict.ContainsKey("icon"));
+
                 if (isPlantGrowing)
                 {
-                    var item = Item.GetItemInfo(plantId);
-                    var date = DateTime.Parse(activity.GetData("land[" + id + "].date[ripe]", DateTime.MaxValue.ToString()));
-                    var ripe = DateTime.Now >= date;
-                    var icon = ripe ? plantId : int.Parse(item.options.Get("seed", "600000"));
-                    npc.SetIcon((ItemInfo.IsMod(icon) ? "Mod/" : string.Empty) + "Items/" + icon);
+                    if (overrideIcon != null)
+                    {
+                        var iconList = overrideIcon.abilityOptionDict.Get("icon").ToIntList('/');
+                        var iconId = iconList.Last();
+                        if (!ripe)
+                        {
+                            var growth = 1 - (date - DateTime.Now) / TimeSpan.Parse(seed.options["time"]);
+                            int index = (int)(growth * (iconList.Count - 1));
+                            if (index >= (iconList.Count - 1))
+                                index = iconList.Count - 1;
+                            
+                            iconId = iconList[index];
+                        }
+                        var sprite = ResourceManager.instance.GetLocalAddressables<Sprite>($"Maps/plant/{iconId}", ItemInfo.IsMod(iconId));
+                        size = sprite?.texture.GetTextureSize() ?? size;
+                        sizeOffset = overrideIcon.abilityOptionDict.Get("offset")?.ToVector2(sizeOffset, '/') ?? sizeOffset;
+                        npc.SetSprite(sprite);
+                    }
+                    else
+                    {
+                        npc.SetIcon((ItemInfo.IsMod(icon) ? "Mod/" : string.Empty) + "Items/" + icon);
+                    }   
                 }
+
+                var pos = npc.GetInfo().pos + new Vector2((50 - size.x) / 2, 0) + sizeOffset;
+
                 npc.SetColor(isPlantGrowing ? Color.white : Color.clear);
+                npc.SetRect(pos, size, Quaternion.identity);
+                */
             }
             yield return null;
         }
     }
+
+    private IEnumerator CheckAnimalCoroutine()
+    {
+        while (true)
+        {
+            foreach (var land in animalDict)
+            {
+                var id = land.Key;
+                var npc = land.Value;
+                var animal = Animal.LoadData(id);
+
+                if (Animal.IsNullOrEmpty(animal))
+                {
+                    npc.SetColor(Color.clear);
+                }
+                else
+                {
+                    var icon = animal.GetIcon();
+                    npc.SetSprite(icon);
+                    npc.SetColor(Color.white);
+                    npc.SetSize(icon?.texture.GetTextureSize() ?? Vector2.zero);
+                    /*
+                    var gif = animal.GetGifUrl("front");
+                    if (!string.IsNullOrEmpty(gif))
+                    {
+                        npc.SetGif(new AnimInfo(){ id = gif });
+                    }
+                    */
+                }
+            }
+            yield return null;
+        }   
+    }
+
 
     public void SetTeleport(List<TeleportInfo> infos)
     {

@@ -19,6 +19,7 @@ public class SpriteKingPanel : Panel
     public override void Init()
     {
         base.Init();
+        selectBlockViews.ForEach(x => x.InitButtonAndIconSize());
         ShowLight();
     }
 

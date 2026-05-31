@@ -9,7 +9,8 @@ public class NpcController : Module
     [SerializeField] private NpcModel npcModel;
     [SerializeField] private NpcView npcView;
 
-    public NpcInfo GetInfo() {
+    public NpcInfo GetInfo()
+    {
         return npcModel.npcInfo;
     }
 
@@ -23,52 +24,79 @@ public class NpcController : Module
         gameObject.SetActive(active);
     }
 
-    public void SetNpcInfo(NpcInfo info) {
+    public void SetNpcInfo(NpcInfo info)
+    {
         npcModel.SetNpcInfo(info);
         npcView.SetNpcInfo(info);
     }
 
-    public void SetIcon(string resId) {
+    public void SetIcon(string resId)
+    {
         npcView.SetIcon(resId);
     }
 
-    public void SetSprite(Sprite sprite) {
+    public void SetSprite(Sprite sprite)
+    {
         npcView.SetSprite(sprite);
     }
 
-    public void SetPosition(Vector2 pos) {
+    public void SetAnim(string animId)
+    {
+        npcView.SetAnim(animId);
+    }
+
+    public void SetGif(AnimInfo gifInfo)
+    {
+        npcView.SetGif(gifInfo);
+    }
+
+    public void SetPosition(Vector2 pos)
+    {
         npcView.SetPosition(pos);
     }
 
-    public void SetRotation(Vector3 rotation) {
+    public void SetRotation(Vector3 rotation)
+    {
         npcView.SetRotation(rotation);
     }
 
-    public void SetRect(Vector2 pos, Vector2 size, Quaternion rotation) {
+    public void SetSize(Vector2 size)
+    {
+        npcView.SetSize(size);
+    }
+
+    public void SetRect(Vector2 pos, Vector2 size, Quaternion rotation)
+    {
         npcView.SetRect(pos, size, rotation);
     }
 
-    public void SetColor(Color color) {
+    public void SetColor(Color color)
+    {
         npcView.SetColor(color);
     }
 
-    public void SetName(string name) {
+    public void SetName(string name)
+    {
         npcView.SetName(name);
     }
 
-    public void SetNamePos(Vector2 pos) {
+    public void SetNamePos(Vector2 pos)
+    {
         npcView.SetNamePos(pos);
     }
 
-    public void SetNameSize(int size) {
+    public void SetNameSize(int size)
+    {
         npcView.SetNameSize(size);
     }
 
-    public void SetNameColor(Color nameColor) {
+    public void SetNameColor(Color nameColor)
+    {
         npcView.SetNameColor(nameColor);
     }
 
-    public void SetNameFont(string fontOption) {
+    public void SetNameFont(string fontOption)
+    {
         npcView.SetNameFont(fontOption);
     }
 
@@ -82,19 +110,27 @@ public class NpcController : Module
         npcView.SetAction(this, npcList, infoPrompt);
     }
 
-    public void SetFarmAction(Dictionary<int, NpcController> npcList, InfoPrompt infoPrompt) {
+    public void SetFarmAction(Dictionary<int, NpcController> npcList, InfoPrompt infoPrompt)
+    {
         npcView.SetFarmAction(this, npcList, infoPrompt);
+    }
+
+    public void SetAnimalAction(Dictionary<int, NpcController> npcList, InfoPrompt infoPrompt)
+    {
+        npcView.SetAnimalAction(this, npcList, infoPrompt);
     }
 
     public void SetBGM(string bgm)
     {
-        ResourceManager.instance.GetLocalAddressables<AudioClip>("BGM/" + bgm, onSuccess: (audioClip) => {
+        ResourceManager.instance.GetLocalAddressables<AudioClip>("BGM/" + bgm, onSuccess: (audioClip) =>
+        {
             if (audioClip != null)
                 npcView.SetBGM(audioClip);
         });
     }
 
-    public void Shoot() {
+    public void Shoot()
+    {
         if (!Player.instance.isShootMode)
             return;
 

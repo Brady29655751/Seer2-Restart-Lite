@@ -1,12 +1,138 @@
-<map name="虫蚀氏族主城"  category="12"  id="1210">
+<map name="虫蚀氏族主城"  category="12"  id="1210" weather="100012">
 	<!-- <resource>10011</resource> -->
 	<initialPoint>670,100</initialPoint>
 	<music category="12">
 		<bgm>BGM_1210</bgm>
 	</music>
 	<entities>
+		<npc id="121001" resId="121001" name="黑桃皇后" size="67,93" pos="295,225" namePos="0,-5">
+			<description>哦吼吼吼</description>
+			<dialog>
+				<branch id="default" name="黑桃皇后" icon="121001" size="67,93" pos="0,55">
+					<content><![CDATA[红心和梅花居然敢背叛我（概率触发捕捉事件）]]></content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[你和黑桃扑克是什么关系]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+						<reply type="click">
+							<description><![CDATA[挑战雨林巨蚊军团]]></description>
+							<action>battle</action>
+							<param>default</param>
+						</reply>
+					</replyHandler>
+				</branch>
+				<branch id="reward" name="黑桃皇后" icon="121001" size="67,93" pos="0,55">
+					<content><![CDATA[巨蚊迷上了你的血液，呵呵呵...]]></content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[我从不捐血]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+						<reply type="click">
+							<description><![CDATA[捐血一袋，救蚊一命]]></description>
+							<action>battle</action>
+							<param>capture</param>
+						</reply>
+					</replyHandler>
+				</branch>
+			</dialog>
+			<battle>
+				<branch id="default">
+					<settings count="6">
+						<initBuff>(field:600012)</initBuff>
+					</settings>
+					<enemy>
+						<pet id="468" level="95">
+							<loopSkill>14488,14484,14484,14484</loopSkill>
+							<superSkill>14486</superSkill>
+						</pet>
+						<pet id="468" level="96">
+							<loopSkill>14488,14484,14484,14484</loopSkill>
+							<superSkill>14486</superSkill>
+						</pet>
+						<pet id="468" level="97">
+							<loopSkill>14488,14484,14484,14484</loopSkill>
+							<superSkill>14486</superSkill>
+						</pet>
+						<pet id="468" level="98">
+							<loopSkill>14488,14484,14484,14484</loopSkill>
+							<superSkill>14486</superSkill>
+						</pet>
+						<pet id="468" level="99">
+							<loopSkill>14488,14484,14484,14484</loopSkill>
+							<superSkill>14486</superSkill>
+						</pet>
+						<pet id="468" level="100">
+							<loopSkill>14488,14484,14484,14484</loopSkill>
+							<superSkill>14486</superSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setItem</action>
+							<param>add</param>
+							<param>10201,3</param>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=3个砂糖甜饼已经放入背包</param>
+							<param>item_icon=item[10201]</param>
+							<param>option_num=1</param>
+						</button>
+						<button type="auto">
+							<action>openDialog</action>
+							<param>reward</param>
+							<condition>random[old]&lt;5</condition>
+						</button>
+					</winHandler>
+				</branch>
+				<branch id="capture">
+					<settings count="1" capture="true">
+						<initBuff>(field:600012)</initBuff>
+					</settings>
+					<enemy>
+						<pet id="468" level="95">
+							<loopSkill>14488,14484,14484,14484,14484,-4</loopSkill>
+						</pet>
+					</enemy>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>openDialog</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<npc id="121002" resId="Pets/pet/1261" name="黑桃扑克" size="113,120" pos="140,125" rotation="0,180,0" namePos="0,-5" />
+		<npc id="121003" resId="Pets/pet/1262" name="方块扑克" size="78,113" pos="465,220" namePos="0,-5">
+			<dialog>
+				<branch id="default" name="方块扑克" icon="Pets/pet/1262" size="78,113" pos="0,55">
+					<content><![CDATA[别看黑桃扑克一脸正经，其实他在打瞌睡，所以没法和他互动]]></content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[难绷]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+					</replyHandler>
+				</branch>
+			</dialog>
+			<eventHandler>
+				<button type="click">
+					<action>openDialog</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
 		<teleport id="1" name="虫林小径" pos="260,60" targetMapId="1200"/>
 		<teleport id="2" name="虫穴地牢" pos="760,200" targetMapId="1220"/>
+		<teleport id="3" name="后花园" pos="540,225" targetMapId="1230"/>
 	</entities>
 </map>
 

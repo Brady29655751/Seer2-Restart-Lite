@@ -16,6 +16,7 @@ public class NpcInfo
     public Sprite icon => GetIcon(resId);
     public GameObject anim => GetAnim(animInfo?.id);
     [XmlElement("anim")] public AnimInfo animInfo;
+    [XmlElement("gif")] public AnimInfo gifInfo;
 
     [XmlAttribute] public string name;
     [XmlElement] public string description;

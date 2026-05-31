@@ -6,6 +6,7 @@
 	</music>
 	<entities>
         <npc id="40401" resId="Pets/pet/127.png" name="Lv 70 卡尼娅" size="110,133" pos="455,300">
+			<anim id="Pets/anim/127" pos="-1,1.2" scale="1,1" />
 			<description>SPT</description>
 			<dialog>
 				<branch id="default" name="卡尼娅" icon="Pets/pet/127.png" size="110,133" pos="10,35">
@@ -36,7 +37,6 @@
 							<action>battle</action>
 							<param>challenge_2</param>
 						</func>
-						<!--
 						<func type="click">
 							<description><![CDATA[超进化挑战]]></description>
 							<action>battle</action>
@@ -50,15 +50,56 @@
 							<param>content=把卡尼娅设为首发之后再来挑战吧</param>
 							<param>option_num=1</param>
 							<param>item_icon=pet[127]</param>
-							<condition>firstPet.idNOT126</condition>
+							<condition>firstPet.idNOT127</condition>
 						</func>
-						-->
 					</functionHandler>
 					<replyHandler>
 						<reply type="click">
 							<description><![CDATA[我不畏风雪，奋勇前行]]></description>
 							<action>openDialog</action>
 							<param>null</param>
+						</reply>
+						<reply type="click">
+							<description><![CDATA[▼ 下一页]]></description>
+							<action>openDialog</action>
+							<param>evolve</param>
+						</reply>
+					</replyHandler>
+				</branch>
+				<branch id="evolve" name="卡尼娅" icon="Pets/pet/127.png" size="110,133" pos="10,35">
+					<content><![CDATA[暴风雪将永无止境，如同汝等的贪婪一般]]></content>
+					<functionHandler>
+						<func type="click">
+							<description><![CDATA[神迹觉醒]]></description>
+							<action>battle</action>
+							<param>miracle</param>
+						</func>
+						<func type="click">
+							<description><![CDATA[常态神迹]]></description>
+							<action>battle</action>
+							<param>resident_miracle</param>
+							<condition>firstPet.id=739</condition>
+						</func>
+						<func type="branch">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=把神迹卡尼娅设为首发之后再来挑战吧</param>
+							<param>option_num=1</param>
+							<param>item_icon=pet[739]</param>
+							<condition>firstPet.idNOT739</condition>
+						</func>
+					</functionHandler>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[我不畏风雪，奋勇前行]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+						<reply type="click">
+							<description><![CDATA[▲ 上一页]]></description>
+							<action>openDialog</action>
+							<param>default</param>
 						</reply>
 					</replyHandler>
 				</branch>
@@ -292,33 +333,33 @@
 						</button>
 					</winHandler>
 				</branch>
-				<!--
 				<branch id="evolve">
-					<settings count="1">
+					<settings count="1" item="false">
 						<mode>3</mode>
-						<weather>2</weather>
+						<weather>4</weather>
 					</settings>
 					<enemy>
-						<pet id="692" level="105">
+						<pet id="698" level="105">
 							<status>
 								<hp>2000</hp>
 							</status>
-							<initBuff>20</initBuff>
-							<loopSkill>10429,10430,10428,10426,10432</loopSkill>
+							<initBuff>13,14,17,78,420008,410011,-3119</initBuff>
+							<loopSkill>14497,14491,14494,14494,14499</loopSkill>
+							<superSkill>11259</superSkill>
 						</pet>
 					</enemy>
 					<winHandler>
 						<button type="auto">
 							<action>evolvePet</action>
-							<param>692</param>
+							<param>698</param>
 							<condition>activity[spt].done[north][7][evolve]=[bool]false[default]false</condition>
 						</button>
 						<button type="auto">
 							<action>openHintbox</action>
 							<param>type=Item</param>
 							<param>title=提示</param>
-							<param>content=阿卡纳斯已成功超进化</param>
-							<param>item_icon=pet[692]</param>
+							<param>content=卡尼娅已成功超进化</param>
+							<param>item_icon=pet[698]</param>
 							<param>option_num=1</param>
 							<condition>activity[spt].done[north][7][evolve]=[bool]false[default]false</condition>
 						</button>
@@ -330,7 +371,65 @@
 						</button>
 					</winHandler>
 				</branch>
-				-->
+				<branch id="miracle">
+					<settings count="6">
+						<mode>3</mode>
+						<weather>4</weather>
+						<initBuff>(rule:600000)</initBuff>
+					</settings>
+					<enemy>
+						<pet id="20013" level="105">
+							<status>
+								<hp>30000</hp>
+							</status>
+							<initBuff>-8,20,92,93,98,43,-3118,-3037,-3112,-3032,-3033,-3034,-3035,-3036,-2003</initBuff>
+							<loopSkill>14505,14506,14507</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=PetSelect</param>
+						    <param>title=选择要进化的暴雪女尼娅</param>
+						    <param>option_num=2</param>
+						    <param>callback=miracle</param>
+						</button>
+					</winHandler>
+				</branch>
+				<branch id="resident_miracle">
+					<settings count="1">
+						<mode>4</mode>
+						<weather>4</weather>
+					</settings>
+					<enemy>
+						<pet id="20009" level="105">
+							<status>
+								<hp>13500</hp>
+							</status>
+							<initBuff>12,97,14,17,20,99,71,-3112,-3120</initBuff>
+							<loopSkill>11494,11495,11498,11497</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setPet</action>
+							<param>maxLevel=105</param>
+							<param>level=105</param>
+						</button>
+						<button type="auto">
+							<action>evolvePet</action>
+							<param>20013</param>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=卡尼娅已常驻神迹形态</param>
+							<param>item_icon=pet[20013]</param>
+							<param>option_num=1</param>
+						</button>
+					</winHandler>
+				</branch>
 			</battle>
 			<eventHandler>
 				<button type="click">
@@ -353,6 +452,43 @@
 					<condition>activity[20009].done[404]=[bool]true[default]false</condition>
 				</button>
 			</eventHandler>
+			<callbackHandler>
+				<button type="miracle_choose">
+					<action>openHintbox</action>
+					<param>type=PetSelect</param>
+				    <param>title=选择要进化的暴雪女尼娅</param>
+				    <param>option_num=2</param>
+					<param>callback=miracle</param>
+				    <condition>data.PetSelect.uidNOT698|data.PetSelect.level&lt;100</condition>
+				</button>
+				<button type="miracle">
+				    <action>openHintbox</action>
+				    <param>type=Item</param>
+				    <param>title=提示</param>
+				    <param>content=必须选择等级100的暴雪女尼娅！</param>
+				    <param>item_icon=pet[698]</param>
+				    <param>option_num=1</param>
+					<param>callback=miracle_choose</param>
+				    <condition>data.PetSelect.uidNOT698|data.PetSelect.level&lt;100</condition>
+				</button>
+				<button type="miracle">
+				    <action>openHintbox</action>
+				    <param>type=Item</param>
+				    <param>title=提示</param>
+				    <param>content=暴雪女尼娅已成功神迹觉醒</param>
+				    <param>item_icon=pet[739]</param>
+				    <param>option_num=1</param>
+				    <condition>data.PetSelect.uid=698</condition>
+				    <condition>data.PetSelect.levelGTE100</condition>
+				</button>
+				<button type="miracle">
+				    <action>evolvePet</action>
+				    <param>index=data.PetSelectIndex</param>
+				    <param>739</param>
+				    <condition>data.PetSelect.uid=698</condition>
+				    <condition>data.PetSelect.levelGTE100</condition>
+				</button>
+			</callbackHandler>
 		</npc>
 		<teleport id="1" name="冰之谷" pos="350,150" targetMapId="401"/>
 

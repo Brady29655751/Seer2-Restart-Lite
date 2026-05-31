@@ -19,7 +19,7 @@ public class PetSelectBlockView : Module
     [SerializeField] private Sprite chosenFrameSprite;
     [SerializeField] private Sprite notChosenFrameSprite;
     [SerializeField] private Text nameText;
-    [SerializeField] private Image mask, icon, getMark;
+    [SerializeField] private Image mask, icon, frame, getMark;
     [SerializeField] private Text levelText;
     [SerializeField] private Text hpText;
     [SerializeField] private RectTransform hpBarRect;
@@ -94,6 +94,8 @@ public class PetSelectBlockView : Module
         if (isOverride)
             button.SetSprite(overrideFrameSprite);
 
+        button.SetColor(isOverride ? Color.clear : Color.white);
+        frame.SetSprite(overrideFrameSprite ?? SpriteSet.Empty);
         return isOverride;
     }
 

@@ -60,6 +60,11 @@ public class Item
         return linear?.Select(x => new Item(x.key, x.value)).ToList();
     }
 
+    public static bool IsNullOrEmpty(Item item)
+    {
+        return (item == null) || (item.num <= 0);
+    }
+
     public List<Effect> GetEffects()
     {
         var itemEffects = info.effects.Select(x => new Effect(x)).ToList();
@@ -99,6 +104,9 @@ public class Item
 
     public static void AddTo(Item item, List<Item> toWhichStorage)
     {
+        if (Item.IsNullOrEmpty(item))
+            return;
+
         var addItem = new Item(item.info.getId, item.num);
         int index = toWhichStorage.FindIndex(x => x.id == addItem.id);
         if (index != -1)
@@ -143,6 +151,9 @@ public class Item
 
     public static void Add(Item item)
     {
+        if (Item.IsNullOrEmpty(item))
+            return;
+
         var addItem = new Item(item.info.getId, item.num);
         int index = itemStorage.FindIndex(x => x.id == addItem.id);
         if (index != -1)

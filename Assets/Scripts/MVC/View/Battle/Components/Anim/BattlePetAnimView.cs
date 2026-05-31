@@ -167,6 +167,7 @@ public class BattlePetAnimView : BattleBaseView
         if (isSuperSkill)
             PlaySkillSound(sound);
 
+        #region play anim functions
         void PlayDefaultAnim()
         {
             string trigger = type switch
@@ -191,6 +192,56 @@ public class BattlePetAnimView : BattleBaseView
             skillAnim.anim.SetTrigger(trigger);   
         }
 
+        void PrepareVideoAnim()
+        {
+            videoPlayer.url = this.currentPet?.ui?.hitInfo?.GetVideoUrl(type);
+            videoPlayer.playbackSpeed = skillAnimSpeed;
+            videoRenderImage.texture = videoPlayer.targetTexture = RenderTexture.GetTemporary(1920, 1080);
+            videoRenderImage.color = Color.clear;
+            videoPlayer.Prepare();
+        }
+
+        void PlayVideoAnim()
+        {
+            void OnVideoEnd(VideoPlayer vp)
+            {
+                videoPlayer.loopPointReached -= OnVideoEnd;
+                videoRenderImage.color = Color.clear;
+                RenderTexture.ReleaseTemporary(videoPlayer.targetTexture);
+                OnPetEnd();
+            }
+            
+            _ = SetDelayCallback((int)(videoStartFrame * 1000 / (24 * skillAnimSpeed)), () =>
+            {
+                videoPlayer.loopPointReached += OnVideoEnd;
+                videoRenderImage.color = Color.white;
+                videoPlayer.Play();
+            });
+            
+            _ = SetDelayCallback((int)(hitFrame * 1000 / (24 * skillAnimSpeed)), () =>
+            {
+                // 若不為必殺技則擊中才有音效
+                if (!isSuperSkill)
+                    PlaySkillSound(sound);
+            
+                OnPetHit();
+            });
+        }
+
+        void PlayVideoOrDefaultAnim()
+        {
+            if (videoStartFrame >= 0)
+            {
+                PrepareVideoAnim();
+                PlayVideoAnim();
+            }
+            else
+            {
+                PlayDefaultAnim();   
+            }
+        }
+        #endregion
+
         GameObject tmp;
 
         //使用技能动画,或者是通用技能动画
@@ -200,7 +251,7 @@ public class BattlePetAnimView : BattleBaseView
             {
                 if (CurrentPetSkeletonAnim.FindAnimation(type) == null)
                 {
-                    PlayDefaultAnim();
+                    PlayVideoOrDefaultAnim();
                 }
                 else
                 {
@@ -239,11 +290,7 @@ public class BattlePetAnimView : BattleBaseView
 
                 if (videoStartFrame >= 0)
                 {
-                    videoPlayer.url = this.currentPet?.ui?.hitInfo?.GetVideoUrl(type);
-                    videoPlayer.playbackSpeed = skillAnimSpeed;
-                    videoRenderImage.texture = videoPlayer.targetTexture = RenderTexture.GetTemporary(1920, 1080);
-                    videoRenderImage.color = Color.clear;
-                    videoPlayer.Prepare();
+                    PrepareVideoAnim();
 
                     void OnVideoEnd(VideoPlayer vp)
                     {
@@ -290,43 +337,12 @@ public class BattlePetAnimView : BattleBaseView
             }
             else
             {
-                PlayDefaultAnim();
+                PlayVideoOrDefaultAnim();
             }
         }
-        else if (videoStartFrame >= 0)
+        else
         {
-            videoPlayer.url = this.currentPet?.ui?.hitInfo?.GetVideoUrl(type);
-            videoPlayer.playbackSpeed = skillAnimSpeed;
-            videoRenderImage.texture = videoPlayer.targetTexture = RenderTexture.GetTemporary(1920, 1080);
-            videoRenderImage.color = Color.clear;
-            videoPlayer.Prepare();
-
-            void OnVideoEnd(VideoPlayer vp)
-            {
-                videoPlayer.loopPointReached -= OnVideoEnd;
-                videoRenderImage.color = Color.clear;
-                RenderTexture.ReleaseTemporary(videoPlayer.targetTexture);
-            }
-
-            _ = SetDelayCallback((int)(videoStartFrame * 1000 / (24 * skillAnimSpeed)), () =>
-            {
-                videoPlayer.loopPointReached += OnVideoEnd;
-                videoRenderImage.color = Color.white;
-                videoPlayer.Play();
-            });
-
-            _ = SetDelayCallback((int)(hitFrame * 1000 / (24 * skillAnimSpeed)), () =>
-            {
-                // 若不為必殺技則擊中才有音效
-                if (!isSuperSkill)
-                    PlaySkillSound(sound);
-
-                OnPetHit();
-            });
-        }
-        else  //为null,说明这个精灵没有动画,执行通用技能动画
-        {
-            PlayDefaultAnim();
+            PlayVideoOrDefaultAnim();
         }
 
         StartCoroutine(PreventAnimStuckCoroutine(24));

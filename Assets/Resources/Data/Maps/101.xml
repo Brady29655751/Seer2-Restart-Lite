@@ -1,4 +1,4 @@
-<map name="碧玉森林" category="2" id="101" weather="13">
+<map name="碧玉森林(草)" category="2" id="101" weather="13">
 	<!-- <resource>10010_1</resource> -->
 	<fightMap>100002</fightMap>
 	<initialPoint>450,150</initialPoint>
@@ -262,6 +262,13 @@
 			<dialog>
 				<branch id="default" name="【青蜂队长】巴卢特" icon="10101" size="80,126" pos="0,45">
 					<content><![CDATA[萨伦帝国将会踏平整个草目氏族！（击败获得精灵）]]></content>
+					<functionHandler>
+						<func type="click">
+							<description><![CDATA[超进化挑战]]></description>
+							<action>battle</action>
+							<param>evolve</param>
+						</func>
+					</functionHandler>
 					<replyHandler>
 						<reply type="click">
 							<description><![CDATA[好可怕阿！]]></description>
@@ -402,6 +409,43 @@
 						</button>
 					</winHandler>
 				</branch>
+				<branch id="evolve">
+					<settings count="2" parallel="2" star="4">
+						<weather>13</weather>
+					</settings>
+					<enemy>
+						<pet id="613" level="100">
+							<status>
+								<atk>600</atk>
+								<mat>600</mat>
+								<def>1200</def>
+								<mdf>1200</mdf>
+								<hp>10000</hp>
+							</status>
+							<initBuff>13,14,17,99,3143,410010</initBuff>
+							<loopSkill>14447,14448,14449,14451,14454</loopSkill>
+						</pet>
+						<pet id="736" level="100">
+							<status>
+								<atk>600</atk>
+								<mat>600</mat>
+								<def>1200</def>
+								<mdf>1200</mdf>
+								<hp>30000</hp>
+							</status>
+							<initBuff>13,14,17,99,3625,410010</initBuff>
+							<loopSkill>14458,14463,14456,14462,14464</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setItem</action>
+							<param>add_with_hint</param>
+							<param>320613,1</param>
+							<param>320736,1</param>
+						</button>
+					</winHandler>
+				</branch>
 			</battle>
 			<eventHandler>
 				<button type="click">
@@ -417,5 +461,6 @@
 			</eventHandler>
 		</npc>
 		<teleport id="1" name="信奉广场" pos="220,165" targetMapId="100"/>
+		<teleport id="2" name="碧玉森林(虫)" pos="735,180" targetMapId="1190"/>
 	</entities>		
 </map>

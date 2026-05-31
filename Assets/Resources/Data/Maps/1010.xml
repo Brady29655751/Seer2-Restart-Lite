@@ -1,0 +1,47 @@
+<map name="普兰特牧场" category="9" id="1010">
+	<fightMap>100011</fightMap>
+	<music category="9">
+		<bgm>BGM_1000</bgm>
+	</music>
+	<initialPoint>380,110</initialPoint>
+	<entities>
+		<npc id="101001" resId="1001" name="饲料区" size="150,150" pos="130,290" namePos="0,-45" color="0,0,0,0">
+			<description>饲料区</description>
+			<eventHandler>
+				<button type="click">
+					<action>openPanel</action>
+					<param>ItemBag</param>
+					<param>title=牧 场 饲 料</param>
+					<param>item=611001/611024/420001/7004/7005/7008</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<npc id="101002" resId="1001" name="牧场仓库" size="200,200" pos="520,270" namePos="-20,-122.5" color="0,0,0,0">
+			<description>牧场仓库</description>
+			<eventHandler>
+				<button type="click">
+					<action>openPanel</action>
+					<param>ItemBag</param>
+					<param>title=牧 场 仓 库</param>
+					<param>item=670001/410001</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<!--
+		<npc id="101003" resId="1001" name="管理动物" size="170,100" pos="75,50" namePos="2.5,-72.5" color="0,0,0,0">
+			<description>管理动物</description>
+			<eventHandler>
+				<button type="click">
+					<action>setNpcParam</action>
+					<param>animal</param>
+					<param>active=true</param>
+				</button>
+			</eventHandler>
+		</npc>
+
+		<animal id="101101" resId="99002" name="" size="99,42" pos="240,205" />
+		-->
+
+		<teleport id="1" name="普兰特山脚" pos="60,260" color="0,127,255,255" targetMapId="990"/>
+	</entities>
+</map>

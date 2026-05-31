@@ -129,7 +129,7 @@ public class PetDemoView : Module
 
     public void SetFeatureInfoPromptContent(Feature feature)
     {
-        string text = feature.description;
+        string text = Buff.GetBuffDescriptionPreview(feature.rawDescription, Buff.GetFeatureBuff(currentPet));
         infoPrompt.SetInfoPromptWithAutoSize(text, TextAnchor.MiddleLeft);
         if (featurePromptLeft)
         {
@@ -160,7 +160,7 @@ public class PetDemoView : Module
         if (emblem == null)
             return;
 
-        string text = emblem.description;
+        string text = Buff.GetBuffDescriptionPreview(emblem.rawDescription, Buff.GetEmblemBuff(currentPet));
         infoPrompt.SetInfoPromptWithAutoSize(text, TextAnchor.MiddleLeft);
     }
 

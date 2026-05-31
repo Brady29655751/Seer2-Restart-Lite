@@ -12,11 +12,11 @@
 					<content><![CDATA[普兰特山麓有很多值得研究的珍惜植被。]]></content>
 					<functionHandler>
 						<func>
-							<description><![CDATA[购买肥料]]></description>
+							<description><![CDATA[购买种子]]></description>
 							<action>openPanel</action>
 							<param>ItemShop</param>
 							<param>mode=buy</param>
-							<param>item=630001/630002/630003</param>
+							<param>item=(type[seed]:1)(idNOT610000)(id&gt;0)</param>
 							<param>currency=1/2</param>
 						</func>
 						<func>
@@ -32,7 +32,7 @@
 							<action>openPanel</action>
 							<param>ItemShop</param>
 							<param>mode=buy</param>
-							<param>item=22009/23001</param>
+							<param>item=630001/630002/630003/22009/23001</param>
 							<param>currency=1/2</param>
 						</func>
 					</functionHandler>

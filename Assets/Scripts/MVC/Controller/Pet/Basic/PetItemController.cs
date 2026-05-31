@@ -7,6 +7,7 @@ using UnityEngine;
 public class PetItemController : Module
 {
     private PetBagMode mode = PetBagMode.Normal;
+    [SerializeField] private bool defaultSelect = true;
     [SerializeField] private PetItemModel itemModel;
     [SerializeField] private PetItemView itemView;
     [SerializeField] private PageView pageView;
@@ -77,7 +78,7 @@ public class PetItemController : Module
     private void OnSelectItemUsedNum(Item item) {
         SelectNumHintbox ihb = Hintbox.OpenHintbox<SelectNumHintbox>();
         ihb.SetTitle(item.name);
-        ihb.SetContent(item.info.effectDescription, 14, FontOption.Arial);
+        ihb.SetContent(item.info.GetEffectDescription(false), 14, FontOption.Arial);
         ihb.SetIcon(item.icon);
         ihb.SetMinValue(1);
         ihb.SetMaxValue(Mathf.Min(item.num, item.GetMaxUseCount(itemModel.currentPet, null), 999));
@@ -104,7 +105,8 @@ public class PetItemController : Module
     public void OnItemSetPage() {
         itemView.SetItems(itemModel.selections.ToList());
         pageView?.SetPage(itemModel.page, itemModel.lastPage);
-        Select(0);
+        if (defaultSelect)
+            Select(0);
     }
 
     public void SetPage(int index) {
