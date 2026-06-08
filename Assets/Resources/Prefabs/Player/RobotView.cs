@@ -45,11 +45,10 @@ using UnityEngine.UI;
                 Sprite directionSprite = GetPlayerDirectionSprite(lastDirection);
                 if (directionSprite != null) {
                     playerImage?.SetSprite(directionSprite); 
-                    playerRect.localScale = new Vector3((lastDirection.x < 0) ? 1 : -1, 1, 1);
+                    FlipHorizontal(lastDirection.x < 0);
                 }
                 
                 playerImage.SetNativeSize();
-                playerNameText.rectTransform.localScale = this.playerRect.localScale;
 
                 lastDirection = dir;
                 return;
@@ -58,7 +57,7 @@ using UnityEngine.UI;
             {
                 if (direction[2] || direction[3])
                 {
-                    this.playerRect.localScale = new Vector3(direction[2] ? 1 : -1, 1, 1);
+                    FlipHorizontal(direction[2]);
                     animationController.Play("SidelongBack");
                 }else
                 {
@@ -68,7 +67,7 @@ using UnityEngine.UI;
             {
                 if (direction[2] || direction[3])
                 {
-                    this.playerRect.localScale = new Vector3(direction[2] ? 1 : -1, 1, 1);
+                    FlipHorizontal(direction[2]);
                     animationController.Play("Sidelong");
                 }
                 else
@@ -78,11 +77,9 @@ using UnityEngine.UI;
             }
             else
             {
-                this.playerRect.localScale = new Vector3(direction[2] ? 1 : -1, 1, 1);
+                FlipHorizontal(direction[2]);
                 animationController.Play("LeftRight");
             }
-            playerNameText.rectTransform.localScale = this.playerRect.localScale;
-            achievementText.rectTransform.localScale = this.playerRect.localScale;
             playerImage.SetNativeSize();
 
             lastDirection = dir;
