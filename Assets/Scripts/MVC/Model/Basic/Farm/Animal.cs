@@ -24,16 +24,18 @@ public class Animal
 
     public TimeSpan RipeTime => TimeSpan.Parse(ChildInfo.options.Get("time", "00:00:00"));
     public TimeSpan LeftTime => IsRiped ? TimeSpan.Zero : (ripeDate - DateTime.Now);
-    public DateTime LastProduceDate => (lastProduceDate < ripeDate) ? ripeDate : lastProduceDate;
+    public DateTime LastProduceDate => ((id != 0) && (lastProduceDate < BirthDate)) ? BirthDate : lastProduceDate;
     public DateTime BirthDate => ripeDate - RipeTime;
 
     public string ProductNumRange => AnimalInfo.options.Get("num", "1");
-    public string ProduceEachRange => AnimalInfo.options.Get("product.each", "1");
+    public string ProduceEachRange => AnimalInfo.options.Get("productEach", "1");
     public int ProductLeft => productAll - productBorned;
 
-    public LandType HomeType => (LandType)int.Parse(ChildInfo.options.Get("landType", "0"));
+    public LandType AnimalLandType => ChildInfo.options.Get("landType", "land").ToLandType();
+    public float WalkSpeed => float.Parse(ChildInfo.options.Get("walk", "5"));
     public string Adjective => AnimalInfo.options.Get("adj", "普通的");
     public bool IsRiped => DateTime.Now >= ripeDate;
+    public bool IsFollowing => (Player.instance.follower != null) && (Player.instance.follower.landId == landId);
 
     public Sprite Icon => GetIcon();
 
@@ -106,20 +108,6 @@ public class Animal
         return true;   
     }
 
-    public static Animal Harvest(int landId)
-    {
-        var animal = Animal.LoadData(landId);
-        var name = animal.Name;
-        var specialEffect = animal.AnimalInfo.effects.Find(x => x.abilityOptionDict.ContainsKey("animal"));
-        var harvest = new Item(animal.id, 1);
-
-        Animal.SaveData(Animal.DefaultAnimal(landId), false);
-        Item.Add(harvest);
-        Item.OpenHintbox(harvest);
-
-        return animal;
-    }
-
     public static bool IsNullOrEmpty(Animal animal)
     {
         return (animal == null) || (animal.AnimalInfo == null);
@@ -145,7 +133,7 @@ public class Animal
         this.id = id;
         this.landId = landId;
         this.ripeDate = (id == 0) ? DateTime.MaxValue : (DateTime.Now + RipeTime);
-        this.lastProduceDate = this.ripeDate;
+        this.lastProduceDate = DateTime.Today;
         this.productAll = (int)Identifier.GetNumIdentifier(ProductNumRange);
         this.productBorned = 0;
     }
@@ -185,49 +173,141 @@ public class Animal
         return IsRiped ? AnimalInfo.icon : ChildInfo.icon;
     }
 
-    public string GetGifUrl(string type)
+    private string GetGifUrl(string dirName, out float speed)
     {
+        speed = 1f;
+
         var overrideGif = ChildInfo?.effects.Find(x => x.abilityOptionDict.ContainsKey("gif"));
         if (overrideGif == null)
             return null;
         
         var gifList = overrideGif.abilityOptionDict.Get("gif").ToIntList('/');
+        var gifSpeed = overrideGif.abilityOptionDict.Get("gif_speed", "1").ToFloatList('/');
         var growth = GetGrowth(gifList.Count);
-        return $"Maps/animal/{gifList[growth]}/{type}";
+
+        speed = gifSpeed.Get(growth, gifSpeed.First());
+
+        return $"Maps/animal/{gifList[growth]}/{dirName}.gif";
+    }
+
+    public AnimInfo GetGifInfo(string dirName)
+    {
+        var gifUrl = GetGifUrl(dirName, out var speed);
+        if (string.IsNullOrEmpty(gifUrl))
+            return null;
+        
+        var animInfo = new AnimInfo()
+        {
+            id = gifUrl,
+            scale = "1,1",
+            size = "anim",
+            speed = $"{speed}",
+        };
+
+        if (SaveSystem.IsFileExists(animInfo.GifPath))
+            return animInfo;
+
+        dirName = dirName.Contains("right") ? dirName.Replace("right", "left") : dirName.Replace("left", "right");
+        gifUrl = GetGifUrl(dirName, out speed);
+        animInfo = new AnimInfo()
+        {
+            id = gifUrl,
+            scale = "-1,1",
+            size = "anim",
+            speed = $"{speed}",
+        };
+        return animInfo;
+    }
+
+    public void Release()
+    {
+        var hintbox = Hintbox.OpenHintboxWithContent($"确定要放生<color=#ffbb33>{Name}</color>吗？放生后无法恢复！", 14);
+        hintbox.SetOptionNum(2);
+        hintbox.SetOptionCallback(() =>
+        {
+            Animal.SaveData(Animal.DefaultAnimal(landId));
+            Hintbox.OpenHintboxWithContent($"已放生{Name}", 14); 
+        });
     }
 
     public bool Feed()
     {
         var feeder = Item.Find(FeedId);
         if (Item.IsNullOrEmpty(feeder))
+        {
+            Hintbox.OpenHintboxWithContent($"你没有<color=#ffbb33>{FeedInfo.name}</color>！\n先去购买饲料吧！", 14);
+            return false;   
+        }
+
+        if (LastProduceDate >= DateTime.Today)
+        {
+            Hintbox.OpenHintboxWithContent($"这只动物今天已经吃饱了！\n请明天再来！", 14);
             return false;
+        }
 
         Item.Remove(FeedId, 1);
         return true;
     }
 
-    public Item Produce(Action<Item> callback = null)
+    public Item Produce()
     {
         if (!IsRiped)
-            return null;
+        {
+            ripeDate -= Operator.Min(RipeTime / 8, TimeSpan.FromHours(2));
+            lastProduceDate = DateTime.Now;
+            Animal.SaveData(this);
+            return null;   
+        }
 
         if (ProductLeft <= 0)
-            return null;
+        {
+            Hintbox.OpenHintboxWithContent($"这只动物已经无法再生产了！\n直接捕获这只动物吧！", 14);
+            return null;   
+        }
 
-        var num = (int)Identifier.GetNumIdentifier(ProduceEachRange);
+        var num = Mathf.Clamp((int)Identifier.GetNumIdentifier(ProduceEachRange), 1, ProductLeft);
         var item = new Item(ProductId, num);
-        productBorned -= num;
+
+        productBorned += num;
         lastProduceDate = DateTime.Now;
-        Animal.SaveData(this, false);
-        callback?.Invoke(item);
+        Animal.SaveData(this);
+        Item.Add(item);
+        Item.OpenHintbox(item);
         return item;
     }
-}
 
-public enum LandType
-{
-    Land = 0,
-    Water = 1,
-    Insect = 2,
-    Egg = 3,
+    public Item Harvest()
+    {
+        if (!IsRiped)
+        {
+            Hintbox.OpenHintboxWithContent($"这只动物还没有成年，不可以收获哦！", 14);
+            return null;
+        }
+
+        var specialEffect = AnimalInfo.effects.Find(x => x.abilityOptionDict.ContainsKey("animal"));
+        var harvest = new Item(id, 1);
+
+        Animal.SaveData(Animal.DefaultAnimal(landId), false);
+        Item.Add(harvest);
+        ItemHintbox itemHintbox = Hintbox.OpenHintbox<ItemHintbox>();
+        itemHintbox.SetTitle("提示");
+        itemHintbox.SetContent($"{harvest.num}只{Adjective}{harvest.name}已经放入仓库", 14, FontOption.Arial);
+        itemHintbox.SetOptionNum(1);
+        itemHintbox.SetIcon(harvest.icon);
+        return harvest;
+    }
+
+    public void Follow()
+    {
+        Player.instance.follower = this;
+        PlayerController.instance.SetFollowerSprite();
+    }
+
+    public enum LandType
+    {
+        Land = 0,
+        Water = 1,
+        Insect = 2,
+        Egg = 3,
+    }
 }

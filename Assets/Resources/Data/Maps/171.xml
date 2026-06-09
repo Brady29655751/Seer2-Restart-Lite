@@ -364,16 +364,23 @@
 			<dialog>
 				<branch id="default" name="脉灵兽" icon="Pets/pet/982" size="132,90" pos="0,55">
 					<content><![CDATA[我是精灵王之血脉，水脉氏族不朽的守护者]]></content>
+					<functionHandler>
+						<func type="click">
+							<description><![CDATA[挑战脉灵兽]]></description>
+							<action>battle</action>
+							<param>default</param>
+						</func>
+						<func type="click">
+							<description><![CDATA[超进化]]></description>
+							<action>battle</action>
+							<param>evolve</param>
+						</func>
+					</functionHandler>
 					<replyHandler>
 						<reply type="click">
 							<description><![CDATA[脉灵兽居然被封印在此]]></description>
 							<action>openDialog</action>
 							<param>null</param>
-						</reply>
-						<reply type="click">
-							<description><![CDATA[挑战脉灵兽]]></description>
-							<action>battle</action>
-							<param>default</param>
 						</reply>
 					</replyHandler>
 				</branch>
@@ -433,6 +440,35 @@
 						</button>
 					</winHandler>
 				</branch>
+				<branch id="evolve">
+					<settings count="6">
+						<weather>2</weather>
+						<initBuff>(field:600002)</initBuff>
+						<limit>(elementNOT7)(elementNOT12)</limit>
+						<limitDesc><![CDATA[不可以使用<color=#ffbb33>电系</color>和<color=#ffbb33>特质系</color>精灵进行挑战哦！]]></limitDesc>
+					</settings>
+					<enemy>
+						<pet id="992" level="105">
+							<status>
+								<mat>1000</mat>
+								<spd>100</spd>
+								<hp>250000</hp>
+								<hit>500</hit>
+							</status>
+							<initBuff>12,13,14,99,20,-3123,57,-3122,-3062,-3112,-3082,97,93</initBuff>
+							<loopSkill>14578,14571,14572,14578,14570,14574</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="choose">
+							<action>openHintbox</action>
+							<param>type=PetSelect</param>
+						    <param>title=选择要进化的脉灵兽</param>
+						    <param>option_num=2</param>
+							<param>callback=evolve</param>
+						</button>
+					</winHandler>
+				</branch>
 			</battle>
 			<eventHandler>
 				<button type="click">
@@ -440,6 +476,43 @@
 					<param>default</param>
 				</button>
 			</eventHandler>
+			<callbackHandler>
+				<button type="choose">
+					<action>openHintbox</action>
+					<param>type=PetSelect</param>
+				    <param>title=选择要进化的脉灵兽</param>
+				    <param>option_num=2</param>
+					<param>callback=evolve</param>
+				    <condition>data.PetSelect.uidNOT982|data.PetSelect.level&lt;100</condition>
+				</button>
+				<button type="evolve">
+				    <action>openHintbox</action>
+				    <param>type=Item</param>
+				    <param>title=提示</param>
+				    <param>content=必须选择等级100的脉灵兽！</param>
+				    <param>item_icon=pet[982]</param>
+				    <param>option_num=1</param>
+					<param>callback=choose</param>
+				    <condition>data.PetSelect.uidNOT982|data.PetSelect.level&lt;100</condition>
+				</button>
+				<button type="evolve">
+				    <action>openHintbox</action>
+				    <param>type=Item</param>
+				    <param>title=提示</param>
+				    <param>content=脉灵兽已成功超进化</param>
+				    <param>item_icon=pet[992]</param>
+				    <param>option_num=1</param>
+				    <condition>data.PetSelect.uid=982</condition>
+				    <condition>data.PetSelect.levelGTE100</condition>
+				</button>
+				<button type="evolve">
+				    <action>evolvePet</action>
+				    <param>index=data.PetSelectIndex</param>
+				    <param>992</param>
+				    <condition>data.PetSelect.uid=982</condition>
+				    <condition>data.PetSelect.levelGTE100</condition>
+				</button>
+			</callbackHandler>
 		</npc>
 		<teleport id="1" name="深水之城" pos="320,70" targetMapId="170"/>
 	</entities>

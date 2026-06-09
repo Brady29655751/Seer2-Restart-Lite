@@ -101,8 +101,8 @@ public class BattleResourceView : BattleBaseView
         else
         {
             mapAnim = Instantiate(prefab, Camera.main.transform);
-            mapAnim.transform.localScale = map.anim?.animScale ?? Vector2.one;
-            mapAnim.transform.localPosition = map.anim?.animPos ?? Vector2.zero;
+            mapAnim.transform.localScale = map.anim?.AnimScale ?? Vector2.one;
+            mapAnim.transform.localPosition = map.anim?.AnimPos ?? Vector2.zero;
             mapAnim.transform.SetAsFirstSibling();
             background.color = Color.clear;   
         }

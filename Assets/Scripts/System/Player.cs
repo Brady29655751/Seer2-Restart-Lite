@@ -18,6 +18,7 @@ public class Player : Singleton<Player>
     }
     public int petBagCursor = 0;
     public Pet pet => petBag[petBagCursor];
+    public Animal follower = null;
 
     public int currentMapId = 70, lastMapId = 0;
     public Map currentMap = null, lastMap = null;

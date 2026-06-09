@@ -144,6 +144,9 @@ public class Buff
 
     public bool IsUnmovable()
     {
+        if (ignore)
+            return false;
+
         if (id == 104)
             return value < 40;
 

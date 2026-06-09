@@ -14,6 +14,7 @@ public class ItemShopController : Module
     public event Action<Item> onItemBuyEvent, onItemSellEvent;
 
     protected ItemShopMode shopMode = ItemShopMode.Buy;
+    protected bool descMode = false;
 
     protected override void Awake()
     {
@@ -21,33 +22,56 @@ public class ItemShopController : Module
         InitSelectSubscriptions();
     }
 
-    private void InitSelectSubscriptions() {
-        itemController.onItemSelectEvent += itemDetailView.SetItem;
+    private void InitSelectSubscriptions()
+    {
+        itemController.onItemSelectEvent += OnItemChange;
         itemController.onItemSelectEvent += (x) => OnItemNumChange(selectNumController.GetInputValue());
         selectNumController.onValueChangedEvent += OnItemNumChange;
-    }   
+    }
 
-    public void SetShopMode(ItemShopMode shopMode) {
+    public void SetShopMode(ItemShopMode shopMode)
+    {
         this.shopMode = shopMode;
         playerInfoController.SetShopMode(shopMode);
     }
 
-    public void SetCurrencyType(int coinType, int diamondType) {
+    public void SetDescriptionMode(bool descMode)
+    {
+        this.descMode = descMode;
+    }
+
+    public void SetCurrencyType(int coinType, int diamondType)
+    {
         playerInfoController.SetCurrencyType(coinType, diamondType);
     }
 
-    public void SetTitle(string title) {
+    public void SetTitle(string title)
+    {
         itemDetailView.SetTitle(title);
     }
 
-    public void SetStorage(List<Item> itemBag) {
+    public void SetStorage(List<Item> itemBag)
+    {
         itemController.SetItemBag(itemBag);
         itemController.Select(0);
         selectNumController.SetMaxValue(99);
         playerInfoController.ShowCurrency();
     }
 
-    public void OnItemNumChange(int num = -1) {
+    public void SetDescriptionFontSize(int fontSize)
+    {
+        itemDetailView.SetDescriptionFontSize(fontSize);
+    }
+
+    public void OnItemChange(Item item)
+    {
+        itemDetailView.SetItem(item);
+        if (descMode)
+            itemDetailView.SetDescription(item.info.GetItemDescription());
+    }
+
+    public void OnItemNumChange(int num = -1)
+    {
         if (num == -1)
             return;
 
@@ -58,30 +82,35 @@ public class ItemShopController : Module
         itemDetailView.SetTotal((uint)(num * item.info.price), item.info.CurrencyInfo?.name);
     }
 
-    public void OnBuyItem() {
+    public void OnBuyItem()
+    {
         Item item = itemController.GetSelectedItem().FirstOrDefault();
         if (item == null)
             return;
 
         var storage = (shopMode == ItemShopMode.BuyYiTe) ? YiTeRogueData.instance.itemBag : null;
         int num = selectNumController.GetInputValue();
-        Action onAfterBuy = () => {
-            if (shopMode == ItemShopMode.BuyYiTe) {
+        Action onAfterBuy = () =>
+        {
+            if (shopMode == ItemShopMode.BuyYiTe)
+            {
                 itemController.Remove(item);
                 if (YiTeRogueData.instance.buffIds.Contains(430000))
                     Item.AddTo(new Item(item.id, 2), storage);
-            }  
-                
+            }
+
             playerInfoController.ShowCurrency();
             onItemBuyEvent?.Invoke(new Item(item.id, num));
         };
 
-        if ((num > 1) && (shopMode == ItemShopMode.BuyYiTe)) {
+        if ((num > 1) && (shopMode == ItemShopMode.BuyYiTe))
+        {
             Hintbox.OpenHintboxWithContent("别贪心，一次只能购买一个哟！", 16);
             return;
-        }   
+        }
 
-        if ((num > item.num) && (item.num >= 0)) {
+        if ((num > item.num) && (item.num >= 0))
+        {
             var content = (item.num == 0) ? "此物品已售完！" : ("购买数量高于剩余数量，当前仅剩余" + item.num + "个！");
             Hintbox.OpenHintboxWithContent(content, 16);
             return;
@@ -90,19 +119,21 @@ public class ItemShopController : Module
         Item.Buy(item.id, num, onAfterBuy, storage);
     }
 
-    public void OnSellItem() {
+    public void OnSellItem()
+    {
         Item item = itemController.GetSelectedItem().FirstOrDefault();
         if (item == null)
             return;
 
         var storage = (shopMode == ItemShopMode.SellYiTe) ? YiTeRogueData.instance.itemBag : null;
         int num = selectNumController.GetInputValue();
-        Action onAfterSell = () => {
+        Action onAfterSell = () =>
+        {
             playerInfoController.ShowCurrency();
             onItemSellEvent?.Invoke(new Item(item.id, num));
         };
 
         Item.Sell(item.id, num, onAfterSell, storage);
     }
-    
+
 }

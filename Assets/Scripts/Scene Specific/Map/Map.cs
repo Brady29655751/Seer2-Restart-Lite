@@ -119,7 +119,8 @@ public class Map
     }
     public bool IsPathAvailable(int x, int y) {
         if (resources.pathSprite == null)
-            return true;
+            return x.IsInRange(0, 960) && y.IsInRange(20, 540);
+        
         return resources.pathTexture.GetPixel(x, y) == Color.white;
     }
 

@@ -22,13 +22,18 @@ public class AnimInfo
 {
     [XmlAttribute("id")] public string id;
     [XmlAttribute("pos")] public string pos;
+    [XmlAttribute("size")] public string size;
     [XmlAttribute("scale")] public string scale;
-    [XmlAttribute("rotation")] public string npcRotation = "0,0,0";
+    [XmlAttribute("rotation")] public string rotation = "0,0,0";
+    [XmlAttribute("speed")] public string speed = "1";
 
-    public string gifPath => GetGifPath();
-    public Vector3 animPos => string.IsNullOrEmpty(pos) ? new Vector3(0, 0, 1) : new Vector3(pos.ToVector2().x, pos.ToVector2().y, 1);
-    public Vector3 animScale => string.IsNullOrEmpty(scale) ? Vector3.one : new Vector3(scale.ToVector2().x, scale.ToVector2().y, 1);
-    public Quaternion animRot => npcRotation.ToQuaternion();
+    public string GifPath => GetGifPath();
+    public Vector3 AnimPos => string.IsNullOrEmpty(pos) ? new Vector3(0, 0, 1) : new Vector3(pos.ToVector2().x, pos.ToVector2().y, 1);
+    public Vector3 AnimScale => string.IsNullOrEmpty(scale) ? Vector3.one : new Vector3(scale.ToVector2().x, scale.ToVector2().y, 1);
+    public Quaternion AnimRot => rotation.ToQuaternion();
+    public float AnimSpeed => string.IsNullOrEmpty(speed) ? 1 : Identifier.GetNumIdentifier(speed);
+
+    public bool UseAnimSize => size == "anim";
 
     public string GetGifPath() 
     {

@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -50,6 +51,8 @@ public class PlayerController : Manager<PlayerController>
             nonoView.SetPlayerSprite(item.icon);
             nonoView.SetPlayerSize(new Vector2(item.icon.GetResizedWidth(100), 100));
         }
+
+        SetFollowerSprite();
     }
 
     public void Shoot(List<Action> callbacks = null)
@@ -119,6 +122,13 @@ public class PlayerController : Manager<PlayerController>
             return;
 
         playerView.SetPlayerSprite(sprite);
+    }
+
+    public void SetFollowerSprite()
+    {   
+        var follower = Player.instance.follower;
+        var icon = Animal.IsNullOrEmpty(follower) ? SpriteSet.Empty : follower.Icon;
+        playerView.SetFollowerSprite(icon);
     }
 
 }

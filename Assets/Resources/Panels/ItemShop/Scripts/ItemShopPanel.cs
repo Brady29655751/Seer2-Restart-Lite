@@ -51,7 +51,8 @@ public class ItemShopPanel : Panel
         { ItemShopType.YiTe, new List<int>() {
             500091, 24000,  320757, 320092, 320093, 320094,
             320095, 320096, 320097, 320098, 320099, 320100,
-            320101, 320102, 320103, 320104, 320810,
+            320101, 320102, 320103, 320104, 320105, 320741,
+            320810,
         } },
         { ItemShopType.Plant, Item.plantItemDatabase.Select(x => x.id).ToList() },
         { ItemShopType.Achievement, Item.achievementItemDatabase.Where(x => x.info.price > 0).Select(x => x.id).ToList() },
@@ -93,10 +94,12 @@ public class ItemShopPanel : Panel
             default:
                 base.SetPanelIdentifier(id, param);
                 break;
+
             case "title":
                 shopNameDict.Set(ItemShopType.Others, param);
                 SetTitle();
                 break;
+
             case "mode":
                 var mode = param switch
                 {
@@ -108,6 +111,15 @@ public class ItemShopPanel : Panel
                 };
                 SetShopMode(mode);
                 break;
+
+            case "desc":
+                SetDescriptionMode(param != "effect");
+                break;
+
+            case "descSize":
+                shopController.SetDescriptionFontSize(int.Parse(param));
+                break;
+
             case "type":
                 var type = param switch
                 {
@@ -123,10 +135,12 @@ public class ItemShopPanel : Panel
                 };
                 SetShopType(type);
                 break;
+
             case "currency":
                 var currency = param.ToIntList('/');
                 SetCurrencyType(currency[0], currency[1]);
                 break;
+
             case "item":
                 var itemList = new List<int>();
                 if (param.TryTrimParentheses(out _, '(', ')'))
@@ -143,6 +157,7 @@ public class ItemShopPanel : Panel
                 shopItemIdDict.Set(ItemShopType.Others, itemList);
                 SetShopType(ItemShopType.Others);
                 break;
+
             case "limit":
                 itemNumLimit = param.ToIntList('/');
                 SetStorage();
@@ -163,6 +178,11 @@ public class ItemShopPanel : Panel
         this.shopType = shopType;
         SetTitle();
         SetStorage();
+    }
+
+    public void SetDescriptionMode(bool descMode)
+    {
+        shopController.SetDescriptionMode(descMode);
     }
 
     public void SetCurrencyType(int coinType, int diamondType)

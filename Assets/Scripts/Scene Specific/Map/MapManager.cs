@@ -63,6 +63,8 @@ public class MapManager : Manager<MapManager>
     public void SetAnimalPanelActive(bool active)
     {
         animalController?.gameObject.SetActive(active);
+        if (!active)
+            Player.SetSceneData("seed", 0);
     }
 
     public void RefreshPlantPanel(Item seed = null)

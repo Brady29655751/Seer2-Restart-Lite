@@ -73,6 +73,15 @@ public class UniGifImage : MonoBehaviour
     }
 
     /// <summary>
+    /// Speed (default is 1)
+    /// </summary>
+    public float speed
+    {
+        get;
+        private set;
+    }
+
+    /// <summary>
     /// Animation loop count (0 is infinite)
     /// </summary>
     public int loopCount
@@ -98,6 +107,15 @@ public class UniGifImage : MonoBehaviour
         get;
         private set;
     }
+
+    public bool useGifSize
+    {
+        get;
+        private set;
+    }
+
+    public Image image => m_image;
+
 
     private void Start()
     {
@@ -160,11 +178,17 @@ public class UniGifImage : MonoBehaviour
                 }
                 Texture2D texture2D = m_gifTextureList[m_gifTextureIndex].m_texture2d;
                 if (texture2D != null)
-                    m_image.sprite = Sprite.Create(texture2D, new Rect(0, 0, texture2D.width, texture2D.height), new Vector2(0, 0), 100f, 0, SpriteMeshType.Tight);
+                    m_image.sprite = Sprite.Create(texture2D, new Rect(0, 0, texture2D.width, texture2D.height), new Vector2(0.5f, 0.5f), 100f, 0, SpriteMeshType.Tight);
                 else
                     m_image.sprite = null;
 
-                m_delayTime = Time.time + m_gifTextureList[m_gifTextureIndex].m_delaySec;
+                if (useGifSize)
+                {
+                    m_image.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, texture2D.width);
+                    m_image.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, texture2D.height);
+                }
+
+                m_delayTime = Time.time + m_gifTextureList[m_gifTextureIndex].m_delaySec / speed;
                 break;
 
             case State.Pause:
@@ -180,9 +204,9 @@ public class UniGifImage : MonoBehaviour
     /// </summary>
     /// <param name="url">GIF image url (WEB or StreamingAssets path)</param>
     /// <param name="autoPlay">Auto play after decode</param>
-    public void SetGifFromUrl(string url, bool autoPlay = true, Sprite loadingSprite = null)
+    public void SetGifFromUrl(string url, bool autoPlay = true, Sprite loadingSprite = null, float speed = 1f, bool useGifSize = false)
     {
-        StartCoroutine(SetGifFromUrlCoroutine(url, autoPlay, loadingSprite));
+        StartCoroutine(SetGifFromUrlCoroutine(url, autoPlay, loadingSprite, speed, useGifSize));
     }
 
     /// <summary>
@@ -191,7 +215,7 @@ public class UniGifImage : MonoBehaviour
     /// <param name="url">GIF image url (WEB or StreamingAssets path)</param>
     /// <param name="autoPlay">Auto play after decode</param>
     /// <returns>IEnumerator</returns>
-    public IEnumerator SetGifFromUrlCoroutine(string url, bool autoPlay = true, Sprite loadingSprite = null)
+    public IEnumerator SetGifFromUrlCoroutine(string url, bool autoPlay = true, Sprite loadingSprite = null, float speed = 1f, bool useGifSize = false)
     {
         if (string.IsNullOrEmpty(url))
         {
@@ -231,10 +255,14 @@ public class UniGifImage : MonoBehaviour
                 nowState = State.None;
                 yield break;
             }
-        
+
+            var previousSprite = m_image.sprite;
             Clear();
             if (m_image != null)
-                m_image.sprite = loadingSprite;
+                m_image.sprite = loadingSprite ?? previousSprite;
+
+            this.speed = speed;
+            this.useGifSize = useGifSize;
         
             nowState = State.Loading;
         
@@ -334,7 +362,7 @@ public class UniGifImage : MonoBehaviour
         
         Texture2D texture2D = m_gifTextureList[0].m_texture2d;
         if (texture2D != null)
-            m_image.sprite = Sprite.Create(texture2D, new Rect(0, 0, texture2D.width, texture2D.height), new Vector2(0, 0), 100f, 0, SpriteMeshType.Tight);
+            m_image.sprite = Sprite.Create(texture2D, new Rect(0, 0, texture2D.width, texture2D.height), new Vector2(0.5f, 0.5f), 100f, 0, SpriteMeshType.Tight);
         else
             m_image.sprite = null;
 
@@ -350,7 +378,7 @@ public class UniGifImage : MonoBehaviour
     {
         if (nowState != State.Playing && nowState != State.Pause)
         {
-            Debug.LogWarning("State is not Playing and Pause.");
+            // Debug.LogWarning("State is not Playing and Pause.");
             return;
         }
         nowState = State.Ready;
@@ -380,5 +408,38 @@ public class UniGifImage : MonoBehaviour
             return;
         }
         nowState = State.Playing;
+    }
+
+    /// <summary>
+    /// Reset GIF animation (Set to first texture and stop)
+    /// </summary>
+    public void Reset()
+    {
+        if (nowState == State.Ready)
+        {
+            return;
+        }
+
+        if (m_gifTextureList == null || m_gifTextureList.Count <= 0)
+        {
+            return;
+        }
+
+        m_gifTextureIndex = 0;
+        m_nowLoopCount = 0;
+
+        Texture2D texture2D = m_gifTextureList[m_gifTextureIndex].m_texture2d;
+        if (texture2D != null)
+            m_image.sprite = Sprite.Create(texture2D, new Rect(0, 0, texture2D.width, texture2D.height), new Vector2(0.5f, 0.5f), 100f, 0, SpriteMeshType.Tight);
+        else
+            m_image.sprite = null;
+
+        if (useGifSize)
+        {
+            m_image.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, texture2D.width);
+            m_image.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, texture2D.height);
+        }
+
+        nowState = State.Ready;
     }
 }

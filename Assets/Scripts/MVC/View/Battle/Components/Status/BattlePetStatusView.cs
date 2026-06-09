@@ -8,13 +8,14 @@ public class BattlePetStatusView : BattleBaseView
     private Color hpBarNormalColor => new Color32(119, 226, 12, 255);
     [SerializeField] private float hpBarLength = 260, angerBarLength = 246;
     [SerializeField] private Image hpBarImage, angerBarImage;
-    [SerializeField] private RectTransform hpBar, angerBar;
+    [SerializeField] private RectTransform hpBar, angerBar, corruptBar;
     [SerializeField] private Text currentHpText, maxHpText;
     [SerializeField] private Text currentAngerText, maxAngerText;
 
-    public bool isDone => isHpDone && isAngerDone;
+    public bool isDone => isHpDone && isAngerDone && isCorruptDone;
     protected bool isHpDone = true;
     protected bool isAngerDone = true;
+    protected bool isCorruptDone = true;
 
     public static float animSpeed => Player.instance.gameData.settingsData.battleAnimSpeed;
 
@@ -97,5 +98,39 @@ public class BattlePetStatusView : BattleBaseView
     private void SetAngerBar(float anger, float maxAnger) {
         float percent = anger / maxAnger;
         angerBar.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, percent * angerBarLength);
+    }
+
+    public void SetCorrupt(float corrupt, float maxCorrupt)
+    {
+        if (corruptBar == null)
+            return;
+
+        float percent = corrupt / maxCorrupt;
+        corruptBar.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, percent * hpBarLength);
+    }
+
+    public void SetCorrupt(float lastCorrupt, float lastMaxCorrupt, float corrupt, float maxCorrupt)
+    {
+        if (corruptBar == null)
+            return;
+
+        StartCoroutine(ModifyCorrupt(lastCorrupt, lastMaxCorrupt, corrupt, maxCorrupt));
+    }
+
+    private IEnumerator ModifyCorrupt(float lastCorrupt, float lastMaxCorrupt, float corrupt, float maxCorrupt) {
+        isCorruptDone = false;
+        float currentCorrupt = lastCorrupt;
+        float percent = Mathf.Abs((corrupt - lastCorrupt) * 100f / maxCorrupt);
+        float speed = 0.005f + 0.01f * Mathf.Max(0, (percent - 30) / 70) * animSpeed;
+        float diff = (corrupt == lastCorrupt) ? 0 : (corrupt - currentCorrupt) / (corrupt - lastCorrupt);
+        while (diff > 0.02f) {
+            currentCorrupt += ((speed * maxCorrupt) * Mathf.Sign(corrupt - lastCorrupt));
+            currentCorrupt = Mathf.Clamp(currentCorrupt, 0, maxCorrupt);
+            diff = (corrupt == lastCorrupt) ? 0 : (corrupt - currentCorrupt) / (corrupt - lastCorrupt);
+            SetCorrupt(currentCorrupt, maxCorrupt);
+            yield return new WaitForSeconds(0.01f);
+        }
+        SetCorrupt(corrupt, maxCorrupt);
+        isCorruptDone = true;
     }
 }

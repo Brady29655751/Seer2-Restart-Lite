@@ -20,8 +20,12 @@
 			<transport>570,265</transport>
 			<eventHandler>
 				<button type="click">
-					<action>teleport</action>
-					<param>10103</param>
+					<action>openHintbox</action>
+					<param>type=PetSelect</param>
+					<param>title=选择要前往的地点</param>
+					<param>storage=813,-100/11278,-100</param>
+					<param>option_num=2</param>
+					<param>callback=teleport</param>
 					<condition>firstPet.featureId=10499</condition>
 				</button>
 				<button type="click">
@@ -34,6 +38,18 @@
 					<condition>firstPet.featureIdNOT10499</condition>
 				</button>
 			</eventHandler>
+			<callbackHandler>
+				<button type="teleport">
+					<action>teleport</action>
+					<param>10103</param>
+					<condition>data.PetSelect.uid=813</condition>
+				</button>
+				<button type="teleport">
+					<action>teleport</action>
+					<param>10425</param>
+					<condition>data.PetSelect.uid=11278</condition>
+				</button>
+			</callbackHandler>
 		</npc>
 		<npc id="1000103" resId="1000101" size="106,214" pos="430,330" rotation="0,0,5" color="0,0,0,0">
 			<description>SPT</description>

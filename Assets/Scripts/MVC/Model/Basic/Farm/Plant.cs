@@ -158,7 +158,7 @@ public class Plant
         Item.OpenHintbox(harvest);
 
         if (isSpecialSuccess)
-            Hintbox.OpenHintboxWithContent($"<color=#ffbb33>{name}</color>变异了！</color>", 20);
+            Hintbox.OpenHintboxWithContent($"<color=#ffbb33>{name}</color>变异了！", 20);
 
         return plant;
     }

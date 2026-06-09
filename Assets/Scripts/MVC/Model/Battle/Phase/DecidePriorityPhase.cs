@@ -39,10 +39,11 @@ public class DecidePriorityPhase : BattlePhase
     /// <returns>An action order list where each item represents (cursor + 1) of the pet and the sign represents which unit</returns>
     private List<int> GetActionOrder(List<(Unit, Skill, BattlePet, int)> priorityUnits)
     {
+        var negSpeed = state.stateBuffs.Exists(x => x.Value.id == 60_0013) ? -1 : 1;
         var actionOrder = priorityUnits.OrderByDescending(p => ((p.Item2 == null) || (p.Item3 == null)) ? -1 : 0)
             .ThenByDescending(p => p.Item2.isAction ? 1 : 0)
             .ThenByDescending(p => p.Item2.priority)
-            .ThenByDescending(p => p.Item3.statusController.GetCurrentStatus(p.Item2.powerup, p.Item2.powerdown).spd)
+            .ThenByDescending(p => negSpeed * p.Item3.statusController.GetCurrentStatus(p.Item2.powerup, p.Item2.powerdown).spd)
             .ThenBy(p => Random.Range(0, 100))
             .Select(p => (int)(Mathf.Sign(p.Item1.id) * (p.Item4 + 1)))
             .ToList();
