@@ -143,9 +143,7 @@ public class MapSceneView : UIModule
     private void ConfigureForegroundMaskCanvas(Canvas foregroundCanvas)
     {
         Canvas parentCanvas = canvasRect.GetComponentInParent<Canvas>();
-        foregroundCanvas.overrideSorting = true;
-        foregroundCanvas.sortingLayerID = parentCanvas == null ? 0 : parentCanvas.sortingLayerID;
-        foregroundCanvas.sortingOrder = (parentCanvas == null ? 0 : parentCanvas.sortingOrder) + 1;
+        foregroundCanvas.overrideSorting = false;
         foregroundCanvas.additionalShaderChannels = parentCanvas == null
             ? AdditionalCanvasShaderChannels.None
             : parentCanvas.additionalShaderChannels;
