@@ -14,6 +14,8 @@ public class MapSceneView : UIModule
     public Player player => Player.instance;
     [SerializeField] private RectTransform canvasRect;
     [SerializeField] private Image background, pathMask;
+    [Tooltip("Show the dashed route when A* pathfinding is used.")]
+    [SerializeField] private bool showPathPreview = true;
 
     private Map map;
     private Map lastMap => Player.instance.lastMap;
@@ -23,6 +25,7 @@ public class MapSceneView : UIModule
     private Dictionary<int, GameObject> teleportDict = new Dictionary<int, GameObject>();
     private GameObject foregroundMaskRoot;
     private MapClickFeedbackView clickFeedbackView;
+    private MapPathPreviewView pathPreviewView;
 
     public Vector2 GetCanvasSize()
     {
@@ -177,6 +180,23 @@ public class MapSceneView : UIModule
         clickFeedbackView?.Play(canvasPos);
     }
 
+    public void SetPathPreview(Vector2 start, IReadOnlyList<Vector2> path)
+    {
+        if (!showPathPreview)
+        {
+            ClearPathPreview();
+            return;
+        }
+
+        EnsurePathPreviewView();
+        pathPreviewView?.SetPath(start, path);
+    }
+
+    public void ClearPathPreview()
+    {
+        pathPreviewView?.Clear();
+    }
+
     private void EnsureClickFeedbackView()
     {
         if (clickFeedbackView != null)
@@ -211,6 +231,25 @@ public class MapSceneView : UIModule
             return Mathf.Clamp(background.rectTransform.GetSiblingIndex() + 1, 0, feedbackParent.childCount - 1);
 
         return Mathf.Clamp(GetForegroundMaskSiblingIndex(null), 0, feedbackParent.childCount - 1);
+    }
+
+    private void EnsurePathPreviewView()
+    {
+        if (pathPreviewView != null)
+            return;
+
+        RectTransform previewParent = GetClickFeedbackParent();
+        var previewObject = new GameObject("Map Path Preview", typeof(RectTransform), typeof(MapPathPreviewView));
+        var previewRect = previewObject.GetComponent<RectTransform>();
+        previewRect.SetParent(previewParent, false);
+        previewRect.anchorMin = Vector2.zero;
+        previewRect.anchorMax = Vector2.zero;
+        previewRect.pivot = new Vector2(0.5f, 0.5f);
+        previewRect.anchoredPosition = Vector2.zero;
+        previewRect.sizeDelta = Vector2.zero;
+        previewRect.localScale = Vector3.one;
+        previewObject.transform.SetSiblingIndex(GetClickFeedbackSiblingIndex(previewParent));
+        pathPreviewView = previewObject.GetComponent<MapPathPreviewView>();
     }
 
     #endregion

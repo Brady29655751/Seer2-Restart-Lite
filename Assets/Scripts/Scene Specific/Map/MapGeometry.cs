@@ -49,6 +49,17 @@ public class MapGeometry
 
         return false;
     }
+
+    public bool IntersectsCollisionCircle(Vector2 center, float radius)
+    {
+        foreach (var polygon in ValidCollisions)
+        {
+            if (polygon.IntersectsCircle(center, radius))
+                return true;
+        }
+
+        return false;
+    }
 }
 
 public class MapPolygon
@@ -68,6 +79,27 @@ public class MapPolygon
     public bool ContainsPoint(Vector2 point)
     {
         return MapGeometryUtility.ContainsPoint(points, point);
+    }
+
+    public bool IntersectsCircle(Vector2 center, float radius)
+    {
+        var polygonPoints = points;
+        if (polygonPoints.Count < 3)
+            return false;
+
+        if (MapGeometryUtility.ContainsPoint(polygonPoints, center))
+            return true;
+
+        float radiusSquared = radius * radius;
+        for (int i = 0; i < polygonPoints.Count; i++)
+        {
+            Vector2 edgeStart = polygonPoints[i];
+            Vector2 edgeEnd = polygonPoints[(i + 1) % polygonPoints.Count];
+            if (MapGeometryUtility.DistancePointToSegmentSquared(center, edgeStart, edgeEnd) <= radiusSquared)
+                return true;
+        }
+
+        return false;
     }
 
     public bool TryGetMovementHit(Vector2 from, Vector2 to, out float hitT)
@@ -203,6 +235,18 @@ public static class MapGeometryUtility
 
         t = Mathf.Clamp01(segmentT);
         return true;
+    }
+
+    public static float DistancePointToSegmentSquared(Vector2 point, Vector2 a, Vector2 b)
+    {
+        Vector2 segment = b - a;
+        float lengthSquared = Vector2.Dot(segment, segment);
+        if (lengthSquared < Epsilon)
+            return (point - a).sqrMagnitude;
+
+        float t = Mathf.Clamp01(Vector2.Dot(point - a, segment) / lengthSquared);
+        Vector2 projection = a + segment * t;
+        return (point - projection).sqrMagnitude;
     }
 
     public static List<int> Triangulate(IReadOnlyList<Vector2> polygon)
