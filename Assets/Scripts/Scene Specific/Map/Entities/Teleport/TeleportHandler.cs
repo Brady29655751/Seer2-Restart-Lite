@@ -6,6 +6,7 @@ using UnityEngine;
 public static class TeleportHandler
 {
     public static ResourceManager RM => ResourceManager.instance;
+    private const float TeleportReachableSearchRadius = 72f;
 
     public static void CreateTeleport(Dictionary<int, GameObject> teleportList, GameObject teleport, TeleportInfo info, InfoPrompt infoPrompt) {
         SetTeleportRect(teleport, info);
@@ -30,7 +31,7 @@ public static class TeleportHandler
     }
 
     public static void Transport(Vector2 canvasPos, Action onArrive) {
-        PlayerController.instance.SetDestinationByCanvasPos(canvasPos, onArrive);
+        PlayerController.instance.SetDestinationNearCanvasPos(canvasPos, TeleportReachableSearchRadius, onArrive);
     }
 
     public static void Teleport(TeleportInfo info) {

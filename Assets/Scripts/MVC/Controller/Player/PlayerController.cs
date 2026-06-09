@@ -19,7 +19,11 @@ public class PlayerController : Manager<PlayerController>
     {
         playerModel.OnPlayerMove();
         playerView.SetPlayerPosition(playerModel.currentPos);
-        if (!playerModel.isMoving)
+        if (playerModel.isMoving)
+        {
+            playerView.SetDirection(playerModel.direction);
+        }
+        else
         {
             playerView.SetDirection(new Vector2(0, 0));
             if (pathPreviewVisible)
@@ -97,6 +101,15 @@ public class PlayerController : Manager<PlayerController>
         if (!playerModel.SetDestinationByCanvasPos(canvasPos, onArrive))
             return;
 
+        playerView.SetDirection(playerModel.direction);
+    }
+
+    public void SetDestinationNearCanvasPos(Vector2 canvasPos, float searchRadius, Action onArrive = null)
+    {
+        if (!playerModel.SetDestinationNearCanvasPos(canvasPos, searchRadius, onArrive))
+            return;
+
+        UpdatePathPreview();
         playerView.SetDirection(playerModel.direction);
     }
 
