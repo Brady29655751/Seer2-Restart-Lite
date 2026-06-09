@@ -134,6 +134,13 @@ public class Map
         return IsPathAvailable(pathPixel);
     }
 
+    public bool IsCanvasMovementTargetAvailable(Vector2 canvasPos, Vector2 canvasSize) {
+        if (!IsCanvasPathAvailable(canvasPos, canvasSize))
+            return false;
+
+        return geometry == null || !geometry.ContainsCollisionPoint(canvasPos);
+    }
+
     public bool TryGetMovementDestination(Vector2 fromCanvasPos, Vector2 desiredCanvasPos, Vector2 canvasSize, out Vector2 destination) {
         destination = desiredCanvasPos;
 

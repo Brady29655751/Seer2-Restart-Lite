@@ -38,6 +38,17 @@ public class MapGeometry
 
         return hasHit;
     }
+
+    public bool ContainsCollisionPoint(Vector2 point)
+    {
+        foreach (var polygon in ValidCollisions)
+        {
+            if (polygon.ContainsPoint(point))
+                return true;
+        }
+
+        return false;
+    }
 }
 
 public class MapPolygon

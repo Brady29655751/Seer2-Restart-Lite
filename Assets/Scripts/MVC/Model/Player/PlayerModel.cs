@@ -24,24 +24,31 @@ public class PlayerModel : Module
     }
 
     // MousePos: anchored at bottom-left.
-    public void SetDestinationByMousePos(Vector2 destination, Action onArrive) {
+    public bool SetDestinationByMousePos(Vector2 destination, Action onArrive) {
         Vector2 canvasDestination = map.GetCanvasPixelByMousePos(destination, canvasSize);
-        if (!map.TryGetMovementDestination(currentPos, canvasDestination, canvasSize, out var safeDestination)) {
-            return;
+        if (!map.IsCanvasMovementTargetAvailable(canvasDestination, canvasSize)) {
+            return false;
         }
+
+        if (!map.TryGetMovementDestination(currentPos, canvasDestination, canvasSize, out var safeDestination)) {
+            return false;
+        }
+
         targetPos = safeDestination;
         onArriveEvent = onArrive;
+        return true;
     }
 
     /// <summary>
     /// <paramref name="destination"/> Anchored at bottom-left.
     /// </summary>  
-    public void SetDestinationByCanvasPos(Vector2 destination, Action onArrive) {
+    public bool SetDestinationByCanvasPos(Vector2 destination, Action onArrive) {
         if (!map.TryGetMovementDestination(currentPos, destination, canvasSize, out var safeDestination)) {
-            return;
+            return false;
         }
         targetPos = safeDestination;
         onArriveEvent = onArrive;
+        return true;
     }
 
     /// <summary>

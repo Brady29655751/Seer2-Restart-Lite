@@ -22,6 +22,7 @@ public class MapSceneView : UIModule
     private Dictionary<int, NpcController> animalDict = new Dictionary<int, NpcController>();
     private Dictionary<int, GameObject> teleportDict = new Dictionary<int, GameObject>();
     private GameObject foregroundMaskRoot;
+    private MapClickFeedbackView clickFeedbackView;
 
     public Vector2 GetCanvasSize()
     {
@@ -87,20 +88,17 @@ public class MapSceneView : UIModule
         ClearForegroundMasks();
         if (resources.bg == null)
         {
-            LogForegroundMaskSkip("background sprite is null");
             return;
         }
 
         if (map.geometry == null)
         {
-            LogForegroundMaskSkip("geometry is null");
             return;
         }
 
         var masks = map.geometry.ValidMasks.ToList();
         if (masks.Count == 0)
         {
-            LogForegroundMaskSkip("valid mask count is 0");
             return;
         }
 
@@ -122,22 +120,8 @@ public class MapSceneView : UIModule
         if (!graphic.hasGeneratedMask)
         {
             ClearForegroundMasks();
-            LogForegroundMaskSkip("generated mask texture is empty");
             return;
         }
-
-#if UNITY_EDITOR || DEVELOPMENT_BUILD
-        Debug.Log($"Map foreground masks created. map={map.id}, count={masks.Count}, " +
-                  $"pixels={graphic.copiedPixelCount}, sibling={rootRect.GetSiblingIndex()}, " +
-                  $"sortingOrder={foregroundMaskRoot.GetComponent<Canvas>().sortingOrder}");
-#endif
-    }
-
-    private void LogForegroundMaskSkip(string reason)
-    {
-#if UNITY_EDITOR || DEVELOPMENT_BUILD
-        Debug.Log($"Map foreground masks skipped. map={map?.id}, reason={reason}");
-#endif
     }
 
     private void ConfigureForegroundMaskCanvas(Canvas foregroundCanvas)
@@ -185,6 +169,48 @@ public class MapSceneView : UIModule
 
         Destroy(foregroundMaskRoot);
         foregroundMaskRoot = null;
+    }
+
+    public void PlayClickFeedback(Vector2 canvasPos)
+    {
+        EnsureClickFeedbackView();
+        clickFeedbackView?.Play(canvasPos);
+    }
+
+    private void EnsureClickFeedbackView()
+    {
+        if (clickFeedbackView != null)
+            return;
+
+        RectTransform feedbackParent = GetClickFeedbackParent();
+        var feedbackObject = new GameObject("Map Click Feedback", typeof(RectTransform), typeof(MapClickFeedbackView));
+        var feedbackRect = feedbackObject.GetComponent<RectTransform>();
+        feedbackRect.SetParent(feedbackParent, false);
+        feedbackRect.anchorMin = Vector2.zero;
+        feedbackRect.anchorMax = Vector2.zero;
+        feedbackRect.pivot = new Vector2(0.5f, 0.5f);
+        feedbackRect.sizeDelta = new Vector2(80f, 80f);
+        feedbackRect.localScale = Vector3.one;
+
+        clickFeedbackView = feedbackObject.GetComponent<MapClickFeedbackView>();
+        feedbackObject.transform.SetSiblingIndex(GetClickFeedbackSiblingIndex(feedbackParent));
+        clickFeedbackView.gameObject.SetActive(false);
+    }
+
+    private RectTransform GetClickFeedbackParent()
+    {
+        RectTransform backgroundParent = background == null
+            ? null
+            : background.rectTransform.parent as RectTransform;
+        return backgroundParent == null ? canvasRect : backgroundParent;
+    }
+
+    private int GetClickFeedbackSiblingIndex(RectTransform feedbackParent)
+    {
+        if (background != null && background.rectTransform.parent == feedbackParent)
+            return Mathf.Clamp(background.rectTransform.GetSiblingIndex() + 1, 0, feedbackParent.childCount - 1);
+
+        return Mathf.Clamp(GetForegroundMaskSiblingIndex(null), 0, feedbackParent.childCount - 1);
     }
 
     #endregion
