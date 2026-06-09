@@ -12,6 +12,7 @@ public class PlayerView : Module
     [SerializeField] protected IButton playerButton;
     [SerializeField] protected Sprite[] playerDirectionSprite = new Sprite[4];
     [SerializeField] protected Text playerNameText, achievementText;
+    [SerializeField] protected Vector2 visualCenterOffset = new Vector2(0, 0);
     [SerializeField] protected UniGifImage followerGif;
 
     protected Vector2 lastDirection = Vector2.zero;
@@ -50,6 +51,52 @@ public class PlayerView : Module
         lastDirection = direction;
     }
 
+    public void SetPlayerPosition(Vector2 currentPos) {
+        Vector2 actualOffset = GetFlippedOffset();
+        playerRect.anchoredPosition = currentPos - actualOffset;
+    }
+    
+    /// <summary>
+    /// 获取角色视觉中心点的实际Canvas位置
+    /// </summary>
+    public Vector2 GetVisualCenterPosition() {
+        Vector2 actualOffset = GetFlippedOffset();
+        return playerRect.anchoredPosition + actualOffset;
+    }
+    
+    /// <summary>
+    /// 根据角色朝向返回正确的偏移量
+    /// </summary>
+    protected Vector2 GetFlippedOffset() {
+        if (playerRect == null)
+            return visualCenterOffset;
+        float xSign = (playerRect.localScale.x < 0) ? -1f : 1f;
+        return new Vector2(visualCenterOffset.x * xSign, visualCenterOffset.y);
+    }
+    
+    /// <summary>
+    /// 翻转角色朝向，同时补偿位置确保视觉中心点保持不变
+    /// </summary>
+    protected void FlipHorizontal(bool faceLeft) {
+        if (playerRect == null)
+            return;
+        
+        float targetScaleX = faceLeft ? 1f : -1f;
+        if (Mathf.Approximately(playerRect.localScale.x, targetScaleX))
+            return;
+        
+        Vector2 oldOffset = GetFlippedOffset();
+        playerRect.localScale = new Vector3(targetScaleX, 1f, 1f);
+        Vector2 newOffset = GetFlippedOffset();
+        
+        Vector2 delta = oldOffset - newOffset;
+        playerRect.anchoredPosition += delta;
+        
+        if (playerNameText != null)
+            playerNameText.rectTransform.localScale = playerRect.localScale;
+        if (achievementText != null)
+            achievementText.rectTransform.localScale = playerRect.localScale;
+    }
     public virtual void SetFollowerDirection(Vector2 direction)
     {
         var follower = Player.instance.follower;
@@ -83,11 +130,6 @@ public class PlayerView : Module
 
             followerGif.image.rectTransform.anchoredPosition = Vector2.zero;
         }
-    }
-
-    public void SetPlayerPosition(Vector2 currentPos)
-    {
-        playerRect.anchoredPosition = currentPos;
     }
 
     public void SetPlayerSize(Vector2 size)
@@ -143,7 +185,8 @@ public class PlayerView : Module
         NpcController npc = obj.GetComponent<NpcController>();
         var item = Item.GetItemInfo(shootId);
         var size = item.effects.FirstOrDefault()?.abilityOptionDict.Get("shootSize")?.ToVector2(delimeter: '/') ?? item.icon.GetResizedSize(Vector2.one * 50);
-        var direction = canvasPos - playerRect.anchoredPosition;
+        var visualCenter = GetVisualCenterPosition();
+        var direction = canvasPos - visualCenter;
         var rotation = new Vector3(0, 0, Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg);
 
         npc.SetNpcInfo(new NpcInfo()
@@ -151,7 +194,7 @@ public class PlayerView : Module
             id = shootId,
             name = string.Empty,
             npcSize = size.x + "," + size.y,
-            npcPos = playerRect.anchoredPosition.x + "," + playerRect.anchoredPosition.y,
+            npcPos = visualCenter.x + "," + visualCenter.y,
             npcRotation = rotation.x + "," + rotation.y + "," + rotation.z,
             raycastTarget = false,
         });
@@ -164,7 +207,7 @@ public class PlayerView : Module
         var id = npc.GetInfo().id;
         var item = Item.GetItemInfo(id);
         var effect = item?.effects.FirstOrDefault();
-        var initPos = playerRect.anchoredPosition;
+        var initPos = GetVisualCenterPosition();
         var distance = targetPos - npc.GetInfo().size / 2 - initPos;
         var speed = float.Parse(effect.abilityOptionDict.Get("speed", "600"));
         var rotation = (effect == null) ? 0 : int.Parse(effect.abilityOptionDict.Get("rotation", (item.type == ItemType.Shoot) ? "0" : "720"));

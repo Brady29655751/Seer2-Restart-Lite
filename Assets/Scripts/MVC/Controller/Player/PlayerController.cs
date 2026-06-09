@@ -12,13 +12,22 @@ public class PlayerController : Manager<PlayerController>
     [SerializeField] private PlayerView nonoView;
     [SerializeField] private RobotView robotView;
     private PlayerView playerView;
+    private MapSceneView mapSceneView;
+    private bool pathPreviewVisible;
 
     private void FixedUpdate()
     {
         playerModel.OnPlayerMove();
         playerView.SetPlayerPosition(playerModel.currentPos);
         if (!playerModel.isMoving)
+        {
             playerView.SetDirection(new Vector2(0, 0));
+            if (pathPreviewVisible)
+            {
+                mapSceneView?.ClearPathPreview();
+                pathPreviewVisible = false;
+            }
+        }
     }
 
     public void OnClickMap(BaseEventData bed)
@@ -44,6 +53,7 @@ public class PlayerController : Manager<PlayerController>
         nonoView.gameObject.SetActive(!playerModel.useRobot);
         robotView.gameObject.SetActive(playerModel.useRobot);
         playerView = playerModel.useRobot ? robotView : nonoView;
+        mapSceneView = FindObjectOfType<MapSceneView>();
 
         var item = Item.GetItemInfo(Player.instance.gameData.achievement);
         if ((item != null) && (item.type == ItemType.Equipment))
@@ -68,20 +78,39 @@ public class PlayerController : Manager<PlayerController>
 
     public void SetDestinationByMousePos()
     {
-        playerModel.SetDestinationByMousePos(Input.mousePosition, null);
-        playerView.SetDirection(playerModel.direction);
+        SetDestinationByMousePos(null);
     }
 
     public void SetDestinationByMousePos(Action onArrive = null)
     {
-        playerModel.SetDestinationByMousePos(Input.mousePosition, onArrive);
+        Vector2 canvasPos = playerModel.GetCanvasPosByMousePos(Input.mousePosition);
+        if (!playerModel.SetDestinationByMousePos(Input.mousePosition, onArrive))
+            return;
+
+        mapSceneView?.PlayClickFeedback(canvasPos);
+        UpdatePathPreview();
         playerView.SetDirection(playerModel.direction);
     }
 
     public void SetDestinationByCanvasPos(Vector2 canvasPos, Action onArrive = null)
     {
-        playerModel.SetDestinationByCanvasPos(canvasPos, onArrive);
+        if (!playerModel.SetDestinationByCanvasPos(canvasPos, onArrive))
+            return;
+
         playerView.SetDirection(playerModel.direction);
+    }
+
+    private void UpdatePathPreview()
+    {
+        if (playerModel.currentPath.Count <= 1)
+        {
+            mapSceneView?.ClearPathPreview();
+            pathPreviewVisible = false;
+            return;
+        }
+
+        mapSceneView?.SetPathPreview(playerModel.currentPos, playerModel.currentPath);
+        pathPreviewVisible = true;
     }
 
     public void SetPlayerPositionByMapPos(Vector2 mapPos, Vector2 anchor)

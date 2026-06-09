@@ -47,8 +47,8 @@ public class RobotView : PlayerView
             Sprite directionSprite = GetPlayerDirectionSprite(lastDirection);
             if (directionSprite != null)
             {
-                playerImage?.SetSprite(directionSprite);
-                playerRect.localScale = new Vector3((lastDirection.x < 0) ? 1 : -1, 1, 1);
+               playerImage?.SetSprite(directionSprite); 
+               FlipHorizontal(lastDirection.x < 0);
             }
 
             playerImage.SetNativeSize();
@@ -62,19 +62,19 @@ public class RobotView : PlayerView
         {
             if (direction[2] || direction[3])
             {
-                this.playerRect.localScale = new Vector3(direction[2] ? 1 : -1, 1, 1);
+                FlipHorizontal(direction[2]);
                 animationController.Play("SidelongBack");
             }
             else
             {
-                animationController.Play("Backwards");
+                animationController.Play("Backwards");                
             }
         }
         else if (direction[1])//下
         {
             if (direction[2] || direction[3])
             {
-                this.playerRect.localScale = new Vector3(direction[2] ? 1 : -1, 1, 1);
+                FlipHorizontal(direction[2]);
                 animationController.Play("Sidelong");
             }
             else
@@ -84,7 +84,7 @@ public class RobotView : PlayerView
         }
         else
         {
-            this.playerRect.localScale = new Vector3(direction[2] ? 1 : -1, 1, 1);
+            FlipHorizontal(direction[2]);
             animationController.Play("LeftRight");
         }
 
