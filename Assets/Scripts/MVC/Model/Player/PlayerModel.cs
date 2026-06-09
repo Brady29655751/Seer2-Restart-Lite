@@ -25,10 +25,11 @@ public class PlayerModel : Module
 
     // MousePos: anchored at bottom-left.
     public void SetDestinationByMousePos(Vector2 destination, Action onArrive) {
-        if (!map.IsPathAvailableByMousePos(destination)) {
+        Vector2 canvasDestination = map.GetCanvasPixelByMousePos(destination, canvasSize);
+        if (!map.TryGetMovementDestination(currentPos, canvasDestination, canvasSize, out var safeDestination)) {
             return;
         }
-        targetPos = map.GetCanvasPixelByMousePos(destination, canvasSize);
+        targetPos = safeDestination;
         onArriveEvent = onArrive;
     }
 
@@ -36,7 +37,10 @@ public class PlayerModel : Module
     /// <paramref name="destination"/> Anchored at bottom-left.
     /// </summary>  
     public void SetDestinationByCanvasPos(Vector2 destination, Action onArrive) {
-        targetPos = destination;
+        if (!map.TryGetMovementDestination(currentPos, destination, canvasSize, out var safeDestination)) {
+            return;
+        }
+        targetPos = safeDestination;
         onArriveEvent = onArrive;
     }
 

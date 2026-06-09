@@ -8,6 +8,8 @@ using Random = UnityEngine.Random;
 
 public class MapSceneView : UIModule
 {
+    private static readonly Vector2 ReferenceCanvasSize = new Vector2(960, 540);
+
     public ResourceManager RM => ResourceManager.instance;
     public Player player => Player.instance;
     [SerializeField] private RectTransform canvasRect;
@@ -19,6 +21,7 @@ public class MapSceneView : UIModule
     private Dictionary<int, NpcController> farmDict = new Dictionary<int, NpcController>();
     private Dictionary<int, NpcController> animalDict = new Dictionary<int, NpcController>();
     private Dictionary<int, GameObject> teleportDict = new Dictionary<int, GameObject>();
+    private GameObject foregroundMaskRoot;
 
     public Vector2 GetCanvasSize()
     {
@@ -28,6 +31,7 @@ public class MapSceneView : UIModule
     public void SetMap(Map map)
     {
         this.map = map;
+        this.map.geometry?.EnsureLists();
         bool refreshBGM = (SceneLoader.instance.GetLastScene() != SceneId.Map) ||
             (lastMap == null) || (!map.music.ValueEquals(lastMap?.music)) ||
             ((Player.instance.currentBattle != null) && (Player.instance.currentBattle.settings.mode == BattleMode.PVP));
@@ -46,6 +50,7 @@ public class MapSceneView : UIModule
 
         SetBackground(resources);
         SetPathMask(resources);
+        SetForegroundMasks(resources);
     }
 
     #region resources
@@ -75,6 +80,113 @@ public class MapSceneView : UIModule
     public void SetPathMask(MapResources resources)
     {
         pathMask.sprite = resources.pathMaskSprite;
+    }
+
+    public void SetForegroundMasks(MapResources resources)
+    {
+        ClearForegroundMasks();
+        if (resources.bg == null)
+        {
+            LogForegroundMaskSkip("background sprite is null");
+            return;
+        }
+
+        if (map.geometry == null)
+        {
+            LogForegroundMaskSkip("geometry is null");
+            return;
+        }
+
+        var masks = map.geometry.ValidMasks.ToList();
+        if (masks.Count == 0)
+        {
+            LogForegroundMaskSkip("valid mask count is 0");
+            return;
+        }
+
+        foregroundMaskRoot = new GameObject("Foreground Masks", typeof(RectTransform), typeof(Canvas));
+        var rootRect = foregroundMaskRoot.GetComponent<RectTransform>();
+        rootRect.SetParent(canvasRect, false);
+        StretchToFill(rootRect);
+        rootRect.SetSiblingIndex(GetForegroundMaskSiblingIndex(rootRect));
+        ConfigureForegroundMaskCanvas(foregroundMaskRoot.GetComponent<Canvas>());
+
+        var maskObject = new GameObject("Foreground Mask", typeof(RectTransform), typeof(MapForegroundMaskGraphic));
+        var maskRect = maskObject.GetComponent<RectTransform>();
+        maskRect.SetParent(rootRect, false);
+        StretchToFill(maskRect);
+
+        var graphic = maskObject.GetComponent<MapForegroundMaskGraphic>();
+        graphic.color = map.dream ? Color.gray : map.backgroundColor;
+        graphic.SetPolygons(resources.bg, masks, ReferenceCanvasSize);
+        if (!graphic.hasGeneratedMask)
+        {
+            ClearForegroundMasks();
+            LogForegroundMaskSkip("generated mask texture is empty");
+            return;
+        }
+
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+        Debug.Log($"Map foreground masks created. map={map.id}, count={masks.Count}, " +
+                  $"pixels={graphic.copiedPixelCount}, sibling={rootRect.GetSiblingIndex()}, " +
+                  $"sortingOrder={foregroundMaskRoot.GetComponent<Canvas>().sortingOrder}");
+#endif
+    }
+
+    private void LogForegroundMaskSkip(string reason)
+    {
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+        Debug.Log($"Map foreground masks skipped. map={map?.id}, reason={reason}");
+#endif
+    }
+
+    private void ConfigureForegroundMaskCanvas(Canvas foregroundCanvas)
+    {
+        Canvas parentCanvas = canvasRect.GetComponentInParent<Canvas>();
+        foregroundCanvas.overrideSorting = true;
+        foregroundCanvas.sortingLayerID = parentCanvas == null ? 0 : parentCanvas.sortingLayerID;
+        foregroundCanvas.sortingOrder = (parentCanvas == null ? 0 : parentCanvas.sortingOrder) + 1;
+        foregroundCanvas.additionalShaderChannels = parentCanvas == null
+            ? AdditionalCanvasShaderChannels.None
+            : parentCanvas.additionalShaderChannels;
+    }
+
+    private int GetForegroundMaskSiblingIndex(RectTransform maskRoot)
+    {
+        int foregroundIndex = 0;
+        for (int i = 0; i < canvasRect.childCount; i++)
+        {
+            Transform child = canvasRect.GetChild(i);
+            if (child == maskRoot)
+                continue;
+
+            if (child.GetComponent<PlayerController>() == null &&
+                child.GetComponentInChildren<PlayerView>(true) == null)
+                continue;
+
+            foregroundIndex = Mathf.Max(foregroundIndex, i + 1);
+        }
+
+        return Mathf.Clamp(foregroundIndex, 0, canvasRect.childCount - 1);
+    }
+
+    private void StretchToFill(RectTransform rect)
+    {
+        rect.anchorMin = Vector2.zero;
+        rect.anchorMax = Vector2.one;
+        rect.pivot = new Vector2(0.5f, 0.5f);
+        rect.anchoredPosition = Vector2.zero;
+        rect.sizeDelta = Vector2.zero;
+        rect.localScale = Vector3.one;
+    }
+
+    private void ClearForegroundMasks()
+    {
+        if (foregroundMaskRoot == null)
+            return;
+
+        Destroy(foregroundMaskRoot);
+        foregroundMaskRoot = null;
     }
 
     #endregion

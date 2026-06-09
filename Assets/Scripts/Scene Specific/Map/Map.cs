@@ -33,6 +33,7 @@ public class Map
     [XmlElement("anim")] public AnimInfo anim; 
     [XmlElement("music")] public MapMusic music;
     [XmlElement("entities")] public MapEntities entities;
+    [XmlElement("geometry")] public MapGeometry geometry = new MapGeometry();
     [XmlIgnore] public MapResources resources;
     [XmlIgnore] public Vector2Int pathSize => resources.pathSize;
 
@@ -120,7 +121,37 @@ public class Map
     public bool IsPathAvailable(int x, int y) {
         if (resources.pathSprite == null)
             return true;
+        if ((x < 0) || (y < 0) || (x >= resources.pathTexture.width) || (y >= resources.pathTexture.height))
+            return false;
         return resources.pathTexture.GetPixel(x, y) == Color.white;
+    }
+
+    public bool IsCanvasPathAvailable(Vector2 canvasPos, Vector2 canvasSize) {
+        if (resources.pathSprite == null)
+            return true;
+
+        Vector2Int pathPixel = canvasPos.GetCorrespondingPixel(canvasSize, pathSize);
+        return IsPathAvailable(pathPixel);
+    }
+
+    public bool TryGetMovementDestination(Vector2 fromCanvasPos, Vector2 desiredCanvasPos, Vector2 canvasSize, out Vector2 destination) {
+        destination = desiredCanvasPos;
+
+        if (!IsCanvasPathAvailable(desiredCanvasPos, canvasSize))
+            return false;
+
+        if (geometry == null || !geometry.TryGetFirstCollisionHit(fromCanvasPos, desiredCanvasPos, out var hitT))
+            return true;
+
+        Vector2 movement = desiredCanvasPos - fromCanvasPos;
+        float distance = movement.magnitude;
+        if (distance <= 0.01f)
+            return false;
+
+        float safeT = Mathf.Clamp01(hitT - (2f / distance));
+        destination = Vector2.Lerp(fromCanvasPos, desiredCanvasPos, safeT);
+
+        return (destination - fromCanvasPos).sqrMagnitude > 0.25f && IsCanvasPathAvailable(destination, canvasSize);
     }
 
     public Vector2Int GetMapPixelByMousePos(Vector2 mousePos) {
