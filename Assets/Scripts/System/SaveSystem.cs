@@ -15,6 +15,19 @@ public static class SaveSystem
     public const int MAX_SAVE_COUNT = 3;
     public static string savePath => Application.persistentDataPath + "/save" + Player.instance.gameDataId + ".xml";
 
+
+    public static bool IsFileExists(string path)
+    {
+        try
+        {
+            return FileBrowserHelpers.FileExists($"{Application.persistentDataPath}/{path}");   
+        }
+        catch (Exception)
+        {
+            return false;
+        }
+    }
+
     public static bool TryGetZipFileEntry(string zipPath, string entryFullName, out ZipArchiveEntry entry)
     {
         try

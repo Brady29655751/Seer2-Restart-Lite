@@ -44,10 +44,10 @@ public class DialogView : Module
 
     private void SetGif(AnimInfo gifInfo, Sprite icon = null)
     {
-        if (gifInfo?.gifPath == null)
+        if (gifInfo?.GifPath == null)
             return;
         
-        gif.SetGifFromUrl(gifInfo.gifPath, loadingSprite: icon);
+        gif.SetGifFromUrl(gifInfo.GifPath, loadingSprite: icon, speed: gifInfo.AnimSpeed, useGifSize: gifInfo.UseAnimSize);
     }
 
     private void SetContent(string text)

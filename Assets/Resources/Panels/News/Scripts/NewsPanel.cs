@@ -14,7 +14,7 @@ public class NewsPanel : Panel
 
     private string GetNews() {
         var news = GameManager.versionData.releaseNote.GetDescription();
-        var note = "<b><size=20><color=#52e5f9>由于游戏可能有闪退、安卓权限、Mod操作等不可预期的情况导致存档毁损，请时常前往「设定＞其他＞导出存档」备份！特别是手机版！！！</color></size></b>\n\n";
+        var note = "<b><size=26><color=#52e5f9>本游戏完全免费，闲鱼上的卖家都是骗子，被骗请立即举报！！！</color></size></b>\n\n";
         return note + news;
     }
 }

@@ -146,17 +146,35 @@ public class NpcView : Module
         if (animInfo == null)
             return;
 
-        anim.transform.localScale = animInfo.animScale / (animCamera.canvas?.scaleFactor ?? 1);
-        anim.transform.localPosition = animInfo.animPos / (animCamera.canvas?.scaleFactor ?? 1);
-        anim.transform.localRotation = animInfo.animRot;
+        anim.transform.localScale = animInfo.AnimScale / (animCamera.canvas?.scaleFactor ?? 1);
+        anim.transform.localPosition = animInfo.AnimPos / (animCamera.canvas?.scaleFactor ?? 1);
+        anim.transform.localRotation = animInfo.AnimRot;
     }
 
     public void SetGif(AnimInfo gifInfo = null)
     {
-        if (gifInfo?.gifPath == null)
+        if (gifInfo == null)
             return;
 
-        gif.SetGifFromUrl(gifInfo.gifPath, loadingSprite: image.sprite);
+        switch (gifInfo.id)
+        {
+            default:
+                break;
+
+            case "stop":
+                gif.Stop();
+                return;
+            
+            case "reset":
+                gif.Reset();
+                return;
+        }
+
+        if (gifInfo.GifPath == null)
+            return;
+
+        gif.SetGifFromUrl(gifInfo.GifPath, speed: gifInfo.AnimSpeed, useGifSize: gifInfo.UseAnimSize);
+        rect.localScale = gifInfo.AnimScale;
     }
 
     public void SetBGM(AudioClip bgm)
@@ -196,28 +214,6 @@ public class NpcView : Module
         var info = npc.GetInfo();
         var activity = Activity.Find("farm");
 
-        /*
-        void ShowPlantInfo()
-        {
-            var plant = Plant.LoadData(info.id);
-            infoPrompt.SetPlant(plant);
-
-            var plant = activity.GetData("land[" + info.id + "].plant", "none");
-            if (int.TryParse(plant, out var plantId))
-            {
-                var item = Item.GetItemInfo(plantId);
-                var ripeDate = DateTime.Parse(activity.GetData("land[" + info.id + "].date[ripe]", DateTime.MaxValue.ToString()));
-                var totalTime = TimeSpan.Parse(item.options["time"]);
-                var now = DateTime.Now;
-                var ripeNeedTime = (now >= ripeDate) ? TimeSpan.Zero : (ripeDate - now);
-                var produceMult = float.TryParse(activity.GetData("land[" + info.id + "].produce", "1"), out var produce) ? produce : 1;
-                infoPrompt.SetPlant(item, ripeNeedTime, totalTime, produceMult);
-            }
-            else
-                infoPrompt.SetPlant(null, TimeSpan.Zero, TimeSpan.MaxValue);
-        }
-        */
-
         void PlantAction()
         {
             var oldPlant = Plant.LoadData(info.id);
@@ -241,122 +237,6 @@ public class NpcView : Module
                 if (e.Condition(Player.instance.pet, null))
                     e.SetPlayer(null, npc, null, npcList);
             }
-
-            /*
-            var now = DateTime.Now;
-            var landPlant = activity.GetData("land[" + info.id + "].plant", "none");
-            var plantId = (int)Player.GetSceneData("seed", 0);
-            var plantInfo = Item.GetItemInfo(plantId);
-            var seedId = int.Parse(plantInfo?.options.Get("seed", "600000") ?? "600000");
-            var seedInfo = Item.GetItemInfo(seedId);
-            var seed = Item.Find(seedId);
-            var seedNum = seed?.num ?? 0;
-
-            // No plant currently.
-            if (!int.TryParse(landPlant, out var landPlantId))
-            {
-                if (plantInfo == null)
-                {
-                    MapManager.instance.SetPlantPanelActive(true);
-                    return;
-                }
-
-                if (plantInfo.type != ItemType.Plant)
-                    return;
-
-                if (seedNum <= 0)
-                {
-                    Hintbox.OpenHintboxWithContent($"你没有<color=#ffbb33>{seedInfo.name}</color>！\n先去旁边的木屋购买吧！", 14);
-                    return;
-                }
-
-                // Plant the seed.
-                var item = Item.GetItemInfo(plantId);
-                var totalTime = TimeSpan.Parse(item.options["time"]);
-                activity["land[" + info.id + "].plant"] = plantId.ToString();
-                activity["land[" + info.id + "].date[ripe]"] = (now + totalTime).ToString();
-                activity["land[" + info.id + "].produce"] = "1";
-
-                Item.Remove(seedId, 1);
-                SaveSystem.SaveData();
-
-                MapManager.instance.RefreshPlantPanel(new Item(item.id, Item.Find(seedId)?.num ?? 0));
-                return;
-            }
-
-            // Not ripe yet.
-            var date = DateTime.Parse(activity["land[" + info.id + "].date[ripe]"]);
-            if (now < date)
-            {
-                if (plantInfo == null)
-                {
-                    MapManager.instance.SetPlantPanelActive(true);
-                    return;
-                }
-
-                if (plantInfo.type == ItemType.Fertilizer)
-                {
-                    if (Item.Find(plantId) == null)
-                    {
-                        Hintbox.OpenHintboxWithContent("你没有<color=#ffbb33>" + plantInfo.name + "</color>！先去旁边的木屋购买吧！", 16);
-                        return;
-                    }
-
-                    if (plantInfo.options.TryGet("time", out var speedup))
-                        activity["land[" + info.id + "].date[ripe]"] = (date - TimeSpan.Parse(speedup)).ToString();
-
-                    if (plantInfo.options.TryGet("produce", out var produceUp))
-                        activity["land[" + info.id + "].produce"] = produceUp;
-
-                    Item.Remove(plantInfo.id, 1);
-                    MapManager.instance.RefreshPlantPanel();
-                    Player.SetSceneData("seed", plantId);
-                    return;
-                }
-                
-                switch (plantId)
-                {
-                    default:
-                        return;
-
-                    case 61_0000:
-                        activity["land[" + info.id + "].plant"] = "none";
-                        activity["land[" + info.id + "].date[ripe]"] = "none";
-                        activity["land[" + info.id + "].produce"] = "1";
-                        SaveSystem.SaveData(); 
-                        return;      
-                }
-            }
-
-            // Ripe.
-            var harvestInfo = Item.GetItemInfo(landPlantId);
-            var specialEffect = harvestInfo.effects.Find(x => (x.ability == EffectAbility.None) && x.abilityOptionDict.ContainsKey("plant"));
-            var isSpecialSuccess = (specialEffect != null) && specialEffect.Condition(Player.instance.pet, null);
-            if (isSpecialSuccess)
-            {
-                landPlant = harvestInfo.name;
-                landPlantId = int.Parse(specialEffect.abilityOptionDict.Get("plant", harvestInfo.id.ToString()));
-                harvestInfo = Item.GetItemInfo(landPlantId);
-            }
-            var produceMult = float.TryParse(activity.GetData("land[" + info.id + "].produce", "1"), out var produce) ? produce : 1;
-            var harvestNum = (int)(Identifier.GetNumIdentifier(harvestInfo.options["num"]) * produceMult);
-            var harvest = new Item(landPlantId, harvestNum);
-
-            activity["land[" + info.id + "].plant"] = "none";
-            activity["land[" + info.id + "].date[ripe]"] = "none";
-            activity["land[" + info.id + "].produce"] = "1";
-            Item.Add(harvest);
-            Item.OpenHintbox(harvest);
-
-            if (isSpecialSuccess)
-                Hintbox.OpenHintboxWithContent("<color=#ffbb33>你的" + landPlant + "变异了！</color>", 20);
-
-            foreach (var e in harvestInfo.effects.Where(x => x.ability == EffectAbility.SetPlayer))
-            {
-                if (e.Condition(Player.instance.pet, null))
-                    e.SetPlayer(null, npc, null, npcList);
-            }
-            */
         }
 
         button.onPointerEnterEvent.AddListener(() => infoPrompt.SetActive(true));
@@ -375,7 +255,37 @@ public class NpcView : Module
             if (Animal.IsNullOrEmpty(animal))
                 return;
             
-            
+            var itemId = (int)Player.GetSceneData("seed", 0); 
+            var itemInfo = Item.GetItemInfo(itemId);
+            if ((itemInfo == null) || (itemInfo.type != ItemType.AnimalAction))
+            {
+                MapManager.instance.SetAnimalPanelActive(true);
+                return;
+            }
+
+            switch (itemId)
+            {
+                default:
+                    Player.SetSceneData("seed", 0);
+                    break;
+
+                case 68_0001:
+                    if (animal.Feed())
+                        animal.Produce();
+                    break;
+
+                case 68_0002:
+                    animal.Harvest();
+                    break;
+
+                case 68_0003:
+                    animal.Follow();
+                    break;
+
+                case 68_0099:
+                    animal.Release();
+                    break;
+            }
         }
 
         button.onPointerEnterEvent.AddListener(() => infoPrompt.SetActive(true));

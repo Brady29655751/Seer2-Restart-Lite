@@ -201,6 +201,7 @@ public class InfoPrompt : IMonoBehaviour
     {
         if (Animal.IsNullOrEmpty(animal))
         {
+            SetActive(false);
             return;
         }
 
@@ -209,7 +210,7 @@ public class InfoPrompt : IMonoBehaviour
         var timeBar = "<size=28><color=#ffbb33>" + "■".Repeat(ratio) + "□".Repeat(10 - ratio) + "</color></size>\n";
         var text = "<size=16>【成熟所需时间】" + animal.LeftTime.ToString(@"hh\:mm\:ss") + "\n";
         var num = "【预计总产量】" + animal.productAll + "\n";
-        var borned = "<color=#77e20c>【当前已产下】</color>" + animal.productBorned + "\n";
+        var borned = "<color=#77e20c>【当前已生产】</color>" + animal.productBorned + "\n";
         var food = "【食物】" + animal.FeedInfo.name + "</size>";
         SetInfoPromptWithAutoSize(header + timeBar + text + num + borned + food, TextAnchor.MiddleLeft);        
     }

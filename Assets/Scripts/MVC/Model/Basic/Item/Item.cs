@@ -274,6 +274,11 @@ public class Item
 
     public bool IsInCategory(ItemCategory category)
     {
+        if (info?.type == null)
+        {
+            Hintbox.OpenHintboxWithContent($"检测到未知道具id：{id}", 14);
+            return false;
+        }
         return info.type.IsInCategory(category);
     }
 

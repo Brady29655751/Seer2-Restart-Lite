@@ -1425,7 +1425,7 @@ public static class EffectAbilityHandler
         oldValue = battlePet.GetPetIdentifier(type);
         newValue = Parser.ParseEffectOperation(value, effect, lhsUnit, rhsUnit);
 
-        bool TryGetShiftedSkills(BattlePet pet, out Skill[] normalSkills, out Skill superSkill, string normalSkillKey = "normal_skill", string superSkillKey = "super_skill")
+        bool TryGetShiftedSkills(BattlePet pet, Pet newPet, out Skill[] normalSkills, out Skill superSkill, string normalSkillKey = "normal_skill", string superSkillKey = "super_skill")
         {
             normalSkills = null;
             superSkill = null;
@@ -1448,6 +1448,11 @@ public static class EffectAbilityHandler
 
                     Array.Resize(ref normalSkills, 4);
                 }
+                else if (normalSkillExpr == "secret")
+                {
+                    var secretPet = Pet.GetExamplePet(newPet.id);
+                    normalSkills = secretPet.skills.secretSkill.Where(x => x.type != SkillType.必杀).TakeLast(4).ToArray();
+                }
                 else if (normalSkillExpr.TryTrimStart("shift", out var normalTrim) &&
                     normalTrim.TryTrimParentheses(out var normalShift) &&
                     int.TryParse(normalShift, out var normalShiftCount))
@@ -1466,6 +1471,12 @@ public static class EffectAbilityHandler
                 if (superSkillExpr == "op")
                 {
                     superSkill = rhsUnit.pet.skillController.superSkill;
+                }
+                else if (superSkillExpr == "secret")
+                {
+                    var secretPet = Pet.GetExamplePet(newPet.id);
+                    superSkill = secretPet.skills.secretSkill.LastOrDefault(x => x.type == SkillType.必杀);
+                    superSkill ??= secretPet.skills.ownSuperSkill.LastOrDefault(x => x.type == SkillType.必杀);
                 }
                 else if (superSkillExpr.TryTrimStart("shift", out var superTrim) &&
                     superTrim.TryTrimParentheses(out var superShift) &&
@@ -1594,7 +1605,7 @@ public static class EffectAbilityHandler
             // Switch Pet.
             var inheritList = effect.abilityOptionDict.Get("inherit", "buff").Split('/');
             Pet switchPet = new Pet((int)newValue, battlePet);
-            bool isSkillShifted = TryGetShiftedSkills(battlePet, out var normalSkills, out var superSkill);
+            bool isSkillShifted = TryGetShiftedSkills(battlePet, switchPet, out var normalSkills, out var superSkill);
             switchPet.record.SetRecord("lastSwitchPetId", battlePet.id);
             switchPet.normalSkill = isSkillShifted ? normalSkills : battlePet.skillController.normalSkills.ToArray();
             switchPet.superSkill = isSkillShifted ? superSkill : battlePet.skillController.superSkill;
@@ -1696,7 +1707,7 @@ public static class EffectAbilityHandler
 
         if (type.TryTrimStart("normalSkill", out var trimNormalSkill))
         {
-            TryGetShiftedSkills(battlePet, out var normalSkills, out var superSkill, normalSkillKey: "value");
+            TryGetShiftedSkills(battlePet, battlePet, out var normalSkills, out var superSkill, normalSkillKey: "value");
             if (trimNormalSkill.TryTrimParentheses(out var skillIndexExpr)
                 && int.TryParse(skillIndexExpr, out var skillIndex))
             {
@@ -1735,7 +1746,7 @@ public static class EffectAbilityHandler
 
         if (type.TryTrimStart("superSkill", out var trimSuperSkill))
         {
-            TryGetShiftedSkills(battlePet, out var normalSkills, out var superSkill, superSkillKey: "value");
+            TryGetShiftedSkills(battlePet, battlePet, out var normalSkills, out var superSkill, superSkillKey: "value");
 
             trimSuperSkill = trimSuperSkill.TrimStart(".");
             if (string.IsNullOrEmpty(trimSuperSkill) || trimSuperSkill == "id")

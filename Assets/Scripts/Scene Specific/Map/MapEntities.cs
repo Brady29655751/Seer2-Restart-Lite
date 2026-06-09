@@ -9,4 +9,5 @@ public class MapEntities
     [XmlElement("npc")] public List<NpcInfo> npcs;
     [XmlElement("farm")] public List<NpcInfo> farms;
     [XmlElement("animal")] public List<NpcInfo> animals;
+    [XmlElement("pond")] public List<NpcInfo> ponds;
 }

@@ -17,9 +17,11 @@ public class ItemBagPanel : Panel
             default:
                 base.SetPanelIdentifier(id, param);
                 return;
+
             case "title":
                 titleText?.SetText(param);
                 return;
+
             case "item":
                 var itemList = new List<int>();
                 if (param.TryTrimParentheses(out _, '(', ')'))
@@ -35,6 +37,24 @@ public class ItemBagPanel : Panel
                 }
                 SetItemBag(itemList.Select(id => Item.Find(id) ?? new Item(id, 0)).ToList());
                 break;
+                
+            case "mode":
+                switch (param)
+                {
+                    default:
+                        return;
+
+                    case "animal":
+                        var animalItems = new List<Item>();
+                        var animalList = ItemInfo.database.Where(x => x.type == ItemType.Animal).Select(x => new Animal(x.id, 0)).ToList();
+                        foreach (var animal in animalList)
+                        {
+                            animalItems.Add(Item.Find(animal.id) ?? new Item(animal.id, 0));
+                            animalItems.Add(Item.Find(animal.ProductId) ?? new Item(animal.ProductId, 0));
+                        }
+                        SetItemBag(animalItems);
+                        return;
+                }
         }
 
     }

@@ -60,8 +60,8 @@ public class TitleManager : Manager<TitleManager>
         if (res.anim != null)
         {
             var obj = Instantiate(res.anim, Camera.main.transform);
-            obj.transform.localScale = map.anim.animScale;
-            obj.transform.position = map.anim.animPos;
+            obj.transform.localScale = map.anim.AnimScale;
+            obj.transform.position = map.anim.AnimPos;
             backgroundImage.gameObject.SetActive(false);
         }
     }

@@ -47,6 +47,7 @@ public class BattlePet : Pet
     public int minAnger => statusController.minAnger;
     public int maxAnger => statusController.maxAnger;
 
+    public float corrupt => GetCorruptValue();
 
     public BattlePet(Pet _pet) : base(_pet)
     {
@@ -169,6 +170,16 @@ public class BattlePet : Pet
             return new KeyValuePair<int, int>((int)status.spd, (int)status.hp);
         }
         return new KeyValuePair<int, int>(0, 1);
+    }
+
+    public float GetCorruptValue()
+    {
+        var buff = buffController.GetBuff(3631);
+        if (buff == null)
+            return 0;
+
+        var unit = Mathf.Min(maxHp * 0.05f, 50);
+        return unit * buff.value;
     }
 
     public override float GetPetIdentifier(string id)

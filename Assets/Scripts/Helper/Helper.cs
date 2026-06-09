@@ -250,5 +250,22 @@ namespace System {
             q.eulerAngles = ((list == null) || (list.Count != 3)) ? defaultValue.eulerAngles : new Vector3(list[0], list[1], list[2]);
             return q;
         }
+
+        public static string GetDirectionName(this Vector2 direction, string separator = "_", string defaultValue = null)
+        {
+            if (direction == Vector2.zero)
+                return defaultValue;
+
+            var x = direction.x > 0 ? "right" : "left";
+            var y = direction.y > 0 ? "back" : "front";
+
+            if (direction.x == 0)
+                return y;
+
+            if (direction.y == 0)
+                return x;
+
+            return $"{y}{separator}{x}";
+        }
     }
 }

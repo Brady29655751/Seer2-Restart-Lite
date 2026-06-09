@@ -76,8 +76,8 @@ public class MapSceneView : UIModule
         }
 
         var anim = Instantiate(prefab, Camera.main.transform);
-        anim.transform.localScale = map.anim?.animScale ?? Vector2.one;
-        anim.transform.localPosition = map.anim?.animPos ?? Vector2.zero;
+        anim.transform.localScale = map.anim?.AnimScale ?? Vector2.one;
+        anim.transform.localPosition = map.anim?.AnimPos ?? Vector2.zero;
         background.color = Color.clear;
     }
 
@@ -340,56 +340,6 @@ public class MapSceneView : UIModule
                     npc.SetColor(Color.white);
                     npc.SetRect(npc.GetInfo().pos + posOffset, size, Quaternion.identity);   
                 }
-
-                /*
-                var plantExpr = activity.GetData("land[" + id + "].plant", "none");
-                var isPlantGrowing = int.TryParse(plantExpr, out var plantId);
-                
-                var plant = Item.GetItemInfo(plantId);
-                var date = isPlantGrowing ? DateTime.Parse(activity.GetData("land[" + id + "].date[ripe]", DateTime.MaxValue.ToString())) : DateTime.MaxValue;
-                var ripe = DateTime.Now >= date;
-                
-                var seedId = int.Parse(plant?.options.Get("seed", "600000") ?? "600000");
-                var seed = Item.GetItemInfo(seedId);
-
-                var item = ripe ? plant : seed;
-                var size = Vector2.one * 50;
-                var sizeOffset = Vector2.zero;
-
-                var icon = ripe ? plantId : seedId;
-                var overrideIcon = seed.effects.Find(x => x.abilityOptionDict.ContainsKey("icon"));
-
-                if (isPlantGrowing)
-                {
-                    if (overrideIcon != null)
-                    {
-                        var iconList = overrideIcon.abilityOptionDict.Get("icon").ToIntList('/');
-                        var iconId = iconList.Last();
-                        if (!ripe)
-                        {
-                            var growth = 1 - (date - DateTime.Now) / TimeSpan.Parse(seed.options["time"]);
-                            int index = (int)(growth * (iconList.Count - 1));
-                            if (index >= (iconList.Count - 1))
-                                index = iconList.Count - 1;
-                            
-                            iconId = iconList[index];
-                        }
-                        var sprite = ResourceManager.instance.GetLocalAddressables<Sprite>($"Maps/plant/{iconId}", ItemInfo.IsMod(iconId));
-                        size = sprite?.texture.GetTextureSize() ?? size;
-                        sizeOffset = overrideIcon.abilityOptionDict.Get("offset")?.ToVector2(sizeOffset, '/') ?? sizeOffset;
-                        npc.SetSprite(sprite);
-                    }
-                    else
-                    {
-                        npc.SetIcon((ItemInfo.IsMod(icon) ? "Mod/" : string.Empty) + "Items/" + icon);
-                    }   
-                }
-
-                var pos = npc.GetInfo().pos + new Vector2((50 - size.x) / 2, 0) + sizeOffset;
-
-                npc.SetColor(isPlantGrowing ? Color.white : Color.clear);
-                npc.SetRect(pos, size, Quaternion.identity);
-                */
             }
             yield return null;
         }
@@ -397,6 +347,31 @@ public class MapSceneView : UIModule
 
     private IEnumerator CheckAnimalCoroutine()
     {
+        var timeStep = 0.1f;
+        var moveInfo = animalDict.ToDictionary(x => x.Key, x => (Vector2.zero, Animal.IsNullOrEmpty(Animal.LoadData(x.Key)) ? 0 : Random.Range(-4f, -1f)));
+
+        foreach (var land in animalDict)
+        {
+            var id = land.Key;
+            var npc = land.Value;
+            var animal = Animal.LoadData(id);
+
+            if (Animal.IsNullOrEmpty(animal))
+            {
+                npc.SetSprite(SpriteSet.Empty);
+                npc.SetColor(Color.clear);
+                npc.SetRaycastTarget(false);
+            }
+            else
+            {
+                var icon = animal.GetIcon();
+                npc.SetRaycastTarget(true);
+                npc.SetSprite(icon);
+                npc.SetColor(Color.white);
+                npc.SetSize(icon?.texture.GetTextureSize() ?? Vector2.zero);   
+            }
+        }
+
         while (true)
         {
             foreach (var land in animalDict)
@@ -405,26 +380,60 @@ public class MapSceneView : UIModule
                 var npc = land.Value;
                 var animal = Animal.LoadData(id);
 
-                if (Animal.IsNullOrEmpty(animal))
+                if (Animal.IsNullOrEmpty(animal) || animal.IsFollowing)
                 {
                     npc.SetColor(Color.clear);
+                    npc.SetRaycastTarget(false);
                 }
                 else
                 {
-                    var icon = animal.GetIcon();
-                    npc.SetSprite(icon);
                     npc.SetColor(Color.white);
-                    npc.SetSize(icon?.texture.GetTextureSize() ?? Vector2.zero);
-                    /*
-                    var gif = animal.GetGifUrl("front");
-                    if (!string.IsNullOrEmpty(gif))
+                    npc.SetRaycastTarget(true);
+
+                    var move = moveInfo.Get(id, (Vector2.zero, 0));
+                    if (move.Item1 == Vector2.zero)
                     {
-                        npc.SetGif(new AnimInfo(){ id = gif });
+                        if (move.Item2 < 0)
+                        {
+                            npc.SetGif(new AnimInfo(){ id = "reset" });
+                            moveInfo.Set(id, (move.Item1, move.Item2 + timeStep));
+                            continue;
+                        }
+
+                        var rng = Random.Range(0, 8);
+                        var dirName = new List<string>(){ "front", "front_left", "left", "back_left", "back", "back_right", "right", "front_right"}.Get(rng, "none");
+                        var dirX = dirName.Contains("right") ? 1 : (dirName.Contains("left") ? -1 : 0);
+                        var dirY = dirName.Contains("back") ? 1 : (dirName.Contains("front") ? -1 : 0);
+                        var dir = new Vector2(dirX * Random.Range(1f, 3f), dirY);
+                        var time = Random.Range(1f, 5f);
+                        var gifInfo = animal.GetGifInfo(dirName);
+                        if (gifInfo != null)
+                        {
+                            npc.SetGif(gifInfo);
+                            moveInfo.Set(id, (dir, time));
+                        }
                     }
-                    */
+                    else if (move.Item2 > 0)
+                    {
+                        var rect = npc.GetComponent<RectTransform>();
+                        var dest = Vector2Int.FloorToInt(rect.anchoredPosition + move.Item1 * animal.WalkSpeed);
+                        if (!map.IsPathAvailable(dest))
+                        {
+                            moveInfo.Set(id, (Vector2.zero, Random.Range(-3f, -1f)));
+                        }
+                        else
+                        {
+                            moveInfo.Set(id, (move.Item1, move.Item2 - timeStep));
+                            rect.anchoredPosition = dest;
+                        }
+                    }
+                    else
+                    {
+                        moveInfo.Set(id, (Vector2.zero, Random.Range(-12f, -4f)));
+                    }
                 }
             }
-            yield return null;
+            yield return new WaitForSeconds(timeStep);
         }   
     }
 

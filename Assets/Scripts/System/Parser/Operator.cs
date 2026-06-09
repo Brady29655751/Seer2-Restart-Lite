@@ -131,6 +131,16 @@ public static class Operator {
     {
         return Mathf.RoundToInt(lhs / rhs) * rhs;
     }
+
+    public static T Max<T>(T lhs, T rhs) where T : IComparable<T>
+    {
+        return lhs.CompareTo(rhs) > 0 ? lhs : rhs;
+    }
+
+    public static T Min<T>(T lhs, T rhs) where T : IComparable<T>
+    {
+        return lhs.CompareTo(rhs) < 0 ? lhs : rhs;
+    }
 }
 
 public enum DataType {

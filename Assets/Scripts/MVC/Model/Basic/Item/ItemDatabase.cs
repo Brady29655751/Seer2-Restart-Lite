@@ -27,6 +27,7 @@ public static class ItemDatabase
         {"fertilizer", ItemType.Fertilizer},
         {"animal_child", ItemType.AnimalChild},
         {"animal", ItemType.Animal},
+        {"animal_action", ItemType.AnimalAction},
         {"achievement", ItemType.Achievement},
         {"shoot", ItemType.Shoot},
         {"equipment", ItemType.Equipment},
@@ -54,6 +55,7 @@ public static class ItemDatabase
         {ItemType.Fertilizer, "肥料"},
         {ItemType.AnimalChild, "动物幼崽"},
         {ItemType.Animal, "动物"},
+        {ItemType.AnimalAction, "动物操作"},
         {ItemType.Achievement, "称号"},
         {ItemType.Shoot, "射击"},
         {ItemType.Equipment, "装备"},
@@ -67,7 +69,7 @@ public static class ItemDatabase
         { ItemCategory.Capture, new List<ItemType>() { ItemType.Capture } },
         { ItemCategory.Stuff, new List<ItemType>() { ItemType.Mine, ItemType.Stuff }},
         { ItemCategory.Plant, new List<ItemType>() { ItemType.Plant, ItemType.Seed, ItemType.Fertilizer }},
-        { ItemCategory.Animal, new List<ItemType>() { ItemType.Animal, ItemType.AnimalChild }},
+        { ItemCategory.Animal, new List<ItemType>() { ItemType.Animal, ItemType.AnimalChild, ItemType.AnimalAction }},
         { ItemCategory.Achievement, new List<ItemType>() { ItemType.Achievement, ItemType.Shoot, ItemType.Equipment } },
 
         { ItemCategory.PetGrow, new List<ItemType>() { ItemType.Evolve, ItemType.EXP, ItemType.EV, ItemType.IV, ItemType.Personality } },
@@ -96,6 +98,17 @@ public static class ItemDatabase
         return (typeList == null) ? false : typeList.Contains(type);
     }
 
+    public static Animal.LandType ToLandType(this string type)
+    {
+        return type switch
+        {
+            "water" => Animal.LandType.Water,
+            "insect" => Animal.LandType.Insect,
+            "egg" => Animal.LandType.Egg,
+            _ => Animal.LandType.Land,
+        };
+    }
+
 }
 
 public enum ItemType
@@ -121,6 +134,7 @@ public enum ItemType
     Fertilizer,
     AnimalChild,
     Animal,
+    AnimalAction,
     Achievement,
     Shoot,
     Equipment,

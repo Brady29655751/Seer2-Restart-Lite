@@ -19,12 +19,14 @@ public class PlayerInfoPanel : Panel
         InitChangeNameSubscriptions();
     }
 
-    public override void Init() {
+    public override void Init()
+    {
         base.Init();
         InitPlayerData();
     }
 
-    private void InitPlayerData() {
+    private void InitPlayerData()
+    {
         changeNameController.InitName(data.nickname);
         changeNameController.InitAchievement(data.achievement);
         infoController.ShowCurrency();
@@ -33,7 +35,8 @@ public class PlayerInfoPanel : Panel
         SetPlayerSprite();
     }
 
-    private void InitChangeNameSubscriptions() {
+    private void InitChangeNameSubscriptions()
+    {
         changeNameController.onChangeNameEmptyEvent += infoController.OnChangeNameEmpty;
         changeNameController.onChangeNameSuccessEvent += infoController.OnChangeNameSuccess;
         changeNameController.onChangeAchievementSuccessEvent += (x) => SetPlayerSprite();
@@ -66,14 +69,34 @@ public class PlayerInfoPanel : Panel
         playerImage?.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, height);
     }
 
-    public void ChangePlayerRobot() {
+    public void ChangePlayerRobot()
+    {
         data.settingsData.useRobotAsPlayer = !data.settingsData.useRobotAsPlayer;
         SetPlayerSprite();
         SaveSystem.SaveData();
     }
 
-    public void ChangeShootMode() {
+    public void ChangeShootMode()
+    {
         Player.instance.isShootMode = !Player.instance.isShootMode;
+    }
+
+    public void TakeFollower()
+    {
+        Hintbox.OpenHintboxWithContent("该功能尚未实装，敬请期待！", 16);
+    }
+
+    public void SetFollowerHome()
+    {
+        if (Player.instance.follower == null)
+        {
+            Hintbox.OpenHintboxWithContent("当前没有跟随中的精灵或动物哦！", 16);
+            return;
+        }
+
+        Player.instance.follower = null;
+        PlayerController.instance.SetFollowerSprite();
+        Hintbox.OpenHintboxWithContent("跟随者已平安返回！", 16);
     }
 
 }

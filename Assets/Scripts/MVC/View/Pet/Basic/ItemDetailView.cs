@@ -28,6 +28,19 @@ public class ItemDetailView : Module
         totalText?.SetText(total + " " + currencyType);
     }
 
+    public void SetDescription(string description)
+    {
+        descriptionText?.SetText(description);
+    }
+
+    public void SetDescriptionFontSize(int fontSize)
+    {
+        if (descriptionText == null)
+            return;
+
+        descriptionText.fontSize = fontSize;
+    }
+
     public void SetOtherInfo(string info) {
         otherInfoText?.SetText(info);
     }

@@ -1,0 +1,46 @@
+<map name="时空罗盘" category="101" id="10425">
+	<fightMapColor>64,64,64,255</fightMapColor>
+	<initialPoint>790,110</initialPoint>
+	<music category="101">
+		<bgm>BGM_425</bgm>
+	</music>
+	<entities>
+		<npc id="1067001" resId="Pets/pet/10500" name="Lv100 阿尔比零" size="135,172" pos="475,355" namePos="10,-195">
+			<description>万千时空汇聚于此</description>
+			<dialog>
+				<branch id="default" name="阿尔比零" icon="Pets/pet/10500" size="123,155" pos="0,30">
+					<content>跨越所有平行时空，寻找无限的可能性</content>
+					<functionHandler>
+						<func type="click">
+							<description><![CDATA[超进化]]></description>
+							<action>openPanel</action>
+							<param>TwelveRound</param>
+							<param>pet=11278</param>
+							<param>pos=0,120</param>
+							<param>size=154,178</param>
+							<param>item[2]=10239[1]</param>
+							<param>item[5]=9008[3]</param>
+							<param>item[8]=2[50]</param>
+							<param>item[10]=10242[1]</param>
+							<param>item[12]=331278[1]</param>
+						</func>	
+					</functionHandler>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[无限猴子理论是吧？]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+					</replyHandler>
+				</branch>
+			</dialog>
+			<eventHandler>
+				<button type="click">
+					<action>openDialog</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<!-- <teleport id="1" name="传送室" pos="300,120" targetMapId="10001"/> -->
+	</entities>		
+</map>
