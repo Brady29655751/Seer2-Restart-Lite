@@ -27,7 +27,7 @@ public class MapNavigator
     public float footprint => footprintRadius;
     public float gridCellSize => cellSize;
 
-    public MapNavigator(Map map, Vector2 canvasSize, float cellSize = 8f, float footprintRadius = 14f)
+    public MapNavigator(Map map, Vector2 canvasSize, float cellSize = 8f, float footprintRadius = 8f)
     {
         this.map = map;
         this.canvasSize = canvasSize;
@@ -59,6 +59,50 @@ public class MapNavigator
         }
 
         return true;
+    }
+
+    public bool TryFindNearestReachablePoint(Vector2 center, float searchRadius, out Vector2 point)
+    {
+        point = center;
+        if (IsTargetReachable(center))
+            return true;
+
+        Vector2Int origin = CanvasToCell(center);
+        int maxCellRadius = Mathf.CeilToInt(Mathf.Max(0f, searchRadius) / cellSize);
+        float bestDistanceSquared = float.PositiveInfinity;
+        bool found = false;
+
+        for (int radius = 1; radius <= maxCellRadius; radius++)
+        {
+            bool foundAtRadius = false;
+            for (int y = origin.y - radius; y <= origin.y + radius; y++)
+            {
+                for (int x = origin.x - radius; x <= origin.x + radius; x++)
+                {
+                    if (Mathf.Abs(x - origin.x) != radius && Mathf.Abs(y - origin.y) != radius)
+                        continue;
+
+                    var cell = new Vector2Int(x, y);
+                    if (!IsCellWalkable(cell))
+                        continue;
+
+                    Vector2 candidate = CellToCanvas(cell);
+                    float distanceSquared = (candidate - center).sqrMagnitude;
+                    if (distanceSquared > searchRadius * searchRadius || distanceSquared >= bestDistanceSquared)
+                        continue;
+
+                    point = candidate;
+                    bestDistanceSquared = distanceSquared;
+                    found = true;
+                    foundAtRadius = true;
+                }
+            }
+
+            if (foundAtRadius)
+                return true;
+        }
+
+        return found;
     }
 
     public bool TryFindPath(Vector2 from, Vector2 to, out List<Vector2> path)

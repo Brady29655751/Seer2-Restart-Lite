@@ -56,6 +56,17 @@ public class PlayerModel : Module
         return true;
     }
 
+    public bool SetDestinationNearCanvasPos(Vector2 destination, float searchRadius, Action onArrive)
+    {
+        if (navigator == null)
+            navigator = new MapNavigator(map, canvasSize);
+
+        if (!navigator.TryFindNearestReachablePoint(destination, searchRadius, out var reachableDestination))
+            return false;
+
+        return SetDestinationByCanvasPos(reachableDestination, onArrive);
+    }
+
     /// <summary>
     /// <paramref name="anchor"/> Bottom-left (0, 0). Top-right (1, 1).
     /// </summary>
