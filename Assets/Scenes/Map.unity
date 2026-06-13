@@ -3292,6 +3292,7 @@ MonoBehaviour:
   canvasRect: {fileID: 1692785721}
   background: {fileID: 471731215}
   pathMask: {fileID: 1733171895}
+  showPathPreview: 1
 --- !u!1 &386233366
 GameObject:
   m_ObjectHideFlags: 0
@@ -9230,6 +9231,33 @@ MonoBehaviour:
   dialogController: {fileID: 1740313653}
   dialogStoryLayer: {fileID: 350885961}
   dialogStoryController: {fileID: 350885960}
+  useOpenAnimation: 1
+  openAnimationDuration: 0.18
+  openAnimationRiseDistance: 12
+  openAnimationCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!4 &936650829
 Transform:
   m_ObjectHideFlags: 0
@@ -11829,6 +11857,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2927443407237216242, guid: e99749ea939ad6c419d0e2129dcf2129, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 04e56da1602600447b9b8c0631fe5e8c, type: 3}
     - target: {fileID: 4283326611254360902, guid: e99749ea939ad6c419d0e2129dcf2129, type: 3}
       propertyPath: sound
       value: 
@@ -22190,6 +22222,7 @@ MonoBehaviour:
   - {fileID: -4187008917887026971, guid: 2a250307a3c7f31498bb729613887c9a, type: 3}
   playerNameText: {fileID: 1515764620}
   achievementText: {fileID: 1001929267}
+  visualCenterOffset: {x: 0, y: 0}
   followerGif: {fileID: 1482753621}
 --- !u!224 &2069327822
 RectTransform:
