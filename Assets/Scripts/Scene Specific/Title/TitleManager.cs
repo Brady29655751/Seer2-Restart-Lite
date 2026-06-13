@@ -5,7 +5,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using SimpleFileBrowser;
 using FTRuntime;
-using System.Linq;
 
 public class TitleManager : Manager<TitleManager>
 {
@@ -14,11 +13,414 @@ public class TitleManager : Manager<TitleManager>
     [SerializeField] private IButton startButton;
     [SerializeField] private IText versionDateText, versionStringText;
     [SerializeField] private GameObject toolBarObject, resourceOperateObject, modOperateObject, helpObject;
+    [Header("Game Icon Entrance")]
+    [SerializeField] private bool playGameIconEntrance = true;
+    [SerializeField] private RectTransform gameIconEntranceTarget;
+    [SerializeField] private float gameIconEntranceStartScaleX = 0.08f;
+    [SerializeField] private float gameIconEntranceDuration = 0.45f;
+    [SerializeField] private float gameIconEntranceDelay = 0.05f;
+    [SerializeField] private AnimationCurve gameIconEntranceCurve = AnimationCurve.EaseInOut(0f, 0f, 1f, 1f);
+    [SerializeField] private bool showGameIconScanLine = true;
+    [SerializeField] private float gameIconScanLineWidth = 10f;
+    [SerializeField] private Color gameIconScanLineColor = new Color(0.25f, 0.95f, 1f, 0.85f);
+    [SerializeField] private bool debugGameIconEntrance = false;
+    [Header("Toolbar Entrance")]
+    [SerializeField] private bool playToolbarEntrance = true;
+    [SerializeField] private RectTransform toolbarEntranceTarget;
+    [SerializeField] private Vector2 toolbarEntranceOffset = new Vector2(0f, -36f);
+    [SerializeField] private float toolbarEntranceDuration = 0.42f;
+    [SerializeField] private float toolbarEntranceDelay = 0.16f;
+    [SerializeField] private AnimationCurve toolbarEntranceCurve = AnimationCurve.EaseInOut(0f, 0f, 1f, 1f);
+    [Header("Toolbar Button Hover")]
+    [SerializeField] private bool enableToolbarButtonHover = true;
+    [SerializeField] private float toolbarButtonHoverScale = 1.06f;
+    [SerializeField] private float toolbarButtonHoverLerpSpeed = 12f;
+
+    private Graphic gameIconGraphic;
+    private Image gameIconImage;
+    private GameObject gameIconEntranceObject;
+    private Vector2 gameIconTargetPosition;
+    private Vector3 gameIconTargetScale;
+    private Color gameIconTargetColor = Color.white;
+    private Image.Type gameIconOriginalImageType;
+    private Image.FillMethod gameIconOriginalFillMethod;
+    private int gameIconOriginalFillOrigin;
+    private bool gameIconOriginalFillClockwise;
+    private float gameIconOriginalFillAmount = 1f;
+    private RectTransform gameIconScanLineRect;
+    private Image gameIconScanLineImage;
+    private RectTransform toolbarRect;
+    private CanvasGroup toolbarCanvasGroup;
+    private Vector2 toolbarTargetPosition;
+    private float toolbarTargetAlpha = 1f;
+    private bool toolbarOriginalInteractable = true;
+    private bool toolbarOriginalBlocksRaycasts = true;
+
+    protected override void Awake()
+    {
+        base.Awake();
+        PrepareGameIconEntrance();
+        PrepareToolbarEntrance();
+        ConfigureToolbarButtonHover();
+    }
 
     private void Start() {
         GetVersion();
         FileBrowser.AddQuickLink("默认存档位置", Application.persistentDataPath);
         SetBackgroundPageImage();
+        PlayGameIconEntrance();
+        PlayToolbarEntrance();
+    }
+
+    private void PrepareGameIconEntrance()
+    {
+        if (!playGameIconEntrance)
+        {
+            LogGameIconEntrance("Prepare skipped: playGameIconEntrance is false");
+            return;
+        }
+
+        var target = GetGameIconEntranceTarget();
+        if ((target == null) || !target.gameObject.activeInHierarchy)
+        {
+            LogGameIconEntrance($"Prepare skipped: target={(target == null ? "null" : target.name)}, active={(target != null && target.gameObject.activeInHierarchy)}");
+            return;
+        }
+
+        gameIconEntranceObject = target.gameObject;
+        gameIconImage = target.GetComponent<Image>();
+        gameIconGraphic = gameIconImage != null ? gameIconImage : target.GetComponent<Graphic>();
+        if (gameIconGraphic == null)
+        {
+            LogGameIconEntrance($"Prepare skipped: {target.name} has no Graphic component");
+            return;
+        }
+
+        gameIconTargetPosition = target.anchoredPosition;
+        gameIconTargetScale = target.localScale;
+        gameIconTargetColor = gameIconGraphic.color;
+
+        if (gameIconImage != null)
+        {
+            gameIconOriginalImageType = gameIconImage.type;
+            gameIconOriginalFillMethod = gameIconImage.fillMethod;
+            gameIconOriginalFillOrigin = gameIconImage.fillOrigin;
+            gameIconOriginalFillClockwise = gameIconImage.fillClockwise;
+            gameIconOriginalFillAmount = gameIconImage.fillAmount;
+
+            gameIconImage.type = Image.Type.Filled;
+            gameIconImage.fillMethod = Image.FillMethod.Horizontal;
+            gameIconImage.fillOrigin = 0;
+            gameIconImage.fillClockwise = true;
+            gameIconImage.fillAmount = 0f;
+        }
+
+        target.anchoredPosition = gameIconTargetPosition;
+        target.localScale = new Vector3(gameIconTargetScale.x * gameIconEntranceStartScaleX, gameIconTargetScale.y, gameIconTargetScale.z);
+        SetGameIconAlpha(gameIconTargetColor.a);
+        PrepareGameIconScanLine(target);
+        LogGameIconEntrance($"Prepared target={target.name}, scale={target.localScale}, targetScale={gameIconTargetScale}, duration={gameIconEntranceDuration}, delay={gameIconEntranceDelay}, graphic={gameIconGraphic.GetType().Name}, image={(gameIconImage != null)}, active={target.gameObject.activeInHierarchy}");
+    }
+
+    private RectTransform GetGameIconEntranceTarget()
+    {
+        if (gameIconEntranceTarget != null)
+            return gameIconEntranceTarget;
+
+        foreach (var rect in FindObjectsOfType<RectTransform>(true))
+        {
+            if (rect.gameObject.activeInHierarchy && (rect.name == "Game Icon"))
+                return rect;
+        }
+
+        return null;
+    }
+
+    private void PlayGameIconEntrance()
+    {
+        if (!playGameIconEntrance)
+        {
+            LogGameIconEntrance("Play skipped: playGameIconEntrance is false");
+            return;
+        }
+
+        var target = GetGameIconEntranceTarget();
+        if ((target == null) || (gameIconGraphic == null))
+        {
+            LogGameIconEntrance($"Play skipped: target={(target == null ? "null" : target.name)}, graphic={(gameIconGraphic == null ? "null" : gameIconGraphic.GetType().Name)}");
+            return;
+        }
+
+        LogGameIconEntrance($"Play started: target={target.name}, currentPos={target.anchoredPosition}, currentAlpha={gameIconGraphic.color.a}");
+        StartCoroutine(AnimateGameIconEntrance(target));
+    }
+
+    private IEnumerator AnimateGameIconEntrance(RectTransform target)
+    {
+        if (gameIconEntranceDelay > 0f)
+        {
+            LogGameIconEntrance($"Delay begin: {gameIconEntranceDelay}s");
+            yield return new WaitForSecondsRealtime(gameIconEntranceDelay);
+            LogGameIconEntrance("Delay end");
+        }
+
+        var duration = Mathf.Max(0.2f, gameIconEntranceDuration);
+        if (duration <= 0f)
+        {
+            FinishGameIconEntrance(target);
+            yield break;
+        }
+
+        var elapsed = 0f;
+        var frame = 0;
+        var startScale = new Vector3(gameIconTargetScale.x * gameIconEntranceStartScaleX, gameIconTargetScale.y, gameIconTargetScale.z);
+        while (elapsed < duration)
+        {
+            var progress = Mathf.Clamp01(elapsed / duration);
+            var easedProgress = EvaluateGameIconEntranceCurve(progress);
+            ApplyGameIconReveal(target, startScale, easedProgress);
+            var frameDelta = Mathf.Min(Time.unscaledDeltaTime, 1f / 30f);
+            LogGameIconEntrance($"Frame {frame}: elapsed={elapsed:F3}, delta={Time.unscaledDeltaTime:F3}, clampedDelta={frameDelta:F3}, progress={progress:F3}, eased={easedProgress:F3}, fill={(gameIconImage != null ? gameIconImage.fillAmount : 1f):F3}, scale={target.localScale}, active={target.gameObject.activeInHierarchy}");
+            elapsed += frameDelta;
+            frame++;
+            yield return null;
+        }
+
+        FinishGameIconEntrance(target);
+    }
+
+    private float EvaluateGameIconEntranceCurve(float progress)
+    {
+        if ((gameIconEntranceCurve != null) && (gameIconEntranceCurve.length >= 2))
+            return gameIconEntranceCurve.Evaluate(progress);
+
+        return progress * progress * (3f - 2f * progress);
+    }
+
+    private void FinishGameIconEntrance(RectTransform target)
+    {
+        target.anchoredPosition = gameIconTargetPosition;
+        target.localScale = gameIconTargetScale;
+        gameIconGraphic.color = gameIconTargetColor;
+        if (gameIconImage != null)
+        {
+            gameIconImage.type = gameIconOriginalImageType;
+            gameIconImage.fillMethod = gameIconOriginalFillMethod;
+            gameIconImage.fillOrigin = gameIconOriginalFillOrigin;
+            gameIconImage.fillClockwise = gameIconOriginalFillClockwise;
+            gameIconImage.fillAmount = gameIconOriginalFillAmount;
+        }
+
+        if (gameIconScanLineImage != null)
+        {
+            gameIconScanLineImage.enabled = false;
+        }
+
+        LogGameIconEntrance($"Finished: finalPos={target.anchoredPosition}, finalAlpha={gameIconGraphic.color.a}, active={target.gameObject.activeInHierarchy}");
+    }
+
+    private void SetGameIconAlpha(float alpha)
+    {
+        var color = gameIconTargetColor;
+        color.a = alpha;
+        gameIconGraphic.color = color;
+    }
+
+    private void ApplyGameIconReveal(RectTransform target, Vector3 startScale, float progress)
+    {
+        target.anchoredPosition = gameIconTargetPosition;
+        target.localScale = Vector3.LerpUnclamped(startScale, gameIconTargetScale, progress);
+
+        if (gameIconImage != null)
+        {
+            gameIconImage.fillAmount = progress;
+        }
+        else
+        {
+            SetGameIconAlpha(Mathf.LerpUnclamped(0f, gameIconTargetColor.a, progress));
+        }
+
+        UpdateGameIconScanLine(target, progress);
+    }
+
+    private void PrepareGameIconScanLine(RectTransform target)
+    {
+        if (!showGameIconScanLine)
+            return;
+
+        var scanLineObject = new GameObject("Game Icon Scan Line", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
+        scanLineObject.transform.SetParent(target, false);
+
+        gameIconScanLineRect = scanLineObject.GetComponent<RectTransform>();
+        gameIconScanLineRect.anchorMin = new Vector2(0f, 0f);
+        gameIconScanLineRect.anchorMax = new Vector2(0f, 1f);
+        gameIconScanLineRect.pivot = new Vector2(0.5f, 0.5f);
+        gameIconScanLineRect.sizeDelta = new Vector2(gameIconScanLineWidth, 0f);
+        gameIconScanLineRect.anchoredPosition = Vector2.zero;
+
+        gameIconScanLineImage = scanLineObject.GetComponent<Image>();
+        gameIconScanLineImage.raycastTarget = false;
+        gameIconScanLineImage.color = new Color(gameIconScanLineColor.r, gameIconScanLineColor.g, gameIconScanLineColor.b, 0f);
+    }
+
+    private void UpdateGameIconScanLine(RectTransform target, float progress)
+    {
+        if ((gameIconScanLineRect == null) || (gameIconScanLineImage == null))
+            return;
+
+        var rectWidth = target.rect.width;
+        gameIconScanLineRect.anchoredPosition = new Vector2(rectWidth * progress, 0f);
+        var alpha = gameIconScanLineColor.a * Mathf.Sin(Mathf.Clamp01(progress) * Mathf.PI);
+        gameIconScanLineImage.color = new Color(gameIconScanLineColor.r, gameIconScanLineColor.g, gameIconScanLineColor.b, alpha);
+    }
+
+    private void LogGameIconEntrance(string message)
+    {
+        if (!debugGameIconEntrance)
+            return;
+
+        Debug.Log($"[TitleManager][GameIconEntrance] {message}");
+    }
+
+    private void PrepareToolbarEntrance()
+    {
+        if (!playToolbarEntrance)
+            return;
+
+        toolbarRect = GetToolbarEntranceTarget();
+        if ((toolbarRect == null) || !toolbarRect.gameObject.activeInHierarchy)
+            return;
+
+        toolbarCanvasGroup = toolbarRect.GetComponent<CanvasGroup>();
+        if (toolbarCanvasGroup == null)
+        {
+            toolbarCanvasGroup = toolbarRect.gameObject.AddComponent<CanvasGroup>();
+        }
+
+        toolbarTargetPosition = toolbarRect.anchoredPosition;
+        toolbarTargetAlpha = toolbarCanvasGroup.alpha;
+        toolbarOriginalInteractable = toolbarCanvasGroup.interactable;
+        toolbarOriginalBlocksRaycasts = toolbarCanvasGroup.blocksRaycasts;
+
+        toolbarRect.anchoredPosition = toolbarTargetPosition + toolbarEntranceOffset;
+        toolbarCanvasGroup.alpha = 0f;
+        toolbarCanvasGroup.interactable = false;
+        toolbarCanvasGroup.blocksRaycasts = false;
+    }
+
+    private RectTransform GetToolbarEntranceTarget()
+    {
+        if (toolbarEntranceTarget != null)
+            return toolbarEntranceTarget;
+
+        foreach (var rect in FindObjectsOfType<RectTransform>(true))
+        {
+            if (rect.gameObject.activeInHierarchy && (rect.name == "Start Toolbar"))
+                return rect;
+        }
+
+        if (toolBarObject == null)
+            return null;
+
+        var current = toolBarObject.transform;
+        while (current != null)
+        {
+            if (current.name == "Start Toolbar")
+                return current.GetComponent<RectTransform>();
+
+            current = current.parent;
+        }
+
+        return toolBarObject.GetComponent<RectTransform>();
+    }
+
+    private void PlayToolbarEntrance()
+    {
+        if (!playToolbarEntrance || (toolbarRect == null) || (toolbarCanvasGroup == null))
+            return;
+
+        StartCoroutine(AnimateToolbarEntrance());
+    }
+
+    private IEnumerator AnimateToolbarEntrance()
+    {
+        if (toolbarEntranceDelay > 0f)
+            yield return new WaitForSecondsRealtime(toolbarEntranceDelay);
+
+        var duration = Mathf.Max(0.2f, toolbarEntranceDuration);
+        var elapsed = 0f;
+        var startPosition = toolbarTargetPosition + toolbarEntranceOffset;
+        while (elapsed < duration)
+        {
+            var progress = Mathf.Clamp01(elapsed / duration);
+            var easedProgress = EvaluateToolbarEntranceCurve(progress);
+            toolbarRect.anchoredPosition = Vector2.LerpUnclamped(startPosition, toolbarTargetPosition, easedProgress);
+            toolbarCanvasGroup.alpha = Mathf.LerpUnclamped(0f, toolbarTargetAlpha, easedProgress);
+            elapsed += Mathf.Min(Time.unscaledDeltaTime, 1f / 30f);
+            yield return null;
+        }
+
+        FinishToolbarEntrance();
+    }
+
+    private float EvaluateToolbarEntranceCurve(float progress)
+    {
+        if ((toolbarEntranceCurve != null) && (toolbarEntranceCurve.length >= 2))
+            return toolbarEntranceCurve.Evaluate(progress);
+
+        return progress * progress * (3f - 2f * progress);
+    }
+
+    private void FinishToolbarEntrance()
+    {
+        toolbarRect.anchoredPosition = toolbarTargetPosition;
+        toolbarCanvasGroup.alpha = toolbarTargetAlpha;
+        toolbarCanvasGroup.interactable = toolbarOriginalInteractable;
+        toolbarCanvasGroup.blocksRaycasts = toolbarOriginalBlocksRaycasts;
+    }
+
+    private void ConfigureToolbarButtonHover()
+    {
+        if (!enableToolbarButtonHover)
+            return;
+
+        var toolContainer = GetToolbarToolContainer();
+        if (toolContainer == null)
+            return;
+
+        foreach (Transform child in toolContainer)
+        {
+            if (!IsMainToolbarButtonName(child.name))
+                continue;
+
+            var feedback = child.GetComponent<TitleToolbarButtonHoverFeedback>();
+            if (feedback == null)
+            {
+                feedback = child.gameObject.AddComponent<TitleToolbarButtonHoverFeedback>();
+            }
+
+            feedback.SetFeedback(toolbarButtonHoverScale, toolbarButtonHoverLerpSpeed);
+        }
+    }
+
+    private Transform GetToolbarToolContainer()
+    {
+        var toolbar = GetToolbarEntranceTarget();
+        if (toolbar == null)
+            return null;
+
+        foreach (var rect in toolbar.GetComponentsInChildren<RectTransform>(true))
+        {
+            if (rect.name == "Tool")
+                return rect.transform;
+        }
+
+        return null;
+    }
+
+    private bool IsMainToolbarButtonName(string buttonName)
+    {
+        return (buttonName == "Resource") || (buttonName == "Mod") || (buttonName == "Help");
     }
 
     private void SetBackgroundPageImage() {
@@ -54,7 +456,7 @@ public class TitleManager : Manager<TitleManager>
         {
             backgroundImage.SetSprite(res.bg);
             backgroundImage.color = Color.white;
-            backgroundGadgetObjectList.ForEach(x => x?.SetActive(false));   
+            HideBackgroundGadgetsExceptGameIcon();
         }
 
         if (res.anim != null)
@@ -63,6 +465,17 @@ public class TitleManager : Manager<TitleManager>
             obj.transform.localScale = map.anim.AnimScale;
             obj.transform.position = map.anim.AnimPos;
             backgroundImage.gameObject.SetActive(false);
+        }
+    }
+
+    private void HideBackgroundGadgetsExceptGameIcon()
+    {
+        foreach (var obj in backgroundGadgetObjectList)
+        {
+            if ((obj == null) || (obj == gameIconEntranceObject) || (obj.name == "Game Icon"))
+                continue;
+
+            obj.SetActive(false);
         }
     }
 
