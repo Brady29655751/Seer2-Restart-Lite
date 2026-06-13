@@ -206,8 +206,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 55ae1e7da37b3c0429fd5ab60a20371b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   onPointerClickEvent:
     m_PersistentCalls:
       m_Calls: []
@@ -12594,6 +12594,7 @@ GameObject:
   - component: {fileID: 2077734742}
   - component: {fileID: 2077734744}
   - component: {fileID: 2077734743}
+  - component: {fileID: 2077734745}
   m_Layer: 5
   m_Name: Background Image
   m_TagString: Untagged
@@ -12658,6 +12659,24 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2077734741}
   m_CullTransparentMesh: 1
+--- !u!114 &2077734745
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2077734741}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7e83b4d2639d2e64fa5a0b0ec5af58f1, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  enableMotion: 1
+  useUnscaledTime: 1
+  cycleDuration: 8
+  scaleAmount: 0.015
+  positionOffset: {x: 4, y: 3}
+  phaseOffset: 0
 --- !u!1 &2083720590
 GameObject:
   m_ObjectHideFlags: 0
