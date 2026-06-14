@@ -13,23 +13,41 @@ public class PetItemBlockView : Module
     [SerializeField] private IButton button;
     [SerializeField] private Image icon;
     [SerializeField] private Text numText;
+    [SerializeField] private UniGifImage gif;
 
-    public void SetItem(Item item) {
+    public void SetItem(Item item)
+    {
         this.item = item;
         button?.SetInteractable(!isNull, false);
         icon?.gameObject.SetActive(!isNull);
-        icon?.SetSprite(isNull ? null :   item.info.icon);
+        icon?.SetSprite(isNull ? null : item.info.icon);
         numText?.SetText((isNull || (item.num < 0)) ? string.Empty : item.num.ToString());
     }
 
-    public void SetRewardIcon(Sprite sprite) {
+    public void SetRewardIcon(Sprite sprite)
+    {
         button?.SetInteractable(sprite != null);
         icon?.gameObject.SetActive(sprite != null);
         icon?.SetSprite(sprite);
         numText?.SetText(string.Empty);
     }
 
-    public void SetChosen(bool chosen) {
+    public void SetChosen(bool chosen)
+    {
+
+    }
+
+    public void SetGif(AnimInfo info)
+    {
+        if (gif == null)
+            return;
+
+        if (info == null)
+        {
+            gif.Stop();
+            return;
+        }
         
+        gif.SetGifFromUrl(info.GifPath, speed: info.AnimSpeed, useGifSize: info.UseAnimSize);
     }
 }

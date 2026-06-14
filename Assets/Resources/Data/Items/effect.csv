@@ -137,6 +137,7 @@ id,timing,priority,target,condition,cond_option,effect,effect_option
 13001,resident,-1,pet,pet,type=kizuna/kizuna.tag[bird]&kizuna_op=<&kizuna_cmp=maxKizuna&kizuna.tag[bird]_cmp=1,set_pet,max_use=maxKizuna-kizuna/5&type=record[kizuna]&op=+&value=5
 13002,resident,-1,pet,pet,type=kizuna/element&kizuna_op=<&kizuna_cmp=maxKizuna&element_cmp=1,set_pet,max_use=maxKizuna-kizuna/5&type=record[kizuna]&op=+&value=5
 13003,resident,-1,pet,pet,type=kizuna/kizuna.tag[twin]&kizuna_op=<&kizuna_cmp=maxKizuna&kizuna.tag[twin]_cmp=1,set_pet,max_use=maxKizuna-kizuna/5&type=record[kizuna]&op=+&value=5
+15002,none,-1,none,none,none,none,max_use=0
 20001,resident,-1,pet,pet,type=buff[400003]&buff[400003]_cmp=0,set_pet,type=buff&op=+&value=400003
 20002,resident\resident\on_remove_buff,-1\-1\-1,pet\pet\pet,pet\pet\none,type=buff[400004]&buff[400004]_cmp=0\type=buff[400004]&buff[400004]_cmp=0\none,set_pet\set_pet\set_pet,type=buff&op=+&value=400004\type=record[evolveBan]&op=SET&value=1\type=record[evolveBan]&op=SET&value=0
 21000,resident,-1,pet,pet,type=buff[410000]/buff[group:star_soul]&buff[410000]_cmp=0&buff[group:star_soul]_op=<&buff[group:star_soul]_cmp=5,set_pet,type=buff&op=+&value=410000
@@ -224,6 +225,8 @@ id,timing,priority,target,condition,cond_option,effect,effect_option
 201002,resident,-1,state,none,none,none,recipe=1011[5]/22021[3]/22009[2]/22026[3]&result=12002[90]/13002[5]/11002[5]
 201003,resident,-1,state,none,none,none,recipe=1008[4]/22033[3]/22010[2]/22020[3]&result=12003[90]/13003[5]/11003[5]
 202001,resident,-1,state,none,none,none,recipe=611001[1]/611024[1]
+202002,resident,-1,state,none,none,none,recipe=611004[1]/611049[1]
+205002,resident,-1,state,none,none,none,recipe=610004[5]/611035[2]/425001[1]
 210001,resident,-1,state,none,none,none,recipe=2[2025]
 210002,resident,-1,state,none,none,none,recipe=400010[1]/400011[1]/400012[1]/400013[1]
 210003,resident,-1,state,none,none,none,recipe=400010[1]/400011[1]/400012[1]/400013[1]
@@ -359,7 +362,12 @@ id,timing,priority,target,condition,cond_option,effect,effect_option
 400023,none,-1,none,none,none,none,none
 410001,none,-1,none,none,none,none,none
 410002,none,-1,none,none,none,none,none
+411001,none,-1,none,none,none,none,none
 420001,none,-1,none,none,none,none,none
+420002,none,-1,none,none,none,none,none
+425001,none,-1,none,none,none,none,none
+425002,none,-1,none,none,none,none,none
+425003,none,-1,none,none,none,none,none
 470002,resident,-1,pet,pet,type=baseId[20002]/level/buff[group:Cm]/buff[Cm_type:0]&baseId[20002]_cmp=1&level_op=>&level_cmp=99&buff[group:Cm]_op=<&buff[group:Cm]_cmp=3&buff[Cm_type:0]_op=<&buff[Cm_type:0]_cmp=1,set_pet,type=buff&op=+&value=470002
 470003,resident,-1,pet,pet,type=baseId[20003]/level/buff[group:Cm]/buff[Cm_type:0]&baseId[20003]_cmp=1&level_op=>&level_cmp=99&buff[group:Cm]_op=<&buff[group:Cm]_cmp=3&buff[Cm_type:0]_op=<&buff[Cm_type:0]_cmp=1,set_pet,type=buff&op=+&value=470003
 470004,resident,-1,pet,pet,type=baseId[20004]/level/buff[group:Cm]/buff[Cm_type:0]&baseId[20004]_cmp=1&level_op=>&level_cmp=99&buff[group:Cm]_op=<&buff[group:Cm]_cmp=3&buff[Cm_type:0]_op=<&buff[Cm_type:0]_cmp=1,set_pet,type=buff&op=+&value=470004
@@ -445,7 +453,10 @@ id,timing,priority,target,condition,cond_option,effect,effect_option
 600006,none,-1,none,none,none,none,none
 600007,none,-1,none,none,none,none,none
 601001,none,-1,none,none,none,none,icon=1001/2001/3001/4001/11001&offset=0/-12
+601004,none,-1,none,none,none,none,icon=1004/2004/3004/4004/11004&offset=0/-12
 601024,none,-1,none,none,none,none,icon=1024/2024/3024/4024/11024
+601035,none,-1,none,none,none,none,icon=1035/2035/3035/4035/11035[5035:1][6035:2]
+601049,none,-1,none,none,none,none,none
 610000,none,-1,none,none,none,none,none
 610001,resident,-1,state,none,random_cmp=3,none,plant=620001
 610002,resident\resident,-1\-1,state\state,none\none,random_type=unit&random_cmp=5\random_cmp=5,set_player\set_player,param_count=2&action=setItem&param[0]=add&param[1]=22002，1\param_count=5&action=openHintbox&param[0]=type＝Item&param[1]=title＝提示&param[2]=content＝你的笑笑花额外产出了1枚【笑笑花子】！&param[3]=item_icon＝buff[420002]&param[4]=option_num＝1
@@ -455,17 +466,30 @@ id,timing,priority,target,condition,cond_option,effect,effect_option
 610006,resident\resident,-1\-1,state\state,none\none,random_type=unit&random_cmp=5\random_cmp=5,set_player\set_player,param_count=2&action=setItem&param[0]=add&param[1]=22009，1\param_count=5&action=openHintbox&param[0]=type＝Item&param[1]=title＝提示&param[2]=content＝你的笑笑花额外产出了1枚【藤蔓花子】！&param[3]=item_icon＝buff[420009]&param[4]=option_num＝1
 610007,resident,-1,state,none,random_cmp=5,none,plant=620003
 611001,none,-1,none,none,none,none,none
+611004,none,-1,none,none,none,none,none
 611024,none,-1,none,none,none,none,none
+611035,resident\resident,-1\-1,state\state,unit\unit,type=plant.butterfly&type[0].cmp=1\type=plant.butterfly&type[0].cmp=2,none\none,plant=621002\plant=621003
+611049,resident\resident,-1\-1,state\state,none\none,none\none,set_player\set_player,param_count=2&action=setItem&param[0]=add&param[1]=621001，5\param_count=5&action=openHintbox&param[0]=type＝Item&param[1]=title＝提示&param[2]=content＝你额外获得了桑树的5片【桑叶】！&param[3]=item_icon＝item[621001]&param[4]=option_num＝1
 620001,none,-1,none,none,none,none,none
 620002,none,-1,none,none,none,none,none
 620003,none,-1,none,none,none,none,none
+621001,none,-1,none,none,none,none,none
+621002,none,-1,none,none,none,none,none
+621003,none,-1,none,none,none,none,none
 630001,none,-1,none,none,none,none,none
 630002,none,-1,none,none,none,none,none
 630003,none,-1,none,none,none,none,none
-660001,none,-1,none,none,none,none,icon=1/1001/10001&gif=1/1001/10001
-660002,none,-1,none,none,none,none,icon=2/1002/10002&gif=2/1002/10002
+631001,none,-1,none,none,none,none,none
+660001,none,-1,none,none,none,none,icon=1/10001/20001&gif=1/10001/20001
+660002,none,-1,none,none,none,none,icon=2/10002/20002&gif=2/10002/20002
+661001,none,-1,none,none,none,none,none
+662001,none,-1,none,none,none,none,icon=2001/12001/0&gif=2001/12001/0
+662002,none,-1,none,none,none,none,icon=2002/12002/22002&gif=2002/12002/22002&gif_speed=1/1/0.5
 670001,none,-1,none,none,none,none,none
 670002,none,-1,none,none,none,none,none
+671001,none,-1,none,none,none,none,none
+672001,none,-1,none,none,none,none,none
+672002,none,-1,none,none,none,none,none
 680000,none,-1,none,none,none,none,none
 680001,none,-1,none,none,none,none,none
 680002,none,-1,none,none,none,none,none

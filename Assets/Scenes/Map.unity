@@ -3292,6 +3292,7 @@ MonoBehaviour:
   canvasRect: {fileID: 1692785721}
   background: {fileID: 471731215}
   pathMask: {fileID: 1733171895}
+  showPathPreview: 1
 --- !u!1 &386233366
 GameObject:
   m_ObjectHideFlags: 0
@@ -11444,7 +11445,7 @@ MonoBehaviour:
   onPointerClickEvent:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 467937488}
         m_TargetAssemblyTypeName: PetItemController, Assembly-CSharp
         m_MethodName: OnItemNextPage
         m_Mode: 1
@@ -11861,6 +11862,10 @@ PrefabInstance:
       propertyPath: onPointerClickEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
+    - target: {fileID: 4609971708615561227, guid: e99749ea939ad6c419d0e2129dcf2129, type: 3}
+      propertyPath: infoPrompt
+      value: 
+      objectReference: {fileID: 1360834064}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -13013,6 +13018,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animalController: {fileID: 467937488}
+  cursor: 20
 --- !u!1 &1305157256
 GameObject:
   m_ObjectHideFlags: 0
@@ -14875,7 +14881,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 0
+  m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -14908,10 +14914,13 @@ MonoBehaviour:
   sound: {fileID: 8300000, guid: 5d77784f479467c489bf7b7849776b18, type: 3}
   onPointerClickEvent:
     m_PersistentCalls:
+      m_Calls: []
+  onPointerOverEvent:
+    m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 613729592}
-        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
-        m_MethodName: OpenPlayerInfoPanel
+      - m_Target: {fileID: 2069327821}
+        m_TargetAssemblyTypeName: PlayerView, Assembly-CSharp
+        m_MethodName: ShowFollowerInfo
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -14921,15 +14930,36 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  onPointerOverEvent:
-    m_PersistentCalls:
-      m_Calls: []
   onPointerEnterEvent:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 2069327821}
+        m_TargetAssemblyTypeName: UIModule, Assembly-CSharp
+        m_MethodName: SetInfoPromptActive
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
   onPointerExitEvent:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 2069327821}
+        m_TargetAssemblyTypeName: UIModule, Assembly-CSharp
+        m_MethodName: SetInfoPromptActive
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   onPointerHoldEvent:
     m_PersistentCalls:
       m_Calls: []
@@ -18410,7 +18440,7 @@ MonoBehaviour:
   onPointerClickEvent:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 467937488}
         m_TargetAssemblyTypeName: PetItemController, Assembly-CSharp
         m_MethodName: OnItemPrevPage
         m_Mode: 1
@@ -22181,6 +22211,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 30493f9256cda4e4d89aee45cf2a4fb3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  infoPrompt: {fileID: 1360834064}
+  descriptionBox: {fileID: 0}
   playerRect: {fileID: 613729590}
   playerButton: {fileID: 1818240898}
   playerDirectionSprite:
@@ -22190,6 +22222,7 @@ MonoBehaviour:
   - {fileID: -4187008917887026971, guid: 2a250307a3c7f31498bb729613887c9a, type: 3}
   playerNameText: {fileID: 1515764620}
   achievementText: {fileID: 1001929267}
+  visualCenterOffset: {x: 0, y: 0}
   followerGif: {fileID: 1482753621}
 --- !u!224 &2069327822
 RectTransform:
@@ -23565,7 +23598,7 @@ MonoBehaviour:
   onPointerClickEvent:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 8785829782159007086}
         m_TargetAssemblyTypeName: PetItemController, Assembly-CSharp
         m_MethodName: OnItemPrevPage
         m_Mode: 1
@@ -24546,7 +24579,7 @@ MonoBehaviour:
   onPointerClickEvent:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 8785829782159007086}
         m_TargetAssemblyTypeName: PetItemController, Assembly-CSharp
         m_MethodName: OnItemNextPage
         m_Mode: 1

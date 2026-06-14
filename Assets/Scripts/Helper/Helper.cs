@@ -4,9 +4,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace System {
-    public static class StringHelper {
-        public static string Repeat(this string str, int repeat) {
+namespace System
+{
+    public static class StringHelper
+    {
+        public static string Repeat(this string str, int repeat)
+        {
             var result = string.Empty;
             for (int i = 0; i < repeat; i++)
                 result += str;
@@ -14,39 +17,47 @@ namespace System {
             return result;
         }
 
-        public static string ConcatToString(this IEnumerable<string> stringList, string eachConcatWith) {
+        public static string ConcatToString(this IEnumerable<string> stringList, string eachConcatWith)
+        {
             string result = string.Empty;
-            foreach (var str in stringList) {   
+            foreach (var str in stringList)
+            {
                 result += (str + eachConcatWith);
             }
             return result.TrimEnd(eachConcatWith);
         }
 
-        public static string TrimEmpty(this string str) {
+        public static string TrimEmpty(this string str)
+        {
             return str.Replace(" ", string.Empty).Replace("\n", string.Empty).Replace("\t", string.Empty);
-        } 
-        public static string TrimEnd(this string str, string suffix) {
+        }
+        public static string TrimEnd(this string str, string suffix)
+        {
             if (str == suffix)
                 return string.Empty;
 
             return str.EndsWith(suffix) ? str.Substring(0, str.Length - suffix.Length) : str;
         }
-        public static bool TryTrimEnd(this string str, string suffix, out string trim) {
+        public static bool TryTrimEnd(this string str, string suffix, out string trim)
+        {
             trim = TrimEnd(str, suffix);
             return str.EndsWith(suffix);
         }
-        public static string TrimStart(this string str, string prefix) {
+        public static string TrimStart(this string str, string prefix)
+        {
             if (str == prefix)
                 return string.Empty;
-                
+
             return str.StartsWith(prefix) ? str.Substring(prefix.Length) : str;
         }
-        public static bool TryTrimStart(this string str, string prefix, out string trim) {
+        public static bool TryTrimStart(this string str, string prefix, out string trim)
+        {
             trim = TrimStart(str, prefix);
             return str.StartsWith(prefix);
         }
 
-        public static string TrimParentheses(this string str, char leftPar = '[', char rightPar = ']') {
+        public static string TrimParentheses(this string str, char leftPar = '[', char rightPar = ']')
+        {
             if (string.IsNullOrEmpty(str))
                 return str;
 
@@ -71,17 +82,20 @@ namespace System {
             return str.Substring(startIndex + 1, endIndex - startIndex - 1);
         }
 
-        public static bool TryTrimParentheses(this string str, out string trim, char leftPar = '[', char rightPar = ']') {
+        public static bool TryTrimParentheses(this string str, out string trim, char leftPar = '[', char rightPar = ']')
+        {
             trim = TrimParentheses(str, leftPar, rightPar);
             return trim != str;
         }
 
-        public static List<string> TrimParenthesesLoop(this string str, char leftPar = '[', char rightPar = ']') {
+        public static List<string> TrimParenthesesLoop(this string str, char leftPar = '[', char rightPar = ']')
+        {
             List<string> result = new List<string>();
             if (string.IsNullOrEmpty(str))
                 return null;
 
-            while (str.TryTrimParentheses(out var trimStr, leftPar, rightPar)) {
+            while (str.TryTrimParentheses(out var trimStr, leftPar, rightPar))
+            {
                 result.Add(trimStr);
                 if (!str.StartsWith('('))
                     str = str.Substring(str.IndexOf(leftPar));
@@ -95,32 +109,37 @@ namespace System {
             return result;
         }
 
-        public static string ReplaceAll(this string str, string[] allOldString, string newString) {
+        public static string ReplaceAll(this string str, string[] allOldString, string newString)
+        {
             if (allOldString == null)
                 return str;
 
             var result = str;
             foreach (var s in allOldString)
                 result = result.Replace(s, newString);
-            
+
             return result;
         }
 
         /// <summary>
         /// Replace all \t, \r, \n, \v, and \f with newString
         /// </summary>
-        public static string ReplaceSpecialWhiteSpaceCharacters(this string str, string newString) {
-            return str.ReplaceAll(new string[] { "\t", "\r", "\n", "\v", "\f"}, newString);
+        public static string ReplaceSpecialWhiteSpaceCharacters(this string str, string newString)
+        {
+            return str.ReplaceAll(new string[] { "\t", "\r", "\n", "\v", "\f" }, newString);
         }
 
-        public static string ReplaceColorAndNewline(this string str) {
+        public static string ReplaceColorAndNewline(this string str)
+        {
             return str.Replace("[ENDL]", "\n").Replace("[-]", "</color>").Replace("[", "<color=#").Replace("]", ">");
         }
 
-        public static string GetDescription(this string str) {
+        public static string GetDescription(this string str)
+        {
             var description = string.Empty;
             var lines = str.Trim().Split('\n');
-            for(int i = 0; i < lines.Length; i++) {
+            for (int i = 0; i < lines.Length; i++)
+            {
                 description += lines[i].TrimStart() + "\n";
             }
             return description;
@@ -129,16 +148,19 @@ namespace System {
         /// <summary>
         /// Count length without rich-text tags.
         /// </summary>
-        public static int GetPlainLength(this string str) {
+        public static int GetPlainLength(this string str)
+        {
             string trimStr = str.Trim();
             return trimStr.Length - ((trimStr.Length - trimStr.Replace("color", string.Empty).Length) / 10) * 23;
         }
 
-        public static Vector2 GetPreferredSize(this string str, int maxCharX, int fontSize, int padX = 21, int padY = 21) {
+        public static Vector2 GetPreferredSize(this string str, int maxCharX, int fontSize, int padX = 21, int padY = 21)
+        {
             string[] split = str.Trim().Split('\n');
             int lineSizeX = -1;
             int line = split.Length;
-            for (int i = 0; i < split.Length; i++) {
+            for (int i = 0; i < split.Length; i++)
+            {
                 int length = split[i].GetPlainLength();
                 line += (length - 1) / maxCharX;
                 lineSizeX = Mathf.Min(Mathf.Max(lineSizeX, length), maxCharX);
@@ -152,7 +174,8 @@ namespace System {
         /// Parse the given string to list of float. <br/>
         /// We expect input to be "xxx,yyy,zzz....."
         /// </summary>
-        public static List<float> ToFloatList(this string str, char delimeter = ',') {
+        public static List<float> ToFloatList(this string str, char delimeter = ',')
+        {
             if (string.IsNullOrEmpty(str))
                 return new List<float>();
 
@@ -160,13 +183,16 @@ namespace System {
             var split = str.Split(delimeter);
             List<float> list = new List<float>();
 
-            for (int i = 0; i < split.Length; i++) {
-                if (float.TryParse(split[i], out tmp)) {
+            for (int i = 0; i < split.Length; i++)
+            {
+                if (float.TryParse(split[i], out tmp))
+                {
                     list.Add(tmp);
                     continue;
-                } 
+                }
                 tmp = Identifier.GetNumIdentifier(split[i]);
-                if (tmp != 0) {
+                if (tmp != 0)
+                {
                     list.Add(tmp);
                     continue;
                 }
@@ -175,38 +201,43 @@ namespace System {
             return list;
         }
 
-        public static List<short> ToShortList(this string str, char delimeter = ',') {
+        public static List<short> ToShortList(this string str, char delimeter = ',')
+        {
             if (string.IsNullOrEmpty(str) || (str == "none"))
                 return new List<short>();
 
             return str.ToFloatList(delimeter)?.Select(x => (short)x).ToList();
         }
 
-        public static List<int> ToIntList(this string str, char delimeter = ',') {
+        public static List<int> ToIntList(this string str, char delimeter = ',')
+        {
             if (string.IsNullOrEmpty(str) || (str == "none"))
                 return new List<int>();
 
             return str.ToFloatList(delimeter)?.Select(x => (int)x).ToList();
         }
 
-        public static List<int> ToIntRange(this string str, Func<string, int> parseFunc = null) {
+        public static List<int> ToIntRange(this string str, Func<string, int> parseFunc = null)
+        {
             if (string.IsNullOrEmpty(str) || (str == "none"))
                 return new List<int>();
 
             var strRanges = str.Replace("－", "-").Split('|');
             var allRanges = new List<int>();
-            
+
             parseFunc ??= int.Parse;
 
-            for (int i = 0; i < strRanges.Length; i++) {
+            for (int i = 0; i < strRanges.Length; i++)
+            {
                 var range = strRanges[i].Split('~').Select(parseFunc).ToList();
-                if (range.Count == 1) {
+                if (range.Count == 1)
+                {
                     allRanges.Add(range[0]);
                     continue;
                 }
                 int min = Mathf.Min(range[0], range[1]);
                 int max = Mathf.Max(range[0], range[1]);
-                allRanges.AddRange(Enumerable.Range(min, max - min + 1));               
+                allRanges.AddRange(Enumerable.Range(min, max - min + 1));
             }
 
             return allRanges;
@@ -216,7 +247,8 @@ namespace System {
         /// Parse the given string to Vector2. <br/>
         /// We expect input to be "xxx,yyy"
         /// </summary>
-        public static Vector2 ToVector2(this string pos, Vector2 defaultValue = default(Vector2), char delimeter = ',') {
+        public static Vector2 ToVector2(this string pos, Vector2 defaultValue = default(Vector2), char delimeter = ',')
+        {
             var list = pos.ToFloatList(delimeter);
             return ((list == null) || (list.Count != 2)) ? defaultValue : new Vector2(list[0], list[1]);
         }
@@ -225,7 +257,8 @@ namespace System {
         /// Parse the given string to Vector4. <br/>
         /// We expect input to be "xxx,yyy,zzz,www"
         /// </summary>
-        public static Vector4 ToVector4(this string pos, Vector4 defaultValue = default(Vector4)) {
+        public static Vector4 ToVector4(this string pos, Vector4 defaultValue = default(Vector4))
+        {
             var list = pos.ToFloatList();
             return ((list == null) || (list.Count != 4)) ? defaultValue : new Vector4(list[0], list[1], list[2], list[3]);
         }
@@ -234,7 +267,8 @@ namespace System {
         /// Parse the given string to Color. <br/>
         /// We expect input to be "rrr,ggg,bbb,aaa"
         /// </summary>
-        public static Color ToColor(this string color, Color defaultValue = default(Color)) {
+        public static Color ToColor(this string color, Color defaultValue = default(Color))
+        {
             var list = color.ToIntList().Select(x => (byte)x).ToList();
             Color color32 = new Color32(list[0], list[1], list[2], list[3]);
             return ((list == null) || (list.Count != 4)) ? defaultValue : color32;
@@ -244,7 +278,8 @@ namespace System {
         /// Parse the given string to Quaternion. <br/>
         /// We expect input to be "xxx,yyy,zzz"
         /// </summary>
-        public static Quaternion ToQuaternion(this string rotation, Quaternion defaultValue = default(Quaternion)) {
+        public static Quaternion ToQuaternion(this string rotation, Quaternion defaultValue = default(Quaternion))
+        {
             var q = Quaternion.identity;
             var list = rotation.ToFloatList();
             q.eulerAngles = ((list == null) || (list.Count != 3)) ? defaultValue.eulerAngles : new Vector3(list[0], list[1], list[2]);
@@ -266,6 +301,20 @@ namespace System {
                 return x;
 
             return $"{y}{separator}{x}";
+        }
+    }
+
+    public static class TimeHelper
+    {
+        public static TimeSpan ToTimeSpan(this string value)
+        {
+            var list = value.ToIntList(':');
+            return new TimeSpan(list.Get(0), list.Get(1), list.Get(2));
+        }
+
+        public static string ToStringWithoutDays(this TimeSpan value)
+        {
+            return $"{(int)value.TotalHours:d2}:{value:mm}:{value:ss}";
         }
     }
 }

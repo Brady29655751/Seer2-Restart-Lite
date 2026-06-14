@@ -21,7 +21,7 @@ public class ItemShopPanel : Panel
         { ItemShopType.Honor, "荣誉商店" },
         { ItemShopType.Sign, "签到商店" },
         { ItemShopType.YiTe, "伊特商店" },
-        { ItemShopType.Plant, "农作物出售" },
+        { ItemShopType.Farm, "农牧产品出售" },
         { ItemShopType.Achievement, "称号商店" },
     };
 
@@ -54,7 +54,7 @@ public class ItemShopPanel : Panel
             320101, 320102, 320103, 320104, 320105, 320741,
             320810,
         } },
-        { ItemShopType.Plant, Item.plantItemDatabase.Select(x => x.id).ToList() },
+        { ItemShopType.Farm, Item.plantItemDatabase.Concat(Item.animalItemDatabase).Concat(Item.animalProductItemDatabase).Select(x => x.id).ToList() },
         { ItemShopType.Achievement, Item.achievementItemDatabase.Where(x => x.info.price > 0).Select(x => x.id).ToList() },
     };
 
@@ -128,7 +128,7 @@ public class ItemShopPanel : Panel
                     "honor" => ItemShopType.Honor,
                     "sign" => ItemShopType.Sign,
                     "yite" => ItemShopType.YiTe,
-                    "plant" => ItemShopType.Plant,
+                    "farm" => ItemShopType.Farm,
                     "achievement" => ItemShopType.Achievement,
                     "others" => ItemShopType.Others,
                     _ => ItemShopType.None,
@@ -230,6 +230,6 @@ public enum ItemShopType
     Honor = 3,
     Sign = 4,
     YiTe = 5,
-    Plant = 6,
+    Farm = 6,
     Achievement = 7,
 }

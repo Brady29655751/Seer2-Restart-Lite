@@ -6,7 +6,7 @@ using ExitGames.Client.Photon.StructWrapping;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class PlayerView : Module
+public class PlayerView : UIModule
 {
     [SerializeField] protected RectTransform playerRect;
     [SerializeField] protected IButton playerButton;
@@ -38,7 +38,7 @@ public class PlayerView : Module
         return playerDirectionSprite[idx];
     }
 
-    public virtual void SetDirection(Vector2 direction)
+    public virtual void SetDirection(Vector2 direction, bool isMoving = false)
     {
         Sprite directionSprite = GetPlayerDirectionSprite(direction);
         if (directionSprite != null)
@@ -46,7 +46,8 @@ public class PlayerView : Module
             playerButton.SetSprite(directionSprite);
         }
 
-        SetFollowerDirection(direction);
+        if (!isMoving)
+            SetFollowerDirection(direction);
 
         lastDirection = direction;
     }
@@ -102,13 +103,18 @@ public class PlayerView : Module
         var follower = Player.instance.follower;
         if (Animal.IsNullOrEmpty(follower))
         {
+            followerGif.Clear();
             followerGif.image.SetSprite(SpriteSet.Empty);
+            followerGif.image.SetSize(Vector2.zero);
             return;
         }
 
         var dirName = direction.GetDirectionName();
         if (string.IsNullOrEmpty(dirName))
         {
+            if (!follower.PauseWhenIdle)
+                return;
+            
             followerGif.Reset();
         }
         else
@@ -119,13 +125,13 @@ public class PlayerView : Module
                 var anchorX = (gifInfo.AnimScale.x + 1) / 2;
                 followerGif.image.rectTransform.anchorMin = followerGif.image.rectTransform.anchorMax = new Vector2(anchorX, 0);
                 followerGif.image.rectTransform.localScale = gifInfo.AnimScale;
-                followerGif.SetGifFromUrl(gifInfo.GifPath, speed: gifInfo.AnimSpeed * 2.5f, useGifSize: gifInfo.UseAnimSize);
+                followerGif.SetGifFromUrl(gifInfo.GifPath, speed: gifInfo.AnimSpeed * 2, useGifSize: gifInfo.UseAnimSize);
             }      
             else
             {
                 followerGif.image.rectTransform.anchorMin = followerGif.image.rectTransform.anchorMax = Vector2.right;
                 followerGif.image.rectTransform.localScale = Vector3.one;
-                followerGif.image.SetSprite(follower.Icon);
+                SetFollowerSprite(follower.Icon);
             }
 
             followerGif.image.rectTransform.anchoredPosition = Vector2.zero;
@@ -165,7 +171,13 @@ public class PlayerView : Module
 
     public void SetFollowerSprite(Sprite sprite)
     {
-        sprite ??= SpriteSet.Empty;
+        if (sprite == null)
+        {
+            followerGif.image.SetSprite(SpriteSet.Empty);
+            followerGif.image.SetSize(Vector2.zero);
+            return;
+        }
+
         followerGif.image.SetSprite(sprite);   
         followerGif.image.SetSize(sprite.texture.GetTextureSize());
     }
@@ -238,5 +250,16 @@ public class PlayerView : Module
             Item.Remove(item.id, 1);
 
         callbacks?.ForEach(x => x?.Invoke());
+    }
+
+    public void ShowFollowerInfo()
+    {
+        if (Animal.IsNullOrEmpty(Player.instance.follower))
+        {
+            infoPrompt?.SetActive(false);
+            return;
+        }
+
+        infoPrompt?.SetAnimal(Player.instance.follower);
     }
 }

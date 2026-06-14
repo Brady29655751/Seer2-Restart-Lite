@@ -12,7 +12,7 @@
 					<action>openPanel</action>
 					<param>ItemBag</param>
 					<param>title=牧 场 饲 料</param>
-					<param>item=611001/611024/420001/7004/7005/7008</param>
+					<param>item=611001/611004/611024/621001/420001/420002/7004/7005/7008</param>
 				</button>
 			</eventHandler>
 		</npc>
@@ -34,6 +34,26 @@
 					<action>setNpcParam</action>
 					<param>animal</param>
 					<param>active=true</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<npc id="101004" resId="1001" name="鱼塘" size="320,160" pos="640,40" namePos="20,-100" nameSize="24" color="0,0,0,0">
+			<description>鱼塘</description>
+			<eventHandler>
+				<button type="click">
+					<action>openPanel</action>
+					<param>pond</param>
+					<param>pond=map</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<npc id="101005" resId="1001" name="昆虫小屋" size="150,110" pos="720,290" namePos="-5,-10" color="0,0,0,0">
+			<description>昆虫小屋</description>
+			<eventHandler>
+				<button type="click">
+					<action>openPanel</action>
+					<param>pond</param>
+					<param>insect=map</param>
 				</button>
 			</eventHandler>
 		</npc>
@@ -84,6 +104,19 @@
 		<pond id="101228" resId="99002" name="" size="99,42" pos="360,165" />
 		<pond id="101229" resId="99002" name="" size="99,42" pos="400,165" />
 		<pond id="101230" resId="99002" name="" size="99,42" pos="440,165" />
+
+		<insect id="101301" resId="99002" name="" size="99,42" pos="200,205" />
+		<insect id="101302" resId="99002" name="" size="99,42" pos="200,205" />
+		<insect id="101303" resId="99002" name="" size="99,42" pos="200,205" />
+		<insect id="101304" resId="99002" name="" size="99,42" pos="200,205" />
+		<insect id="101305" resId="99002" name="" size="99,42" pos="200,205" />
+		<insect id="101306" resId="99002" name="" size="99,42" pos="200,205" />
+		<insect id="101307" resId="99002" name="" size="99,42" pos="200,205" />
+		<insect id="101308" resId="99002" name="" size="99,42" pos="200,205" />
+
+		<nest id="101401" resId="99002" name="" size="99,42" pos="200,205" />
+		<nest id="101402" resId="99002" name="" size="99,42" pos="200,205" />
+		<nest id="101403" resId="99002" name="" size="99,42" pos="200,205" />
 
 		<teleport id="1" name="普兰特山脚" pos="60,260" color="0,127,255,255" targetMapId="990"/>
 	</entities>

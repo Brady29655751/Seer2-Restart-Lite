@@ -4324,7 +4324,7 @@ id,timing,priority,target,condition,cond_option,effect,effect_option
 14310,on_attack\on_after_attack,7\-1,pet\pet_bag,none\unit,none\type=me.skill.evolve/me.pet.specialChance/me.pet.deadNum&type[0].cmp=1&type[1].op=>&type[1].cmp=0&type[2].op=>&type[2].cmp=0,heal\heal,add=me.pet.status.hp\on_success=-7&target_type=index_dead_other&target_num=1&set=target.status.maxHp
 14311,on_before_attack,-1,skill,pet,type=weight&weight_op=>&weight_cmp=200,set_skill,type=power&op=*&value=2
 14312,on_after_attack\on_after_attack,-1\0,pet\pet,none\none,none\none,add_buff\add_buff,repeat=2&id=3040&value=1\id=31&value=me.pet.weight
-14313,on_after_attack\on_after_attack,-1\-1,pet\pet,buff\buff,id=3040&type=value&value_op=GTE&value_cmp=2\id=3040&type=value&value_op=GTE&value_cmp=2,powerup\set_buff,atk=1&def=1&mdf=1\id=3040&type=value&op=-&value=2
+14313,on_after_attack\on_after_attack,-1\-1,pet\pet,buff\buff,id=3040&type=value&value_op=GTE&value_cmp=2\id=3040&type=value&value_op=GTE&value_cmp=2,powerup\remove_buff,atk=1&def=1&mdf=1\id=3040
 14314,on_after_attack,-1,pet,buff,who=op&id=102,powerup,who=op&random=true&random_pdf=uniform&random_count=2&all=-1
 14315,on_after_attack,-1,pet,none,none,add_buff,id=3061
 14316,on_after_attack,-1,state,none,none,set_weather,weather=2
@@ -4643,7 +4643,7 @@ id,timing,priority,target,condition,cond_option,effect,effect_option
 1041,none\none,-1\0,skill\pet,none\none,none\none,set_damage\heal,type=skill_fix&op=+&value=300\type=skill_fix&add=300
 1042,none\none,-1\-1,pet\pet,none\none,is_hit=all&is_move=all&whos_turn=all&whos_attack=all\is_hit=all&is_move=all&whos_turn=all&whos_attack=all,remove_buff\block_buff,id=3028\op=+&id_list=3028
 1043,none\none\none,1500\1500\1500,pet\pet\pet,unit\unit\unit,is_hit=all&whos_turn=all&whos_attack=all&type=me.pet.dead&type[0].cmp=1\is_hit=all&whos_turn=all&whos_attack=all&type=me.pet.dead&type[0].cmp=1\is_hit=all&whos_turn=all&whos_attack=all&type=me.pet.dead&type[0].cmp=1,heal\set_buff\add_buff,set=me.pet.status.maxHp*1&name=触发不屈\id=220012&type=option[value_1]&op=SET&value=1&name=扣除不屈次数\id=91&name=不屈补偿
-99999,on_dmg_cal,-1,skill,none,whos_turn=op,set_skill,who=op&type=elementRelation&op=SET&value=elementRelation[atk:1][def:2]
+99999,on_after_attack\on_after_attack,-1\-1,pet\pet,skill\skill,type=evolve&evolve_cmp=0\type=evolve&evolve_cmp=1,add_buff\remove_buff,who=op&id=13&turn=3\who=op&id=13&on_success=(2002{who}{op}{id}{1000})
 100001,resident,-1,pet,none,none,set_skill,type=effect&op=SET&value=(1{100010}{2})
 100002,resident,-1,pet,none,none,set_skill,type=effect&op=SET&value=(1002{id}{10001})
 100003,resident,-1,pet,none,none,set_skill,type=effect&op=SET&value=(1001{def}{1}{mdf}{1})

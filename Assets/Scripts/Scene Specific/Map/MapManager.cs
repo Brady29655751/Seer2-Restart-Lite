@@ -76,12 +76,12 @@ public class MapManager : Manager<MapManager>
         plantController?.OnSelectSeed(seed);
     }
 
-    public void RefreshAnimalPanel(Item animal = null)
+    public void RefreshAnimalPanel(Item child = null)
     {
         animalController?.Refresh();
-        if (animal == null)
+        if (child == null)
             return;
         
-        animalController?.OnSelectAnimal(animal);
+        animalController?.OnSelectAnimalChild(child);
     }
 }
