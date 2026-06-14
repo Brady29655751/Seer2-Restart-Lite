@@ -26,6 +26,7 @@ public class MapSceneView : UIModule
     private GameObject foregroundMaskRoot;
     private MapClickFeedbackView clickFeedbackView;
     private MapPathPreviewView pathPreviewView;
+    private MapNavigator wildNpcNavigator;
 
     public Vector2 GetCanvasSize()
     {
@@ -36,6 +37,7 @@ public class MapSceneView : UIModule
     {
         this.map = map;
         this.map.geometry?.EnsureLists();
+        wildNpcNavigator = null;
         bool refreshBGM = (SceneLoader.instance.GetLastScene() != SceneId.Map) ||
             (lastMap == null) || (!map.music.ValueEquals(lastMap?.music)) ||
             ((Player.instance.currentBattle != null) && (Player.instance.currentBattle.settings.mode == BattleMode.PVP));
@@ -278,6 +280,7 @@ public class MapSceneView : UIModule
             GameObject obj = Instantiate(prefab, transform);
             NpcController npc = obj.GetComponent<NpcController>();
             NpcHandler.CreateNpc(npc, npcInfo, npcDict, infoPrompt);
+            TryStartWildNpcWander(npcInfo, obj);
         }
         Player.SetSceneData("mapNpcList", npcDict);
 
@@ -287,6 +290,16 @@ public class MapSceneView : UIModule
                 .Select(x => NpcHandler.GetNpcEntity(npcDict.Get(npcInfo.id), x, npcDict)).ToList();
             autoActionList.ForEach(x => x?.Invoke());
         }
+    }
+
+    private void TryStartWildNpcWander(NpcInfo npcInfo, GameObject npcObject)
+    {
+        if (npcInfo == null || npcObject == null || !MapWildNpcWanderController.CanWander(npcInfo))
+            return;
+
+        wildNpcNavigator ??= new MapNavigator(map, ReferenceCanvasSize);
+        var wander = npcObject.AddComponent<MapWildNpcWanderController>();
+        wander.Init(map, wildNpcNavigator, npcInfo);
     }
 
     public void SetFarm(List<NpcInfo> infos)
