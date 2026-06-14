@@ -206,8 +206,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 55ae1e7da37b3c0429fd5ab60a20371b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   onPointerClickEvent:
     m_PersistentCalls:
       m_Calls: []
@@ -708,6 +708,71 @@ MonoBehaviour:
   resourceOperateObject: {fileID: 1265778611}
   modOperateObject: {fileID: 1461611923}
   helpObject: {fileID: 1750036182}
+  playGameIconEntrance: 1
+  gameIconEntranceTarget: {fileID: 0}
+  gameIconEntranceStartScaleX: 0.08
+  gameIconEntranceDuration: 1
+  gameIconEntranceDelay: 0.05
+  gameIconEntranceCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  showGameIconScanLine: 1
+  gameIconScanLineWidth: 10
+  gameIconScanLineColor: {r: 0.25, g: 0.95, b: 1, a: 0.85}
+  debugGameIconEntrance: 0
+  playToolbarEntrance: 1
+  toolbarEntranceTarget: {fileID: 0}
+  toolbarEntranceOffset: {x: 0, y: -36}
+  toolbarEntranceDuration: 0.42
+  toolbarEntranceDelay: 0.16
+  toolbarEntranceCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  enableToolbarButtonHover: 1
+  toolbarButtonHoverScale: 1.06
+  toolbarButtonHoverLerpSpeed: 12
 --- !u!4 &206025359
 Transform:
   m_ObjectHideFlags: 0
@@ -1224,6 +1289,9 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   anim: {fileID: 757464539}
+  hoverScale: 1.06
+  hoverLift: 4
+  hoverLerpSpeed: 12
 --- !u!1 &249389529
 GameObject:
   m_ObjectHideFlags: 0
@@ -10333,6 +10401,9 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   anim: {fileID: 0}
+  hoverScale: 1.06
+  hoverLift: 4
+  hoverLerpSpeed: 12
 --- !u!114 &1700983713
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12523,6 +12594,7 @@ GameObject:
   - component: {fileID: 2077734742}
   - component: {fileID: 2077734744}
   - component: {fileID: 2077734743}
+  - component: {fileID: 2077734745}
   m_Layer: 5
   m_Name: Background Image
   m_TagString: Untagged
@@ -12587,6 +12659,24 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2077734741}
   m_CullTransparentMesh: 1
+--- !u!114 &2077734745
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2077734741}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7e83b4d2639d2e64fa5a0b0ec5af58f1, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  enableMotion: 1
+  useUnscaledTime: 1
+  cycleDuration: 8
+  scaleAmount: 0.015
+  positionOffset: {x: 4, y: 3}
+  phaseOffset: 0
 --- !u!1 &2083720590
 GameObject:
   m_ObjectHideFlags: 0
