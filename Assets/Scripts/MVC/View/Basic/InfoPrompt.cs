@@ -188,13 +188,14 @@ public class InfoPrompt : IMonoBehaviour
             return;
         }
 
-        string header = "<size=22><color=#52e5f9>" + plant.Name + "</color></size>\n";
+        var header = "<size=22><color=#52e5f9>" + plant.Name + "</color></size>\n";
         var ratio = plant.GetGrowth(11);
         var timeBar = "<size=28><color=#ffbb33>" + "■".Repeat(ratio) + "□".Repeat(10 - ratio) + "</color></size>\n";
-        var text = "<size=16>【成熟所需时间】" + plant.LeftTime.ToString(@"hh\:mm\:ss") + "\n";
+        var text = "<size=16>【成熟所需时间】" + plant.LeftTime.ToStringWithoutDays() + "\n";
         var num = "【预计产量】" + plant.ProductNumRange.TrimParentheses() + "</size>";
         var produce = (plant.productMult != 1) ? ("\n\n<size=16><color=#77e20c>【施肥信息】</color>" + plant.productMult + "倍产量</size>") : string.Empty;
-        SetInfoPromptWithAutoSize(header + timeBar + text + num + produce, TextAnchor.MiddleLeft);        
+        var butterfly = (plant.butterflyCount > 0) ? ((string.IsNullOrEmpty(produce) ? "\n" : string.Empty) + "\n<size=16><color=#77e20c>【已授粉次数】</color>" + plant.butterflyCount + "次</size>") : string.Empty;
+        SetInfoPromptWithAutoSize(header + timeBar + text + num + produce + butterfly, TextAnchor.MiddleLeft);        
     }
 
     public void SetAnimal(Animal animal)
@@ -205,10 +206,10 @@ public class InfoPrompt : IMonoBehaviour
             return;
         }
 
-        string header = "<size=22><color=#52e5f9>" + animal.Name + "</color></size>\n";
+        var header = "<size=22><color=#52e5f9>" + animal.Name + "</color></size>\n";
         var ratio = animal.GetGrowth(11);
         var timeBar = "<size=28><color=#ffbb33>" + "■".Repeat(ratio) + "□".Repeat(10 - ratio) + "</color></size>\n";
-        var text = "<size=16>【成熟所需时间】" + animal.LeftTime.ToString(@"hh\:mm\:ss") + "\n";
+        var text = "<size=16>【成熟所需时间】" + animal.LeftTime.ToStringWithoutDays() + "\n";
         var num = "【预计总产量】" + animal.productAll + "\n";
         var borned = "<color=#77e20c>【当前已生产】</color>" + animal.productBorned + "\n";
         var food = "【食物】" + animal.FeedInfo.name + "</size>";

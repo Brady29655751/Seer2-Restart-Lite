@@ -120,7 +120,8 @@ public class Map
     }
     public bool IsPathAvailable(int x, int y) {
         if (resources.pathSprite == null)
-             return x.IsInRange(0, 960) && y.IsInRange(20, 540);
+            return x.IsInRange(0, 960) && y.IsInRange(20, 540);
+
         if ((x < 0) || (y < 0) || (x >= resources.pathTexture.width) || (y >= resources.pathTexture.height))
             return false;
         

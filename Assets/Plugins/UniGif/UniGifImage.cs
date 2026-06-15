@@ -251,7 +251,7 @@ public class UniGifImage : MonoBehaviour
         
             if (webRequest.result != UnityWebRequest.Result.Success)
             {
-                Debug.LogError("File load error.\n" + webRequest.error);
+                // Debug.LogError("File load error.\n" + webRequest.error);
                 nowState = State.None;
                 yield break;
             }
@@ -441,5 +441,10 @@ public class UniGifImage : MonoBehaviour
         }
 
         nowState = State.Ready;
+    }
+
+    public void SetSpeed(float speed)
+    {
+        this.speed = speed;
     }
 }

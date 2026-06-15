@@ -46,11 +46,10 @@ public class ItemBagPanel : Panel
 
                     case "animal":
                         var animalItems = new List<Item>();
-                        var animalList = ItemInfo.database.Where(x => x.type == ItemType.Animal).Select(x => new Animal(x.id, 0)).ToList();
+                        var animalList = Item.animalItemDatabase.Concat(Item.animalProductItemDatabase);
                         foreach (var animal in animalList)
                         {
                             animalItems.Add(Item.Find(animal.id) ?? new Item(animal.id, 0));
-                            animalItems.Add(Item.Find(animal.ProductId) ?? new Item(animal.ProductId, 0));
                         }
                         SetItemBag(animalItems);
                         return;

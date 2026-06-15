@@ -20,6 +20,8 @@ public class Item
         return (!banned.Contains(type));
     })) ?? false)).ToList();
     public static List<Item> pvpPotionItemDatabase => ItemInfo.database.Where(x => (x.type == ItemType.HpPotion) && (x.id == x.getId)).Select(x => new Item(x.id, 9999)).ToList();
+    public static List<Item> animalItemDatabase => ItemInfo.database.Where(x => x.type == ItemType.Animal).Select(x => new Item(x.id, -1)).ToList();
+    public static List<Item> animalProductItemDatabase => ItemInfo.database.Where(x => x.type == ItemType.AnimalProduct).Select(x => new Item(x.id, -1)).ToList();
     public static List<Item> plantItemDatabase => ItemInfo.database.Where(x => x.type == ItemType.Plant).Select(x => new Item(x.id, -1)).ToList();
     public static List<Item> normalPlantItemDatabase => plantItemDatabase.Where(x => !bool.Parse(x.info.options.Get("rare", "false"))).ToList();
     public static List<Item> skillBookItemDatabase => ItemInfo.database.Where(x => (x.id - 10_0000).IsWithin(GameManager.versionData.skillData.minSkillId,

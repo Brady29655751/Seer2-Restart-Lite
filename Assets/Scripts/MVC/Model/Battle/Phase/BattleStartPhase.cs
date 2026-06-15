@@ -5,7 +5,8 @@ using UnityEngine;
 
 public class BattleStartPhase : BattlePhase
 {
-    public BattleStartPhase() {
+    public BattleStartPhase()
+    {
         this.state = new BattleState(battle.currentState);
         this.phase = EffectTiming.OnBattleStart;
     }
@@ -22,9 +23,13 @@ public class BattleStartPhase : BattlePhase
         return new TurnStartPhase();
     }
 
-    public void SetInitBuffs() {
-        SetInitBuffs(state.masterUnit);
-        SetInitBuffs(state.clientUnit);
+    public void SetInitBuffs()
+    {
+        var masterInitBuff = GetInitBuffs(state.masterUnit);
+        var clientInitBuff = GetInitBuffs(state.clientUnit);
+        
+        SetInitBuffs(state.masterUnit, masterInitBuff);
+        SetInitBuffs(state.clientUnit, clientInitBuff);
         SetAchievement();
 
         if (state.settings.mode == BattleMode.Card)
@@ -33,7 +38,8 @@ public class BattleStartPhase : BattlePhase
         }
     }
 
-    private void SetAchievement() {
+    private void SetAchievement()
+    {
         if (battle.settings.isSimulate)
             return;
 
@@ -46,12 +52,18 @@ public class BattleStartPhase : BattlePhase
         handler.CheckAndApply(state);
     }
 
-    private void SetInitBuffs(Unit thisUnit) {
-        for (int i = 0; i < thisUnit.petSystem.petBag.Length; i++) {
+    private List<List<Buff>> GetInitBuffs(Unit thisUnit)
+    {
+        List<List<Buff>> initBuffs = new List<List<Buff>>();
+        for (int i = 0; i < thisUnit.petSystem.petBag.Length; i++)
+        {
             thisUnit.petSystem.cursor = i;
             var pet = thisUnit.pet;
             if (pet == null)
+            {
+                initBuffs.Add(new List<Buff>());
                 continue;
+            }
 
             List<Buff> buffs = new List<Buff>(pet.buffController.buffs) { Buff.GetFeatureBuff(pet) };
             if (pet.hasEmblem)
@@ -61,8 +73,22 @@ public class BattleStartPhase : BattlePhase
             if (state.stateBuffs.Exists(x => x.Value.id == 600000))
                 buffs.RemoveAll(x => (x != null) && x.IsType(BuffType.Item));
 
-            pet.buffController.RemoveRangeBuff(x => true, null, null);
-            pet.buffController.AddRangeBuff(buffs, thisUnit, state);
+            initBuffs.Add(buffs);
+        }
+        return initBuffs;
+    }
+
+    private void SetInitBuffs(Unit thisUnit, List<List<Buff>> initBuffs)
+    {
+        for (int i = 0; i < thisUnit.petSystem.petBag.Length; i++)
+        {
+            thisUnit.petSystem.cursor = i;
+            var pet = thisUnit.pet;
+            if (pet == null)
+                continue;
+
+            pet.buffController.RemoveRangeBuff(initBuffs[i].Contains, null, null);
+            pet.buffController.AddRangeBuff(initBuffs[i], thisUnit, state);
 
             pet.skillController.allSkills.Where(x => x != null).SelectMany(x => x.effects)
                 .Where(x => (x != null) && (x.timing == EffectTiming.OnAddBuff)).OrderBy(x => x.priority).ToList()

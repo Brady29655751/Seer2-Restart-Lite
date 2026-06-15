@@ -57,6 +57,9 @@ public static class Identifier
         if (id.TryTrimStart("player.", out trimId))
         {
             var gameData = Player.instance.gameData;
+            if (trimId.TryTrimStart("follower.", out trimId))
+                return Player.instance.follower?.GetIdentifier(trimId) ?? float.MinValue;
+
             return trimId switch
             {
                 "shoot" => gameData.shoot,
@@ -64,6 +67,12 @@ public static class Identifier
                 _ => GetNumIdentifier(trimId),
             };
         }
+
+        if (id.TryTrimStart("plant.", out trimId))
+            return Plant.currentPlant?.GetIdentifier(trimId) ?? float.MinValue;
+
+        if (id.TryTrimStart("animal.", out trimId))
+            return Animal.currentAnimal?.GetIdentifier(trimId) ?? float.MinValue;
 
         if (id.TryTrimStart("data.", out trimId))
         {

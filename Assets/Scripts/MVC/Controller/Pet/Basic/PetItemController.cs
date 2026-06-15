@@ -19,49 +19,58 @@ public class PetItemController : Module
     public int GetCurrentCategoryIndex() => itemModel.categories.IndexOf(itemModel.currentCategory);
     public int GetCurrentPage() => itemModel.page;
 
-    public void SetMode(PetBagMode mode) {
+    public void SetMode(PetBagMode mode)
+    {
         this.mode = mode;
     }
 
-    public void SetPet(Pet pet) {
+    public void SetPet(Pet pet)
+    {
         itemModel.SetPet(pet);
     }
 
-    public void SetItemBag(List<Item> items) {
+    public void SetItemBag(List<Item> items)
+    {
         itemModel.SetStorage(items);
         OnItemSetPage();
     }
 
-    public void SelectCategory(int index) {
+    public void SelectCategory(int index)
+    {
         itemModel.SelectCategory(index);
         OnItemSetPage();
     }
 
-    public void Select(int index) {
+    public void Select(int index)
+    {
         itemModel.Select(index);
         itemView.Select(index);
         onItemSelectEvent?.Invoke(itemModel.items[index]);
     }
 
-    public void Remove(Item item) {
+    public void Remove(Item item)
+    {
         itemModel.Remove(itemModel.items.IndexOf(item));
         OnItemSetPage();
     }
 
-    public void OnItemButtonClick(int index) {
+    public void OnItemButtonClick(int index)
+    {
         Item item = itemModel.items[index];
 
         if (item == null)
             return;
 
-        if (!item.IsUsable(itemModel.currentPet, null)) {
+        if (!item.IsUsable(itemModel.currentPet, null))
+        {
             OnItemUsed(null, -1);
             return;
         }
         OnSelectItemUsedNum(item);
     }
 
-    private void OnItemUsed(Item item, int usedNum) {
+    private void OnItemUsed(Item item, int usedNum)
+    {
         bool success = (item != null);
 
         Hintbox hintbox = Hintbox.OpenHintbox();
@@ -72,10 +81,11 @@ public class PetItemController : Module
         if (!success)
             return;
 
-        onItemUsedEvent?.Invoke(item, usedNum);    
+        onItemUsedEvent?.Invoke(item, usedNum);
     }
 
-    private void OnSelectItemUsedNum(Item item) {
+    private void OnSelectItemUsedNum(Item item)
+    {
         SelectNumHintbox ihb = Hintbox.OpenHintbox<SelectNumHintbox>();
         ihb.SetTitle(item.name);
         ihb.SetContent(item.info.GetEffectDescription(false), 14, FontOption.Arial);
@@ -83,18 +93,22 @@ public class PetItemController : Module
         ihb.SetMinValue(1);
         ihb.SetMaxValue(Mathf.Min(item.num, item.GetMaxUseCount(itemModel.currentPet, null), 999));
         ihb.SetOptionNum(2);
-        ihb.SetOptionCallback(() => {
+        ihb.SetOptionCallback(() =>
+        {
             int usedNum = item.Use(itemModel.currentPet, null, ihb.GetInputValue(), mode);
             OnItemUsed(item, usedNum);
-        }, true); 
+        }, true);
     }
 
-    public void SetInfoPromptActive(bool active) {
+    public void SetInfoPromptActive(bool active)
+    {
         itemView.SetInfoPromptActive(active);
     }
 
-    public void ShowItemInfo(int index) {
-        if (!index.IsInRange(0, itemModel.items.Length)) {
+    public void ShowItemInfo(int index)
+    {
+        if (!index.IsInRange(0, itemModel.items.Length))
+        {
             SetInfoPromptActive(false);
             return;
         }
@@ -102,28 +116,37 @@ public class PetItemController : Module
         itemView.ShowItemInfo(itemModel.items[index], index);
     }
 
-    public void OnItemSetPage() {
+    public void OnItemSetPage()
+    {
         itemView.SetItems(itemModel.selections.ToList());
+        itemView.SetGif(itemModel.gifInfos);
         pageView?.SetPage(itemModel.page, itemModel.lastPage);
         if (defaultSelect)
             Select(0);
     }
 
-    public void SetPage(int index) {
+    public void SetPage(int index)
+    {
         itemModel.SetPage(Mathf.Clamp(index, 0, itemModel.lastPage));
         OnItemSetPage();
     }
 
-    public void OnItemPrevPage() {
+    public void OnItemPrevPage()
+    {
         itemModel.PrevPage();
         OnItemSetPage();
     }
 
-    public void OnItemNextPage() {
+    public void OnItemNextPage()
+    {
         itemModel.NextPage();
         OnItemSetPage();
     }
 
-
+    public void SetGif(Func<Item, int, AnimInfo> gifFunc)
+    {
+        itemModel.SetGifFunc(gifFunc);
+        itemView.SetGif(itemModel.gifInfos);
+    }
 
 }

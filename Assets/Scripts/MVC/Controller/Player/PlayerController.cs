@@ -21,7 +21,7 @@ public class PlayerController : Manager<PlayerController>
         playerView.SetPlayerPosition(playerModel.currentPos);
         if (playerModel.isMoving)
         {
-            playerView.SetDirection(playerModel.direction);
+            playerView.SetDirection(playerModel.direction, true);
         }
         else
         {
@@ -169,8 +169,18 @@ public class PlayerController : Manager<PlayerController>
     public void SetFollowerSprite()
     {   
         var follower = Player.instance.follower;
-        var icon = Animal.IsNullOrEmpty(follower) ? SpriteSet.Empty : follower.Icon;
-        playerView.SetFollowerSprite(icon);
+        if (Animal.IsNullOrEmpty(follower))
+        {
+            playerView.SetFollowerSprite(null);    
+            return;
+        }
+        
+        playerView.SetFollowerSprite(follower.Icon);    
+        
+        if (follower.PauseWhenIdle)
+            return;
+        
+        playerView.SetFollowerDirection(Vector2.down);
     }
 
 }

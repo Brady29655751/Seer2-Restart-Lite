@@ -27,7 +27,7 @@ public class MapPlantController : Module
     {
         return itemType switch
         {
-            ItemType.Fertilizer => Item.FindAll(x => x.info.type == ItemType.Fertilizer),
+            ItemType.Fertilizer => Item.FindAll(x => x.info.type == ItemType.Fertilizer).Append(new Item(631001, -1)).ToList(),
             _ => Item.normalPlantItemDatabase.Select(x => new Item(x.id, Item.Find(int.Parse(x.info.options.Get("seed", "600000")))?.num ?? 0)).ToList(),  
         };
     }

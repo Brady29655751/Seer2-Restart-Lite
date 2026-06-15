@@ -10,7 +10,8 @@ public static class EffectConditionHandler
     public static Player player => Player.instance;
     public static Battle battle => player.currentBattle;
 
-    public static bool IsCorrectTurn(this Effect effect, BattleState state, Dictionary<string, string> condOptions) {
+    public static bool IsCorrectTurn(this Effect effect, BattleState state, Dictionary<string, string> condOptions)
+    {
         if (state == null)
             return true;
 
@@ -27,7 +28,8 @@ public static class EffectConditionHandler
         return isWhosTurnCorrect && isTurnNumCorrect;
     }
 
-    public static bool IsCorrectWeather(this Effect effect, BattleState state, Dictionary<string, string> condOptions) {
+    public static bool IsCorrectWeather(this Effect effect, BattleState state, Dictionary<string, string> condOptions)
+    {
         if (state == null)
             return true;
 
@@ -43,7 +45,8 @@ public static class EffectConditionHandler
     }
 
     //! Note that whos_attack must be applied when phase is OnAttack/OnAfterAttack
-    public static bool IsAttackAndHit(this Effect effect, BattleState state, Dictionary<string, string> condOptions) {
+    public static bool IsAttackAndHit(this Effect effect, BattleState state, Dictionary<string, string> condOptions)
+    {
         if (state == null)
             return true;
 
@@ -65,17 +68,18 @@ public static class EffectConditionHandler
         string hit = condOptions.Get("is_hit", "true");
         string move = condOptions.Get("is_move", "true");
         bool isHit = true, isMove = true;
-        
+
         if ((hit != "all") && !bool.TryParse(hit, out isHit))
             return false;
-        
+
         if ((move != "all") && !bool.TryParse(move, out isMove))
             return false;
 
         return ((hit == "all") || (lhsUnit.skillSystem.isHit == isHit)) && ((move == "all") || (lhsUnit.pet.isMovable == isMove));
     }
 
-    public static bool RandomNumber(this Effect effect, BattleState state, Dictionary<string, string> condOptions) {
+    public static bool RandomNumber(this Effect effect, BattleState state, Dictionary<string, string> condOptions)
+    {
         string who = condOptions.Get("who", "me");
         string type = condOptions.Get("random_type", "rng");
         var isOpExist = condOptions.TryGet("random_op", out var op, "LTE");
@@ -90,14 +94,17 @@ public static class EffectConditionHandler
 
         Unit lhsUnit = null, rhsUnit = null;
 
-        if (state == null) {
+        if (state == null)
+        {
             if (type == "rng")
                 Player.instance.random = Random.Range(0, 100);
-        } else {
+        }
+        else
+        {
             var invokeUnitId = ((Unit)effect.invokeUnit).id;
             lhsUnit = state.GetUnitById(invokeUnitId);
             rhsUnit = state.GetRhsUnitById(lhsUnit.id);
-            
+
             random = (type == "rng") ? Random.Range(0, 100) : lhsUnit.random;
             random *= (lhsUnit.pet.buffController.GetBuff(75)?.value ?? 100f) / 100f;
             random += lhsUnit.pet.buffController.GetBuff(67)?.value ?? 0;
@@ -106,7 +113,8 @@ public static class EffectConditionHandler
             random = lhsUnit.pet.buffController.GetBuff(68)?.value ?? random;
         }
 
-        if (op == "IN") {
+        if (op == "IN")
+        {
             int middleIndex = cmpValue.IndexOf('~');
             if (middleIndex == -1)
                 return false;
@@ -116,22 +124,36 @@ public static class EffectConditionHandler
             int startRange = int.Parse(startExpr);
             int endRange = int.Parse(endExpr);
             return random.IsWithin(startRange, endRange);
-        } 
-            
+        }
+
         value = (state == null) ? float.Parse(cmpValue) : Parser.ParseEffectOperation(cmpValue, effect, lhsUnit, rhsUnit);
         return Operator.Condition(op, random, value);
     }
 
-    public static bool UnitCondition(this Effect effect, BattleState state, Dictionary<string, string> condOptions) {
+    public static bool UnitCondition(this Effect effect, BattleState state, Dictionary<string, string> condOptions)
+    {
         string who = condOptions.Get("who", "me");
         string type = condOptions.Get("type", "none");
         string[] typeList = type.Split('/');
+
+        if (state == null)
+        {
+            for (int i = 0; i < typeList.Length; i++)
+            {
+                string op = condOptions.Get("type[" + i + "].op", "=");
+                string cmpValue = condOptions.Get("type[" + i + "].cmp", "0");
+                if (!Operator.Condition(op, Parser.ParseOperation(typeList[i]), Parser.ParseOperation(cmpValue)))
+                    return false;
+            }
+            return true;
+        }
 
         var invokeUnitId = ((Unit)effect.invokeUnit).id;
         Unit lhsUnit = (who == "me") ? state.GetUnitById(invokeUnitId) : state.GetRhsUnitById(invokeUnitId);
         Unit rhsUnit = state.GetRhsUnitById(lhsUnit.id);
 
-        for (int i = 0; i < typeList.Length; i++) {
+        for (int i = 0; i < typeList.Length; i++)
+        {
             string op = condOptions.Get("type[" + i + "].op", "=");
             string cmpValue = condOptions.Get("type[" + i + "].cmp", "0");
 
@@ -143,20 +165,24 @@ public static class EffectConditionHandler
         return true;
     }
 
-    public static bool PetCondition(this Effect effect, BattleState state, Dictionary<string, string> condOptions) {
+    public static bool PetCondition(this Effect effect, BattleState state, Dictionary<string, string> condOptions)
+    {
         string who = condOptions.Get("who", "me");
         string type = condOptions.Get("type", "none");
+        string own = condOptions.Get("own", "true");
         string[] typeList = type.Split('/');
 
-        if (type == "none")
-            return true;
-
-        if (state == null) {
+        if (state == null)
+        {
+            if (type == "none")
+                return true;
+            
             Pet pet = ((Pet)effect.invokeUnit);
-            for (int i = 0; i < typeList.Length; i++) {
+            for (int i = 0; i < typeList.Length; i++)
+            {
                 string op = condOptions.Get(typeList[i] + "_op", "=");
                 string cmpValue = condOptions.Get(typeList[i] + "_cmp", "0");
-                float value = pet.TryGetPetIdentifier(cmpValue, out value) ? 
+                float value = pet.TryGetPetIdentifier(cmpValue, out value) ?
                     value : Identifier.GetNumIdentifier(cmpValue);
 
                 if (!Operator.Condition(op, pet.GetPetIdentifier(typeList[i]), value))
@@ -168,13 +194,18 @@ public static class EffectConditionHandler
         var invokeUnitId = ((Unit)effect.invokeUnit).id;
         Unit lhsUnit = (who == "me") ? state.GetUnitById(invokeUnitId) : state.GetRhsUnitById(invokeUnitId);
         Unit rhsUnit = state.GetRhsUnitById(lhsUnit.id);
-        BattlePet battlePet = effect.condition switch {
+        BattlePet battlePet = effect.condition switch
+        {
             EffectCondition.CurrentToken => lhsUnit.token,
             _ => (who == "me") ? (effect?.sourcePet ?? lhsUnit.pet) : lhsUnit.pet,
         };
 
-        if (battlePet == null)
-            return !bool.Parse(condOptions.Get("own", "true"));
+        if (!bool.TryParse(own, out var ownPet))
+            return false;
+        
+        bool isOwnCorrect = (ownPet == (battlePet != null));
+        if ((!ownPet) || (!isOwnCorrect) || (type == "none"))
+            return isOwnCorrect;
 
         for (int i = 0; i < typeList.Length; i++)
         {
@@ -188,30 +219,39 @@ public static class EffectConditionHandler
         return true;
     }
 
-    public static bool StatusCondition(this Effect effect, BattleState state, Dictionary<string, string> condOptions) {
+    public static bool StatusCondition(this Effect effect, BattleState state, Dictionary<string, string> condOptions)
+    {
         string who = condOptions.Get("who", "me");
         string statusType = condOptions.Get("status_type", "hp");
         string op = condOptions.Get("op", "=");
         string cmpValue = condOptions.Get("cmp_value", "1/1");
         var data = Parser.ParseDataType(cmpValue);
-        
+
         var invokeUnit = effect.invokeUnit;
         float currentValue = 0, maxValue = 0;
 
-        if (state == null) {
+        if (state == null)
+        {
             currentValue = ((Pet)invokeUnit).currentStatus[statusType];
             maxValue = ((Pet)invokeUnit).normalStatus[statusType];
-        } else {
+        }
+        else
+        {
             var invokeUnitId = ((Unit)invokeUnit).id;
             var statusUnit = (who == "me") ? state.GetUnitById(invokeUnitId) : state.GetRhsUnitById(invokeUnitId);
-            
-            if (statusType == "hp") {
+
+            if (statusType == "hp")
+            {
                 currentValue = statusUnit.pet.hp;
                 maxValue = statusUnit.pet.maxHp;
-            } else if (statusType == "anger") {
+            }
+            else if (statusType == "anger")
+            {
                 currentValue = statusUnit.pet.anger;
                 maxValue = statusUnit.pet.maxAnger;
-            } else {
+            }
+            else
+            {
                 currentValue = statusUnit.pet.battleStatus[statusType];
                 maxValue = statusUnit.pet.initStatus[statusType];
             }
@@ -219,13 +259,14 @@ public static class EffectConditionHandler
         return Operator.Condition(op, currentValue, maxValue, data);
     }
 
-    public static bool BuffCondition(this Effect effect, BattleState state, Dictionary<string, string> condOptions) {
+    public static bool BuffCondition(this Effect effect, BattleState state, Dictionary<string, string> condOptions)
+    {
         string key = condOptions.Get("key", string.Empty);
         string who = condOptions.Get("who", "me");
         string id = condOptions.Get("id", "0");
         string own = condOptions.Get("own", "true");
         string type = condOptions.Get("type", "none");
-        
+
         string[] typeList = type.Split('/');
 
         if (!bool.TryParse(own, out bool ownBuff))
@@ -252,7 +293,7 @@ public static class EffectConditionHandler
                     return true;
 
                 id = (string.IsNullOrEmpty(key) || (key == "unit")) ? $"(id:{buffId})" : null;
-            }   
+            }
         }
 
         var buffFilter = Parser.ParseConditionFilter<Buff>(id, (expr, buff) => buff.TryGetBuffIdentifier(expr, out var num) ? num : Identifier.GetNumIdentifier(expr));
@@ -269,7 +310,8 @@ public static class EffectConditionHandler
         if ((!ownBuff) || (!isOwnCorrect) || (type == "none"))
             return isOwnCorrect;
 
-        for (int i = 0; i < typeList.Length; i++) {
+        for (int i = 0; i < typeList.Length; i++)
+        {
             string op = condOptions.Get(typeList[i] + "_op", "=");
             string cmpValue = condOptions.Get(typeList[i] + "_cmp", "0");
             float value = Parser.ParseEffectOperation(cmpValue, effect, buffUnit, rhsUnit);
@@ -280,7 +322,8 @@ public static class EffectConditionHandler
         return true;
     }
 
-    public static bool SkillCondition(this Effect effect, BattleState state, Dictionary<string, string> condOptions) {
+    public static bool SkillCondition(this Effect effect, BattleState state, Dictionary<string, string> condOptions)
+    {
         string who = condOptions.Get("who", "me");
         string type = condOptions.Get("type", "none");
         string[] typeList = type.Split('/');
@@ -298,7 +341,8 @@ public static class EffectConditionHandler
         if (type == "none")
             return true;
 
-        for (int i = 0; i < typeList.Length; i++) {
+        for (int i = 0; i < typeList.Length; i++)
+        {
             string op = condOptions.Get(typeList[i] + "_op", "=");
             string cmpValue = condOptions.Get(typeList[i] + "_cmp", "0");
             float value = Parser.ParseEffectOperation(cmpValue, effect, skillUnit, rhsUnit);
@@ -309,26 +353,29 @@ public static class EffectConditionHandler
         return true;
     }
 
-    public static bool PokerCondition(this Effect effect, BattleState state, Dictionary<string, string> condOptions) {
+    public static bool PokerCondition(this Effect effect, BattleState state, Dictionary<string, string> condOptions)
+    {
         string who = condOptions.Get("who", "me");
         var type = condOptions.Get("type", "none");
         string[] typeList = type.Split('/');
         var invokeUnitId = ((Unit)effect.invokeUnit).id;
 
-        Unit pokerUnit = (who == "me") ? state.GetUnitById(invokeUnitId) :state.GetRhsUnitById(invokeUnitId);
+        Unit pokerUnit = (who == "me") ? state.GetUnitById(invokeUnitId) : state.GetRhsUnitById(invokeUnitId);
         Unit rhsUnit = state.GetRhsUnitById(pokerUnit.id);
         var cards = pokerUnit.pet.buffController.GetRangeBuff(x => x.info.options.Get("group") == "poker");
-        
+
         if (type == "none")
             return true;
 
-        float GetPokerIdentifier(string code) {
-            if (code.TryTrimStart("straight", out _) && code.TryTrimParentheses(out var countExpr) 
-                && int.TryParse(countExpr, out var count)) 
+        float GetPokerIdentifier(string code)
+        {
+            if (code.TryTrimStart("straight", out _) && code.TryTrimParentheses(out var countExpr)
+                && int.TryParse(countExpr, out var count))
             {
                 var sortByPoint = cards.Select(x => x.value).Distinct().OrderBy(x => x).ToList();
                 int goal = 1;
-                for (int i = 1; i < sortByPoint.Count; i++) {
+                for (int i = 1; i < sortByPoint.Count; i++)
+                {
                     if (sortByPoint[i] - sortByPoint[i - 1] == 1)
                         goal++;
                     else
@@ -340,7 +387,8 @@ public static class EffectConditionHandler
                 return 0;
             }
 
-            switch (code) {
+            switch (code)
+            {
                 default:
                     return 0;
                 case "count":
@@ -352,7 +400,8 @@ public static class EffectConditionHandler
             }
         }
 
-        for (int i = 0; i < typeList.Length; i++) {
+        for (int i = 0; i < typeList.Length; i++)
+        {
             string op = condOptions.Get(typeList[i] + "_op", "=");
             string cmpValue = condOptions.Get(typeList[i] + "_cmp", "0");
             float value = Parser.ParseEffectOperation(cmpValue, effect, pokerUnit, rhsUnit);

@@ -1986,14 +1986,14 @@ public static class EffectAbilityHandler
                 if (op == "+")
                 {
                     var pet = BattlePet.GetBattlePet(new Pet((int)newValue, lhsUnit.pet));
-                    var buffs = new List<Buff>() { Buff.GetFeatureBuff(pet), Buff.GetEmblemBuff(pet), new Buff(Buff.BUFFID_TOKEN) };
-                    buffs.AddRange(pet.initBuffs);
-
-                    pet.buffController.AddRangeBuff(buffs, lhsUnit, state);
                     pet.skillController.normalSkills = new List<Skill>();
                     pet.skillController.superSkill = null;
-
+                    
                     lhsUnit.petSystem.tokenPetBag[lhsUnit.petSystem.cursor] = pet;
+
+                    var buffs = new List<Buff>() { Buff.GetFeatureBuff(pet), Buff.GetEmblemBuff(pet), new Buff(Buff.BUFFID_TOKEN) };
+                    buffs.AddRange(pet.initBuffs);
+                    pet.buffController.AddRangeBuff(buffs, lhsUnit, state);
                     return true;
                 }
                 if (op == "-")

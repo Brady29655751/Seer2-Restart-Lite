@@ -214,83 +214,18 @@ public class NpcView : Module
         var info = npc.GetInfo();
         var activity = Activity.Find("farm");
 
-        void PlantAction()
-        {
-            var oldPlant = Plant.LoadData(info.id);
-            var itemId = (int)Player.GetSceneData("seed", 0); 
-
-            if (Plant.IsNullOrEmpty(oldPlant))
-            {
-                Plant.NewPlant(info.id, itemId);
-                return;
-            }
-
-            if (!oldPlant.IsRiped)
-            {
-                Plant.Fertilize(info.id, itemId);
-                return;
-            }
-
-            var ripePlant = Plant.Harvest(info.id);
-            foreach (var e in ripePlant.PlantInfo.effects.Where(x => x.ability == EffectAbility.SetPlayer))
-            {
-                if (e.Condition(Player.instance.pet, null))
-                    e.SetPlayer(null, npc, null, npcList);
-            }
-        }
-
         button.onPointerEnterEvent.AddListener(() => infoPrompt.SetActive(true));
         button.onPointerExitEvent.AddListener(() => infoPrompt.SetActive(false));
         button.onPointerOverEvent.AddListener(() => infoPrompt.SetPlant(Plant.LoadData(info.id)));
-        button.onPointerClickEvent.AddListener(PlantAction);
+        button.onPointerClickEvent.AddListener(() => Plant.OnClick(info.id, npc, npcList));
     }
 
     public void SetAnimalAction(NpcController npc, Dictionary<int, NpcController> npcList, InfoPrompt infoPrompt)
     {
         var info = npc.GetInfo();
-
-        void AnimalAction()
-        {
-            var animal = Animal.LoadData(info.id);
-            if (Animal.IsNullOrEmpty(animal))
-                return;
-            
-            var itemId = (int)Player.GetSceneData("seed", 0); 
-            var itemInfo = Item.GetItemInfo(itemId);
-            if ((itemInfo == null) || (itemInfo.type != ItemType.AnimalAction))
-            {
-                MapManager.instance.SetAnimalPanelActive(true);
-                return;
-            }
-
-            switch (itemId)
-            {
-                default:
-                    Player.SetSceneData("seed", 0);
-                    break;
-
-                case 68_0001:
-                    if (animal.Feed())
-                        animal.Produce();
-                    break;
-
-                case 68_0002:
-                    animal.Harvest();
-                    break;
-
-                case 68_0003:
-                    animal.Follow();
-                    break;
-
-                case 68_0099:
-                    animal.Release();
-                    break;
-            }
-        }
-
         button.onPointerEnterEvent.AddListener(() => infoPrompt.SetActive(true));
         button.onPointerExitEvent.AddListener(() => infoPrompt.SetActive(false));
         button.onPointerOverEvent.AddListener(() => infoPrompt.SetAnimal(Animal.LoadData(info.id)));
-        button.onPointerClickEvent.AddListener(AnimalAction);
+        button.onPointerClickEvent.AddListener(() => Animal.OnClick(info.id));
     }
 }

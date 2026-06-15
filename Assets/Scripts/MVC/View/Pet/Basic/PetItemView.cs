@@ -32,4 +32,12 @@ public class PetItemView : Module
 
         infoPrompt.SetItem(item, index % numInOneRow < showAtRightLimit);
     }
+
+    public void SetGif(AnimInfo[] infos)
+    {
+        for (int i = 0; i < itemBlockViews.Count; i++) 
+        {
+            itemBlockViews[i].SetGif(infos?.Get(i));
+        }
+    }
 }

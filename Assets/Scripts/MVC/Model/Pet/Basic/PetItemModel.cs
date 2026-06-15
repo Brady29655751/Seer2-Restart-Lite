@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
@@ -9,6 +10,9 @@ public class PetItemModel : SelectModel<Item>
     public Pet currentPet;
     public ItemCategory currentCategory;
     public Item[] items => selections;
+    public AnimInfo[] gifInfos => (gifFunc == null) ? null : selections?.Select((x, i) => gifFunc(x, i)).ToArray();
+    private Func<Item, int, AnimInfo> gifFunc;
+
 
     protected override void Awake()
     {
@@ -23,16 +27,23 @@ public class PetItemModel : SelectModel<Item>
         SetPage(defaultSelectPage);
     }
 
-    public void SetPet(Pet pet) {
+    public void SetPet(Pet pet)
+    {
         currentPet = pet;
     }
 
-    public void SelectCategory(int index) {
+    public void SelectCategory(int index)
+    {
         if (!index.IsInRange(0, categories.Count))
             currentCategory = categories.FirstOrDefault();
         else
             currentCategory = categories[index];
 
-        Filter(x => x.IsInCategory(currentCategory));
+        Filter(x => ItemDatabase.IsInCategory(x?.info?.type ?? ItemType.None, currentCategory));
+    }
+
+    public void SetGifFunc(Func<Item, int, AnimInfo> gifFunc)
+    {
+        this.gifFunc = gifFunc;
     }
 }

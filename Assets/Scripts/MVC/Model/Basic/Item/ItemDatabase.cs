@@ -28,6 +28,7 @@ public static class ItemDatabase
         {"animal_child", ItemType.AnimalChild},
         {"animal", ItemType.Animal},
         {"animal_action", ItemType.AnimalAction},
+        {"animal_product", ItemType.AnimalProduct},
         {"achievement", ItemType.Achievement},
         {"shoot", ItemType.Shoot},
         {"equipment", ItemType.Equipment},
@@ -56,6 +57,7 @@ public static class ItemDatabase
         {ItemType.AnimalChild, "动物幼崽"},
         {ItemType.Animal, "动物"},
         {ItemType.AnimalAction, "动物操作"},
+        {ItemType.AnimalProduct, "动物产物"},
         {ItemType.Achievement, "称号"},
         {ItemType.Shoot, "射击"},
         {ItemType.Equipment, "装备"},
@@ -69,7 +71,7 @@ public static class ItemDatabase
         { ItemCategory.Capture, new List<ItemType>() { ItemType.Capture } },
         { ItemCategory.Stuff, new List<ItemType>() { ItemType.Mine, ItemType.Stuff }},
         { ItemCategory.Plant, new List<ItemType>() { ItemType.Plant, ItemType.Seed, ItemType.Fertilizer }},
-        { ItemCategory.Animal, new List<ItemType>() { ItemType.Animal, ItemType.AnimalChild, ItemType.AnimalAction }},
+        { ItemCategory.Animal, new List<ItemType>() { ItemType.Animal, ItemType.AnimalChild, ItemType.AnimalAction, ItemType.AnimalProduct }},
         { ItemCategory.Achievement, new List<ItemType>() { ItemType.Achievement, ItemType.Shoot, ItemType.Equipment } },
 
         { ItemCategory.PetGrow, new List<ItemType>() { ItemType.Evolve, ItemType.EXP, ItemType.EV, ItemType.IV, ItemType.Personality } },
@@ -104,7 +106,7 @@ public static class ItemDatabase
         {
             "water" => Animal.LandType.Water,
             "insect" => Animal.LandType.Insect,
-            "egg" => Animal.LandType.Egg,
+            "nest" => Animal.LandType.Nest,
             _ => Animal.LandType.Land,
         };
     }
@@ -135,6 +137,7 @@ public enum ItemType
     AnimalChild,
     Animal,
     AnimalAction,
+    AnimalProduct,
     Achievement,
     Shoot,
     Equipment,

@@ -32,14 +32,15 @@ public class RobotView : PlayerView
     }
     */
 
-    public override void SetDirection(Vector2 dir)
+    public override void SetDirection(Vector2 dir, bool isMoving = false)
     {
         bool[] direction = new bool[] { dir[1] > 0, dir[1] < 0, dir[0] < 0, dir[0] > 0 };
         bool isMove = direction[0] || direction[1] || direction[2] || direction[3];//上下左右
 
         animationController.enabled = isMove;
 
-        SetFollowerDirection(dir);
+        if (!isMoving)
+            SetFollowerDirection(dir);
 
         if (!isMove)
         {
@@ -100,12 +101,18 @@ public class RobotView : PlayerView
         var follower = Player.instance.follower;
         if (Animal.IsNullOrEmpty(follower))
         {
+            followerGif.Clear();
             followerGif.image.SetSprite(SpriteSet.Empty);
+            followerGif.image.SetSize(Vector2.zero);
             return;
         }
+
         var dirName = direction.GetDirectionName();
         if (string.IsNullOrEmpty(dirName))
         {
+            if (!follower.PauseWhenIdle)
+                return;
+            
             followerGif.Reset();
         }
         else
@@ -117,13 +124,13 @@ public class RobotView : PlayerView
                 var scaleX = anchorX * 2 - 1;
                 followerGif.image.rectTransform.anchorMin = followerGif.image.rectTransform.anchorMax = new Vector2(anchorX, 0);
                 followerGif.image.rectTransform.localScale = new Vector3(scaleX, 1, 1);
-                followerGif.SetGifFromUrl(gifInfo.GifPath, speed: gifInfo.AnimSpeed * 2.5f, useGifSize: gifInfo.UseAnimSize);
+                followerGif.SetGifFromUrl(gifInfo.GifPath, speed: gifInfo.AnimSpeed * 2, useGifSize: gifInfo.UseAnimSize);
             }      
             else
             {
                 followerGif.image.rectTransform.anchorMin = followerGif.image.rectTransform.anchorMax = Vector2.right;
                 followerGif.image.rectTransform.localScale = Vector3.one;
-                followerGif.image.SetSprite(follower.Icon);
+                SetFollowerSprite(follower.Icon);
             }
 
             followerGif.image.rectTransform.anchoredPosition = Vector2.zero;

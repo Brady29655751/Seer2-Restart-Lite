@@ -8,11 +8,13 @@ using Random = UnityEngine.Random;
 
 public class Animal
 {
+    public static Animal currentAnimal;
+
     public int id, landId;
     public DateTime ripeDate, lastProduceDate;
     public int productAll, productBorned;
 
-    public string Name => AnimalInfo?.name;
+    public string Name => IsRiped ? AnimalInfo?.name : ChildInfo.name;
     public int ChildId => int.Parse(AnimalInfo.options.Get("child", "0"));
     public int ProductId => int.Parse(AnimalInfo.options.Get("product", "0"));
     public int FeedId => int.Parse(ChildInfo.options.Get("feed", "0"));
@@ -22,7 +24,7 @@ public class Animal
     public ItemInfo ProductInfo => Item.GetItemInfo(ProductId);
     public ItemInfo FeedInfo => Item.GetItemInfo(FeedId);
 
-    public TimeSpan RipeTime => TimeSpan.Parse(ChildInfo.options.Get("time", "00:00:00"));
+    public TimeSpan RipeTime => ChildInfo.options.Get("time", "00:00:00").ToTimeSpan();
     public TimeSpan LeftTime => IsRiped ? TimeSpan.Zero : (ripeDate - DateTime.Now);
     public DateTime LastProduceDate => ((id != 0) && (lastProduceDate < BirthDate)) ? BirthDate : lastProduceDate;
     public DateTime BirthDate => ripeDate - RipeTime;
@@ -36,6 +38,7 @@ public class Animal
     public string Adjective => AnimalInfo.options.Get("adj", "普通的");
     public bool IsRiped => DateTime.Now >= ripeDate;
     public bool IsFollowing => (Player.instance.follower != null) && (Player.instance.follower.landId == landId);
+    public bool PauseWhenIdle => ProductId != 63_1001;
 
     public Sprite Icon => GetIcon();
 
@@ -78,6 +81,24 @@ public class Animal
             SaveSystem.SaveData();
     }
 
+    public static bool IsNullOrEmpty(Animal animal)
+    {
+        return (animal == null) || (animal.AnimalInfo == null);
+    }
+
+    public static Animal DefaultAnimal(int landId = 0)
+    {
+        return new Animal()
+        {
+            id = 0,
+            landId = landId,
+            ripeDate = DateTime.MaxValue,
+            lastProduceDate = DateTime.MaxValue,
+            productAll = 0,
+            productBorned = 0,
+        };
+    }
+
     public static bool NewAnimal(int landId, int animalId)
     {
         var oldAnimal = Animal.LoadData(landId);
@@ -108,22 +129,46 @@ public class Animal
         return true;   
     }
 
-    public static bool IsNullOrEmpty(Animal animal)
+    public static void OnClick(int landId, Action callback = null)
     {
-        return (animal == null) || (animal.AnimalInfo == null);
-    }
+        var animal = Animal.LoadData(landId);
+        if (Animal.IsNullOrEmpty(animal))
+            return;
 
-    public static Animal DefaultAnimal(int landId = 0)
-    {
-        return new Animal()
+        var itemId = (int)Player.GetSceneData("seed", 0); 
+        var itemInfo = Item.GetItemInfo(itemId);
+        if ((itemInfo == null) || (itemInfo.type != ItemType.AnimalAction))
         {
-            id = 0,
-            landId = landId,
-            ripeDate = DateTime.MaxValue,
-            lastProduceDate = DateTime.MaxValue,
-            productAll = 0,
-            productBorned = 0,
-        };
+            animal.GetSound((sound) => AudioSystem.instance.PlaySound(sound));
+            MapManager.instance.SetAnimalPanelActive(true);
+            return;
+        }
+
+        switch (itemId)
+        {
+            default:
+                Player.SetSceneData("seed", 0);
+                break;
+            // Feed.
+            case 68_0001:
+                if (animal.Feed())
+                    animal.Produce();
+                break;
+            // Harverst.
+            case 68_0002:
+                animal.Harvest();
+                break;
+            // Follow.
+            case 68_0003:
+                animal.Follow();
+                break;
+            // Release. The callback is called after confirm, so we directly return.
+            case 68_0099:
+                animal.Release(callback);
+                return;
+        }
+
+        callback?.Invoke();
     }
 
     public Animal(){}
@@ -136,6 +181,18 @@ public class Animal
         this.lastProduceDate = DateTime.Today;
         this.productAll = (int)Identifier.GetNumIdentifier(ProductNumRange);
         this.productBorned = 0;
+    }
+
+    public float GetIdentifier(string id)
+    {
+        return id switch
+        {
+            "id" => this.id,
+            "landId" => landId,
+            "ripe" => IsRiped ? 1 : 0,
+            "growth" => (float)(1 - LeftTime / RipeTime),
+            _ => Identifier.GetNumIdentifier(id),
+        };
     }
 
     /// <summary>
@@ -167,10 +224,17 @@ public class Animal
                 
                 iconId = iconList[index];
             }
-            return ResourceManager.instance.GetLocalAddressables<Sprite>($"Maps/animal/{iconId}/icon", ItemInfo.IsMod(iconId));
+            var icon = ResourceManager.instance.GetLocalAddressables<Sprite>($"Maps/animal/{iconId}/icon", ItemInfo.IsMod(iconId));
+            if (icon != null)
+                return icon;
         }
 
         return IsRiped ? AnimalInfo.icon : ChildInfo.icon;
+    }
+
+    public void GetSound(Action<AudioClip> onSuccess, Action<string> onFail = null)
+    {
+        ResourceManager.instance.GetLocalAddressables<AudioClip>($"BGM/animal/{id}", ItemInfo.IsMod(id), onSuccess, onFail);
     }
 
     private string GetGifUrl(string dirName, out float speed)
@@ -219,7 +283,23 @@ public class Animal
         return animInfo;
     }
 
-    public void Release()
+    public bool IsFollowable(out string reason)
+    {
+        reason = "该动物不可跟随哦！";
+
+        if ((AnimalLandType == LandType.Water) || (AnimalLandType == LandType.Nest))
+            return false;
+        
+        if ((AnimalLandType == LandType.Insect) && (!IsRiped))
+        {
+            reason = "未成年的昆虫很脆弱，\n需要细心呵护无法跟随哦！";
+            return false;
+        }
+
+        return bool.Parse(ChildInfo.options.Get("follow", "true"));
+    }
+
+    public void Release(Action callback = null)
     {
         var hintbox = Hintbox.OpenHintboxWithContent($"确定要放生<color=#ffbb33>{Name}</color>吗？放生后无法恢复！", 14);
         hintbox.SetOptionNum(2);
@@ -227,6 +307,7 @@ public class Animal
         {
             Animal.SaveData(Animal.DefaultAnimal(landId));
             Hintbox.OpenHintboxWithContent($"已放生{Name}", 14); 
+            callback?.Invoke();
         });
     }
 
@@ -268,11 +349,19 @@ public class Animal
         var num = Mathf.Clamp((int)Identifier.GetNumIdentifier(ProduceEachRange), 1, ProductLeft);
         var item = new Item(ProductId, num);
 
-        productBorned += num;
+        if (ProductInfo.id == 63_1001)
+        {
+            Hintbox.OpenHintboxWithContent($"<color=#ffbb33>{Name}</color>吃饱了！现在可以带她去授粉了！", 14);
+        }
+        else
+        {
+            Item.Add(item);
+            Item.OpenHintbox(item);
+            productBorned += num;
+        }
+
         lastProduceDate = DateTime.Now;
         Animal.SaveData(this);
-        Item.Add(item);
-        Item.OpenHintbox(item);
         return item;
     }
 
@@ -299,6 +388,11 @@ public class Animal
 
     public void Follow()
     {
+        if (!IsFollowable(out var reason))
+        {
+            Hintbox.OpenHintboxWithContent(reason, 16);
+            return;
+        }
         Player.instance.follower = this;
         PlayerController.instance.SetFollowerSprite();
     }
@@ -308,6 +402,6 @@ public class Animal
         Land = 0,
         Water = 1,
         Insect = 2,
-        Egg = 3,
+        Nest = 3,
     }
 }
