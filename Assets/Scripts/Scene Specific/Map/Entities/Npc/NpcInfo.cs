@@ -50,9 +50,12 @@ public class NpcInfo
     [XmlAttribute] public bool wanderFlip = true;
     [XmlAttribute] public bool wanderDebug = false;
     [XmlAttribute] public bool wanderOriginalFacesRight = false;
+    [XmlAttribute] public float wanderBubbleChance = 0.35f;
+    [XmlAttribute] public float wanderBubbleDuration = 1.8f;
     [XmlIgnore] public Vector2 wanderIdleRange => wanderIdle.ToVector2(new Vector2(2f, 6f));
     [XmlIgnore] public Vector2 wanderStepRange => wanderStep.ToVector2(new Vector2(14f, 30f));
     [XmlIgnore] public float wanderFaceRightScale => wanderOriginalFacesRight ? 1f : -1f;
+    [XmlElement("wanderBubble")] public NpcWanderBubbleInfo wanderBubble;
 
     [XmlElement("transport")] public string transport;
     public Vector2 transportPos => transport.ToVector2(pos);
@@ -119,5 +122,23 @@ public class NpcInfo
 
         return bundle.LoadAsset<GameObject>(animId.Substring(animId.LastIndexOf('_') + 1));
 
+    }
+}
+
+public class NpcWanderBubbleInfo
+{
+    [XmlElement("self")] public List<string> self;
+    [XmlElement("scene")] public List<string> scene;
+    [XmlElement("player")] public List<string> player;
+
+    [XmlIgnore] public bool HasSelf => self != null && self.Any(x => !string.IsNullOrWhiteSpace(x));
+
+    public string GetRandomSelf()
+    {
+        if (!HasSelf)
+            return null;
+
+        var options = self.Where(x => !string.IsNullOrWhiteSpace(x)).ToList();
+        return options.Get(UnityEngine.Random.Range(0, options.Count));
     }
 }
