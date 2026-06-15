@@ -4,7 +4,13 @@
 		<bgm>BGM_36</bgm>
 	</music>
 	<entities>
-		<npc id="1003601" resId="Pets/pet/10010" name="Lv1 皮皮" size="56,42" pos="420,200" namePos="0,0">
+		<npc id="1003601" resId="Pets/pet/10010" name="Lv1 皮皮" size="56,42" pos="420,200" namePos="0,0" wander="true" wanderRadius="220" wanderSpeed="34" wanderIdle="2,3" wanderStep="12,26" wanderMoveTick="0.05" wanderSnap="1" wanderBob="1.25" wanderBobSpeed="2" wanderOriginalFacesRight="true" wanderBubbleChance="0.3" wanderBubbleDuration="2.5">
+			
+			<wanderBubble>
+				<self>我的耳朵可是武器哦！别小看它们~</self>
+				<self>克洛斯星草原好大，适合蹦蹦跳跳！</self>
+				<self>鸣叫！叽叽叽~</self>
+			</wanderBubble>
 			<battle>
 				<branch id="default">
 					<settings count="6" capture="true"/>
@@ -39,7 +45,13 @@
 				</button>
 			</eventHandler>
 		</npc>
-		<npc id="1003602" resId="Pets/pet/10010" name="Lv2 皮皮" size="56,42" pos="265,140" namePos="0,0">
+		<npc id="1003602" resId="Pets/pet/10010" name="Lv2 皮皮" size="56,42" pos="265,140" namePos="0,0" wander="true" wanderRadius="220" wanderSpeed="34" wanderIdle="2,3" wanderStep="12,26" wanderMoveTick="0.05" wanderSnap="1" wanderBob="1.25" wanderBobSpeed="2" wanderOriginalFacesRight="true" wanderBubbleChance="0.3" wanderBubbleDuration="2.5">
+			
+			<wanderBubble>
+				<self>燕返！飞过去又飞回来~</self>
+				<self>皮皮最喜欢热闹了！快来和我玩！</self>
+				<self>大耳朵拍拍！啪啪啪~</self>
+			</wanderBubble>
 			<battle>
 				<branch id="default">
 					<settings count="6" capture="true"/>

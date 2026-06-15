@@ -5,7 +5,13 @@
 		<bgm>BGM_310</bgm>
 	</music>
 	<entities>
-		<npc id="31001" resId="Pets/pet/114.png" name="Lv51 蹦蹦鼠" size="82,80" pos="675,120" namePos="15,0">
+		<npc id="31001" resId="Pets/pet/114.png" name="Lv51 蹦蹦鼠" size="82,80" pos="675,120" namePos="15,0" wander="true" wanderRadius="220" wanderSpeed="34" wanderIdle="2,3" wanderStep="12,26" wanderMoveTick="0.05" wanderSnap="1" wanderBob="1.25" wanderBobSpeed="2" wanderOriginalFacesRight="true" wanderBubbleChance="0.3" wanderBubbleDuration="2.5">
+			
+			<wanderBubble>
+				<self>以守转攻！先防守再反击，聪明的战术~</self>
+				<self>今天跳了1000下，腿有点酸。</self>
+				<self>蹦蹦鼠的尾巴：平衡大师，兼职方向盘。</self>
+			</wanderBubble>
 			<battle>
 				<branch id="default">
 					<settings count="6" capture="true"/>
@@ -23,7 +29,13 @@
 				</button>
 			</eventHandler>
 		</npc>
-		<npc id="31002" resId="Pets/pet/114.png" name="Lv52 蹦蹦鼠" size="82,80" pos="465,95" namePos="15,0">
+		<npc id="31002" resId="Pets/pet/114.png" name="Lv52 蹦蹦鼠" size="82,80" pos="465,95" namePos="15,0" wander="true" wanderRadius="220" wanderSpeed="34" wanderIdle="2,3" wanderStep="12,26" wanderMoveTick="0.05" wanderSnap="1" wanderBob="1.25" wanderBobSpeed="2" wanderOriginalFacesRight="true" wanderBubbleChance="0.3" wanderBubbleDuration="2.5">
+			
+			<wanderBubble>
+				<self>蹦！蹦！蹦！停不下来啦~</self>
+				<self>尾巴是我的秘密武器，平衡感全靠它！</self>
+				<self>沙之刀刃！沙子也能变成武器~</self>
+			</wanderBubble>
 			<battle>
 				<branch id="default">
 					<settings count="6" capture="true"/>
