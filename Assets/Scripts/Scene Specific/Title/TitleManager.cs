@@ -432,7 +432,7 @@ public class TitleManager : Manager<TitleManager>
                 var modBg = ResourceManager.instance.GetLocalAddressables<Sprite>("Activities/FirstPage", true);
                 var mapRes = new MapResources(modBg, null, modBGM);
                 var map = new Map(){ id = 0, resources = mapRes };
-                SetBackground(map);
+                SetBackground(map, true);
             }
             
             ResourceManager.instance.GetLocalAddressables<AudioClip>("BGM/FirstPage", true, OnLoadBGMFinished, (error) => OnLoadBGMFinished(null));    
@@ -448,6 +448,11 @@ public class TitleManager : Manager<TitleManager>
 
     private void SetBackground(Map map)
     {
+        SetBackground(map, false);
+    }
+
+    private void SetBackground(Map map, bool hideGameIcon)
+    {
         var res = map.resources;
         if (res.bgm != null)
             AudioSystem.instance.PlayMusic(res.bgm, AudioVolumeType.None); 
@@ -456,7 +461,7 @@ public class TitleManager : Manager<TitleManager>
         {
             backgroundImage.SetSprite(res.bg);
             backgroundImage.color = Color.white;
-            HideBackgroundGadgetsExceptGameIcon();
+            HideBackgroundGadgets(hideGameIcon);
         }
 
         if (res.anim != null)
@@ -468,13 +473,16 @@ public class TitleManager : Manager<TitleManager>
         }
     }
 
-    private void HideBackgroundGadgetsExceptGameIcon()
+    private void HideBackgroundGadgets(bool hideGameIcon)
     {
         foreach (var obj in backgroundGadgetObjectList)
         {
-            if ((obj == null) || (obj == gameIconEntranceObject) || (obj.name == "Game Icon"))
+            if (obj == null)
                 continue;
 
+            if (!hideGameIcon && ((obj == gameIconEntranceObject) || (obj.name == "Game Icon")))
+                continue;
+            
             obj.SetActive(false);
         }
     }
