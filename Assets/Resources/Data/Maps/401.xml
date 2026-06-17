@@ -6,7 +6,13 @@
 	</music>
 	<entities>
 
-		<npc id="40101" resId="Pets/pet/122.png" name="Lv61 冻气龟" size="45,58" pos="350,230" namePos="0,0">
+		<npc id="40101" resId="Pets/pet/122.png" name="Lv61 冻气龟" size="45,58" pos="350,230" namePos="0,0" wander="true" wanderRadius="220" wanderSpeed="34" wanderIdle="2,3" wanderStep="12,26" wanderMoveTick="0.05" wanderSnap="1" wanderBob="1.25" wanderBobSpeed="2" wanderOriginalFacesRight="true" wanderBubbleChance="0.3" wanderBubbleDuration="2.5">
+			
+			<wanderBubble>
+				<self>我不是驼子！这是冰壳！冰壳！</self>
+				<self>冻气附体！暴击率提升~</self>
+				<self>冰之谷好冷，但对我来说刚刚好~</self>
+			</wanderBubble>
 			<battle>
 				<branch id="default">
 					<settings count="6" capture="true"/>
@@ -24,7 +30,13 @@
 				</button>
 			</eventHandler>
 		</npc>
-		<npc id="40102" resId="Pets/pet/122.png" name="Lv60 冻气龟" size="45,58" pos="520,120" namePos="0,0">
+		<npc id="40102" resId="Pets/pet/122.png" name="Lv60 冻气龟" size="45,58" pos="520,120" namePos="0,0" wander="true" wanderRadius="220" wanderSpeed="34" wanderIdle="2,3" wanderStep="12,26" wanderMoveTick="0.05" wanderSnap="1" wanderBob="1.25" wanderBobSpeed="2" wanderOriginalFacesRight="true" wanderBubbleChance="0.3" wanderBubbleDuration="2.5">
+			
+			<wanderBubble>
+				<self>小时候被嘲笑的事……哼，现在谁还敢笑我？</self>
+				<self>重击！龟壳一顶，对手飞出去~</self>
+				<self>冻气龟出击！小心别被冻到~</self>
+			</wanderBubble>
 			<battle>
 				<branch id="default">
 					<settings count="6" capture="true"/>

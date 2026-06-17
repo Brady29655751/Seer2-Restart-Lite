@@ -7,7 +7,13 @@
 		<fx>FX_114</fx>
 	</music>
 	<entities>
-		<npc id="13301" resId="Pets/pet/200.png" name="Lv10 荧光蝶" size="62,62" pos="320,60" namePos="0,0">
+		<npc id="13301" resId="Pets/pet/200.png" name="Lv10 荧光蝶" size="62,62" pos="320,60" namePos="0,0" wander="true" wanderRadius="220" wanderSpeed="34" wanderIdle="2,3" wanderStep="12,26" wanderMoveTick="0.05" wanderSnap="1" wanderBob="1.25" wanderBobSpeed="2" wanderOriginalFacesRight="true" wanderBubbleChance="0.3" wanderBubbleDuration="2.5">
+			
+			<wanderBubble>
+				<self>我发光了！是不是很好看~</self>
+				<self>深幽沼泽虽然名字不太好听，但其实是我的家~</self>
+				<self>我不太擅长战斗……但我会发光呀！</self>
+			</wanderBubble>
 			<battle>
 				<branch id="default">
 					<settings count="6" capture="true" />
@@ -33,7 +39,13 @@
 				</button>
 			</eventHandler>
 		</npc>
-		<npc id="13302" resId="Pets/pet/200.png" name="Lv11 荧光蝶" size="62,62" pos="200,90" namePos="0,0">
+		<npc id="13302" resId="Pets/pet/200.png" name="Lv11 荧光蝶" size="62,62" pos="200,90" namePos="0,0" wander="true" wanderRadius="220" wanderSpeed="34" wanderIdle="2,3" wanderStep="12,26" wanderMoveTick="0.05" wanderSnap="1" wanderBob="1.25" wanderBobSpeed="2" wanderOriginalFacesRight="true" wanderBubbleChance="0.3" wanderBubbleDuration="2.5">
+			
+			<wanderBubble>
+				<self>腐蚀花粉！花粉弥漫~</self>
+				<self>荧光特性！对手有荧光花粉时我每回合回血~</self>
+				<self>虚弱花粉！让对手变弱~</self>
+			</wanderBubble>
 			<battle>
 				<branch id="default">
 					<settings count="6" capture="true" />
@@ -59,7 +71,13 @@
 				</button>
 			</eventHandler>
 		</npc>
-		<npc id="13303" resId="Pets/pet/200.png" name="Lv12 荧光蝶" size="62,62" pos="130,180" namePos="0,0">
+		<npc id="13303" resId="Pets/pet/200.png" name="Lv12 荧光蝶" size="62,62" pos="130,180" namePos="0,0" wander="true" wanderRadius="220" wanderSpeed="34" wanderIdle="2,3" wanderStep="12,26" wanderMoveTick="0.05" wanderSnap="1" wanderBob="1.25" wanderBobSpeed="2" wanderOriginalFacesRight="true" wanderBubbleChance="0.3" wanderBubbleDuration="2.5">
+			
+			<wanderBubble>
+				<self>俯冲！……飞太低了，撞到泥巴了。</self>
+				<self>居民区的精灵们都很喜欢我发的光~</self>
+				<self>荧光蝶的日常：发光、飞舞、偶尔迷路。</self>
+			</wanderBubble>
 			<battle>
 				<branch id="default">
 					<settings count="6" capture="true" />

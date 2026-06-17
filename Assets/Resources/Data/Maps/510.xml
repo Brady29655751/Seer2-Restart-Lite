@@ -5,7 +5,13 @@
 		<bgm>BGM_520</bgm>
 	</music>
 	<entities>
-		<npc id="51002" resId="Pets/pet/64.png" name="Lv43 格尔西克" size="61,45" pos="330,190" namePos="0,0">
+		<npc id="51002" resId="Pets/pet/64.png" name="Lv43 格尔西克" size="61,45" pos="330,190" namePos="0,0" wander="true" wanderRadius="220" wanderSpeed="34" wanderIdle="2,3" wanderStep="12,26" wanderMoveTick="0.05" wanderSnap="1" wanderBob="1.25" wanderBobSpeed="2" wanderOriginalFacesRight="true" wanderBubbleChance="0.3" wanderBubbleDuration="2.5">
+			
+			<wanderBubble>
+				<self>我没有生气！我天生就长这样！</self>
+				<self>胆子变大了！今天敢跟一只蝴蝶对视了！</self>
+				<self>尘土飞扬！……咳咳，呛到了。</self>
+			</wanderBubble>
 			<battle>
 				<branch id="default">
 					<settings count="6" capture="true"/>
@@ -31,7 +37,13 @@
 				</button>
 			</eventHandler>
 		</npc>
-		<npc id="51003" resId="Pets/pet/64.png" name="Lv44 格尔西克" size="61,45" pos="210,130" namePos="0,0">
+		<npc id="51003" resId="Pets/pet/64.png" name="Lv44 格尔西克" size="61,45" pos="210,130" namePos="0,0" wander="true" wanderRadius="220" wanderSpeed="34" wanderIdle="2,3" wanderStep="12,26" wanderMoveTick="0.05" wanderSnap="1" wanderBob="1.25" wanderBobSpeed="2" wanderOriginalFacesRight="true" wanderBubbleChance="0.3" wanderBubbleDuration="2.5">
+			
+			<wanderBubble>
+				<self>锐减！把对手的能力减下去~</self>
+				<self>蛮力冲锋！冲啊——！</self>
+				<self>地道之路好黑，但我不怕！……好吧有一点点怕。</self>
+			</wanderBubble>
 			<battle>
 				<branch id="default">
 					<settings count="6" capture="true"/>

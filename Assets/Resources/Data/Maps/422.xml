@@ -5,7 +5,13 @@
 		<bgm>BGM_031</bgm>
 	</music>
 	<entities>
-		<npc id="42201" resId="Pets/pet/195.png" name="Lv73 克里普特" size="75,77" pos="410,45" namePos="0,0">
+		<npc id="42201" resId="Pets/pet/195.png" name="Lv73 克里普特" size="75,77" pos="410,45" namePos="0,0" wander="true" wanderRadius="220" wanderSpeed="34" wanderIdle="2,3" wanderStep="12,26" wanderMoveTick="0.05" wanderSnap="1" wanderBob="1.25" wanderBobSpeed="2" wanderOriginalFacesRight="true" wanderBubbleChance="0.3" wanderBubbleDuration="2.5">
+			
+			<wanderBubble>
+				<self>勘探报告：前方安全……大概。</self>
+				<self>弑龙弹！虽然没见过龙，但万一呢？</self>
+				<self>时镜之岛好多镜子，照来照去的。</self>
+			</wanderBubble>
 			<battle>
 				<branch id="default">
 					<settings count="6" capture="true"/>
@@ -23,7 +29,13 @@
 				</button>
 			</eventHandler>
 		</npc>
-		<npc id="42202" resId="Pets/pet/195.png" name="Lv72 克里普特" size="75,77" pos="600,45" namePos="0,0">
+		<npc id="42202" resId="Pets/pet/195.png" name="Lv72 克里普特" size="75,77" pos="600,45" namePos="0,0" wander="true" wanderRadius="220" wanderSpeed="34" wanderIdle="2,3" wanderStep="12,26" wanderMoveTick="0.05" wanderSnap="1" wanderBob="1.25" wanderBobSpeed="2" wanderOriginalFacesRight="true" wanderBubbleChance="0.3" wanderBubbleDuration="2.5">
+			
+			<wanderBubble>
+				<self>燃烧弹！虽然是超能系的，但谁规定不能放火？</self>
+				<self>克里普特在此！有危险找我！</self>
+				<self>勘探精灵的日常：去危险的地方，写安全的报告。</self>
+			</wanderBubble>
 			<battle>
 				<branch id="default">
 					<settings count="6" capture="true"/>

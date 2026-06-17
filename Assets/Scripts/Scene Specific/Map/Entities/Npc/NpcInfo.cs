@@ -38,6 +38,7 @@ public class NpcInfo
     public Color nameColor => nameRgba.ToColor(new Color32(0, 64, 255, 255));
     [XmlAttribute("nameFont")] public string nameFont;
 
+    [XmlElement("wander")] public NpcWanderInfo wanderInfo;
 
     [XmlElement("transport")] public string transport;
     public Vector2 transportPos => transport.ToVector2(pos);
@@ -104,5 +105,46 @@ public class NpcInfo
 
         return bundle.LoadAsset<GameObject>(animId.Substring(animId.LastIndexOf('_') + 1));
 
+    }
+}
+
+public class NpcWanderInfo
+{
+    [XmlAttribute] public bool enabled = false;
+    [XmlAttribute] public float radius = 120f;
+    [XmlAttribute] public float speed = 35f;
+    [XmlAttribute] public string idle = "2,6";
+    [XmlAttribute] public string step = "14,30";
+    [XmlAttribute] public float moveTick = 0.08f;
+    [XmlAttribute] public float snap = 1f;
+    [XmlAttribute] public float bob = 0f;
+    [XmlAttribute] public float bobSpeed = 2f;
+    [XmlAttribute] public bool flip = true;
+    [XmlAttribute] public bool debug = false;
+    [XmlAttribute] public bool originalFacesRight = false;
+    [XmlElement("bubble")] public NpcWanderBubbleInfo bubble;
+
+    [XmlIgnore] public Vector2 idleRange => idle.ToVector2(new Vector2(2f, 6f));
+    [XmlIgnore] public Vector2 stepRange => step.ToVector2(new Vector2(14f, 30f));
+    [XmlIgnore] public float faceRightScale => originalFacesRight ? 1f : -1f;
+}
+
+public class NpcWanderBubbleInfo
+{
+    [XmlAttribute] public float chance = 0.35f;
+    [XmlAttribute] public float duration = 1.8f;
+    [XmlElement("self")] public List<string> self;
+    [XmlElement("scene")] public List<string> scene;
+    [XmlElement("player")] public List<string> player;
+
+    [XmlIgnore] public bool HasSelf => self != null && self.Any(x => !string.IsNullOrWhiteSpace(x));
+
+    public string GetRandomSelf()
+    {
+        if (!HasSelf)
+            return null;
+
+        var options = self.Where(x => !string.IsNullOrWhiteSpace(x)).ToList();
+        return options.Get(UnityEngine.Random.Range(0, options.Count));
     }
 }

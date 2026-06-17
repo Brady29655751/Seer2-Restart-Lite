@@ -5,7 +5,13 @@
 		<bgm>BGM_470</bgm>
 	</music>
 	<entities>
-		<npc id="36001" resId="Pets/pet/54.png" name="Lv48 牛顿" size="107,77" pos="670,140" namePos="0,0">
+		<npc id="36001" resId="Pets/pet/54.png" name="Lv48 牛顿" size="107,77" pos="670,140" namePos="0,0" wander="true" wanderRadius="220" wanderSpeed="34" wanderIdle="2,3" wanderStep="12,26" wanderMoveTick="0.05" wanderSnap="1" wanderBob="1.25" wanderBobSpeed="2" wanderOriginalFacesRight="true" wanderBubbleChance="0.3" wanderBubbleDuration="2.5">
+			
+			<wanderBubble>
+				<self>坚韧！我可是很坚韧的牛！</self>
+				<self>地心引力真神奇，它让一切都有了方向。</self>
+				<self>牛顿在这里思考人生……其实是发呆啦~</self>
+			</wanderBubble>
 			<battle>
 				<branch id="default">
 					<settings count="6" capture="true"/>
@@ -23,7 +29,13 @@
 				</button>
 			</eventHandler>
 		</npc>
-		<npc id="36002" resId="Pets/pet/54.png" name="Lv49 牛顿" size="107,77" pos="400,50" namePos="0,0">
+		<npc id="36002" resId="Pets/pet/54.png" name="Lv49 牛顿" size="107,77" pos="400,50" namePos="0,0" wander="true" wanderRadius="220" wanderSpeed="34" wanderIdle="2,3" wanderStep="12,26" wanderMoveTick="0.05" wanderSnap="1" wanderBob="1.25" wanderBobSpeed="2" wanderOriginalFacesRight="true" wanderBubbleChance="0.3" wanderBubbleDuration="2.5">
+			
+			<wanderBubble>
+				<self>我终于明白了！是地心引力！是地心引力让苹果掉下来的！</self>
+				<self>群牛践踏！……只有我一个牛，但气势不能输！</self>
+				<self>地铁站里好暗，不过我自带电光~</self>
+			</wanderBubble>
 			<battle>
 				<branch id="default">
 					<settings count="6" capture="true"/>

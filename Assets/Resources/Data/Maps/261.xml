@@ -6,7 +6,13 @@
 	</music>
 	<initialPoint>390,135</initialPoint>
 	<entities>
-		<npc id="26101" resId="Pets/pet/40.png" name="Lv37 赤焰兽" size="78,73" pos="600,140" namePos="0,0">
+		<npc id="26101" resId="Pets/pet/40.png" name="Lv37 赤焰兽" size="78,73" pos="600,140" namePos="0,0" wander="true" wanderRadius="220" wanderSpeed="34" wanderIdle="2,3" wanderStep="12,26" wanderMoveTick="0.05" wanderSnap="1" wanderBob="1.25" wanderBobSpeed="2" wanderOriginalFacesRight="true" wanderBubbleChance="0.3" wanderBubbleDuration="2.5">
+			
+			<wanderBubble>
+				<self>我的嘴巴能喝岩浆哦！……别问我什么味道。</self>
+				<self>烈焰撞击！感觉自己像一颗流星~</self>
+				<self>赤链山脉的熔浆最好喝了，今天又喝饱了。</self>
+			</wanderBubble>
 			<battle>
 				<branch id="default">
 					<settings count="6" capture="true">
@@ -43,7 +49,13 @@
 				</button>
 			</eventHandler>
 		</npc>
-		<npc id="26102" resId="Pets/pet/40.png" name="Lv36 赤焰兽" size="78,73" pos="495,65" namePos="0,0">
+		<npc id="26102" resId="Pets/pet/40.png" name="Lv36 赤焰兽" size="78,73" pos="495,65" namePos="0,0" wander="true" wanderRadius="220" wanderSpeed="34" wanderIdle="2,3" wanderStep="12,26" wanderMoveTick="0.05" wanderSnap="1" wanderBob="1.25" wanderBobSpeed="2" wanderOriginalFacesRight="true" wanderBubbleChance="0.3" wanderBubbleDuration="2.5">
+			
+			<wanderBubble>
+				<self>火球飞弹！嗖——打中了！……打中了谁？</self>
+				<self>有时候会想，如果岩浆喝多了会怎样？</self>
+				<self>赤焰兽出击！小心别被我的热情烫到~</self>
+			</wanderBubble>
 			<battle>
 				<branch id="default">
 					<settings count="6" capture="true">
