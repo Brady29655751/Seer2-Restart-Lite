@@ -4,13 +4,14 @@
 		<bgm>BGM_36</bgm>
 	</music>
 	<entities>
-		<npc id="1003701" resId="Pets/pet/10016" name="Lv3 仙人球" size="45,80" pos="460,100" namePos="0,-10" wander="true" wanderRadius="220" wanderSpeed="34" wanderIdle="2,3" wanderStep="12,26" wanderMoveTick="0.05" wanderSnap="1" wanderBob="1.25" wanderBobSpeed="2" wanderOriginalFacesRight="true" wanderBubbleChance="0.3" wanderBubbleDuration="2.5">
-			
-			<wanderBubble>
-				<self>仙人球：高傲、带刺、不好惹。</self>
-				<self>刺身撞击！连人带刺一起撞过去~</self>
-				<self>缩头！……我没有头可以缩。那就缩刺吧。</self>
-			</wanderBubble>
+		<npc id="1003701" resId="Pets/pet/10016" name="Lv3 仙人球" size="45,80" pos="460,100" namePos="0,-10">
+			<wander enabled="true" radius="220" speed="34" idle="2,3" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true">
+				<bubble chance="0.3" duration="2.5">
+					<self>仙人球：高傲、带刺、不好惹。</self>
+					<self>刺身撞击！连人带刺一起撞过去~</self>
+					<self>缩头！……我没有头可以缩。那就缩刺吧。</self>
+				</bubble>
+			</wander>
 			<battle>
 				<branch id="default">
 					<settings count="6" capture="true">
@@ -47,13 +48,14 @@
 				</button>
 			</eventHandler>
 		</npc>
-		<npc id="1003702" resId="Pets/pet/10016" name="Lv4 仙人球" size="45,80" pos="600,70" namePos="0,-10" wander="true" wanderRadius="220" wanderSpeed="34" wanderIdle="2,3" wanderStep="12,26" wanderMoveTick="0.05" wanderSnap="1" wanderBob="1.25" wanderBobSpeed="2" wanderOriginalFacesRight="true" wanderBubbleChance="0.3" wanderBubbleDuration="2.5">
-			
-			<wanderBubble>
-				<self>别碰我！我浑身都是刺！</self>
-				<self>克洛斯星沼泽虽然湿漉漉的，但我喜欢~</self>
-				<self>针刺！扎扎扎~</self>
-			</wanderBubble>
+		<npc id="1003702" resId="Pets/pet/10016" name="Lv4 仙人球" size="45,80" pos="600,70" namePos="0,-10">
+			<wander enabled="true" radius="220" speed="34" idle="2,3" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true">
+				<bubble chance="0.3" duration="2.5">
+					<self>别碰我！我浑身都是刺！</self>
+					<self>克洛斯星沼泽虽然湿漉漉的，但我喜欢~</self>
+					<self>针刺！扎扎扎~</self>
+				</bubble>
+			</wander>
 			<battle>
 				<branch id="default">
 					<settings count="6" capture="true">

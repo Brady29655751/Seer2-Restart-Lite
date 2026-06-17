@@ -7,13 +7,14 @@
 	<entities>
 
 
-		<npc id="40901" resId="Pets/pet/119.png" name="Lv68 豚豚" size="50,57" pos="350,150" namePos="0,0" wander="true" wanderRadius="220" wanderSpeed="34" wanderIdle="2,3" wanderStep="12,26" wanderMoveTick="0.05" wanderSnap="1" wanderBob="1.25" wanderBobSpeed="2" wanderOriginalFacesRight="true" wanderBubbleChance="0.3" wanderBubbleDuration="2.5">
-			
-			<wanderBubble>
-				<self>雪之湖泊好冷，但我的毛很厚！</self>
-				<self>寒冰坚韧！受到伤害减少20点~</self>
-				<self>小时候差点被海浪冲走，现在可不会了！</self>
-			</wanderBubble>
+		<npc id="40901" resId="Pets/pet/119.png" name="Lv68 豚豚" size="50,57" pos="350,150" namePos="0,0">
+			<wander enabled="true" radius="220" speed="34" idle="2,3" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true">
+				<bubble chance="0.3" duration="2.5">
+					<self>雪之湖泊好冷，但我的毛很厚！</self>
+					<self>寒冰坚韧！受到伤害减少20点~</self>
+					<self>小时候差点被海浪冲走，现在可不会了！</self>
+				</bubble>
+			</wander>
 			<battle>
 				<branch id="default">
 					<settings count="6" capture="true"/>
@@ -31,13 +32,14 @@
 				</button>
 			</eventHandler>
 		</npc>
-		<npc id="40902" resId="Pets/pet/119.png" name="Lv69 豚豚" size="50,57" pos="600,200" namePos="0,0" wander="true" wanderRadius="220" wanderSpeed="34" wanderIdle="2,3" wanderStep="12,26" wanderMoveTick="0.05" wanderSnap="1" wanderBob="1.25" wanderBobSpeed="2" wanderOriginalFacesRight="true" wanderBubbleChance="0.3" wanderBubbleDuration="2.5">
-			
-			<wanderBubble>
-				<self>冰川湖泊虽然险恶，但风景真的很美。</self>
-				<self>坚硬！我可是很硬的！</self>
-				<self>豚豚抓紧浮冰中……浪来了！啊——！</self>
-			</wanderBubble>
+		<npc id="40902" resId="Pets/pet/119.png" name="Lv69 豚豚" size="50,57" pos="600,200" namePos="0,0">
+			<wander enabled="true" radius="220" speed="34" idle="2,3" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true">
+				<bubble chance="0.3" duration="2.5">
+					<self>冰川湖泊虽然险恶，但风景真的很美。</self>
+					<self>坚硬！我可是很硬的！</self>
+					<self>豚豚抓紧浮冰中……浪来了！啊——！</self>
+				</bubble>
+			</wander>
 			<battle>
 				<branch id="default">
 					<settings count="6" capture="true"/>
