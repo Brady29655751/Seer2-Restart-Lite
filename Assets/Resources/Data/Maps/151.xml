@@ -7,13 +7,14 @@
     	<fx>FX_117</fx>
     </music>
 	<entities>
-		<npc id="15101" resId="Pets/pet/20.png" name="Lv13 奇鲁" size="48,54" pos="145,180" namePos="0,0" wander="true" wanderRadius="220" wanderSpeed="34" wanderIdle="2,3" wanderStep="12,26" wanderMoveTick="0.05" wanderSnap="1" wanderBob="1.25" wanderBobSpeed="2" wanderOriginalFacesRight="true" wanderBubbleChance="0.3" wanderBubbleDuration="2.5">
-			
-			<wanderBubble>
-				<self>我可是从石头缝里钻出来的！厉害吧？</self>
-				<self>水枪准备好了！……呃，先喝口水再说。</self>
-				<self>头顶这块石头好重，但我不怕！</self>
-			</wanderBubble>
+		<npc id="15101" resId="Pets/pet/20.png" name="Lv13 奇鲁" size="48,54" pos="145,180" namePos="0,0">
+			<wander enabled="true" radius="220" speed="34" idle="2,3" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true">
+				<bubble chance="0.3" duration="2.5">
+					<self>我可是从石头缝里钻出来的！厉害吧？</self>
+					<self>水枪准备好了！……呃，先喝口水再说。</self>
+					<self>头顶这块石头好重，但我不怕！</self>
+				</bubble>
+			</wander>
 			<battle>
 				<branch id="default">
 					<settings count="6" capture="true">
@@ -50,13 +51,14 @@
 				</button>
 			</eventHandler>
 		</npc>
-		<npc id="15102" resId="Pets/pet/20.png" name="Lv14 奇鲁" size="48,54" pos="270,240" namePos="0,0" wander="true" wanderRadius="220" wanderSpeed="34" wanderIdle="2,3" wanderStep="12,26" wanderMoveTick="0.05" wanderSnap="1" wanderBob="1.25" wanderBobSpeed="2" wanderOriginalFacesRight="true" wanderBubbleChance="0.3" wanderBubbleDuration="2.5">
-			
-			<wanderBubble>
-				<self>流水特性发动！水系技能威力up up~</self>
-				<self>有时候会想，石头外面是什么样子呢？</self>
-				<self>穿击波！……打偏了。</self>
-			</wanderBubble>
+		<npc id="15102" resId="Pets/pet/20.png" name="Lv14 奇鲁" size="48,54" pos="270,240" namePos="0,0">
+			<wander enabled="true" radius="220" speed="34" idle="2,3" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true">
+				<bubble chance="0.3" duration="2.5">
+					<self>流水特性发动！水系技能威力up up~</self>
+					<self>有时候会想，石头外面是什么样子呢？</self>
+					<self>穿击波！……打偏了。</self>
+				</bubble>
+			</wander>
 			<battle>
 				<branch id="default">
 					<settings count="6" capture="true">
@@ -93,13 +95,14 @@
 				</button>
 			</eventHandler>
 		</npc>
-		<npc id="15103" resId="Pets/pet/20.png" name="Lv15 奇鲁" size="48,54" pos="350,190" namePos="0,0" wander="true" wanderRadius="220" wanderSpeed="34" wanderIdle="2,3" wanderStep="12,26" wanderMoveTick="0.05" wanderSnap="1" wanderBob="1.25" wanderBobSpeed="2" wanderOriginalFacesRight="true" wanderBubbleChance="0.3" wanderBubbleDuration="2.5">
-			
-			<wanderBubble>
-				<self>终于把大石头顶开了！外面的世界好大啊~</self>
-				<self>失明免疫！谁也蒙不了我的眼睛！</self>
-				<self>水仙草界的水好清澈，游起来很舒服~</self>
-			</wanderBubble>
+		<npc id="15103" resId="Pets/pet/20.png" name="Lv15 奇鲁" size="48,54" pos="350,190" namePos="0,0">
+			<wander enabled="true" radius="220" speed="34" idle="2,3" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true">
+				<bubble chance="0.3" duration="2.5">
+					<self>终于把大石头顶开了！外面的世界好大啊~</self>
+					<self>失明免疫！谁也蒙不了我的眼睛！</self>
+					<self>水仙草界的水好清澈，游起来很舒服~</self>
+				</bubble>
+			</wander>
 			<battle>
 				<branch id="default">
 					<settings count="6" capture="true">

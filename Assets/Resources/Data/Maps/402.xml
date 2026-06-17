@@ -5,13 +5,14 @@
 		<bgm>BGM_045</bgm>
 	</music>
 	<entities>
-		<npc id="40201" resId="Pets/pet/128.png" name="Lv65 波利" size="46,55" pos="350,150" namePos="0,0" wander="true" wanderRadius="220" wanderSpeed="34" wanderIdle="2,3" wanderStep="12,26" wanderMoveTick="0.05" wanderSnap="1" wanderBob="1.25" wanderBobSpeed="2" wanderOriginalFacesRight="true" wanderBubbleChance="0.3" wanderBubbleDuration="2.5">
-			
-			<wanderBubble>
-				<self>对手体力低于一半时，我的伤害增加15%！</self>
-				<self>掷冰！冰块飞飞飞~</self>
-				<self>万人迷的烦恼：大家都看着我，好害羞~</self>
-			</wanderBubble>
+		<npc id="40201" resId="Pets/pet/128.png" name="Lv65 波利" size="46,55" pos="350,150" namePos="0,0">
+			<wander enabled="true" radius="220" speed="34" idle="2,3" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true">
+				<bubble chance="0.3" duration="2.5">
+					<self>对手体力低于一半时，我的伤害增加15%！</self>
+					<self>掷冰！冰块飞飞飞~</self>
+					<self>万人迷的烦恼：大家都看着我，好害羞~</self>
+				</bubble>
+			</wander>
 			<battle>
 				<branch id="default">
 					<settings count="6" capture="true"/>
@@ -29,13 +30,14 @@
 				</button>
 			</eventHandler>
 		</npc>
-		<npc id="40202" resId="Pets/pet/128.png" name="Lv64 波利" size="46,55" pos="600,200" namePos="0,0" wander="true" wanderRadius="220" wanderSpeed="34" wanderIdle="2,3" wanderStep="12,26" wanderMoveTick="0.05" wanderSnap="1" wanderBob="1.25" wanderBobSpeed="2" wanderOriginalFacesRight="true" wanderBubbleChance="0.3" wanderBubbleDuration="2.5">
-			
-			<wanderBubble>
-				<self>我可是冰脊山脉的人气王！迷倒万千精灵~</self>
-				<self>怪笑！后出手必中，跑不掉的！</self>
-				<self>寒冰咆哮！嗷呜——！</self>
-			</wanderBubble>
+		<npc id="40202" resId="Pets/pet/128.png" name="Lv64 波利" size="46,55" pos="600,200" namePos="0,0">
+			<wander enabled="true" radius="220" speed="34" idle="2,3" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true">
+				<bubble chance="0.3" duration="2.5">
+					<self>我可是冰脊山脉的人气王！迷倒万千精灵~</self>
+					<self>怪笑！后出手必中，跑不掉的！</self>
+					<self>寒冰咆哮！嗷呜——！</self>
+				</bubble>
+			</wander>
 			<battle>
 				<branch id="default">
 					<settings count="6" capture="true"/>

@@ -6,13 +6,14 @@
 	</music>
 	<entities>
 		
-		<npc id="40801" resId="Pets/pet/138.png" name="Lv70 多利" size="38,45" pos="400,220" namePos="0,0" wander="true" wanderRadius="220" wanderSpeed="34" wanderIdle="2,3" wanderStep="12,26" wanderMoveTick="0.05" wanderSnap="1" wanderBob="1.25" wanderBobSpeed="2" wanderOriginalFacesRight="true" wanderBubbleChance="0.3" wanderBubbleDuration="2.5">
-			
-			<wanderBubble>
-				<self>我身上的襁褓有咒文哦！具体是什么……我也不清楚。</self>
-				<self>雪球！来打雪仗吧~</self>
-				<self>原始雪森林的雪好白好软~</self>
-			</wanderBubble>
+		<npc id="40801" resId="Pets/pet/138.png" name="Lv70 多利" size="38,45" pos="400,220" namePos="0,0">
+			<wander enabled="true" radius="220" speed="34" idle="2,3" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true">
+				<bubble chance="0.3" duration="2.5">
+					<self>我身上的襁褓有咒文哦！具体是什么……我也不清楚。</self>
+					<self>雪球！来打雪仗吧~</self>
+					<self>原始雪森林的雪好白好软~</self>
+				</bubble>
+			</wander>
 			<battle>
 				<branch id="default">
 					<settings count="6" capture="true"/>
@@ -31,13 +32,14 @@
 			</eventHandler>
 		</npc>
 		<!--
-		<npc id="40802" resId="Pets/pet/138.png" name="Lv70 多利" size="38,45" pos="600,120" namePos="0,0" wander="true" wanderRadius="220" wanderSpeed="34" wanderIdle="2,3" wanderStep="12,26" wanderMoveTick="0.05" wanderSnap="1" wanderBob="1.25" wanderBobSpeed="2" wanderOriginalFacesRight="true" wanderBubbleChance="0.3" wanderBubbleDuration="2.5">
-			
-			<wanderBubble>
-				<self>我身上的襁褓有咒文哦！具体是什么……我也不清楚。</self>
-				<self>雪球！来打雪仗吧~</self>
-				<self>原始雪森林的雪好白好软~</self>
-			</wanderBubble>
+		<npc id="40802" resId="Pets/pet/138.png" name="Lv70 多利" size="38,45" pos="600,120" namePos="0,0">
+			<wander enabled="true" radius="220" speed="34" idle="2,3" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true">
+				<bubble chance="0.3" duration="2.5">
+					<self>我身上的襁褓有咒文哦！具体是什么……我也不清楚。</self>
+					<self>雪球！来打雪仗吧~</self>
+					<self>原始雪森林的雪好白好软~</self>
+				</bubble>
+			</wander>
 			<battle>
 				<branch id="default">
 					<settings count="6" capture="true"/>

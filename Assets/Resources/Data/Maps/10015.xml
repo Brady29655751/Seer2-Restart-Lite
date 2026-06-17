@@ -49,13 +49,14 @@
 				</button>
 			</eventHandler>
 		</npc>
-		<npc id="1001504" resId="Pets/pet/10038" name="Lv21 火炎贝" size="40,70" pos="420,180" namePos="0,0" wander="true" wanderRadius="220" wanderSpeed="34" wanderIdle="2,3" wanderStep="12,26" wanderMoveTick="0.05" wanderSnap="1" wanderBob="1.25" wanderBobSpeed="2" wanderOriginalFacesRight="true" wanderBubbleChance="0.3" wanderBubbleDuration="2.5">
-			
-			<wanderBubble>
-				<self>全身被熔岩外壳覆盖，摸起来……别摸！很烫！</self>
-				<self>火焰！火苗苗~</self>
-				<self>火炎贝：一只从岩浆里爬出来的小家伙。</self>
-			</wanderBubble>
+		<npc id="1001504" resId="Pets/pet/10038" name="Lv21 火炎贝" size="40,70" pos="420,180" namePos="0,0">
+			<wander enabled="true" radius="220" speed="34" idle="2,3" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true">
+				<bubble chance="0.3" duration="2.5">
+					<self>全身被熔岩外壳覆盖，摸起来……别摸！很烫！</self>
+					<self>火焰！火苗苗~</self>
+					<self>火炎贝：一只从岩浆里爬出来的小家伙。</self>
+				</bubble>
+			</wander>
 			<battle>
 				<branch id="default">
 					<settings count="6" capture="true">
@@ -92,13 +93,14 @@
 				</button>
 			</eventHandler>
 		</npc>
-		<npc id="1001505" resId="Pets/pet/10038" name="Lv22 火炎贝" size="40,70" pos="265,220" namePos="0,0" wander="true" wanderRadius="220" wanderSpeed="34" wanderIdle="2,3" wanderStep="12,26" wanderMoveTick="0.05" wanderSnap="1" wanderBob="1.25" wanderBobSpeed="2" wanderOriginalFacesRight="true" wanderBubbleChance="0.3" wanderBubbleDuration="2.5">
-			
-			<wanderBubble>
-				<self>我从岩浆里出生的！是不是很厉害？</self>
-				<self>熔壳！免疫燃烧，火来了也不怕！</self>
-				<self>火山星山脚下的温度刚刚好~</self>
-			</wanderBubble>
+		<npc id="1001505" resId="Pets/pet/10038" name="Lv22 火炎贝" size="40,70" pos="265,220" namePos="0,0">
+			<wander enabled="true" radius="220" speed="34" idle="2,3" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true">
+				<bubble chance="0.3" duration="2.5">
+					<self>我从岩浆里出生的！是不是很厉害？</self>
+					<self>熔壳！免疫燃烧，火来了也不怕！</self>
+					<self>火山星山脚下的温度刚刚好~</self>
+				</bubble>
+			</wander>
 			<battle>
 				<branch id="default">
 					<settings count="6" capture="true">

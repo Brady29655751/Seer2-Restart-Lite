@@ -6,13 +6,14 @@
     	<fx>FX_120</fx>
     </music>
 	<entities>
-		<npc id="19201" resId="Pets/pet/28.png" name="Lv21 蓝喵" size="47,35" pos="500,200" namePos="0,0" wander="true" wanderRadius="220" wanderSpeed="34" wanderIdle="2,3" wanderStep="12,26" wanderMoveTick="0.05" wanderSnap="1" wanderBob="1.25" wanderBobSpeed="2" wanderOriginalFacesRight="true" wanderBubbleChance="0.3" wanderBubbleDuration="2.5">
-			
-			<wanderBubble>
-				<self>今天撞了三块石头，两根柱子，一个……NPC。</self>
-				<self>星之力发动！速度嗖嗖的~</self>
-				<self>蓝喵出击！目标：前方那块看起来很硬的东西！</self>
-			</wanderBubble>
+		<npc id="19201" resId="Pets/pet/28.png" name="Lv21 蓝喵" size="47,35" pos="500,200" namePos="0,0">
+			<wander enabled="true" radius="220" speed="34" idle="2,3" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true">
+				<bubble chance="0.3" duration="2.5">
+					<self>今天撞了三块石头，两根柱子，一个……NPC。</self>
+					<self>星之力发动！速度嗖嗖的~</self>
+					<self>蓝喵出击！目标：前方那块看起来很硬的东西！</self>
+				</bubble>
+			</wander>
 			<battle>
 				<branch id="default">
 					<settings count="6" capture="true"/>
@@ -48,13 +49,14 @@
 				</button>
 			</eventHandler>
 		</npc>
-		<npc id="19202" resId="Pets/pet/28.png" name="Lv22 蓝喵" size="47,35" pos="720,140" namePos="0,0" wander="true" wanderRadius="220" wanderSpeed="34" wanderIdle="2,3" wanderStep="12,26" wanderMoveTick="0.05" wanderSnap="1" wanderBob="1.25" wanderBobSpeed="2" wanderOriginalFacesRight="true" wanderBubbleChance="0.3" wanderBubbleDuration="2.5">
-			
-			<wanderBubble>
-				<self>谁说蓝喵胆小？我敢撞任何东西！</self>
-				<self>全力冲撞！……头好疼。</self>
-				<self>残骸通道里好多东西可以撞，开心！</self>
-			</wanderBubble>
+		<npc id="19202" resId="Pets/pet/28.png" name="Lv22 蓝喵" size="47,35" pos="720,140" namePos="0,0">
+			<wander enabled="true" radius="220" speed="34" idle="2,3" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true">
+				<bubble chance="0.3" duration="2.5">
+					<self>谁说蓝喵胆小？我敢撞任何东西！</self>
+					<self>全力冲撞！……头好疼。</self>
+					<self>残骸通道里好多东西可以撞，开心！</self>
+				</bubble>
+			</wander>
 			<battle>
 				<branch id="default">
 					<settings count="6" capture="true"/>

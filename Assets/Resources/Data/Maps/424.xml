@@ -5,13 +5,14 @@
 		<bgm>BGM_033</bgm>
 	</music>
 	<entities>
-		<npc id="42401" resId="Pets/pet/209.png" name="Lv76 安吉丽塔" size="80,97" pos="320,65" namePos="0,0" wander="true" wanderRadius="220" wanderSpeed="34" wanderIdle="2,3" wanderStep="12,26" wanderMoveTick="0.05" wanderSnap="1" wanderBob="1.25" wanderBobSpeed="2" wanderOriginalFacesRight="true" wanderBubbleChance="0.3" wanderBubbleDuration="2.5">
-			
-			<wanderBubble>
-				<self>虽然会飞，但我更喜欢在水里~</self>
-				<self>流体贯穿！水流穿过去~</self>
-				<self>汲雨之岛的雨水好温柔。</self>
-			</wanderBubble>
+		<npc id="42401" resId="Pets/pet/209.png" name="Lv76 安吉丽塔" size="80,97" pos="320,65" namePos="0,0">
+			<wander enabled="true" radius="220" speed="34" idle="2,3" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true">
+				<bubble chance="0.3" duration="2.5">
+					<self>虽然会飞，但我更喜欢在水里~</self>
+					<self>流体贯穿！水流穿过去~</self>
+					<self>汲雨之岛的雨水好温柔。</self>
+				</bubble>
+			</wander>
 			<battle>
 				<branch id="default">
 					<settings count="6" capture="true"/>
@@ -29,13 +30,14 @@
 				</button>
 			</eventHandler>
 		</npc>
-		<npc id="42402" resId="Pets/pet/209.png" name="Lv77 安吉丽塔" size="80,97" pos="840,190" namePos="0,0" wander="true" wanderRadius="220" wanderSpeed="34" wanderIdle="2,3" wanderStep="12,26" wanderMoveTick="0.05" wanderSnap="1" wanderBob="1.25" wanderBobSpeed="2" wanderOriginalFacesRight="true" wanderBubbleChance="0.3" wanderBubbleDuration="2.5">
-			
-			<wanderBubble>
-				<self>流水激射！水花四溅~</self>
-				<self>激流冲撞！像一条小瀑布~</self>
-				<self>大家问我为什么不去天上飞……水里更舒服嘛！</self>
-			</wanderBubble>
+		<npc id="42402" resId="Pets/pet/209.png" name="Lv77 安吉丽塔" size="80,97" pos="840,190" namePos="0,0">
+			<wander enabled="true" radius="220" speed="34" idle="2,3" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true">
+				<bubble chance="0.3" duration="2.5">
+					<self>流水激射！水花四溅~</self>
+					<self>激流冲撞！像一条小瀑布~</self>
+					<self>大家问我为什么不去天上飞……水里更舒服嘛！</self>
+				</bubble>
+			</wander>
 			<battle>
 				<branch id="default">
 					<settings count="6" capture="true"/>
