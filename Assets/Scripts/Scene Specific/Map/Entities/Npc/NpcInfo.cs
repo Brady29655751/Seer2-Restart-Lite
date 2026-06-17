@@ -38,24 +38,7 @@ public class NpcInfo
     public Color nameColor => nameRgba.ToColor(new Color32(0, 64, 255, 255));
     [XmlAttribute("nameFont")] public string nameFont;
 
-    [XmlAttribute] public bool wander = false;
-    [XmlAttribute] public float wanderRadius = 120f;
-    [XmlAttribute] public float wanderSpeed = 35f;
-    [XmlAttribute] public string wanderIdle = "2,6";
-    [XmlAttribute] public string wanderStep = "14,30";
-    [XmlAttribute] public float wanderMoveTick = 0.08f;
-    [XmlAttribute] public float wanderSnap = 1f;
-    [XmlAttribute] public float wanderBob = 0f;
-    [XmlAttribute] public float wanderBobSpeed = 2f;
-    [XmlAttribute] public bool wanderFlip = true;
-    [XmlAttribute] public bool wanderDebug = false;
-    [XmlAttribute] public bool wanderOriginalFacesRight = false;
-    [XmlAttribute] public float wanderBubbleChance = 0.35f;
-    [XmlAttribute] public float wanderBubbleDuration = 1.8f;
-    [XmlIgnore] public Vector2 wanderIdleRange => wanderIdle.ToVector2(new Vector2(2f, 6f));
-    [XmlIgnore] public Vector2 wanderStepRange => wanderStep.ToVector2(new Vector2(14f, 30f));
-    [XmlIgnore] public float wanderFaceRightScale => wanderOriginalFacesRight ? 1f : -1f;
-    [XmlElement("wanderBubble")] public NpcWanderBubbleInfo wanderBubble;
+    [XmlElement("wander")] public NpcWanderInfo wanderInfo;
 
     [XmlElement("transport")] public string transport;
     public Vector2 transportPos => transport.ToVector2(pos);
@@ -125,8 +108,31 @@ public class NpcInfo
     }
 }
 
+public class NpcWanderInfo
+{
+    [XmlAttribute] public bool enabled = false;
+    [XmlAttribute] public float radius = 120f;
+    [XmlAttribute] public float speed = 35f;
+    [XmlAttribute] public string idle = "2,6";
+    [XmlAttribute] public string step = "14,30";
+    [XmlAttribute] public float moveTick = 0.08f;
+    [XmlAttribute] public float snap = 1f;
+    [XmlAttribute] public float bob = 0f;
+    [XmlAttribute] public float bobSpeed = 2f;
+    [XmlAttribute] public bool flip = true;
+    [XmlAttribute] public bool debug = false;
+    [XmlAttribute] public bool originalFacesRight = false;
+    [XmlElement("bubble")] public NpcWanderBubbleInfo bubble;
+
+    [XmlIgnore] public Vector2 idleRange => idle.ToVector2(new Vector2(2f, 6f));
+    [XmlIgnore] public Vector2 stepRange => step.ToVector2(new Vector2(14f, 30f));
+    [XmlIgnore] public float faceRightScale => originalFacesRight ? 1f : -1f;
+}
+
 public class NpcWanderBubbleInfo
 {
+    [XmlAttribute] public float chance = 0.35f;
+    [XmlAttribute] public float duration = 1.8f;
     [XmlElement("self")] public List<string> self;
     [XmlElement("scene")] public List<string> scene;
     [XmlElement("player")] public List<string> player;
