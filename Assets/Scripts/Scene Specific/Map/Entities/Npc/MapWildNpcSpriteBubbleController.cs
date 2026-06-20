@@ -3,31 +3,32 @@ using UnityEngine.UI;
 
 public class MapWildNpcSpriteBubbleController : MonoBehaviour
 {
-    private const int MaxTextLength = 30;
-    private const float FadeTime = 0.18f;
-    private const int BubbleFontSize = 17;
-    private const float MinBubbleWidth = 50f;
-    private const float MaxBubbleWidth = 200f;
-    private const float MinBubbleHeight = 72f;
-    private const float BubblePaddingX = 15f;
-    private const float BubblePaddingY = 20f;
-    private const float BubbleTailHeight = 15f;
-    private const float BubbleBottomOffset = 7f;
-    private const string BubbleSpritePath = "Sprites/UI/WildNpcBubbleIntegrated";
-    private const TextAnchor BubbleTextAnchor = TextAnchor.MiddleLeft; // MiddleLeft左对齐，MiddleCenter居中对齐，MiddleRight右对齐
+    [SerializeField] private RectTransform bubbleRect;
+    [SerializeField] private CanvasGroup canvasGroup;
+    [SerializeField] private Text bubbleText;
+    [SerializeField] private int maxTextLength = 30;
+    [SerializeField] private float fadeTime = 0.18f;
+    [SerializeField] private int fontSize = 17;
+    [SerializeField] private float minWidth = 50f;
+    [SerializeField] private float maxWidth = 200f;
+    [SerializeField] private float minHeight = 72f;
+    [SerializeField] private float paddingX = 15f;
+    [SerializeField] private float paddingY = 20f;
+    [SerializeField] private float tailReserve = 15f;
+    [SerializeField] private TextAnchor textAnchor = TextAnchor.MiddleLeft;
 
-    private NpcInfo info;
-    private RectTransform bubbleRect;
-    private CanvasGroup canvasGroup;
-    private Text bubbleText;
-    private Image bubbleImage;
     private float remainingTime;
     private float totalDuration;
 
+    private void Awake()
+    {
+        CacheReferences();
+    }
+
     public void Init(NpcInfo info)
     {
-        this.info = info;
-        EnsureView();
+        CacheReferences();
+        ApplyTextStyle();
         HideImmediate();
     }
 
@@ -36,14 +37,16 @@ public class MapWildNpcSpriteBubbleController : MonoBehaviour
         if (string.IsNullOrWhiteSpace(content))
             return;
 
-        EnsureView();
+        CacheReferences();
+        if (bubbleRect == null || canvasGroup == null || bubbleText == null)
+            return;
+
         string text = TrimText(content.Trim());
         bubbleText.text = text;
-        bubbleText.alignment = BubbleTextAnchor;
+        ApplyTextStyle();
         Vector2 bubbleSize = GetBubbleSize(text);
         bubbleRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, bubbleSize.x);
         bubbleRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, bubbleSize.y);
-        bubbleRect.anchoredPosition = GetBubblePosition();
         ApplyTextPadding();
 
         remainingTime = Mathf.Max(0.2f, duration);
@@ -74,100 +77,82 @@ public class MapWildNpcSpriteBubbleController : MonoBehaviour
             return;
         }
 
-        if (remainingTime < FadeTime)
-            canvasGroup.alpha = Mathf.Clamp01(remainingTime / FadeTime);
-        else if (totalDuration - remainingTime < FadeTime)
-            canvasGroup.alpha = Mathf.Clamp01((totalDuration - remainingTime) / FadeTime);
+        float fade = Mathf.Max(0.01f, fadeTime);
+        if (remainingTime < fade)
+            canvasGroup.alpha = Mathf.Clamp01(remainingTime / fade);
+        else if (totalDuration - remainingTime < fade)
+            canvasGroup.alpha = Mathf.Clamp01((totalDuration - remainingTime) / fade);
         else
             canvasGroup.alpha = 1f;
     }
 
-    private void EnsureView()
+    private void CacheReferences()
     {
-        if (bubbleRect != null)
+        if (bubbleRect == null)
+            bubbleRect = transform as RectTransform;
+        if (canvasGroup == null)
+            canvasGroup = GetComponent<CanvasGroup>();
+        if (bubbleText == null)
+            bubbleText = GetComponentInChildren<Text>(true);
+    }
+
+    private void ApplyTextStyle()
+    {
+        if (bubbleText == null)
             return;
 
-        var bubbleObject = new GameObject("Wild Npc Bubble", typeof(RectTransform), typeof(CanvasGroup), typeof(Image));
-        bubbleRect = bubbleObject.GetComponent<RectTransform>();
-        bubbleRect.SetParent(transform, false);
-        bubbleRect.anchorMin = new Vector2(0.5f, 0.5f);
-        bubbleRect.anchorMax = new Vector2(0.5f, 0.5f);
-        bubbleRect.pivot = new Vector2(0.5f, 0f);
-        bubbleRect.localScale = Vector3.one;
-
-        canvasGroup = bubbleObject.GetComponent<CanvasGroup>();
-        bubbleImage = bubbleObject.GetComponent<Image>();
-        bubbleImage.sprite = Resources.Load<Sprite>(BubbleSpritePath);
-        bubbleImage.type = Image.Type.Simple;
-        bubbleImage.preserveAspect = false;
-        bubbleImage.color = Color.white;
-        bubbleImage.raycastTarget = false;
-
-        var textObject = new GameObject("Text", typeof(RectTransform), typeof(Text));
-        var textRect = textObject.GetComponent<RectTransform>();
-        textRect.SetParent(bubbleRect, false);
-        textRect.anchorMin = Vector2.zero;
-        textRect.anchorMax = Vector2.one;
-        textRect.pivot = new Vector2(0.5f, 0.5f);
-
-        bubbleText = textObject.GetComponent<Text>();
-        bubbleText.alignment = BubbleTextAnchor;
-        bubbleText.color = new Color(0.12f, 0.12f, 0.12f, 1f);
-        bubbleText.fontSize = BubbleFontSize;
+        bubbleText.alignment = textAnchor;
+        bubbleText.fontSize = fontSize;
         bubbleText.horizontalOverflow = HorizontalWrapMode.Wrap;
         bubbleText.verticalOverflow = VerticalWrapMode.Truncate;
         bubbleText.raycastTarget = false;
         bubbleText.supportRichText = false;
-        bubbleText.font = GetBubbleFont();
 
-        var shadow = textObject.AddComponent<Shadow>();
-        shadow.effectColor = new Color(1f, 1f, 1f, 0.4f);
-        shadow.effectDistance = new Vector2(1f, -1f);
-    }
-
-    private Font GetBubbleFont()
-    {
-        var nameText = transform.Find("View/Name")?.GetComponent<Text>();
-        if (nameText?.font != null)
-            return nameText.font;
-
-        return Resources.GetBuiltinResource<Font>("Arial.ttf");
-    }
-
-    private Vector2 GetBubblePosition()
-    {
-        float npcHeight = Mathf.Max(40f, info?.size.y ?? 40f);
-        return new Vector2(0f, npcHeight * 0.5f + BubbleBottomOffset);
+        if (bubbleText.font == null)
+            bubbleText.font = GetFallbackFont();
     }
 
     private Vector2 GetBubbleSize(string text)
     {
-        float maxTextWidth = MaxBubbleWidth - BubblePaddingX * 2f;
+        float safeMinWidth = Mathf.Max(1f, minWidth);
+        float safeMaxWidth = Mathf.Max(safeMinWidth, maxWidth);
+        float safePaddingX = Mathf.Max(0f, paddingX);
+        float safePaddingY = Mathf.Max(0f, paddingY);
+        float safeTailReserve = Mathf.Max(0f, tailReserve);
+        float maxTextWidth = Mathf.Max(1f, safeMaxWidth - safePaddingX * 2f);
         float preferredWidth = bubbleText.cachedTextGeneratorForLayout.GetPreferredWidth(
             text,
             bubbleText.GetGenerationSettings(new Vector2(maxTextWidth, 0f))) / bubbleText.pixelsPerUnit;
-        float width = Mathf.Clamp(preferredWidth + BubblePaddingX * 2f, MinBubbleWidth, MaxBubbleWidth);
+        float width = Mathf.Clamp(preferredWidth + safePaddingX * 2f, safeMinWidth, safeMaxWidth);
 
-        float contentWidth = Mathf.Max(40f, width - BubblePaddingX * 2f);
+        float contentWidth = Mathf.Max(1f, width - safePaddingX * 2f);
         float preferredHeight = bubbleText.cachedTextGeneratorForLayout.GetPreferredHeight(
             text,
             bubbleText.GetGenerationSettings(new Vector2(contentWidth, 0f))) / bubbleText.pixelsPerUnit;
-        float height = Mathf.Max(MinBubbleHeight, preferredHeight + BubblePaddingY * 2f + BubbleTailHeight);
+        float height = Mathf.Max(minHeight, preferredHeight + safePaddingY * 2f + safeTailReserve);
         return new Vector2(width, height);
     }
 
     private void ApplyTextPadding()
     {
         var textRect = bubbleText.rectTransform;
-        textRect.offsetMin = new Vector2(BubblePaddingX, BubblePaddingY + BubbleTailHeight);
-        textRect.offsetMax = new Vector2(-BubblePaddingX, -BubblePaddingY);
+        float safePaddingX = Mathf.Max(0f, paddingX);
+        float safePaddingY = Mathf.Max(0f, paddingY);
+        float safeTailReserve = Mathf.Max(0f, tailReserve);
+        textRect.offsetMin = new Vector2(safePaddingX, safePaddingY + safeTailReserve);
+        textRect.offsetMax = new Vector2(-safePaddingX, -safePaddingY);
+    }
+
+    private Font GetFallbackFont()
+    {
+        return Resources.GetBuiltinResource<Font>("Arial.ttf");
     }
 
     private string TrimText(string text)
     {
-        if (text.Length <= MaxTextLength)
+        if (text.Length <= maxTextLength)
             return text;
 
-        return text.Substring(0, MaxTextLength);
+        return text.Substring(0, maxTextLength);
     }
 }

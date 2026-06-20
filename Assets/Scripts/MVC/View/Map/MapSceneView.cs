@@ -294,11 +294,21 @@ public class MapSceneView : UIModule
 
     private void TryStartWildNpcWander(NpcInfo npcInfo, GameObject npcObject)
     {
-        if (npcInfo == null || npcObject == null || !MapWildNpcWanderController.CanWander(npcInfo))
+        if (npcInfo == null || npcObject == null)
             return;
 
+        var wander = npcObject.GetComponent<MapWildNpcWanderController>();
+        if (wander == null)
+            return;
+
+        if (!MapWildNpcWanderController.CanWander(npcInfo))
+        {
+            wander.Stop();
+            wander.enabled = false;
+            return;
+        }
+
         wildNpcNavigator ??= new MapNavigator(map, ReferenceCanvasSize);
-        var wander = npcObject.AddComponent<MapWildNpcWanderController>();
         wander.Init(map, wildNpcNavigator, npcInfo);
     }
 

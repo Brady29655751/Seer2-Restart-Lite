@@ -9,12 +9,13 @@ public class MapWildNpcWanderController : MonoBehaviour
     private const float StuckDistanceThreshold = 0.5f;
     private const int MaxTargetAttempts = 12;
 
+    [SerializeField] private RectTransform buttonRect;
+    [SerializeField] private MapWildNpcSpriteBubbleController bubbleController;
+
     private MapNavigator navigator;
     private NpcInfo info;
     private NpcWanderInfo wanderInfo;
     private RectTransform rect;
-    private RectTransform buttonRect;
-    private MapWildNpcSpriteBubbleController bubbleController;
     private readonly Queue<Vector2> pathQueue = new Queue<Vector2>();
     private Vector2 spawnPos;
     private Vector2 targetPos;
@@ -27,6 +28,11 @@ public class MapWildNpcWanderController : MonoBehaviour
     private bool initialized;
     private bool hasTarget;
     private bool bobRaised;
+
+    private void Awake()
+    {
+        CacheReferences();
+    }
 
     public static bool CanWander(NpcInfo info)
     {
@@ -43,13 +49,18 @@ public class MapWildNpcWanderController : MonoBehaviour
 
     public void Init(Map map, MapNavigator navigator, NpcInfo info)
     {
+        CacheReferences();
         this.navigator = navigator;
         this.info = info;
         wanderInfo = info?.wanderInfo;
-        rect = transform as RectTransform;
-        buttonRect = transform.Find("View/Button") as RectTransform;
-        bubbleController = gameObject.AddComponent<MapWildNpcSpriteBubbleController>();
-        bubbleController.Init(info);
+        enabled = CanWander(info);
+        if (!enabled)
+        {
+            Stop();
+            return;
+        }
+
+        bubbleController?.Init(info);
         spawnPos = rect == null ? Vector2.zero : rect.anchoredPosition;
         targetPos = spawnPos;
         lastStuckCheckPos = spawnPos;
@@ -59,10 +70,32 @@ public class MapWildNpcWanderController : MonoBehaviour
         Log($"init map={map?.id} npc={info?.id} spawn={spawnPos} reachable={navigator?.IsTargetReachable(spawnPos)}");
     }
 
-    private void OnDisable()
+    public void Stop()
     {
+        initialized = false;
+        hasTarget = false;
+        pathQueue.Clear();
+        holdTimer = 0f;
+        idleTimer = 0f;
+        tickTimer = 0f;
+        stuckTimer = 0f;
         SetVisualOffset(Vector2.zero);
         bubbleController?.HideImmediate();
+    }
+
+    private void OnDisable()
+    {
+        Stop();
+    }
+
+    private void CacheReferences()
+    {
+        if (rect == null)
+            rect = transform as RectTransform;
+        if (buttonRect == null)
+            buttonRect = transform.Find("View/Button") as RectTransform;
+        if (bubbleController == null)
+            bubbleController = GetComponentInChildren<MapWildNpcSpriteBubbleController>(true);
     }
 
     private void Update()
