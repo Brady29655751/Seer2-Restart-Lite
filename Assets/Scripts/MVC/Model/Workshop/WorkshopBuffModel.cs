@@ -17,7 +17,7 @@ public class WorkshopBuffModel : Module
     public BuffInfo buffInfo => GetBuffInfo();
     public int id => int.Parse(idInputField.inputString);
     public string buffName => nameInputField.inputString;
-    public BuffType type => (BuffType)(typeDropdown.value + 1);
+    public BuffType type => GetBuffType();
     public CopyHandleType copyHandleType => (CopyHandleType)(copyDropdown.value);
     public int turn => Mathf.Max(int.Parse(turnInputField.inputString), -1);
     public bool keep => keepToggle.isOn;
@@ -45,7 +45,7 @@ public class WorkshopBuffModel : Module
         idInputField.SetInputString(buffInfo.id.ToString());
         nameInputField.SetInputString(buffInfo.name);
         
-        typeDropdown.value = ((int)buffInfo.type) - 1;
+        SetBuffType(buffInfo.type);
         copyDropdown.value = (int)buffInfo.copyHandleType;
         
         turnInputField.SetInputString(buffInfo.turn.ToString());
@@ -68,6 +68,25 @@ public class WorkshopBuffModel : Module
 
         iconBytes = null;
         iconSprite = null;
+    }
+
+    public BuffType GetBuffType()
+    {
+        const int lastType = (int)BuffType.Item;
+        var typeValue = typeDropdown.value + 1;
+        if (typeValue >= lastType)
+            return (BuffType)(-typeValue - 2 + lastType);
+        
+        return (BuffType)typeValue;
+    }
+
+    public void SetBuffType(BuffType type)
+    {
+        for (typeDropdown.value = 0; typeDropdown.value < typeDropdown.optionCount; typeDropdown.value++) 
+        {
+            if (type == GetBuffType())
+                break;
+        }
     }
 
     public void OnClearIcon() {

@@ -377,6 +377,7 @@ public class Buff
             "ignore" => ignore ? 1 : 0,
             "hide" => hide ? 1 : 0,
             "removable" => removable ? 1 : 0,
+            "movable" => IsUnmovable() ? 0 : 1,
             "maxValue" => info.maxValue,
             "minValue" => info.minValue,
             _ => float.MinValue,

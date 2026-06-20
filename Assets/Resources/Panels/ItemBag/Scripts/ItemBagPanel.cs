@@ -33,7 +33,7 @@ public class ItemBagPanel : Panel
                 }
                 else
                 {
-                    itemList = param.ToIntList('/');
+                    itemList = param.Split('/').Select(x => (int)Parser.ParseOperation(x)).ToList();
                 }
                 SetItemBag(itemList.Select(id => Item.Find(id) ?? new Item(id, 0)).ToList());
                 break;

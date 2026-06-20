@@ -822,13 +822,13 @@ public static class EffectAbilityHandler
         List<BuffType> typeRange = typeList.Split('/').Select(x => x.ToBuffType()).Where(x => x != BuffType.None).ToList();
 
         // Switch special type
-        if (typeRange.Remove(BuffType.Power))
+        if (typeRange.Contains(BuffType.Power))
             idRange.AddRange(Buff.powerupBuffIds.Concat(Buff.powerdownBuffIds));
 
-        if (typeRange.Remove(BuffType.Powerup))
+        if (typeRange.Contains(BuffType.Powerup))
             idRange.AddRange(Buff.powerupBuffIds);
 
-        if (typeRange.Remove(BuffType.Powerdown))
+        if (typeRange.Contains(BuffType.Powerdown))
             idRange.AddRange(Buff.powerdownBuffIds);
 
         bool isKey = !string.IsNullOrEmpty(keyList);
@@ -843,6 +843,10 @@ public static class EffectAbilityHandler
             return Parser.ParseEffectOperation(id, effect, lhsUnit, rhsUnit, buff, false);
         });
         int randomCount = (int)Parser.ParseEffectOperation(randomCountExpr, effect, lhsUnit, rhsUnit);
+
+        var idRangeResult = buffController.GetRangeBuff(x => idRange.Contains(x.id) && !x.IsPower()).Select(x => x.id).Distinct().ToList();
+        var buffPowerResult = buffController.GetRangeBuff(x => idRange.Contains(x.id) && x.IsPower()).Random((randomCount >= 0) ? randomCount : int.MaxValue, false);
+        var idPowerResult = buffPowerResult.Select(x => x.id).Distinct().ToList();
 
         bool isSuccess = false;
 
@@ -882,10 +886,6 @@ public static class EffectAbilityHandler
 
         if (isId)
         {
-            var idRangeResult = buffController.GetRangeBuff(x => idRange.Contains(x.id) && !x.IsPower()).Select(x => x.id).Distinct().ToList();
-            var buffPowerResult = buffController.GetRangeBuff(x => idRange.Contains(x.id) && x.IsPower()).Random((randomCount >= 0) ? randomCount : int.MaxValue, false);
-            var idPowerResult = buffPowerResult.Select(x => x.id).Distinct().ToList();
-
             foreach (var buff in buffPowerResult)
             {
                 int id = buff.id;
@@ -974,8 +974,11 @@ public static class EffectAbilityHandler
         if (!isId && !isType)
             return false;
 
-        if (!bool.TryParse(transfer, out bool isTransfer) || !bool.TryParse(reverse, out bool isReverse))
+        if (!bool.TryParse(transfer, out bool isTransfer))
             return false;
+
+        var isReverse = reverse.ToLower() != "false";
+        var reverseMult = (int)Identifier.GetNumIdentifier(reverse);
 
         if (isId)
         {
@@ -1001,7 +1004,7 @@ public static class EffectAbilityHandler
                 }
 
                 int type = buff.id.IsWithin(-9, -10) ? 5 : (buff.id - 1) / 2;
-                status[type] = (isReverse ? -1 : 1) * powerup[type];
+                status[type] = (isReverse ? -reverseMult : 1) * powerup[type];
 
                 if (isTransfer || isReverse)
                 {
@@ -1557,22 +1560,36 @@ public static class EffectAbilityHandler
             return true;
         }
 
+        if (type == "state")
+        {
+            switch (value)
+            {
+                default:
+                    return false;
+
+                case "state.last.me.pet":
+                    var lastPet = state?.lastTurnState?.GetUnitById(lhsUnit.id)?.pet;
+                    if (lastPet == null)
+                        return false;
+
+                    lhsUnit.petSystem.petBag[lhsUnit.petSystem.cursor] = new BattlePet(lastPet);
+                    return true;
+            }
+        }
+
+        // Name.
         if (type == "name")
         {
-            // Name.
-            if (type == "name")
+            switch (op)
             {
-                switch (op)
-                {
-                    default:
-                        battlePet.name = value;
-                        break;
-                    case "+":
-                        battlePet.name += value;
-                        break;
-                }
-                return true;
+                default:
+                    battlePet.name = value;
+                    break;
+                case "+":
+                    battlePet.name += value;
+                    break;
             }
+            return true;
         }
 
         // Switch to special pet.
