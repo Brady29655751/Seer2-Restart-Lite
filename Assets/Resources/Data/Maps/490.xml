@@ -6,13 +6,14 @@
 	</music>
 	<entities>
 		<npc id="49002" resId="Pets/pet/203.png" name="Lv46 碎晶蜂" size="82,71" pos="445,65" namePos="0,0">
-			<wander enabled="true" radius="220" speed="34" idle="2,3" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true">
-				<bubble chance="0.3" duration="2.5">
+			<wild>
+				<movement mode="wander" radius="220" speed="34" idle="2,3" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true" />
+				<talk chance="0.3" duration="2.5">
 					<self>我的身体在发光……是因为吃了太多矿石。</self>
 					<self>振翅突击！嗡嗡嗡~</self>
 					<self>地下黑市的矿石真好吃……啊不是，真好看。</self>
-				</bubble>
-			</wander>
+				</talk>
+			</wild>
 			<battle>
 				<branch id="default">
 					<settings count="6" capture="true"/>
@@ -31,13 +32,14 @@
 			</eventHandler>
 		</npc>
 		<npc id="49003" resId="Pets/pet/203.png" name="Lv47 碎晶蜂" size="82,71" pos="700,135" namePos="0,0">
-			<wander enabled="true" radius="220" speed="34" idle="2,3" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true">
-				<bubble chance="0.3" duration="2.5">
+			<wild>
+				<movement mode="wander" radius="220" speed="34" idle="2,3" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true" />
+				<talk chance="0.3" duration="2.5">
 					<self>蜂皇迷针！针针针~</self>
 					<self>加速！速度越来越快！</self>
 					<self>变成结晶体之后，感觉身体硬邦邦的。</self>
-				</bubble>
-			</wander>
+				</talk>
+			</wild>
 			<battle>
 				<branch id="default">
 					<settings count="6" capture="true"/>

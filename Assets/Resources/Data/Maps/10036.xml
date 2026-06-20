@@ -5,13 +5,14 @@
 	</music>
 	<entities>
 		<npc id="1003601" resId="Pets/pet/10010" name="Lv1 皮皮" size="56,42" pos="420,200" namePos="0,0">
-			<wander enabled="true" radius="220" speed="34" idle="2,3" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true">
-				<bubble chance="0.3" duration="2.5">
+			<wild>
+				<movement mode="wander" radius="220" speed="34" idle="2,3" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true" />
+				<talk chance="0.3" duration="2.5">
 					<self>我的耳朵可是武器哦！别小看它们~</self>
 					<self>克洛斯星草原好大，适合蹦蹦跳跳！</self>
 					<self>鸣叫！叽叽叽~</self>
-				</bubble>
-			</wander>
+				</talk>
+			</wild>
 			<battle>
 				<branch id="default">
 					<settings count="6" capture="true"/>
@@ -47,13 +48,14 @@
 			</eventHandler>
 		</npc>
 		<npc id="1003602" resId="Pets/pet/10010" name="Lv2 皮皮" size="56,42" pos="265,140" namePos="0,0">
-			<wander enabled="true" radius="220" speed="34" idle="2,3" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true">
-				<bubble chance="0.3" duration="2.5">
+			<wild>
+				<movement mode="wander" radius="220" speed="34" idle="2,3" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true" />
+				<talk chance="0.3" duration="2.5">
 					<self>燕返！飞过去又飞回来~</self>
 					<self>皮皮最喜欢热闹了！快来和我玩！</self>
 					<self>大耳朵拍拍！啪啪啪~</self>
-				</bubble>
-			</wander>
+				</talk>
+			</wild>
 			<battle>
 				<branch id="default">
 					<settings count="6" capture="true"/>

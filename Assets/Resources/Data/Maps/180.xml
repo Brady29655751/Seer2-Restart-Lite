@@ -7,13 +7,14 @@
     </music>
 	<entities>
 		<npc id="18001" resId="Pets/pet/41.png" name="Lv23 水墨点点" size="20,34" pos="500,80" namePos="0,0">
-			<wander enabled="true" radius="220" speed="34" idle="2,3" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true">
-				<bubble chance="0.3" duration="2.5">
+			<wild>
+				<movement mode="wander" radius="220" speed="34" idle="2,3" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true" />
+				<talk chance="0.3" duration="2.5">
 					<self>逆流！逆流而上！……被冲回来了。</self>
 					<self>银脉山脊的水好凉快，最适合散步~</self>
 					<self>虽然不能畅游，但我在水中走路也很优雅的！</self>
-				</bubble>
-			</wander>
+				</talk>
+			</wild>
 			<battle>
 				<branch id="default">
 					<settings count="6" capture="true"/>
@@ -49,13 +50,14 @@
 			</eventHandler>
 		</npc>
 		<npc id="18002" resId="Pets/pet/41.png" name="Lv24 水墨点点" size="20,34" pos="720,140" namePos="0,0">
-			<wander enabled="true" radius="220" speed="34" idle="2,3" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true">
-				<bubble chance="0.3" duration="2.5">
+			<wild>
+				<movement mode="wander" radius="220" speed="34" idle="2,3" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true" />
+				<talk chance="0.3" duration="2.5">
 					<self>虚弱水枪！……水枪也虚弱了？不，是让对手虚弱！</self>
 					<self>小时候被嘲笑的事……现在想想也没什么啦~</self>
 					<self>哼，总有一天我要学会游泳的！……大概。</self>
-				</bubble>
-			</wander>
+				</talk>
+			</wild>
 			<battle>
 				<branch id="default">
 					<settings count="6" capture="true"/>

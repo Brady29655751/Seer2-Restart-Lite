@@ -6,13 +6,14 @@
 	</music>
 	<entities>
 		<npc id="40701" resId="Pets/pet/228.png" name="Lv63 米诺" size="32,48" pos="300,120" namePos="0,0">
-			<wander enabled="true" radius="220" speed="34" idle="2,3" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true">
-				<bubble chance="0.3" duration="2.5">
+			<wild>
+				<movement mode="wander" radius="220" speed="34" idle="2,3" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true" />
+				<talk chance="0.3" duration="2.5">
 					<self>米诺不唱歌！米诺只打架！</self>
 					<self>重击！简单粗暴~</self>
 					<self>冰沁氏族的歌声……其实也没有那么难听啦。</self>
-				</bubble>
-			</wander>
+				</talk>
+			</wild>
 			<battle>
 				<branch id="default">
 					<settings count="6" capture="true"/>
@@ -31,13 +32,14 @@
 			</eventHandler>
 		</npc>
 		<npc id="40702" resId="Pets/pet/228.png" name="Lv62 米诺" size="32,48" pos="500,120" namePos="0,0">
-			<wander enabled="true" radius="220" speed="34" idle="2,3" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true">
-				<bubble chance="0.3" duration="2.5">
+			<wild>
+				<movement mode="wander" radius="220" speed="34" idle="2,3" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true" />
+				<talk chance="0.3" duration="2.5">
 					<self>暗施冷箭！偷偷地~</self>
 					<self>盗取！拿了对手的东西~</self>
 					<self>陷阱！踩到了吧？恢复15点怒气~</self>
-				</bubble>
-			</wander>
+				</talk>
+			</wild>
 			<battle>
 				<branch id="default">
 					<settings count="6" capture="true"/>

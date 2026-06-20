@@ -7,13 +7,14 @@
     </music>
 	<entities>
 		<npc id="20401" resId="Pets/pet/141.png" name="Lv29 希捷特" size="54,48" pos="340,260" namePos="0,0">
-			<wander enabled="true" radius="220" speed="34" idle="2,3" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true">
-				<bubble chance="0.3" duration="2.5">
+			<wild>
+				<movement mode="wander" radius="220" speed="34" idle="2,3" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true" />
+				<talk chance="0.3" duration="2.5">
 					<self>虚空充能！能量蓄满~</self>
 					<self>幽静珊瑚穴好安静，适合练习空间跳跃。</self>
 					<self>窒息冲锋！……对手窒息了，我也快窒息了。</self>
-				</bubble>
-			</wander>
+				</talk>
+			</wild>
 			<battle>
 				<branch id="default">
 					<settings count="6" capture="true"/>
@@ -32,13 +33,14 @@
 			</eventHandler>
 		</npc>
 		<npc id="20402" resId="Pets/pet/141.png" name="Lv30 希捷特" size="54,48" pos="265,140" namePos="0,0">
-			<wander enabled="true" radius="220" speed="34" idle="2,3" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true">
-				<bubble chance="0.3" duration="2.5">
+			<wild>
+				<movement mode="wander" radius="220" speed="34" idle="2,3" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true" />
+				<talk chance="0.3" duration="2.5">
 					<self>虚空炸弹！轰——！</self>
 					<self>穿梭在不同空间之间，有时候会迷路~</self>
 					<self>希捷特的空间跳跃：快、准、偶尔偏。</self>
-				</bubble>
-			</wander>
+				</talk>
+			</wild>
 			<battle>
 				<branch id="default">
 					<settings count="6" capture="true"/>

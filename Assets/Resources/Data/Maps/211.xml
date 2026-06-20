@@ -7,13 +7,14 @@
     </music>
 	<entities>
 		<npc id="21101" resId="Pets/pet/26.png" name="Lv25 安亚" size="36,57" pos="300,120" namePos="0,0">
-			<wander enabled="true" radius="220" speed="34" idle="2,3" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true">
-				<bubble chance="0.3" duration="2.5">
+			<wild>
+				<movement mode="wander" radius="220" speed="34" idle="2,3" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true" />
+				<talk chance="0.3" duration="2.5">
 					<self>头上的水泡又变大了，是不是快进化了？</self>
 					<self>呼吸罩模式启动！可以在水下待更久啦~</self>
 					<self>墨汁喷射！……把自己也染黑了。</self>
-				</bubble>
-			</wander>
+				</talk>
+			</wild>
 			<battle>
 				<branch id="default">
 					<settings count="6" capture="true"/>
@@ -49,13 +50,14 @@
 			</eventHandler>
 		</npc>
 		<npc id="21202" resId="Pets/pet/26.png" name="Lv26 安亚" size="36,57" pos="620,80" namePos="0,0">
-			<wander enabled="true" radius="220" speed="34" idle="2,3" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true">
-				<bubble chance="0.3" duration="2.5">
+			<wild>
+				<movement mode="wander" radius="220" speed="34" idle="2,3" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true" />
+				<talk chance="0.3" duration="2.5">
 					<self>漩涡谷地的水流好急，不过我已经习惯了~</self>
 					<self>气泡咕噜咕噜的，像在唱歌一样~</self>
 					<self>衰退技能练好了！就是有点累。</self>
-				</bubble>
-			</wander>
+				</talk>
+			</wild>
 			<battle>
 				<branch id="default">
 					<settings count="6" capture="true"/>

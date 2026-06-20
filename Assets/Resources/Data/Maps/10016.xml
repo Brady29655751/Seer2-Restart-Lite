@@ -286,13 +286,14 @@
 			</eventHandler>
 		</npc>
 		<npc id="1001604" resId="Pets/pet/10035" name="Lv23 吉尔" size="56,70" pos="420,180" namePos="0,0">
-			<wander enabled="true" radius="220" speed="34" idle="2,3" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true">
-				<bubble chance="0.3" duration="2.5">
+			<wild>
+				<movement mode="wander" radius="220" speed="34" idle="2,3" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true" />
+				<talk chance="0.3" duration="2.5">
 					<self>火花！噼里啪啦~</self>
 					<self>炽翼！火系技能10%让对手烧伤！</self>
 					<self>龙爪！龙系技能伤害增加25%！</self>
-				</bubble>
-			</wander>
+				</talk>
+			</wild>
 			<battle>
 				<branch id="default">
 					<settings count="6" capture="true">
@@ -313,13 +314,14 @@
 			</eventHandler>
 		</npc>
 		<npc id="1001605" resId="Pets/pet/10035" name="Lv24 吉尔" size="56,70" pos="320,325" namePos="0,0">
-			<wander enabled="true" radius="220" speed="34" idle="2,3" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true">
-				<bubble chance="0.3" duration="2.5">
+			<wild>
+				<movement mode="wander" radius="220" speed="34" idle="2,3" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true" />
+				<talk chance="0.3" duration="2.5">
 					<self>烟幕！看不见我了吧~</self>
 					<self>抓！……抓到了空气。</self>
 					<self>吉尔在火山里散步~地面好烫！但我不怕~</self>
-				</bubble>
-			</wander>
+				</talk>
+			</wild>
 			<battle>
 				<branch id="default">
 					<settings count="6" capture="true">

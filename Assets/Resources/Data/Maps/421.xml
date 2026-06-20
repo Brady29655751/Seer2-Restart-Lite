@@ -6,13 +6,14 @@
 	</music>
 	<entities>
 		<npc id="42101" resId="Pets/pet/213.png" name="Lv78 石像魔" size="109,102" pos="340,45" namePos="0,0">
-			<wander enabled="true" radius="220" speed="34" idle="2,3" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true">
-				<bubble chance="0.3" duration="2.5">
+			<wild>
+				<movement mode="wander" radius="220" speed="34" idle="2,3" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true" />
+				<talk chance="0.3" duration="2.5">
 					<self>坚硬！我可是很硬的！</self>
 					<self>当所有符文拼在一起，一段历史就会被揭开……</self>
 					<self>石像魔：看起来很凶，其实只是脸比较方。</self>
-				</bubble>
-			</wander>
+				</talk>
+			</wild>
 			<battle>
 				<branch id="default">
 					<settings count="6" capture="true"/>
@@ -31,13 +32,14 @@
 			</eventHandler>
 		</npc>
 		<npc id="42102" resId="Pets/pet/213.png" name="Lv79 石像魔" size="109,102" pos="130,160" namePos="0,0">
-			<wander enabled="true" radius="220" speed="34" idle="2,3" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true">
-				<bubble chance="0.3" duration="2.5">
+			<wild>
+				<movement mode="wander" radius="220" speed="34" idle="2,3" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true" />
+				<talk chance="0.3" duration="2.5">
 					<self>我身上的符文你认识吗？反正我自己不认识。</self>
 					<self>石化冲击！变成石头……不是，是让对手变石头！</self>
 					<self>飞翼之核的风好大，差点把我吹跑了。</self>
-				</bubble>
-			</wander>
+				</talk>
+			</wild>
 			<battle>
 				<branch id="default">
 					<settings count="6" capture="true"/>

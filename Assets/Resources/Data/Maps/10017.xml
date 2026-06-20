@@ -290,13 +290,14 @@
 			</callbackHandler>
 		</npc>
 		<npc id="1001704" resId="Pets/pet/10335" name="Lv26 赤甲虫" size="64,48" pos="450,300" namePos="0,0">
-			<wander enabled="true" radius="220" speed="34" idle="2,3" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true">
-				<bubble chance="0.3" duration="2.5">
+			<wild>
+				<movement mode="wander" radius="220" speed="34" idle="2,3" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true" />
+				<talk chance="0.3" duration="2.5">
 					<self>火花！噼啪~</self>
 					<self>焰舞！火系技能10%让对手昏迷！</self>
 					<self>温室！10%获得火环之心~</self>
-				</bubble>
-			</wander>
+				</talk>
+			</wild>
 			<battle>
 				<branch id="default">
 					<settings count="6" capture="true">
@@ -317,13 +318,14 @@
 			</eventHandler>
 		</npc>
 		<npc id="1001705" resId="Pets/pet/10335" name="Lv27 赤甲虫" size="64,48" pos="270,260" namePos="0,0">
-			<wander enabled="true" radius="220" speed="34" idle="2,3" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true">
-				<bubble chance="0.3" duration="2.5">
+			<wild>
+				<movement mode="wander" radius="220" speed="34" idle="2,3" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true" />
+				<talk chance="0.3" duration="2.5">
 					<self>火焰之环！转圈圈~</self>
 					<self>赤甲虫的心情：温度高就开心，温度低就……困。</self>
 					<self>火山星深处是我的地盘！别过来！……除非你带好吃的。</self>
-				</bubble>
-			</wander>
+				</talk>
+			</wild>
 			<battle>
 				<branch id="default">
 					<settings count="6" capture="true">

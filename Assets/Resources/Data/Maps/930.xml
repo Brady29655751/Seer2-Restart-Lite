@@ -7,6 +7,14 @@
 	<entities>
 		<npc id="93001" resId="Pets/pet/268" name="Lv91 奥罗吉尔" size="86,99" pos="200,310" namePos="0,0">
 			<anim id="Pets/anim/268" pos="-0.6,0.3" scale="0.75,0.75" />
+			<wild visual="animation">
+				<movement mode="wander" radius="220" speed="34" idle="2,6" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true" />
+				<talk chance="0.3" duration="4">
+					<self>风其实很温柔的，只是大家不了解它~</self>
+					<self>御风中枢的风最听话了！</self>
+					<self>美好的一面？看我的翅膀就知道了~</self>
+				</talk>
+			</wild>
 			<battle>
 				<branch id="default">
 					<settings count="6" capture="true"/>
@@ -26,6 +34,14 @@
 		</npc>
 		<npc id="93002" resId="Pets/pet/268" name="Lv92 奥罗吉尔" size="86,99" pos="465,110" namePos="0,0">
 			<anim id="Pets/anim/268" pos="-0.6,0.3" scale="0.75,0.75" />
+			<wild visual="animation">
+				<movement mode="wander" radius="220" speed="34" idle="2,6" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true" />
+				<talk chance="0.3" duration="4">
+					<self>今天给路人吹了一阵凉风，他们好像很开心。</self>
+					<self>奥罗吉尔：风的使者，美好代言人。</self>
+					<self>御风而行，感觉整个世界都在微笑~</self>
+				</talk>
+			</wild>
 			<battle>
 				<branch id="default">
 					<settings count="6" capture="true"/>

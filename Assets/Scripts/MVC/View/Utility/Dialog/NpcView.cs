@@ -20,6 +20,10 @@ public class NpcView : Module
     private GameObject currentAnim;
     private Vector3 visualBaseScale = Vector3.one;
     private Vector2 visualBasePosition;
+    private Vector3 animationBaseLocalPosition;
+    private Vector3 animationFlipPositionOffset;
+    private bool hasAnimationFlipPositionOffset;
+    private bool currentVisualFlipped;
 
     public object GetIdentifier(string id)
     {
@@ -170,15 +174,82 @@ public class NpcView : Module
         if (Mathf.Abs(directionX) <= 0.05f)
             return;
 
-        Transform facingTarget = currentAnim != null ? currentAnim.transform : button?.rect;
+        bool faceRight = directionX > 0f;
+        bool shouldFlip = faceRight != originalFacesRight;
+        if (currentVisualFlipped == shouldFlip)
+            return;
+
+        if (currentAnim != null)
+        {
+            SetAnimationFacing(shouldFlip);
+            currentVisualFlipped = shouldFlip;
+            return;
+        }
+
+        Transform facingTarget = button?.rect;
         if (facingTarget == null)
             return;
 
-        bool faceRight = directionX > 0f;
-        float multiplier = faceRight == originalFacesRight ? 1f : -1f;
         Vector3 scale = visualBaseScale;
-        scale.x *= multiplier;
+        if (shouldFlip)
+            scale.x *= -1f;
         facingTarget.localScale = scale;
+        currentVisualFlipped = shouldFlip;
+    }
+
+    private void SetAnimationFacing(bool shouldFlip)
+    {
+        if (currentAnim == null)
+            return;
+
+        Transform animTransform = currentAnim.transform;
+        animTransform.localPosition = animationBaseLocalPosition;
+        animTransform.localScale = visualBaseScale;
+
+        if (!shouldFlip)
+            return;
+
+        if (!hasAnimationFlipPositionOffset)
+        {
+            bool hasCenterBefore = TryGetAnimationVisualCenter(out Vector3 centerBefore);
+            Vector3 flippedScale = visualBaseScale;
+            flippedScale.x *= -1f;
+            animTransform.localScale = flippedScale;
+
+            if (hasCenterBefore && TryGetAnimationVisualCenter(out Vector3 centerAfter))
+            {
+                Transform parent = animTransform.parent;
+                animationFlipPositionOffset = parent.InverseTransformVector(centerBefore - centerAfter);
+            }
+
+            hasAnimationFlipPositionOffset = true;
+        }
+        else
+        {
+            Vector3 flippedScale = visualBaseScale;
+            flippedScale.x *= -1f;
+            animTransform.localScale = flippedScale;
+        }
+
+        animTransform.localPosition = animationBaseLocalPosition + animationFlipPositionOffset;
+    }
+
+    private bool TryGetAnimationVisualCenter(out Vector3 center)
+    {
+        center = Vector3.zero;
+        if (currentAnim == null)
+            return false;
+
+        Renderer[] renderers = currentAnim.GetComponentsInChildren<Renderer>(true);
+        if (renderers.Length == 0)
+            return false;
+
+        Bounds bounds = renderers[0].bounds;
+        for (int i = 1; i < renderers.Length; i++)
+            bounds.Encapsulate(renderers[i].bounds);
+
+        center = bounds.center;
+        return true;
     }
 
     public void SetVisualOffset(Vector2 offset)
@@ -194,9 +265,17 @@ public class NpcView : Module
         if (facingTarget != null)
             visualBaseScale = facingTarget.localScale;
 
+        if (currentAnim != null)
+            animationBaseLocalPosition = currentAnim.transform.localPosition;
+
+        animationFlipPositionOffset = Vector3.zero;
+        hasAnimationFlipPositionOffset = false;
+
         RectTransform offsetTarget = GetVisualOffsetTarget();
         if (offsetTarget != null)
             visualBasePosition = offsetTarget.anchoredPosition;
+
+        currentVisualFlipped = false;
     }
 
     private RectTransform GetVisualOffsetTarget()

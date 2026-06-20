@@ -16,13 +16,14 @@
 			</eventHandler>
 		</npc>
 		<npc id="1003101" resId="Pets/pet/10043" name="Lv54 罗奇" size="36,38" pos="345,340" namePos="0,0">
-			<wander enabled="true" radius="220" speed="34" idle="2,3" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true">
-				<bubble chance="0.3" duration="2.5">
+			<wild>
+				<movement mode="wander" radius="220" speed="34" idle="2,3" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true" />
+				<talk chance="0.3" duration="2.5">
 					<self>罗奇的小窝在夹缝里，虽然小但很温馨~</self>
 					<self>电气震！电一下！</self>
 					<self>以金属为食的精灵，你见过几个？</self>
-				</bubble>
-			</wander>
+				</talk>
+			</wild>
 			<battle>
 				<branch id="default">
 					<settings count="6" capture="true"/>
@@ -41,13 +42,14 @@
 			</eventHandler>
 		</npc>
 		<npc id="1003102" resId="Pets/pet/10043" name="Lv53 罗奇" size="36,38" pos="680,230" namePos="0,0">
-			<wander enabled="true" radius="220" speed="34" idle="2,3" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true">
-				<bubble chance="0.3" duration="2.5">
+			<wild>
+				<movement mode="wander" radius="220" speed="34" idle="2,3" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true" />
+				<talk chance="0.3" duration="2.5">
 					<self>电磁！麻痹几率提升20%！</self>
 					<self>电轮！50%几率加速~</self>
 					<self>阴谋！偷偷谋划~</self>
-				</bubble>
-			</wander>
+				</talk>
+			</wild>
 			<battle>
 				<branch id="default">
 					<settings count="6" capture="true"/>

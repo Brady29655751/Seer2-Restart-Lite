@@ -7,13 +7,14 @@
 	<initialPoint>390,135</initialPoint>
 	<entities>
 		<npc id="29101" resId="Pets/pet/33.png" name="Lv31 乔尼" size="58,78" pos="580,140" namePos="0,0">
-			<wander enabled="true" radius="220" speed="34" idle="2,3" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true">
-				<bubble chance="0.3" duration="2.5">
+			<wild>
+				<movement mode="wander" radius="220" speed="34" idle="2,3" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true" />
+				<talk chance="0.3" duration="2.5">
 					<self>身后的火烧得好旺！不撞点什么就憋得慌~</self>
 					<self>火焰冲撞！冲冲冲！</self>
 					<self>双轨火炮准备！……呃，炮口朝哪来着？</self>
-				</bubble>
-			</wander>
+				</talk>
+			</wild>
 			<battle>
 				<branch id="default">
 					<settings count="6" capture="true" />
@@ -49,13 +50,14 @@
 			</eventHandler>
 		</npc>
 		<npc id="29102" resId="Pets/pet/33.png" name="Lv32 乔尼" size="58,78" pos="320,225" namePos="0,0">
-			<wander enabled="true" radius="220" speed="34" idle="2,3" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true">
-				<bubble chance="0.3" duration="2.5">
+			<wild>
+				<movement mode="wander" radius="220" speed="34" idle="2,3" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true" />
+				<talk chance="0.3" duration="2.5">
 					<self>大家别靠太近，我身后真的很烫！</self>
 					<self>有时候停下来就会过热，只好一直跑~</self>
 					<self>幻空通道的风好大，把我的火焰吹得东倒西歪的。</self>
-				</bubble>
-			</wander>
+				</talk>
+			</wild>
 			<battle>
 				<branch id="default">
 					<settings count="6" capture="true" />

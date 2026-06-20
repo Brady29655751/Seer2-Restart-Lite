@@ -7,6 +7,14 @@
 	<entities>
 		<npc id="125001" resId="Pets/pet/705" name="Lv98 萤火虫" size="96,84" pos="260,135" namePos="0,0">
 			<anim id="Pets/anim/705" pos="-0.3,0.3" scale="0.6,0.6" />
+			<wild visual="animation">
+				<movement mode="wander" radius="220" speed="34" idle="2,6" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true" />
+				<talk chance="0.3" duration="4">
+					<self>听说有人把我的光当鬼火……才不是呢！</self>
+					<self>受到攻击会反击的哦！别惹我~</self>
+					<self>萤火虫的夜晚，比星星还好看。</self>
+				</talk>
+			</wild>
 			<battle>
 				<branch id="default">
 					<settings count="6" capture="true"/>
@@ -26,6 +34,14 @@
 		</npc>
 		<npc id="125002" resId="Pets/pet/705" name="Lv99 萤火虫" size="96,84" pos="600,145" namePos="0,0">
 			<anim id="Pets/anim/705" pos="-0.3,0.3" scale="0.6,0.6" />
+			<wild visual="animation">
+				<movement mode="wander" radius="220" speed="34" idle="2,6" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true" />
+				<talk chance="0.3" duration="4">
+					<self>萤火之墓的绿光？那是我的小伙伴们在跳舞~</self>
+					<self>我的光虽然微弱，但绝不会熄灭！</self>
+					<self>先出手闪避up！反应速度一流~</self>
+				</talk>
+			</wild>
 			<battle>
 				<branch id="default">
 					<settings count="6" capture="true"/>

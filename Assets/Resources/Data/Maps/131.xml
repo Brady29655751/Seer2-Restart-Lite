@@ -8,13 +8,14 @@
 	</music>
 	<entities>
 		<npc id="13101" resId="Pets/pet/13.png" name="Lv5 小小葵" size="36,38" pos="290,150" namePos="0,0">
-			<wander enabled="true" radius="220" speed="34" idle="2,3" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true">
-				<bubble chance="0.3" duration="2.5">
+			<wild>
+				<movement mode="wander" radius="220" speed="34" idle="2,3" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true" />
+				<talk chance="0.3" duration="2.5">
 					<self>葵花种子准备好了，谁来和我玩？</self>
 					<self>下雨天也不错，雨水甜甜的~</self>
 					<self>别踩我的叶子！……开玩笑的啦。</self>
-				</bubble>
-			</wander>
+				</talk>
+			</wild>
 			<battle>
 				<branch id="default">
 					<settings count="6" capture="true">
@@ -52,13 +53,14 @@
 			</eventHandler>
 		</npc>
 		<npc id="13102" resId="Pets/pet/13.png" name="Lv6 小小葵" size="36,38" pos="420,120" namePos="0,0">
-			<wander enabled="true" radius="220" speed="34" idle="2,3" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true">
-				<bubble chance="0.3" duration="2.5">
+			<wild>
+				<movement mode="wander" radius="220" speed="34" idle="2,3" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true" />
+				<talk chance="0.3" duration="2.5">
 					<self>阳光特性发动！感觉浑身暖洋洋的~</self>
 					<self>听说自然界里有很多好朋友，好想都认识一下！</self>
 					<self>有时候会和小虫子聊天，它们都很害羞。</self>
-				</bubble>
-			</wander>
+				</talk>
+			</wild>
 			<battle>
 				<branch id="default">
 					<settings count="6" capture="true">
@@ -79,13 +81,14 @@
 			</eventHandler>
 		</npc>
 		<npc id="13103" resId="Pets/pet/13.png" name="Lv7 小小葵" size="36,38" pos="580,80" namePos="0,0">
-			<wander enabled="true" radius="220" speed="34" idle="2,3" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true">
-				<bubble chance="0.3" duration="2.5">
+			<wild>
+				<movement mode="wander" radius="220" speed="34" idle="2,3" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true" />
+				<talk chance="0.3" duration="2.5">
 					<self>今天的阳光刚刚好，多晒一会儿~</self>
 					<self>三叶草又长出新芽了，好开心！</self>
 					<self>我是荆棘林里最会光合作用的！</self>
-				</bubble>
-			</wander>
+				</talk>
+			</wild>
 			<battle>
 				<branch id="default">
 					<settings count="6" capture="true">

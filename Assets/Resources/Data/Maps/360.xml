@@ -72,13 +72,14 @@
 			</eventHandler>
 		</npc>
 		<npc id="36001" resId="Pets/pet/69.png" name="Lv53 蛋壳鸡" size="58,90" pos="390,55" namePos="0,0">
-			<wander enabled="true" radius="220" speed="34" idle="2,3" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true">
-				<bubble chance="0.3" duration="2.5">
+			<wild>
+				<movement mode="wander" radius="220" speed="34" idle="2,3" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true" />
+				<talk chance="0.3" duration="2.5">
 					<self>飞沙走石！……主要是沙子。</self>
 					<self>黄金之路果然是金色的……不对，是沙色的。</self>
 					<self>蛋壳是我的家，也是我的武器！</self>
-				</bubble>
-			</wander>
+				</talk>
+			</wild>
 			<battle>
 				<branch id="default">
 					<settings count="6" capture="true"/>
@@ -105,13 +106,14 @@
 			</eventHandler>
 		</npc>
 		<npc id="36002" resId="Pets/pet/69.png" name="Lv54 蛋壳鸡" size="58,90" pos="155,135" namePos="0,0">
-			<wander enabled="true" radius="220" speed="34" idle="2,3" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true">
-				<bubble chance="0.3" duration="2.5">
+			<wild>
+				<movement mode="wander" radius="220" speed="34" idle="2,3" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true" />
+				<talk chance="0.3" duration="2.5">
 					<self>沙之脚！在沙地上跑得飞快~</self>
 					<self>走遍千山万水，还是觉得自己的蛋壳最舒服。</self>
 					<self>今天又领悟了一个秘密……然后忘了。</self>
-				</bubble>
-			</wander>
+				</talk>
+			</wild>
 			<battle>
 				<branch id="default">
 					<settings count="6" capture="true"/>

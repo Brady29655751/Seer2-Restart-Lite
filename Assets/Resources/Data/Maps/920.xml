@@ -7,6 +7,14 @@
 	<entities>
 		<npc id="92001" resId="Pets/pet/254" name="Lv83 海葵" size="88,104" pos="595,175" namePos="0,0">
 			<anim id="Pets/anim/254" pos="-1,1.5" scale="1.5,1.5" />
+			<wild visual="animation">
+				<movement mode="wander" radius="220" speed="34" idle="2,6" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true" />
+				<talk chance="0.3" duration="4">
+					<self>风有好的一面也有坏的一面，我负责坏的那面~</self>
+					<self>流离街的风总是带着沙子，迷眼睛！</self>
+					<self>别小看地面系！我可是玩风的专家~</self>
+				</talk>
+			</wild>
 			<battle>
 				<branch id="default">
 					<settings count="6" capture="true"/>
@@ -26,6 +34,14 @@
 		</npc>
 		<npc id="92002" resId="Pets/pet/254" name="Lv84 海葵" size="88,104" pos="325,210" namePos="0,0">
 			<anim id="Pets/anim/254" pos="-1,1.5" scale="1.5,1.5" />
+			<wild visual="animation">
+				<movement mode="wander" radius="220" speed="34" idle="2,6" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true" />
+				<talk chance="0.3" duration="4">
+					<self>今天的风有点懒，不怎么吹。</self>
+					<self>把风的负面影响发挥到极致……听起来很厉害吧？</self>
+					<self>流离街的精灵们都躲着我，大概是因为我太强了~</self>
+				</talk>
+			</wild>
 			<battle>
 				<branch id="default">
 					<settings count="6" capture="true"/>

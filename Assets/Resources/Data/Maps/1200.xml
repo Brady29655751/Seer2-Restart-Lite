@@ -7,6 +7,14 @@
 	<entities>
 		<npc id="120001" resId="Pets/pet/403" name="Lv96 彩翼蜓" size="111,105" pos="285,260" namePos="0,0">
 			<anim id="Pets/anim/403" pos="-1,1" scale="0.8,0.8" />
+			<wild visual="animation">
+				<movement mode="wander" radius="220" speed="34" idle="2,6" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true" />
+				<talk chance="0.3" duration="4">
+					<self>今天翅膀有点灰……是不是该洗澡了？</self>
+					<self>彩翼蜓飞行中！注意避让~</self>
+					<self>五色彩虹就是我！</self>
+				</talk>
+			</wild>
 			<battle>
 				<branch id="default">
 					<settings count="6" capture="true"/>
@@ -26,6 +34,14 @@
 		</npc>
 		<npc id="120002" resId="Pets/pet/403" name="Lv97 彩翼蜓" size="111,105" pos="545,150" namePos="0,0">
 			<anim id="Pets/anim/403" pos="-1,1" scale="0.8,0.8" />
+			<wild visual="animation">
+				<movement mode="wander" radius="220" speed="34" idle="2,6" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true" />
+				<talk chance="0.3" duration="4">
+					<self>看我的翅膀！在阳光下会变出五种颜色~</self>
+					<self>虫林小径的树叶间飞来飞去最开心了！</self>
+					<self>半透明翅膀可是我的骄傲！</self>
+				</talk>
+			</wild>
 			<battle>
 				<branch id="default">
 					<settings count="6" capture="true"/>

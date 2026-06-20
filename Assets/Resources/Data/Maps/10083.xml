@@ -8,6 +8,14 @@
 		<npc id="1008301" resId="Pets/pet/10300" name="Lv 105 谱尼" size="122,160" pos="375,300" namePos="10,-20">
 			<anim id="Pets/anim/10300" pos="0.2,-0.6" scale="1,1" />
 			<description>谱尼真身</description>
+			<wild visual="animation">
+				<movement mode="wander" radius="220" speed="34" idle="2,6" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true" />
+				<talk chance="0.3" duration="4">
+					<self>我的力量……连我自己都无法完全掌控。</self>
+					<self>时间与空间在我面前不过是一层薄纱。</self>
+					<self>也许我只是个传说……但传说也有想散步的时候。</self>
+				</talk>
+			</wild>
 			<battle>
 				<branch id="default">
 					<settings count="6" star="4">
