@@ -17,6 +17,14 @@
 		</npc>
 		<npc id="1003001" resId="Pets/pet/10013" name="Lv52 比比鼠" size="36,38" pos="290,90" namePos="0,0">
 			<anim id="Pets/anim/10013" pos="0,0" scale="0.8,0.8" />
+			<wild visual="animation">
+				<movement mode="wander" radius="160" speed="34" idle="2,3" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true" />
+				<talk chance="0.3" duration="2.5">
+					<self>吱吱！这里可是我的地盘。</self>
+					<self>刚才是不是有什么东西闪过去了？</self>
+					<self>今天也要努力收集能量！</self>
+				</talk>
+			</wild>
 			<battle>
 				<branch id="default">
 					<settings count="6" capture="true"/>
@@ -44,6 +52,14 @@
 		</npc>
 		<npc id="1003002" resId="Pets/pet/10013" name="Lv51 比比鼠" size="36,38" pos="300,330" namePos="0,0">
 			<anim id="Pets/anim/10013" pos="0,0" scale="0.8,0.8" />
+			<wild visual="animation">
+				<movement mode="wander" radius="160" speed="34" idle="2,3" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true" />
+				<talk chance="0.3" duration="2.5">
+					<self>鼠鼠我呀，今天也是狠狠充电了呢！</self>
+					<self>你见过赫尔卡星早晨五点钟的太阳吗？</self>
+					<self>成功一定会属于鼠鼠我这样不肯停下脚步的人！</self>
+				</talk>
+			</wild>
 			<battle>
 				<branch id="default">
 					<settings count="6" capture="true"/>

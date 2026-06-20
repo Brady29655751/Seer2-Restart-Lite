@@ -38,7 +38,7 @@ public class NpcInfo
     public Color nameColor => nameRgba.ToColor(new Color32(0, 64, 255, 255));
     [XmlAttribute("nameFont")] public string nameFont;
 
-    [XmlElement("wander")] public NpcWanderInfo wanderInfo;
+    [XmlElement("wild")] public NpcWildInfo wildInfo;
 
     [XmlElement("transport")] public string transport;
     public Vector2 transportPos => transport.ToVector2(pos);
@@ -108,9 +108,16 @@ public class NpcInfo
     }
 }
 
-public class NpcWanderInfo
+public class NpcWildInfo
 {
-    [XmlAttribute] public bool enabled = false;
+    [XmlAttribute] public string visual = "auto";
+    [XmlElement("movement")] public NpcWildMovementInfo movement;
+    [XmlElement("talk")] public NpcWildTalkInfo talk;
+}
+
+public class NpcWildMovementInfo
+{
+    [XmlAttribute] public string mode = "stationary";
     [XmlAttribute] public float radius = 120f;
     [XmlAttribute] public float speed = 35f;
     [XmlAttribute] public string idle = "2,6";
@@ -122,22 +129,23 @@ public class NpcWanderInfo
     [XmlAttribute] public bool flip = true;
     [XmlAttribute] public bool debug = false;
     [XmlAttribute] public bool originalFacesRight = false;
-    [XmlElement("bubble")] public NpcWanderBubbleInfo bubble;
 
+    [XmlIgnore] public bool isWander => string.Equals(mode, "wander", StringComparison.OrdinalIgnoreCase);
     [XmlIgnore] public Vector2 idleRange => idle.ToVector2(new Vector2(2f, 6f));
     [XmlIgnore] public Vector2 stepRange => step.ToVector2(new Vector2(14f, 30f));
-    [XmlIgnore] public float faceRightScale => originalFacesRight ? 1f : -1f;
 }
 
-public class NpcWanderBubbleInfo
+public class NpcWildTalkInfo
 {
     [XmlAttribute] public float chance = 0.35f;
     [XmlAttribute] public float duration = 1.8f;
+    [XmlAttribute] public string interval = "5,10";
     [XmlElement("self")] public List<string> self;
     [XmlElement("scene")] public List<string> scene;
     [XmlElement("player")] public List<string> player;
 
     [XmlIgnore] public bool HasSelf => self != null && self.Any(x => !string.IsNullOrWhiteSpace(x));
+    [XmlIgnore] public Vector2 intervalRange => interval.ToVector2(new Vector2(5f, 10f));
 
     public string GetRandomSelf()
     {

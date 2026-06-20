@@ -280,7 +280,7 @@ public class MapSceneView : UIModule
             GameObject obj = Instantiate(prefab, transform);
             NpcController npc = obj.GetComponent<NpcController>();
             NpcHandler.CreateNpc(npc, npcInfo, npcDict, infoPrompt);
-            TryStartWildNpcWander(npcInfo, obj);
+            TryStartWildNpcBehaviour(npcInfo, obj);
         }
         Player.SetSceneData("mapNpcList", npcDict);
 
@@ -292,24 +292,29 @@ public class MapSceneView : UIModule
         }
     }
 
-    private void TryStartWildNpcWander(NpcInfo npcInfo, GameObject npcObject)
+    private void TryStartWildNpcBehaviour(NpcInfo npcInfo, GameObject npcObject)
     {
         if (npcInfo == null || npcObject == null)
             return;
 
-        var wander = npcObject.GetComponent<MapWildNpcWanderController>();
-        if (wander == null)
+        var behaviour = npcObject.GetComponent<MapWildNpcBehaviourController>();
+        if (behaviour == null)
             return;
 
-        if (!MapWildNpcWanderController.CanWander(npcInfo))
+        if (!MapWildNpcBehaviourController.CanUseWildBehaviour(npcInfo))
         {
-            wander.Stop();
-            wander.enabled = false;
+            behaviour.Stop();
             return;
         }
 
-        wildNpcNavigator ??= new MapNavigator(map, ReferenceCanvasSize);
-        wander.Init(map, wildNpcNavigator, npcInfo);
+        MapNavigator navigator = null;
+        if (MapWildNpcBehaviourController.RequiresNavigator(npcInfo))
+        {
+            wildNpcNavigator ??= new MapNavigator(map, ReferenceCanvasSize);
+            navigator = wildNpcNavigator;
+        }
+
+        behaviour.Init(map, navigator, npcInfo);
     }
 
     public void SetFarm(List<NpcInfo> infos)

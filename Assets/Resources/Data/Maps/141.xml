@@ -8,13 +8,14 @@
 	<initialPoint>550,100</initialPoint>
 	<entities>
 		<npc id="14101" resId="Pets/pet/18.png" name="Lv8 小树根" size="43,40" pos="220,210" namePos="0,0">
-			<wander enabled="true" radius="220" speed="34" idle="2,3" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true">
-				<bubble chance="0.3" duration="2.5">
+			<wild>
+				<movement mode="wander" radius="220" speed="34" idle="2,3" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true" />
+				<talk chance="0.3" duration="2.5">
 					<self>有时我会想，是不是要一辈子呆在幻影崖呢？</self>
 					<self>等我长大之后，一定不会再被布鲁托欺负了！</self>
 					<self></self>
-				</bubble>
-			</wander>
+				</talk>
+			</wild>
 			<battle>
 				<branch id="default">
 					<settings count="6" capture="true"/>
@@ -50,16 +51,16 @@
 			</eventHandler>
 		</npc>
 		<npc id="14102" resId="Pets/pet/18.png" name="Lv9 小树根" size="43,40" pos="380,70" namePos="0,0">
-			<wander enabled="true" radius="220" speed="34" idle="2,3" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true">
-				<bubble chance="0.30" duration="2.5">
+			<wild>
+				<movement mode="wander" radius="220" speed="34" idle="2,3" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true" />
+				<talk chance="0.30" duration="2.5">
 					<self>严肃光合作用！</self>
 					<self>兄弟你别盯着我看。</self>
 					<self>猛猛扎根ing！</self>
 					<self>这里有点安静。。。</self>
 					<self>今天适合扎根~</self>
-					<self>这里怎么有一个低——等机器人~</self>
-				</bubble>
-			</wander>
+				</talk>
+			</wild>
 			<battle>
 				<branch id="default">
 					<settings count="6" capture="true"/>

@@ -25,7 +25,7 @@ public class MapWildNpcSpriteBubbleController : MonoBehaviour
         CacheReferences();
     }
 
-    public void Init(NpcInfo info)
+    public void Init()
     {
         CacheReferences();
         ApplyTextStyle();

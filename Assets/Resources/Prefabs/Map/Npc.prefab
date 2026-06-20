@@ -154,6 +154,8 @@ GameObject:
   - component: {fileID: 6243201562102233065}
   - component: {fileID: 9163802570058746159}
   - component: {fileID: 7700000000000000001}
+  - component: {fileID: 7700000000000000002}
+  - component: {fileID: 7700000000000000003}
   m_Layer: 5
   m_Name: Npc
   m_TagString: Untagged
@@ -208,8 +210,34 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 679d6a58ff14347418ca5b109db5d42b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  buttonRect: {fileID: 3910383591659972298}
-  bubbleController: {fileID: 7700000000000000015}
+  npcController: {fileID: 9163802570058746159}
+--- !u!114 &7700000000000000002
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6243201562102233066}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b2c3d4e5f6074891a2b3c4d5e6f70819, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  wanderController: {fileID: 7700000000000000001}
+  talkController: {fileID: 7700000000000000003}
+--- !u!114 &7700000000000000003
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6243201562102233066}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c3d4e5f6071849a2b3c4d5e6f708192a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bubbleView: {fileID: 7700000000000000015}
 --- !u!1 &7107418388866967116
 GameObject:
   m_ObjectHideFlags: 0

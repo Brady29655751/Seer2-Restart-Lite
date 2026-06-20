@@ -17,6 +17,10 @@ public class NpcView : Module
     [SerializeField] private AnimCamera animCamera;
     [SerializeField] private UniGifImage gif;
 
+    private GameObject currentAnim;
+    private Vector3 visualBaseScale = Vector3.one;
+    private Vector2 visualBasePosition;
+
     public object GetIdentifier(string id)
     {
         return id switch
@@ -119,6 +123,8 @@ public class NpcView : Module
     {
         gif.Clear();
         button.SetSprite(sprite);
+        if (currentAnim == null)
+            CaptureVisualBase();
     }
 
     public void SetAnim(string animId)
@@ -129,6 +135,7 @@ public class NpcView : Module
 
     public void SetAnim(GameObject prefab, AnimInfo animInfo = null)
     {
+        currentAnim = null;
         foreach (Transform t in animCamera.transform)
         {
             if (t.name == "Pet Anim")
@@ -138,17 +145,63 @@ public class NpcView : Module
         }
 
         if (prefab == null)
+        {
+            CaptureVisualBase();
             return;
+        }
 
         SetColor(Color.clear);
 
-        var anim = Instantiate(prefab, animCamera.transform);
+        currentAnim = Instantiate(prefab, animCamera.transform);
         if (animInfo == null)
+        {
+            CaptureVisualBase();
+            return;
+        }
+
+        currentAnim.transform.localScale = animInfo.AnimScale / (animCamera.canvas?.scaleFactor ?? 1);
+        currentAnim.transform.localPosition = animInfo.AnimPos / (animCamera.canvas?.scaleFactor ?? 1);
+        currentAnim.transform.localRotation = animInfo.AnimRot;
+        CaptureVisualBase();
+    }
+
+    public void SetVisualFacing(float directionX, bool originalFacesRight)
+    {
+        if (Mathf.Abs(directionX) <= 0.05f)
             return;
 
-        anim.transform.localScale = animInfo.AnimScale / (animCamera.canvas?.scaleFactor ?? 1);
-        anim.transform.localPosition = animInfo.AnimPos / (animCamera.canvas?.scaleFactor ?? 1);
-        anim.transform.localRotation = animInfo.AnimRot;
+        Transform facingTarget = currentAnim != null ? currentAnim.transform : button?.rect;
+        if (facingTarget == null)
+            return;
+
+        bool faceRight = directionX > 0f;
+        float multiplier = faceRight == originalFacesRight ? 1f : -1f;
+        Vector3 scale = visualBaseScale;
+        scale.x *= multiplier;
+        facingTarget.localScale = scale;
+    }
+
+    public void SetVisualOffset(Vector2 offset)
+    {
+        RectTransform offsetTarget = GetVisualOffsetTarget();
+        if (offsetTarget != null)
+            offsetTarget.anchoredPosition = visualBasePosition + offset;
+    }
+
+    private void CaptureVisualBase()
+    {
+        Transform facingTarget = currentAnim != null ? currentAnim.transform : button?.rect;
+        if (facingTarget != null)
+            visualBaseScale = facingTarget.localScale;
+
+        RectTransform offsetTarget = GetVisualOffsetTarget();
+        if (offsetTarget != null)
+            visualBasePosition = offsetTarget.anchoredPosition;
+    }
+
+    private RectTransform GetVisualOffsetTarget()
+    {
+        return currentAnim != null ? animCamera?.displayRect : button?.rect;
     }
 
     public void SetGif(AnimInfo gifInfo = null)

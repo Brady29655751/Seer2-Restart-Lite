@@ -8,6 +8,7 @@ public class AnimCamera : Module
     [SerializeField] private Camera animCamera;
     [SerializeField] private RawImage rawImage;
     public Canvas canvas;
+    public RectTransform displayRect => rawImage?.rectTransform;
 
     protected override void Awake()
     {
