@@ -10,6 +10,7 @@ public class VolumeSettingView : Module
     [SerializeField] private List<ISlider> sliderBlockViews;    
     [SerializeField] private Toggle flashToggle, shakeToggle, autoHealToggle;
     [SerializeField] private Text battleAnimSpeedText, initMapText;
+    [SerializeField] private Text bubbleStyleText;
 
     public void SetSliderVolume(SettingsData settingsData)
     {
@@ -66,6 +67,11 @@ public class VolumeSettingView : Module
             _ => "阿卡迪亚",
         };
         initMapText?.SetText(home);
+    }
+
+    public void SetBubbleStyleText(string value)
+    {
+        bubbleStyleText?.SetText(VolumeSettingModel.GetWildNpcBubbleStyleLabel(value));
     }
 
     public enum VolumeOrder

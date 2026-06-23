@@ -13,6 +13,7 @@ public class VolumeSettingController : Module
         base.Init();
         volumeModel.InitVolume();
         volumeView.SetSliderVolume(volumeModel.settingsData);
+        volumeView.SetBubbleStyleText(volumeModel.wildNpcBubbleStyle);
     }
 
     public void OnConfirmSettings()
@@ -74,6 +75,13 @@ public class VolumeSettingController : Module
         volumeModel.SetInitMapId(initMapId);
         volumeView.SetInitMapText(initMapId);
         
+        volumeModel.OnConfirmSettings();
+    }
+
+    public void OnWildNpcBubbleStyleChanged()
+    {
+        volumeModel.ToggleWildNpcBubbleStyle();
+        volumeView.SetBubbleStyleText(volumeModel.wildNpcBubbleStyle);
         volumeModel.OnConfirmSettings();
     }
 }
