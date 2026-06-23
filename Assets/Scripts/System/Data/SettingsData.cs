@@ -13,6 +13,7 @@ public class SettingsData
     public bool autoHealAfterBattle;
     public int initMapId = -70;
     public int ruleId;
+    public string wildNpcBubbleStyle;
     [XmlIgnore] public BattleRule rule => (BattleRule)ruleId;
 
     public SettingsData()
@@ -26,5 +27,6 @@ public class SettingsData
         autoHealAfterBattle = false;
         initMapId = -70;
         ruleId = 0;
+        wildNpcBubbleStyle = "white";
     }
 }

@@ -140,19 +140,28 @@ public class NpcWildTalkInfo
     [XmlAttribute] public float chance = 0.35f;
     [XmlAttribute] public float duration = 1.8f;
     [XmlAttribute] public string interval = "5,10";
-    [XmlElement("self")] public List<string> self;
-    [XmlElement("scene")] public List<string> scene;
-    [XmlElement("player")] public List<string> player;
+    [XmlElement("self")] public List<NpcWildTalkContent> self;
+    [XmlElement("scene")] public List<NpcWildTalkContent> scene;
+    [XmlElement("player")] public List<NpcWildTalkContent> player;
 
-    [XmlIgnore] public bool HasSelf => self != null && self.Any(x => !string.IsNullOrWhiteSpace(x));
+    [XmlIgnore] public bool HasSelf => self != null && self.Any(x => x?.IsValid == true);
     [XmlIgnore] public Vector2 intervalRange => interval.ToVector2(new Vector2(5f, 10f));
 
-    public string GetRandomSelf()
+    public NpcWildTalkContent GetRandomSelf()
     {
         if (!HasSelf)
             return null;
 
-        var options = self.Where(x => !string.IsNullOrWhiteSpace(x)).ToList();
+        var options = self.Where(x => x?.IsValid == true).ToList();
         return options.Get(UnityEngine.Random.Range(0, options.Count));
     }
+}
+
+public class NpcWildTalkContent
+{
+    [XmlText] public string text;
+    [XmlAttribute] public string image;
+
+    [XmlIgnore] public bool IsImage => !string.IsNullOrWhiteSpace(image);
+    [XmlIgnore] public bool IsValid => IsImage || !string.IsNullOrWhiteSpace(text);
 }

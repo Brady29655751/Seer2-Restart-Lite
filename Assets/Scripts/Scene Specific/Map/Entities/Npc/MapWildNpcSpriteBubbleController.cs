@@ -6,6 +6,7 @@ public class MapWildNpcSpriteBubbleController : MonoBehaviour
     [SerializeField] private RectTransform bubbleRect;
     [SerializeField] private CanvasGroup canvasGroup;
     [SerializeField] private Text bubbleText;
+    [SerializeField] private Image bubbleImage;
     [SerializeField] private int maxTextLength = 30;
     [SerializeField] private float fadeTime = 0.18f;
     [SerializeField] private int fontSize = 17;
@@ -16,6 +17,7 @@ public class MapWildNpcSpriteBubbleController : MonoBehaviour
     [SerializeField] private float paddingY = 20f;
     [SerializeField] private float tailReserve = 15f;
     [SerializeField] private TextAnchor textAnchor = TextAnchor.MiddleLeft;
+    [SerializeField] private Vector2 imageMaxSize = new Vector2(120f, 120f);
 
     private float remainingTime;
     private float totalDuration;
@@ -32,7 +34,7 @@ public class MapWildNpcSpriteBubbleController : MonoBehaviour
         HideImmediate();
     }
 
-    public void Show(string content, float duration)
+    public void ShowText(string content, float duration)
     {
         if (string.IsNullOrWhiteSpace(content))
             return;
@@ -42,6 +44,7 @@ public class MapWildNpcSpriteBubbleController : MonoBehaviour
             return;
 
         string text = TrimText(content.Trim());
+        SetContentActive(showText: true);
         bubbleText.text = text;
         ApplyTextStyle();
         Vector2 bubbleSize = GetBubbleSize(text);
@@ -49,10 +52,32 @@ public class MapWildNpcSpriteBubbleController : MonoBehaviour
         bubbleRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, bubbleSize.y);
         ApplyTextPadding();
 
-        remainingTime = Mathf.Max(0.2f, duration);
-        totalDuration = remainingTime;
-        bubbleRect.gameObject.SetActive(true);
-        canvasGroup.alpha = 1f;
+        BeginShow(duration);
+    }
+
+    public void ShowImage(Sprite sprite, float duration)
+    {
+        if (sprite == null)
+            return;
+
+        CacheReferences();
+        if (bubbleRect == null || canvasGroup == null || bubbleImage == null)
+            return;
+
+        SetContentActive(showText: false);
+        bubbleImage.sprite = sprite;
+        bubbleImage.preserveAspect = true;
+
+        Vector2 imageSize = GetImageSize(sprite);
+        float safePaddingX = Mathf.Max(0f, paddingX);
+        float safePaddingY = Mathf.Max(0f, paddingY);
+        float width = Mathf.Max(minWidth, imageSize.x + safePaddingX * 2f);
+        float height = Mathf.Max(minHeight, imageSize.y + safePaddingY * 2f + Mathf.Max(0f, tailReserve));
+        bubbleRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, width);
+        bubbleRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, height);
+        ApplyContentPadding(bubbleImage.rectTransform);
+
+        BeginShow(duration);
     }
 
     public void HideImmediate()
@@ -94,6 +119,12 @@ public class MapWildNpcSpriteBubbleController : MonoBehaviour
             canvasGroup = GetComponent<CanvasGroup>();
         if (bubbleText == null)
             bubbleText = GetComponentInChildren<Text>(true);
+        if (bubbleImage == null)
+        {
+            Transform imageTransform = transform.Find("Image Content");
+            if (imageTransform != null)
+                bubbleImage = imageTransform.GetComponent<Image>();
+        }
     }
 
     private void ApplyTextStyle()
@@ -135,17 +166,52 @@ public class MapWildNpcSpriteBubbleController : MonoBehaviour
 
     private void ApplyTextPadding()
     {
-        var textRect = bubbleText.rectTransform;
+        ApplyContentPadding(bubbleText.rectTransform);
+    }
+
+    private void ApplyContentPadding(RectTransform contentRect)
+    {
+        if (contentRect == null)
+            return;
+
         float safePaddingX = Mathf.Max(0f, paddingX);
         float safePaddingY = Mathf.Max(0f, paddingY);
         float safeTailReserve = Mathf.Max(0f, tailReserve);
-        textRect.offsetMin = new Vector2(safePaddingX, safePaddingY + safeTailReserve);
-        textRect.offsetMax = new Vector2(-safePaddingX, -safePaddingY);
+        contentRect.anchorMin = Vector2.zero;
+        contentRect.anchorMax = Vector2.one;
+        contentRect.offsetMin = new Vector2(safePaddingX, safePaddingY + safeTailReserve);
+        contentRect.offsetMax = new Vector2(-safePaddingX, -safePaddingY);
     }
 
     private Font GetFallbackFont()
     {
         return Resources.GetBuiltinResource<Font>("Arial.ttf");
+    }
+
+    private Vector2 GetImageSize(Sprite sprite)
+    {
+        Vector2 nativeSize = sprite.rect.size;
+        Vector2 safeMaxSize = new Vector2(
+            Mathf.Max(1f, imageMaxSize.x),
+            Mathf.Max(1f, imageMaxSize.y));
+        float scale = Mathf.Min(1f, safeMaxSize.x / nativeSize.x, safeMaxSize.y / nativeSize.y);
+        return nativeSize * scale;
+    }
+
+    private void SetContentActive(bool showText)
+    {
+        if (bubbleText != null)
+            bubbleText.gameObject.SetActive(showText);
+        if (bubbleImage != null)
+            bubbleImage.gameObject.SetActive(!showText);
+    }
+
+    private void BeginShow(float duration)
+    {
+        remainingTime = Mathf.Max(0.2f, duration);
+        totalDuration = remainingTime;
+        bubbleRect.gameObject.SetActive(true);
+        canvasGroup.alpha = 1f;
     }
 
     private string TrimText(string text)
