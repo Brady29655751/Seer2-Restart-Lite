@@ -7,13 +7,19 @@
     </music>
 	<entities>
 		<npc id="21101" resId="Pets/pet/26.png" name="Lv25 安亚" size="36,57" pos="300,120" namePos="0,0">
-			<wander enabled="true" radius="220" speed="34" idle="2,3" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true">
-				<bubble chance="0.3" duration="2.5">
+			<wild>
+				<movement mode="wander" radius="220" speed="34" idle="2,3" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true" />
+				<talk chance="0.3" duration="2.5">
 					<self>头上的水泡又变大了，是不是快进化了？</self>
 					<self>呼吸罩模式启动！可以在水下待更久啦~</self>
 					<self>墨汁喷射！……把自己也染黑了。</self>
-				</bubble>
-			</wander>
+									<self>水泡呼吸罩充能完毕，准备执行深海巡航任务！</self>
+					<self>漩涡谷地的水流今天格外温柔，像在给我做按摩~</self>
+					<self>头上这个水泡其实是我的便携式氧气舱，很先进的！</self>
+					<self>刚才差点被漩涡卷走，还好我按了紧急制动按钮……就是甩了甩尾巴。</self>
+					<self>深海里的星星和天空中的星星，是不是同一批呢？</self>
+</talk>
+			</wild>
 			<battle>
 				<branch id="default">
 					<settings count="6" capture="true"/>
@@ -49,13 +55,19 @@
 			</eventHandler>
 		</npc>
 		<npc id="21202" resId="Pets/pet/26.png" name="Lv26 安亚" size="36,57" pos="620,80" namePos="0,0">
-			<wander enabled="true" radius="220" speed="34" idle="2,3" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true">
-				<bubble chance="0.3" duration="2.5">
+			<wild>
+				<movement mode="wander" radius="220" speed="34" idle="2,3" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true" />
+				<talk chance="0.3" duration="2.5">
 					<self>漩涡谷地的水流好急，不过我已经习惯了~</self>
 					<self>气泡咕噜咕噜的，像在唱歌一样~</self>
 					<self>衰退技能练好了！就是有点累。</self>
-				</bubble>
-			</wander>
+									<self>水泡呼吸罩充能完毕，准备执行深海巡航任务！</self>
+					<self>漩涡谷地的水流今天格外温柔，像在给我做按摩~</self>
+					<self>头上这个水泡其实是我的便携式氧气舱，很先进的！</self>
+					<self>刚才差点被漩涡卷走，还好我按了紧急制动按钮……就是甩了甩尾巴。</self>
+					<self>深海里的星星和天空中的星星，是不是同一批呢？</self>
+</talk>
+			</wild>
 			<battle>
 				<branch id="default">
 					<settings count="6" capture="true"/>

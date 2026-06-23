@@ -40,13 +40,19 @@
 			</callbackHandler>
 		</npc>
 		<npc id="1002602" resId="Pets/pet/10025" name="Lv38 幽浮" size="74,46" pos="600,140" namePos="0,0">
-			<wander enabled="true" radius="220" speed="34" idle="2,3" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true">
-				<bubble chance="0.3" duration="2.5">
+			<wild>
+				<movement mode="wander" radius="220" speed="34" idle="2,3" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true" />
+				<talk chance="0.3" duration="2.5">
 					<self>加速！快快快~</self>
 					<self>身体轻盈到可以飘起来~</self>
 					<self>燕返！飞出去又飞回来~</self>
-				</bubble>
-			</wander>
+									<self>云霄星高空层空气稀薄度：非常适合幽浮生存，像回家一样。</self>
+					<self>我是外星来客，但已经习惯了这里的生活，除了 gravity 有点重。</self>
+					<self>身体轻盈到可以飘起来，有时候忘记自己还在地面上。</self>
+					<self>幽浮模式启动！神出鬼没，来无影去无踪……偶尔撞墙。</self>
+					<self>加速！速度突破音障！……好吧，只是突破了我自己的纪录。</self>
+</talk>
+			</wild>
 			<battle>
 				<branch id="default">
 					<settings count="6" capture="true">
@@ -67,13 +73,19 @@
 			</eventHandler>
 		</npc>
 		<npc id="1002603" resId="Pets/pet/10025" name="Lv39 幽浮" size="74,46" pos="250,90" namePos="0,0">
-			<wander enabled="true" radius="220" speed="34" idle="2,3" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true">
-				<bubble chance="0.3" duration="2.5">
+			<wild>
+				<movement mode="wander" radius="220" speed="34" idle="2,3" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true" />
+				<talk chance="0.3" duration="2.5">
 					<self>幽浮特性！对手眩晕时我减伤~</self>
 					<self>幻光！攻击命中10%让对手迷惑~</self>
 					<self>幽浮：神出鬼没，来去无踪……偶尔撞墙。</self>
-				</bubble>
-			</wander>
+									<self>云霄星高空层空气稀薄度：非常适合幽浮生存，像回家一样。</self>
+					<self>我是外星来客，但已经习惯了这里的生活，除了 gravity 有点重。</self>
+					<self>身体轻盈到可以飘起来，有时候忘记自己还在地面上。</self>
+					<self>幽浮模式启动！神出鬼没，来无影去无踪……偶尔撞墙。</self>
+					<self>加速！速度突破音障！……好吧，只是突破了我自己的纪录。</self>
+</talk>
+			</wild>
 			<battle>
 				<branch id="default">
 					<settings count="6" capture="true">

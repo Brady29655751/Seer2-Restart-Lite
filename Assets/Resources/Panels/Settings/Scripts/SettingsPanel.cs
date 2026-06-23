@@ -7,6 +7,12 @@ public class SettingsPanel : Panel
 {
     [SerializeField] private VolumeSettingController volumeController;
 
+    protected override void Start()
+    {
+        base.Start();
+        volumeController?.Init();
+    }
+
     public void ExportRole() {
         var filter = new FileBrowser.Filter("save", ".xml");
         FileBrowser.SetFilters(false, filter);

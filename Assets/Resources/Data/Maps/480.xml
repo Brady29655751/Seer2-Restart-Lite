@@ -6,13 +6,19 @@
 	</music>
 	<entities>
 		<npc id="36001" resId="Pets/pet/54.png" name="Lv48 牛顿" size="107,77" pos="670,140" namePos="0,0">
-			<wander enabled="true" radius="220" speed="34" idle="2,3" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true">
-				<bubble chance="0.3" duration="2.5">
+			<wild>
+				<movement mode="wander" radius="220" speed="34" idle="2,3" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true" />
+				<talk chance="0.3" duration="2.5">
 					<self>坚韧！我可是很坚韧的牛！</self>
 					<self>地心引力真神奇，它让一切都有了方向。</self>
 					<self>牛顿在这里思考人生……其实是发呆啦~</self>
-				</bubble>
-			</wander>
+									<self>地铁站磁场扫描：今日电流稳定，适合发表科学演讲。</self>
+					<self>地心引力定律验证实验：扔了一个苹果，它确实往下掉了。</self>
+					<self>群牛践踏！……虽然牛群里只有我一个，但气势不能输。</self>
+					<self>小时候以为苹果会飞，长大后才知道是引力在作怪。</self>
+					<self>慢性恢复中……恢复速度堪比星际快递，慢但一定会到。</self>
+</talk>
+			</wild>
 			<battle>
 				<branch id="default">
 					<settings count="6" capture="true"/>
@@ -31,13 +37,19 @@
 			</eventHandler>
 		</npc>
 		<npc id="36002" resId="Pets/pet/54.png" name="Lv49 牛顿" size="107,77" pos="400,50" namePos="0,0">
-			<wander enabled="true" radius="220" speed="34" idle="2,3" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true">
-				<bubble chance="0.3" duration="2.5">
+			<wild>
+				<movement mode="wander" radius="220" speed="34" idle="2,3" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true" />
+				<talk chance="0.3" duration="2.5">
 					<self>我终于明白了！是地心引力！是地心引力让苹果掉下来的！</self>
 					<self>群牛践踏！……只有我一个牛，但气势不能输！</self>
 					<self>地铁站里好暗，不过我自带电光~</self>
-				</bubble>
-			</wander>
+									<self>地铁站磁场扫描：今日电流稳定，适合发表科学演讲。</self>
+					<self>地心引力定律验证实验：扔了一个苹果，它确实往下掉了。</self>
+					<self>群牛践踏！……虽然牛群里只有我一个，但气势不能输。</self>
+					<self>小时候以为苹果会飞，长大后才知道是引力在作怪。</self>
+					<self>慢性恢复中……恢复速度堪比星际快递，慢但一定会到。</self>
+</talk>
+			</wild>
 			<battle>
 				<branch id="default">
 					<settings count="6" capture="true"/>

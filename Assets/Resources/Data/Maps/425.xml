@@ -6,13 +6,19 @@
 	</music>
 	<entities>
 		<npc id="42501" resId="Pets/pet/199.png" name="Lv74 泰姆尔" size="67,77" pos="340,45" namePos="0,0">
-			<wander enabled="true" radius="220" speed="34" idle="2,3" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true">
-				<bubble chance="0.3" duration="2.5">
+			<wild>
+				<movement mode="wander" radius="220" speed="34" idle="2,3" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true" />
+				<talk chance="0.3" duration="2.5">
 					<self>时光倒流！如果能回到过去就好了……</self>
 					<self>时光冲击！把时间的力量打出去~</self>
 					<self>羽冠之岛的大家都靠我报时，压力好大！</self>
-				</bubble>
-			</wander>
+									<self>羽冠之岛标准时间：现在、立刻、马上——精确到普朗克时间。</self>
+					<self>报时压力好大……但误差永远控制在0.0001秒以内！</self>
+					<self>时光倒流实验：如果能回到昨天，我要多吃一颗星星糖。</self>
+					<self>时间加速模式：一秒钟当两秒用，今天可以多睡一会儿~</self>
+					<self>羽冠之岛的日出时间由我播报，这是全岛最光荣的工作！</self>
+</talk>
+			</wild>
 			<battle>
 				<branch id="default">
 					<settings count="6" capture="true"/>
@@ -31,13 +37,19 @@
 			</eventHandler>
 		</npc>
 		<npc id="42502" resId="Pets/pet/199.png" name="Lv71 泰姆尔" size="67,77" pos="620,45" namePos="0,0">
-			<wander enabled="true" radius="220" speed="34" idle="2,3" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true">
-				<bubble chance="0.3" duration="2.5">
+			<wild>
+				<movement mode="wander" radius="220" speed="34" idle="2,3" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true" />
+				<talk chance="0.3" duration="2.5">
 					<self>时光倒流！如果能回到过去就好了……</self>
 					<self>时光冲击！把时间的力量打出去~</self>
 					<self>羽冠之岛的大家都靠我报时，压力好大！</self>
-				</bubble>
-			</wander>
+									<self>羽冠之岛标准时间：现在、立刻、马上——精确到普朗克时间。</self>
+					<self>报时压力好大……但误差永远控制在0.0001秒以内！</self>
+					<self>时光倒流实验：如果能回到昨天，我要多吃一颗星星糖。</self>
+					<self>时间加速模式：一秒钟当两秒用，今天可以多睡一会儿~</self>
+					<self>羽冠之岛的日出时间由我播报，这是全岛最光荣的工作！</self>
+</talk>
+			</wild>
 			<battle>
 				<branch id="default">
 					<settings count="6" capture="true"/>

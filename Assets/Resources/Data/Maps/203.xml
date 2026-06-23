@@ -7,13 +7,19 @@
     </music>
 	<entities>
 		<npc id="20301" resId="Pets/pet/72.png" name="Lv27 乌达" size="46,58" pos="400,310" namePos="0,0">
-			<wander enabled="true" radius="220" speed="34" idle="2,3" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true">
-				<bubble chance="0.3" duration="2.5">
+			<wild>
+				<movement mode="wander" radius="220" speed="34" idle="2,3" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true" />
+				<talk chance="0.3" duration="2.5">
 					<self>潮水技能！让对手溺水几率提升~</self>
 					<self>有时候会吵架，但过一会儿又黏在一起了。</self>
 					<self>脱力！……不是我们脱力了，是让对手脱力！</self>
-				</bubble>
-			</wander>
+									<self>双人合体模式启动！……其实我们是两个人啦。</self>
+					<self>幻彩珊瑚的珊瑚礁像星际迷宫，我们经常在里面捉迷藏。</self>
+					<self>黏在一起的好处：永远不会迷路，因为有两个脑袋在想方向。</self>
+					<self>今天和另一半吵架了，原因是谁先眨眼……最后和好了。</self>
+					<self>乌达的双人舞：一个向左一个向右，结果原地转圈圈~</self>
+</talk>
+			</wild>
 			<battle>
 				<branch id="default">
 					<settings count="6" capture="true"/>
@@ -32,13 +38,19 @@
 			</eventHandler>
 		</npc>
 		<npc id="20302" resId="Pets/pet/72.png" name="Lv28 乌达" size="46,58" pos="520,250" namePos="0,0">
-			<wander enabled="true" radius="220" speed="34" idle="2,3" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true">
-				<bubble chance="0.3" duration="2.5">
+			<wild>
+				<movement mode="wander" radius="220" speed="34" idle="2,3" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true" />
+				<talk chance="0.3" duration="2.5">
 					<self>我们是两个！不是两个头，是两只精灵！</self>
 					<self>黏在一起久了，有时候会忘记谁是哪个。</self>
 					<self>蓄水！水量充足，伤害加成~</self>
-				</bubble>
-			</wander>
+									<self>双人合体模式启动！……其实我们是两个人啦。</self>
+					<self>幻彩珊瑚的珊瑚礁像星际迷宫，我们经常在里面捉迷藏。</self>
+					<self>黏在一起的好处：永远不会迷路，因为有两个脑袋在想方向。</self>
+					<self>今天和另一半吵架了，原因是谁先眨眼……最后和好了。</self>
+					<self>乌达的双人舞：一个向左一个向右，结果原地转圈圈~</self>
+</talk>
+			</wild>
 			<battle>
 				<branch id="default">
 					<settings count="6" capture="true"/>

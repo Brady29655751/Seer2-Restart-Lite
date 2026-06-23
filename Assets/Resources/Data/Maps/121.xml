@@ -1,4 +1,4 @@
-<map name="异蘑世界" category="2" id="121" weather="1">
+﻿<map name="异蘑世界" category="2" id="121" weather="1">
 	<!-- <resource>10012_1</resource> -->
 	<anim pos="-8,-0.7" scale="1.5,1.53"/>
 	<fightMap>100002</fightMap>
@@ -9,13 +9,20 @@
 	</music>
 	<entities>
 		<npc id="12101" resId="12101" name="" size="107,121" pos="560,120" target="false"/>
-		<npc id="12102" resId="Pets/pet/10.png" name="Lv2 法拉" size="45,60" pos="480,50" namePos="0,-5" wander="false" wanderRadius="220" wanderSpeed="34" wanderIdle="2,3" wanderStep="12,26" wanderMoveTick="0.05" wanderSnap="1" wanderBob="1.25" wanderBobSpeed="2" wanderOriginalFacesRight="true" wanderBubbleChance="0.3" wanderBubbleDuration="2.5">
-			<wanderBubble>
-				<self>我在阿卡迪亚住了好久好久……久到自己也数不清了。</self>
-				<self>今天的蘑菇味道还行，就是有点凉。</self>
-				<self>有时候会做梦，梦里有好多好多星星~</self>
-				<self></self>
-			</wanderBubble>
+		<npc id="12102" resId="Pets/pet/10.png" name="Lv2 法拉" size="45,60" pos="480,50" namePos="0,-5">
+			<wild visual="embedded">
+				<movement mode="stationary" />
+				<talk interval="5,10" chance="0.3" duration="4">
+					<self>我在阿卡迪亚住了好久好久……久到自己也数不清了。</self>
+					<self>今天的蘑菇味道还行，就是有点凉。</self>
+					<self>有时候会做梦，梦里有好多好多星星~</self>
+					<self>阿卡迪亚星际历史课：第一节，法拉的起源。……其实我也忘了。</self>
+					<self>入梦模式准备！今晚要去谁的梦里做客呢~</self>
+					<self>魅惑免疫！谁也别想迷惑我，我可是清醒的！</self>
+					<self>两只大耳朵扇风的时候，可以当小型风扇用，很凉快的。</self>
+					<self>阿卡迪亚的星星和别的星球不一样，它们会眨眼睛。</self>
+				</talk>
+			</wild>
 			<battle>
 				<branch id="default">
 					<settings count="6" capture="true">
@@ -58,14 +65,21 @@
 				</button>
 			</eventHandler>
 		</npc>
-		<npc id="12103" resId="Pets/pet/10.png" name="Lv3 法拉" size="45,60" pos="348,87" namePos="0,-5" wander="false" wanderRadius="220" wanderSpeed="34" wanderIdle="2,3" wanderStep="12,26" wanderMoveTick="0.05" wanderSnap="1" wanderBob="1.25" wanderBobSpeed="2" wanderOriginalFacesRight="true" wanderBubbleChance="0.3" wanderBubbleDuration="2.5">
-			<wanderBubble>
-				<self>撞一下！……啊，撞到蘑菇了。</self>
-				<self>听说进化之后会变得很大很大，好期待呀！</self>
-				<self>我是不是很轻？风一吹就跑~</self>
-				<self>嘘……我在听星星的声音。</self>
-				<self></self>
-			</wanderBubble>
+		<npc id="12103" resId="Pets/pet/10.png" name="Lv3 法拉" size="45,60" pos="348,87" namePos="0,-5">
+			<wild visual="embedded">
+				<movement mode="stationary" />
+				<talk interval="5,10" chance="0.3" duration="4">
+					<self>撞一下！……啊，撞到蘑菇了。</self>
+					<self>听说进化之后会变得很大很大，好期待呀！</self>
+					<self>我是不是很轻？风一吹就跑~</self>
+					<self>嘘……我在听星星的声音。</self>
+									<self>阿卡迪亚星际历史课：第一节，法拉的起源。……其实我也忘了。</self>
+					<self>入梦模式准备！今晚要去谁的梦里做客呢~</self>
+					<self>魅惑免疫！谁也别想迷惑我，我可是清醒的！</self>
+					<self>两只大耳朵扇风的时候，可以当小型风扇用，很凉快的。</self>
+					<self>阿卡迪亚的星星和别的星球不一样，它们会眨眼睛。</self>
+</talk>
+			</wild>
 			<battle>
 				<branch id="default">
 					<settings count="6" capture="true">
@@ -108,13 +122,20 @@
 				</button>
 			</eventHandler>
 		</npc>
-		<npc id="12104" resId="Pets/pet/10.png" name="Lv4 法拉" size="45,60" pos="415,190" namePos="0,-5" wander="false" wanderRadius="220" wanderSpeed="34" wanderIdle="2,3" wanderStep="12,26" wanderMoveTick="0.05" wanderSnap="1" wanderBob="1.25" wanderBobSpeed="2" wanderOriginalFacesRight="true" wanderBubbleChance="0.3" wanderBubbleDuration="2.5">
-			<wanderBubble>
-				<self>我可是阿卡迪亚最古老的居民之一哦！……大概。</self>
-				<self>再练练撞击，说不定就能进化成法娜了呢！</self>
-				<self>有时候觉得这片蘑菇林也挺美的，就是有点孤单。</self>
-				<self></self>
-			</wanderBubble>
+		<npc id="12104" resId="Pets/pet/10.png" name="Lv4 法拉" size="45,60" pos="415,190" namePos="0,-5">
+			<wild visual="embedded">
+				<movement mode="stationary" />
+				<talk interval="5,10" chance="0.3" duration="4">
+					<self>我可是阿卡迪亚最古老的居民之一哦！……大概。</self>
+					<self>再练练撞击，说不定就能进化成法娜了呢！</self>
+					<self>有时候觉得这片蘑菇林也挺美的，就是有点孤单。</self>
+									<self>阿卡迪亚星际历史课：第一节，法拉的起源。……其实我也忘了。</self>
+					<self>入梦模式准备！今晚要去谁的梦里做客呢~</self>
+					<self>魅惑免疫！谁也别想迷惑我，我可是清醒的！</self>
+					<self>两只大耳朵扇风的时候，可以当小型风扇用，很凉快的。</self>
+					<self>阿卡迪亚的星星和别的星球不一样，它们会眨眼睛。</self>
+</talk>
+			</wild>
 			<battle>
 				<branch id="default">
 					<settings count="6" capture="true">
@@ -467,3 +488,4 @@
 		<teleport id="2" name="朽木桥" pos="450,220" targetMapId="122"/>
 	</entities>
 </map>
+

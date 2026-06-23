@@ -7,13 +7,19 @@
 	<initialPoint>390,135</initialPoint>
 	<entities>
 		<npc id="26101" resId="Pets/pet/40.png" name="Lv37 赤焰兽" size="78,73" pos="600,140" namePos="0,0">
-			<wander enabled="true" radius="220" speed="34" idle="2,3" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true">
-				<bubble chance="0.3" duration="2.5">
+			<wild>
+				<movement mode="wander" radius="220" speed="34" idle="2,3" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true" />
+				<talk chance="0.3" duration="2.5">
 					<self>我的嘴巴能喝岩浆哦！……别问我什么味道。</self>
 					<self>烈焰撞击！感觉自己像一颗流星~</self>
 					<self>赤链山脉的熔浆最好喝了，今天又喝饱了。</self>
-				</bubble>
-			</wander>
+									<self>熔浆品鉴笔记：今日份岩浆口感醇厚，回味微甜。</self>
+					<self>赤链山脉的地质报告：这里的石头都很热情，和我一样！</self>
+					<self>野猪之速测试：从山这头跑到那头，耗时……我忘了。</self>
+					<self>爆牙技能的副作用：经常咬到自己的舌头，好疼。</self>
+					<self>我的大嘴是星际认证的熔浆吸管，独家专利！</self>
+</talk>
+			</wild>
 			<battle>
 				<branch id="default">
 					<settings count="6" capture="true">
@@ -51,13 +57,19 @@
 			</eventHandler>
 		</npc>
 		<npc id="26102" resId="Pets/pet/40.png" name="Lv36 赤焰兽" size="78,73" pos="495,65" namePos="0,0">
-			<wander enabled="true" radius="220" speed="34" idle="2,3" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true">
-				<bubble chance="0.3" duration="2.5">
+			<wild>
+				<movement mode="wander" radius="220" speed="34" idle="2,3" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true" />
+				<talk chance="0.3" duration="2.5">
 					<self>火球飞弹！嗖——打中了！……打中了谁？</self>
 					<self>有时候会想，如果岩浆喝多了会怎样？</self>
 					<self>赤焰兽出击！小心别被我的热情烫到~</self>
-				</bubble>
-			</wander>
+									<self>熔浆品鉴笔记：今日份岩浆口感醇厚，回味微甜。</self>
+					<self>赤链山脉的地质报告：这里的石头都很热情，和我一样！</self>
+					<self>野猪之速测试：从山这头跑到那头，耗时……我忘了。</self>
+					<self>爆牙技能的副作用：经常咬到自己的舌头，好疼。</self>
+					<self>我的大嘴是星际认证的熔浆吸管，独家专利！</self>
+</talk>
+			</wild>
 			<battle>
 				<branch id="default">
 					<settings count="6" capture="true">

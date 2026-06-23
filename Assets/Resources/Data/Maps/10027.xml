@@ -30,13 +30,19 @@
 			</callbackHandler>
 		</npc>
 		<npc id="1002702" resId="Pets/pet/10249" name="Lv41 浮空苗" size="36,33" pos="350,115" namePos="0,0">
-			<wander enabled="true" radius="220" speed="34" idle="2,3" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true">
-				<bubble chance="0.3" duration="2.5">
+			<wild>
+				<movement mode="wander" radius="220" speed="34" idle="2,3" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true" />
+				<talk chance="0.3" duration="2.5">
 					<self>旋风！呼呼呼~</self>
 					<self>气流！风系攻击还能让对手干裂~</self>
 					<self>对光源很敏感，天一黑我就想睡觉~</self>
-				</bubble>
-			</wander>
+									<self>云霄星最高层光照监测：今日紫外线指数高，建议开启气囊防护。</self>
+					<self>气囊充满空气的感觉，就像穿了一件会飞的羽绒服~</self>
+					<self>对光源敏感的好处：可以当活体光度计，精确测量亮度。</self>
+					<self>季风变换时恢复体力，这是大自然给我的充电站！</self>
+					<self>浮空苗的飞行高度：比云高一点，比星星低一点，刚刚好。</self>
+</talk>
+			</wild>
 			<battle>
 				<branch id="default">
 					<settings count="6" capture="true">
@@ -57,13 +63,19 @@
 			</eventHandler>
 		</npc>
 		<npc id="1002703" resId="Pets/pet/10249" name="Lv42 浮空苗" size="36,33" pos="200,90" namePos="0,0">
-			<wander enabled="true" radius="220" speed="34" idle="2,3" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true">
-				<bubble chance="0.3" duration="2.5">
+			<wild>
+				<movement mode="wander" radius="220" speed="34" idle="2,3" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true" />
+				<talk chance="0.3" duration="2.5">
 					<self>鸣叫！叽~</self>
 					<self>冲顶！顶顶顶~</self>
 					<self>浮空苗飘在云层上方，世界好安静~</self>
-				</bubble>
-			</wander>
+									<self>云霄星最高层光照监测：今日紫外线指数高，建议开启气囊防护。</self>
+					<self>气囊充满空气的感觉，就像穿了一件会飞的羽绒服~</self>
+					<self>对光源敏感的好处：可以当活体光度计，精确测量亮度。</self>
+					<self>季风变换时恢复体力，这是大自然给我的充电站！</self>
+					<self>浮空苗的飞行高度：比云高一点，比星星低一点，刚刚好。</self>
+</talk>
+			</wild>
 			<battle>
 				<branch id="default">
 					<settings count="6" capture="true">

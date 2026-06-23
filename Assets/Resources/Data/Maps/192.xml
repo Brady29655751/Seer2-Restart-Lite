@@ -7,13 +7,19 @@
     </music>
 	<entities>
 		<npc id="19201" resId="Pets/pet/28.png" name="Lv21 蓝喵" size="47,35" pos="500,200" namePos="0,0">
-			<wander enabled="true" radius="220" speed="34" idle="2,3" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true">
-				<bubble chance="0.3" duration="2.5">
+			<wild>
+				<movement mode="wander" radius="220" speed="34" idle="2,3" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true" />
+				<talk chance="0.3" duration="2.5">
 					<self>今天撞了三块石头，两根柱子，一个……NPC。</self>
 					<self>星之力发动！速度嗖嗖的~</self>
 					<self>蓝喵出击！目标：前方那块看起来很硬的东西！</self>
-				</bubble>
-			</wander>
+									<self>残骸通道探险报告：今日撞击目标3个，全部命中！</self>
+					<self>我的脑袋经过星际硬度认证，可以当锤子用~</self>
+					<self>全力冲撞！……啊，撞到了一块比自己还硬的石头。</self>
+					<self>蓝喵的冒险哲学：看到什么撞什么，撞不过就跑！</self>
+					<self>残骸通道里有很多废弃的金属碎片，我收集了一些当枕头。</self>
+</talk>
+			</wild>
 			<battle>
 				<branch id="default">
 					<settings count="6" capture="true"/>
@@ -50,13 +56,19 @@
 			</eventHandler>
 		</npc>
 		<npc id="19202" resId="Pets/pet/28.png" name="Lv22 蓝喵" size="47,35" pos="720,140" namePos="0,0">
-			<wander enabled="true" radius="220" speed="34" idle="2,3" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true">
-				<bubble chance="0.3" duration="2.5">
+			<wild>
+				<movement mode="wander" radius="220" speed="34" idle="2,3" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true" />
+				<talk chance="0.3" duration="2.5">
 					<self>谁说蓝喵胆小？我敢撞任何东西！</self>
 					<self>全力冲撞！……头好疼。</self>
 					<self>残骸通道里好多东西可以撞，开心！</self>
-				</bubble>
-			</wander>
+									<self>残骸通道探险报告：今日撞击目标3个，全部命中！</self>
+					<self>我的脑袋经过星际硬度认证，可以当锤子用~</self>
+					<self>全力冲撞！……啊，撞到了一块比自己还硬的石头。</self>
+					<self>蓝喵的冒险哲学：看到什么撞什么，撞不过就跑！</self>
+					<self>残骸通道里有很多废弃的金属碎片，我收集了一些当枕头。</self>
+</talk>
+			</wild>
 			<battle>
 				<branch id="default">
 					<settings count="6" capture="true"/>

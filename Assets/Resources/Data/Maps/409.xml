@@ -8,13 +8,19 @@
 
 
 		<npc id="40901" resId="Pets/pet/119.png" name="Lv68 豚豚" size="50,57" pos="350,150" namePos="0,0">
-			<wander enabled="true" radius="220" speed="34" idle="2,3" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true">
-				<bubble chance="0.3" duration="2.5">
+			<wild>
+				<movement mode="wander" radius="220" speed="34" idle="2,3" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true" />
+				<talk chance="0.3" duration="2.5">
 					<self>雪之湖泊好冷，但我的毛很厚！</self>
 					<self>寒冰坚韧！受到伤害减少20点~</self>
 					<self>小时候差点被海浪冲走，现在可不会了！</self>
-				</bubble>
-			</wander>
+									<self>雪之湖泊浮冰监测：今日冰块厚度足够，适合日光浴。</self>
+					<self>后劲特性发动！越到后面越有力，就像星际马拉松！</self>
+					<self>小时候差点被海浪冲走，现在我是这片湖最稳的浮冰居民。</self>
+					<self>冰川湖泊的星空特别清晰，因为这里没有光污染~</self>
+					<self>冰锥收藏：今天捡到了一根特别漂亮的，准备当牙签用。</self>
+</talk>
+			</wild>
 			<battle>
 				<branch id="default">
 					<settings count="6" capture="true"/>
@@ -33,13 +39,19 @@
 			</eventHandler>
 		</npc>
 		<npc id="40902" resId="Pets/pet/119.png" name="Lv69 豚豚" size="50,57" pos="600,200" namePos="0,0">
-			<wander enabled="true" radius="220" speed="34" idle="2,3" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true">
-				<bubble chance="0.3" duration="2.5">
+			<wild>
+				<movement mode="wander" radius="220" speed="34" idle="2,3" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true" />
+				<talk chance="0.3" duration="2.5">
 					<self>冰川湖泊虽然险恶，但风景真的很美。</self>
 					<self>坚硬！我可是很硬的！</self>
 					<self>豚豚抓紧浮冰中……浪来了！啊——！</self>
-				</bubble>
-			</wander>
+									<self>雪之湖泊浮冰监测：今日冰块厚度足够，适合日光浴。</self>
+					<self>后劲特性发动！越到后面越有力，就像星际马拉松！</self>
+					<self>小时候差点被海浪冲走，现在我是这片湖最稳的浮冰居民。</self>
+					<self>冰川湖泊的星空特别清晰，因为这里没有光污染~</self>
+					<self>冰锥收藏：今天捡到了一根特别漂亮的，准备当牙签用。</self>
+</talk>
+			</wild>
 			<battle>
 				<branch id="default">
 					<settings count="6" capture="true"/>

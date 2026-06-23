@@ -5,13 +5,19 @@
 	</music>
 	<entities>
 		<npc id="1003701" resId="Pets/pet/10016" name="Lv3 仙人球" size="45,80" pos="460,100" namePos="0,-10">
-			<wander enabled="true" radius="220" speed="34" idle="2,3" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true">
-				<bubble chance="0.3" duration="2.5">
+			<wild>
+				<movement mode="wander" radius="220" speed="34" idle="2,3" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true" />
+				<talk chance="0.3" duration="2.5">
 					<self>仙人球：高傲、带刺、不好惹。</self>
 					<self>刺身撞击！连人带刺一起撞过去~</self>
 					<self>缩头！……我没有头可以缩。那就缩刺吧。</self>
-				</bubble>
-			</wander>
+									<self>克洛斯星沼泽尖刺护理：今日涂抹露水防晒霜，防止刺尖开裂。</self>
+					<self>高傲是我的保护色，其实内心很柔软……字面意义上的。</self>
+					<self>别碰我！我浑身都是刺！……但如果你轻轻摸，其实还好。</self>
+					<self>仙人球的刺是天然的星际天线，可以接收外星信号~</self>
+					<self>克洛斯星沼泽的湿气让我的刺长得更快，像打了生长激素。</self>
+</talk>
+			</wild>
 			<battle>
 				<branch id="default">
 					<settings count="6" capture="true">
@@ -49,13 +55,19 @@
 			</eventHandler>
 		</npc>
 		<npc id="1003702" resId="Pets/pet/10016" name="Lv4 仙人球" size="45,80" pos="600,70" namePos="0,-10">
-			<wander enabled="true" radius="220" speed="34" idle="2,3" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true">
-				<bubble chance="0.3" duration="2.5">
+			<wild>
+				<movement mode="wander" radius="220" speed="34" idle="2,3" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true" />
+				<talk chance="0.3" duration="2.5">
 					<self>别碰我！我浑身都是刺！</self>
 					<self>克洛斯星沼泽虽然湿漉漉的，但我喜欢~</self>
 					<self>针刺！扎扎扎~</self>
-				</bubble>
-			</wander>
+									<self>克洛斯星沼泽尖刺护理：今日涂抹露水防晒霜，防止刺尖开裂。</self>
+					<self>高傲是我的保护色，其实内心很柔软……字面意义上的。</self>
+					<self>别碰我！我浑身都是刺！……但如果你轻轻摸，其实还好。</self>
+					<self>仙人球的刺是天然的星际天线，可以接收外星信号~</self>
+					<self>克洛斯星沼泽的湿气让我的刺长得更快，像打了生长激素。</self>
+</talk>
+			</wild>
 			<battle>
 				<branch id="default">
 					<settings count="6" capture="true">

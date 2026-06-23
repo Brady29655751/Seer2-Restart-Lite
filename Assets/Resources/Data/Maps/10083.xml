@@ -8,6 +8,19 @@
 		<npc id="1008301" resId="Pets/pet/10300" name="Lv 105 谱尼" size="122,160" pos="375,300" namePos="10,-20">
 			<anim id="Pets/anim/10300" pos="0.2,-0.6" scale="1,1" />
 			<description>谱尼真身</description>
+			<wild visual="animation">
+				<movement mode="wander" radius="220" speed="34" idle="2,6" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true" />
+				<talk chance="0.3" duration="4">
+					<self>我的力量……连我自己都无法完全掌控。</self>
+					<self>时间与空间在我面前不过是一层薄纱。</self>
+					<self>也许我只是个传说……但传说也有想散步的时候。</self>
+									<self>勇者之塔时空监测：今日时空扭曲度0.001%，处于安全范围。</self>
+					<self>我的力量可以扭曲时空，但扭曲不了一块好吃的蛋糕。</self>
+					<self>传说之所以是传说，是因为没人能证实……包括我自己。</self>
+					<self>时间与空间在我面前像一层薄纱，轻轻一掀就能看到另一边。</self>
+					<self>有时候我会想，如果我不是传说，只是一只普通的精灵，会不会更快乐？</self>
+</talk>
+			</wild>
 			<battle>
 				<branch id="default">
 					<settings count="6" star="4">

@@ -6,13 +6,19 @@
 	</music>
 	<entities>
 		<npc id="40501" resId="Pets/pet/124.png" name="Lv67 伊露" size="47,49" pos="350,150" namePos="0,0">
-			<wander enabled="true" radius="220" speed="34" idle="2,3" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true">
-				<bubble chance="0.3" duration="2.5">
+			<wild>
+				<movement mode="wander" radius="220" speed="34" idle="2,3" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true" />
+				<talk chance="0.3" duration="2.5">
 					<self>今天幻想自己是一只大鸟，飞过了冰原~</self>
 					<self>幻想特性！有幻想时受伤减少15%！</self>
 					<self>冰沁宫殿好安静，适合想东想西~</self>
-				</bubble>
-			</wander>
+									<self>冰沁宫殿幻想日志：今日幻想内容——在热带星球冲浪。</self>
+					<self>幻想模式开启！有幻想的时候，连寒风都变得温柔了~</self>
+					<self>冰原上的脚印被雪覆盖了，但我的幻想永远不会被覆盖。</self>
+					<self>化冰、化雾、化雪三种形态切换，我是冰原上的变形金刚！</self>
+					<self>有时候幻想自己是一只火系精灵，然后立刻被冷风吹醒了。</self>
+</talk>
+			</wild>
 			<battle>
 				<branch id="default">
 					<settings count="6" capture="true"/>
@@ -31,13 +37,19 @@
 			</eventHandler>
 		</npc>
 		<npc id="40502" resId="Pets/pet/124.png" name="Lv66 伊露" size="47,49" pos="600,200" namePos="0,0">
-			<wander enabled="true" radius="220" speed="34" idle="2,3" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true">
-				<bubble chance="0.3" duration="2.5">
+			<wild>
+				<movement mode="wander" radius="220" speed="34" idle="2,3" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true" />
+				<talk chance="0.3" duration="2.5">
 					<self>坚定！不管发生什么，我都很坚定！</self>
 					<self>踩踏！小心脚下~</self>
 					<self>有时候幻想和现实分不清……不过这样也挺好玩的~</self>
-				</bubble>
-			</wander>
+									<self>冰沁宫殿幻想日志：今日幻想内容——在热带星球冲浪。</self>
+					<self>幻想模式开启！有幻想的时候，连寒风都变得温柔了~</self>
+					<self>冰原上的脚印被雪覆盖了，但我的幻想永远不会被覆盖。</self>
+					<self>化冰、化雾、化雪三种形态切换，我是冰原上的变形金刚！</self>
+					<self>有时候幻想自己是一只火系精灵，然后立刻被冷风吹醒了。</self>
+</talk>
+			</wild>
 			<battle>
 				<branch id="default">
 					<settings count="6" capture="true"/>

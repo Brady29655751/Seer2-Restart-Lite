@@ -31,13 +31,19 @@
 			</eventHandler>
 		</npc>
 		<npc id="52002" resId="Pets/pet/88.png" name="Lv41 皮格" size="53,38" pos="740,140" namePos="0,0">
-			<wander enabled="true" radius="220" speed="34" idle="2,3" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true">
-				<bubble chance="0.3" duration="2.5">
+			<wild>
+				<movement mode="wander" radius="220" speed="34" idle="2,3" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true" />
+				<talk chance="0.3" duration="2.5">
 					<self>念动力！看我的！……只移动了一颗石子。</self>
 					<self>振奋！精神满满！</self>
 					<self>皮格的催眠术可是百发百中哦~大概。</self>
-				</bubble>
-			</wander>
+									<self>乌黑矿坑照明系统自检：皮格牌灯泡，亮度100%。</self>
+					<self>催眠暗示发射！3、2、1……你刚才是不是打了个哈欠？</self>
+					<self>矿坑里的精灵都躲着我，可能是因为我晚上太亮了。</self>
+					<self>念动力练习：今天成功移动了一颗石子，距离0.5厘米！</self>
+					<self>光系精灵在黑暗中就像一颗小太阳，虽然这颗太阳有点困。</self>
+</talk>
+			</wild>
 			<battle>
 				<branch id="default">
 					<settings count="6" capture="true"/>
@@ -56,13 +62,19 @@
 			</eventHandler>
 		</npc>
 		<npc id="52003" resId="Pets/pet/88.png" name="Lv42 皮格" size="53,38" pos="400,85" namePos="0,0">
-			<wander enabled="true" radius="220" speed="34" idle="2,3" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true">
-				<bubble chance="0.3" duration="2.5">
+			<wild>
+				<movement mode="wander" radius="220" speed="34" idle="2,3" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true" />
+				<talk chance="0.3" duration="2.5">
 					<self>光系精灵在黑暗中也能发光，是不是很酷？</self>
 					<self>催眠暗示发动！3、2、1……睡着了吗？</self>
 					<self>矿坑里其他精灵都躲着我，不知道为什么~</self>
-				</bubble>
-			</wander>
+									<self>乌黑矿坑照明系统自检：皮格牌灯泡，亮度100%。</self>
+					<self>催眠暗示发射！3、2、1……你刚才是不是打了个哈欠？</self>
+					<self>矿坑里的精灵都躲着我，可能是因为我晚上太亮了。</self>
+					<self>念动力练习：今天成功移动了一颗石子，距离0.5厘米！</self>
+					<self>光系精灵在黑暗中就像一颗小太阳，虽然这颗太阳有点困。</self>
+</talk>
+			</wild>
 			<battle>
 				<branch id="default">
 					<settings count="6" capture="true"/>

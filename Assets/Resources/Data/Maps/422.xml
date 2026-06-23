@@ -6,13 +6,19 @@
 	</music>
 	<entities>
 		<npc id="42201" resId="Pets/pet/195.png" name="Lv73 克里普特" size="75,77" pos="410,45" namePos="0,0">
-			<wander enabled="true" radius="220" speed="34" idle="2,3" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true">
-				<bubble chance="0.3" duration="2.5">
+			<wild>
+				<movement mode="wander" radius="220" speed="34" idle="2,3" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true" />
+				<talk chance="0.3" duration="2.5">
 					<self>勘探报告：前方安全……大概。</self>
 					<self>弑龙弹！虽然没见过龙，但万一呢？</self>
 					<self>时镜之岛好多镜子，照来照去的。</self>
-				</bubble>
-			</wander>
+									<self>时镜之岛勘探任务：今日发现三面新镜子，反射角度各异。</self>
+					<self>弑龙弹准备就绪！虽然龙已经灭绝了，但仪式感要有。</self>
+					<self>燃烧弹发射！……等等，我是超能系，火是从哪来的？</self>
+					<self>勘探报告撰写中：前方区域安全，风景指数四星半。</self>
+					<self>作为专业勘探精灵，我的座右铭是：危险的地方我先去，安全的地方大家来。</self>
+</talk>
+			</wild>
 			<battle>
 				<branch id="default">
 					<settings count="6" capture="true"/>
@@ -31,13 +37,19 @@
 			</eventHandler>
 		</npc>
 		<npc id="42202" resId="Pets/pet/195.png" name="Lv72 克里普特" size="75,77" pos="600,45" namePos="0,0">
-			<wander enabled="true" radius="220" speed="34" idle="2,3" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true">
-				<bubble chance="0.3" duration="2.5">
+			<wild>
+				<movement mode="wander" radius="220" speed="34" idle="2,3" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true" />
+				<talk chance="0.3" duration="2.5">
 					<self>燃烧弹！虽然是超能系的，但谁规定不能放火？</self>
 					<self>克里普特在此！有危险找我！</self>
 					<self>勘探精灵的日常：去危险的地方，写安全的报告。</self>
-				</bubble>
-			</wander>
+									<self>时镜之岛勘探任务：今日发现三面新镜子，反射角度各异。</self>
+					<self>弑龙弹准备就绪！虽然龙已经灭绝了，但仪式感要有。</self>
+					<self>燃烧弹发射！……等等，我是超能系，火是从哪来的？</self>
+					<self>勘探报告撰写中：前方区域安全，风景指数四星半。</self>
+					<self>作为专业勘探精灵，我的座右铭是：危险的地方我先去，安全的地方大家来。</self>
+</talk>
+			</wild>
 			<battle>
 				<branch id="default">
 					<settings count="6" capture="true"/>

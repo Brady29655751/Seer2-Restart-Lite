@@ -105,6 +105,16 @@ public class NpcController : Module
         npcView.SetRaycastTarget(isRaycastTarget);
     }
 
+    public void SetVisualFacing(float directionX, bool originalFacesRight)
+    {
+        npcView.SetVisualFacing(directionX, originalFacesRight);
+    }
+
+    public void SetVisualOffset(Vector2 offset)
+    {
+        npcView.SetVisualOffset(offset);
+    }
+
     public void SetAction(Dictionary<int, NpcController> npcList, InfoPrompt infoPrompt)
     {
         npcView.SetAction(this, npcList, infoPrompt);

@@ -111,13 +111,19 @@
 			</eventHandler>
 		</npc>
 		<npc id="12403" resId="Pets/pet/204.png" name="Lv16 芙拉" size="37,62" pos="500,180" namePos="0,0">
-			<wander enabled="true" radius="220" speed="34" idle="2,3" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true">
-				<bubble chance="0.3" duration="2.5">
+			<wild>
+				<movement mode="wander" radius="220" speed="34" idle="2,3" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true" />
+				<talk chance="0.3" duration="2.5">
 					<self>我没有根！我是自由的花朵~</self>
 					<self>异蘑谷的蘑菇和我的花瓣很配呢~</self>
 					<self>漂浮着到处旅行，世界好大！</self>
-				</bubble>
-			</wander>
+									<self>异蘑谷漂浮巡航：今日风速适中，适合低空飞行。</self>
+					<self>没有根的好处：想去哪就去哪，像一颗自由的星际蒲公英。</self>
+					<self>亮叶光束充电中……太阳能板已展开，预计三分钟充满。</self>
+					<self>异蘑谷的蘑菇们是我的邻居，虽然它们不会说话，但会摇晃表示欢迎。</self>
+					<self>铁木保护！变硬变硬~现在连陨石雨都不怕了！……大概。</self>
+</talk>
+			</wild>
 			<battle>
 				<branch id="default">
 					<settings count="6" capture="true" />
@@ -136,13 +142,19 @@
 			</eventHandler>
 		</npc>
 		<npc id="12404" resId="Pets/pet/204.png" name="Lv17 芙拉" size="37,62" pos="350,70" namePos="0,0">
-			<wander enabled="true" radius="220" speed="34" idle="2,3" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true">
-				<bubble chance="0.3" duration="2.5">
+			<wild>
+				<movement mode="wander" radius="220" speed="34" idle="2,3" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true" />
+				<talk chance="0.3" duration="2.5">
 					<self>亮叶光束！叶子闪闪发光~</self>
 					<self>铁木保护！变硬变硬~</self>
 					<self>毒枝！对手中毒时我伤害更高~</self>
-				</bubble>
-			</wander>
+									<self>异蘑谷漂浮巡航：今日风速适中，适合低空飞行。</self>
+					<self>没有根的好处：想去哪就去哪，像一颗自由的星际蒲公英。</self>
+					<self>亮叶光束充电中……太阳能板已展开，预计三分钟充满。</self>
+					<self>异蘑谷的蘑菇们是我的邻居，虽然它们不会说话，但会摇晃表示欢迎。</self>
+					<self>铁木保护！变硬变硬~现在连陨石雨都不怕了！……大概。</self>
+</talk>
+			</wild>
 			<battle>
 				<branch id="default">
 					<settings count="6" capture="true" />

@@ -17,6 +17,14 @@ public class NpcView : Module
     [SerializeField] private AnimCamera animCamera;
     [SerializeField] private UniGifImage gif;
 
+    private GameObject currentAnim;
+    private Vector3 visualBaseScale = Vector3.one;
+    private Vector2 visualBasePosition;
+    private Vector3 animationBaseLocalPosition;
+    private Vector3 animationFlipPositionOffset;
+    private bool hasAnimationFlipPositionOffset;
+    private bool currentVisualFlipped;
+
     public object GetIdentifier(string id)
     {
         return id switch
@@ -119,6 +127,8 @@ public class NpcView : Module
     {
         gif.Clear();
         button.SetSprite(sprite);
+        if (currentAnim == null)
+            CaptureVisualBase();
     }
 
     public void SetAnim(string animId)
@@ -129,6 +139,7 @@ public class NpcView : Module
 
     public void SetAnim(GameObject prefab, AnimInfo animInfo = null)
     {
+        currentAnim = null;
         foreach (Transform t in animCamera.transform)
         {
             if (t.name == "Pet Anim")
@@ -138,17 +149,138 @@ public class NpcView : Module
         }
 
         if (prefab == null)
+        {
+            CaptureVisualBase();
             return;
+        }
 
         SetColor(Color.clear);
 
-        var anim = Instantiate(prefab, animCamera.transform);
+        currentAnim = Instantiate(prefab, animCamera.transform);
         if (animInfo == null)
+        {
+            CaptureVisualBase();
+            return;
+        }
+
+        currentAnim.transform.localScale = animInfo.AnimScale / (animCamera.canvas?.scaleFactor ?? 1);
+        currentAnim.transform.localPosition = animInfo.AnimPos / (animCamera.canvas?.scaleFactor ?? 1);
+        currentAnim.transform.localRotation = animInfo.AnimRot;
+        CaptureVisualBase();
+    }
+
+    public void SetVisualFacing(float directionX, bool originalFacesRight)
+    {
+        if (Mathf.Abs(directionX) <= 0.05f)
             return;
 
-        anim.transform.localScale = animInfo.AnimScale / (animCamera.canvas?.scaleFactor ?? 1);
-        anim.transform.localPosition = animInfo.AnimPos / (animCamera.canvas?.scaleFactor ?? 1);
-        anim.transform.localRotation = animInfo.AnimRot;
+        bool faceRight = directionX > 0f;
+        bool shouldFlip = faceRight != originalFacesRight;
+        if (currentVisualFlipped == shouldFlip)
+            return;
+
+        if (currentAnim != null)
+        {
+            SetAnimationFacing(shouldFlip);
+            currentVisualFlipped = shouldFlip;
+            return;
+        }
+
+        Transform facingTarget = button?.rect;
+        if (facingTarget == null)
+            return;
+
+        Vector3 scale = visualBaseScale;
+        if (shouldFlip)
+            scale.x *= -1f;
+        facingTarget.localScale = scale;
+        currentVisualFlipped = shouldFlip;
+    }
+
+    private void SetAnimationFacing(bool shouldFlip)
+    {
+        if (currentAnim == null)
+            return;
+
+        Transform animTransform = currentAnim.transform;
+        animTransform.localPosition = animationBaseLocalPosition;
+        animTransform.localScale = visualBaseScale;
+
+        if (!shouldFlip)
+            return;
+
+        if (!hasAnimationFlipPositionOffset)
+        {
+            bool hasCenterBefore = TryGetAnimationVisualCenter(out Vector3 centerBefore);
+            Vector3 flippedScale = visualBaseScale;
+            flippedScale.x *= -1f;
+            animTransform.localScale = flippedScale;
+
+            if (hasCenterBefore && TryGetAnimationVisualCenter(out Vector3 centerAfter))
+            {
+                Transform parent = animTransform.parent;
+                animationFlipPositionOffset = parent.InverseTransformVector(centerBefore - centerAfter);
+            }
+
+            hasAnimationFlipPositionOffset = true;
+        }
+        else
+        {
+            Vector3 flippedScale = visualBaseScale;
+            flippedScale.x *= -1f;
+            animTransform.localScale = flippedScale;
+        }
+
+        animTransform.localPosition = animationBaseLocalPosition + animationFlipPositionOffset;
+    }
+
+    private bool TryGetAnimationVisualCenter(out Vector3 center)
+    {
+        center = Vector3.zero;
+        if (currentAnim == null)
+            return false;
+
+        Renderer[] renderers = currentAnim.GetComponentsInChildren<Renderer>(true);
+        if (renderers.Length == 0)
+            return false;
+
+        Bounds bounds = renderers[0].bounds;
+        for (int i = 1; i < renderers.Length; i++)
+            bounds.Encapsulate(renderers[i].bounds);
+
+        center = bounds.center;
+        return true;
+    }
+
+    public void SetVisualOffset(Vector2 offset)
+    {
+        RectTransform offsetTarget = GetVisualOffsetTarget();
+        if (offsetTarget != null)
+            offsetTarget.anchoredPosition = visualBasePosition + offset;
+    }
+
+    private void CaptureVisualBase()
+    {
+        Transform facingTarget = currentAnim != null ? currentAnim.transform : button?.rect;
+        if (facingTarget != null)
+            visualBaseScale = facingTarget.localScale;
+
+        if (currentAnim != null)
+            animationBaseLocalPosition = currentAnim.transform.localPosition;
+
+        animationFlipPositionOffset = Vector3.zero;
+        hasAnimationFlipPositionOffset = false;
+
+        RectTransform offsetTarget = GetVisualOffsetTarget();
+        if (offsetTarget != null)
+            visualBasePosition = offsetTarget.anchoredPosition;
+
+        currentVisualFlipped = false;
+    }
+
+    private RectTransform GetVisualOffsetTarget()
+    {
+        return currentAnim != null ? animCamera?.displayRect : button?.rect;
     }
 
     public void SetGif(AnimInfo gifInfo = null)

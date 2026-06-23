@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
+using System;
 using UnityEngine;
 
 public class MapWildNpcWanderController : MonoBehaviour
@@ -9,17 +9,16 @@ public class MapWildNpcWanderController : MonoBehaviour
     private const float StuckDistanceThreshold = 0.5f;
     private const int MaxTargetAttempts = 12;
 
+    [SerializeField] private NpcController npcController;
+
     private MapNavigator navigator;
     private NpcInfo info;
-    private NpcWanderInfo wanderInfo;
+    private NpcWildMovementInfo movementInfo;
     private RectTransform rect;
-    private RectTransform buttonRect;
-    private MapWildNpcSpriteBubbleController bubbleController;
     private readonly Queue<Vector2> pathQueue = new Queue<Vector2>();
     private Vector2 spawnPos;
     private Vector2 targetPos;
     private Vector2 lastStuckCheckPos;
-    private Vector2 buttonBasePos;
     private float idleTimer;
     private float holdTimer;
     private float tickTimer;
@@ -28,41 +27,57 @@ public class MapWildNpcWanderController : MonoBehaviour
     private bool hasTarget;
     private bool bobRaised;
 
-    public static bool CanWander(NpcInfo info)
+    public event Action<float> RestStarted;
+
+    private void Awake()
     {
-        return info != null &&
-               info.wanderInfo != null &&
-               info.wanderInfo.enabled &&
-               info.battleHandler != null &&
-               info.battleHandler.Count > 0 &&
-               info.eventHandler != null &&
-               info.eventHandler.Any(handler =>
-                   handler.type == ButtonEventType.OnPointerClick &&
-                   handler.action == NpcAction.Battle);
+        CacheReferences();
     }
 
-    public void Init(Map map, MapNavigator navigator, NpcInfo info)
+    public void Init(Map map, MapNavigator navigator, NpcInfo info, NpcWildMovementInfo movementInfo)
     {
+        CacheReferences();
         this.navigator = navigator;
         this.info = info;
-        wanderInfo = info?.wanderInfo;
-        rect = transform as RectTransform;
-        buttonRect = transform.Find("View/Button") as RectTransform;
-        bubbleController = gameObject.AddComponent<MapWildNpcSpriteBubbleController>();
-        bubbleController.Init(info);
+        this.movementInfo = movementInfo;
+        enabled = movementInfo?.isWander == true;
+        if (!enabled)
+        {
+            Stop();
+            return;
+        }
+
         spawnPos = rect == null ? Vector2.zero : rect.anchoredPosition;
         targetPos = spawnPos;
         lastStuckCheckPos = spawnPos;
-        buttonBasePos = buttonRect == null ? Vector2.zero : buttonRect.anchoredPosition;
-        initialized = map != null && navigator != null && info != null && wanderInfo != null && rect != null;
+        initialized = map != null && navigator != null && info != null && movementInfo != null && rect != null;
 
         Log($"init map={map?.id} npc={info?.id} spawn={spawnPos} reachable={navigator?.IsTargetReachable(spawnPos)}");
     }
 
+    public void Stop()
+    {
+        initialized = false;
+        hasTarget = false;
+        pathQueue.Clear();
+        holdTimer = 0f;
+        idleTimer = 0f;
+        tickTimer = 0f;
+        stuckTimer = 0f;
+        SetVisualOffset(Vector2.zero);
+    }
+
     private void OnDisable()
     {
-        SetVisualOffset(Vector2.zero);
-        bubbleController?.HideImmediate();
+        Stop();
+    }
+
+    private void CacheReferences()
+    {
+        if (rect == null)
+            rect = transform as RectTransform;
+        if (npcController == null)
+            npcController = GetComponent<NpcController>();
     }
 
     private void Update()
@@ -85,7 +100,7 @@ public class MapWildNpcWanderController : MonoBehaviour
         }
 
         tickTimer += Time.deltaTime;
-        float tick = Mathf.Max(0.01f, wanderInfo.moveTick);
+        float tick = Mathf.Max(0.01f, movementInfo.moveTick);
         if (tickTimer < tick)
             return;
 
@@ -121,8 +136,8 @@ public class MapWildNpcWanderController : MonoBehaviour
 
     private Vector2 GetRandomCandidate()
     {
-        float radius = Mathf.Max(16f, wanderInfo.radius);
-        Vector2 stepRange = wanderInfo.stepRange;
+        float radius = Mathf.Max(16f, movementInfo.radius);
+        Vector2 stepRange = movementInfo.stepRange;
         float minStep = Mathf.Clamp(Mathf.Min(stepRange.x, stepRange.y), 1f, radius);
         float maxStep = Mathf.Clamp(Mathf.Max(stepRange.x, stepRange.y), minStep, radius);
         float distance = UnityEngine.Random.Range(minStep, maxStep);
@@ -137,7 +152,7 @@ public class MapWildNpcWanderController : MonoBehaviour
 
     private IEnumerable<Vector2> GetFallbackCandidates()
     {
-        float radius = Mathf.Max(24f, wanderInfo.radius * 0.6f);
+        float radius = Mathf.Max(24f, movementInfo.radius * 0.6f);
         Vector2 current = GetPosition();
         yield return current + Vector2.right * radius;
         yield return current + Vector2.left * radius;
@@ -148,7 +163,7 @@ public class MapWildNpcWanderController : MonoBehaviour
 
     private bool TrySetPathToNearestReachable(Vector2 candidate, ref int nearestFail, ref int tooCloseFail, ref int pathFail)
     {
-        float searchRadius = Mathf.Max(24f, wanderInfo.radius * 0.5f);
+        float searchRadius = Mathf.Max(24f, movementInfo.radius * 0.5f);
         if (!navigator.TryFindNearestReachablePoint(candidate, searchRadius, out var reachable))
         {
             nearestFail++;
@@ -201,10 +216,10 @@ public class MapWildNpcWanderController : MonoBehaviour
             return;
         }
 
-        if (wanderInfo.flip && Mathf.Abs(delta.x) > 0.05f)
-            SetButtonFacing(delta.x);
+        if (movementInfo.flip && Mathf.Abs(delta.x) > 0.05f)
+            npcController?.SetVisualFacing(delta.x, movementInfo.originalFacesRight);
 
-        float step = Mathf.Max(1f, wanderInfo.speed) * Mathf.Max(0.01f, elapsed);
+        float step = Mathf.Max(1f, movementInfo.speed) * Mathf.Max(0.01f, elapsed);
         Vector2 next = Vector2.MoveTowards(current, targetPos, step);
         SetPosition(SnapToPixel(next));
         ToggleStepBob();
@@ -226,7 +241,7 @@ public class MapWildNpcWanderController : MonoBehaviour
 
         hasTarget = false;
         idleTimer = GetIdleDuration();
-        TryShowIdleBubble(idleTimer);
+        RestStarted?.Invoke(idleTimer);
     }
 
     private Vector2 GetPosition()
@@ -245,23 +260,10 @@ public class MapWildNpcWanderController : MonoBehaviour
         return new Vector2(Mathf.Round(pos.x), Mathf.Round(pos.y));
     }
 
-    private void SetButtonFacing(float directionX)
-    {
-        if (buttonRect == null)
-            return;
-
-        float scaleX = directionX > 0f ? wanderInfo.faceRightScale : -wanderInfo.faceRightScale;
-        float absX = Mathf.Abs(buttonRect.localScale.x);
-        if (absX <= 0.001f)
-            absX = 1f;
-
-        buttonRect.localScale = new Vector3(absX * Mathf.Sign(scaleX), buttonRect.localScale.y, buttonRect.localScale.z);
-    }
-
     private void ToggleStepBob()
     {
-        float bob = Mathf.Max(0f, wanderInfo.bob);
-        if (buttonRect == null || bob <= 0f)
+        float bob = Mathf.Max(0f, movementInfo.bob);
+        if (npcController == null || bob <= 0f)
         {
             SetVisualOffset(Vector2.zero);
             return;
@@ -273,13 +275,12 @@ public class MapWildNpcWanderController : MonoBehaviour
 
     private void SetVisualOffset(Vector2 offset)
     {
-        if (buttonRect != null)
-            buttonRect.anchoredPosition = buttonBasePos + offset;
+        npcController?.SetVisualOffset(offset);
     }
 
     private void CheckStuck()
     {
-        stuckTimer += Mathf.Max(0.01f, wanderInfo.moveTick);
+        stuckTimer += Mathf.Max(0.01f, movementInfo.moveTick);
         if (stuckTimer < StuckCheckInterval)
             return;
 
@@ -299,7 +300,7 @@ public class MapWildNpcWanderController : MonoBehaviour
 
     private float GetRandomIdleTime()
     {
-        Vector2 range = wanderInfo?.idleRange ?? new Vector2(2f, 6f);
+        Vector2 range = movementInfo?.idleRange ?? new Vector2(2f, 6f);
         float min = Mathf.Max(0f, Mathf.Min(range.x, range.y));
         float max = Mathf.Max(min, Mathf.Max(range.x, range.y));
         return UnityEngine.Random.Range(min, max);
@@ -307,8 +308,8 @@ public class MapWildNpcWanderController : MonoBehaviour
 
     private float GetSnapHoldTime()
     {
-        float tick = wanderInfo == null ? 0f : Mathf.Max(0.01f, wanderInfo.moveTick);
-        float snap = wanderInfo == null ? 0f : Mathf.Max(0f, wanderInfo.snap);
+        float tick = movementInfo == null ? 0f : Mathf.Max(0.01f, movementInfo.moveTick);
+        float snap = movementInfo == null ? 0f : Mathf.Max(0f, movementInfo.snap);
         return snap * tick;
     }
 
@@ -317,28 +318,13 @@ public class MapWildNpcWanderController : MonoBehaviour
         return GetRandomIdleTime() + GetSnapHoldTime();
     }
 
-    private void TryShowIdleBubble(float idleDuration)
-    {
-        if (bubbleController == null || idleDuration < 0.2f)
-            return;
-
-        if (wanderInfo?.bubble == null || UnityEngine.Random.value > Mathf.Clamp01(wanderInfo.bubble.chance))
-            return;
-
-        string text = wanderInfo.bubble?.GetRandomSelf();
-        if (string.IsNullOrWhiteSpace(text))
-            return;
-
-        float duration = Mathf.Min(Mathf.Max(0.2f, wanderInfo.bubble.duration), idleDuration);
-        bubbleController.Show(text, duration);
-    }
-
     private void Log(string message)
     {
-        if (wanderInfo == null || !wanderInfo.debug)
+        if (movementInfo == null || !movementInfo.debug)
             return;
 
         Debug.Log($"[WildNpcWander] {message}");
     }
 }
+
 

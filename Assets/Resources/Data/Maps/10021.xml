@@ -81,13 +81,19 @@
 			</eventHandler>
 		</npc>
 		<npc id="1002104" resId="Pets/pet/10198" name="Lv13 小鳍鱼" size="69,60" pos="420,180" namePos="0,0">
-			<wander enabled="true" radius="220" speed="34" idle="2,3" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true">
-				<bubble chance="0.3" duration="2.5">
+			<wild>
+				<movement mode="wander" radius="220" speed="34" idle="2,3" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true" />
+				<talk chance="0.3" duration="2.5">
 					<self>我的鱼鳍很漂亮吧？每天都要打理的！</self>
 					<self>海洋星深水区好深好蓝~</self>
 					<self>成群出现时海水会变成彩虹色哦~</self>
-				</bubble>
-			</wander>
+									<self>海洋星深水区水质报告：透明度99%，适合展示鱼鳍。</self>
+					<self>我的鱼鳍每天都要打理三次，美丽是需要付出代价的！</self>
+					<self>成群游动的时候，海水会变成蔚蓝彩虹，像星际极光。</self>
+					<self>鳞甲护盾启动！深海压力？不存在的，我自带抗压系统。</self>
+					<self>海洋星深水区的珊瑚是我的镜子，每天对着它检查鱼鳍造型。</self>
+</talk>
+			</wild>
 			<battle>
 				<branch id="default">
 					<settings count="6" capture="true">
@@ -108,13 +114,19 @@
 			</eventHandler>
 		</npc>
 		<npc id="1002105" resId="Pets/pet/10198" name="Lv14 小鳍鱼" size="69,60" pos="290,130" namePos="0,0">
-			<wander enabled="true" radius="220" speed="34" idle="2,3" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true">
-				<bubble chance="0.3" duration="2.5">
+			<wild>
+				<movement mode="wander" radius="220" speed="34" idle="2,3" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true" />
+				<talk chance="0.3" duration="2.5">
 					<self>摆尾！甩甩甩~</self>
 					<self>破浪！对手体力高时伤害增加10%！</self>
 					<self>鳞甲！深海减伤~</self>
-				</bubble>
-			</wander>
+									<self>海洋星深水区水质报告：透明度99%，适合展示鱼鳍。</self>
+					<self>我的鱼鳍每天都要打理三次，美丽是需要付出代价的！</self>
+					<self>成群游动的时候，海水会变成蔚蓝彩虹，像星际极光。</self>
+					<self>鳞甲护盾启动！深海压力？不存在的，我自带抗压系统。</self>
+					<self>海洋星深水区的珊瑚是我的镜子，每天对着它检查鱼鳍造型。</self>
+</talk>
+			</wild>
 			<battle>
 				<branch id="default">
 					<settings count="6" capture="true">

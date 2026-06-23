@@ -7,13 +7,19 @@
 	<entities>
 
 		<npc id="40101" resId="Pets/pet/122.png" name="Lv61 冻气龟" size="45,58" pos="350,230" namePos="0,0">
-			<wander enabled="true" radius="220" speed="34" idle="2,3" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true">
-				<bubble chance="0.3" duration="2.5">
+			<wild>
+				<movement mode="wander" radius="220" speed="34" idle="2,3" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true" />
+				<talk chance="0.3" duration="2.5">
 					<self>我不是驼子！这是冰壳！冰壳！</self>
 					<self>冻气附体！暴击率提升~</self>
 					<self>冰之谷好冷，但对我来说刚刚好~</self>
-				</bubble>
-			</wander>
+									<self>冰之谷温度报告：零下20度，对我来说刚刚好，像温泉。</self>
+					<self>冰壳防御系统升级完成！现在可以抵御小型陨石撞击~</self>
+					<self>那些叫我驼子的精灵，现在都在羡慕我的天然护甲呢！</self>
+					<self>冻气附体的时候，感觉自己像一台行走的星际冰箱。</self>
+					<self>冰之谷的雪景每天都不一样，今天的是奶油味儿的。</self>
+</talk>
+			</wild>
 			<battle>
 				<branch id="default">
 					<settings count="6" capture="true"/>
@@ -32,13 +38,19 @@
 			</eventHandler>
 		</npc>
 		<npc id="40102" resId="Pets/pet/122.png" name="Lv60 冻气龟" size="45,58" pos="520,120" namePos="0,0">
-			<wander enabled="true" radius="220" speed="34" idle="2,3" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true">
-				<bubble chance="0.3" duration="2.5">
+			<wild>
+				<movement mode="wander" radius="220" speed="34" idle="2,3" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true" />
+				<talk chance="0.3" duration="2.5">
 					<self>小时候被嘲笑的事……哼，现在谁还敢笑我？</self>
 					<self>重击！龟壳一顶，对手飞出去~</self>
 					<self>冻气龟出击！小心别被冻到~</self>
-				</bubble>
-			</wander>
+									<self>冰之谷温度报告：零下20度，对我来说刚刚好，像温泉。</self>
+					<self>冰壳防御系统升级完成！现在可以抵御小型陨石撞击~</self>
+					<self>那些叫我驼子的精灵，现在都在羡慕我的天然护甲呢！</self>
+					<self>冻气附体的时候，感觉自己像一台行走的星际冰箱。</self>
+					<self>冰之谷的雪景每天都不一样，今天的是奶油味儿的。</self>
+</talk>
+			</wild>
 			<battle>
 				<branch id="default">
 					<settings count="6" capture="true"/>

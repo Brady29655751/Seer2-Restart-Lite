@@ -16,13 +16,19 @@
 			</eventHandler>
 		</npc>
 		<npc id="1003501" resId="Pets/pet/10145" name="Lv48 吉斯" size="24,44" pos="530,360" namePos="0,0">
-			<wander enabled="true" radius="220" speed="34" idle="2,3" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true">
-				<bubble chance="0.3" duration="2.5">
+			<wild>
+				<movement mode="wander" radius="220" speed="34" idle="2,3" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true" />
+				<talk chance="0.3" duration="2.5">
 					<self>折磨！让对手难受~</self>
 					<self>吉斯：严肃、刻板、但很可靠。</self>
 					<self>圣殿守护了这么久，偶尔也会想出去走走~</self>
-				</bubble>
-			</wander>
+									<self>精灵圣殿安全巡查：一切正常，无异常入侵，报告完毕。</self>
+					<self>严肃是我的工作，刻板是我的习惯，但可靠是我的本质。</self>
+					<self>正极减伤模式启动！伤害降低10%，安全感提升100%。</self>
+					<self>赫星人还在的时候，我们会一起喝茶聊天……现在只有我了。</self>
+					<self>守护圣殿这么久，偶尔也会想：外面的世界是不是也有一座圣殿？</self>
+</talk>
+			</wild>
 			<battle>
 				<branch id="default">
 					<settings count="6" capture="true"/>
@@ -41,13 +47,19 @@
 			</eventHandler>
 		</npc>
 		<npc id="1003502" resId="Pets/pet/10145" name="Lv49 吉斯" size="24,44" pos="365,280" namePos="0,0">
-			<wander enabled="true" radius="220" speed="34" idle="2,3" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true">
-				<bubble chance="0.3" duration="2.5">
+			<wild>
+				<movement mode="wander" radius="220" speed="34" idle="2,3" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true" />
+				<talk chance="0.3" duration="2.5">
 					<self>精灵圣殿由我守护，闲人勿进！</self>
 					<self>正极！减伤10%！负极！增伤10%！</self>
 					<self>守护圣殿是我的使命，不能懈怠！</self>
-				</bubble>
-			</wander>
+									<self>精灵圣殿安全巡查：一切正常，无异常入侵，报告完毕。</self>
+					<self>严肃是我的工作，刻板是我的习惯，但可靠是我的本质。</self>
+					<self>正极减伤模式启动！伤害降低10%，安全感提升100%。</self>
+					<self>赫星人还在的时候，我们会一起喝茶聊天……现在只有我了。</self>
+					<self>守护圣殿这么久，偶尔也会想：外面的世界是不是也有一座圣殿？</self>
+</talk>
+			</wild>
 			<battle>
 				<branch id="default">
 					<settings count="6" capture="true"/>

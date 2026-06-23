@@ -1,9 +1,13 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class VolumeSettingModel : Module
 {
+    public const string BubbleStyleWhite = "white";
+    public const string BubbleStyleBlueBlack = "blue-black";
+
     public SettingsData settingsData => Player.instance.gameData.settingsData;
     public float BGMVolume { get; private set; }
     public float UIVolume { get; private set; }
@@ -15,6 +19,7 @@ public class VolumeSettingModel : Module
     public float battleAnimSpeed { get; private set; }
     public bool autoHealAfterBattle { get; private set; }
     public int initMapId { get; private set; }
+    public string wildNpcBubbleStyle { get; private set; }
 
     public void InitVolume()
     {
@@ -27,6 +32,7 @@ public class VolumeSettingModel : Module
         battleAnimSpeed = settingsData.battleAnimSpeed;
         autoHealAfterBattle = settingsData.autoHealAfterBattle;
         initMapId = settingsData.initMapId;
+        wildNpcBubbleStyle = NormalizeWildNpcBubbleStyle(settingsData.wildNpcBubbleStyle);
     }
 
     public void OnConfirmSettings()
@@ -40,6 +46,7 @@ public class VolumeSettingModel : Module
         settingsData.battleAnimSpeed = battleAnimSpeed;
         settingsData.autoHealAfterBattle = autoHealAfterBattle;
         settingsData.initMapId = initMapId;
+        settingsData.wildNpcBubbleStyle = NormalizeWildNpcBubbleStyle(wildNpcBubbleStyle);
         SaveSystem.SaveData();
     }
 
@@ -85,4 +92,25 @@ public class VolumeSettingModel : Module
         initMapId = value;
     }
 
+    public void SetWildNpcBubbleStyle(string value)
+    {
+        wildNpcBubbleStyle = NormalizeWildNpcBubbleStyle(value);
+    }
+
+    public void ToggleWildNpcBubbleStyle()
+    {
+        SetWildNpcBubbleStyle(wildNpcBubbleStyle == BubbleStyleBlueBlack ? BubbleStyleWhite : BubbleStyleBlueBlack);
+    }
+
+    public static string NormalizeWildNpcBubbleStyle(string value)
+    {
+        return string.Equals(value, BubbleStyleBlueBlack, StringComparison.OrdinalIgnoreCase)
+            ? BubbleStyleBlueBlack
+            : BubbleStyleWhite;
+    }
+
+    public static string GetWildNpcBubbleStyleLabel(string value)
+    {
+        return NormalizeWildNpcBubbleStyle(value) == BubbleStyleBlueBlack ? "蓝黑" : "纯白";
+    }
 }

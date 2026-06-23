@@ -6,13 +6,19 @@
 	</music>
 	<entities>
 		<npc id="31001" resId="Pets/pet/114.png" name="Lv51 蹦蹦鼠" size="82,80" pos="675,120" namePos="15,0">
-			<wander enabled="true" radius="220" speed="34" idle="2,3" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true">
-				<bubble chance="0.3" duration="2.5">
+			<wild>
+				<movement mode="wander" radius="220" speed="34" idle="2,3" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true" />
+				<talk chance="0.3" duration="2.5">
 					<self>以守转攻！先防守再反击，聪明的战术~</self>
 					<self>今天跳了1000下，腿有点酸。</self>
 					<self>蹦蹦鼠的尾巴：平衡大师，兼职方向盘。</self>
-				</bubble>
-			</wander>
+									<self>三八跑道线今日弹跳测试：最高纪录，撞到了一片云！</self>
+					<self>尾巴平衡系统运行正常，即使倒着跳也不会摔倒~</self>
+					<self>沙之刀刃！沙子在我脚下变成了最锋利的武器！</self>
+					<self>今天跳了1001下，比昨天多一下，进步肉眼可见！</self>
+					<self>跑道线上的沙子软软的，跳起来像踩在星际蹦床上~</self>
+</talk>
+			</wild>
 			<battle>
 				<branch id="default">
 					<settings count="6" capture="true"/>
@@ -31,13 +37,19 @@
 			</eventHandler>
 		</npc>
 		<npc id="31002" resId="Pets/pet/114.png" name="Lv52 蹦蹦鼠" size="82,80" pos="465,95" namePos="15,0">
-			<wander enabled="true" radius="220" speed="34" idle="2,3" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true">
-				<bubble chance="0.3" duration="2.5">
+			<wild>
+				<movement mode="wander" radius="220" speed="34" idle="2,3" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true" />
+				<talk chance="0.3" duration="2.5">
 					<self>蹦！蹦！蹦！停不下来啦~</self>
 					<self>尾巴是我的秘密武器，平衡感全靠它！</self>
 					<self>沙之刀刃！沙子也能变成武器~</self>
-				</bubble>
-			</wander>
+									<self>三八跑道线今日弹跳测试：最高纪录，撞到了一片云！</self>
+					<self>尾巴平衡系统运行正常，即使倒着跳也不会摔倒~</self>
+					<self>沙之刀刃！沙子在我脚下变成了最锋利的武器！</self>
+					<self>今天跳了1001下，比昨天多一下，进步肉眼可见！</self>
+					<self>跑道线上的沙子软软的，跳起来像踩在星际蹦床上~</self>
+</talk>
+			</wild>
 			<battle>
 				<branch id="default">
 					<settings count="6" capture="true"/>
