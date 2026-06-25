@@ -20,6 +20,7 @@ public class VolumeSettingModel : Module
     public bool autoHealAfterBattle { get; private set; }
     public int initMapId { get; private set; }
     public string wildNpcBubbleStyle { get; private set; }
+    public ComboDamageDisplayMode comboDamageDisplayMode { get; private set; }
 
     public void InitVolume()
     {
@@ -33,6 +34,7 @@ public class VolumeSettingModel : Module
         autoHealAfterBattle = settingsData.autoHealAfterBattle;
         initMapId = settingsData.initMapId;
         wildNpcBubbleStyle = NormalizeWildNpcBubbleStyle(settingsData.wildNpcBubbleStyle);
+        comboDamageDisplayMode = NormalizeComboDamageDisplayMode(settingsData.comboDamageDisplayMode);
     }
 
     public void OnConfirmSettings()
@@ -47,6 +49,7 @@ public class VolumeSettingModel : Module
         settingsData.autoHealAfterBattle = autoHealAfterBattle;
         settingsData.initMapId = initMapId;
         settingsData.wildNpcBubbleStyle = NormalizeWildNpcBubbleStyle(wildNpcBubbleStyle);
+        settingsData.comboDamageDisplayMode = (int)NormalizeComboDamageDisplayMode(comboDamageDisplayMode);
         SaveSystem.SaveData();
     }
 
@@ -97,9 +100,24 @@ public class VolumeSettingModel : Module
         wildNpcBubbleStyle = NormalizeWildNpcBubbleStyle(value);
     }
 
+    public void SetComboDamageDisplayMode(ComboDamageDisplayMode value)
+    {
+        comboDamageDisplayMode = NormalizeComboDamageDisplayMode(value);
+    }
+
     public void ToggleWildNpcBubbleStyle()
     {
         SetWildNpcBubbleStyle(wildNpcBubbleStyle == BubbleStyleBlueBlack ? BubbleStyleWhite : BubbleStyleBlueBlack);
+    }
+
+    public void ToggleComboDamageDisplayMode()
+    {
+        SetComboDamageDisplayMode(comboDamageDisplayMode switch
+        {
+            ComboDamageDisplayMode.TotalOnly => ComboDamageDisplayMode.AllComboOnly,
+            ComboDamageDisplayMode.AllComboOnly => ComboDamageDisplayMode.AllComboAndTotal,
+            _ => ComboDamageDisplayMode.TotalOnly,
+        });
     }
 
     public static string NormalizeWildNpcBubbleStyle(string value)
@@ -112,5 +130,29 @@ public class VolumeSettingModel : Module
     public static string GetWildNpcBubbleStyleLabel(string value)
     {
         return NormalizeWildNpcBubbleStyle(value) == BubbleStyleBlueBlack ? "蓝黑" : "纯白";
+    }
+    public static ComboDamageDisplayMode NormalizeComboDamageDisplayMode(int value)
+    {
+        return NormalizeComboDamageDisplayMode((ComboDamageDisplayMode)value);
+    }
+
+    public static ComboDamageDisplayMode NormalizeComboDamageDisplayMode(ComboDamageDisplayMode value)
+    {
+        return value switch
+        {
+            ComboDamageDisplayMode.TotalOnly => ComboDamageDisplayMode.TotalOnly,
+            ComboDamageDisplayMode.AllComboOnly => ComboDamageDisplayMode.AllComboOnly,
+            _ => ComboDamageDisplayMode.AllComboAndTotal,
+        };
+    }
+
+    public static string GetComboDamageDisplayModeLabel(ComboDamageDisplayMode value)
+    {
+        return NormalizeComboDamageDisplayMode(value) switch
+        {
+            ComboDamageDisplayMode.TotalOnly => "仅显示总伤害",
+            ComboDamageDisplayMode.AllComboOnly => "仅显示所有连击伤害",
+            _ => "显示所有连击伤害和总伤害",
+        };
     }
 }

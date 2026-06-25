@@ -14,6 +14,8 @@ public class VolumeSettingController : Module
         volumeModel.InitVolume();
         volumeView.SetSliderVolume(volumeModel.settingsData);
         volumeView.SetBubbleStyleText(volumeModel.wildNpcBubbleStyle);
+        volumeView.SetComboDamageDisplayModeButton(OnComboDamageDisplayModeChanged);
+        volumeView.SetComboDamageDisplayModeText(volumeModel.comboDamageDisplayMode);
     }
 
     public void OnConfirmSettings()
@@ -83,6 +85,13 @@ public class VolumeSettingController : Module
     {
         volumeModel.ToggleWildNpcBubbleStyle();
         volumeView.SetBubbleStyleText(volumeModel.wildNpcBubbleStyle);
+        volumeModel.OnConfirmSettings();
+    }
+
+    public void OnComboDamageDisplayModeChanged()
+    {
+        volumeModel.ToggleComboDamageDisplayMode();
+        volumeView.SetComboDamageDisplayModeText(volumeModel.comboDamageDisplayMode);
         volumeModel.OnConfirmSettings();
     }
 }

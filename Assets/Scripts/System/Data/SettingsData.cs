@@ -13,6 +13,7 @@ public class SettingsData
     public bool autoHealAfterBattle;
     public int initMapId = -70;
     public int ruleId;
+    public int comboDamageDisplayMode;
     public string wildNpcBubbleStyle;
     [XmlIgnore] public BattleRule rule => (BattleRule)ruleId;
 
@@ -27,6 +28,14 @@ public class SettingsData
         autoHealAfterBattle = false;
         initMapId = -70;
         ruleId = 0;
+        comboDamageDisplayMode = (int)ComboDamageDisplayMode.AllComboAndTotal;
         wildNpcBubbleStyle = "white";
     }
+}
+
+public enum ComboDamageDisplayMode
+{
+    TotalOnly = 0,
+    AllComboOnly = 1,
+    AllComboAndTotal = 2,
 }

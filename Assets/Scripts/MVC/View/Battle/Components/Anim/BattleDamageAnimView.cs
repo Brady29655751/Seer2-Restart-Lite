@@ -73,16 +73,20 @@ public class BattleDamageAnimView : Module
 
     public void SetDamageObject(UnitHudSystem.DamageInfo info, Vector3? criticalEffectWorldPosition = null)
     {
-        if ((info.ComboDamageInfoList != null) && (info.ComboDamageInfoList.Count > 1))
+        bool hasComboDamageInfo = (info.ComboDamageInfoList != null) && (info.ComboDamageInfoList.Count > 1);
+        ComboDamageDisplayMode comboMode =
+            VolumeSettingModel.NormalizeComboDamageDisplayMode(settingsData.comboDamageDisplayMode);
+        if (hasComboDamageInfo && comboMode != ComboDamageDisplayMode.TotalOnly)
         {
-            StartCoroutine(SetComboDamageObject(info, criticalEffectWorldPosition));
+            StartCoroutine(SetComboDamageObject(info, criticalEffectWorldPosition, comboMode));
             return;
         }
 
         SetDamageObject(info, info.Damage, info.IsCritical, true, criticalEffectWorldPosition);
     }
 
-    private IEnumerator SetComboDamageObject(UnitHudSystem.DamageInfo info, Vector3? criticalEffectWorldPosition)
+    private IEnumerator SetComboDamageObject(UnitHudSystem.DamageInfo info, Vector3? criticalEffectWorldPosition,
+        ComboDamageDisplayMode comboMode)
     {
         foreach (var comboDamageInfo in info.ComboDamageInfoList)
         {
@@ -92,13 +96,19 @@ public class BattleDamageAnimView : Module
             yield return new WaitForSeconds(comboDamagePreviewInterval / Mathf.Max(settingsData.battleAnimSpeed, 1f));
         }
 
-        SetDamageObject(info, info.Damage, info.IsCritical, true, criticalEffectWorldPosition);
+        if (comboMode == ComboDamageDisplayMode.AllComboAndTotal)
+        {
+            SetDamageObject(info, info.Damage, info.IsCritical, true, criticalEffectWorldPosition);
+        }
+        else
+        {
+            SetFinalDamageEffects(info, info.Damage, info.IsCritical, criticalEffectWorldPosition, false);
+        }
     }
 
     private GameObject SetDamageObject(UnitHudSystem.DamageInfo info, int damage, bool isCritical, bool isFinalDamage,
         Vector3? criticalEffectWorldPosition)
     {
-        bool type = info.DamageType;
         bool isHit = info.IsHit;
         bool isMe = info.IsMe;
         float elementRelation = info.ElementRelation;
@@ -111,28 +121,9 @@ public class BattleDamageAnimView : Module
         Image img = script.Background;
         IAnimator anim = script.Anim;
         script.Critical.SetActive(isDamage && isCritical);
-        if (isFinalDamage && isDamage && isCritical)
-        {
-            SetCriticalEffectObject(info, criticalEffectWorldPosition);
-        }
-
         if (isFinalDamage)
         {
-            damageAnchoredRect.transform.localScale =
-                (isDamage && (isCritical || damage > 500)) ? new Vector3(1.2f, 1.2f, 1.2f) : Vector3.one;
-        }
-
-        if (isFinalDamage && type && isDamage)
-        {
-            if (isCritical || (settingsData.shakeWhenBigDamage && (damage > 400)))
-            {
-                camara.ScreenShake();
-            }
-
-            if (settingsData.flashWhenBigDamage && (damage > 500))
-            {
-                camara.ScreenFlash();
-            }
+            SetFinalDamageEffects(info, damage, isCritical, criticalEffectWorldPosition, true);
         }
 
         script.Rect.anchoredPosition = damageAnchoredPos;
@@ -148,6 +139,35 @@ public class BattleDamageAnimView : Module
 
         SetDamageAnim(anim, who + absorb);
         return obj;
+    }
+
+    private void SetFinalDamageEffects(UnitHudSystem.DamageInfo info, int damage, bool isCritical,
+        Vector3? criticalEffectWorldPosition, bool scaleDamageAnchor)
+    {
+        bool isDamage = info.IsHit && (damage != 0);
+        if (isDamage && isCritical)
+        {
+            SetCriticalEffectObject(info, criticalEffectWorldPosition);
+        }
+
+        if (scaleDamageAnchor)
+        {
+            damageAnchoredRect.transform.localScale =
+                (isDamage && (isCritical || damage > 500)) ? new Vector3(1.2f, 1.2f, 1.2f) : Vector3.one;
+        }
+
+        if (!info.DamageType || !isDamage)
+            return;
+
+        if (isCritical || (settingsData.shakeWhenBigDamage && (damage > 400)))
+        {
+            camara.ScreenShake();
+        }
+
+        if (settingsData.flashWhenBigDamage && (damage > 500))
+        {
+            camara.ScreenFlash();
+        }
     }
 
     private void SetCriticalEffectObject(UnitHudSystem.DamageInfo info, Vector3? criticalEffectWorldPosition)

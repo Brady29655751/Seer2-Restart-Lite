@@ -11,6 +11,8 @@ public class VolumeSettingView : Module
     [SerializeField] private Toggle flashToggle, shakeToggle, autoHealToggle;
     [SerializeField] private Text battleAnimSpeedText, initMapText;
     [SerializeField] private Text bubbleStyleText;
+    [SerializeField] private Text comboDamageDisplayModeText;
+    [SerializeField] private IButton comboDamageDisplayModeButton;
 
     public void SetSliderVolume(SettingsData settingsData)
     {
@@ -72,6 +74,19 @@ public class VolumeSettingView : Module
     public void SetBubbleStyleText(string value)
     {
         bubbleStyleText?.SetText(VolumeSettingModel.GetWildNpcBubbleStyleLabel(value));
+    }
+
+    public void SetComboDamageDisplayModeButton(Action onClick)
+    {
+        if ((comboDamageDisplayModeButton == null) || (onClick == null))
+            return;
+
+        comboDamageDisplayModeButton.onPointerClickEvent.SetListener(onClick.Invoke);
+    }
+
+    public void SetComboDamageDisplayModeText(ComboDamageDisplayMode value)
+    {
+        comboDamageDisplayModeText?.SetText(VolumeSettingModel.GetComboDamageDisplayModeLabel(value));
     }
 
     public enum VolumeOrder
