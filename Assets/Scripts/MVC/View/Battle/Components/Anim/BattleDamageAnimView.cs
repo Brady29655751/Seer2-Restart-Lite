@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -15,6 +16,8 @@ public class BattleDamageAnimView : Module
     [SerializeField] private float comboDamagePreviewLifetime = 0.28f;
 
     private SettingsData settingsData => Player.instance.gameData.settingsData;
+    private readonly Dictionary<string, Sprite> criticalEffectSpriteDict = new Dictionary<string, Sprite>();
+    private RectTransform criticalEffectLayer;
     public bool isDone = true;
 
     public void SetHealObject(UnitHudSystem.HealInfo info)
@@ -68,30 +71,32 @@ public class BattleDamageAnimView : Module
         Destroy(healRect.gameObject);
     }
 
-    public void SetDamageObject(UnitHudSystem.DamageInfo info)
+    public void SetDamageObject(UnitHudSystem.DamageInfo info, Vector3? criticalEffectWorldPosition = null)
     {
         if ((info.ComboDamageInfoList != null) && (info.ComboDamageInfoList.Count > 1))
         {
-            StartCoroutine(SetComboDamageObject(info));
+            StartCoroutine(SetComboDamageObject(info, criticalEffectWorldPosition));
             return;
         }
 
-        SetDamageObject(info, info.Damage, info.IsCritical, true);
+        SetDamageObject(info, info.Damage, info.IsCritical, true, criticalEffectWorldPosition);
     }
 
-    private IEnumerator SetComboDamageObject(UnitHudSystem.DamageInfo info)
+    private IEnumerator SetComboDamageObject(UnitHudSystem.DamageInfo info, Vector3? criticalEffectWorldPosition)
     {
         foreach (var comboDamageInfo in info.ComboDamageInfoList)
         {
-            var obj = SetDamageObject(info, comboDamageInfo.Damage, comboDamageInfo.IsCritical, false);
+            var obj = SetDamageObject(info, comboDamageInfo.Damage, comboDamageInfo.IsCritical, false,
+                criticalEffectWorldPosition);
             Destroy(obj, comboDamagePreviewLifetime / Mathf.Max(settingsData.battleAnimSpeed, 1f));
             yield return new WaitForSeconds(comboDamagePreviewInterval / Mathf.Max(settingsData.battleAnimSpeed, 1f));
         }
 
-        SetDamageObject(info, info.Damage, info.IsCritical, true);
+        SetDamageObject(info, info.Damage, info.IsCritical, true, criticalEffectWorldPosition);
     }
 
-    private GameObject SetDamageObject(UnitHudSystem.DamageInfo info, int damage, bool isCritical, bool isFinalDamage)
+    private GameObject SetDamageObject(UnitHudSystem.DamageInfo info, int damage, bool isCritical, bool isFinalDamage,
+        Vector3? criticalEffectWorldPosition)
     {
         bool type = info.DamageType;
         bool isHit = info.IsHit;
@@ -106,6 +111,11 @@ public class BattleDamageAnimView : Module
         Image img = script.Background;
         IAnimator anim = script.Anim;
         script.Critical.SetActive(isDamage && isCritical);
+        if (isFinalDamage && isDamage && isCritical)
+        {
+            SetCriticalEffectObject(info, criticalEffectWorldPosition);
+        }
+
         if (isFinalDamage)
         {
             damageAnchoredRect.transform.localScale =
@@ -138,6 +148,123 @@ public class BattleDamageAnimView : Module
 
         SetDamageAnim(anim, who + absorb);
         return obj;
+    }
+
+    private void SetCriticalEffectObject(UnitHudSystem.DamageInfo info, Vector3? criticalEffectWorldPosition)
+    {
+        var config = BattleCriticalEffectConfig.Get(info.AttackPetBaseId);
+        if (config == null)
+            return;
+
+        Sprite sprite = GetCriticalEffectSprite(config.ResourcePath);
+        if (sprite == null)
+            return;
+
+        RectTransform effectParent = GetCriticalEffectParent();
+        GameObject obj = new GameObject("Critical Effect", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
+        RectTransform rect = obj.GetComponent<RectTransform>();
+        Image img = obj.GetComponent<Image>();
+        obj.transform.SetParent(effectParent, false);
+        obj.transform.SetAsFirstSibling();
+
+        SetCriticalEffectRect(rect, sprite, config, criticalEffectWorldPosition);
+        img.sprite = sprite;
+        img.raycastTarget = false;
+        img.preserveAspect = false;
+        StartCoroutine(SetCriticalEffectAnim(rect, img, config, info.IsMe));
+    }
+
+    private RectTransform GetCriticalEffectParent()
+    {
+        if (criticalEffectLayer == null)
+        {
+            criticalEffectLayer = GameObject.Find("UI Layer")?.GetComponent<RectTransform>();
+        }
+
+        return criticalEffectLayer != null ? criticalEffectLayer : damageAnchoredRect;
+    }
+
+    private void SetCriticalEffectRect(RectTransform rect, Sprite sprite, BattleCriticalEffectConfig config,
+        Vector3? criticalEffectWorldPosition)
+    {
+        rect.anchorMin = new Vector2(0.5f, 0.5f);
+        rect.anchorMax = new Vector2(0.5f, 0.5f);
+        rect.sizeDelta = new Vector2(sprite.texture.width, sprite.texture.height) * config.Scale;
+        rect.anchoredPosition = GetCriticalEffectAnchoredPosition(rect.parent as RectTransform,
+            criticalEffectWorldPosition) + config.AnchoredPosition;
+    }
+
+    private Sprite GetCriticalEffectSprite(string path)
+    {
+        if (criticalEffectSpriteDict.TryGetValue(path, out var sprite))
+            return sprite;
+
+        Texture2D texture = Resources.Load<Texture2D>("Sprites/" + path);
+        if (texture == null)
+            return null;
+
+        sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f));
+        criticalEffectSpriteDict.Set(path, sprite);
+        return sprite;
+    }
+
+    private IEnumerator SetCriticalEffectAnim(RectTransform rect, Image img, BattleCriticalEffectConfig config, bool isMe)
+    {
+        float time = 0;
+        float dir = isMe ? 1f : -1f;
+        Vector2 centerPos = rect.anchoredPosition;
+        Vector2 offset = new Vector2(config.MoveOffset.x * dir, config.MoveOffset.y);
+        Vector2 startPos = centerPos - offset;
+        Vector2 endPos = centerPos + offset;
+        Color color = img.color;
+
+        while ((time < config.Duration) && (rect != null) && (img != null))
+        {
+            float t = time / config.Duration;
+            rect.anchoredPosition = Vector2.Lerp(startPos, endPos, EaseOut(t));
+            rect.localScale = new Vector3(dir, 1, 1);
+            color.a = GetCriticalEffectAlpha(t);
+            img.color = color;
+            time += Time.deltaTime;
+            yield return null;
+        }
+
+        if (rect != null)
+        {
+            Destroy(rect.gameObject);
+        }
+    }
+
+    private float EaseOut(float t)
+    {
+        return 1f - Mathf.Pow(1f - Mathf.Clamp01(t), 3);
+    }
+
+    private Vector2 GetCriticalEffectAnchoredPosition(RectTransform parent, Vector3? worldPosition)
+    {
+        if ((parent == null) || (Camera.main == null) || !worldPosition.HasValue)
+            return damageAnchoredPos;
+
+        Canvas canvas = parent.GetComponentInParent<Canvas>();
+        Camera uiCamera = null;
+        if (canvas != null && canvas.renderMode != RenderMode.ScreenSpaceOverlay)
+        {
+            uiCamera = canvas.worldCamera != null ? canvas.worldCamera : Camera.main;
+        }
+
+        Vector2 screenPos = Camera.main.WorldToScreenPoint(worldPosition.Value);
+        return RectTransformUtility.ScreenPointToLocalPointInRectangle(parent, screenPos, uiCamera, out var localPos)
+            ? localPos
+            : damageAnchoredPos;
+    }
+
+    private float GetCriticalEffectAlpha(float t)
+    {
+        t = Mathf.Clamp01(t);
+        if (t < 0.18f)
+            return Mathf.Lerp(0, 1, t / 0.18f);
+
+        return Mathf.Lerp(1, 0, Mathf.InverseLerp(0.62f, 1f, t));
     }
 
     private void SetDamageAnim(IAnimator iAnim, string trigger)

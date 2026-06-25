@@ -31,6 +31,17 @@ public class BattlePetAnimView : BattleBaseView
         Player.instance.gameData.settingsData.battleAnimSpeed;
 
     public bool isDone => isPetDone && isCaptureDone;
+    public Vector3 CriticalEffectWorldPosition
+    {
+        get
+        {
+            if (currentPetAnim != null && currentPetAnim.activeInHierarchy)
+                return currentPetAnim.transform.position;
+
+            return battlePetSprite.transform.position;
+        }
+    }
+
     protected bool isCaptureDone = true;
     protected bool isPetDone = true;
     protected string defalutSuperTrigger = "super";

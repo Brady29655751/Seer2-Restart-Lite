@@ -106,7 +106,7 @@ public class UnitHudSystem
             {
                 this.CurDamageInfo = new DamageInfo(thisUnit.IsMyUnit(), true, damage,
                     thisUnit.skillSystem.isHit, thisUnit.skillSystem.isCritical, thisUnit.skillSystem.elementRelation,
-                    GetComboDamageInfoList(thisUnit.skillSystem, damage));
+                    GetComboDamageInfoList(thisUnit.skillSystem, damage), thisUnit.pet.basic.baseId);
                 this.CurOtherSidePetReactionInfo = new OtherSidePetReactionInfo(this.CurDamageInfo);
             }
 
@@ -207,9 +207,11 @@ public class UnitHudSystem
         public readonly float ElementRelation; //属性相克关系,决定颜色
 
         public readonly List<UnitSkillSystem.ComboDamageInfo> ComboDamageInfoList;
+        public readonly int AttackPetBaseId;
 
         public DamageInfo(bool isMe, bool damageType, int damage, bool isHit = true, bool isCritical = false,
-            float elementRelation = 1f, List<UnitSkillSystem.ComboDamageInfo> comboDamageInfoList = null)
+            float elementRelation = 1f, List<UnitSkillSystem.ComboDamageInfo> comboDamageInfoList = null,
+            int attackPetBaseId = 0)
         {
             this.IsMe = isMe;
             this.DamageType = damageType;
@@ -218,6 +220,7 @@ public class UnitHudSystem
             this.IsHit = isHit;
             this.ElementRelation = elementRelation;
             this.ComboDamageInfoList = comboDamageInfoList;
+            this.AttackPetBaseId = attackPetBaseId;
         }
     };
 

@@ -69,7 +69,7 @@ public class BattleAnimView : BattleBaseView
     {
         if (currentUnit.hudSystem.CurDamageInfo != null)
         {
-            damageView.SetDamageObject(currentUnit.hudSystem.CurDamageInfo);
+            damageView.SetDamageObject(currentUnit.hudSystem.CurDamageInfo, petView.CriticalEffectWorldPosition);
         }
     }
 
