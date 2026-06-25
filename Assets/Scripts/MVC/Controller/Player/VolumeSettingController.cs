@@ -61,6 +61,7 @@ public class VolumeSettingController : Module
         float speed = (volumeModel.battleAnimSpeed == 1) ? 2 : 1;
         volumeModel.SetBattleAnimSpeed(speed);
         volumeView.SetBattleAnimSpeedText(volumeModel.battleAnimSpeed);
+        volumeModel.OnConfirmSettings();
     }
 
     public void OnAutoHealChanged(bool isOn)

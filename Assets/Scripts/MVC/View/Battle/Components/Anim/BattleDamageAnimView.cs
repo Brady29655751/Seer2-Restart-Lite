@@ -11,6 +11,8 @@ public class BattleDamageAnimView : Module
     [SerializeField] private GameObject healAnchoredObject;
     [SerializeField] private GameObject healNumberPrefab;
     [SerializeField] private FightCamaraController camara;
+    [SerializeField] private float comboDamagePreviewInterval = 0.18f;
+    [SerializeField] private float comboDamagePreviewLifetime = 0.28f;
 
     private SettingsData settingsData => Player.instance.gameData.settingsData;
     public bool isDone = true;
@@ -68,38 +70,60 @@ public class BattleDamageAnimView : Module
 
     public void SetDamageObject(UnitHudSystem.DamageInfo info)
     {
-        //拆包开始
+        if ((info.ComboDamageInfoList != null) && (info.ComboDamageInfoList.Count > 1))
+        {
+            StartCoroutine(SetComboDamageObject(info));
+            return;
+        }
+
+        SetDamageObject(info, info.Damage, info.IsCritical, true);
+    }
+
+    private IEnumerator SetComboDamageObject(UnitHudSystem.DamageInfo info)
+    {
+        foreach (var comboDamageInfo in info.ComboDamageInfoList)
+        {
+            var obj = SetDamageObject(info, comboDamageInfo.Damage, comboDamageInfo.IsCritical, false);
+            Destroy(obj, comboDamagePreviewLifetime / Mathf.Max(settingsData.battleAnimSpeed, 1f));
+            yield return new WaitForSeconds(comboDamagePreviewInterval / Mathf.Max(settingsData.battleAnimSpeed, 1f));
+        }
+
+        SetDamageObject(info, info.Damage, info.IsCritical, true);
+    }
+
+    private GameObject SetDamageObject(UnitHudSystem.DamageInfo info, int damage, bool isCritical, bool isFinalDamage)
+    {
         bool type = info.DamageType;
         bool isHit = info.IsHit;
-        bool isCritical = info.IsCritical;
         bool isMe = info.IsMe;
-        int damage = info.Damage;
         float elementRelation = info.ElementRelation;
-        //拆包结束
         bool isDamage = (isHit && (damage != 0));
         string who = isMe ? "me" : "op";
         string absorb = isDamage ? string.Empty : "Absorb";
 
         GameObject obj = Instantiate(damageBackgroundPrefab, damageAnchoredRect);
         BattleDamageBackgroundView script = obj.GetComponent<BattleDamageBackgroundView>();
-        Image img = script.Background; //设置伤害背景颜色
+        Image img = script.Background;
         IAnimator anim = script.Anim;
         script.Critical.SetActive(isDamage && isCritical);
-        damageAnchoredRect.transform.localScale =
-            (isDamage && (isCritical || damage > 500)) ? new Vector3(1.2f, 1.2f, 1.2f) : Vector3.one; //暴击或伤害大的时候放大
-        if (type && isDamage)   // 攻擊傷害才適用屏幕效果
+        if (isFinalDamage)
+        {
+            damageAnchoredRect.transform.localScale =
+                (isDamage && (isCritical || damage > 500)) ? new Vector3(1.2f, 1.2f, 1.2f) : Vector3.one;
+        }
+
+        if (isFinalDamage && type && isDamage)
         {
             if (isCritical || (settingsData.shakeWhenBigDamage && (damage > 400)))
             {
-                camara.ScreenShake(); //暴击或伤害较大时屏幕大幅震动
+                camara.ScreenShake();
             }
 
-            if (settingsData.flashWhenBigDamage && (damage > 500)) //伤害过大时屏幕闪烁
+            if (settingsData.flashWhenBigDamage && (damage > 500))
             {
                 camara.ScreenFlash();
             }
         }
-
 
         script.Rect.anchoredPosition = damageAnchoredPos;
         script.Rect.SetAsLastSibling();
@@ -113,6 +137,7 @@ public class BattleDamageAnimView : Module
         obj.SetActive(true);
 
         SetDamageAnim(anim, who + absorb);
+        return obj;
     }
 
     private void SetDamageAnim(IAnimator iAnim, string trigger)

@@ -105,7 +105,8 @@ public class UnitHudSystem
             if (thisUnit.skillSystem.skill.isAttack || (!thisUnit.skillSystem.isHit) || (damage > 0))
             {
                 this.CurDamageInfo = new DamageInfo(thisUnit.IsMyUnit(), true, damage,
-                    thisUnit.skillSystem.isHit, thisUnit.skillSystem.isCritical, thisUnit.skillSystem.elementRelation);
+                    thisUnit.skillSystem.isHit, thisUnit.skillSystem.isCritical, thisUnit.skillSystem.elementRelation,
+                    GetComboDamageInfoList(thisUnit.skillSystem, damage));
                 this.CurOtherSidePetReactionInfo = new OtherSidePetReactionInfo(this.CurDamageInfo);
             }
 
@@ -124,6 +125,20 @@ public class UnitHudSystem
         this.CurHealInfo = null;
         this.CurOtherSidePetReactionInfo = null;
         this.petAnimType = PetAnimationType.Idle;
+    }
+
+    private List<UnitSkillSystem.ComboDamageInfo> GetComboDamageInfoList(UnitSkillSystem skillSystem, int damage)
+    {
+        if (damage <= 0 || skillSystem.comboDamageInfoList.Count <= 1)
+            return null;
+
+        int comboDamage = 0;
+        foreach (var info in skillSystem.comboDamageInfoList)
+        {
+            comboDamage += info.Damage;
+        }
+
+        return comboDamage == damage ? new List<UnitSkillSystem.ComboDamageInfo>(skillSystem.comboDamageInfoList) : null;
     }
 
     public void OnTurnEnd(Unit thisUnit, Unit rhsUnit)
@@ -191,8 +206,10 @@ public class UnitHudSystem
         public readonly bool IsCritical; //是否暴击
         public readonly float ElementRelation; //属性相克关系,决定颜色
 
+        public readonly List<UnitSkillSystem.ComboDamageInfo> ComboDamageInfoList;
+
         public DamageInfo(bool isMe, bool damageType, int damage, bool isHit = true, bool isCritical = false,
-            float elementRelation = 1f)
+            float elementRelation = 1f, List<UnitSkillSystem.ComboDamageInfo> comboDamageInfoList = null)
         {
             this.IsMe = isMe;
             this.DamageType = damageType;
@@ -200,6 +217,7 @@ public class UnitHudSystem
             this.Damage = damage;
             this.IsHit = isHit;
             this.ElementRelation = elementRelation;
+            this.ComboDamageInfoList = comboDamageInfoList;
         }
     };
 
