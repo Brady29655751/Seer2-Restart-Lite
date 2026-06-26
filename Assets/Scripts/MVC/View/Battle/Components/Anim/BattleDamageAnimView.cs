@@ -90,12 +90,10 @@ public class BattleDamageAnimView : Module
     private IEnumerator SetComboDamageObject(UnitHudSystem.DamageInfo info, Vector3? criticalEffectWorldPosition,
         ComboDamageDisplayMode comboMode)
     {
-        var comboDamageObjects = new List<GameObject>();
         foreach (var comboDamageInfo in info.ComboDamageInfoList)
         {
-            var obj = SetDamageObject(info, comboDamageInfo.Damage, comboDamageInfo.IsCritical, false,
-                criticalEffectWorldPosition, false);
-            comboDamageObjects.Add(obj);
+            SetDamageObject(info, comboDamageInfo.Damage, comboDamageInfo.IsCritical, false,
+                criticalEffectWorldPosition);
             yield return new WaitForSeconds(comboDamagePreviewInterval / Mathf.Max(settingsData.battleAnimSpeed, 1f));
         }
 
@@ -103,13 +101,11 @@ public class BattleDamageAnimView : Module
         {
             var finalDamageObject = SetDamageObject(info, info.Damage, info.IsCritical, true, criticalEffectWorldPosition);
             yield return new WaitWhile(() => finalDamageObject != null);
-            DestroyComboDamageObjects(comboDamageObjects);
         }
         else
         {
             SetFinalDamageEffects(info, info.Damage, info.IsCritical, criticalEffectWorldPosition, false);
             yield return new WaitForSeconds(comboDamagePreviewHoldTime / Mathf.Max(settingsData.battleAnimSpeed, 1f));
-            DestroyComboDamageObjects(comboDamageObjects);
         }
     }
 
@@ -172,17 +168,6 @@ public class BattleDamageAnimView : Module
         float angle = UnityEngine.Random.Range(0f, Mathf.PI * 2f);
         float radius = UnityEngine.Random.Range(offsetMin, offsetMax);
         return new Vector2(Mathf.Cos(angle), Mathf.Sin(angle)) * radius;
-    }
-
-    private void DestroyComboDamageObjects(List<GameObject> comboDamageObjects)
-    {
-        foreach (var obj in comboDamageObjects)
-        {
-            if (obj != null)
-            {
-                Destroy(obj);
-            }
-        }
     }
 
     private void SetFinalDamageEffects(UnitHudSystem.DamageInfo info, int damage, bool isCritical,
