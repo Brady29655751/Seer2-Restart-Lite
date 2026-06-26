@@ -129,16 +129,70 @@ public class UnitHudSystem
 
     private List<UnitSkillSystem.ComboDamageInfo> GetComboDamageInfoList(UnitSkillSystem skillSystem, int damage)
     {
-        if (damage <= 0 || skillSystem.comboDamageInfoList.Count <= 1)
+        int comboCount = skillSystem.comboDamageInfoList.Count;
+        if (comboCount <= 1)
             return null;
 
+        int finalDamage = Mathf.Max(damage, 0);
         int comboDamage = 0;
         foreach (var info in skillSystem.comboDamageInfoList)
         {
-            comboDamage += info.Damage;
+            comboDamage += Mathf.Max(info.Damage, 0);
         }
 
-        return comboDamage == damage ? new List<UnitSkillSystem.ComboDamageInfo>(skillSystem.comboDamageInfoList) : null;
+        if (comboDamage <= 0)
+        {
+            return GetEvenComboDamageInfoList(skillSystem.comboDamageInfoList, finalDamage);
+        }
+
+        var result = new List<UnitSkillSystem.ComboDamageInfo>(comboCount);
+        var remainders = new List<long>(comboCount);
+        int allocatedDamage = 0;
+        for (int i = 0; i < comboCount; i++)
+        {
+            var info = skillSystem.comboDamageInfoList[i];
+            long weightedDamage = (long)Mathf.Max(info.Damage, 0) * finalDamage;
+            int allocatedComboDamage = (int)(weightedDamage / comboDamage);
+            result.Add(new UnitSkillSystem.ComboDamageInfo(allocatedComboDamage, info.IsCritical));
+            remainders.Add(weightedDamage % comboDamage);
+            allocatedDamage += allocatedComboDamage;
+        }
+
+        int remainingDamage = finalDamage - allocatedDamage;
+        while (remainingDamage > 0)
+        {
+            int maxIndex = 0;
+            for (int i = 1; i < remainders.Count; i++)
+            {
+                if (remainders[i] > remainders[maxIndex])
+                {
+                    maxIndex = i;
+                }
+            }
+
+            var info = result[maxIndex];
+            result[maxIndex] = new UnitSkillSystem.ComboDamageInfo(info.Damage + 1, info.IsCritical);
+            remainders[maxIndex] = -1;
+            remainingDamage--;
+        }
+
+        return result;
+    }
+
+    private List<UnitSkillSystem.ComboDamageInfo> GetEvenComboDamageInfoList(
+        List<UnitSkillSystem.ComboDamageInfo> comboDamageInfoList, int finalDamage)
+    {
+        int comboCount = comboDamageInfoList.Count;
+        int baseDamage = finalDamage / comboCount;
+        int remainingDamage = finalDamage % comboCount;
+        var result = new List<UnitSkillSystem.ComboDamageInfo>(comboCount);
+        for (int i = 0; i < comboCount; i++)
+        {
+            int comboDamage = baseDamage + ((i < remainingDamage) ? 1 : 0);
+            result.Add(new UnitSkillSystem.ComboDamageInfo(comboDamage, comboDamageInfoList[i].IsCritical));
+        }
+
+        return result;
     }
 
     public void OnTurnEnd(Unit thisUnit, Unit rhsUnit)

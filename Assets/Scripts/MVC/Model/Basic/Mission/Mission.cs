@@ -91,8 +91,14 @@ public class Mission
 
     public static void DailyLogin() {
         var missionStorage = Player.instance.gameData.missionStorage;
-        for (int i = 0; i < missionStorage.Count; i++) {
-            if (missionStorage[i].info.type != MissionType.Daily)
+        for (int i = missionStorage.Count - 1; i >= 0; i--) {
+            var missionInfo = missionStorage[i].info;
+            if (missionInfo == null) {
+                missionStorage.RemoveAt(i);
+                continue;
+            }
+
+            if (missionInfo.type != MissionType.Daily)
                 continue;
 
             missionStorage[i] = new Mission(missionStorage[i].id);
