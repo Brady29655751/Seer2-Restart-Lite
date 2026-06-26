@@ -13,7 +13,9 @@ public class BattleDamageAnimView : Module
     [SerializeField] private GameObject healNumberPrefab;
     [SerializeField] private FightCamaraController camara;
     [SerializeField] private float comboDamagePreviewInterval = 0.18f;
-    [SerializeField] private float comboDamagePreviewLifetime = 0.28f;
+    [SerializeField] private float comboDamagePreviewMinOffset = 50f;
+    [SerializeField] private float comboDamagePreviewMaxOffset = 70f;
+    [SerializeField] private float comboDamagePreviewHoldTime = 0.35f;
 
     private SettingsData settingsData => Player.instance.gameData.settingsData;
     private readonly Dictionary<string, Sprite> criticalEffectSpriteDict = new Dictionary<string, Sprite>();
@@ -88,26 +90,31 @@ public class BattleDamageAnimView : Module
     private IEnumerator SetComboDamageObject(UnitHudSystem.DamageInfo info, Vector3? criticalEffectWorldPosition,
         ComboDamageDisplayMode comboMode)
     {
+        var comboDamageObjects = new List<GameObject>();
         foreach (var comboDamageInfo in info.ComboDamageInfoList)
         {
             var obj = SetDamageObject(info, comboDamageInfo.Damage, comboDamageInfo.IsCritical, false,
-                criticalEffectWorldPosition);
-            Destroy(obj, comboDamagePreviewLifetime / Mathf.Max(settingsData.battleAnimSpeed, 1f));
+                criticalEffectWorldPosition, false);
+            comboDamageObjects.Add(obj);
             yield return new WaitForSeconds(comboDamagePreviewInterval / Mathf.Max(settingsData.battleAnimSpeed, 1f));
         }
 
         if (comboMode == ComboDamageDisplayMode.AllComboAndTotal)
         {
-            SetDamageObject(info, info.Damage, info.IsCritical, true, criticalEffectWorldPosition);
+            var finalDamageObject = SetDamageObject(info, info.Damage, info.IsCritical, true, criticalEffectWorldPosition);
+            yield return new WaitWhile(() => finalDamageObject != null);
+            DestroyComboDamageObjects(comboDamageObjects);
         }
         else
         {
             SetFinalDamageEffects(info, info.Damage, info.IsCritical, criticalEffectWorldPosition, false);
+            yield return new WaitForSeconds(comboDamagePreviewHoldTime / Mathf.Max(settingsData.battleAnimSpeed, 1f));
+            DestroyComboDamageObjects(comboDamageObjects);
         }
     }
 
     private GameObject SetDamageObject(UnitHudSystem.DamageInfo info, int damage, bool isCritical, bool isFinalDamage,
-        Vector3? criticalEffectWorldPosition)
+        Vector3? criticalEffectWorldPosition, bool destroyOnAnimEnd = true)
     {
         bool isHit = info.IsHit;
         bool isMe = info.IsMe;
@@ -116,7 +123,8 @@ public class BattleDamageAnimView : Module
         string who = isMe ? "me" : "op";
         string absorb = isDamage ? string.Empty : "Absorb";
 
-        GameObject obj = Instantiate(damageBackgroundPrefab, damageAnchoredRect);
+        GameObject holder = CreateDamageObjectHolder(isFinalDamage);
+        GameObject obj = Instantiate(damageBackgroundPrefab, holder.transform);
         BattleDamageBackgroundView script = obj.GetComponent<BattleDamageBackgroundView>();
         Image img = script.Background;
         IAnimator anim = script.Anim;
@@ -127,7 +135,7 @@ public class BattleDamageAnimView : Module
         }
 
         script.Rect.anchoredPosition = damageAnchoredPos;
-        script.Rect.SetAsLastSibling();
+        holder.transform.SetAsLastSibling();
 
         if (isDamage || (!isFinalDamage && isHit))
         {
@@ -137,8 +145,44 @@ public class BattleDamageAnimView : Module
         img.SetDamageBackgroundSprite(elementRelation, isHit, (damage == 0));
         obj.SetActive(true);
 
-        SetDamageAnim(anim, who + absorb);
-        return obj;
+        SetDamageAnim(anim, who + absorb, destroyOnAnimEnd, holder);
+        return holder;
+    }
+
+    private GameObject CreateDamageObjectHolder(bool isFinalDamage)
+    {
+        var holder = new GameObject("Damage Object Holder", typeof(RectTransform));
+        var rect = holder.GetComponent<RectTransform>();
+        rect.SetParent(damageAnchoredRect, false);
+        rect.anchorMin = Vector2.zero;
+        rect.anchorMax = Vector2.zero;
+        rect.pivot = Vector2.zero;
+        rect.sizeDelta = Vector2.zero;
+        rect.anchoredPosition = GetComboDamagePreviewOffset(isFinalDamage);
+        return holder;
+    }
+
+    private Vector2 GetComboDamagePreviewOffset(bool isFinalDamage)
+    {
+        if (isFinalDamage)
+            return Vector2.zero;
+
+        float offsetMin = Mathf.Min(comboDamagePreviewMinOffset, comboDamagePreviewMaxOffset);
+        float offsetMax = Mathf.Max(comboDamagePreviewMinOffset, comboDamagePreviewMaxOffset);
+        float angle = UnityEngine.Random.Range(0f, Mathf.PI * 2f);
+        float radius = UnityEngine.Random.Range(offsetMin, offsetMax);
+        return new Vector2(Mathf.Cos(angle), Mathf.Sin(angle)) * radius;
+    }
+
+    private void DestroyComboDamageObjects(List<GameObject> comboDamageObjects)
+    {
+        foreach (var obj in comboDamageObjects)
+        {
+            if (obj != null)
+            {
+                Destroy(obj);
+            }
+        }
     }
 
     private void SetFinalDamageEffects(UnitHudSystem.DamageInfo info, int damage, bool isCritical,
@@ -287,17 +331,17 @@ public class BattleDamageAnimView : Module
         return Mathf.Lerp(1, 0, Mathf.InverseLerp(0.62f, 1f, t));
     }
 
-    private void SetDamageAnim(IAnimator iAnim, string trigger)
+    private void SetDamageAnim(IAnimator iAnim, string trigger, bool destroyOnAnimEnd = true, GameObject destroyObject = null)
     {
-        Action onAnimEnd = () => { OnDamageAnimEnd(iAnim); };
+        Action onAnimEnd = destroyOnAnimEnd ? () => { OnDamageAnimEnd(iAnim, destroyObject); } : () => { };
         iAnim.onAnimEndEvent.SetListener(onAnimEnd.Invoke);
         iAnim.anim.ResetAllTriggers();
         iAnim.anim.SetTrigger(trigger);
     }
 
-    private void OnDamageAnimEnd(IAnimator anim)
+    private void OnDamageAnimEnd(IAnimator anim, GameObject destroyObject = null)
     {
         damageAnchoredRect.transform.localScale = Vector3.one;
-        Destroy(anim.gameObject);
+        Destroy(destroyObject != null ? destroyObject : anim.gameObject);
     }
 }
