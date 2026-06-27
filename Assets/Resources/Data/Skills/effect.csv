@@ -4558,7 +4558,7 @@ id,timing,priority,target,condition,cond_option,effect,effect_option
 14544,on_after_attack,-1,pet,none,none,set_buff,who=op&id=3631&type=value&op=+&value=me.pet.buff[3631].value
 14545,on_after_attack\on_after_attack\on_after_attack,-1\-1\-1,pet\pet\pet,none\none\none,none\none\none,powerup\heal\remove_buff,def=1&mdf=1\add=me.pet.buff[3631].value*40\id=3631
 14546,on_after_attack\on_after_attack,-1\-1,pet\pet,none\none,none\none,add_buff\remove_buff,who=op&id=3631&value=op.pet.buff[3631].value\id=3631
-14547,on_after_attack\on_after_attack,-1\-1,pet\pet,buff\none,id=3631&type=value&value_op=GTE&value_cmp=3\none,add_buff\remove_buff,id=2053&value=me.pet.buff[3631].value/3\id=3631
+14547,on_after_attack\on_after_attack,-1\-1,pet\pet,buff\buff,id=3631&type=value&value_op=GTE&value_cmp=3\id=3631&type=value&value_op=GTE&value_cmp=3,add_buff\remove_buff,id=2053&value=me.pet.buff[3631].value/3\id=3631
 14548,on_final_dmg_cal,100,skill,none,none,set_damage,op=[MAX]&value=200
 14549,on_after_attack\on_after_attack,-1\-1,pet\pet,unit\unit,type=state.me.order&type[0].cmp=1\type=state.me.order&type[0].cmp=2,add_buff\heal,id=2008&value=30&turn=1&name=先出手减伤\who=op&add=-50&name=后出手固伤
 14550,on_after_attack,-1,pet,none,none,add_buff,who=op&id=1004&value=50&turn=3&name=流血
@@ -4579,7 +4579,7 @@ id,timing,priority,target,condition,cond_option,effect,effect_option
 14565,on_after_attack\on_after_attack,-1\-1,pet\pet,none\none,none\none,add_buff\add_buff,id=13&turn=5\id=69&turn=5
 14566,on_final_dmg_cal,900,skill,none,none,set_damage,op=+&value=op.skill.damage/3
 14567,on_after_attack\on_after_attack,-1\-1,pet\pet,none\buff,none\id=3152,add_buff\add_buff,id=3637&name=不具有伊特领域\id=3638&name=具有伊特领域
-14568,on_before_attack\on_final_dmg_cal,-1\900,skill\skill,buff\buff,id=3633\id=3634,set_skill\set_damage,type=power&op=*&value=2&name=特之威力2倍\op=+&value=op.pet.status.lostHp*0.4
+14568,on_before_attack\on_final_dmg_cal,-1\900,skill\skill,buff\buff,id=3633\id=3634,set_skill\set_damage,type=power&op=*&value=2&name=特之威力2倍\op=+&value=op.pet.status.lostHp*0.4[MIN]400
 14569,on_after_attack,-1,pet,none,none,powerup,atk=1&mdf=1
 14570,on_before_attack\on_after_attack,-1\-1,skill\pet,none\none,none\none,set_skill\heal,type=combo&op=+&value=1\add=-75
 14571,on_after_attack\on_after_attack\on_after_attack,-1\-1\-1,pet\pet\pet,none\none\none,none\none\none,heal\powerup\add_buff,add=-50\mat=2&def=1&mdf=1&hit=1\id=3639&value=1
@@ -4647,6 +4647,15 @@ id,timing,priority,target,condition,cond_option,effect,effect_option
 14633,on_after_attack,-1,pet,none,is_hit=false,add_buff,id=27&turn=2
 14634,on_after_attack\on_after_attack,-1\-1,pet\pet,none\buff,none\id=unhealthy,copy_buff\rage,source=me&target=me&reverse=true&type=powerup.neg\who=op&add=-20
 14635,on_after_attack\on_after_attack,-1\-1,pet\pet,none\none,none\none,powerup\powerup,mdf=1\spd=-1
+14636,on_after_attack,-1,pet,none,none,add_buff,id=3438&value=5
+14637,on_after_attack\on_after_attack,-1\-1,pet\pet,none\none,none\none,powerup\remove_buff,mat=me.pet.buff[3438].value+1/2&spd=me.pet.buff[3438].value/2\id=3438
+14638,on_decide_pri,-1,skill,none,none,set_skill,type=priority&op=+&value=me.pet.buff[3438].value+1/2
+14639,on_after_attack,-1,pet,none,none,remove_buff,type=powerup.neg
+14640,on_before_attack,-1,skill,unit,type=state.settings.parallelCount&type[0].cmp=2,set_skill,type=critical&op=+&value=1000
+14641,on_before_attack,-1,skill,none,none,set_skill,type=power&op=+&value=me.pet.buff[3438].value*10
+14642,on_before_attack,-1,skill,none,none,set_skill,type=combo&op=+&value=me.pet.buff[3438].value
+14643,on_after_attack,-1,pet,unit,type=state.me.order&type[0].cmp=1,add_buff,id=40
+14644,on_after_attack,-1,pet,none,none,add_buff,id=14&turn=5
 1000,none\none,-1\-1,skill\pet,buff\buff,random_cmp=me.pet.buff[－2006].option[prob]&id=-2006&type=value&value_op=>&value_cmp=0\id=-2006&type=value&value_op=>&value_cmp=0,set_damage\set_buff,type=skill_fix&op=+&value=me.pet.buff[－2006].option[value]\on_success=1000&id=-2006&type=value&op=-&value=1
 1001,on_after_attack,-1,pet,none,none,add_buff,id=2010&value=200&turn=2
 1002,on_before_attack,-1,skill,none,none,set_skill,who=op&type=effect&op=SET&value=0

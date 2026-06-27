@@ -1,9 +1,89 @@
 <map name="教官室" category="101" id="10009" weather="0">
-	<initialPoint>640,230</initialPoint>
+	<initialPoint>380,85</initialPoint>
 	<music category="101">
 		<bgm>BGM_2</bgm>
 	</music>
 	<entities>
+		<!--
+		<npc id="1000901" resId="8501" name="试炼之塔" size="125,125" pos="560,105" namePos="0,-10" color="0,0,0,0">
+			<description>试炼之塔</description>
+			<dialog>
+				<branch id="default" name="试炼之塔" icon="7001" size="64,100" pos="0,55">
+					<content><![CDATA[这里是试炼之塔，来迎接各种挑战吧！]]></content>
+					<functionHandler>
+						<func type="click">
+							<description><![CDATA[试炼之塔]]></description>
+							<action>openPanel</action>
+							<param>Door</param>
+							<param>door=new_basic</param>
+							<param>mode=easy</param>
+						</func>
+						<func type="click">
+							<description><![CDATA[荣誉兑换]]></description>
+							<action>openPanel</action>
+							<param>ItemShop</param>
+							<param>type=honor</param>
+							<param>currency=3/0</param>
+						</func>
+					</functionHandler>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[好的]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+					</replyHandler>
+				</branch>
+			</dialog>
+			<battle>
+				<branch id="30">
+					<settings count="1">
+						<mode>1</mode>
+					</settings>
+					<enemy>
+						<pet id="10300" level="100">
+							<loopSkill>10753,10754,10749,10761,10756</loopSkill>
+							<superSkill>10759</superSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setItem</action>
+							<param>add</param>
+							<param>2,50</param>
+							<condition>activity[door].new_basic[easy][max]=[int]29[default]0</condition>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=50 星钻已经放入背包</param>
+							<param>option_num=1</param>
+							<param>item_icon=item[2]</param>
+							<condition>activity[door].new_basic[easy][max]=[int]29[default]0</condition>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>door</param>
+							<param>new_basic[easy][floor]=31</param>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>door</param>
+							<param>new_basic[easy][max]=30</param>
+							<condition>activity[door].new_basic[easy][max]=[int]29[default]0</condition>
+						</button>
+					</winHandler>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>openDialog</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		-->
 		<teleport id="1" name="传送室" pos="750,250" targetMapId="10001"/>
 	</entities>		
 </map>

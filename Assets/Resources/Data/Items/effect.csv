@@ -138,7 +138,11 @@ id,timing,priority,target,condition,cond_option,effect,effect_option
 13002,resident,-1,pet,pet,type=kizuna/element&kizuna_op=<&kizuna_cmp=maxKizuna&element_cmp=1,set_pet,max_use=maxKizuna-kizuna/5&type=record[kizuna]&op=+&value=5
 13003,resident,-1,pet,pet,type=kizuna/kizuna.tag[twin]&kizuna_op=<&kizuna_cmp=maxKizuna&kizuna.tag[twin]_cmp=1,set_pet,max_use=maxKizuna-kizuna/5&type=record[kizuna]&op=+&value=5
 14001,none,-1,none,none,none,none,none
+15001,none,-1,none,none,none,none,max_use=0
 15002,none,-1,none,none,none,none,max_use=0
+15005,none,-1,none,none,none,none,max_use=0
+15017,none,-1,none,none,none,none,max_use=0
+15036,none,-1,none,none,none,none,max_use=0
 20001,resident,-1,pet,pet,type=buff[400003]&buff[400003]_cmp=0,set_pet,type=buff&op=+&value=400003
 20002,resident\resident\on_remove_buff,-1\-1\-1,pet\pet\pet,pet\pet\none,type=buff[400004]&buff[400004]_cmp=0\type=buff[400004]&buff[400004]_cmp=0\none,set_pet\set_pet\set_pet,type=buff&op=+&value=400004\type=record[evolveBan]&op=SET&value=1\type=record[evolveBan]&op=SET&value=0
 21000,resident,-1,pet,pet,type=buff[410000]/buff[group:star_soul]&buff[410000]_cmp=0&buff[group:star_soul]_op=<&buff[group:star_soul]_cmp=5,set_pet,type=buff&op=+&value=410000
@@ -208,6 +212,7 @@ id,timing,priority,target,condition,cond_option,effect,effect_option
 25001,none\on_battle_start,-1\-1,none\pet,none\none,none\none,none\add_buff,size=45/33\key=unit&id=441001
 25002,none\on_battle_start,-1\-1,none\pet,none\none,none\none,none\add_buff,size=47/53\key=unit&id=441002
 25003,none\on_battle_start,-1\-1,none\pet,none\none,none\none,none\add_buff,size=48/37\key=unit&id=441003
+25004,on_turn_end,-1,item,pet,type=dead&dead_cmp=1,set_player,param_count=2&action=setItem&param[0]=add&param[1]=1101，1
 30001,none,-1,none,none,none,none,none
 37002,none,-1,none,none,none,none,none
 110050,resident,-1,pet,pet,type=skill[10050]&skill[10050]_cmp=0,set_pet,type=skill&op=+&value=10050
@@ -227,8 +232,13 @@ id,timing,priority,target,condition,cond_option,effect,effect_option
 201003,resident,-1,state,none,none,none,recipe=1008[4]/22033[3]/22010[2]/22020[3]&result=12003[90]/13003[5]/11003[5]
 202001,resident,-1,state,none,none,none,recipe=611001[1]/611024[1]
 202002,resident,-1,state,none,none,none,recipe=611004[1]/611049[1]
+203001,resident,-1,state,none,none,none,recipe=611008[2]
 204001,resident,-1,state,none,none,none,recipe=620003[1]/620004[3]/22025[1]
+205001,resident,-1,state,none,none,none,recipe=611009[1]/425004[1]
 205002,resident,-1,state,none,none,none,recipe=610004[5]/611035[2]/425001[2]/425004[5]
+205005,resident,-1,state,none,none,none,recipe=410001[3]/424001[1]/425003[5]
+205017,resident,-1,state,none,none,none,recipe=410002[2]/424001[1]
+205036,resident,-1,state,none,none,none,recipe=410002[1]/424001[2]/611001[2]/611013[1]
 210001,resident,-1,state,none,none,none,recipe=2[2025]
 210002,resident,-1,state,none,none,none,recipe=400010[1]/400011[1]/400012[1]/400013[1]
 210003,resident,-1,state,none,none,none,recipe=400010[1]/400011[1]/400012[1]/400013[1]
@@ -332,7 +342,7 @@ id,timing,priority,target,condition,cond_option,effect,effect_option
 334732,resident,-1,pet,pet,type=uid/level&uid_cmp=12197&level_op=GTE&level_cmp=100,set_pet,type=id&op=SET&value=14732
 334734,resident,-1,pet,pet,type=uid/level&uid_cmp=110018&level_op=GTE&level_cmp=100,set_pet,type=id&op=SET&value=14734
 334760,resident,-1,pet,pet,type=uid/level&uid_cmp=456&level_op=GTE&level_cmp=100,set_pet,type=id&op=SET&value=12939
-334761,resident\resident,-1\-1,pet\none,pet\none,random_cmp=5&type=uid&uid_cmp=14727\none,set_pet\none,type=id&op=SET&value=14761\none
+334761,resident\resident\resident,-1\-1\-1,pet\none\pet,pet\none\pet,random_cmp=5&type=uid&uid_cmp=14727\none\type=uid/kizuna&uid_cmp=14761&kizuna_op=<&kizuna_cmp=maxKizuna,set_pet\none\set_pet,type=id&op=SET&value=14761\none\type=record[kizuna]&op=+&value=5
 334780,resident,-1,pet,pet,type=uid/level&uid_cmp=12698&level_op=GTE&level_cmp=100,set_pet,type=id&op=SET&value=14780
 340940,resident,-1,pet,pet,type=uid/level&uid_cmp=456&level_op=GTE&level_cmp=100,set_pet,type=id&op=SET&value=939
 381757,resident,-1,pet,pet,type=baseId[456]&baseId[456]_cmp=1,set_pet,type=skinId&op=+&value=11757
@@ -368,6 +378,7 @@ id,timing,priority,target,condition,cond_option,effect,effect_option
 411001,none,-1,none,none,none,none,none
 420001,none,-1,none,none,none,none,none
 420002,none,-1,none,none,none,none,none
+424001,none,-1,none,none,none,none,none
 425001,none,-1,none,none,none,none,none
 425002,none,-1,none,none,none,none,none
 425003,none,-1,none,none,none,none,none
@@ -463,6 +474,9 @@ id,timing,priority,target,condition,cond_option,effect,effect_option
 600008,none,-1,none,none,none,none,none
 601001,none,-1,none,none,none,none,icon=1001/2001/3001/4001/11001&offset=0/-12
 601004,none,-1,none,none,none,none,icon=1004/2004/3004/4004/11004&offset=0/-12
+601008,none,-1,none,none,none,none,icon=1008/2008/3008/4008/11008&offset=0/-12
+601009,none,-1,none,none,none,none,icon=1009/2009/3009/4009/11009&offset=0/-12
+601013,none,-1,none,none,none,none,icon=1013/2013/3013/4013/11013&offset=0/-12
 601024,none,-1,none,none,none,none,icon=1024/2024/3024/4024/11024
 601035,none,-1,none,none,none,none,icon=1035/2035/3035/4035/11035[5035:1][6035:2]
 601049,none,-1,none,none,none,none,none
@@ -474,9 +488,12 @@ id,timing,priority,target,condition,cond_option,effect,effect_option
 610005,resident,-1,state,none,random_cmp=5,none,plant=620002
 610006,resident\resident,-1\-1,state\state,none\none,random_type=unit&random_cmp=5\random_cmp=5,set_player\set_player,param_count=2&action=setItem&param[0]=add&param[1]=22009，1\param_count=5&action=openHintbox&param[0]=type＝Item&param[1]=title＝提示&param[2]=content＝你的笑笑花额外产出了1枚【藤蔓花子】！&param[3]=item_icon＝buff[420009]&param[4]=option_num＝1
 610007,resident,-1,state,none,random_cmp=5,none,plant=620003
-611008,resident\resident,-1\-1,state\state,none\none,none\none,set_player\set_player,param_count=2&action=setItem&param[0]=add&param[1]=620004，3\param_count=5&action=openHintbox&param[0]=type＝Item&param[1]=title＝提示&param[2]=content＝你额外获得了竹子的3片【竹叶】！&param[3]=item_icon＝item[620004]&param[4]=option_num＝1
+610008,resident\resident,-1\-1,state\state,none\none,none\none,set_player\set_player,param_count=2&action=setItem&param[0]=add&param[1]=620004，3\param_count=5&action=openHintbox&param[0]=type＝Item&param[1]=title＝提示&param[2]=content＝你额外获得了竹子的3片【竹叶】！&param[3]=item_icon＝item[620004]&param[4]=option_num＝1
 611001,none,-1,none,none,none,none,none
 611004,none,-1,none,none,none,none,none
+611008,none,-1,none,none,none,none,none
+611009,none,-1,none,none,none,none,none
+611013,none,-1,none,none,none,none,none
 611024,none,-1,none,none,none,none,none
 611035,resident\resident,-1\-1,state\state,unit\unit,type=plant.butterfly&type[0].cmp=1\type=plant.butterfly&type[0].cmp=2,none\none,plant=621002\plant=621003
 611049,resident\resident,-1\-1,state\state,none\none,none\none,set_player\set_player,param_count=2&action=setItem&param[0]=add&param[1]=621001，5\param_count=5&action=openHintbox&param[0]=type＝Item&param[1]=title＝提示&param[2]=content＝你额外获得了桑树的5片【桑叶】！&param[3]=item_icon＝item[621001]&param[4]=option_num＝1

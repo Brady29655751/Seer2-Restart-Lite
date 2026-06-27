@@ -6,7 +6,11 @@ public class DoorPanel : Panel
 {
     [SerializeField] private DoorController doorController;
 
-    public static string[] doorNames => new string[] { "challenge", "brave", "competition", "hero", "twin", "king", "lonely" };
+    public static string[] doorNames => new string[] 
+    { 
+        "challenge",    "brave",    "competition",  "hero", "twin", "king", "lonely",
+        "new_basic",
+    };
 
     public override void SetPanelIdentifier(string id, string param) {
         switch (id) {
