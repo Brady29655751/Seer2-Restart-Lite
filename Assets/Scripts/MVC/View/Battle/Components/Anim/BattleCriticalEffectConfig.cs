@@ -5,9 +5,11 @@ using UnityEngine;
 public class BattleCriticalEffectConfig
 {
     private const string ConfigPath = "Data/Battle/critical_effect.csv";
-    private const int ColumnCount = 12;
+    private const int ColumnCount = 11;
     private const string CriticalEventType = "critical";
     private const string PosterEffectType = "poster";
+    private const string ModAssetPrefix = "mod:";
+    private const string PosterAssetPath = "Battle/CriticalEffects/";
     private static Dictionary<string, BattleCriticalEffectConfig> configDict;
 
     public readonly string OwnerType;
@@ -16,6 +18,7 @@ public class BattleCriticalEffectConfig
     public readonly string EffectType;
     public readonly string AssetKey;
     public readonly bool IsMod;
+    public readonly string ResolvedAssetKey;
     public readonly Vector2 AnchoredPosition;
     public readonly float Scale;
     public readonly float Duration;
@@ -27,12 +30,12 @@ public class BattleCriticalEffectConfig
         OwnerId = ParseInt(data[index + 1]);
         EventType = NormalizeKey(data[index + 2]);
         EffectType = NormalizeKey(data[index + 3]);
-        AssetKey = data[index + 4];
-        IsMod = ParseBool(data[index + 5]);
-        AnchoredPosition = new Vector2(ParseFloat(data[index + 6]), ParseFloat(data[index + 7]));
-        Scale = ParseFloat(data[index + 8], 1f);
-        Duration = ParseFloat(data[index + 9], 0.75f);
-        MoveOffset = new Vector2(ParseFloat(data[index + 10]), ParseFloat(data[index + 11]));
+        AssetKey = NormalizeAssetKey(data[index + 4], out IsMod);
+        ResolvedAssetKey = ResolveAssetKey(EffectType, AssetKey);
+        AnchoredPosition = new Vector2(ParseFloat(data[index + 5]), ParseFloat(data[index + 6]));
+        Scale = ParseFloat(data[index + 7], 1f);
+        Duration = ParseFloat(data[index + 8], 0.75f);
+        MoveOffset = new Vector2(ParseFloat(data[index + 9]), ParseFloat(data[index + 10]));
     }
 
     public static BattleCriticalEffectConfig GetCriticalPoster(int petAnimId, int petBaseId)
@@ -103,6 +106,25 @@ public class BattleCriticalEffectConfig
         return string.IsNullOrEmpty(value) ? string.Empty : value.Trim().ToLowerInvariant();
     }
 
+    private static string NormalizeAssetKey(string value, out bool isMod)
+    {
+        value = string.IsNullOrEmpty(value) ? string.Empty : value.Trim();
+        isMod = value.StartsWith(ModAssetPrefix, System.StringComparison.OrdinalIgnoreCase);
+        return isMod ? value.Substring(ModAssetPrefix.Length) : value;
+    }
+
+    private static string ResolveAssetKey(string effectType, string assetKey)
+    {
+        if (string.IsNullOrEmpty(assetKey) || assetKey.Contains("/"))
+            return assetKey;
+
+        return NormalizeKey(effectType) switch
+        {
+            PosterEffectType => PosterAssetPath + assetKey,
+            _ => assetKey,
+        };
+    }
+
     private static int ParseInt(string value, int defaultValue = 0)
     {
         return int.TryParse(value, out var result) ? result : defaultValue;
@@ -115,8 +137,4 @@ public class BattleCriticalEffectConfig
             : defaultValue;
     }
 
-    private static bool ParseBool(string value)
-    {
-        return bool.TryParse(value, out var result) && result;
-    }
 }

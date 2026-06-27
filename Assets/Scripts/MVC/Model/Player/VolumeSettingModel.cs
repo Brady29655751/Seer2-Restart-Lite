@@ -141,8 +141,8 @@ public class VolumeSettingModel : Module
         return value switch
         {
             ComboDamageDisplayMode.TotalOnly => ComboDamageDisplayMode.TotalOnly,
-            ComboDamageDisplayMode.AllComboOnly => ComboDamageDisplayMode.AllComboOnly,
-            _ => ComboDamageDisplayMode.AllComboAndTotal,
+            ComboDamageDisplayMode.AllComboAndTotal => ComboDamageDisplayMode.AllComboAndTotal,
+            _ => ComboDamageDisplayMode.AllComboOnly,
         };
     }
 
