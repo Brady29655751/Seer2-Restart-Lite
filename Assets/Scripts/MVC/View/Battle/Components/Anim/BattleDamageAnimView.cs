@@ -201,11 +201,11 @@ public class BattleDamageAnimView : Module
 
     private void SetCriticalEffectObject(UnitHudSystem.DamageInfo info, Vector3? criticalEffectWorldPosition)
     {
-        var config = BattleCriticalEffectConfig.Get(info.AttackPetBaseId);
+        var config = BattleCriticalEffectConfig.GetCriticalPoster(info.AttackPetAnimId, info.AttackPetBaseId);
         if (config == null)
             return;
 
-        Sprite sprite = GetCriticalEffectSprite(config.ResourcePath);
+        Sprite sprite = GetCriticalEffectSprite(config);
         if (sprite == null)
             return;
 
@@ -243,17 +243,22 @@ public class BattleDamageAnimView : Module
             criticalEffectWorldPosition) + config.AnchoredPosition;
     }
 
-    private Sprite GetCriticalEffectSprite(string path)
+    private Sprite GetCriticalEffectSprite(BattleCriticalEffectConfig config)
     {
-        if (criticalEffectSpriteDict.TryGetValue(path, out var sprite))
+        string cacheKey = $"{config.IsMod}:{config.AssetKey}";
+        if (criticalEffectSpriteDict.TryGetValue(cacheKey, out var sprite))
             return sprite;
 
-        Texture2D texture = Resources.Load<Texture2D>("Sprites/" + path);
-        if (texture == null)
+        sprite = ResourceManager.instance.GetLocalAddressables<Sprite>(config.AssetKey, config.IsMod);
+        if ((sprite == null) && !config.IsMod)
+        {
+            sprite = ResourceManager.instance.GetSprite(config.AssetKey);
+        }
+
+        if (sprite == null)
             return null;
 
-        sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f));
-        criticalEffectSpriteDict.Set(path, sprite);
+        criticalEffectSpriteDict.Set(cacheKey, sprite);
         return sprite;
     }
 
