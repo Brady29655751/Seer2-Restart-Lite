@@ -105,7 +105,9 @@ public class UnitHudSystem
             if (thisUnit.skillSystem.skill.isAttack || (!thisUnit.skillSystem.isHit) || (damage > 0))
             {
                 this.CurDamageInfo = new DamageInfo(thisUnit.IsMyUnit(), true, damage,
-                    thisUnit.skillSystem.isHit, thisUnit.skillSystem.isCritical, thisUnit.skillSystem.elementRelation);
+                    thisUnit.skillSystem.isHit, thisUnit.skillSystem.isCritical, thisUnit.skillSystem.elementRelation,
+                    GetComboDamageInfoList(thisUnit.skillSystem, damage), thisUnit.pet.basic.baseId,
+                    thisUnit.pet.ui.animId);
                 this.CurOtherSidePetReactionInfo = new OtherSidePetReactionInfo(this.CurDamageInfo);
             }
 
@@ -124,6 +126,74 @@ public class UnitHudSystem
         this.CurHealInfo = null;
         this.CurOtherSidePetReactionInfo = null;
         this.petAnimType = PetAnimationType.Idle;
+    }
+
+    private List<UnitSkillSystem.ComboDamageInfo> GetComboDamageInfoList(UnitSkillSystem skillSystem, int damage)
+    {
+        int comboCount = skillSystem.comboDamageInfoList.Count;
+        if (comboCount <= 1)
+            return null;
+
+        int finalDamage = Mathf.Max(damage, 0);
+        int comboDamage = 0;
+        foreach (var info in skillSystem.comboDamageInfoList)
+        {
+            comboDamage += Mathf.Max(info.Damage, 0);
+        }
+
+        if (comboDamage <= 0)
+        {
+            return GetEvenComboDamageInfoList(skillSystem.comboDamageInfoList, finalDamage);
+        }
+
+        var result = new List<UnitSkillSystem.ComboDamageInfo>(comboCount);
+        var remainders = new List<long>(comboCount);
+        int allocatedDamage = 0;
+        for (int i = 0; i < comboCount; i++)
+        {
+            var info = skillSystem.comboDamageInfoList[i];
+            long weightedDamage = (long)Mathf.Max(info.Damage, 0) * finalDamage;
+            int allocatedComboDamage = (int)(weightedDamage / comboDamage);
+            result.Add(new UnitSkillSystem.ComboDamageInfo(allocatedComboDamage, info.IsCritical));
+            remainders.Add(weightedDamage % comboDamage);
+            allocatedDamage += allocatedComboDamage;
+        }
+
+        int remainingDamage = finalDamage - allocatedDamage;
+        while (remainingDamage > 0)
+        {
+            int maxIndex = 0;
+            for (int i = 1; i < remainders.Count; i++)
+            {
+                if (remainders[i] > remainders[maxIndex])
+                {
+                    maxIndex = i;
+                }
+            }
+
+            var info = result[maxIndex];
+            result[maxIndex] = new UnitSkillSystem.ComboDamageInfo(info.Damage + 1, info.IsCritical);
+            remainders[maxIndex] = -1;
+            remainingDamage--;
+        }
+
+        return result;
+    }
+
+    private List<UnitSkillSystem.ComboDamageInfo> GetEvenComboDamageInfoList(
+        List<UnitSkillSystem.ComboDamageInfo> comboDamageInfoList, int finalDamage)
+    {
+        int comboCount = comboDamageInfoList.Count;
+        int baseDamage = finalDamage / comboCount;
+        int remainingDamage = finalDamage % comboCount;
+        var result = new List<UnitSkillSystem.ComboDamageInfo>(comboCount);
+        for (int i = 0; i < comboCount; i++)
+        {
+            int comboDamage = baseDamage + ((i < remainingDamage) ? 1 : 0);
+            result.Add(new UnitSkillSystem.ComboDamageInfo(comboDamage, comboDamageInfoList[i].IsCritical));
+        }
+
+        return result;
     }
 
     public void OnTurnEnd(Unit thisUnit, Unit rhsUnit)
@@ -191,8 +261,13 @@ public class UnitHudSystem
         public readonly bool IsCritical; //是否暴击
         public readonly float ElementRelation; //属性相克关系,决定颜色
 
+        public readonly List<UnitSkillSystem.ComboDamageInfo> ComboDamageInfoList;
+        public readonly int AttackPetBaseId;
+        public readonly int AttackPetAnimId;
+
         public DamageInfo(bool isMe, bool damageType, int damage, bool isHit = true, bool isCritical = false,
-            float elementRelation = 1f)
+            float elementRelation = 1f, List<UnitSkillSystem.ComboDamageInfo> comboDamageInfoList = null,
+            int attackPetBaseId = 0, int attackPetAnimId = 0)
         {
             this.IsMe = isMe;
             this.DamageType = damageType;
@@ -200,6 +275,9 @@ public class UnitHudSystem
             this.Damage = damage;
             this.IsHit = isHit;
             this.ElementRelation = elementRelation;
+            this.ComboDamageInfoList = comboDamageInfoList;
+            this.AttackPetBaseId = attackPetBaseId;
+            this.AttackPetAnimId = attackPetAnimId;
         }
     };
 

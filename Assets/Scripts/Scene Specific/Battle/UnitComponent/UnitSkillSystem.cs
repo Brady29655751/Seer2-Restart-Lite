@@ -20,6 +20,7 @@ public class UnitSkillSystem
     public bool isCounter = false;
     public bool isHit = true;
     public bool isCritical = false;
+    public List<ComboDamageInfo> comboDamageInfoList = new List<ComboDamageInfo>();
 
 
     // damage to op, buff damage to me, heal to me.
@@ -63,6 +64,7 @@ public class UnitSkillSystem
         isCounter = rhs.isCounter;
         isHit = rhs.isHit;
         isCritical = rhs.isCritical;
+        comboDamageInfoList = new List<ComboDamageInfo>(rhs.comboDamageInfoList);
 
         damageDict = new Dictionary<string, int>(rhs.damageDict);
         healDict = new Dictionary<string, int>(rhs.healDict);
@@ -114,6 +116,7 @@ public class UnitSkillSystem
         isCounter = false;
         isHit = true;
         isCritical = false;
+        comboDamageInfoList.Clear();
 
         damageDict.Clear();
         healDict.Clear();
@@ -129,6 +132,7 @@ public class UnitSkillSystem
         weatherBuff = sameElementBuff = elementRelation = 1f;
         isHit = true;
         isCritical = false;
+        comboDamageInfoList.Clear();
 
         skillDamage = skillHeal = skillOverHeal = 0;
         itemDamage = itemHeal = itemOverHeal = 0;
@@ -197,8 +201,10 @@ public class UnitSkillSystem
                 * sameElementBuff * elementRelation * weatherBuff * _random *
                 (_isCritical ? 2 : 1);
 
-            skillDamage += (int)Mathf.Ceil(_damage);
+            int damage = (int)Mathf.Ceil(_damage);
+            skillDamage += damage;
             isCritical |= _isCritical;
+            comboDamageInfoList.Add(new ComboDamageInfo(damage, _isCritical));
         }
 
         return skillDamage;
@@ -295,6 +301,18 @@ public class UnitSkillSystem
             case "heal":
                 skillHeal = (int)num;
                 return;
+        }
+    }
+
+    public struct ComboDamageInfo
+    {
+        public readonly int Damage;
+        public readonly bool IsCritical;
+
+        public ComboDamageInfo(int damage, bool isCritical)
+        {
+            Damage = damage;
+            IsCritical = isCritical;
         }
     }
 
