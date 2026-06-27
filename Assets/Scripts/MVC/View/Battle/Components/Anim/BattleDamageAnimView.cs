@@ -216,7 +216,7 @@ public class BattleDamageAnimView : Module
         obj.transform.SetParent(effectParent, false);
         obj.transform.SetAsFirstSibling();
 
-        SetCriticalEffectRect(rect, sprite, config, criticalEffectWorldPosition);
+        SetCriticalEffectRect(rect, sprite, config, criticalEffectWorldPosition, info.IsMe);
         img.sprite = sprite;
         img.raycastTarget = false;
         img.preserveAspect = false;
@@ -234,13 +234,15 @@ public class BattleDamageAnimView : Module
     }
 
     private void SetCriticalEffectRect(RectTransform rect, Sprite sprite, BattleCriticalEffectConfig config,
-        Vector3? criticalEffectWorldPosition)
+        Vector3? criticalEffectWorldPosition, bool isMe)
     {
+        float dir = isMe ? 1f : -1f;
         rect.anchorMin = new Vector2(0.5f, 0.5f);
         rect.anchorMax = new Vector2(0.5f, 0.5f);
         rect.sizeDelta = new Vector2(sprite.texture.width, sprite.texture.height) * config.Scale;
+        Vector2 positionOffset = new Vector2(config.AnchoredPosition.x * dir, config.AnchoredPosition.y);
         rect.anchoredPosition = GetCriticalEffectAnchoredPosition(rect.parent as RectTransform,
-            criticalEffectWorldPosition) + config.AnchoredPosition;
+            criticalEffectWorldPosition) + positionOffset;
     }
 
     private Sprite GetCriticalEffectSprite(BattleCriticalEffectConfig config)
