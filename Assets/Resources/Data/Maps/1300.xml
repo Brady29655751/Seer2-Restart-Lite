@@ -1,0 +1,201 @@
+<map name="穹顶大厅"  category="13"  id="1300">
+	<!-- <resource>10011</resource> -->
+	<initialPoint>470,100</initialPoint>
+	<music category="13">
+		<bgm>BGM_1300</bgm>
+	</music>
+	<entities>
+		<npc id="130001" resId="Pets/pet/748" name="魔念黯灵" size="174,182" pos="580,285" namePos="-10,-10">
+			<description>我认可的超源氏族族长只有一位</description>
+			<dialog>
+				<branch id="default" name="魔念黯灵" icon="Pets/pet/748" size="87,91" pos="0,45">
+					<content><![CDATA[我认可的超源氏族族长只有一位，不论他做了什么]]></content>
+					<functionHandler>
+						<func type="click">
+							<description><![CDATA[挑战一]]></description>
+							<action>battle</action>
+							<param>challenge_1</param>
+						</func>
+						<func type="click">
+							<description><![CDATA[挑战二]]></description>
+							<action>battle</action>
+							<param>challenge_2</param>
+							<condition>firstPet.id=748</condition>
+						</func>
+						<func type="branch">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=把魔念黯灵设为首发之后再来挑战吧</param>
+							<param>option_num=1</param>
+							<param>item_icon=pet[748]</param>
+							<condition>firstPet.idNOT748</condition>
+						</func>
+						<func type="click">
+							<description><![CDATA[挑战三]]></description>
+							<action>battle</action>
+							<param>challenge_3</param>
+						</func>
+					</functionHandler>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[真是一念成魔]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+					</replyHandler>
+				</branch>
+			</dialog>
+			<battle>
+				<branch id="challenge_1">
+					<settings count="1"/>
+					<enemy>
+						<pet id="748" level="60">
+							<status>
+								<mat>10000</mat>
+								<hp>5000</hp>
+							</status>
+							<initBuff>-4,61,-8</initBuff>
+							<loopSkill>14947</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>getPet</action>
+							<param>748,10,0</param>
+							<condition>activity[11025].done[1]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=【魔念黯灵】已经放入精灵仓库</param>
+							<param>item_icon=pet[748]</param>
+							<param>option_num=1</param>
+							<condition>activity[11025].done[1]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>11025</param>
+							<param>done[1]=true</param>
+							<condition>activity[11025].done[1]=[bool]false[default]false</condition>
+						</button>
+					</winHandler>
+				</branch>
+				<branch id="challenge_2">
+					<settings count="1">
+						<initBuff>(rule:600000)</initBuff>
+					</settings>
+					<enemy>
+						<pet id="748" level="60">
+							<status>
+								<hp>3000</hp>
+							</status>
+							<initBuff>-8</initBuff>
+							<loopSkill>14936,14942,14942,14942,14942</loopSkill>
+							<superSkill>14943</superSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setPet</action>
+							<param>emblem=1</param>
+							<condition>activity[11025].done[2]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=【魔念黯灵】获得了【黯念】纹章</param>
+							<param>item_icon=emblem[748]</param>
+							<param>option_num=1</param>
+							<condition>activity[11025].done[2]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>11025</param>
+							<param>done[2]=true</param>
+							<condition>activity[11025].done[2]=[bool]false[default]false</condition>
+						</button>
+					</winHandler>
+				</branch>
+				<branch id="challenge_3">
+					<settings count="6"/>
+					<enemy>
+						<pet id="748" level="60">
+							<status>
+								<atk>1800</atk>
+								<mat>1800</mat>
+								<def>1800</def>
+								<mdf>1800</mdf>
+								<hp>5000</hp>
+								<rec>5000</rec>
+							</status>
+							<initBuff>71,14,99,100,-3022</initBuff>
+							<loopSkill>14938,14939,14936,14939,14945</loopSkill>
+							<superSkill>14943</superSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setItem</action>
+							<param>add</param>
+							<param>2,100</param>
+							<condition>activity[11025].done[3]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=100 星钻已经放入背包</param>
+							<param>item_icon=item[2]</param>
+							<param>option_num=1</param>
+							<condition>activity[11025].done[3]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>11025</param>
+							<param>done[3]=true</param>
+							<condition>activity[11025].done[3]=[bool]false[default]false</condition>
+						</button>
+					</winHandler>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>openDialog</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<npc id="130002" resId="Pets/pet/476" name="Lv104 塔拉米" size="82,121" pos="300,110" namePos="0,0" active="false">
+			<description>讨厌暴力的精灵</description>
+			<battle>
+				<branch id="default">
+					<settings count="6" capture="true"/>
+					<enemy>
+						<pet id="476" level="104">
+							<initBuff>-2</initBuff>
+							<loopSkill>14967,14967,14967,14967,-4</loopSkill>
+						</pet>
+					</enemy>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>battle</action>
+					<param>default</param>
+				</button>
+				<button type="auto">
+					<action>setNpcParam</action>
+					<param>130002</param>
+					<param>active=true</param>
+					<condition>random[new]LTE5</condition>
+				</button>
+			</eventHandler>
+		</npc>
+		<teleport id="1" name="超源氏族主城" pos="130,240" targetMapId="1290"/>
+		<teleport id="2" name="太空武斗场" pos="160,50" targetMapId="1320"/>
+	</entities>
+</map>
+

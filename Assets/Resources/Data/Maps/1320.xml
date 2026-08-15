@@ -1,0 +1,121 @@
+<map name="太空武斗场"  category="13"  id="1320">
+	<!-- <resource>10011</resource> -->
+	<initialPoint>100,150</initialPoint>
+	<music category="13">
+		<bgm>BGM_1300</bgm>
+	</music>
+	<entities>
+		<npc id="132000" resId="1001" name="" size="0,0" pos="0,0">
+			<eventHandler>
+				<button type="auto">
+					<action>openHintbox</action>
+					<param>type=Default</param>
+					<param>content=请配置 MonthRankFix.xml.更新排行榜数据！</param>
+					<param>option_num=1</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<npc id="132001" resId="Pets/pet/430" name="蒂姆森" size="159,147" pos="400,190" namePos="0,-10">
+			<description>穿越无数维度，探索万千宇宙</description>
+			<dialog>
+				<branch id="default" name="蒂姆森" icon="Pets/pet/430" size="106,98" pos="10,45">
+					<content><![CDATA[穿越无数维度，探索万千宇宙]]></content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[这些都是来自平行世界的你？]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+						<reply type="click">
+							<description><![CDATA[挑战蒂姆森军团]]></description>
+							<action>battle</action>
+							<param>default</param>
+						</reply>
+					</replyHandler>
+				</branch>
+				<branch id="reward" name="蒂姆森" icon="128001" size="151,118" pos="10,45">
+					<content><![CDATA[我见过无数宇宙，你是最特别的一个！]]></content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[我其实很普通]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+						<reply type="click">
+							<description><![CDATA[让你见识一下我的独特]]></description>
+							<action>battle</action>
+							<param>capture</param>
+						</reply>
+					</replyHandler>
+				</branch>
+			</dialog>
+			<battle>
+				<branch id="default">
+					<settings count="6"/>
+					<enemy>
+						<pet id="430" level="100">
+							<loopSkill>14950,14951,14952,14953,14954,14955</loopSkill>
+							<superSkill>14959</superSkill>
+						</pet>
+						<pet id="430" level="101">
+							<loopSkill>14950,14951,14952,14953,14954,14955</loopSkill>
+							<superSkill>14959</superSkill>
+						</pet>
+						<pet id="430" level="102">
+							<loopSkill>14950,14951,14952,14953,14954,14955</loopSkill>
+							<superSkill>14959</superSkill>
+						</pet>
+						<pet id="430" level="103">
+							<loopSkill>14950,14951,14952,14953,14954,14955</loopSkill>
+							<superSkill>14959</superSkill>
+						</pet>
+						<pet id="430" level="104">
+							<loopSkill>14950,14951,14952,14953,14954,14955</loopSkill>
+							<superSkill>14959</superSkill>
+						</pet>
+						<pet id="430" level="105">
+							<loopSkill>14950,14951,14952,14953,14954,14955</loopSkill>
+							<superSkill>14959</superSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setItem</action>
+							<param>add</param>
+							<param>10201,3</param>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=3个砂糖甜饼已经放入背包</param>
+							<param>item_icon=item[10201]</param>
+							<param>option_num=1</param>
+						</button>
+						<button type="auto">
+							<action>openDialog</action>
+							<param>reward</param>
+							<condition>random[old]&lt;5</condition>
+						</button>
+					</winHandler>
+				</branch>
+				<branch id="capture">
+					<settings count="1" capture="true"/>
+					<enemy>
+						<pet id="430" level="95">
+							<loopSkill>14951,14952,14953,14954,-4</loopSkill>
+						</pet>
+					</enemy>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>openDialog</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<teleport id="1" name="穹顶大厅" pos="440,60" targetMapId="1300" color="164,40,164,255"/>
+	</entities>
+</map>
+

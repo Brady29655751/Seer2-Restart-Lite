@@ -1086,7 +1086,7 @@ public class ResourceManager : Singleton<ResourceManager>
                     continue;
 
                 var itemDescription = $"记载着技能学习诀窍的神秘书卷[ENDL]使精灵习得{skill.name}（对已习得此技能的精灵无效）";
-                var effectDescription = Skill.GetSkillDescriptionPreview(skill.rawDescription);
+                var effectDescription = skill.rawDescription;
                 var skillItemInfo = new ItemInfo(10_0000 + id, "技能学习书（" + skill.name + "）", ItemType.Skill,
                     skill.isSuper ? 20 : 10, 6, "resId=110050", itemDescription, effectDescription);
                 var effect = new Effect("resident", "-1", "pet", "pet", $"type=skill[{id}]&skill[{id}]_cmp=0", "set_pet", $"type=skill&op=+&value={id}");

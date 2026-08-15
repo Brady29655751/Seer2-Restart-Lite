@@ -195,6 +195,48 @@
 							<action>openDialog</action>
 							<param>null</param>
 						</reply>
+						<reply type="click">
+							<description><![CDATA[▼ 下一页]]></description>
+							<action>openDialog</action>
+							<param>evolve</param>
+						</reply>
+					</replyHandler>
+				</branch>
+				<branch id="evolve" name="阿克希亚" icon="Pets/pet/10050" size="106,138" pos="10,35">
+					<content><![CDATA[离开这里！]]></content>
+					<functionHandler>
+						<func type="click">
+							<description><![CDATA[烟光墨漾]]></description>
+							<action>openDialog</action>
+							<param>skin</param>
+						</func>
+					</functionHandler>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[我带来了雷伊]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+						<reply type="click">
+							<description><![CDATA[▲ 上一页]]></description>
+							<action>openDialog</action>
+							<param>default</param>
+						</reply>
+					</replyHandler>
+				</branch>
+				<branch id="skin" name="阿克希亚" icon="Pets/pet/10050" size="106,138" pos="10,35">
+					<content><![CDATA[该关卡为高难度挑战，战胜后获得烟光墨漾皮肤，是否挑战？]]></content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[我还没准备好]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+						<reply type="click">
+							<description><![CDATA[无视风险，继续访问]]></description>
+							<action>battle</action>
+							<param>skin</param>
+						</reply>
 					</replyHandler>
 				</branch>
 			</dialog>
@@ -320,6 +362,43 @@
 						    <param>title=选择要进化的冰雪女皇·阿克希亚</param>
 						    <param>option_num=2</param>
 							<param>callback=evolve</param>
+						</button>
+					</winHandler>
+				</branch>
+				<branch id="skin">
+					<settings count="2" star="7" item="false">
+						<mode>3</mode>
+						<weather>4</weather>
+						<limit>(elementNOT3)</limit>
+						<limitDesc><![CDATA[不可以使用<color=#ffbb33>火系</color>精灵进行挑战哦！]]></limitDesc>
+					</settings>
+					<enemy>
+						<pet id="113699" level="105">
+							<status>
+								<atk>800</atk>
+								<mat>800</mat>
+								<def>800</def>
+								<mdf>800</mdf>
+								<spd>400</spd>
+								<hp>30000</hp>
+							</status>
+							<initBuff>-8,61,100,-3115,-4[0][50],-3112,-3058,-3059,-3062,68,-3086</initBuff>
+							<headerSkill>14742,14738,14744,14748</headerSkill>
+							<loopSkill>14745,14747,14744,14745,14748,14747,14744,14741,14745,14748,14741</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setItem</action>
+							<param>add_with_hint</param>
+						    <param>383699,1</param>
+							<condition>activity[spt].done[new][6][skin]=[bool]false[skin]false</condition>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>spt</param>
+						    <param>done[new][6][skin]=true</param>
+							<condition>activity[spt].done[new][6][skin]=[bool]false[skin]false</condition>
 						</button>
 					</winHandler>
 				</branch>

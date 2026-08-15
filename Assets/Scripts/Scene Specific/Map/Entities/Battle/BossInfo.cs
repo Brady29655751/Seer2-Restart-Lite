@@ -13,7 +13,7 @@ public class BossInfo
     [XmlElement("emblem")] public bool hasEmblem = true;
 
     [XmlElement("initBuff")] public string initBuffIds;
-    [XmlIgnore] public List<Buff> initBuffs => initBuffIds.ToIntList().Select(x => new Buff(x)).ToList();
+    [XmlIgnore] public List<Buff> initBuffs => initBuffIds?.Split(',').Select(x => BuffReferData.CreateBuff(BuffReferData.Parse(x))).ToList();
     
     [XmlElement("headerSkill")] public string headerSkillIds;
     [XmlIgnore] public List<Skill> headerSkills => headerSkillIds.ToIntList().Select(x => Skill.GetSkill(x, false)).Where(x => x != null).ToList();

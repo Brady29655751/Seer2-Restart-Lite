@@ -137,7 +137,7 @@ public static class Parser {
                 var op = "=";
                 var options = filter.Split(':', 2).Select(x => x.Replace('：', ':')).ToArray();
                 if (options.Length < 2) {
-                    var split = Operator.SplitCondition(filter, out op);
+                    var split = Operator.SplitCondition(filter.Replace('：', ':'), out op);
                     options = new string[] { split.Key, split.Value };  
                 }
                 var ids = idConverter.Invoke(options, value);

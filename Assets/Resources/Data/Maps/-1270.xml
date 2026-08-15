@@ -1,0 +1,43 @@
+<map name="秘密基地梦境" category="13" id="-1270" weather="1" dream="true">
+	<!-- <resource>10011</resource> -->
+	<initialPoint>470,100</initialPoint>
+	<music category="13">
+		<bgm>BGM_1270</bgm>
+	</music>
+	<entities>
+		<npc id="-127001" resId="Pets/pet/883.png" name="Lv 100 鬼瞳" size="115,116" pos="650,200" namePos="0,0">
+			<battle>
+				<branch id="default">
+					<settings count="6" capture="true" />
+					<enemy>
+						<pet id="883" level="100">
+							<initBuff>-2</initBuff>
+							<loopSkill>14910</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setNpcParam</action>
+							<param>-127001</param>
+							<param>active=false</param>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>dream</param>
+							<param>done[-1270]=true</param>
+							<condition>activity[dream].done[-1270]=[bool]false[default]false</condition>
+						</button>
+					</winHandler>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>battle</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<teleport id="1" name="秘密基地" pos="115,120" targetMapId="1270"/>
+	</entities>
+</map>
+

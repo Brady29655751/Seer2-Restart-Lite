@@ -50,6 +50,7 @@ public static class Identifier
                 "minute" => date.Minute,
                 "second" => date.Second,
                 "millisecond" => date.Millisecond,
+                "dayOfWeek" => (float)date.DayOfWeek,
                 _ => GetNumIdentifier(trimId),
             };
         }

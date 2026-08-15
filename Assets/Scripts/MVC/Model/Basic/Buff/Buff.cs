@@ -15,6 +15,7 @@ public class Buff
     public const int BUFFID_PROTECT_POWERDOWN = -2004;
     public const int BUFFID_RESIST_BUFF = -2005;
     // public const int BUFFID_RESIST_DAMAGE = -2006;
+    public static List<int> powerBuffIds => powerupBuffIds.Concat(powerdownBuffIds).ToList();
     public static List<int> powerupBuffIds => new List<int>() { 1, 3, 5, 7, 9, -9 };
     public static List<int> powerdownBuffIds => new List<int>() { 2, 4, 6, 8, 10, -10 };
     public static List<Buff> yiteEndBuffDatabse => BuffInfo.database.Where(x => x.id.IsInRange(410000, 420000)).Select(x => new Buff(x.id)).ToList();
@@ -58,15 +59,15 @@ public class Buff
         if (data == null)
             return;
 
-        value = _value ?? data.value;
+        value = _value ?? data.Value;
         options.Merge(data.options);
     }
 
     public Buff(BuffReferData data)
     {
-        id = data.id;
-        turn = info.turn;
-        value = data.value;
+        id = data.ID;
+        turn = data.Turn;
+        value = data.Value;
         ignore = false;
         effects = info.effects.Select(x => new Effect(x)).ToList();
 

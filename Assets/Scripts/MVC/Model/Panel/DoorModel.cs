@@ -74,14 +74,15 @@ public class DoorModel : Module
                 if (floorNum % 30 == 0)
                     goto default;
 
+                var petId = 10000 + floorNum - floorNum / 30;
                 return new BattleInfo()
                 {
                     enemyInfo = new BossInfo()
                     { 
-                        petId = 10000 + floorNum - floorNum / 30,
+                        petId = petId,
                         level = 10 + (floorNum - 1) * 3,
                         initBuffIds = "-3",
-                        loopSkillIds = Pet.GetPetInfo(10000 + floorNum).skills.skillIdList.Select(x => x.ToString()).ConcatToString(","),
+                        loopSkillIds = Pet.GetPetInfo(petId).skills.skillIdList.Select(x => x.ToString()).ConcatToString(","),
                     }.SingleToList(),
                 };
         }
@@ -152,22 +153,24 @@ public class DoorModel : Module
             case "new_basic":
                 if (floorNum % 30 == 0)
                     goto default;
-                
+
                 doorSettings = new BattleSettings()
                 {
                     petCount = 1,
                     mode = BattleMode.SelfSimulation,
                     isSimulate = true,
                 };
+
+                var petId = 10000 + floorNum - floorNum / 30;
                 doorBattleInfo = new BattleInfo()
                 {
                     settings = doorSettings,
                     enemyInfo = new BossInfo()
                     { 
-                        petId = 10000 + floorNum - floorNum / 30,
+                        petId = petId,
                         level = 10 + (floorNum - 1) * 3,
                         initBuffIds = "-3",
-                        loopSkillIds = Pet.GetPetInfo(10000 + floorNum).skills.skillIdList.Select(x => x.ToString()).ConcatToString(","),
+                        loopSkillIds = Pet.GetPetInfo(petId).skills.skillIdList.Select(x => x.ToString()).ConcatToString(","),
                     }.SingleToList(),
                     winHandler = NpcButtonHandler.Callback(WinHandler).SingleToList(),
                     loseHandler = new List<NpcButtonHandler>(),

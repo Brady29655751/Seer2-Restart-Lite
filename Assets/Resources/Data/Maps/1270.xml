@@ -1,0 +1,91 @@
+<map name="秘密基地" category="13" id="1270">
+	<!-- <resource>10011</resource> -->
+	<initialPoint>470,100</initialPoint>
+	<music category="13">
+		<bgm>BGM_1270</bgm>
+	</music>
+	<entities>
+		<npc id="127001" resId="Pets/pet/295" name="Lv103 赤绒尾" size="97,82" pos="285,110" namePos="0,0">
+			<wild>
+				<movement mode="wander" radius="220" speed="34" idle="2,6" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true" />
+				<talk chance="0.3" duration="4">
+					<self image="emoji/toon/alert" />
+					<self image="emoji/toon/angry" />
+					<self image="emoji/toon/annoyed" />
+					<self image="emoji/toon/cool" />
+					<self image="emoji/toon/cry" />
+					<self image="emoji/toon/dizzy" />
+					<self image="emoji/toon/grin" />
+					<self image="emoji/toon/happy" />
+					<self image="emoji/toon/hypno" />
+					<self image="emoji/toon/laugh" />
+					<self image="emoji/toon/love" />
+					<self image="emoji/toon/mute" />
+					<self image="emoji/toon/shocked" />
+					<self image="emoji/toon/shy" />
+					<self image="emoji/toon/sick" />
+					<self image="emoji/toon/silly" />
+					<self image="emoji/toon/skull" />
+					<self image="emoji/toon/sleepy" />
+					<self image="emoji/toon/smug" />
+					<self image="emoji/toon/star_eyes" />
+					<self image="emoji/toon/sunglasses" />
+					<self image="emoji/toon/surprised" />
+					<self image="emoji/toon/sweat" />
+					<self image="emoji/toon/worried" />
+					<self>吃我一招旋转飞踢！喝啊！</self>
+					<self>旁边的赤绒尾在睡觉，看我拿榛果砸他！</self>
+					<self>哪里有榛果，哪里就有我！</self>
+				</talk>
+			</wild>
+			<battle>
+				<branch id="default">
+					<settings count="6" capture="true"/>
+					<enemy>
+						<pet id="295" level="103">
+							<loopSkill>14930</loopSkill>
+						</pet>
+					</enemy>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>battle</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<npc id="127002" resId="Pets/pet/295" name="赤绒尾梦境" size="97,82" pos="545,150" namePos="0,0">
+			<eventHandler>
+				<button type="click">
+					<action>teleport</action>
+					<param>-1270</param>
+					<condition>activity[dream].done[-1270]=[bool]false[default]false</condition>
+					<condition>firstPet.featureId=10</condition>
+				</button>
+				<button type="click">				
+					<action>openHintbox</action>
+					<param>type=Item</param>
+					<param>title=提示</param>
+					<param>content=赤绒尾今天已经很累了，不要打扰她</param>
+					<param>item_icon=pet[295]</param>
+					<param>option_num=1</param>
+					<condition>activity[dream].done[-1270]=[bool]true[default]false</condition>
+					<condition>firstPet.featureId=10</condition>
+				</button>
+				<button type="click">
+					<action>openHintbox</action>
+					<param>type=Item</param>
+					<param>title=提示</param>
+					<param>content=将入梦特性的精灵设为首发才能进入梦境哦！</param>
+					<param>item_icon=pet[10]</param>
+					<param>option_num=1</param>
+					<condition>firstPet.featureIdNOT10</condition>
+				</button>
+			</eventHandler>
+		</npc>
+		<teleport id="1" name="虫穴地牢" pos="115,120" targetMapId="1220"/>
+		<teleport id="2" name="灵能通径" pos="760,290" targetMapId="1280"/>
+	</entities>
+</map>
+

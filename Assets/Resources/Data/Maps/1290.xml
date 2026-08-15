@@ -1,0 +1,273 @@
+<map name="超源氏族主城"  category="13"  id="1290" weather="10">
+	<!-- <resource>10011</resource> -->
+	<initialPoint>670,100</initialPoint>
+	<music category="13">
+		<bgm>BGM_1290</bgm>
+	</music>
+	<entities>
+		<npc id="129001" resId="Pets/pet/895" name="Lv 105 梵尔尼" size="178,150" pos="425,150" namePos="0,-10">
+			<anim id="Pets/anim/895" pos="-0.6,1" scale="-1.3,1.3" rotation="0,180,0" />
+			<description>SPT</description>
+			<dialog>
+				<branch id="default" name="梵尔尼" icon="Pets/pet/895" size="119,100" pos="0,45">
+					<content><![CDATA[守护能量之源！]]></content>
+					<functionHandler>
+						<func type="click">
+							<description><![CDATA[普通挑战]]></description>
+							<action>battle</action>
+							<param>default</param>
+						</func>
+						<func type="click">
+							<description><![CDATA[挑战1]]></description>
+							<action>battle</action>
+							<param>challenge_1</param>
+							<condition>firstPet.baseId=894</condition>
+						</func>
+						<func type="branch">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=把梵尔尼设为首发之后再来挑战吧</param>
+							<param>option_num=1</param>
+							<param>item_icon=pet[895]</param>
+							<condition>firstPet.baseIdNOT894</condition>
+						</func>
+						<func type="click">
+							<description><![CDATA[挑战2]]></description>
+							<action>battle</action>
+							<param>challenge_2</param>
+						</func>
+						<!--
+						<func type="click">
+							<description><![CDATA[超进化挑战]]></description>
+							<action>battle</action>
+							<param>evolve</param>
+							<condition>firstPet.id=38</condition>
+						</func>
+						<func type="branch">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=把梵尔尼设为首发之后再来挑战吧</param>
+							<param>option_num=1</param>
+							<param>item_icon=pet[38]</param>
+							<condition>firstPet.idNOT38</condition>
+						</func>
+						-->
+					</functionHandler>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[你也有无尽能源？]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+					</replyHandler>
+				</branch>
+				<branch id="default_lose" name="梵尔尼" icon="Pets/pet/895" size="119,100" pos="0,45">
+					<content><![CDATA[获得异常状态之后，我会暂时获得一段时间的免疫能力]]></content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[所以免疫的时候要变招？]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+					</replyHandler>
+				</branch>
+			</dialog>
+			<battle>
+				<branch id="default">
+					<settings count="6" simulate="true">
+						<mode>3</mode>
+						<weather>10</weather>
+					</settings>
+					<player>
+						<pet id="883" level="105">
+							<status>
+								<mat>2500</mat>
+								<def>600</def>
+								<mdf>600</mdf>
+								<spd>500</spd>
+								<hp>400</hp>
+								<cri>-1000</cri>
+							</status>
+							<normalSkill>14918,14917,14911,14916</normalSkill>
+							<superSkill>14914</superSkill>
+						</pet>
+					</player>
+					<enemy>
+						<pet id="895" level="105">
+							<status>
+								<mat>400</mat>
+								<spd>400</spd>
+								<hp>9000</hp>
+								<cri>-1000</cri>
+							</status>
+							<initBuff>17,72</initBuff>
+							<headerSkill>14888,14888</headerSkill>
+							<loopSkill>14892</loopSkill>
+						</pet>								
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>getPet</action>
+							<param>894,10,0</param>
+							<condition>activity[spt].done[south][3][default]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=【梵尼】已经放入精灵仓库</param>
+							<param>item_icon=pet[894]</param>
+							<param>option_num=1</param>
+							<condition>activity[spt].done[south][3][default]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>spt</param>
+							<param>done[south][3][default]=true</param>
+							<condition>activity[spt].done[south][3][default]=[bool]false[default]false</condition>
+						</button>
+					</winHandler>
+					<loseHandler>
+						<button type="auto">
+							<action>openDialog</action>
+							<param>default_lose</param>
+						</button>
+					</loseHandler>
+				</branch>
+				<branch id="challenge_1">
+					<settings count="1">
+						<mode>3</mode>
+						<weather>10</weather>
+					</settings>
+					<enemy>
+						<pet id="895" level="105">
+							<status>
+								<atk>600</atk>
+								<mat>600</mat>
+								<hp>3000</hp>
+							</status>
+							<initBuff>-8,-3121</initBuff>
+							<headerSkill>14888,14888</headerSkill>
+							<loopSkill>14892</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setPet</action>
+							<param>emblem=1</param>
+							<condition>activity[spt].done[south][3][challenge_1]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=【梵尔尼】获得了【源灵】纹章</param>
+							<param>item_icon=emblem[894]</param>
+							<param>option_num=1</param>
+							<condition>activity[spt].done[south][3][challenge_1]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>spt</param>
+							<param>done[south][3][challenge_1]=true</param>
+							<condition>activity[spt].done[south][3][challenge_1]=[bool]false[default]false</condition>
+						</button>
+					</winHandler>
+				</branch>
+				<branch id="challenge_2">
+					<settings count="6">
+						<mode>3</mode>
+						<weather>10</weather>
+					</settings>
+					<enemy>
+						<pet id="895" level="105">
+							<status>
+								<mat>6000</mat>
+								<def>6000</def>
+								<mdf>6000</mdf>
+								<hp>900000</hp>
+							</status>
+							<initBuff>-4[0][50],12,14,17,57,61,93,99,100,2096,2012,-3012,-3112,-3120</initBuff>
+							<loopSkill>14897</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setItem</action>
+							<param>add</param>
+							<param>2,50</param>
+							<condition>activity[spt].done[south][3][challenge_2]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=50 星钻已经放入背包</param>
+							<param>item_icon=item[2]</param>
+							<param>option_num=1</param>
+							<condition>activity[spt].done[south][3][challenge_2]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>spt</param>
+							<param>done[south][3][challenge_2]=true</param>
+							<condition>activity[spt].done[south][3][challenge_2]=[bool]false[default]false</condition>
+						</button>
+					</winHandler>
+				</branch>
+				<!--
+				<branch id="evolve">
+					<settings count="1">
+						<mode>3</mode>
+						<weather>3</weather>
+					</settings>
+					<enemy>
+						<pet id="693" level="105">
+							<status>
+								<hp>2000</hp>
+							</status>
+							<initBuff>13,14,17,20</initBuff>
+							<headerSkill>10561</headerSkill>
+							<loopSkill>10562,10566</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>evolvePet</action>
+							<param>693</param>
+							<condition>activity[spt].done[south][2][evolve]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=梵尔尼已成功超进化</param>
+							<param>item_icon=pet[693]</param>
+							<param>option_num=1</param>
+							<condition>activity[spt].done[south][2][evolve]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>spt</param>
+							<param>done[south][2][evolve]=true</param>
+							<condition>activity[spt].done[south][2][evolve]=[bool]false[default]false</condition>
+						</button>
+					</winHandler>
+				</branch>
+				-->
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>openDialog</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<teleport id="1" name="灵能通径" pos="90,75" targetMapId="1280" color="164,40,164,255"/>
+		<teleport id="2" name="穹顶大厅" pos="765,240" targetMapId="1300"/>
+		<teleport id="3" name="能量之源" pos="800,65" targetMapId="1310" color="164,40,164,255"/>
+	</entities>
+</map>
+

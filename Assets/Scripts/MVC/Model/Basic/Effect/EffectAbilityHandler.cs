@@ -981,6 +981,7 @@ public static class EffectAbilityHandler
         string target = effect.abilityOptionDict.Get("target", "me");
         string transfer = effect.abilityOptionDict.Get("transfer", "false");
         string reverse = effect.abilityOptionDict.Get("reverse", "false");
+        string exchange = effect.abilityOptionDict.Get("exchange", "false");
         string mult = effect.abilityOptionDict.Get("mult", "1");
 
         Unit invokeUnit = (Unit)effect.invokeUnit;
@@ -1036,54 +1037,119 @@ public static class EffectAbilityHandler
         if (!isId && !isType)
             return false;
 
-        if (!bool.TryParse(transfer, out bool isTransfer) || !bool.TryParse(reverse, out bool isReverse))
+        if (!bool.TryParse(transfer, out bool isTransfer) || !bool.TryParse(reverse, out bool isReverse) || !bool.TryParse(exchange, out bool isExchange))
             return false;
 
         if (isId)
         {
-            buffs = lhsBuffController.GetRangeBuff(x => idRange.Contains(x.id) && filter(x));
-            var powerup = lhsUnit.pet.statusController.powerup;
-            var status = new Status();
-            foreach (var buff in buffs.Select(x => new Buff(x)))
+            if (isExchange)
             {
-                if (!buff.IsPower())
-                {
-                    rhsBuffController.AddBuff(buff, rhsUnit, invokeUnit, state);
-                    continue;
-                }
+                var lhsBuffs = lhsBuffController.GetRangeBuff(x => idRange.Contains(x.id) && filter(x));
+                var rhsBuffs = rhsBuffController.GetRangeBuff(x => idRange.Contains(x.id) && filter(x));
+                buffs = lhsBuffs.Concat(rhsBuffs);
 
-                if (isTransfer || isReverse)
+                var lhsPowerup = lhsUnit.pet.statusController.powerup;
+                var rhsPowerup = rhsUnit.pet.statusController.powerup;
+
+                var lhsStatus = new Status();
+                var rhsStatus = new Status();
+
+                for (int type = 0; type < Status.powerupNames.Length; type++)
                 {
-                    if ((buff.IsPowerUp() && (lhsBuffController.GetBuff(Buff.BUFFID_PROTECT_POWERUP) != null)) ||
-                        (buff.IsPowerDown() && (lhsBuffController.GetBuff(Buff.BUFFID_PROTECT_POWERDOWN) != null)))
-                    {
-                        buffs = buffs.Where(x => x.id != buff.id);
+                    var powerupBuffId = Buff.GetPowerUpBuffId(type, 1);
+                    var powerdownBuffId = Buff.GetPowerUpBuffId(type, -1);
+                    if ((!idRange.Contains(powerupBuffId)) && (!idRange.Contains(powerdownBuffId)))
                         continue;
+
+                    if ((idRange.Contains(powerupBuffId) && ((lhsPowerup[type] > 0) || (rhsPowerup[type] > 0))) ||
+                        (idRange.Contains(powerdownBuffId) && ((lhsPowerup[type] < 0) || (rhsPowerup[type] < 0))))
+                    {
+                        lhsStatus[type] = rhsPowerup[type];
+                        rhsStatus[type] = lhsPowerup[type];
+
+                        lhsUnit.pet.statusController.SetPowerUp(type, 0);
+                        rhsUnit.pet.statusController.SetPowerUp(type, 0);   
                     }
                 }
 
-                int type = buff.id.IsWithin(-9, -10) ? 5 : (buff.id - 1) / 2;
-                int statusMult = (int)Parser.ParseEffectOperation(mult, effect, lhsUnit, rhsUnit);
-                status[type] = (isReverse ? -1 : 1) * statusMult * powerup[type];
+                lhsUnit.pet.PowerUp(lhsStatus, lhsUnit, state, true);
+                rhsUnit.pet.PowerUp(rhsStatus, rhsUnit, state, true);
 
-                if (isTransfer || isReverse)
-                {
-                    lhsUnit.pet.statusController.SetPowerUp(type, 0);
-                }
+                var lhsNotPowerBuffs = lhsBuffs.Where(x => !Buff.powerBuffIds.Contains(x.id));
+                var rhsNotPowerBuffs = rhsBuffs.Where(x => !Buff.powerBuffIds.Contains(x.id));
+
+                lhsBuffController.RemoveRangeBuff(lhsNotPowerBuffs, lhsUnit, state);
+                rhsBuffController.RemoveRangeBuff(rhsNotPowerBuffs, rhsUnit, state);
+
+                lhsBuffController.AddRangeBuff(rhsNotPowerBuffs, lhsUnit, state);
+                rhsBuffController.AddRangeBuff(lhsNotPowerBuffs, rhsUnit, state);
             }
-            rhsUnit.pet.PowerUp(status, rhsUnit, state);
+            else
+            {
+                buffs = lhsBuffController.GetRangeBuff(x => idRange.Contains(x.id) && filter(x));
+                var powerup = lhsUnit.pet.statusController.powerup;
+                var status = new Status();
+                foreach (var buff in buffs.Select(x => new Buff(x)))
+                {
+                    if (!buff.IsPower())
+                    {
+                        rhsBuffController.AddBuff(buff, rhsUnit, invokeUnit, state);
+                        continue;
+                    }
+
+                    if (isTransfer || isReverse)
+                    {
+                        if ((buff.IsPowerUp() && (lhsBuffController.GetBuff(Buff.BUFFID_PROTECT_POWERUP) != null)) ||
+                            (buff.IsPowerDown() && (lhsBuffController.GetBuff(Buff.BUFFID_PROTECT_POWERDOWN) != null)))
+                        {
+                            buffs = buffs.Where(x => x.id != buff.id);
+                            continue;
+                        }
+                    }
+
+                    int type = buff.id.IsWithin(-9, -10) ? 5 : (buff.id - 1) / 2;
+                    int statusMult = (int)Parser.ParseEffectOperation(mult, effect, lhsUnit, rhsUnit);
+                    status[type] = (isReverse ? -1 : 1) * statusMult * powerup[type];
+
+                    if (isTransfer || isReverse)
+                    {
+                        lhsUnit.pet.statusController.SetPowerUp(type, 0);
+                    }
+                }
+                rhsUnit.pet.PowerUp(status, rhsUnit, state);   
+            }
         }
 
         if (isType)
         {
-            foreach (var type in typeRange)
+            if (isExchange)
             {
-                if (lhsBuffController.GetBuff(Buff.GetProtectBuffTypeId(type)) != null)
-                    continue;
+                var lhsBuffs = new List<Buff>();
+                var rhsBuffs = new List<Buff>();
+                foreach (var type in typeRange)
+                {
+                    lhsBuffs.AddRange(lhsBuffController.GetRangeBuff(x => (!x.IsUneffectable()) && x.IsType(type) && filter(x)));
+                    rhsBuffs.AddRange(rhsBuffController.GetRangeBuff(x => (!x.IsUneffectable()) && x.IsType(type) && filter(x)));
+                    buffs = lhsBuffs.Concat(rhsBuffs);
+                }
 
-                buffs = buffs.Concat(lhsBuffController.GetRangeBuff(x => (!x.IsUneffectable()) && x.IsType(type) && filter(x)));
+                lhsBuffController.RemoveRangeBuff(lhsBuffs, lhsUnit, state);
+                rhsBuffController.RemoveRangeBuff(rhsBuffs, rhsUnit, state);
+
+                lhsBuffController.AddRangeBuff(rhsBuffs, lhsUnit, state);
+                rhsBuffController.AddRangeBuff(lhsBuffs, rhsUnit, state);
             }
-            rhsBuffController.AddRangeBuff(buffs.Select(x => new Buff(x)), rhsUnit, invokeUnit, state);
+            else
+            {
+                foreach (var type in typeRange)
+                {
+                    if (lhsBuffController.GetBuff(Buff.GetProtectBuffTypeId(type)) != null)
+                        continue;
+
+                    buffs = buffs.Concat(lhsBuffController.GetRangeBuff(x => (!x.IsUneffectable()) && x.IsType(type) && filter(x)));
+                }
+                rhsBuffController.AddRangeBuff(buffs.Select(x => new Buff(x)), rhsUnit, invokeUnit, state);   
+            }
         }
 
         if (isTransfer)

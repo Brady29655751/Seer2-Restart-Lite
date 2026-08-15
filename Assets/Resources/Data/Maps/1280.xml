@@ -1,0 +1,217 @@
+<map name="灵能通径"  category="13"  id="1280" weather="10">
+	<!-- <resource>10011</resource> -->
+	<initialPoint>470,100</initialPoint>
+	<music category="13">
+		<bgm>BGM_1270</bgm>
+	</music>
+	<entities>
+		<npc id="128001" resId="128001" name="里格" size="151,118" pos="390,210" namePos="-20,0">
+			<description>要在这危险的地方生存，必须先在我面前证明实力</description>
+			<dialog>
+				<branch id="default" name="里格" icon="128001" size="151,118" pos="10,35">
+					<content><![CDATA[我是反萨联盟先锋队长，里格]]></content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[我是赛尔先锋队长，星际使者]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+						<reply type="click">
+							<description><![CDATA[挑战伟恩军团]]></description>
+							<action>battle</action>
+							<param>default</param>
+						</reply>
+					</replyHandler>
+				</branch>
+				<branch id="reward" name="里格" icon="128001" size="151,118" pos="10,35">
+					<content><![CDATA[自尊心强的伟恩再次向你发起挑战！]]></content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[打不过就三战两胜是吗]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+						<reply type="click">
+							<description><![CDATA[我无所畏惧]]></description>
+							<action>battle</action>
+							<param>capture</param>
+						</reply>
+					</replyHandler>
+				</branch>
+			</dialog>
+			<battle>
+				<branch id="default">
+					<settings count="6">
+						<weather>10</weather>
+					</settings>
+					<enemy>
+						<pet id="816" level="100">
+							<loopSkill>14868,14863</loopSkill>
+							<superSkill>14866</superSkill>
+						</pet>
+						<pet id="816" level="101">
+							<loopSkill>14868,14863</loopSkill>
+							<superSkill>14866</superSkill>
+						</pet>
+						<pet id="816" level="102">
+							<loopSkill>14868,14863</loopSkill>
+							<superSkill>14866</superSkill>
+						</pet>
+						<pet id="816" level="103">
+							<loopSkill>14868,14863</loopSkill>
+							<superSkill>14866</superSkill>
+						</pet>
+						<pet id="816" level="104">
+							<loopSkill>14868,14863</loopSkill>
+							<superSkill>14866</superSkill>
+						</pet>
+						<pet id="816" level="105">
+							<loopSkill>14868,14863</loopSkill>
+							<superSkill>14866</superSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setItem</action>
+							<param>add</param>
+							<param>10201,3</param>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=3个砂糖甜饼已经放入背包</param>
+							<param>item_icon=item[10201]</param>
+							<param>option_num=1</param>
+						</button>
+						<button type="auto">
+							<action>openDialog</action>
+							<param>reward</param>
+							<condition>random[old]&lt;5</condition>
+						</button>
+					</winHandler>
+				</branch>
+				<branch id="capture">
+					<settings count="1" capture="true">
+						<weather>10</weather>
+					</settings>
+					<enemy>
+						<pet id="816" level="95">
+							<loopSkill>14868,14868,14868,14868,-4</loopSkill>
+						</pet>
+					</enemy>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>openDialog</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<npc id="128002" resId="Pets/pet/884" name="Lv101 迪赛" size="86,74" pos="705,160" namePos="0,0">
+			<wild>
+				<movement mode="wander" radius="220" speed="34" idle="2,6" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true" />
+				<talk chance="0.3" duration="4">
+					<self image="emoji/toon/alert" />
+					<self image="emoji/toon/angry" />
+					<self image="emoji/toon/annoyed" />
+					<self image="emoji/toon/cool" />
+					<self image="emoji/toon/cry" />
+					<self image="emoji/toon/dizzy" />
+					<self image="emoji/toon/grin" />
+					<self image="emoji/toon/happy" />
+					<self image="emoji/toon/hypno" />
+					<self image="emoji/toon/laugh" />
+					<self image="emoji/toon/love" />
+					<self image="emoji/toon/mute" />
+					<self image="emoji/toon/shocked" />
+					<self image="emoji/toon/shy" />
+					<self image="emoji/toon/sick" />
+					<self image="emoji/toon/silly" />
+					<self image="emoji/toon/skull" />
+					<self image="emoji/toon/sleepy" />
+					<self image="emoji/toon/smug" />
+					<self image="emoji/toon/star_eyes" />
+					<self image="emoji/toon/sunglasses" />
+					<self image="emoji/toon/surprised" />
+					<self image="emoji/toon/sweat" />
+					<self image="emoji/toon/worried" />
+					<self>开火！开火！哈哈哈哈！</self>
+					<self>装弹！装弹！哈哈哈哈！</self>
+					<self>有了这把枪就是无敌的！哈哈哈哈！</self>
+				</talk>
+			</wild>
+			<battle>
+				<branch id="default">
+					<settings count="6" capture="true"/>
+					<enemy>
+						<pet id="884" level="101">
+							<loopSkill>10187</loopSkill>
+						</pet>
+					</enemy>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>battle</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<npc id="128003" resId="Pets/pet/884" name="Lv102 迪赛" size="86,74" pos="545,150" namePos="0,0">
+			<wild>
+				<movement mode="wander" radius="220" speed="34" idle="2,6" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true" />
+				<talk chance="0.3" duration="4">
+					<self image="emoji/toon/alert" />
+					<self image="emoji/toon/angry" />
+					<self image="emoji/toon/annoyed" />
+					<self image="emoji/toon/cool" />
+					<self image="emoji/toon/cry" />
+					<self image="emoji/toon/dizzy" />
+					<self image="emoji/toon/grin" />
+					<self image="emoji/toon/happy" />
+					<self image="emoji/toon/hypno" />
+					<self image="emoji/toon/laugh" />
+					<self image="emoji/toon/love" />
+					<self image="emoji/toon/mute" />
+					<self image="emoji/toon/shocked" />
+					<self image="emoji/toon/shy" />
+					<self image="emoji/toon/sick" />
+					<self image="emoji/toon/silly" />
+					<self image="emoji/toon/skull" />
+					<self image="emoji/toon/sleepy" />
+					<self image="emoji/toon/smug" />
+					<self image="emoji/toon/star_eyes" />
+					<self image="emoji/toon/sunglasses" />
+					<self image="emoji/toon/surprised" />
+					<self image="emoji/toon/sweat" />
+					<self image="emoji/toon/worried" />
+					<self>开火！开火！哈哈哈哈！</self>
+					<self>装弹！装弹！哈哈哈哈！</self>
+					<self>有了这把枪就是无敌的！哈哈哈哈！</self>
+				</talk>
+			</wild>
+			<battle>
+				<branch id="default">
+					<settings count="6" capture="true"/>
+					<enemy>
+						<pet id="884" level="102">
+							<loopSkill>10187</loopSkill>
+						</pet>
+					</enemy>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>battle</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<teleport id="1" name="秘密基地" pos="720,210" targetMapId="1270"/>
+		<teleport id="2" name="超源氏族主城" pos="605,295" targetMapId="1290" color="164,40,164,255"/>
+		<!-- <teleport id="3" name="秘密基地" pos="840,155" targetMapId="1270"/> -->
+	</entities>
+</map>
+

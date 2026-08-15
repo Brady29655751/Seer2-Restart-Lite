@@ -172,7 +172,7 @@ public class AttackPhase : BattlePhase
 
             var elementDamage = atkUnit.skillSystem.GetTypeDamage(type => type.StartsWith("skill_element"));
             if (elementDamage > 0)
-                report += $"<color=#fd893d>【属性伤害】<size=13>{elementDamage}</size=13></color>";
+                report += $"<color=#ed780e>【属性伤害】<size=13>{elementDamage}</size=13></color>";
 
             var damageTypes = new Dictionary<string, string>
             {

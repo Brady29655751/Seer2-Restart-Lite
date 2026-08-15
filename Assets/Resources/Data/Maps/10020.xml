@@ -265,9 +265,24 @@
 							<param>ItemShop</param>
 							<param>mode=buy</param>
 							<param>currency=8/0</param>
-							<param>item=334780</param>
-							<param>limit=1</param>
+							<param>item=334780/470015</param>
+							<param>limit=1/-1</param>
 							<param>title=因子商店</param>
+						</func>
+						<func type="click">
+							<description><![CDATA[常态神迹]]></description>
+							<action>battle</action>
+							<param>resident_miracle</param>
+							<condition>firstPet.id=14780</condition>
+						</func>
+						<func type="branch">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=把神迹巴拉龟设为首发之后再来挑战吧</param>
+							<param>option_num=1</param>
+							<param>item_icon=pet[14780]</param>
+							<condition>firstPet.idNOT14780</condition>
 						</func>
 					</functionHandler>
 					<replyHandler>
@@ -330,6 +345,35 @@
 							<param>title=提示</param>
 							<param>content=50个精灵因子已经放入背包</param>
 							<param>item_icon=item[8]</param>
+							<param>option_num=1</param>
+						</button>
+					</winHandler>
+				</branch>
+				<branch id="resident_miracle">
+					<settings count="1">
+						<mode>4</mode>
+						<weather>2</weather>
+					</settings>
+					<enemy>
+						<pet id="20015" level="105">
+							<status>
+								<hp>10000</hp>
+							</status>
+							<initBuff>-8,61,3336,94</initBuff>
+							<loopSkill>12408,12409,12410,12411,12412</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>evolvePet</action>
+							<param>20015</param>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=神迹巴拉龟已常驻神迹形态</param>
+							<param>item_icon=pet[114780]</param>
 							<param>option_num=1</param>
 						</button>
 					</winHandler>

@@ -113,7 +113,8 @@ public class GameManager : Singleton<GameManager>
 
         if (debugMode)
         {
-            Player.instance.gameData.petStorage = Database.instance.petInfoDict.Select(entry => Pet.GetExamplePet(entry.Key)).ToList();
+            var notOwnedPets = Database.instance.petInfoDict.Keys.Where(id => !Player.instance.gameData.petStorage.Exists(x => x.id == id)).Select(id => Pet.GetExamplePet(id));
+            Player.instance.gameData.petStorage.AddRange(notOwnedPets);
             Player.instance.gameData.itemStorage = ItemInfo.database.Where(x => !(new ItemType[] { ItemType.Emblem, /*ItemType.Evolve,*/ ItemType.Skill }).Contains(x.type)).Select(x => new Item(x.id, 99999)).ToList();
             Player.instance.gameData.coin = (int)2e7;
             Player.instance.gameData.diamond = (int)2e7;
