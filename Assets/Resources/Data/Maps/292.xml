@@ -7,20 +7,28 @@
 	<initialPoint>390,105</initialPoint>
 	<entities>
 		<npc id="29201" resId="Pets/pet/983" name="Lv 105 幻灵兽" size="280,210" pos="350,190" namePos="30,0">
+			<anim id="Pets/anim/983" pos="-0.75,0.75" scale="1.5,1.5" />
 			<description><![CDATA[幻灵兽]]></description>
 			<dialog>
 				<branch id="default" name="幻灵兽" icon="Pets/pet/983" size="132,90" pos="0,55">
 					<content><![CDATA[我是精灵王之躯体，火幻氏族不朽的守护者]]></content>
+					<functionHandler>
+						<func type="click">
+							<description><![CDATA[挑战幻灵兽]]></description>
+							<action>battle</action>
+							<param>default</param>
+						</func>
+						<func type="click">
+							<description><![CDATA[超进化]]></description>
+							<action>battle</action>
+							<param>evolve</param>
+						</func>
+					</functionHandler>
 					<replyHandler>
 						<reply type="click">
 							<description><![CDATA[幻灵兽居然隐藏在神灯之中]]></description>
 							<action>openDialog</action>
 							<param>null</param>
-						</reply>
-						<reply type="click">
-							<description><![CDATA[挑战幻灵兽]]></description>
-							<action>battle</action>
-							<param>default</param>
 						</reply>
 					</replyHandler>
 				</branch>
@@ -80,6 +88,36 @@
 						</button>		
 					</winHandler>
 				</branch>
+				<branch id="evolve">
+					<settings count="6">
+						<weather>3</weather>
+						<initBuff>(field:600003)</initBuff>
+						<limit>(elementNOT2)(elementNOT12)</limit>
+						<limitDesc><![CDATA[不可以使用<color=#ffbb33>水系</color>和<color=#ffbb33>特质系</color>精灵进行挑战哦！]]></limitDesc>
+					</settings>
+					<enemy>
+						<pet id="993" level="105">
+							<status>
+								<atk>100</atk>
+								<mat>100</mat>
+								<def>100</def>
+								<mdf>100</mdf>
+								<hp>250000</hp>
+							</status>
+							<initBuff>-8,17,20,61,-3112,-3082,-3026,92,93,-3123,-3105,-3068,-3129,41,3172[30]</initBuff>
+							<loopSkill>14979</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="choose">
+							<action>openHintbox</action>
+							<param>type=PetSelect</param>
+						    <param>title=选择要进化的幻灵兽</param>
+						    <param>option_num=2</param>
+							<param>callback=evolve</param>
+						</button>
+					</winHandler>
+				</branch>
 			</battle>
 			<eventHandler>
 				<button type="click">
@@ -87,6 +125,43 @@
 					<param>default</param>
 				</button>
 			</eventHandler>
+			<callbackHandler>
+				<button type="choose">
+					<action>openHintbox</action>
+					<param>type=PetSelect</param>
+				    <param>title=选择要进化的幻灵兽</param>
+				    <param>option_num=2</param>
+					<param>callback=evolve</param>
+				    <condition>data.PetSelect.uidNOT983|data.PetSelect.level&lt;100</condition>
+				</button>
+				<button type="evolve">
+				    <action>openHintbox</action>
+				    <param>type=Item</param>
+				    <param>title=提示</param>
+				    <param>content=必须选择等级100的幻灵兽！</param>
+				    <param>item_icon=pet[983]</param>
+				    <param>option_num=1</param>
+					<param>callback=choose</param>
+				    <condition>data.PetSelect.uidNOT983|data.PetSelect.level&lt;100</condition>
+				</button>
+				<button type="evolve">
+				    <action>openHintbox</action>
+				    <param>type=Item</param>
+				    <param>title=提示</param>
+				    <param>content=幻灵兽已成功超进化</param>
+				    <param>item_icon=pet[993]</param>
+				    <param>option_num=1</param>
+				    <condition>data.PetSelect.uid=983</condition>
+				    <condition>data.PetSelect.levelGTE100</condition>
+				</button>
+				<button type="evolve">
+				    <action>evolvePet</action>
+				    <param>index=data.PetSelectIndex</param>
+				    <param>993</param>
+				    <condition>data.PetSelect.uid=983</condition>
+				    <condition>data.PetSelect.levelGTE100</condition>
+				</button>
+			</callbackHandler>
 		</npc>
         <teleport id="1" name="幻空通道" pos="720,180" targetMapId="291"/>
 	</entities>

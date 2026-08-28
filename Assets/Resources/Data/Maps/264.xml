@@ -1,0 +1,44 @@
+<map name="烈焰山口" category="4" id="264">
+	<fightMap>100004</fightMap>
+	<music category="4">
+		<bgm>BGM_260</bgm>
+		<fx>FX_123</fx>
+	</music>
+	<initialPoint>290,100</initialPoint>
+	<entities>
+		<npc id="26401" resId="Pets/pet/12739.png" name="Lv105 艾恩斯" size="252,231" pos="150,200" namePos="0,0">
+			<description>火元素之王</description>
+			<dialog>
+				<branch id="default" name="艾恩斯" icon="Pets/pet/12739" size="168,154" pos="0,35">
+				    <content><![CDATA[我是火元素之王！]]></content>
+					<functionHandler>
+						<func type="click">
+							<description><![CDATA[兑换商店]]></description>
+							<action>openPanel</action>
+							<param>ItemShop</param>
+							<param>mode=buy</param>
+							<param>currency=400009/0</param>
+							<param>item=512737</param>
+							<param>limit=1</param>
+							<param>title=兑换商店</param>
+						</func>
+					</functionHandler>
+				    <replyHandler>
+				        <reply type="click">
+				            <description><![CDATA[等我拿个灭火器]]></description>
+				            <action>openDialog</action>
+				            <param>null</param>
+				        </reply>
+				    </replyHandler>
+				</branch>
+			</dialog>
+			<eventHandler>
+				<button type="click">
+					<action>openDialog</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+        <teleport id="1" name="烈焰峡谷" pos="180,70" targetMapId="262"/>
+	</entities>
+</map>

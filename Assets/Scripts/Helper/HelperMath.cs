@@ -21,6 +21,19 @@ public static class MathHelper {
     /// Check if a number is in the range (Max exclusive).
     /// </summary>
     public static bool IsInRange(this int num, int min, int max) {
+        if (min > max) {
+            var tmp = min;  min = max;  max = tmp;
+        }
+        return ((num >= min) && (num < max));
+    }
+
+    /// <summary>
+    /// Check if a number is in the range (Max exclusive).
+    /// </summary>
+    public static bool IsInRange(this float num, float min, float max) {
+        if (min > max) {
+            var tmp = min;  min = max;  max = tmp;
+        }
         return ((num >= min) && (num < max));
     }
 

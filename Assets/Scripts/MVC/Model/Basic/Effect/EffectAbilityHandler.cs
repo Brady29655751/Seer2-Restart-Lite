@@ -279,7 +279,7 @@ public static class EffectAbilityHandler
             }
 
             // If already dead, no heal.
-            if (targetList[i].isDead)
+            if (targetList[i].hp <= 0)
                 continue;
 
             if (targetList[i].buffController.GetBuff(100) != null)
@@ -1931,6 +1931,27 @@ public static class EffectAbilityHandler
                 TrySetSkill(trimSuperSkill, battlePet.skillController, -1);
             }
 
+            return true;
+        }
+
+        if (type == "dead")
+        {
+            var deadCondition = Parser.ParseConditionFilter<BattlePet>(value, (expr, pet) =>
+            {
+                if (pet == null)
+                    return float.MinValue;
+
+                return Identifier.GetPetIdentifier(expr, lhsUnit.petSystem, pet);
+            });
+
+            if (op == "SET")
+            {
+                battlePet.deadCondition = deadCondition;
+            } 
+            else if (op == "+")
+            {
+                battlePet.deadCondition += deadCondition;
+            }
             return true;
         }
 

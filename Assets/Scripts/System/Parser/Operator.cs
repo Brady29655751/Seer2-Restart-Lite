@@ -83,7 +83,7 @@ public static class Operator {
 
     public static Dictionary<string, Func<float, float, float>> opDict { get; } = new Dictionary<string, Func<float, float, float>>() {
         {"+", Add},  {"-", Sub},  {"*", Mult},  {"/", Div},  {"^", Pow},    {"%", Mod},
-        {"[MIN]", Mathf.Min},     {"[MAX]", Mathf.Max},      {"SET", Set},  {"[ABS]", Abs},
+        {"[MIN]", Mathf.Min},     {"[MAX]", Mathf.Max},      {"SET", Set},  {"[ABS]", Abs},     {"[NEG]", Neg},
         {"[FLR]", Floor},       {"[CEL]", Ceil},          {"[RND]", Round}
     };
 
@@ -96,6 +96,9 @@ public static class Operator {
     }
     public static float Sub(float lhs, float rhs) {
         return lhs - rhs;
+    }
+    public static float Neg(float lhs, float rhs) {
+        return rhs - lhs;
     }
     public static float Mult(float lhs, float rhs) {
         return lhs * rhs;

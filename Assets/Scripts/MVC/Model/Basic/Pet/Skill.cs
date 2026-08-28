@@ -350,7 +350,7 @@ public class Skill
     public string GetDescription(string plainText, string mode = "skill")
     {
         string desc;
-        desc = plainText.Trim();
+        desc = "<size=8>\n</size>" + plainText.Trim();
 
         if ((critical <= 100) && (critical != 5))
         {

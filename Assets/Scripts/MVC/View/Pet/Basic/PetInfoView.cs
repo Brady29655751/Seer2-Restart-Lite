@@ -39,7 +39,7 @@ public class PetInfoView : UIModule
         SetGetPetDate(pet.basic.getPetDate);
     }
 
-    public void SetID(int id, int subId, int star, bool isDevolved)
+    public void SetID(int id, int subId, float star, bool isDevolved)
     {
         var subIdText = (subId == 0) ? string.Empty : ("-" + subId);
         var starColor = isDevolved ? "ff0080" : "ffbb33";

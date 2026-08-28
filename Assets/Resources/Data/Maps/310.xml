@@ -51,6 +51,23 @@
 							<loopSkill>12948,12956</loopSkill>
 						</pet>
 					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setItem</action>
+							<param>add</param>
+							<param>22040,1</param>
+							<condition>random[old]&lt;10</condition>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=1个生锈粉末已经放入背包</param>
+							<param>item_icon=buff[420040]</param>
+							<param>option_num=1</param>
+							<condition>random[old]&lt;10</condition>
+						</button>
+					</winHandler>
 				</branch>
 			</battle>
 			<eventHandler>
@@ -106,6 +123,23 @@
 							<loopSkill>12948,12956</loopSkill>
 						</pet>
 					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setItem</action>
+							<param>add</param>
+							<param>22040,1</param>
+							<condition>random[old]&lt;10</condition>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=1个生锈粉末已经放入背包</param>
+							<param>item_icon=buff[420040]</param>
+							<param>option_num=1</param>
+							<condition>random[old]&lt;10</condition>
+						</button>
+					</winHandler>
 				</branch>
 			</battle>
 			<eventHandler>

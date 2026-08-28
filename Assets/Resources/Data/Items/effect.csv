@@ -209,6 +209,10 @@ id,timing,priority,target,condition,cond_option,effect,effect_option
 22036,resident,-1,pet,pet,type=buff[group:exclude]&buff[group:exclude]_cmp=0,set_pet,type=buff&op=+&value=420036
 22037,resident,-1,pet,pet,type=buff[group:exclude]&buff[group:exclude]_cmp=0,set_pet,type=buff&op=+&value=420037
 22038,resident,-1,pet,pet,type=buff[group:exclude]&buff[group:exclude]_cmp=0,set_pet,type=buff&op=+&value=420038
+22039,resident,-1,pet,pet,type=buff[group:exclude]&buff[group:exclude]_cmp=0,set_pet,type=buff&op=+&value=420039
+22040,resident,-1,pet,pet,type=buff[group:exclude]&buff[group:exclude]_cmp=0,set_pet,type=buff&op=+&value=420040
+22050,resident,-1,pet,pet,type=buff[group:exclude]&buff[group:exclude]_cmp=0,set_pet,type=buff&op=+&value=420050
+22052,resident,-1,pet,pet,type=buff[group:exclude]&buff[group:exclude]_cmp=0,set_pet,type=buff&op=+&value=420052
 22054,resident,-1,pet,pet,type=buff[group:exclude]&buff[group:exclude]_cmp=0,set_pet,type=buff&op=+&value=420054
 23001,resident,-1,pet,pet,type=buff[group:exclude]&buff[group:exclude]_cmp=0,set_pet,type=buff&op=+&value=430001
 23002,resident,-1,pet,pet,type=buff[group:exclude]&buff[group:exclude]_cmp=0,set_pet,type=buff&op=+&value=430002
@@ -342,6 +346,8 @@ id,timing,priority,target,condition,cond_option,effect,effect_option
 320761,resident\resident\resident,-1\-1\-1,pet\pet\pet,pet\pet\pet,type=id&id_cmp=761\type=id&id_cmp=762\type=id&id_cmp=763,set_pet\set_pet\set_pet,type=id&op=SET&value=762&keep_skill=false\type=id&op=SET&value=763&keep_skill=false\type=id&op=SET&value=761&keep_skill=false
 320810,resident,-1,pet,pet,type=id/level&id_cmp=91&level_op=GTE&level_cmp=25,set_pet,type=id&op=SET&value=810
 320813,resident,-1,pet,pet,type=uid/level&uid_cmp=809&level_op=GTE&level_cmp=100,set_pet,type=id&op=SET&value=813
+320967,resident,-1,pet,pet,type=id/level&id_cmp=91&level_op=GTE&level_cmp=25,set_pet,type=id&op=SET&value=967
+320968,resident,-1,pet,pet,type=id/level&id_cmp=91&level_op=GTE&level_cmp=25,set_pet,type=id&op=SET&value=968
 320970,resident,-1,pet,pet,type=baseId/maxLevel&baseId_cmp=970&maxLevel_op=<&maxLevel_cmp=105,set_pet,type=maxLevel&op=SET&value=105
 321136,resident,-1,pet,pet,type=uid/level&uid_cmp=608&level_op=GTE&level_cmp=100,set_pet,type=id&op=SET&value=1136
 331122,resident,-1,pet,pet,type=uid/level&uid_cmp=10999&level_op=GTE&level_cmp=100,set_pet,type=id&op=SET&value=11122
@@ -355,6 +361,7 @@ id,timing,priority,target,condition,cond_option,effect,effect_option
 332858,resident,-1,pet,pet,type=uid/level&uid_cmp=10006&level_op=GTE&level_cmp=100,set_pet,type=id&op=SET&value=12858
 333145,resident,-1,pet,pet,type=uid/level&uid_cmp=12197&level_op=GTE&level_cmp=100,set_pet,type=id&op=SET&value=13145
 333147,resident,-1,pet,pet,type=uid/level&uid_cmp=11836&level_op=GTE&level_cmp=100,set_pet,type=id&op=SET&value=13147
+333403,resident\resident,-1\-10,pet\pet,pet\pet,type=uid/level&uid_cmp=13399&level_op=GTE&level_cmp=100\type=uid/level&uid_cmp=13399&level_op=GTE&level_cmp=100,set_pet\set_pet,type=id&op=SET&value=13403\type=record[kizuna]&op=+&value=50
 333848,resident,-1,pet,pet,type=uid/level&uid_cmp=11278&level_op=GTE&level_cmp=100,set_pet,type=id&op=SET&value=11279
 334198,resident,-1,pet,pet,type=uid/level&uid_cmp=11216&level_op=GTE&level_cmp=100,set_pet,type=id&op=SET&value=12798
 334731,resident,-1,pet,pet,type=uid/level&uid_cmp=11836&level_op=GTE&level_cmp=100,set_pet,type=id&op=SET&value=14731
@@ -481,6 +488,7 @@ id,timing,priority,target,condition,cond_option,effect,effect_option
 500809,resident\resident,-1\-1,state\state,none\none,none\none,set_player\set_player,param_count=1&action=getPet&param[0]=809\param_count=5&action=openHintbox&param[0]=type＝Item&param[1]=title＝提示&param[2]=content＝【蛇诗曼】已经放入精灵仓库&param[3]=item_icon＝pet[809]&param[4]=option_num＝1
 500811,resident\resident,-1\-1,state\state,none\none,none\none,set_player\set_player,param_count=1&action=getPet&param[0]=811\param_count=5&action=openHintbox&param[0]=type＝Item&param[1]=title＝提示&param[2]=content＝【小约瑟】已经放入精灵仓库&param[3]=item_icon＝pet[811]&param[4]=option_num＝1
 500826,resident\resident,-1\-1,state\state,none\none,none\none,set_player\set_player,param_count=1&action=getPet&param[0]=826\param_count=5&action=openHintbox&param[0]=type＝Item&param[1]=title＝提示&param[2]=content＝【萌萌大月饼】已经放入精灵仓库&param[3]=item_icon＝pet[826]&param[4]=option_num＝1
+500911,resident\resident,-1\-1,state\state,none\none,none\none,set_player\set_player,param_count=1&action=getPet&param[0]=911\param_count=5&action=openHintbox&param[0]=type＝Item&param[1]=title＝提示&param[2]=content＝【小凯萨】已经放入精灵仓库&param[3]=item_icon＝pet[911]&param[4]=option_num＝1
 500959,resident\resident,-1\-1,state\state,none\none,none\none,set_player\set_player,param_count=1&action=getPet&param[0]=959\param_count=5&action=openHintbox&param[0]=type＝Item&param[1]=title＝提示&param[2]=content＝【洛基】已经放入精灵仓库&param[3]=item_icon＝pet[959]&param[4]=option_num＝1
 501001,resident\resident,-1\-1,state\state,none\none,none\none,set_player\set_player,param_count=1&action=getPet&param[0]=1001\param_count=5&action=openHintbox&param[0]=type＝Item&param[1]=title＝提示&param[2]=content＝【普琳】已经放入精灵仓库&param[3]=item_icon＝pet[1001]&param[4]=option_num＝1
 501003,resident\resident,-1\-1,state\state,none\none,none\none,set_player\set_player,param_count=1&action=getPet&param[0]=1003\param_count=5&action=openHintbox&param[0]=type＝Item&param[1]=title＝提示&param[2]=content＝【辰兔】已经放入精灵仓库&param[3]=item_icon＝pet[1003]&param[4]=option_num＝1
@@ -492,6 +500,7 @@ id,timing,priority,target,condition,cond_option,effect,effect_option
 510196,resident\resident,-1\-1,state\state,none\none,none\none,set_player\set_player,param_count=1&action=getPet&param[0]=10196\param_count=5&action=openHintbox&param[0]=type＝Item&param[1]=title＝提示&param[2]=content＝【祖拉】已经放入精灵仓库&param[3]=item_icon＝pet[10196]&param[4]=option_num＝1
 510370,resident\resident,-1\-1,state\state,none\none,none\none,set_player\set_player,param_count=1&action=getPet&param[0]=10370\param_count=5&action=openHintbox&param[0]=type＝Item&param[1]=title＝提示&param[2]=content＝【奎尼】已经放入精灵仓库&param[3]=item_icon＝pet[10370]&param[4]=option_num＝1
 510499,resident\resident,-1\-1,state\state,none\none,none\none,set_player\set_player,param_count=1&action=getPet&param[0]=10499\param_count=5&action=openHintbox&param[0]=type＝Item&param[1]=title＝提示&param[2]=content＝【阿零】已经放入精灵仓库&param[3]=item_icon＝pet[10499]&param[4]=option_num＝1
+512737,resident\resident,-1\-1,state\state,none\none,none\none,set_player\set_player,param_count=1&action=getPet&param[0]=12737\param_count=5&action=openHintbox&param[0]=type＝Item&param[1]=title＝提示&param[2]=content＝【小斯】已经放入精灵仓库&param[3]=item_icon＝pet[12737]&param[4]=option_num＝1
 600000,none,-1,none,none,none,none,none
 600001,none,-1,none,none,none,none,none
 600002,none,-1,none,none,none,none,none

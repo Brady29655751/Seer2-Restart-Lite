@@ -15,7 +15,7 @@ public class PetResist
     public IKeyValuePair<int, int> unhealthyResist = new IKeyValuePair<int, int>(0, 0);
 
 
-    private int star => Pet.GetPetInfo(id)?.star ?? 0;
+    private float star => Pet.GetPetInfo(id)?.star ?? 0;
     public int abnormalBuffId => Buff.GetBuffInfo(abnormalResist.key)?.id ?? 199;
     public int unhealthyBuffId => Buff.GetBuffInfo(unhealthyResist.key)?.id ?? 1999;
     public Buff abnormalBuff => new Buff(abnormalBuffId);

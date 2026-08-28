@@ -18,7 +18,7 @@ public class PetStarFilterController : Module
 
     public Func<Pet, bool> GetFilter(int star)
     {
-        return pet => (pet != null) && ((star <= 0) || (pet.info.star == star));
+        return pet => (pet != null) && ((star <= 0) || (pet.info.star.IsInRange(star, star + 1)));
     }
 
     public void SetActive(bool active)

@@ -218,6 +218,76 @@
 				</button>
 			</eventHandler>
 		</npc>
+		<npc id="26104" resId="Pets/pet/303.png" name="Lv105 塔纳斯" size="117,136" pos="445,320" namePos="0,0">
+			<description>火幻氏族曾经的守护者</description>
+			<dialog>
+				<branch id="default" name="我" icon="7004" size="136,125" pos="0,35">
+				    <content><![CDATA[看起来被锁链缠绕而处于封印状态，帮忙解封一下吧]]></content>
+					<functionHandler>
+						<func type="click">
+							<description><![CDATA[挑战塔纳斯]]></description>
+							<action>battle</action>
+							<param>default</param>
+						</func>
+					</functionHandler>
+				    <replyHandler>
+				        <reply type="click">
+				            <description><![CDATA[不要随便乱动]]></description>
+				            <action>openDialog</action>
+				            <param>null</param>
+				        </reply>
+				    </replyHandler>
+				</branch>
+			</dialog>
+			<battle>
+				<branch id="default">
+					<settings count="6" star="2">
+						<weather>3</weather>
+					</settings>
+					<enemy>
+						<pet id="303" level="105">
+							<status>
+								<atk>800</atk>
+								<mat>800</mat>
+								<def>800</def>
+								<mdf>800</mdf>
+								<hp>8000</hp>
+							</status>
+							<initBuff>-8,17,20</initBuff>
+							<loopSkill>15052,15057,15058,15059,15054</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>getPet</action>
+							<param>303,1</param>
+							<condition>activity[ancestor].done[3]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=获得了塔纳斯！</param>
+							<param>item_icon=pet[303]</param>
+							<param>option_num=1</param>
+							<condition>activity[ancestor].done[3]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>ancestor</param>
+							<param>done[3]=true</param>
+							<condition>activity[ancestor].done[3]=[bool]false[default]false</condition>
+						</button>
+					</winHandler>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>openDialog</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
         <teleport id="1" name="蛮神战场" pos="280,60" targetMapId="240"/>
 		<teleport id="2" name="烈焰峡谷" pos="720,215" targetMapId="262"/>
 		<teleport id="3" name="火焰山" pos="170,160" targetMapId="263"/>

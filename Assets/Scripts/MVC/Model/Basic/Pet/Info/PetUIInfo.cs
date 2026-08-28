@@ -8,7 +8,8 @@ using System.Linq;
 public class PetUIInfo
 {
     public const int DATA_COL = 4;
-    public int id, subId, baseId, star;
+    public int id, subId, baseId;
+    public float star;
     public int generation => int.Parse(options.Get("generation", "1"));
 
     public int defaultId, defaultAnimId;
@@ -83,7 +84,7 @@ public class PetUIInfo
         defaultBuffIds = options.Get("default_buff", "none").ToIntList('/');
 
         hide = bool.Parse(options.Get("hide", "false"));
-        star = int.Parse(options.Get("star", "0"));
+        star = float.Parse(options.Get("star", "0"));
     }
 
     private void ParseSpecialSkin(string skinStr)

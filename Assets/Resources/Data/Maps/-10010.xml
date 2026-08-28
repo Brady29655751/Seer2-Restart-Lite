@@ -128,7 +128,22 @@
 			<description><![CDATA[可爱的精灵]]></description>
 			<dialog>
 				<branch id="default" name="小娅" icon="Pets/pet/13385" size="125,125" pos="0,40">
-					<content><![CDATA[小娅会成为你最棒的骑士！]]></content>
+					<content><![CDATA[小娅会成为最棒的骑士！]]></content>
+					<functionHandler>
+						<func type="click">
+							<description><![CDATA[阿娅超进化]]></description>
+							<action>openPanel</action>
+							<param>TwelveRound</param>
+							<param>pet=13403</param>
+							<param>pos=0,80</param>
+							<param>size=224,262</param>
+							<param>item[2]=10239[1]</param>
+							<param>item[5]=9008[3]</param>
+							<param>item[8]=2[50]</param>
+							<param>item[10]=10242[1]</param>
+							<param>item[12]=333403[1]</param>
+						</func>
+					</functionHandler>
 					<replyHandler>
 						<reply type="click">
 							<description><![CDATA[孩子开心比什么都重要]]></description>

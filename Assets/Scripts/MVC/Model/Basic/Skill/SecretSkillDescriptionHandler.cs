@@ -20,6 +20,7 @@ public static class SecretSkillDescriptionHandler
         "超伊特、神伊特",
         "战神联盟（新世界）",
         "特伊特、鬼伊特",
+        "古伊特、圣伊特",
     };
 
     public static string GreaterThanLevel(this LearnSkillInfo secretSkillInfo) {

@@ -8,6 +8,7 @@ using System;
 public class BattlePet : Pet
 {
     public int stayTurn = 0, chain = 0;
+    public Func<BattlePet, bool> deadCondition = (pet) => pet.battleStatus.hp <= 0;
     public PetBattleStatusController statusController;
     public PetBattleBuffController buffController;
     public PetBattleSkillController skillController;
@@ -19,7 +20,7 @@ public class BattlePet : Pet
     public int subBattleElementId => (int)subBattleElement;
     public Element subBattleElement => buffController.subElement;
 
-    public bool isDead => (battleStatus.hp <= 0);
+    public bool isDead => deadCondition?.Invoke(this) ?? true;
     public bool isMovable => buffController.isMovable;
     public bool isToken => buffController.GetBuff(Buff.BUFFID_TOKEN) != null;
 
@@ -85,6 +86,7 @@ public class BattlePet : Pet
 
         stayTurn = rhs.stayTurn;
         chain = rhs.chain;
+        deadCondition = (rhs.deadCondition == null) ? null : new Func<BattlePet, bool>(rhs.deadCondition);
 
         statusController = new PetBattleStatusController(rhs.statusController){ parent = this };
         buffController = new PetBattleBuffController(rhs.buffController){ parent = this };

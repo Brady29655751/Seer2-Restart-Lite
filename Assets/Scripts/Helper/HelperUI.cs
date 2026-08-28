@@ -379,9 +379,9 @@ namespace UnityEngine
             };
         }
 
-        public static Color32 GetStarColor(int star)
+        public static Color32 GetStarColor(float star)
         {
-            return starColors.Get(star, Color.clear);
+            return starColors.Get((int)star, Color.clear);
         }
 
         public static void SetColor(this UI.Image image, Color color) {
