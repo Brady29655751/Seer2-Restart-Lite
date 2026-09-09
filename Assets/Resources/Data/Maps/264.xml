@@ -7,17 +7,23 @@
 	<initialPoint>290,100</initialPoint>
 	<entities>
 		<npc id="26401" resId="Pets/pet/12739.png" name="Lv105 艾恩斯" size="252,231" pos="150,200" namePos="0,0">
+			<anim id="Pets/anim/12739" pos="0.35,-0.65" scale="0.75,0.75" />
 			<description>火元素之王</description>
 			<dialog>
 				<branch id="default" name="艾恩斯" icon="Pets/pet/12739" size="168,154" pos="0,35">
 				    <content><![CDATA[我是火元素之王！]]></content>
 					<functionHandler>
 						<func type="click">
+							<description><![CDATA[至纯之火]]></description>
+							<action>battle</action>
+							<param>default</param>
+						</func>
+						<func type="click">
 							<description><![CDATA[兑换商店]]></description>
 							<action>openPanel</action>
 							<param>ItemShop</param>
 							<param>mode=buy</param>
-							<param>currency=400009/0</param>
+							<param>currency=400009</param>
 							<param>item=512737</param>
 							<param>limit=1</param>
 							<param>title=兑换商店</param>
@@ -32,6 +38,44 @@
 				    </replyHandler>
 				</branch>
 			</dialog>
+			<battle>
+				<branch id="default">
+					<settings count="6">
+						<mode>4</mode>
+						<limit>(elementNOT1)</limit>
+						<limitDesc><![CDATA[不可以使用<color=#ffbb33>草系</color>精灵进行挑战哦！]]></limitDesc>
+					</settings>
+					<enemy>
+						<pet id="13467" level="105">
+							<status>
+								<hp>25000</hp>
+							</status>
+							<initBuff>14,99,17,20,-7,61,-3,-3118</initBuff>
+							<loopSkill>15109,15110,15111,15112</loopSkill>
+							<superSkill>15113</superSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setItem</action>
+							<param>add_with_hint</param>
+							<param>10233,2</param>
+						</button>
+						<button type="auto">
+							<action>setItem</action>
+							<param>add_with_hint</param>
+							<param>333467,1</param>
+							<condition>activity[ancestor].done[new][3]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>ancestor</param>
+							<param>done[new][3]=true</param>
+							<condition>activity[ancestor].done[new][3]=[bool]false[default]false</condition>
+						</button>
+					</winHandler>
+				</branch>
+			</battle>
 			<eventHandler>
 				<button type="click">
 					<action>openDialog</action>

@@ -734,12 +734,13 @@ public static class SaveSystem
     }
 
     public static bool TryLoadPetMod(out string error, out Dictionary<int, PetInfo> petDict, out Dictionary<int, PetFeatureInfo> featureDict,
-        out Dictionary<int, PetHitInfo> hitDict, out Dictionary<int, PetSoundInfo> soundDict)
+        out Dictionary<int, PetHitInfo> hitDict, out Dictionary<int, PetSoundInfo> soundDict, out Dictionary<int, PetTransformInfo> transformDict)
     {
         petDict = new Dictionary<int, PetInfo>();
         featureDict = new Dictionary<int, PetFeatureInfo>();
         hitDict = new Dictionary<int, PetHitInfo>();
         soundDict = new Dictionary<int, PetSoundInfo>();
+        transformDict = new Dictionary<int, PetTransformInfo>();
 
         error = string.Empty;
 
@@ -755,6 +756,7 @@ public static class SaveSystem
             var uiPath = petPath + "ui.csv";
             var hitPath = petPath + "hit.csv";
             var soundPath = petPath + "sound.csv";
+            var transformPath = petPath + "transform.csv";
 
             // Check files exist.
             if ((!FileBrowserHelpers.FileExists(basicPath)) || (!FileBrowserHelpers.FileExists(featurePath)) ||
@@ -771,6 +773,7 @@ public static class SaveSystem
             var uiData = ResourceManager.GetCSV(FileBrowserHelpers.ReadTextFromFile(uiPath));
             var hitData = FileBrowserHelpers.FileExists(hitPath) ? ResourceManager.GetCSV(FileBrowserHelpers.ReadTextFromFile(hitPath)) : null;
             var soundData = FileBrowserHelpers.FileExists(soundPath) ? ResourceManager.GetCSV(FileBrowserHelpers.ReadTextFromFile(soundPath)) : null;
+            var transformData = FileBrowserHelpers.FileExists(transformPath) ? ResourceManager.GetCSVByLines(FileBrowserHelpers.ReadTextFromFile(transformPath)) : null;
 
             // Set infos.
             List<PetBasicInfo> basicInfo = ResourceManager.instance.GetPetBasicInfo(basicData);
@@ -781,6 +784,7 @@ public static class SaveSystem
             Dictionary<int, PetUIInfo> uiInfo = ResourceManager.instance.GetPetUIInfo(uiData);
             Dictionary<int, PetHitInfo> hitInfo = ResourceManager.instance.GetPetHitInfo(hitData);
             Dictionary<int, PetSoundInfo> soundInfo = ResourceManager.instance.GetPetSoundInfo(soundData);
+            Dictionary<int, PetTransformInfo> transformInfo = ResourceManager.instance.GetPetTransformInfo(transformData);
 
             // Load to dict.
             for (int i = 0; i < basicInfo.Count; i++)
@@ -803,7 +807,7 @@ public static class SaveSystem
             featureDict = featureInfo;
             hitDict = hitInfo;
             soundDict = soundInfo;
-
+            transformDict = transformInfo;
         }
         catch (Exception e)
         {

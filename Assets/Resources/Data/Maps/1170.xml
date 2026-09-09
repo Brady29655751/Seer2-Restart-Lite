@@ -1,0 +1,43 @@
+<map name="青竹迷境" category="16" id="1170">
+	<fightMap>100004</fightMap>
+	<music category="16">
+		<bgm>BGM_1170</bgm>
+		<fx>FX_001</fx>
+	</music>
+	<initialPoint>290,100</initialPoint>
+	<entities>
+		<npc id="26401" resId="Pets/pet/353.png" name="乔飞" size="147,159" pos="145,230" namePos="0,-15">
+			<description>功夫熊猫</description>
+			<dialog>
+				<branch id="default" name="乔飞" icon="Pets/pet/353" size="98,106" pos="0,35">
+				    <content><![CDATA[功夫熊猫来也！吃我一招！喝啊！]]></content>
+					<functionHandler>
+						<func type="click">
+							<description><![CDATA[兑换商店]]></description>
+							<action>openPanel</action>
+							<param>ItemShop</param>
+							<param>mode=buy</param>
+							<param>currency=610008/620004</param>
+							<param>item=500352/500243</param>
+							<param>limit=1/1</param>
+							<param>title=兑换商店</param>
+						</func>
+					</functionHandler>
+				    <replyHandler>
+				        <reply type="click">
+				            <description><![CDATA[喝啊！喝啊！酒一直喝啊！]]></description>
+				            <action>openDialog</action>
+				            <param>null</param>
+				        </reply>
+				    </replyHandler>
+				</branch>
+			</dialog>
+			<eventHandler>
+				<button type="click">
+					<action>openDialog</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+	</entities>
+</map>

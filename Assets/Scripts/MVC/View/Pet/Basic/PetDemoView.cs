@@ -38,6 +38,7 @@ public class PetDemoView : Module
     protected override void Awake()
     {
         canvas = GameObject.Find("Canvas").GetComponent<Canvas>();
+        animationCamera.transform.position = new Vector3(0, -0.25f, 0);
     }
 
     private void OnDisable()
@@ -83,7 +84,7 @@ public class PetDemoView : Module
         changeNameObject?.SetActive(isActive);
     }
     
-    public void ShowInteractDialog(string dialog)
+    public void ShowInteractDialog(string dialog, AudioClip sound = null)
     {
         if (hideChatboxCoroutine != null)
             StopCoroutine(hideChatboxCoroutine);
@@ -93,6 +94,8 @@ public class PetDemoView : Module
             chatbox?.gameObject.SetActive(false);
             return;
         }
+
+        AudioSystem.instance.PlaySound(sound);
 
         chatbox?.SetText(dialog);
         chatbox?.gameObject.SetActive(true);
@@ -129,6 +132,9 @@ public class PetDemoView : Module
 
     public void SetFeatureInfoPromptContent(Feature feature)
     {
+        infoPrompt.SetBuff(Buff.GetFeatureBuff(currentPet), !featurePromptLeft);
+
+        /*
         string text = Buff.GetBuffDescriptionPreview(feature.rawDescription, Buff.GetFeatureBuff(currentPet));
         infoPrompt.SetInfoPromptWithAutoSize(text, TextAnchor.MiddleLeft);
         if (featurePromptLeft)
@@ -139,6 +145,7 @@ public class PetDemoView : Module
         {
             infoPrompt.SetPositionOffset(new Vector2(infoPrompt.zeroFixPos.x, -infoPrompt.size.y / 2 - 2));
         }
+        */
     }
 
     public void SetGender(int gender)
@@ -160,8 +167,11 @@ public class PetDemoView : Module
         if (emblem == null)
             return;
 
+        infoPrompt.SetBuff(Buff.GetEmblemBuff(currentPet));
+        /*
         string text = Buff.GetBuffDescriptionPreview(emblem.rawDescription, Buff.GetEmblemBuff(currentPet));
         infoPrompt.SetInfoPromptWithAutoSize(text, TextAnchor.MiddleLeft);
+        */
     }
 
     public void SetIVRank(IVRanking ranking)

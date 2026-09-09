@@ -15,6 +15,7 @@ public class Database : Singleton<Database>
     public Dictionary<int, PetFeatureInfo> featureInfoDict = new Dictionary<int, PetFeatureInfo>();
     public Dictionary<int, PetHitInfo> hitInfoDict = new Dictionary<int, PetHitInfo>();
     public Dictionary<int, PetSoundInfo> soundInfoDict = new Dictionary<int, PetSoundInfo>();
+    public Dictionary<int, PetTransformInfo> transformInfoDict = new Dictionary<int, PetTransformInfo>();
     public Dictionary<int, PetInfo> petInfoDict = new Dictionary<int, PetInfo>();
     public Dictionary<int, ItemInfo> itemInfoDict = new Dictionary<int, ItemInfo>();
     public Dictionary<int, BuffInfo> buffInfoDict = new Dictionary<int, BuffInfo>();
@@ -27,7 +28,7 @@ public class Database : Singleton<Database>
 
     public void Init()
     {
-        RM.LoadPetInfo((x) => petInfoDict = x, (y) => featureInfoDict = y, (z) => hitInfoDict = z, (w) => soundInfoDict = w);
+        RM.LoadPetInfo((x) => petInfoDict = x, (y) => featureInfoDict = y, (z) => hitInfoDict = z, (w) => soundInfoDict = w, (v) => transformInfoDict = v);
         RM.LoadEffects((x) => effectDict = x);
         RM.LoadSkill((x) =>
         { 
@@ -222,5 +223,10 @@ public class Database : Singleton<Database>
     public PetSoundInfo GetPetSoundInfo(int skinId)
     {
         return (skinId == 0) ? null : soundInfoDict.Get(skinId, null);
+    }
+
+    public PetTransformInfo GetPetTransformInfo(int skinId)
+    {
+        return (skinId == 0) ? null : transformInfoDict.Get(skinId, null);
     }
 }

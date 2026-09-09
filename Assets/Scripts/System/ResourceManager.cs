@@ -530,6 +530,17 @@ public class ResourceManager : Singleton<ResourceManager>
         return text.Split(new char[] { ',', '\n' }, System.StringSplitOptions.RemoveEmptyEntries);
     }
 
+    public static List<string[]> GetCSVByLines(string text)
+    {
+        if (text == null)
+            return null;
+
+        var rows = text.Split('\n', System.StringSplitOptions.RemoveEmptyEntries);
+        var result = rows.Select(x => x.Split(',', StringSplitOptions.RemoveEmptyEntries)).ToList();
+
+        return result;
+    }
+
     public static string[] LoadCSV(string path, Action<string[]> onSuccess = null, Action<string> onFail = null)
     {
         if (path.StartsWith("http"))
@@ -547,6 +558,29 @@ public class ResourceManager : Singleton<ResourceManager>
         }
 
         string[] csv = GetCSV(textAsset?.text);
+        onSuccess?.Invoke(csv);
+        return csv;
+    }
+
+    public static List<string[]> LoadCSVByLines(string path, Action<List<string[]>> onSuccess = null, Action<string> onFail = null)
+    {
+        if (path.StartsWith("http"))
+        {
+            void OnRequestSuccess(string text) => onSuccess?.Invoke(GetCSVByLines(text));
+            RequestManager.instance.Get(path, OnRequestSuccess, onFail);
+            return null;
+        }
+
+
+        TextAsset textAsset = Resources.Load<TextAsset>(path.TrimEnd(".csv"));
+        if (textAsset == null)
+        {
+            onFail?.Invoke(null);
+            return null;
+        }
+
+
+        List<string[]> csv = GetCSVByLines(textAsset?.text);
         onSuccess?.Invoke(csv);
         return csv;
     }
@@ -754,15 +788,17 @@ public class ResourceManager : Singleton<ResourceManager>
     public void LoadPetInfo(Action<Dictionary<int, PetInfo>> onSuccess = null,
         Action<Dictionary<int, PetFeatureInfo>> onFeatureSuccess = null,
         Action<Dictionary<int, PetHitInfo>> onHitSuccess = null,
-        Action<Dictionary<int, PetSoundInfo>> onSoundSuccess = null)
+        Action<Dictionary<int, PetSoundInfo>> onSoundSuccess = null,
+        Action<Dictionary<int, PetTransformInfo>> onTransformSuccess = null)
     {
-        StartCoroutine(GetPetInfo(onSuccess, onFeatureSuccess, onHitSuccess, onSoundSuccess));
+        StartCoroutine(GetPetInfo(onSuccess, onFeatureSuccess, onHitSuccess, onSoundSuccess, onTransformSuccess));
     }
 
     private IEnumerator GetPetInfo(Action<Dictionary<int, PetInfo>> onSuccess,
         Action<Dictionary<int, PetFeatureInfo>> onFeatureSuccess,
         Action<Dictionary<int, PetHitInfo>> onHitSuccess = null,
-        Action<Dictionary<int, PetSoundInfo>> onSoundSuccess = null)
+        Action<Dictionary<int, PetSoundInfo>> onSoundSuccess = null,
+        Action<Dictionary<int, PetTransformInfo>> onTransformSuccess = null)
     {
         List<PetBasicInfo> basicInfo = null;
         Dictionary<int, PetFeatureInfo> featureInfo = null;
@@ -772,6 +808,7 @@ public class ResourceManager : Singleton<ResourceManager>
         Dictionary<int, PetUIInfo> uiInfo = null;
         Dictionary<int, PetHitInfo> hitInfo = new Dictionary<int, PetHitInfo>();
         Dictionary<int, PetSoundInfo> soundInfo = new Dictionary<int, PetSoundInfo>();
+        Dictionary<int, PetTransformInfo> transformInfo = new Dictionary<int, PetTransformInfo>();
         Dictionary<int, PetInfo> petInfos = new Dictionary<int, PetInfo>();
 
         bool isFailed = false;
@@ -786,12 +823,16 @@ public class ResourceManager : Singleton<ResourceManager>
 
         var hitInfoPath = Application.persistentDataPath + "/PetAnimation/pet/hit.csv";
         var soundInfoPath = Application.persistentDataPath + "/PetAnimation/pet/sound.csv";
+        var transformInfoPath = Application.persistentDataPath + "/PetAnimation/pet/transform.csv";
 
         if (FileBrowserHelpers.FileExists(hitInfoPath))
             hitInfo = GetPetHitInfo(GetCSV(FileBrowserHelpers.ReadTextFromFile(hitInfoPath)));
 
         if (FileBrowserHelpers.FileExists(soundInfoPath))
             soundInfo = GetPetSoundInfo(GetCSV(FileBrowserHelpers.ReadTextFromFile(soundInfoPath)));
+
+        if (FileBrowserHelpers.FileExists(transformInfoPath))
+            transformInfo = GetPetTransformInfo(GetCSVByLines(FileBrowserHelpers.ReadTextFromFile(transformInfoPath)));
 
         while ((basicInfo == null) || (featureInfo == null) || (expInfo == null) || (skillInfo == null) ||
             (cardInfo == null) || (uiInfo == null))
@@ -820,7 +861,7 @@ public class ResourceManager : Singleton<ResourceManager>
                 petInfos.Set(info.id, info);
             }
 
-            if (SaveSystem.TryLoadPetMod(out var error, out var modDict, out var featureDict, out var hitDict, out var soundDict))
+            if (SaveSystem.TryLoadPetMod(out var error, out var modDict, out var featureDict, out var hitDict, out var soundDict, out var transformDict))
             {
                 foreach (var entry in modDict)
                     petInfos.Set(entry.Key, entry.Value);
@@ -833,6 +874,9 @@ public class ResourceManager : Singleton<ResourceManager>
 
                 foreach (var entry in soundDict)
                     soundInfo.Set(entry.Key, entry.Value);
+
+                foreach (var entry in transformDict)
+                    transformInfo.Set(entry.Key, entry.Value);
             }
             else
             {
@@ -848,6 +892,7 @@ public class ResourceManager : Singleton<ResourceManager>
             onFeatureSuccess?.Invoke(featureInfo);
             onHitSuccess?.Invoke(hitInfo);
             onSoundSuccess?.Invoke(soundInfo);
+            onTransformSuccess?.Invoke(transformInfo);
         }
         catch (Exception)
         {
@@ -855,6 +900,7 @@ public class ResourceManager : Singleton<ResourceManager>
             onFeatureSuccess?.Invoke(new Dictionary<int, PetFeatureInfo>());
             onHitSuccess?.Invoke(new Dictionary<int, PetHitInfo>());
             onSoundSuccess?.Invoke(new Dictionary<int, PetSoundInfo>());
+            onTransformSuccess?.Invoke(new Dictionary<int, PetTransformInfo>());
         }
     }
 
@@ -975,6 +1021,21 @@ public class ResourceManager : Singleton<ResourceManager>
         }
 
         return petSoundInfos;
+    }
+
+    public Dictionary<int, PetTransformInfo> GetPetTransformInfo(List<string[]> data)
+    {
+        Dictionary<int, PetTransformInfo> petTransformInfos = new Dictionary<int, PetTransformInfo>();
+        if (data == null)
+            return petTransformInfos;
+
+        foreach (var row in data.Skip(1))
+        {
+            PetTransformInfo info = new PetTransformInfo(row);
+            petTransformInfos.Set(info.skinId, info);
+        }
+
+        return petTransformInfos;
     }
 
     public Dictionary<int, BuffInfo> GetBuffInfo(string[] data, string[] effects)

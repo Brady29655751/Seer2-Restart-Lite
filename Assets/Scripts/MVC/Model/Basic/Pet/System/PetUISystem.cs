@@ -30,36 +30,38 @@ public static class PetUISystem
         return ResourceManager.instance.GetLocalAddressables<Sprite>("Pets/pet/" + petId, PetInfo.IsMod(petId));
     }
 
+    public static PetTransformInfo GetPetTransformInfo(int petId, PetAnimationType type)
+    {
+        return Database.instance.GetPetTransformInfo(petId);
+    }
+
     public static GameObject GetPetAnimInstance(int petId, PetAnimationType type)
     {
         string animName = type.ToString();
-        /*
+        var anim = ResourceManager.instance.GetPetAnimInstance(petId, $"{petId}-" + animName);
+        var info = GetPetTransformInfo(petId, type);
+        if ((anim != null) && (info != null))
         {
-            PetAnimationType.Idle => $"待机",
-            PetAnimationType.Dying => $"濒死",
-            PetAnimationType.Physic => $"物理攻击",
-            PetAnimationType.Special => $"特殊攻击",
-            PetAnimationType.Property => $"属性攻击",
-            PetAnimationType.Super => $"必杀",
-            PetAnimationType.SecondSuper => $"合体攻击", //其实不是,但暂定
-            PetAnimationType.Win => $"胜利",
-            PetAnimationType.Lose => $"失败",
-            PetAnimationType.Hurt => $"被打",
-            PetAnimationType.Evade => $"闪避",
-            PetAnimationType.BeCriticalStruck => $"被暴击",
-            PetAnimationType.JointSuper => $"合体攻击",
-            PetAnimationType.Morph => ($"变身"),
-            PetAnimationType.Present => ($"个性出场"),
-            _ => throw new Exception("阿娘你个嗲列,没有这个动画的!!" + type)
-        };
-        */
-        return ResourceManager.instance.GetPetAnimInstance(petId, $"{petId}-" + animName);
+            anim.transform.position = info.GetPositionByType(type, anim.transform.position);
+            anim.transform.localScale = info.GetScaleByType(type, anim.transform.localScale);
+        }
+
+        return anim;
     }
 
     public static void GetPetAnimInstanceAsync(int petId, PetAnimationType type, Action<GameObject> onSuccess, Action<float> onProgress = null)
     {
         string animName = type.ToString();
-        ResourceManager.instance.GetPetAnimInstanceAsync(petId, $"{petId}-" + animName, onSuccess, onProgress);
+        ResourceManager.instance.GetPetAnimInstanceAsync(petId, $"{petId}-" + animName, (anim) => 
+        {
+            var info = GetPetTransformInfo(petId, type);
+            if ((anim != null) && (info != null))
+            {
+                anim.transform.position = info.GetPositionByType(type, anim.transform.position);
+                anim.transform.localScale = info.GetScaleByType(type, anim.transform.localScale);
+            }
+            onSuccess?.Invoke(anim);
+        }, onProgress);
     }
 
     public static void PreloadPetAnimAsync(int petId, Action onSuccess = null, Action<float> onProgress = null)

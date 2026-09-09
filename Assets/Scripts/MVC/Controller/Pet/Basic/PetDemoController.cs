@@ -43,8 +43,8 @@ public class PetDemoController : Module
         if (mode != PetBagMode.Normal)
             return;
 
-        string dialog = demoModel.Interact();
-        demoView.ShowInteractDialog(dialog);
+        demoModel.Interact(out var dialog, out var sound);
+        demoView.ShowInteractDialog(dialog, sound);
     }
 
     public void SetPetAnimationActive(bool active)

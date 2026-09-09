@@ -68,6 +68,8 @@ public class NpcInfo
             
         if (int.TryParse(resId, out _))
             return ResourceManager.instance.GetLocalAddressables<Sprite>("Npc/" + resId, IsMod(resId));
+
+        resId = resId.Split('/').Select(x => x.TryTrimStart("[expr]", out var expr) ? Parser.ParseOperation(expr).ToString() : x).ConcatToString("/");
         
         bool isBuiltin = resId.TryTrimStart("Builtin/", out string builtinResId);
         bool isMod = !isBuiltin && IsMod(resId);

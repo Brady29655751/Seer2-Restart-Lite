@@ -51,8 +51,8 @@ public class ItemShopPanel : Panel
         { ItemShopType.YiTe, new List<int>() {
             500091, 24000,  320757, 320092, 320093, 320094,
             320095, 320096, 320097, 320098, 320099, 320100,
-            320101, 320102, 320103, 320104, 320105, 320741,
-            320810, 320967, 320968,
+            320101, 320102, 320103, 320104, 320105, 320106,
+            320107, 320108, 320741, 320810, 320967, 320968,
         } },
         { ItemShopType.Farm, Item.plantItemDatabase.Concat(Item.animalItemDatabase).Concat(Item.animalProductItemDatabase).Select(x => x.id).ToList() },
         { ItemShopType.Achievement, Item.achievementItemDatabase.Where(x => x.info.price > 0).Select(x => x.id).ToList() },

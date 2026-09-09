@@ -42,14 +42,17 @@ public class PlayerModel : Module
         if (navigator == null)
             navigator = new MapNavigator(map, canvasSize);
 
-        if (!navigator.IsTargetReachable(destination))
+        if ((!navigator.IsTargetReachable(destination)) && (onArrive == null))
             return false;
 
         List<Vector2> path;
         if (navigator.HasLineOfSight(currentPos, destination))
             path = new List<Vector2> { destination };
-        else if (!navigator.TryFindPath(currentPos, destination, out path))
+        else if ((!navigator.TryFindPath(currentPos, destination, out path)) && (onArrive == null))
             return false;
+            
+        if ((onArrive != null) && ListHelper.IsNullOrEmpty(path))
+            path = new List<Vector2>() { destination };
 
         SetPath(path);
         onArriveEvent = onArrive;
@@ -62,7 +65,12 @@ public class PlayerModel : Module
             navigator = new MapNavigator(map, canvasSize);
 
         if (!navigator.TryFindNearestReachablePoint(destination, searchRadius, out var reachableDestination))
-            return false;
+        {
+            if (onArrive == null)
+                return false;
+
+            reachableDestination = destination;
+        }
 
         return SetDestinationByCanvasPos(reachableDestination, onArrive);
     }

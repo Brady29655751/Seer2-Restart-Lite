@@ -1,0 +1,406 @@
+<map name="碧玉森林(草)" category="2" id="50027" resId="101" weather="13">
+	<!-- <resource>10010_1</resource> -->
+	<fightMap>100002</fightMap>
+	<initialPoint>450,150</initialPoint>
+	<music category="2">
+		<bgm>BGM_101</bgm>
+		<fx>FX_106</fx>
+	</music>
+	<entities>
+		<npc id="10101" resId="10102" name="Lv35 萨伦士兵" size="80,100" pos="320,100" namePos="5,-5">
+			<description>萨伦帝国将会踏平整个草目氏族！</description>
+			<dialog>
+				<branch id="default" name="萨伦士兵" icon="10102" size="80,100" pos="0,45">
+					<content><![CDATA[萨伦帝国将会踏平整个草目氏族！（概率掉落纷绚果萃，每天最多掉落一次）]]></content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[好可怕阿！]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+						<reply type="click">
+							<description><![CDATA[我会一直守护草目氏族！]]></description>
+							<action>battle</action>
+							<param>default</param>
+						</reply>
+					</replyHandler>
+				</branch>
+				<branch id="reward" name="萨伦士兵" icon="10102" size="80,100" pos="0,45">
+					<content><![CDATA[抢夺的物资还给你，别再来打我了！]]></content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[别再入侵草目氏族了！]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+						<reply type="branch">
+							<action>setItem</action>
+							<param>add</param>
+							<param>10238,3</param>
+						</reply>
+						<reply type="branch">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=3个纷绚果萃已经放入精灵背包</param>
+							<param>item_icon=item[10238]</param>
+							<param>option_num=1</param>
+						</reply>
+						<reply type="branch">
+							<action>setActivity</action>
+							<param>10001</param>
+							<param>done[1]=true</param>
+						</reply>
+					</replyHandler>
+				</branch>
+			</dialog>
+			<battle>
+				<branch id="default">
+					<settings count="6">
+						<weather>13</weather>
+					</settings>
+					<enemy>
+						<pet id="146" level="10">
+							<headerSkill>10053</headerSkill>
+							<loopSkill>10069</loopSkill>
+						</pet>
+						<pet id="146" level="15">
+							<headerSkill>10053</headerSkill>
+							<loopSkill>10069</loopSkill>
+						</pet>
+						<pet id="146" level="20">
+							<headerSkill>10053</headerSkill>
+							<loopSkill>10069</loopSkill>
+						</pet>
+						<pet id="147" level="25">
+							<loopSkill>10070,10071</loopSkill>
+						</pet>
+						<pet id="147" level="30">
+							<loopSkill>10070,10071</loopSkill>
+						</pet>
+						<pet id="147" level="35">
+							<headerSkill>10053,10069</headerSkill>
+							<loopSkill>10070,10072</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setItem</action>
+							<param>add</param>
+							<param>10201,3</param>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=3个砂糖甜饼已经放入背包</param>
+							<param>item_icon=item[10201]</param>
+							<param>option_num=1</param>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>10001</param>
+							<param>guarantee[1]=[expr]activity[10001].guarantee[1]+1</param>
+						</button>
+						<button type="auto">
+							<action>openDialog</action>
+							<param>reward</param>
+							<condition>random[0~100]LTE10|activity[10001].guarantee[1]GTE[int]20[default]0</condition>
+							<condition>activity[10001].done[1]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>setItem</action>
+							<param>add</param>
+							<param>22003,1</param>
+							<condition>random[old]&lt;10</condition>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=1个破损头盔已经放入背包</param>
+							<param>item_icon=buff[420003]</param>
+							<param>option_num=1</param>
+							<condition>random[old]&lt;10</condition>
+						</button>
+					</winHandler>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>openDialog</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<npc id="10102" resId="10102" name="Lv75 萨伦士兵" size="80,100" pos="500,130" namePos="5,-5">
+			<description>萨伦帝国将会踏平整个草目氏族！</description>
+			<dialog>
+				<branch id="default" name="萨伦士兵" icon="10102" size="80,100" pos="0,45">
+					<content><![CDATA[萨伦帝国将会踏平整个草目氏族！（概率掉落五十星钻，每天最多掉落一次）]]></content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[好可怕阿！]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+						<reply type="click">
+							<description><![CDATA[我会一直守护草目氏族！]]></description>
+							<action>battle</action>
+							<param>default</param>
+						</reply>
+					</replyHandler>
+				</branch>
+				<branch id="reward" name="萨伦士兵" icon="10102" size="80,100" pos="0,45">
+					<content><![CDATA[抢夺的物资还给你，别再来打我了！]]></content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[别再入侵草目氏族了！]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+						<reply type="branch">
+							<action>setItem</action>
+							<param>add</param>
+							<param>2,50</param>
+						</reply>
+						<reply type="branch">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=50 星钻已经放入背包</param>
+							<param>item_icon=item[2]</param>
+							<param>option_num=1</param>
+						</reply>
+						<reply type="branch">
+							<action>setActivity</action>
+							<param>10001</param>
+							<param>done[2]=true</param>
+						</reply>
+					</replyHandler>
+				</branch>
+			</dialog>
+			<battle>
+				<branch id="default">
+					<settings count="6">
+						<weather>13</weather>
+					</settings>
+					<enemy>
+						<pet id="147" level="40">
+							<loopSkill>10070,10071</loopSkill>
+						</pet>
+						<pet id="148" level="50">
+							<loopSkill>10074,10075</loopSkill>
+						</pet>
+						<pet id="148" level="60">
+							<headerSkill>10069</headerSkill>
+							<loopSkill>10074,10076</loopSkill>
+						</pet>
+						<pet id="148" level="65">
+							<loopSkill>10079</loopSkill>
+						</pet>
+						<pet id="148" level="70">
+							<loopSkill>10080</loopSkill>
+						</pet>
+						<pet id="148" level="75">
+							<headerSkill>10069</headerSkill>
+							<loopSkill>10074,10076</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setItem</action>
+							<param>add</param>
+							<param>1,1000</param>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=1000 赛尔豆已经放入背包</param>
+							<param>item_icon=item[1]</param>
+							<param>option_num=1</param>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>10001</param>
+							<param>guarantee[2]=[expr]activity[10001].guarantee[2]+1</param>
+						</button>
+						<button type="auto">
+							<action>openDialog</action>
+							<param>reward</param>
+							<condition>random[0~100]LTE10|activity[10001].guarantee[2]GTE[int]20[default]0</condition>
+							<condition>activity[10001].done[2]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>setItem</action>
+							<param>add</param>
+							<param>22004,1</param>
+							<condition>random[old]&lt;10</condition>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=1个披风碎片已经放入背包</param>
+							<param>item_icon=buff[420004]</param>
+							<param>option_num=1</param>
+							<condition>random[old]&lt;10</condition>
+						</button>
+					</winHandler>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>openDialog</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<npc id="10103" resId="10101" name="Lv100 青蜂队长" size="80,126" pos="650,160" namePos="5,-5">
+			<description>萨伦帝国将会踏平整个草目氏族！</description>
+			<dialog>
+				<branch id="default" name="【青蜂队长】巴卢特" icon="10101" size="80,126" pos="0,45">
+					<content><![CDATA[萨伦帝国将会踏平整个草目氏族！]]></content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[好可怕阿！]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+						<reply type="click">
+							<description><![CDATA[萨伦！你们的恶行到此为止了！]]></description>
+							<action>battle</action>
+							<param>default</param>
+						</reply>
+					</replyHandler>
+				</branch>
+				<branch id="done" name="【青蜂队长】巴卢特" icon="10101" size="80,126" pos="0,45">
+					<content><![CDATA[萨伦帝国还会继续进攻，走着瞧！]]></content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[我会一直守护草目氏族！]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+					</replyHandler>
+				</branch>
+				<branch id="lose" name="【青蜂队长】巴卢特" icon="10101" size="80,126" pos="0,45">
+					<content><![CDATA[哼，就这点实力还敢说大话？]]></content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[等我准备好再来一战！]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+					</replyHandler>
+				</branch>
+				<branch id="boss_escape" name="【青蜂队长】巴卢特" icon="10101" size="100,115" pos="0,45">
+					<content><![CDATA[哼！算你走运，我们撤！]]></content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[我会一直守护草目氏族！]]></description>
+							<action>openDialog</action>
+							<param>mission_7_battle_1</param>
+						</reply>
+					</replyHandler>
+				</branch>
+				<branch id="mission_7_battle_1" name="草目酋长" icon="11001" size="105,92" pos="0,55">
+				    <content><![CDATA[吼吼吼，我们成功了！现在，草目氏族和赛尔正式结盟，共同抵抗萨伦帝国！]]></content>
+				    <replyHandler>
+				        <reply type="click">
+				            <description><![CDATA[草目氏族篇，完结]]></description>
+				            <action>openDialog</action>
+				            <param>null</param>
+				        </reply>
+				        <reply type="branch">
+				            <action>setMission</action>
+				            <param>7</param>
+				            <param>complete</param>
+				        </reply>
+						<reply type="branch">
+						    <action>setItem</action>
+						    <param>add_with_hint</param>
+						    <param>320855,1</param>
+						</reply>
+				    </replyHandler>
+				</branch>
+			</dialog>
+			<battle>
+				<branch id="default">
+				    <settings count="2" parallel="2"/>
+				    <player>
+						<pet id="981" level="105">
+							<status>
+								<atk>3000</atk>
+								<mat>3000</mat>
+								<hp>30000</hp>
+							</status>
+							<initBuff>14,17</initBuff>
+							<normalSkill>10489,10493,10490,10491</normalSkill>
+							<superSkill>10498</superSkill>
+						</pet>
+				        <pet id="301" level="60">
+				            <status>
+								<atk>3000</atk>
+								<mat>3000</mat>
+				                <hp>5000</hp>
+				            </status>
+				            <initBuff>17,99</initBuff>
+				            <normalSkill>10221,10222,10219,10224</normalSkill>
+				            <superSkill>10220</superSkill>
+				        </pet>
+				    </player>
+					<enemy>
+						<pet id="148" level="100">
+							<status>
+								<atk>9000</atk>
+								<mat>9000</mat>
+								<hp>10000</hp>
+							</status>
+							<initBuff>13,14,17</initBuff>
+							<loopSkill>10070,10081,10081</loopSkill>
+							<superSkill>10078</superSkill>
+						</pet>
+						<pet id="153" level="100">
+							<status>
+								<atk>9000</atk>
+								<mat>9000</mat>
+								<hp>30000</hp>
+							</status>
+							<initBuff>13,14,17</initBuff>
+							<loopSkill>10084,10094,10092</loopSkill>
+							<superSkill>10091</superSkill>
+						</pet>
+					</enemy>
+				    <winHandler>
+						<button type="auto">
+						    <action>openDialog</action>
+						    <param>boss_escape</param>
+						</button>
+				    </winHandler>
+				    <loseHandler>
+				        <button type="auto">
+				            <action>openDialog</action>
+				            <param>lose</param>
+				        </button>
+				    </loseHandler>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>openDialog</action>
+					<param>default</param>
+					<condition>mission[7].checkpoint=battle</condition>
+				</button>
+				<button type="click">
+					<action>openDialog</action>
+					<param>done</param>
+					<condition>mission[7].checkpointNOTbattle</condition>
+				</button>
+			</eventHandler>
+		</npc>
+		<teleport id="1" name="信奉广场" pos="220,165" targetMapId="100"/>
+		<teleport id="2" name="碧玉森林(虫)" pos="735,180" targetMapId="1190"/>
+	</entities>		
+</map>

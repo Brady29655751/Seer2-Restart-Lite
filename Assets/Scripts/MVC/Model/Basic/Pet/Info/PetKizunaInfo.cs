@@ -21,17 +21,26 @@ public class PetKizunaInfo
 
     public PetKizunaInfo(){}
 
-    public List<string> GetDialogCandidates(int kizuna)
+    public PetKizunaDialog GetKizunaDialog(int kizuna)
     {
-        return dialogs.Where(x => x.Condition(kizuna)).OrderByDescending(x => x.kizuna).FirstOrDefault()?.contents;
+        var kizunaDialog = dialogs.Where(x => x.Condition(kizuna)).OrderByDescending(x => x.kizuna).FirstOrDefault();
+        if (kizunaDialog == null)
+            return null;
+
+        kizunaDialog.LoadSounds(PetInfo.IsMod(id));
+        return kizunaDialog;
     }
 }
 
 public class PetKizunaDialog
 {
     [XmlAttribute("kizuna")] public int kizuna;
+    [XmlAttribute("resId")] public string resId;
     [XmlElement("content")] public List<string> contents = new List<string>();
     [XmlElement("condition")] public List<string> condition;
+
+    [XmlIgnore] public AudioClip[] sounds = new AudioClip[0];
+
 
     public Func<bool> GetCondition()
     {
@@ -42,6 +51,16 @@ public class PetKizunaDialog
     public bool Condition(int kizuna) 
     {
         return (kizuna >= this.kizuna) && GetCondition().Invoke();
+    }
+
+    public void LoadSounds(bool isMod)
+    {
+        sounds = new AudioClip[contents.Count];
+        for (int i = 0; i < contents.Count; i++)
+        {
+            int copy = i;
+            ResourceManager.instance.GetLocalAddressables<AudioClip>($"BGM/kizuna/{resId}_{i}", isMod, (clip) => { sounds[copy] = clip; });
+        }
     }
 }
 

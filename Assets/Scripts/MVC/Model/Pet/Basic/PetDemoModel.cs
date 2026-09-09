@@ -27,7 +27,8 @@ public class PetDemoModel : Module
     public int iv => currentPet.talent.iv;
     public IVRanking ivRank => currentPet.talent.IVRank;
 
-    private int kizunaDialogIndex = -1;
+    public PetKizunaDialog kizunaDialogInfo;
+    public int kizunaDialogIndex = -1;
 
 
     public void SetPet(Pet pet)
@@ -35,6 +36,8 @@ public class PetDemoModel : Module
         currentPet = pet;
         nameInputField?.SetInputString(string.Empty);
         nameInputField?.SetPlaceHolderText(petName);
+
+        kizunaDialogInfo = currentPet?.info.kizuna?.GetKizunaDialog(currentPet?.kizuna ?? 0);
     }
 
     public void SetAnimMode(bool newMode)
@@ -52,23 +55,38 @@ public class PetDemoModel : Module
         petName = fixedName;
     }
 
-    public string Interact()
+    public void Interact(out string content, out AudioClip sound)
     {
-        var candidates = currentPet?.info.kizuna?.GetDialogCandidates(currentPet?.kizuna ?? 0);
-        if (ListHelper.IsNullOrEmpty(candidates))
-            return null;
+        content = null;
+        sound = null;
 
-        if (candidates.Count == 1)
-            return candidates.Get(0);
+        var candidateContents = kizunaDialogInfo?.contents;
+        var candidateSounds = kizunaDialogInfo?.sounds;
+
+        if (ListHelper.IsNullOrEmpty(candidateContents))
+        {
+            kizunaDialogIndex = -1;
+            return;
+        }
+            
+        if (candidateContents.Count == 1)
+        {
+            kizunaDialogIndex = 0;
+            content = candidateContents?.Get(0);
+            sound = candidateSounds?.Get(0);
+            return;
+        }
         
         while (true)
         {
-            var index = Random.Range(0, candidates.Count);
+            var index = Random.Range(0, candidateContents.Count);
             if (index != kizunaDialogIndex)
             {
                 kizunaDialogIndex = index;
-                return candidates.Get(index);   
+                content = candidateContents?.Get(index);
+                sound = candidateSounds?.Get(index);
+                return;
             }
         }
-    }    
+    }
 }

@@ -1,0 +1,45 @@
+<map name="坛塔" category="14" id="1100">
+	<music category="14">
+		<bgm>BGM_1100</bgm>
+	</music>
+	<initialPoint>680,125</initialPoint>
+	<entities>
+		<npc id="110001" resId="Pets/pet/530" name="圣光月神" size="209,184" pos="365,175" namePos="20,-5">
+			<description>月神</description>
+			<dialog>
+				<branch id="default" name="圣光月神" icon="Pets/pet/530" size="139,123" pos="0,45">
+					<content>不知天上宫阙，今夕是何年</content>
+					<functionHandler>
+						<func type="click">
+							<description><![CDATA[月神超进化]]></description>
+							<action>openPanel</action>
+							<param>TwelveRound</param>
+							<param>pet=530</param>
+							<param>pos=-10,70</param>
+							<param>size=216,238</param>
+							<param>item[2]=10239[1]</param>
+							<param>item[5]=9008[3]</param>
+							<param>item[8]=2[50]</param>
+							<param>item[10]=10242[1]</param>
+							<param>item[12]=320530[1]</param>
+						</func>	
+					</functionHandler>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[我欲乘风归去，又恐琼楼玉宇]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+					</replyHandler>
+				</branch>
+			</dialog>
+			<eventHandler>
+				<button type="click">
+					<action>openDialog</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<!-- <teleport id="1" name="异蘑小径" pos="810,200" targetMapId="123"/> -->
+	</entities>
+</map>
