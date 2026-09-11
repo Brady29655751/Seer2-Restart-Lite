@@ -145,17 +145,13 @@
 						</func>
 						<func type="click">
 							<description><![CDATA[艾丽娅羁绊进化]]></description>
-							<param>evolve</param>
-							<param>13437</param>
-							<condition>firstPet.uid=13403</condition>
-							<condition>firstPet.kizunaGTE200</condition>
-						</func>
-						<func type="branch">
-							<param>setItem</param>
-							<param>add_with_hint</param>
-							<param>483437,1</param>
-							<condition>firstPet.uid=13403</condition>
-							<condition>firstPet.kizunaGTE200</condition>
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=先将好感度不低于200的艾丽娅设为首发吧！</param>
+							<param>item_icon=pet[13403]</param>
+							<param>option_num=1</param>
+							<condition>firstPet.uidNOT13403|firstPet.kizuna&lt;200</condition>
 						</func>
 						<func type="branch">
 							<action>openHintbox</action>
@@ -168,13 +164,17 @@
 							<condition>firstPet.kizunaGTE200</condition>
 						</func>
 						<func type="branch">
-							<action>openHintbox</action>
-							<param>type=Item</param>
-							<param>title=提示</param>
-							<param>content=先将好感度不低于200的艾丽娅设为首发吧！</param>
-							<param>item_icon=pet[13403]</param>
-							<param>option_num=1</param>
-							<condition>firstPet.uidNOT13403|firstPet.kizuna&lt;200</condition>
+							<action>evolvePet</action>
+							<param>13437</param>
+							<condition>firstPet.uid=13403</condition>
+							<condition>firstPet.kizunaGTE200</condition>
+						</func>
+						<func type="branch">
+							<action>setItem</action>
+							<param>add_with_hint</param>
+							<param>483437,1</param>
+							<condition>firstPet.uid=13403</condition>
+							<condition>firstPet.kizunaGTE200</condition>
 						</func>
 					</functionHandler>
 					<replyHandler>

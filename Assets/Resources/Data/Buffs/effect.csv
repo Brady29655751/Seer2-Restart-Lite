@@ -1037,7 +1037,7 @@ id,timing,priority,target,condition,cond_option,effect,effect_option
 3700,on_after_dmg_cal\on_after_dmg_cal\on_add_buff\on_remove_buff\on_after_attack,-1\-1\-1\-1\-1,skill\skill\pet\pet\pet,none\none\none\none\skill,none\whos_turn=op\none\none\type=type&type_op=NOT&type_cmp=100,set_damage\set_damage\remove_buff\add_buff\set_buff,op=*&value=0.5\who=op&op=*&value=0.5\id=3701\id=3701\id=3700&type=value&op=-&value=me.skill.anger
 3701,on_after_dmg_cal\on_after_dmg_cal\on_add_buff\on_remove_buff\on_add_buff\on_remove_buff,-1\-1\-1\-1\-1\-1,skill\skill\pet\pet\pet\pet,none\none\none\none\none\none,none\whos_turn=op\none\none\none\none,set_damage\set_damage\block_buff\block_buff\set_pet\set_pet,op=*&value=1.5\who=op&op=*&value=1.5\op=+&type_list=abnormal\op=-&type_list=abnormal\type=dead&op=SET&value=(status.hp:0)(status.maxAnger:0)\type=dead&op=SET&value=(status.hp:0)
 3702,on_turn_end,-1,pet,buff,id=3702&type=turn&turn_cmp=1,set_damage,type=buff&op=+&value=me.pet.status.maxHp/2[MIN]500
-3703,on_final_dmg_cal\on_turn_end,900\-1,skill\pet,none\none,whos_turn=op\none,set_damage\heal,op=-&value=30\type=buff&add=15
+3703,on_final_dmg_cal\on_turn_end,900\-1,skill\pet,none\none,whos_turn=op\none,set_damage\heal,who=op&op=-&value=30\type=buff&add=15
 3704,on_add_buff\on_remove_buff,-1\-1,pet\pet,none\none,none\none,add_status\add_status,type=10&add=15\type=10&add=-15
 3705,on_add_buff\on_remove_buff,-1\-1,pet\pet,none\none,none\none,add_status\add_status,type=10&add=25\type=10&add=-25
 3706,on_after_dmg_cal,-1,skill,skill,who=op&whos_turn=op&type=criticalResult&criticalResult_cmp=1,set_damage,op=*&value=1.5
