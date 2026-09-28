@@ -218,6 +218,13 @@ public class AudioSystem : Singleton<AudioSystem>
         soundSource.PlayOneShot(clip);
     }
 
+    public void StopSound() {
+        if ((soundSource == null) || (soundSource.clip == null))
+            return;
+
+        soundSource.Stop();
+    }
+
     // 环境音效等特别音效
     public void PlayEffect(AudioClip clip, AudioVolumeType volumeType = AudioVolumeType.BGM) {
         if (clip == null) {

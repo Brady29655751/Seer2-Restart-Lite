@@ -66,6 +66,7 @@ public class Battle
     {
         var seed = (int)roomHash["seed"];
         var rule = (int)roomHash["rule"];
+        var bp = (BattleBanPick)(int)roomHash["bp"];
         var petCount = (int)roomHash["count"];
         var time = (int)roomHash["time"];
         var buffList = (int[])roomHash["buff"];
@@ -77,7 +78,7 @@ public class Battle
             seed = seed,
             mode = BattleMode.PVP,
             rule = (BattleRule)rule,
-            petCount = petCount,
+            petCount = (bp != BattleBanPick.None) ? 6 : petCount,
             parallelCount = (petCount == 2) ? 2 : 1,
             time = time,
             initBuffs = buffList.Select((x, i) => new KeyValuePair<string, Buff>("rule[" + i + "]", new Buff(x))).ToList(),
@@ -145,19 +146,33 @@ public class Battle
                 x.buffController.buffs.RemoveAll(buff => buff.id == -3);
             });
 
-            // 尼爾補丁
-            if (settings.isCaptureOK && (Player.instance.currentMap.worldId == 1) && (clientPetBag[0].buffController.GetBuff(-2) == null))
+            // 佛洛伊德、尼尔補丁
+            if (settings.isCaptureOK && (Player.instance.currentMap.worldId == 0) && (clientPetBag[0].buffController.GetBuff(-2) == null) && (Random.Range(0, 256) < 1))
             {
-                if (Random.Range(0, 256) < 1)
+                var bossInfo = new BossInfo();
+                switch (Player.instance.currentMap.worldId)
                 {
-                    var bossInfo = new BossInfo()
-                    {
-                        petId = (masterPetBag[0].basic.baseId == 10077) ? 10416 : 10077,
-                        level = clientPetBag[0].level,
-                        initBuffIds = "-2",
-                        loopSkillIds = "12641,12641,12641,12641,-4",
-                    };
-                    clientPetBag[0] = BattlePet.GetBattlePet(bossInfo);
+                    case 0:
+                        bossInfo = new BossInfo()
+                        {
+                            petId = 376,
+                            level = clientPetBag[0].level,
+                            initBuffIds = "-2",
+                            loopSkillIds = "15204,15205,15204,15205,-4",
+                        };
+                        clientPetBag[0] = BattlePet.GetBattlePet(bossInfo);
+                        break;
+
+                    case 1:
+                        bossInfo = new BossInfo()
+                        {
+                            petId = (masterPetBag[0].basic.baseId == 10077) ? 10416 : 10077,
+                            level = clientPetBag[0].level,
+                            initBuffIds = "-2",
+                            loopSkillIds = "12641,12641,12641,12641,-4",
+                        };
+                        clientPetBag[0] = BattlePet.GetBattlePet(bossInfo);
+                        break;
                 }
             }
         }

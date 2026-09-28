@@ -95,6 +95,7 @@ public class PetDemoView : Module
             return;
         }
 
+        AudioSystem.instance.StopSound();
         AudioSystem.instance.PlaySound(sound);
 
         chatbox?.SetText(dialog);

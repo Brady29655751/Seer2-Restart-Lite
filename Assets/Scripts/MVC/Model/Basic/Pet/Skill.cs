@@ -42,7 +42,7 @@ public class Skill
 
     public float critical;
     public int combo, chain;
-    public int priority;
+    public int priority, vipriority;
     public bool ignoreShield = false;
     public bool ignorePowerup
     {
@@ -143,6 +143,7 @@ public class Skill
         isSecondSuper = bool.Parse(options.Get("second_super", "false"));
         critical = float.Parse(options.Get("critical", "5"));
         priority = int.Parse(options.Get("priority", "0"));
+        vipriority = int.Parse(options.Get("vipriority", "0"));
         ignoreShield = bool.Parse(options.Get("ignore_shield", "false"));
         ignorePowerup = bool.Parse(options.Get("ignore_powerup", "false"));
         ignorePowerdown = bool.Parse(options.Get("ignore_powerdown", "false"));
@@ -169,6 +170,7 @@ public class Skill
         combo = rhs.combo;
         chain = rhs.chain;
         priority = rhs.priority;
+        vipriority = rhs.vipriority;
         ignoreShield = rhs.ignoreShield;
         powerup = new Linear<Status>(new Status(rhs.powerup.mult), new Status(rhs.powerup.add));
         powerdown = new Linear<Status>(new Status(rhs.powerdown.mult), new Status(rhs.powerdown.add));
@@ -609,6 +611,7 @@ public class Skill
             "lostPP" => maxPP - PP,
             "accuracy" => accuracy,
             "priority" => priority,
+            "vipriority" => vipriority,
             "critical" => critical,
             "combo" => combo,
             "chain" => chain,
@@ -685,6 +688,9 @@ public class Skill
                 return;
             case "priority":
                 priority = (int)value;
+                return;
+            case "vipriority":
+                vipriority = (int)value;
                 return;
             case "critical":
                 critical = value;

@@ -3,11 +3,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Video;
 using SimpleFileBrowser;
 using FTRuntime;
 
 public class TitleManager : Manager<TitleManager>
 {
+    [SerializeField] private VideoPlayer videoPlayer;
+    [SerializeField] private RawImage videoRenderImage;
     [SerializeField] private Image backgroundImage;
     [SerializeField] private List<GameObject> backgroundGadgetObjectList;
     [SerializeField] private IButton startButton;
@@ -68,6 +71,7 @@ public class TitleManager : Manager<TitleManager>
         GetVersion();
         FileBrowser.AddQuickLink("默认存档位置", Application.persistentDataPath);
         SetBackgroundPageImage();
+        SetBackgroundPageVideo();
         PlayGameIconEntrance();
         PlayToolbarEntrance();
     }
@@ -444,6 +448,17 @@ public class TitleManager : Manager<TitleManager>
             Map map = new Map(){ id = 0 };
             ResourceManager.instance.LoadMapResources(map, SetBackground, (error) => SetBackground(map));
         });
+    }
+
+    private void SetBackgroundPageVideo()
+    {
+        var path = $"{Application.persistentDataPath}/Mod/Activities/FirstPage.mp4";
+        if (!FileBrowserHelpers.FileExists(path))
+            return;
+        
+        videoPlayer.url = path;
+        videoRenderImage.color = Color.white;
+        videoPlayer.Play();
     }
 
     private void SetBackground(Map map)

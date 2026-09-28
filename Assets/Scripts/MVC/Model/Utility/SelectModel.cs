@@ -12,9 +12,9 @@ public class SelectModel<T> : Module, IPageHandler
     [SerializeField] protected int selectCount = 1;
     [SerializeField] protected int capacity = 4;
     [SerializeField] protected PageMode pageMode = PageMode.NewPage;
-    [SerializeField] protected List<T> storage = new List<T>();
+    [SerializeField] public List<T> storage = new List<T>();
     protected List<T> sortedStorage => filter.Sort(storage).ToList();
-    protected List<T> resultStorage => filter.Filter(sortedStorage).ToList();
+    public List<T> resultStorage => filter.Filter(sortedStorage).ToList();
     protected IFilter<T> filter = new IFilter<T>();
     
 

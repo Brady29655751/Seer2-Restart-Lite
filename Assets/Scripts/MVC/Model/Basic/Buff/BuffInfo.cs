@@ -38,6 +38,7 @@ public class BuffInfo
     public string overrideType => options.Get("type");
     public List<Effect> effects { get; private set; }
     public Sprite icon => GetIcon();
+    public Vector2 infoSize => options.Get("infoSize", "0/0").ToVector2(delimeter: '/');
 
     public static bool IsMod(int id) {
         return id.IsWithin(51_0001, 59_9999) || id.IsWithin(80_0013, 89_9999) || id.IsWithin(90_0013, 99_9999) || (id < -10_0000);

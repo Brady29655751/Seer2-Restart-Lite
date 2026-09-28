@@ -94,6 +94,17 @@ public static class ListHelper {
         return index;
     }
 
+    public static void Flip<T>(this IList<T> list, T item)
+    {
+        if (list == null)
+            return; 
+            
+        if (!list.Contains(item))
+            list.Add(item);
+        else
+            list.Remove(item);
+    }
+
     public static T Random<T>(this List<T> values, List<int> weights = null) {
         if (weights == null) {
             int index = UnityEngine.Random.Range(0, values.Count);

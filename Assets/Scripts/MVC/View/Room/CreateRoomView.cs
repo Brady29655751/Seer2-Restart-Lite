@@ -19,9 +19,16 @@ public class CreateRoomView : Module
 
     public void SetPetCount(int count)
     {
-        int[] countList = new int[] { 1, 6, 2 };
-        int posX = 200 + countList.IndexOf(count) * 70;
-        petCountBackground.rectTransform.anchoredPosition = new Vector2(posX, 0);
+        petCountBackground.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, count <= 6 ? 65 : 100);
+        petCountBackground.rectTransform.anchoredPosition = count switch
+        {
+            1 => new Vector2(200, 22.5f),
+            6 => new Vector2(270, 22.5f),
+            2 => new Vector2(340, 22.5f),
+            12 => new Vector2(200, -22.5f),
+            20 => new Vector2(305, -22.5f),
+            _ => new Vector2(200, 22.5f),  
+        };
     }
 
     public void SetTurnTime(int time) {

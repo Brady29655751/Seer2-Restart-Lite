@@ -53,7 +53,9 @@ public class CreateRoomController : Module
     }
 
     public void CreateRoom() {
+        if (!createModel.CreateRoom())
+            return;
+
         createView.CreateRoom();
-        createModel.CreateRoom();
     }
 }

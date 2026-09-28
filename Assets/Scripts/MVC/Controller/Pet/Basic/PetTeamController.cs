@@ -26,7 +26,7 @@ public class PetTeamController : Module
     }
 
     public void SetStorage(List<IKeyValuePair<string, Pet[]>> storage) {
-        var defaultTeam = Enumerable.Repeat(3, petCount).Select(x => Pet.GetExamplePet(x)).ToArray();
+        var defaultTeam = Enumerable.Repeat(3, Mathf.Min(petCount, 6)).Select(x => Pet.GetExamplePet(x)).ToArray();
         var defaultChoice = new IKeyValuePair<string, Pet[]>("默认队伍", defaultTeam);
         var mergeStorage = storage.Concat(new List<IKeyValuePair<string, Pet[]>>(){ defaultChoice }).ToList();
 

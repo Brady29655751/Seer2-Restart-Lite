@@ -137,7 +137,10 @@ public class InfoPrompt : IMonoBehaviour
         if (preferredSize.y >= 225)
             preferredSize = text.GetPreferredSize((int)(15 * preferredSize.y / 225), 14, 21, 61);
 
-        Vector2 size = new Vector2(preferredSize.x, this.text.preferredHeight + 41);
+        Vector2 size = buff.info.infoSize;
+        if (size == Vector2.zero)
+            size = new Vector2(preferredSize.x, this.text.preferredHeight + 41);
+        
         Vector2 fixPos = showAtRight ? new Vector2(12, -size.y * 0.8f + 12) : new Vector2(-size.x - 2, -size.y * 0.8f + 12);
 
         SetInfoPrompt(size, header + text, fixPos, TextAnchor.MiddleLeft);

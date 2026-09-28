@@ -154,6 +154,13 @@
 							<condition>firstPet.uidNOT13403|firstPet.kizuna&lt;200</condition>
 						</func>
 						<func type="branch">
+							<action>setItem</action>
+							<param>add_with_hint</param>
+							<param>483437,1</param>
+							<condition>firstPet.uid=13403</condition>
+							<condition>firstPet.kizunaGTE200</condition>
+						</func>
+						<func type="branch">
 							<action>openHintbox</action>
 							<param>type=Item</param>
 							<param>title=提示</param>
@@ -166,13 +173,6 @@
 						<func type="branch">
 							<action>evolvePet</action>
 							<param>13437</param>
-							<condition>firstPet.uid=13403</condition>
-							<condition>firstPet.kizunaGTE200</condition>
-						</func>
-						<func type="branch">
-							<action>setItem</action>
-							<param>add_with_hint</param>
-							<param>483437,1</param>
 							<condition>firstPet.uid=13403</condition>
 							<condition>firstPet.kizunaGTE200</condition>
 						</func>

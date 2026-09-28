@@ -48,7 +48,7 @@ public class PetStorageModel : Module
 
         if (!PetStoragePanel.IsNormalStorageMode(mode))
         {
-            petBag.Update(oldPet, newPet);
+            petBagPanel?.SetPetBag(petBag.Update(oldPet, newPet).ToArray());
             petBagPanel?.RefreshPetBag();
             return;
         }

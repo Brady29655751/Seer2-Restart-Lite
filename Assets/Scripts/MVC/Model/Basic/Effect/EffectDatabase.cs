@@ -121,6 +121,16 @@ public static class EffectDatabase {
         return typeConvDict.ContainsValue(ability) ? typeConvDict.First(x => x.Value == ability).Key : "none";
     }
 
+    public static string ToChineseName(this BattleBanPick bp, string defaultValue = "无")
+    {
+        return bp switch
+        {
+            BattleBanPick.Ranking => "竞技模式",
+            BattleBanPick.Expert => "专家模式",
+            _ => defaultValue,
+        };
+    }
+
     public static bool IsAttackPhase(this EffectTiming timing)
     {
         bool isAttackPhase = (timing > EffectTiming.OnBeforeAttack) && (timing < EffectTiming.OnAttackEnd);

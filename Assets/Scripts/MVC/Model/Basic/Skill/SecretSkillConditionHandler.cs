@@ -24,6 +24,7 @@ public static class SecretSkillConditionHandler
         new List<int>(){ 105, 741 },
         new List<int>(){ 967, 968 },
         new List<int>(){ 106, 107, 108 },
+        new List<int>(){ 969, 757 },
     };
 
     public static bool GreaterThanLevel(this LearnSkillInfo secretSkillInfo, Pet pet, BattleState endState) {

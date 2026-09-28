@@ -4,7 +4,8 @@
 		<bgm>BGM_1</bgm>
 	</music>
 	<entities>
-		<npc id="1045701" resId="Pets/pet/10462" name="Lv70 阿尔达拉" size="152,180" pos="380,180" namePos="0,0">
+		<npc id="1045701" resId="Pets/pet/10462" name="Lv70 阿尔达拉" size="101,120" pos="415,180" namePos="0,0">
+			<anim id="Pets/anim/10462" pos="0,-0.5" scale="-0.5,0.5" />
 			<description>阿尔达拉</description>
 			<dialog>
 				<branch id="default" name="阿尔达拉" icon="Pets/pet/10462" size="152,180" pos="0,35">
@@ -14,7 +15,27 @@
 							<description><![CDATA[挑战阿尔达拉]]></description>
 							<action>battle</action>
 							<param>default</param>
-						</func>	
+						</func>
+						<func type="click">
+							<description><![CDATA[超进化]]></description>
+							<action>battle</action>
+							<param>evolve</param>
+							<condition>firstPet.uid=10462</condition>
+						</func>
+						<func type="branch">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=将阿尔达拉设为首发吧</param>
+							<param>item_icon=pet[10462]</param>
+							<param>option_num=1</param>
+							<condition>firstPet.uidNOT10462</condition>
+						</func>
+						<func type="click">
+							<description><![CDATA[月光]]></description>
+							<action>battle</action>
+							<param>miracle</param>
+						</func>		
 					</functionHandler>
 					<replyHandler>
 						<reply type="click">
@@ -59,6 +80,160 @@
 							<param>new_moon</param>
 							<param>done[10462][default]=true</param>
 							<condition>activity[new_moon].done[10462][default]=[bool]false[default]false</condition>
+						</button>
+					</winHandler>
+				</branch>
+				<branch id="evolve">
+					<settings count="1">
+						<weather>9</weather>
+					</settings>
+					<enemy>
+						<pet id="12484" level="100">
+							<status>
+								<hp>3000</hp>
+							</status>
+							<initBuff>14,77,3417,61,-3</initBuff>
+							<loopSkill>12840,12839,12832,12836</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>evolvePet</action>
+							<param>12484</param>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=阿尔达拉已成功超进化</param>
+							<param>item_icon=pet[12484]</param>
+							<param>option_num=1</param>
+						</button>
+					</winHandler>
+				</branch>
+				<branch id="miracle">
+					<settings count="1">
+						<weather>9</weather>
+					</settings>
+					<enemy>
+						<pet id="14415" level="105">
+							<status>
+								<hp>35000</hp>
+							</status>
+							<initBuff>-8,97,-3,2122,-3112,-3059,-3118,93,-3022</initBuff>
+							<loopSkill>15172,15174,15175,15176</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=PetSelect</param>
+						    <param>title=选择要进化的阿尔达克</param>
+						    <param>option_num=2</param>
+						    <param>callback=evolve</param>
+						</button>						
+					</winHandler>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>openDialog</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+			<callbackHandler>
+				<button type="choose">
+					<action>openHintbox</action>
+					<param>type=PetSelect</param>
+				    <param>title=选择要进化的阿尔达克</param>
+				    <param>option_num=2</param>
+					<param>callback=evolve</param>
+				    <condition>data.PetSelect.uidNOT12484|data.PetSelect.level&lt;100</condition>
+				</button>
+				<button type="evolve">
+				    <action>openHintbox</action>
+				    <param>type=Item</param>
+				    <param>title=提示</param>
+				    <param>content=必须选择等级100的阿尔达克！</param>
+				    <param>item_icon=pet[12484]</param>
+				    <param>option_num=1</param>
+					<param>callback=choose</param>
+				    <condition>data.PetSelect.uidNOT12484|data.PetSelect.level&lt;100</condition>
+				</button>
+				<button type="evolve">
+				    <action>openHintbox</action>
+				    <param>type=Item</param>
+				    <param>title=提示</param>
+				    <param>content=阿尔达克获得了月光的力量</param>
+				    <param>item_icon=pet[14415]</param>
+				    <param>option_num=1</param>
+				    <condition>data.PetSelect.uid=12484</condition>
+				    <condition>data.PetSelect.levelGTE100</condition>
+				</button>
+				<button type="evolve">
+				    <action>evolvePet</action>
+				    <param>index=data.PetSelectIndex</param>
+				    <param>14415</param>
+				    <condition>data.PetSelect.uid=12484</condition>
+				    <condition>data.PetSelect.levelGTE100</condition>
+				</button>
+			</callbackHandler>
+		</npc>
+		<npc id="1045702" resId="Pets/pet/10904" name="Lv70 阿尔莫尼" size="107,121" pos="695,375" namePos="-5,0">
+			<description>阿尔莫尼</description>
+			<dialog>
+				<branch id="default" name="阿尔莫尼" icon="Pets/pet/10904" size="107,121" pos="0,35">
+					<content>月圆人团圆</content>
+					<functionHandler>
+						<func type="click">
+							<description><![CDATA[挑战阿尔莫尼]]></description>
+							<action>battle</action>
+							<param>default</param>
+						</func>	
+					</functionHandler>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[中秋佳节！]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+					</replyHandler>
+				</branch>
+			</dialog>
+			<battle>
+				<branch id="default">
+					<settings count="6">
+						<weather>9</weather>
+					</settings>
+					<enemy>
+						<pet id="10904" level="70">
+							<status>
+								<hp>2000</hp>
+							</status>
+							<initBuff>14,77,3719[1],61,-3</initBuff>
+							<loopSkill>15191,15190,15193,15185</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>getPet</action>
+							<param>10903,1</param>
+							<condition>activity[new_moon].done[10904][default]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=阿尔尼已经放入精灵仓库</param>
+							<param>item_icon=pet[10903]</param>
+							<param>option_num=1</param>
+							<condition>activity[new_moon].done[10904][default]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>new_moon</param>
+							<param>done[10904][default]=true</param>
+							<condition>activity[new_moon].done[10904][default]=[bool]false[default]false</condition>
 						</button>
 					</winHandler>
 				</branch>

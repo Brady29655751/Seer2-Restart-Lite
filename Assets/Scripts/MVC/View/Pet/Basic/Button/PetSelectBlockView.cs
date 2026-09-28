@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -19,11 +20,12 @@ public class PetSelectBlockView : Module
     [SerializeField] private Sprite chosenFrameSprite;
     [SerializeField] private Sprite notChosenFrameSprite;
     [SerializeField] private Text nameText;
-    [SerializeField] private Image mask, icon, frame, getMark;
+    [SerializeField] private Image mask, icon, frame, getMark, banPick;
     [SerializeField] private Text levelText;
     [SerializeField] private Text hpText;
     [SerializeField] private RectTransform hpBarRect;
     [SerializeField] private List<GameObject> genderObjects;
+    [SerializeField] private Sprite banSprite, pickSprite, firstSprite;
 
     protected override void Awake()
     {
@@ -176,4 +178,18 @@ public class PetSelectBlockView : Module
         SetGender();
     }
 
+    public void SetBanPick(List<int> ban, List<int> pick)
+    {
+        var banned = !isNull && !ListHelper.IsNullOrEmpty(ban) && ban.Contains(currentPet.id);
+        var picked = !isNull && !ListHelper.IsNullOrEmpty(pick) && pick.Contains(currentPet.id);
+        var first = !isNull && !ListHelper.IsNullOrEmpty(pick) && currentPet.id == pick.FirstOrDefault();
+        
+        banPick?.gameObject.SetActive(banned || picked);
+        if (first)
+            banPick?.SetSprite(firstSprite);
+        else if (banned)
+            banPick?.SetSprite(banSprite);
+        else if (picked)
+            banPick?.SetSprite(pickSprite);
+    }
 }

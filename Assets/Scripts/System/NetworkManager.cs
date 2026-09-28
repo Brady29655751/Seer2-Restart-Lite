@@ -78,9 +78,11 @@ public class NetworkManager : PhotonSingleton<NetworkManager>
         onPlayerPropsUpdateEvent?.Invoke(targetPlayer);
     }
 
+    /*
     public override void OnCreatedRoom() {
         SceneLoader.instance.ChangeScene(SceneId.Room);
     }
+    */
 
     public override void OnCreateRoomFailed(short returnCode, string message) {
         if (returnCode == ErrorCode.GameIdAlreadyExists) {

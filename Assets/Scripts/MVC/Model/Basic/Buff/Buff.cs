@@ -99,10 +99,10 @@ public class Buff
 
         return type switch
         {
-            BuffType.All => !IsPower(),
-            BuffType.Power => IsPower(),
-            BuffType.Powerup => IsPowerUp(),
-            BuffType.Powerdown => IsPowerDown(),
+            BuffType.All => !IsType(BuffType.Power),
+            BuffType.Power => IsType(BuffType.Powerup) || IsType(BuffType.Powerdown),
+            BuffType.Powerup => IsPowerUp() || (info.type == BuffType.Powerup),
+            BuffType.Powerdown => IsPowerDown() || (info.type == BuffType.Powerdown),
             BuffType.Unhealthy => IsUnhealthy(),
             BuffType.Abnormal => IsAbnormal(),
             BuffType.TurnBased => (turn > 0) && (!IsUnhealthy()) && (!IsAbnormal()),

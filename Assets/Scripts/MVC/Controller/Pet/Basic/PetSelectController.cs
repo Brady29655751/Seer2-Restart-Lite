@@ -38,6 +38,11 @@ public class PetSelectController : Module
         return selectModel.selections;
     }
 
+    public List<Pet> GetPetStorage()
+    {
+        return selectModel.storage;
+    }
+
     public void RefreshView()
     {
         selectView.SetSelections(selectModel.selections);

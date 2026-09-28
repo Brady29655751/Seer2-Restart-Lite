@@ -21,6 +21,23 @@
 			<dialog>
 				<branch id="default" name="我" icon="7004" size="136,125" pos="0,35">
 					<content>总觉得这片黄晶矿好熟悉...和一位精灵朋友有关的样子——但又不是小豆芽</content>
+					<functionHandler>
+						<func type="click">
+							<description><![CDATA[特训]]></description>
+							<action>battle</action>
+							<param>train</param>
+							<condition>firstPet.uid=14761</condition>
+						</func>
+						<func type="branch">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=将琉梦设为首发吧</param>
+							<param>item_icon=pet[14761]</param>
+							<param>option_num=1</param>
+							<condition>firstPet.uidNOT14761</condition>
+						</func>
+					</functionHandler>
 					<replyHandler>
 						<reply type="click">
 							<description><![CDATA[好奇怪啊，想不起来]]></description>
@@ -99,6 +116,42 @@
 						</button>
 					</winHandler>
 				</branch>
+				<branch id="train">
+					<settings count="1">
+						<mode>4</mode>
+					</settings>
+					<enemy>
+						<pet id="114764" level="105">
+							<status>
+								<mat>1000</mat>
+								<def>600</def>
+								<mdf>600</mdf>
+								<hp>16000</hp>
+							</status>
+							<initBuff>-8,100,56,61,-3093,-3059</initBuff>
+							<loopSkill>15238,15240,15241,15238,15240,15242</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setPet</action>
+							<param>skill=15238</param>
+							<param>skill=15239</param>
+							<param>skill=15240</param>
+							<param>skill=15241</param>
+							<param>skill=15242</param>
+							<param>featureId=14764</param>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=琉梦的特性和技能得到了强化！</param>
+							<param>item_icon=pet[14761]</param>
+							<param>option_num=1</param>
+						</button>
+					</winHandler>
+				</branch>
 			</battle>
 			<eventHandler>
 				<button type="click">
@@ -156,8 +209,8 @@
 							<param>ItemShop</param>
 							<param>mode=buy</param>
 							<param>currency=1101/0</param>
-							<param>item=334761/714727</param>
-							<param>limit=-1/1</param>
+							<param>item=334761/714727/384764</param>
+							<param>limit=-1/1/1</param>
 							<param>title=特殊转化</param>
 						</reply>
 					</replyHandler>

@@ -18,6 +18,7 @@ public class PetBagModel : Module
         {
             PetBagMode.Normal => Player.instance.gameData.petBag,
             PetBagMode.YiTeRogue => YiTeRogueData.instance.petBag,
+            PetBagMode.PVP => selectModel.storage.ToArray(),
             _ => selectModel.selections,
         };
     }
@@ -29,20 +30,20 @@ public class PetBagModel : Module
 
     public void SetPetSwap(int indexA, int indexB)
     {
-        indexA += selectModel.page * selectModel.selectionCapacity;
-        indexB += selectModel.page * selectModel.selectionCapacity;
+        var globalIndexA = indexA + selectModel.page * selectModel.selectionCapacity;
+        var globalIndexB = indexB + selectModel.page * selectModel.selectionCapacity;
 
-        if (petBag[indexA] == null || petBag[indexB] == null)
+        if (petBag[globalIndexA] == null || petBag[globalIndexB] == null)
             return;
 
         if ((mode == PetBagMode.Normal) || (mode == PetBagMode.YiTeRogue))
         {
-            petBag.Swap(indexA, indexB);
+            petBag.Swap(globalIndexA, globalIndexB);
             SaveSystem.SaveData();
         }
         else
         {
-            selectModel.Swap(petBag[indexA], indexB);
+            selectModel.Swap(petBag[globalIndexA], indexB);
             selectModel.SetPage(selectModel.page);
         }
     }
@@ -75,8 +76,16 @@ public class PetBagModel : Module
     public void SetPetTake(Pet oldPet)
     {
         var oldIndex = petBag.IndexOf(oldPet);
-        petBag.Swap(oldIndex, selectModel.globalCursor[0]);
-        SaveSystem.SaveData();
+        if ((mode == PetBagMode.Normal) || (mode == PetBagMode.YiTeRogue))
+        {
+            petBag.Swap(oldIndex, selectModel.globalCursor[0]);
+            SaveSystem.SaveData();   
+        }
+        else
+        {
+            selectModel.Swap(oldPet, selectModel.cursor[0]);
+            selectModel.SetPage(selectModel.page);  
+        }
     }
 
     public void SetPetHeal()
@@ -120,8 +129,16 @@ public class PetBagModel : Module
             petStorage.Add(pet);
 
         var stop = (selectModel.page + 1) * selectModel.selectionCapacity;
-        petBag.MoveRangeTo(index + 1, stop, index);
-        petBag[stop - 1] = null;
+        if (mode == PetBagMode.Normal || mode == PetBagMode.YiTeRogue)
+        {
+            petBag.MoveRangeTo(index + 1, stop, index);
+            petBag[stop - 1] = null;   
+        }
+        else
+        {
+            selectModel.storage.MoveRangeTo(index + 1, stop, index);
+            selectModel.storage[stop - 1] = null;
+        }
 
         if (mode == PetBagMode.Normal)
             SaveSystem.SaveData();

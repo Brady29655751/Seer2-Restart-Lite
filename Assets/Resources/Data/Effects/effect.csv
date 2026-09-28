@@ -43,6 +43,7 @@ id,timing,priority,target,condition,cond_option,effect,effect_option
 2011,none,-1,pet,none,whos_turn=all&whos_attack=all,set_buff,name=设定印记数值&id={0}&type={1}&op={2}&value={3}&{4}={5}
 2019,none,-1,pet,none,whos_turn=all&whos_attack=all,heal,name=设定体力数值&{0}={1}&{2}={3}&{4}={5}
 2023,none,-1,skill,none,whos_turn=all&whos_attack=all,set_damage,name=伤害变为{0}倍&op=*&value={0}&{1}={2}
+2024,none,-1,skill,none,whos_turn=all&whos_attack=all,set_damage,{0}={1}&{2}={3}&{4}={5}
 3001,on_add_buff,-1,pet,none,none,rage,name=添加印记时，怒气不低于{0}&min={0}
 3002,on_remove_buf,-1,pet,none,none,rage,name=移除印记时，怒气最低为{0}&min={0}
 3003,on_final_dmg_cal,-1,skill,skill,who=op&whos_turn=op&type=type&type_op=>&type_cmp=0,set_damage,name=受到的攻击伤害乘算&who=op&op=*&value={0}

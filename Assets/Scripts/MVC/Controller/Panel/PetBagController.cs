@@ -44,6 +44,7 @@ public class PetBagController : Module
         {
             PetBagMode.Normal => Player.instance.gameData.petBag,
             PetBagMode.YiTeRogue => YiTeRogueData.instance.petBag,
+            PetBagMode.PVP => selectController.GetPetStorage().ToArray(),
             _ => selectController.GetPetSelections(),
         };
     }

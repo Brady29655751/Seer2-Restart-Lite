@@ -224,6 +224,7 @@ public class PetBagPanel : Panel
         {
             PetBagMode.Normal => playerPetBag,
             PetBagMode.YiTeRogue => YiTeRogueData.instance.petBag,
+            PetBagMode.PVP => selectController?.GetPetStorage().ToArray(),
             _ => selectController?.GetPetSelections(),
         };
     }

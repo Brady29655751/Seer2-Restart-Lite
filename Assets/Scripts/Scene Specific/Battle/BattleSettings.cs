@@ -193,6 +193,13 @@ public enum BattleMode
     Card = 6,
 }
 
+public enum BattleBanPick
+{
+    None = 0,
+    Ranking = 1,
+    Expert = 2,
+}
+
 public enum BattleRule
 {
     Anger = 0,

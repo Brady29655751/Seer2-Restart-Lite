@@ -193,7 +193,7 @@ public class Effect
             { "passive", passive.ToString() }
         };
         var phase = passive ? EffectTiming.OnPassivePetChange : EffectTiming.OnBeforeAttack;
-        return new Effect(phase, -1, EffectTarget.CurrentPet, EffectCondition.None, null, EffectAbility.PetChange, ability_option);
+        return new Effect(phase, 99999, EffectTarget.CurrentPet, EffectCondition.None, null, EffectAbility.PetChange, ability_option);
     }
 
     public void SetTiming(EffectTiming timing)
