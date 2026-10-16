@@ -1,0 +1,192 @@
+<map name="神醚氏族主城"  category="14"  id="1120">
+	<!-- <resource>10011</resource> -->
+	<initialPoint>470,150</initialPoint>
+	<music category="14">
+		<bgm>BGM_1110</bgm>
+	</music>
+	<entities>
+		<npc id="112001" resId="112001" name="弗雷德" size="185,165" pos="440,250" namePos="0,0">
+			<description>神秘黑衣人</description>
+			<dialog>
+				<branch id="default" name="弗雷德" icon="112001" size="111,99" pos="0,45">
+					<content><![CDATA[记住，我在暗中观察着你。]]></content>
+					<functionHandler>
+						<func type="click">
+							<description><![CDATA[挑战神奇拉军团]]></description>
+							<action>battle</action>
+							<param>default</param>
+						</func>
+						<func type="click">
+							<description><![CDATA[挑战双精灵]]></description>
+							<action>battle</action>
+							<param>twin</param>
+						</func>
+					</functionHandler>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[你是暗恋我吗？]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+					</replyHandler>
+				</branch>
+				<branch id="reward" name="弗雷德" icon="112001" size="111,99" pos="0,45">
+					<content><![CDATA[魔奇拉决定向你发起一场赌局]]></content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[珍爱生命，远离赌博]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+						<reply type="click">
+							<description><![CDATA[一起陷入狂赌之渊！]]></description>
+							<action>battle</action>
+							<param>capture</param>
+						</reply>
+					</replyHandler>
+				</branch>
+			</dialog>
+			<battle>
+				<branch id="default">
+					<settings count="6"/>
+					<enemy>
+						<pet id="534" level="105">
+							<headerSkill>15245</headerSkill>
+							<loopSkill>15259,15260</loopSkill>
+							<superSkill>15262</superSkill>
+						</pet>
+						<pet id="534" level="106">
+							<loopSkill>15259,15260</loopSkill>
+							<superSkill>15262</superSkill>
+						</pet>
+						<pet id="534" level="107">
+							<loopSkill>15259,15260</loopSkill>
+							<superSkill>15262</superSkill>
+						</pet>
+						<pet id="534" level="108">
+							<loopSkill>15259,15260</loopSkill>
+							<superSkill>15262</superSkill>
+						</pet>
+						<pet id="534" level="109">
+							<loopSkill>15259,15260</loopSkill>
+							<superSkill>15262</superSkill>
+						</pet>
+						<pet id="534" level="110">
+							<loopSkill>15259,15260</loopSkill>
+							<superSkill>15262</superSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setItem</action>
+							<param>add_with_hint</param>
+							<param>10201,3</param>
+						</button>
+						<button type="auto">
+							<action>setItem</action>
+							<param>add_with_hint</param>
+							<param>320534,1</param>
+							<condition>random[old]&lt;5</condition>
+						</button>
+					</winHandler>
+				</branch>
+				<branch id="twin">
+					<settings count="2" parallel="2"/>
+					<enemy>
+						<pet id="534" level="105">
+							<initBuff>-8</initBuff>
+							<loopSkill>15248,15249</loopSkill>
+							<superSkill>15255</superSkill>
+						</pet>
+						<pet id="524" level="105">
+							<initBuff>-8</initBuff>
+							<loopSkill>15259,15260</loopSkill>
+							<superSkill>15255</superSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setItem</action>
+							<param>add_with_hint</param>
+							<param>10201,3</param>
+						</button>
+						<button type="auto">
+							<action>openDialog</action>
+							<param>reward</param>
+							<condition>random[old]&lt;5</condition>
+						</button>
+					</winHandler>
+				</branch>
+				<branch id="capture">
+					<settings count="1" capture="true"/>
+					<enemy>
+						<pet id="534" level="105">
+							<loopSkill>15259,15260,15259,15260,-4</loopSkill>
+						</pet>
+					</enemy>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>openDialog</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<npc id="112002" resId="Pets/pet/265" name="Lv108 巴博萨" size="68,83" pos="600,145" namePos="0,0">
+			<wild>
+				<movement mode="wander" radius="220" speed="34" idle="2,6" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true" />
+				<talk chance="0.3" duration="4">
+					<self image="emoji/toon/alert" />
+					<self image="emoji/toon/angry" />
+					<self image="emoji/toon/annoyed" />
+					<self image="emoji/toon/cool" />
+					<self image="emoji/toon/cry" />
+					<self image="emoji/toon/dizzy" />
+					<self image="emoji/toon/grin" />
+					<self image="emoji/toon/happy" />
+					<self image="emoji/toon/hypno" />
+					<self image="emoji/toon/laugh" />
+					<self image="emoji/toon/love" />
+					<self image="emoji/toon/mute" />
+					<self image="emoji/toon/shocked" />
+					<self image="emoji/toon/shy" />
+					<self image="emoji/toon/sick" />
+					<self image="emoji/toon/silly" />
+					<self image="emoji/toon/skull" />
+					<self image="emoji/toon/sleepy" />
+					<self image="emoji/toon/smug" />
+					<self image="emoji/toon/star_eyes" />
+					<self image="emoji/toon/sunglasses" />
+					<self image="emoji/toon/surprised" />
+					<self image="emoji/toon/sweat" />
+					<self image="emoji/toon/worried" />
+					<self>掷骰子！掷出三个六！666！</self>                
+					<self>常常有人拿我们和古加罗斯做比较，但我们构造完全不一样！</self>
+		            <self>点数决定命运，尽数掌握在手！</self>  
+				</talk>
+			</wild>
+			<battle>
+				<branch id="default">
+					<settings count="6" capture="true"/>
+					<enemy>
+						<pet id="265" level="108">
+							<loopSkill>15332,15344,15344,15345,15345</loopSkill>
+						</pet>
+					</enemy>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>battle</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<teleport id="1" name="影月林" pos="95,150" targetMapId="1110"/>
+		<teleport id="2" name="坛塔" pos="860,235" targetMapId="1100"/>
+		<teleport id="3" name="暗月岭" pos="150,360" targetMapId="1140"/>
+		<teleport id="4" name="影子密室" pos="735,370" targetMapId="1130"/>
+	</entities>
+</map>
+

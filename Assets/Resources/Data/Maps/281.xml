@@ -28,6 +28,26 @@
 							<param>option_num=1</param>
 							<condition>firstPet.uidNOT492</condition>
 						</func>
+						<func type="click">
+							<description><![CDATA[神迹觉醒]]></description>
+							<action>battle</action>
+							<param>miracle</param>
+						</func>
+						<func type="click">
+							<description><![CDATA[常态神迹]]></description>
+							<action>battle</action>
+							<param>resident_miracle</param>
+							<condition>firstPet.uid=498</condition>
+						</func>
+						<func type="branch">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=将神迹晨璨设为首发吧</param>
+							<param>item_icon=pet[498]</param>
+							<param>option_num=1</param>
+							<condition>firstPet.uidNOT498</condition>
+						</func>
 					</functionHandler>
 					<replyHandler>
 						<reply type="click">
@@ -68,6 +88,65 @@
 						</button>
 					</winHandler>
 				</branch>
+				<branch id="miracle">
+					<settings count="6">
+						<mode>4</mode>
+					</settings>
+					<enemy>
+						<pet id="20017" level="105">
+							<status>
+								<atk>1200</atk>
+								<hp>50000</hp>
+							</status>
+							<initBuff>-8,17,20,-3</initBuff>
+							<loopSkill>15277,15278,15279,15280</loopSkill>
+							<superSkill>15281</superSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=PetSelect</param>
+						    <param>title=选择要进化的晨璨★</param>
+						    <param>option_num=2</param>
+						    <param>callback=evolve</param>
+						</button>
+					</winHandler>
+				</branch>
+				<branch id="resident_miracle">
+					<settings count="1">
+						<mode>4</mode>
+					</settings>
+					<enemy>
+						<pet id="20017" level="105">
+							<status>
+								<hp>6500</hp>
+							</status>
+							<initBuff>-8,17,20,-3130</initBuff>
+							<loopSkill>15277,15279,15280</loopSkill>
+							<superSkill>15281</superSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setPet</action>
+							<param>maxLevel=105</param>
+							<param>level=105</param>
+						</button>
+						<button type="auto">
+							<action>evolvePet</action>
+							<param>20017</param>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=神迹晨璨已常驻神迹形态</param>
+							<param>item_icon=pet[20017]</param>
+							<param>option_num=1</param>
+						</button>
+					</winHandler>
+				</branch>
 			</battle>
 			<eventHandler>
 				<button type="click">
@@ -75,6 +154,43 @@
 					<param>default</param>
 				</button>
 			</eventHandler>
+			<callbackHandler>
+				<button type="choose">
+					<action>openHintbox</action>
+					<param>type=PetSelect</param>
+				    <param>title=选择要进化的晨璨★</param>
+				    <param>option_num=2</param>
+					<param>callback=evolve</param>
+				    <condition>data.PetSelect.uidNOT493|data.PetSelect.level&lt;100</condition>
+				</button>
+				<button type="evolve">
+				    <action>openHintbox</action>
+				    <param>type=Item</param>
+				    <param>title=提示</param>
+				    <param>content=必须选择等级100的晨璨★！</param>
+				    <param>item_icon=pet[493]</param>
+				    <param>option_num=1</param>
+					<param>callback=choose</param>
+				    <condition>data.PetSelect.uidNOT493|data.PetSelect.level&lt;100</condition>
+				</button>
+				<button type="evolve">
+				    <action>openHintbox</action>
+				    <param>type=Item</param>
+				    <param>title=提示</param>
+				    <param>content=晨璨★已成功神迹觉醒</param>
+				    <param>item_icon=pet[498]</param>
+				    <param>option_num=1</param>
+				    <condition>data.PetSelect.uid=493</condition>
+				    <condition>data.PetSelect.levelGTE100</condition>
+				</button>
+				<button type="evolve">
+				    <action>evolvePet</action>
+				    <param>index=data.PetSelectIndex</param>
+				    <param>498</param>
+				    <condition>data.PetSelect.uid=493</condition>
+				    <condition>data.PetSelect.levelGTE100</condition>
+				</button>
+			</callbackHandler>
 		</npc>
         <teleport id="1" name="蛮神战场" pos="195,60" targetMapId="240"/>
 		<teleport id="2" name="魅罗门" pos="865,180" targetMapId="270"/>

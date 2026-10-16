@@ -1,0 +1,177 @@
+<map name="暗月岭(夜)"  category="14"  id="-1140" switch="-1">
+	<!-- <resource>10011</resource> -->
+	<initialPoint>470,150</initialPoint>
+	<music category="10">  
+		<bgm>BGM_1080</bgm>
+    </music>               
+	<entities>
+		<npc id="-114001" resId="Pets/pet/2539" name="夜叉" size="150,149" pos="580,300" namePos="0,-10">
+			<description>恐怖的夜叉在夜晚出现</description>
+			<dialog>
+				<branch id="default" name="夜叉" icon="Pets/pet/2539" size="113,112" pos="0,45">
+					<content><![CDATA[鬼夜叉，人人怕]]></content>
+					<functionHandler>
+						<func type="click">
+							<description><![CDATA[挑战一]]></description>
+							<action>battle</action>
+							<param>challenge_1</param>
+						</func>
+						<func type="click">
+							<description><![CDATA[挑战二]]></description>
+							<action>battle</action>
+							<param>challenge_2</param>
+							<condition>firstPet.id=2539</condition>
+						</func>
+						<func type="branch">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=把夜叉设为首发之后再来挑战吧</param>
+							<param>option_num=1</param>
+							<param>item_icon=pet[2539]</param>
+							<condition>firstPet.idNOT2539</condition>
+						</func>
+						<func type="click">
+							<description><![CDATA[挑战三]]></description>
+							<action>battle</action>
+							<param>challenge_3</param>
+						</func>
+					</functionHandler>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[白天不出现的夜猫子]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+					</replyHandler>
+				</branch>
+			</dialog>
+			<battle>
+				<branch id="challenge_1">
+					<settings count="1"/>
+					<enemy>
+						<pet id="2539" level="60">
+							<status>
+								<atk>2000</atk>
+								<def>500</def>
+								<mdf>500</mdf>
+								<hp>5000</hp>
+							</status>
+							<initBuff>-4,61,-8,3731</initBuff>
+							<loopSkill>15327,15329,15329,15329,15329</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>getPet</action>
+							<param>2539,10,0</param>
+							<condition>activity[11026].done[1]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=【夜叉】已经放入精灵仓库</param>
+							<param>item_icon=pet[2539]</param>
+							<param>option_num=1</param>
+							<condition>activity[11026].done[1]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>11026</param>
+							<param>done[1]=true</param>
+							<condition>activity[11026].done[1]=[bool]false[default]false</condition>
+						</button>
+					</winHandler>
+				</branch>
+				<branch id="challenge_2">
+					<settings count="1">
+						<initBuff>(rule:600000)</initBuff>
+					</settings>
+					<enemy>
+						<pet id="2539" level="60">
+							<status>
+								<atk>1000</atk>
+								<hp>3000</hp>
+							</status>
+							<initBuff>-8,3731,77</initBuff>
+							<loopSkill>15322,15330</loopSkill>
+							<superSkill>15326</superSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setPet</action>
+							<param>emblem=1</param>
+							<condition>activity[11026].done[2]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=【夜叉】获得了【摄魂】纹章</param>
+							<param>item_icon=emblem[2539]</param>
+							<param>option_num=1</param>
+							<condition>activity[11026].done[2]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>11026</param>
+							<param>done[2]=true</param>
+							<condition>activity[11026].done[2]=[bool]false[default]false</condition>
+						</button>
+					</winHandler>
+				</branch>
+				<branch id="challenge_3">
+					<settings count="6"/>
+					<enemy>
+						<pet id="2539" level="60">
+							<status>
+								<atk>1800</atk>
+								<mat>1800</mat>
+								<def>1800</def>
+								<mdf>1800</mdf>
+								<hp>5000</hp>
+								<rec>5000</rec>
+							</status>
+							<initBuff>71,14,100,-8,-3022,-3030,3731</initBuff>
+							<loopSkill>15325</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setItem</action>
+							<param>add</param>
+							<param>2,100</param>
+							<condition>activity[11026].done[3]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=100 星钻已经放入背包</param>
+							<param>item_icon=item[2]</param>
+							<param>option_num=1</param>
+							<condition>activity[11026].done[3]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>11026</param>
+							<param>done[3]=true</param>
+							<condition>activity[11026].done[3]=[bool]false[default]false</condition>
+						</button>
+					</winHandler>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>openDialog</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<teleport id="1" name="炼狱入口" pos="440,365" targetMapId="1080"/>
+		<teleport id="2" name="神醚氏族主城" pos="775,145" targetMapId="1120"/>
+	</entities>
+</map>
+

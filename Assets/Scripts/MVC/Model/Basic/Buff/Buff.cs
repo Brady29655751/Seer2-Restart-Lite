@@ -271,6 +271,7 @@ public class Buff
             { "element",    (buffValue) => ((Element)buffValue).GetElementName() },
             { "poker",      (buffValue) => GetPokerValue(buffValue) },
             { "powerup",    (buffValue) => GetPowerupValue() },
+            { "personality",(buffValue) => ((Personality)buffValue).ToString() },
             { "who",        (buffValue) => (buffValue == 1) ? "自身" : "对方" },
             { "num",        (buffValue) => buffValue.ToString("+#;-#;0") },
             { "+num",       (buffValue) => buffValue.ToString("+#;-#;+0") },

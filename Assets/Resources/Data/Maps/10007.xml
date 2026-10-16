@@ -1,5 +1,5 @@
 <map name="船长室" category="101" id="10007" weather="0">
-	<initialPoint>640,230</initialPoint>
+	<initialPoint>240,230</initialPoint>
 	<music category="101">
 		<bgm>BGM_3</bgm>
 	</music>
@@ -27,6 +27,107 @@
 					<param>daily_login</param>
 					<param>done[10007]=true</param>
 					<condition>activity[daily_login].done[10007]=[bool]false[default]false</condition>
+				</button>
+			</eventHandler>
+		</npc>
+		<npc id="1000702" resId="Pets/pet/633" name="米咔的暗面" size="140,149" pos="690,170" namePos="-10,-5">
+			<description>米咔的暗面</description>
+			<dialog>
+				<branch id="default" name="光煞" icon="Pets/pet/633" size="117,124" pos="10,35">
+					<content><![CDATA[只有战胜自己的黑暗面，才能彻底摆脱进化受阻症。]]></content>
+					<functionHandler>
+						<func type="click">
+							<description><![CDATA[挑战心魔]]></description>
+							<action>battle</action>
+							<param>default</param>
+							<condition>firstPet.baseId=178|firstPet.baseId=11069</condition>
+						</func>
+						<func type="branch">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=把米咔设为首发之后再来挑战吧</param>
+							<param>option_num=1</param>
+							<param>item_icon=pet[178]</param>
+							<condition>firstPet.baseIdNOT178</condition>
+							<condition>firstPet.baseIdNOT11069</condition>
+						</func>
+					</functionHandler>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[我还没准备好]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+					</replyHandler>
+				</branch>
+			</dialog>
+			<battle>
+				<branch id="default">
+					<settings count="1" item="false" simulate="true">
+						<mode>4</mode>
+						<weather>1</weather>
+					</settings>
+					<player>
+						<pet id="178" level="70">
+							<status>
+								<atk>600</atk>
+								<mat>600</mat>
+								<def>400</def>
+								<mdf>400</mdf>
+								<spd>500</spd>
+								<hp>2000</hp>
+								<cri>-1000</cri>
+							</status>
+							<initBuff>17,20</initBuff>
+							<normalSkill>10515,10510,10508,10513</normalSkill>
+							<superSkill>10514</superSkill>
+						</pet>
+					</player>
+					<enemy>
+						<pet id="633" level="70">
+							<status>
+								<atk>600</atk>
+								<mat>600</mat>
+								<def>400</def>
+								<mdf>400</mdf>
+								<spd>400</spd>
+								<hp>2000</hp>
+								<cri>-1000</cri>
+							</status>
+							<initBuff>-4[0][30],20,55,3739,-3086</initBuff>
+							<loopSkill>15353,15350,15353,15349,15357</loopSkill>
+							<superSkill>15352</superSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>getPet</action>
+							<param>633,1</param>
+							<condition>activity[20015].done[6]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=【光煞】已经放入精灵仓库</param>
+							<param>item_icon=pet[633]</param>
+							<param>option_num=1</param>
+							<condition>activity[20015].done[6]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>20015</param>
+							<param>done[6]=true</param>
+							<condition>activity[20015].done[6]=[bool]false[default]false</condition>
+						</button>
+					</winHandler>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>openDialog</action>
+					<param>default</param>
 				</button>
 			</eventHandler>
 		</npc>

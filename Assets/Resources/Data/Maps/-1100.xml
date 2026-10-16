@@ -23,12 +23,12 @@
 							<param>item[10]=10242[1]</param>
 							<param>item[12]=320531[1]</param>
 						</func>
-						<!--
 						<func type="click">
-							<description><![CDATA[神迹觉醒]]></description>
+							<description><![CDATA[暴走]]></description>
 							<action>battle</action>
 							<param>miracle</param>
 						</func>
+						<!--
 						<func type="click">
 							<description><![CDATA[常态神迹]]></description>
 							<action>battle</action>
@@ -61,19 +61,19 @@
 						<mode>4</mode>
 					</settings>
 					<enemy>
-						<pet id="20016" level="105">
+						<pet id="20018" level="105">
 							<status>
 								<hp>25000</hp>
 							</status>
-							<initBuff>-8,97,-3,2122,-3112,-3059,-3118,93</initBuff>
-							<loopSkill>15158,15160,15161,15162</loopSkill>
+							<initBuff>-8,97,-3,2122,-3112,-3059,-3118,93,-3132</initBuff>
+							<loopSkill>15282,15283,15284,15286</loopSkill>
 						</pet>
 					</enemy>
 					<winHandler>
 						<button type="auto">
 							<action>openHintbox</action>
 							<param>type=PetSelect</param>
-						    <param>title=选择要进化的圣光月神</param>
+						    <param>title=选择要进化的暗之月神</param>
 						    <param>option_num=2</param>
 						    <param>callback=evolve</param>
 						</button>
@@ -123,40 +123,40 @@
 				<button type="choose">
 					<action>openHintbox</action>
 					<param>type=PetSelect</param>
-				    <param>title=选择要进化的圣光月神</param>
+				    <param>title=选择要进化的暗之月神</param>
 				    <param>option_num=2</param>
 					<param>callback=evolve</param>
-				    <condition>data.PetSelect.uidNOT530|data.PetSelect.level&lt;100</condition>
+				    <condition>data.PetSelect.uidNOT531|data.PetSelect.level&lt;100</condition>
 				</button>
 				<button type="evolve">
 				    <action>openHintbox</action>
 				    <param>type=Item</param>
 				    <param>title=提示</param>
-				    <param>content=必须选择等级100的圣光月神！</param>
-				    <param>item_icon=pet[530]</param>
+				    <param>content=必须选择等级100的暗之月神！</param>
+				    <param>item_icon=pet[531]</param>
 				    <param>option_num=1</param>
 					<param>callback=choose</param>
-				    <condition>data.PetSelect.uidNOT530|data.PetSelect.level&lt;100</condition>
+				    <condition>data.PetSelect.uidNOT531|data.PetSelect.level&lt;100</condition>
 				</button>
 				<button type="evolve">
 				    <action>openHintbox</action>
 				    <param>type=Item</param>
 				    <param>title=提示</param>
-				    <param>content=圣光月神已成功超进化</param>
-				    <param>item_icon=pet[817]</param>
+				    <param>content=暗之月神已成功超进化</param>
+				    <param>item_icon=pet[778]</param>
 				    <param>option_num=1</param>
-				    <condition>data.PetSelect.uid=530</condition>
+				    <condition>data.PetSelect.uid=531</condition>
 				    <condition>data.PetSelect.levelGTE100</condition>
 				</button>
 				<button type="evolve">
 				    <action>evolvePet</action>
 				    <param>index=data.PetSelectIndex</param>
-				    <param>817</param>
-				    <condition>data.PetSelect.uid=530</condition>
+				    <param>778</param>
+				    <condition>data.PetSelect.uid=531</condition>
 				    <condition>data.PetSelect.levelGTE100</condition>
 				</button>
 			</callbackHandler>
 		</npc>
-		<!-- <teleport id="1" name="异蘑小径" pos="810,200" targetMapId="123"/> -->
+		<teleport id="1" name="神醚氏族主城" pos="810,200" targetMapId="1120"/>
 	</entities>
 </map>

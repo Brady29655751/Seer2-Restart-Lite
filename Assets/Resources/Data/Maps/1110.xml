@@ -1,0 +1,140 @@
+<map name="影月林"  category="14"  id="1110">
+	<!-- <resource>10011</resource> -->
+	<initialPoint>470,150</initialPoint>
+	<music category="14">
+		<bgm>BGM_1110</bgm>
+	</music>
+	<entities>
+		<npc id="111001" resId="111001" name="伊万" size="105,111" pos="575,170" namePos="15,0">
+			<description>神秘黑衣人</description>
+			<dialog>
+				<branch id="default" name="伊万" icon="111001" size="105,111" pos="0,45">
+					<content><![CDATA[往前是神秘之地，没有主人的允许都不能通过这里。]]></content>
+					<functionHandler>
+						<func type="click">
+							<description><![CDATA[挑战魔奇拉军团]]></description>
+							<action>battle</action>
+							<param>default</param>
+						</func>
+						<func type="click">
+							<description><![CDATA[挑战双精灵]]></description>
+							<action>battle</action>
+							<param>twin</param>
+						</func>
+					</functionHandler>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[我什么也没听到]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+					</replyHandler>
+				</branch>
+				<branch id="reward" name="伊万" icon="111001" size="105,111" pos="0,45">
+					<content><![CDATA[魔奇拉决定向你发起一场赌局]]></content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[珍爱生命，远离赌博]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+						<reply type="click">
+							<description><![CDATA[一起陷入狂赌之渊！]]></description>
+							<action>battle</action>
+							<param>capture</param>
+						</reply>
+					</replyHandler>
+				</branch>
+			</dialog>
+			<battle>
+				<branch id="default">
+					<settings count="6"/>
+					<enemy>
+						<pet id="524" level="105">
+							<headerSkill>15245</headerSkill>
+							<loopSkill>15248,15249</loopSkill>
+							<superSkill>15251</superSkill>
+						</pet>
+						<pet id="524" level="106">
+							<loopSkill>15248,15249</loopSkill>
+							<superSkill>15251</superSkill>
+						</pet>
+						<pet id="524" level="107">
+							<loopSkill>15248,15249</loopSkill>
+							<superSkill>15251</superSkill>
+						</pet>
+						<pet id="524" level="108">
+							<loopSkill>15248,15249</loopSkill>
+							<superSkill>15251</superSkill>
+						</pet>
+						<pet id="524" level="109">
+							<loopSkill>15248,15249</loopSkill>
+							<superSkill>15251</superSkill>
+						</pet>
+						<pet id="524" level="110">
+							<loopSkill>15248,15249</loopSkill>
+							<superSkill>15251</superSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setItem</action>
+							<param>add_with_hint</param>
+							<param>10201,3</param>
+						</button>
+						<button type="auto">
+							<action>setItem</action>
+							<param>add_with_hint</param>
+							<param>320524,1</param>
+							<condition>random[old]&lt;5</condition>
+						</button>
+					</winHandler>
+				</branch>
+				<branch id="twin">
+					<settings count="2" parallel="2"/>
+					<enemy>
+						<pet id="524" level="105">
+							<initBuff>-8</initBuff>
+							<loopSkill>15248,15249</loopSkill>
+							<superSkill>15255</superSkill>
+						</pet>
+						<pet id="534" level="105">
+							<initBuff>-8</initBuff>
+							<loopSkill>15259,15260</loopSkill>
+							<superSkill>15255</superSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setItem</action>
+							<param>add_with_hint</param>
+							<param>10201,3</param>
+						</button>
+						<button type="auto">
+							<action>openDialog</action>
+							<param>reward</param>
+							<condition>random[old]&lt;5</condition>
+						</button>
+					</winHandler>
+				</branch>
+				<branch id="capture">
+					<settings count="1" capture="true"/>
+					<enemy>
+						<pet id="524" level="105">
+							<loopSkill>15248,15249,15248,15249,-4</loopSkill>
+						</pet>
+					</enemy>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>openDialog</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<teleport id="1" name="灵能通径" pos="95,150" targetMapId="1280"/>
+		<teleport id="2" name="神醚氏族主城" pos="710,295" targetMapId="1120"/>
+	</entities>
+</map>
+

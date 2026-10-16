@@ -1,0 +1,227 @@
+<map name="影子密室"  category="14"  id="1130" weather="9">
+	<!-- <resource>10011</resource> -->
+	<initialPoint>470,150</initialPoint>
+	<music category="14">
+		<bgm>BGM_1110</bgm>
+	</music>
+	<entities>
+		<npc id="113001" resId="Pets/pet/938" name="Lv 110 撒莱尔" size="169,207" pos="715,260" namePos="0,-10">
+			<anim id="Pets/anim/938" pos="0.9,0.45" scale="-1.2,1.2" />
+			<description>SPT</description>
+			<dialog>
+				<branch id="default" name="撒莱尔" icon="Pets/pet/938" size="113,138" pos="0,45">
+					<content><![CDATA[人心叵测，难分善恶]]></content>
+					<functionHandler>
+						<func type="click">
+							<description><![CDATA[普通挑战]]></description>
+							<action>battle</action>
+							<param>default</param>
+						</func>
+						<func type="click">
+							<description><![CDATA[挑战1]]></description>
+							<action>battle</action>
+							<param>challenge_1</param>
+							<condition>firstPet.baseId=938</condition>
+						</func>
+						<func type="branch">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=把撒莱尔设为首发之后再来挑战吧</param>
+							<param>option_num=1</param>
+							<param>item_icon=pet[938]</param>
+							<condition>firstPet.baseIdNOT938</condition>
+						</func>
+						<func type="click">
+							<description><![CDATA[挑战2]]></description>
+							<action>battle</action>
+							<param>challenge_2</param>
+						</func>
+					</functionHandler>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[善与恶为一体两面]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+					</replyHandler>
+				</branch>
+				<branch id="default_lose" name="撒莱尔" icon="Pets/pet/938" size="113,138" pos="0,45">
+					<content><![CDATA[换场可以解除不良状态]]></content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[好麻烦啊]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+					</replyHandler>
+				</branch>
+			</dialog>
+			<battle>
+				<branch id="default">
+					<settings count="6" simulate="true">
+						<mode>3</mode>
+						<weather>9</weather>
+					</settings>
+					<player>
+						<pet id="534" level="105">
+							<status>
+								<mat>2500</mat>
+								<def>600</def>
+								<mdf>600</mdf>
+								<spd>500</spd>
+								<hp>600</hp>
+								<cri>-1000</cri>
+							</status>
+							<normalSkill>15259,15260,15257,15258</normalSkill>
+							<superSkill>15262</superSkill>
+						</pet>
+						<pet id="524" level="105">
+							<status>
+								<mat>2500</mat>
+								<def>600</def>
+								<mdf>600</mdf>
+								<spd>500</spd>
+								<hp>600</hp>
+								<cri>-1000</cri>
+							</status>
+							<normalSkill>15252,15253,15245,15246</normalSkill>
+							<superSkill>15251</superSkill>
+						</pet>
+					</player>
+					<enemy>
+						<pet id="938" level="110">
+							<status>
+								<mat>400</mat>
+								<atk>400</atk>
+								<spd>400</spd>
+								<hp>20000</hp>
+								<cri>-1000</cri>
+							</status>
+							<initBuff>17,72</initBuff>
+							<loopSkill>15310,15313</loopSkill>
+						</pet>								
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>getPet</action>
+							<param>938,10,0</param>
+							<condition>activity[spt].done[south][4][default]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=【撒莱尔】已经放入精灵仓库</param>
+							<param>item_icon=pet[938]</param>
+							<param>option_num=1</param>
+							<condition>activity[spt].done[south][4][default]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>spt</param>
+							<param>done[south][4][default]=true</param>
+							<condition>activity[spt].done[south][4][default]=[bool]false[default]false</condition>
+						</button>
+					</winHandler>
+					<loseHandler>
+						<button type="auto">
+							<action>openDialog</action>
+							<param>default_lose</param>
+						</button>
+					</loseHandler>
+				</branch>
+				<branch id="challenge_1">
+					<settings count="1">
+						<mode>3</mode>
+						<weather>9</weather>
+					</settings>
+					<enemy>
+						<pet id="938" level="110">
+							<status>
+								<atk>600</atk>
+								<mat>600</mat>
+								<hp>4000</hp>
+							</status>
+							<initBuff>-8,-3121</initBuff>
+							<loopSkill>15309,15312</loopSkill>
+							<superSkill>15314</superSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setPet</action>
+							<param>emblem=1</param>
+							<condition>activity[spt].done[south][4][challenge_1]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=【撒莱尔】获得了【威慑】纹章</param>
+							<param>item_icon=emblem[938]</param>
+							<param>option_num=1</param>
+							<condition>activity[spt].done[south][4][challenge_1]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>spt</param>
+							<param>done[south][4][challenge_1]=true</param>
+							<condition>activity[spt].done[south][4][challenge_1]=[bool]false[default]false</condition>
+						</button>
+					</winHandler>
+				</branch>
+				<branch id="challenge_2">
+					<settings count="6">
+						<mode>3</mode>
+						<weather>9</weather>
+					</settings>
+					<enemy>
+						<pet id="938" level="110">
+							<status>
+								<atk>6000</atk>
+								<mat>6000</mat>
+								<def>6000</def>
+								<mdf>6000</mdf>
+								<hp>20000</hp>
+							</status>
+							<initBuff>-4[0][50],17,20,-8,-3118,-3059,-3112,93</initBuff>
+							<loopSkill>15317,15316</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setItem</action>
+							<param>add</param>
+							<param>2,50</param>
+							<condition>activity[spt].done[south][4][challenge_2]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=50 星钻已经放入背包</param>
+							<param>item_icon=item[2]</param>
+							<param>option_num=1</param>
+							<condition>activity[spt].done[south][4][challenge_2]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>spt</param>
+							<param>done[south][4][challenge_2]=true</param>
+							<condition>activity[spt].done[south][4][challenge_2]=[bool]false[default]false</condition>
+						</button>
+					</winHandler>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>openDialog</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<teleport id="1" name="神醚氏族主城" pos="140,225" targetMapId="1120"/>
+	</entities>
+</map>
+

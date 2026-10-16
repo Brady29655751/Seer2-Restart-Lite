@@ -9,6 +9,16 @@
 			<dialog>
 				<branch id="default" name="S思念体" icon="108001" size="69,111" pos="10,45">
 					<content><![CDATA[这里是炼狱大门，里面关押着不可饶恕之人。只有强者和恶魔能够生存至今，但是这有什么不同吗……]]></content>
+					<functionHandler>
+						<func type="click">                                
+                        	<description><![CDATA[炼狱商店]]></description>
+							<action>openPanel</action>                              
+							<param>ItemShop</param>                                 
+							<param>mode=buy</param>                                 
+							<param>item=22041</param>
+							<param>currency=1004/22041</param>                             							
+						</func>                                            
+					</functionHandler>
 					<replyHandler>
 						<reply type="click">
 							<description><![CDATA[路过…路过而已…]]></description>
@@ -26,6 +36,6 @@
 			</eventHandler>
 		</npc>
 		<teleport id="1" name="欲望回廊" pos="440,125" targetMapId="1081"/>
-		<!-- <teleport id="2" name="微光湖畔" pos="290,270" targetMapId="790"/> -->
+		<teleport id="2" name="暗月岭" pos="800,75" targetMapId="1140"/>
 	</entities>
 </map>

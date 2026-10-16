@@ -7,10 +7,22 @@
 	<initialPoint>390,135</initialPoint>
 	<entities> 
 		<npc id="24001" resId="Pets/pet/495" name="Lv 70 盖亚" size="102,175" pos="620,240" namePos="0,0">
+			<anim id="Pets/anim/495" pos="-0.9,0.3" scale="1.2,1.2" />
 			<description>盖亚</description>
 			<dialog>
 				<branch id="default" name="盖亚" icon="Pets/pet/495" size="102,175" pos="10,35">
 					<content><![CDATA[我的目标是成为精灵战斗大师，我对战斗有着独特的见解，只有力量与智慧都达到一定境界的对手才会得到我的认同。 ]]></content>
+					<functionHandler>
+						<func type="click">
+							<description><![CDATA[因子商店]]></description>
+							<action>openPanel</action>
+							<param>ItemShop</param>
+							<param>mode=buy</param>
+							<param>currency=8/0</param>
+							<param>item=22038</param>
+							<param>title=因子商店</param>
+						</func>
+					</functionHandler>
 					<replyHandler>
 						<reply type="click">
 							<description><![CDATA[▼ 下一页]]></description>
