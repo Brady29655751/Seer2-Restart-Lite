@@ -266,8 +266,8 @@ public class SpriteKingPanel : Panel
     public void Shop()
     {
         var panel = Panel.OpenPanel<ItemShopPanel>();
-        panel.SetPanelIdentifier("item", "500811/490990/" + Enumerable.Range(21013, 8).Select(x => x.ToString()).ConcatToString("/"));
-        panel.SetPanelIdentifier("limit", "1/1/" + Enumerable.Repeat("-1", 8).ConcatToString("/"));
+        panel.SetPanelIdentifier("item", "500811/490990/390990/" + Enumerable.Range(21013, 8).Select(x => x.ToString()).ConcatToString("/"));
+        panel.SetPanelIdentifier("limit", "1/1/1/" + Enumerable.Repeat("-1", 8).ConcatToString("/"));
         panel.SetPanelIdentifier("currency", "400016/2");
     }
 }

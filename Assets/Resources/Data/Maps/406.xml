@@ -1,4 +1,4 @@
-<map name="冰沁神殿"  category="5"  id="406"  weather="0">
+<map name="冰沁神殿"  category="5"  id="406"  weather="4">
 	<!-- <resource>10011</resource> -->
 	<initialPoint>350,90</initialPoint>
 	<music category="5">
@@ -6,20 +6,28 @@
 	</music>
 	<entities>
 		<npc id="40601" resId="Pets/pet/984" name="Lv 105 沁灵兽" size="280,209" pos="280,140" namePos="30,0">
+			<anim id="Pets/anim/984" pos="0,0" scale="1.65,1.65" />
 			<description><![CDATA[沁灵兽]]></description>
 			<dialog>
 				<branch id="default" name="沁灵兽" icon="Pets/pet/984" size="140,105" pos="0,55">
 					<content><![CDATA[我是精灵王之心脏，冰沁氏族不朽的守护者]]></content>
+					<functionHandler>
+						<func type="click">
+							<description><![CDATA[挑战沁灵兽]]></description>
+							<action>battle</action>
+							<param>default</param>
+						</func>
+						<func type="click">
+							<description><![CDATA[超进化]]></description>
+							<action>battle</action>
+							<param>evolve</param>
+						</func>
+					</functionHandler>
 					<replyHandler>
 						<reply type="click">
 							<description><![CDATA[沁灵兽居然不是那位狐狸]]></description>
 							<action>openDialog</action>
 							<param>null</param>
-						</reply>
-						<reply type="click">
-							<description><![CDATA[挑战沁灵兽]]></description>
-							<action>battle</action>
-							<param>default</param>
 						</reply>
 					</replyHandler>
 				</branch>
@@ -77,6 +85,36 @@
 						</button>		
 					</winHandler>
 				</branch>
+				<branch id="evolve">
+					<settings count="6">
+						<weather>4</weather>
+						<initBuff>(field:600004)</initBuff>
+						<limit>(elementNOT3)(elementNOT12)</limit>
+						<limitDesc><![CDATA[不可以使用<color=#ffbb33>火系</color>和<color=#ffbb33>特质系</color>精灵进行挑战哦！]]></limitDesc>
+					</settings>
+					<enemy>
+						<pet id="994" level="105">
+							<status>
+								<atk>3200</atk>
+								<mat>3200</mat>
+								<def>100</def>
+								<mdf>100</mdf>
+								<hp>250000</hp>
+							</status>
+							<initBuff>-8,17,20,61,-3112,-3082,-3039,92,93,-3123,-3105,3182,44,-3133,-3134</initBuff>
+							<loopSkill>15387,15390</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="choose">
+							<action>openHintbox</action>
+							<param>type=PetSelect</param>
+						    <param>title=选择要进化的沁灵兽</param>
+						    <param>option_num=2</param>
+							<param>callback=evolve</param>
+						</button>
+					</winHandler>
+				</branch>
 			</battle>
 			<eventHandler>
 				<button type="click">
@@ -84,6 +122,43 @@
 					<param>default</param>
 				</button>
 			</eventHandler>
+			<callbackHandler>
+				<button type="choose">
+					<action>openHintbox</action>
+					<param>type=PetSelect</param>
+				    <param>title=选择要进化的沁灵兽</param>
+				    <param>option_num=2</param>
+					<param>callback=evolve</param>
+				    <condition>data.PetSelect.uidNOT984|data.PetSelect.level&lt;100</condition>
+				</button>
+				<button type="evolve">
+				    <action>openHintbox</action>
+				    <param>type=Item</param>
+				    <param>title=提示</param>
+				    <param>content=必须选择等级100的沁灵兽！</param>
+				    <param>item_icon=pet[984]</param>
+				    <param>option_num=1</param>
+					<param>callback=choose</param>
+				    <condition>data.PetSelect.uidNOT984|data.PetSelect.level&lt;100</condition>
+				</button>
+				<button type="evolve">
+				    <action>openHintbox</action>
+				    <param>type=Item</param>
+				    <param>title=提示</param>
+				    <param>content=沁灵兽已成功超进化</param>
+				    <param>item_icon=pet[994]</param>
+				    <param>option_num=1</param>
+				    <condition>data.PetSelect.uid=984</condition>
+				    <condition>data.PetSelect.levelGTE100</condition>
+				</button>
+				<button type="evolve">
+				    <action>evolvePet</action>
+				    <param>index=data.PetSelectIndex</param>
+				    <param>994</param>
+				    <condition>data.PetSelect.uid=984</condition>
+				    <condition>data.PetSelect.levelGTE100</condition>
+				</button>
+			</callbackHandler>
 		</npc>
 		<teleport id="1" name="冰沁宫殿" pos="480,60" targetMapId="405"/>
 

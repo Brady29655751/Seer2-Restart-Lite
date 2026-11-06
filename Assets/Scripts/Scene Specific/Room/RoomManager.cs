@@ -45,6 +45,8 @@ public class RoomManager : Manager<RoomManager>
     private void InitPlayer()
     {
         phase = EffectTiming.OnTurnStart;
+        banPetList = new List<int>();
+        opBanPetList = new List<int>();
 
         petBagPanel.SetActive(true);
         petBagPanel.SetActive(false);
@@ -229,6 +231,11 @@ public class RoomManager : Manager<RoomManager>
         var otherPlayer = PhotonNetwork.PlayerListOthers;
         var buffs = (int[])room["buff"];
         var bp = (BattleBanPick)(int)room["bp"];
+        int petCount = bp switch 
+        {
+            BattleBanPick.Ranking => 12,
+            _ => 6,
+        };
 
         if (isReady)
         {
@@ -236,45 +243,45 @@ public class RoomManager : Manager<RoomManager>
             var pets = petBagPanel.petBag.Where(x => x != null);
             if (buffs.Contains(610001))
             {
-                if (pets.Count() < 6)
+                if (pets.Count() != petCount)
                 {
-                    Hintbox.OpenHintboxWithContent("【无禽12星限制】\n必须带满6只精灵", 16);
+                    Hintbox.OpenHintboxWithContent("【无禽2星规则】\n背包必须带满精灵", 16);
                     return;
                 }
+
                 if (pets.Any(x => x.info.star >= 4))
                 {
-                    Hintbox.OpenHintboxWithContent("【无禽12星限制】\n不能使用4星以上的精灵", 16);
+                    Hintbox.OpenHintboxWithContent("【无禽2星规则】\n不能使用4星以上的精灵", 16);
                     return;
                 }
-                if (pets.Count(x => x.info.star == 3) > 2)
+
+                if (pets.Count(x => x.info.star == 3) > petCount / 6)
                 {
-                    Hintbox.OpenHintboxWithContent("【无禽12星限制】\n3星精灵最多携带2只", 16);
+                    Hintbox.OpenHintboxWithContent($"【无禽2星规则】\n每6只精灵中最多只能有1只3星精灵", 16);
                     return;
                 }
-                if (pets.Sum(x => x.info.star) > 12)
+
+                if (pets.Sum(x => x.info.star) > petCount * 2)
                 {
-                    Hintbox.OpenHintboxWithContent("【无禽12星限制】\n精灵星数总和不能超过12", 16);
-                    return;
-                }
-            }
-            if (buffs.Contains(Buff.BUFFID_PET_EXCHANGE))
-            {
-                if (pets.Count() != 3)
-                {
-                    Hintbox.OpenHintboxWithContent("【精灵大乱斗限制】\n必须且只能携带3只精灵", 16);
+                    Hintbox.OpenHintboxWithContent($"【无禽2星规则】\n精灵星数总和不能超过{petCount * 2}", 16);
                     return;
                 }
             }
 
-            if (bp != BattleBanPick.None)
+            if (bp == BattleBanPick.None)
             {
-                if (pets.Count() != pets.Select(x => x.basic.baseId).Distinct().Count())
+                if (buffs.Contains(Buff.BUFFID_PET_EXCHANGE))
                 {
-                    Hintbox.OpenHintboxWithContent("【BP模式限制】\n不能携带具有相同<color=#ffbb33>基础序号</color>的精灵", 16);
-                    return;
-                }
-
-                if (pets.Count() != pets.Select(x => x.GetPetIdentifier("id")).Distinct().Count())
+                    if (pets.Count() != 3)
+                    {
+                        Hintbox.OpenHintboxWithContent("【精灵大乱斗限制】\n必须且只能携带3只精灵", 16);
+                        return;
+                    }
+                }   
+            }
+            else
+            {
+                if (pets.Count() != pets.Select(x => x.id).Distinct().Count())
                 {
                     Hintbox.OpenHintboxWithContent("【BP模式限制】\n不能携带具有相同<color=#ffbb33>序号</color>的精灵", 16);
                     return;

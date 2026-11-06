@@ -1,0 +1,79 @@
+<map name="噬魂塔" category="14" id="1150" weather="10">
+	<music category="14">
+		<bgm>BGM_1110</bgm>
+		<fx>FX_119</fx>
+	</music>
+	<initialPoint>390,105</initialPoint>
+	<entities>
+		<npc id="115001" resId="Pets/pet/1984" name="Lv 105 醚魂兽" size="280,240" pos="485,100" namePos="-30,-25">
+			<anim id="Pets/anim/1984" pos="-0.75,0.75" scale="1.5,1.5" />
+			<description><![CDATA[醚魂兽]]></description>
+			<dialog>
+				<branch id="default" name="醚魂兽" icon="Pets/pet/1984" size="140,120" pos="20,35">
+					<content><![CDATA[我是精灵王之脏腑，神醚氏族不朽的守护者]]></content>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[也许你就是重建消逝氏族的关键]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+						<reply type="click">
+							<description><![CDATA[挑战醚魂兽]]></description>
+							<action>battle</action>
+							<param>default</param>
+						</reply>
+					</replyHandler>
+				</branch>
+			</dialog>
+			<battle>
+				<branch id="default">
+					<settings count="6">
+						<weather>10</weather>
+					</settings>
+					<enemy>
+						<pet id="1984" level="105">
+							<status>
+								<atk>600</atk>
+								<mat>600</mat>
+								<def>1000</def>
+								<mdf>1000</mdf>
+								<hp>25000</hp>
+							</status>
+							<initBuff>13,17,20,-3,61,-3029,-3059</initBuff>
+							<loopSkill>15423,15424,15425,15426,15427,15428,15429,15430,15431,15432,15436</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>getPet</action>
+							<param>1984,100</param>
+							<condition>activity[soul].done[south][4]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=【醚魂兽】已经放入精灵仓库</param>
+							<param>item_icon=pet[1984]</param>
+							<param>option_num=1</param>
+							<condition>activity[soul].done[south][4]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>soul</param>
+							<param>done[south][4]=true</param>
+							<condition>activity[soul].done[south][4]=[bool]false[default]false</condition>
+						</button>
+					</winHandler>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>openDialog</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+        <teleport id="1" name="暗月岭" pos="730,125" targetMapId="1140"/>
+	</entities>
+</map>

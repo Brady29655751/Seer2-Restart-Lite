@@ -218,7 +218,7 @@ public class PetBattleBuffController
                 }
                 return false;
             case CopyHandleType.Stack:
-                if (oldBuff.value < oldBuff.info.maxValue)
+                if (oldBuff.value < oldBuff.maxValue)
                 {
                     oldBuff.value += newBuff.value;
                     OnAddBuff(newBuff, buffUnit, state);

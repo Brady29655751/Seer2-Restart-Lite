@@ -235,6 +235,7 @@ public class BattlePet : Pet
                 return split[0] switch
                 {
                     "count" => allSkills.Count,
+                    "own" => (allSkills.Count > 0) ? 1 : 0,
                     _ => allSkills.FirstOrDefault()?.GetSkillIdentifier(split[0]) ?? float.MinValue,
                 };
 

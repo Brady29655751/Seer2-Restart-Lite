@@ -40,43 +40,6 @@
 				</branch>
 			</dialog>
 			<battle>
-				<branch id="default">
-					<settings count="1">
-						<mode>3</mode>
-					</settings>
-					<enemy>
-						<pet id="606" level="70">
-							<status>
-								<hp>2000</hp>
-							</status>
-							<initBuff>61,12,13,14,17,90,99,960,962,-3000,-3059</initBuff>
-							<headerSkill>12450</headerSkill>
-							<loopSkill>12458,12459,12460</loopSkill>
-						</pet>
-					</enemy>
-					<winHandler>
-						<button type="auto">
-							<action>getPet</action>
-							<param>606,1</param>
-							<condition>activity[11012].done=[bool]false[default]false</condition>
-						</button>
-						<button type="auto">
-							<action>openHintbox</action>
-							<param>type=Item</param>
-							<param>title=提示</param>
-							<param>content=布莱克已经放入精灵仓库</param>
-							<param>item_icon=pet[606]</param>
-							<param>option_num=1</param>
-							<condition>activity[11012].done=[bool]false[default]false</condition>
-						</button>
-						<button type="auto">
-							<action>setActivity</action>
-							<param>11012</param>
-							<param>done=true</param>
-							<condition>activity[11012].done=[bool]false[default]false</condition>
-						</button>
-					</winHandler>
-				</branch>
 				<branch id="evolve">
 					<settings count="3" star="2">
 						<mode>3</mode>
@@ -153,6 +116,74 @@
 				<button type="click">
 					<action>openPanel</action>
 					<param>Lottery</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<npc id="-403" resId="Pets/pet/477" name="烛阴" size="95,145" pos="435,330" namePos="15,-5">
+			<description>寒露</description>
+			<dialog>
+				<branch id="default" name="烛阴" icon="Pets/pet/477" size="72,109" pos="0,45">
+					<content>寒露来了！</content>
+					<functionHandler>
+						<func type="click">
+							<description><![CDATA[挑战烛阴]]></description>
+							<action>battle</action>
+							<param>default</param>
+						</func>	
+					</functionHandler>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[寒露早就过很久了吧]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+					</replyHandler>
+				</branch>
+			</dialog>
+			<battle>
+				<branch id="default">
+					<settings count="3" star="2">
+						<mode>3</mode>
+					</settings>
+					<enemy>
+						<pet id="477" level="70">
+							<status>
+								<atk>800</atk>
+								<mat>800</mat>
+								<hp>3000</hp>
+							</status>
+							<initBuff>-3022,13,14,17,20,99,-3082,-3135</initBuff>
+							<loopSkill>15443,15444,15445</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>getPet</action>
+							<param>477,1</param>
+							<condition>activity[11027].done=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=烛阴已经放入精灵仓库</param>
+							<param>item_icon=pet[477]</param>
+							<param>option_num=1</param>
+							<condition>activity[11027].done=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>11027</param>
+							<param>done=true</param>
+							<condition>activity[11027].done=[bool]false[default]false</condition>
+						</button>
+					</winHandler>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>openDialog</action>
+					<param>default</param>
 				</button>
 			</eventHandler>
 		</npc>

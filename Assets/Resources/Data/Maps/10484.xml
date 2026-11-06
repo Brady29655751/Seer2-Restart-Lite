@@ -1,0 +1,126 @@
+<map name="怀特星" category="105" id="10484" weather="6">
+	<initialPoint>540,240</initialPoint>
+	<music category="102">
+		<bgm>BGM_25</bgm>
+	</music>
+	<entities>
+		<npc id="1048405" resId="Pets/pet/10798" name="Lv70 卡修斯" size="93,150" pos="420,300" namePos="0,0">
+			<anim id="Pets/anim/10798" pos="0,0.2" scale="1.2,1.2" />
+			<description>卡修斯</description>
+			<dialog>
+				<branch id="default" name="卡修斯" icon="Pets/pet/10798" size="93,150" pos="10,35">
+					<content><![CDATA[怀特星和炫彩山就由我来守护]]></content>
+					<functionHandler>
+						<func type="click">
+							<description><![CDATA[挑战卡修斯]]></description>
+							<action>battle</action>
+							<param>default</param>
+						</func>
+						<func type="click">
+							<description><![CDATA[大地誓约]]></description>
+							<action>battle</action>
+							<param>evolve</param>
+							<condition>firstPet.id=10798</condition>
+						</func>
+						<func type="branch">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=把卡修斯设为首发之后再来挑战吧</param>
+							<param>option_num=1</param>
+							<param>item_icon=pet[10798]</param>
+							<condition>firstPet.idNOT10798</condition>
+						</func>
+					</functionHandler>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[小时候黑不是黑]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+					</replyHandler>
+				</branch>
+			</dialog>
+			<battle>
+				<branch id="default">
+					<settings count="6">
+						<mode>3</mode>
+					</settings>
+					<enemy>
+						<pet id="10798" level="70">
+							<status>
+								<mat>600</mat>
+								<hp>15000</hp>
+							</status>
+							<initBuff>61,13,14,99,-3000,-3063,-3086</initBuff>
+							<loopSkill>11770,11777,11778,11781</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>getPet</action>
+							<param>10796,1</param>
+							<condition>activity[new_evolve_10798].done=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=卡茨已经放入精灵仓库</param>
+							<param>item_icon=pet[10796]</param>
+							<param>option_num=1</param>
+							<condition>activity[new_evolve_10798].done=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>new_evolve_10798</param>
+							<param>done=true</param>
+							<condition>activity[new_evolve_10798].done=[bool]false[default]false</condition>
+						</button>
+					</winHandler>
+				</branch>
+				<branch id="evolve">
+					<settings count="1">
+						<mode>3</mode>
+						<weather>6</weather>
+						<initBuff>(rule:600000)</initBuff>
+					</settings>
+					<enemy>
+						<pet id="12323" level="105">
+							<status>
+								<atk>500</atk>
+								<mat>500</mat>
+								<def>200</def>
+								<mdf>200</mdf>
+								<spd>400</spd>
+								<hp>2000</hp>
+							</status>
+							<initBuff>-8,61,-3121</initBuff>
+							<loopSkill>15414</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>evolvePet</action>
+							<param>12323</param>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=【卡修斯】已成功超进化</param>
+							<param>item_icon=pet[12323]</param>
+							<param>option_num=1</param>
+						</button>
+					</winHandler>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>openDialog</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+	</entities>		
+</map>

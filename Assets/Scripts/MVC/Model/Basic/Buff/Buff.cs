@@ -33,13 +33,21 @@ public class Buff
     private int _value;
     public int value
     {
-        get => Mathf.Clamp(_value, info.minValue, info.maxValue);
-        set => _value = Mathf.Clamp(value, info.minValue, info.maxValue);
+        get => Mathf.Clamp(_value, minValue, maxValue);
+        set => _value = Mathf.Clamp(value, minValue, maxValue);
     }
     public int turn;
     public bool ignore;
-    public bool hide => options.TryGet("hide", out var value) ? (float.Parse(value) != 0) : info.hide;
-    public bool removable => options.TryGet("removable", out var value) ? (float.Parse(value) != 0) : info.removable;
+    public int minValue => int.Parse(options.Get("min_val", int.MinValue.ToString()));
+    public int maxValue => int.Parse(options.Get("max_val", int.MaxValue.ToString()));
+    public bool keep => float.Parse(options.Get("keep", info.keep ? "1" : "0")) != 0;
+    public bool inherit => float.Parse(options.Get("inherit", info.inherit ? "1" : "0")) != 0;
+    public bool legacy => float.Parse(options.Get("legacy", info.legacy ? "1" : "0")) != 0;
+    public bool hide => float.Parse(options.Get("hide", info.hide ? "1" : "0")) != 0;
+    public bool removable => float.Parse(options.Get("removable", info.removable ? "1" : "0")) != 0;
+    public List<string> groups => options.Get("group", info.options.Get("group"))?.Split('/').ToList() ?? new List<string>();
+    public Vector2 infoSize => options.Get("infoSize")?.ToVector2(delimeter: '/') ?? Vector2.zero;
+
     public List<Effect> effects = new List<Effect>();
     public Dictionary<string, string> options = new Dictionary<string, string>();
 
@@ -47,6 +55,9 @@ public class Buff
     public Buff(int _id, int _turn = -1, int? _value = null)
     {
         id = _id;
+
+        InitOptionsProperty();
+
         turn = (_turn == -1) ? info.turn : _turn;
         value = _value ?? 0;
         ignore = false;
@@ -90,6 +101,19 @@ public class Buff
         {
             e.source = this;
         }
+    }
+
+    private void InitOptionsProperty()
+    {
+        options.Set("min_val", info.minValue.ToString());
+        options.Set("max_val", info.maxValue.ToString());
+        options.Set("keep", info.keep ? "1" : "0");
+        options.Set("inherit", info.inherit ? "1" : "0");
+        options.Set("legacy", info.legacy ? "1" : "0");
+        options.Set("hide", info.hide ? "1" : "0");
+        options.Set("legacy", info.legacy ? "1" : "0");
+        options.Set("removable", info.removable ? "1" : "0");
+        options.Set("infoSize", info.options.Get("infoSize", "0/0"));
     }
 
     public bool IsType(BuffType type)
@@ -330,13 +354,13 @@ public class Buff
     {
         string desc = GetBuffDescriptionPreview(info.description, this);
 
-        if (!info.keep && !IsUnhealthy() && !IsAbnormal())
+        if (!keep && !IsUnhealthy() && !IsAbnormal())
             desc += "\n（换场不保留原精灵身上）";
 
-        if (info.inherit)
+        if (inherit)
             desc += "\n（换场继承给下一位精灵）";
 
-        if (info.legacy)
+        if (legacy)
             desc += "\n（阵亡继承给下一位精灵）";
 
         if (turn > 0)
@@ -359,8 +383,11 @@ public class Buff
 
         if (id.TryTrimStart("group", out trimId))
         {
-            trimId = trimId.TrimParentheses();
-            return (options.Get("group", info.options.Get("group")) == trimId) ? 1 : 0;
+            var groupList = trimId.TrimParenthesesLoop();
+            if (ListHelper.IsNullOrEmpty(groupList))
+                return 0;
+
+            return groupList.All(groups.Contains) ? 1 : 0;
         }
 
         if (id.TryTrimStart("type", out trimId) && trimId.TryTrimParentheses(out trimId))
@@ -377,11 +404,14 @@ public class Buff
             "turn" => turn,
             "round" => GetBuffIdentifier("option[round]"),
             "ignore" => ignore ? 1 : 0,
+            "keep" => keep ? 1 : 0,
+            "inherit" => inherit ? 1 : 0,
+            "legacy" => legacy ? 1 : 0,
             "hide" => hide ? 1 : 0,
             "removable" => removable ? 1 : 0,
             "movable" => IsUnmovable() ? 0 : 1,
-            "maxValue" => info.maxValue,
-            "minValue" => info.minValue,
+            "maxValue" => maxValue,
+            "minValue" => minValue,
             _ => float.MinValue,
         };
     }
@@ -396,13 +426,17 @@ public class Buff
     {
         if (id.TryTrimStart("option", out var trimId) && trimId.TryTrimParentheses(out trimId))
         {
-            options.Set(trimId, num.ToString());
+            if ((trimId == "min_val") || (trimId == "max_val"))
+                options.Set(trimId, ((int)num).ToString());
+            else
+                options.Set(trimId, num.ToString());
             return;
         }
         switch (id)
         {
             default:
                 return;
+            
             case "id":
                 if (Buff.GetBuffInfo((int)num) == null)
                     return;
@@ -413,18 +447,26 @@ public class Buff
                     e.source = this;
 
                 return;
+            
             case "value":
                 this.value = (int)num;
                 return;
+            
             case "turn":
                 turn = (int)num;
                 return;
+            
             case "round":
                 SetBuffIdentifier("option[round]", num);
                 return;
+            
             case "ignore":
                 ignore = num != 0;
                 return;
+
+            case "keep":
+            case "inherit":
+            case "legacy":
             case "hide":
             case "removable":
                 SetBuffIdentifier($"option[{id}]", num);

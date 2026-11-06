@@ -9,20 +9,27 @@
     		<dialog>
     		    <branch id="default" name="九尾冰狐" icon="Pets/pet/387" size="120,100" pos="5,45">
 					<content>（被冰封在冰块中）</content>
+					<functionHandler>
+						<func type="click">
+							<description><![CDATA[解救九尾冰狐]]></description>
+							<action>openDialog</action>
+							<param>note</param>
+						</func>
+						<func type="click">
+							<description><![CDATA[超进化]]></description>
+							<action>battle</action>
+							<param>evolve</param>
+						</func>
+					</functionHandler>
 					<replyHandler>
 						<reply type="click">
-							<description><![CDATA[这位精灵和沁灵兽是什么关系？]]></description>
+							<description><![CDATA[这位精灵和九尾冰狐是什么关系？]]></description>
 							<action>openDialog</action>
 							<param>null</param>
 						</reply>
-						<reply type="click">
-							<description><![CDATA[我来帮助你]]></description>
-							<action>openDialog</action>
-							<param>note</param>
-						</reply>
 					</replyHandler>
     		    </branch>
-				<branch id="note" name="沁灵兽" icon="Pets/pet/984" size="140,105" pos="0,55">
+				<branch id="note" name="九尾冰狐" icon="Pets/pet/387" size="140,105" pos="0,55">
 					<content>她拥有9条尾巴，战斗非常困难和漫长，只有实力极其强大的挑战者能够控制住她！</content>
 					<replyHandler>
 						<reply type="click">
@@ -131,6 +138,31 @@
 						</button>
 					</winHandler>
 				</branch>
+				<branch id="evolve">
+					<settings count="3" star="4">
+						<weather>4</weather>
+					</settings>
+					<enemy>
+						<pet id="820" level="100">
+							<status>
+								<hp>3000</hp>
+								<cri>-1000</cri>
+							</status>
+							<initBuff>17,44,-8,61,93,-3082,-3059</initBuff>
+							<headerSkill>15397</headerSkill>
+							<loopSkill>15398,15400</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="choose">
+							<action>openHintbox</action>
+							<param>type=PetSelect</param>
+						    <param>title=选择要进化的九尾冰狐</param>
+						    <param>option_num=2</param>
+							<param>callback=evolve</param>
+						</button>
+					</winHandler>
+				</branch>
 			</battle>
 			<eventHandler>
 				<button type="click">
@@ -138,6 +170,43 @@
 					<param>default</param>
 				</button>
 			</eventHandler>
+			<callbackHandler>
+				<button type="choose">
+					<action>openHintbox</action>
+					<param>type=PetSelect</param>
+				    <param>title=选择要进化的九尾冰狐</param>
+				    <param>option_num=2</param>
+					<param>callback=evolve</param>
+				    <condition>data.PetSelect.uidNOT387|data.PetSelect.level&lt;100</condition>
+				</button>
+				<button type="evolve">
+				    <action>openHintbox</action>
+				    <param>type=Item</param>
+				    <param>title=提示</param>
+				    <param>content=必须选择等级100的九尾冰狐！</param>
+				    <param>item_icon=pet[387]</param>
+				    <param>option_num=1</param>
+					<param>callback=choose</param>
+				    <condition>data.PetSelect.uidNOT387|data.PetSelect.level&lt;100</condition>
+				</button>
+				<button type="evolve">
+				    <action>openHintbox</action>
+				    <param>type=Item</param>
+				    <param>title=提示</param>
+				    <param>content=九尾冰狐已成功超进化</param>
+				    <param>item_icon=pet[820]</param>
+				    <param>option_num=1</param>
+				    <condition>data.PetSelect.uid=387</condition>
+				    <condition>data.PetSelect.levelGTE100</condition>
+				</button>
+				<button type="evolve">
+				    <action>evolvePet</action>
+				    <param>index=data.PetSelectIndex</param>
+				    <param>820</param>
+				    <condition>data.PetSelect.uid=387</condition>
+				    <condition>data.PetSelect.levelGTE100</condition>
+				</button>
+			</callbackHandler>
 		</npc>
 		<teleport id="1" name="冰脊山脉" pos="600,50" targetMapId="402"/>
 	</entities>

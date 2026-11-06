@@ -8,45 +8,40 @@
 		<npc id="1008301" resId="Pets/pet/10300" name="Lv 105 谱尼" size="122,160" pos="375,300" namePos="10,-20">
 			<anim id="Pets/anim/10300" pos="0.2,-0.6" scale="1,1" />
 			<description>谱尼真身</description>
-			<!--
-			<wild visual="animation">
-				<movement mode="wander" radius="220" speed="34" idle="2,6" step="12,26" moveTick="0.05" snap="1" bob="1.25" bobSpeed="2" originalFacesRight="true" />
-				<talk chance="0.3" duration="4">
-					<self image="emoji/toon/alert" />
-					<self image="emoji/toon/angry" />
-					<self image="emoji/toon/annoyed" />
-					<self image="emoji/toon/cool" />
-					<self image="emoji/toon/cry" />
-					<self image="emoji/toon/dizzy" />
-					<self image="emoji/toon/grin" />
-					<self image="emoji/toon/happy" />
-					<self image="emoji/toon/hypno" />
-					<self image="emoji/toon/laugh" />
-					<self image="emoji/toon/love" />
-					<self image="emoji/toon/mute" />
-					<self image="emoji/toon/shocked" />
-					<self image="emoji/toon/shy" />
-					<self image="emoji/toon/sick" />
-					<self image="emoji/toon/silly" />
-					<self image="emoji/toon/skull" />
-					<self image="emoji/toon/sleepy" />
-					<self image="emoji/toon/smug" />
-					<self image="emoji/toon/star_eyes" />
-					<self image="emoji/toon/sunglasses" />
-					<self image="emoji/toon/surprised" />
-					<self image="emoji/toon/sweat" />
-					<self image="emoji/toon/worried" />
-					<self>我的力量……连我自己都无法完全掌控。</self>
-					<self>时间与空间在我面前不过是一层薄纱。</self>
-					<self>也许我只是个传说……但传说也有想散步的时候。</self>
-					<self>勇者之塔时空监测：今日时空扭曲度0.001%，处于安全范围。</self>
-					<self>我的力量可以扭曲时空，但扭曲不了一块好吃的蛋糕。</self>
-					<self>传说之所以是传说，是因为没人能证实……包括我自己。</self>
-					<self>时间与空间在我面前像一层薄纱，轻轻一掀就能看到另一边。</self>
-					<self>有时候我会想，如果我不是传说，只是一只普通的精灵，会不会更快乐？</self>
-				</talk>
-			</wild>
-			-->
+			<dialog>
+				<branch id="default" name="我" icon="7004" size="136,125" pos="10,35">
+					<content><![CDATA[这就是传说中的谱尼...]]></content>
+					<functionHandler>
+						<func type="click">
+							<description><![CDATA[挑战谱尼]]></description>
+							<action>battle</action>
+							<param>default</param>
+						</func>
+						<func type="click">
+							<description><![CDATA[谱尼特训]]></description>
+							<action>battle</action>
+							<param>evolve</param>
+							<condition>firstPet.uid=10300</condition>
+						</func>
+						<func type="branch">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=将谱尼设为首发吧</param>
+							<param>item_icon=pet[10300]</param>
+							<param>option_num=1</param>
+							<condition>firstPet.uidNOT10300</condition>
+						</func>
+					</functionHandler>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[七道封印的起源是什么？]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+					</replyHandler>
+				</branch>
+			</dialog>
 			<battle>
 				<branch id="default">
 					<settings count="6" star="4">
@@ -125,10 +120,94 @@
 						</button>
 					</winHandler>
 				</branch>
+				<branch id="evolve">
+					<settings count="6" simulate="true">
+						<mode>3</mode>
+					</settings>
+					<player>
+						<pet id="12502" level="105">
+							<status>
+								<hp>550</hp>
+							</status>
+							<initBuff>-8,17,20</initBuff>
+							<normalSkill>15358,15359,15360,15362</normalSkill>
+							<superSkill>15361</superSkill>
+						</pet>
+					</player>
+					<enemy>
+						<pet id="10300" level="105">
+							<status>
+								<hp>7000</hp>
+							</status>
+							<initBuff>17,20,-3052</initBuff>
+							<loopSkill>11620,11623,11621,11622</loopSkill>
+							<superSkill>11619</superSkill>
+						</pet>
+						<pet id="10300" level="105">
+							<status>
+								<hp>8000</hp>
+							</status>
+							<initBuff>17,20,-3053</initBuff>
+							<loopSkill>11620,11623,11621,11622</loopSkill>
+							<superSkill>11619</superSkill>
+						</pet>
+						<pet id="10300" level="105">
+							<status>
+								<hp>9000</hp>
+							</status>
+							<initBuff>17,20,-3054</initBuff>
+							<loopSkill>11620,11623,11621,11622</loopSkill>
+							<superSkill>11619</superSkill>
+						</pet>
+						<pet id="10300" level="105">
+							<status>
+								<hp>10000</hp>
+							</status>
+							<initBuff>17,20,-3055</initBuff>
+							<loopSkill>11620,11623,11621,11622</loopSkill>
+							<superSkill>11619</superSkill>
+						</pet>
+						<pet id="10300" level="105">
+							<status>
+								<hp>20000</hp>
+							</status>
+							<initBuff>13,14,17,20,99,-3052,-3056,-3057</initBuff>
+							<loopSkill>11620,11623,11621,11622</loopSkill>
+							<superSkill>11619</superSkill>
+						</pet>
+						<pet id="10300" level="105">
+							<status>
+								<hp>65000</hp>
+							</status>
+							<initBuff>13,14,17,20,99,-3056,-3058</initBuff>
+							<loopSkill>11620,11623,11621,11622</loopSkill>
+							<superSkill>11619</superSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setPet</action>
+							<param>maxLevel=105</param>
+							<param>level=105</param>
+						</button>
+						<button type="auto">
+							<action>evolvePet</action>
+							<param>12502</param>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=【谱尼】已经成功特训</param>
+							<param>item_icon=pet[12502]</param>
+							<param>option_num=1</param>
+						</button>
+					</winHandler>
+				</branch>
 			</battle>
 			<eventHandler>
 				<button type="click">
-					<action>battle</action>
+					<action>openDialog</action>
 					<param>default</param>
 				</button>
 			</eventHandler>

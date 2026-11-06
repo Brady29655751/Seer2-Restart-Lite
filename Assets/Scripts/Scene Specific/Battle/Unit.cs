@@ -169,7 +169,7 @@ public class Unit
                 }
                 return false;
             case CopyHandleType.Stack:
-                if (oldBuff.value < oldBuff.info.maxValue)
+                if (oldBuff.value < oldBuff.maxValue)
                 {
                     oldBuff.value += newBuff.value;
                     return true;
