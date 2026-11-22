@@ -486,9 +486,13 @@ public class Skill
         var result = new List<bool>();
         var isSelectDead = effects.Exists(x => x.targetType.Contains("dead"));
         var isSelectOther = effects.Exists(x => x.targetType.Contains("other"));
+        var targetFilters = effects.Select(x => x.targetFilter).Where(x => x != "none").Distinct()
+            .Select(x => Parser.ParseConditionFilter<BattlePet>(x, (id, pet) => pet.TryGetPetIdentifier(id, out var num) ? num : Identifier.GetNumIdentifier(id)))
+            .ToList();
+        
         for (int i = 0; i < petBag.Length; i++) {  
             var index = i; 
-            var isTarget = (petBag[index] != null) && (isSelectDead ^ (!petBag[index].isDead));
+            var isTarget = (petBag[index] != null) && (isSelectDead ^ (!petBag[index].isDead)) && targetFilters.All(filter => filter(petBag[index]));
             var isCursor = isSelectOther && (cursor == index);
             var isParallel = (parallelCount <= 1) || (index < parallelCount);
             var interactable = isTarget && (!isCursor) && isParallel;

@@ -1,0 +1,289 @@
+<map name="神迹领域" category="8" id="600" weather="0">
+	<fightMapColor>64,64,64,255</fightMapColor>
+	<initialPoint>485,100</initialPoint>
+	<music category="8">
+		<bgm>BGM_560</bgm>
+	</music>
+	<entities>
+		<npc id="60001" resId="Pets/pet/905.png" name="Lv105 界王神" size="270,225" pos="400,245" rotation="0,0,9" namePos="10,-35">
+			<description>2027羊年纪念挑战</description>
+			<dialog>
+				<branch id="default" name="界王神" icon="Pets/pet/905" size="130,110" pos="10,45">
+					<content><![CDATA[极限突破的【神迹】力量最早在神域被发现，而且和圣灵属性息息相关，传说这股力量催化了精灵王的诞生]]></content>
+					<functionHandler>
+						<func type="click">
+							<description><![CDATA[新春挑战（2v2）]]></description>
+							<action>battle</action>
+							<param>2v2</param>
+						</func>
+						<func type="click">
+							<description><![CDATA[新春挑战（6v6）]]></description>
+							<action>battle</action>
+							<param>6v6</param>
+						</func>
+						<func type="click">
+							<description><![CDATA[纪念商店]]></description>
+							<action>openPanel</action>
+							<param>Cook</param>
+							<param>recipe=210201/210202/210204/210205/210206/210207/210208/210209/210210/210211</param>
+							<param>title=纪念商店</param>
+							<param>cookText=兑 换</param>
+						</func>
+					</functionHandler>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[你怎么歪一边啊]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+					</replyHandler>
+				</branch>
+			</dialog>
+			<battle>
+				<branch id="6v6">
+					<settings count="6">
+						<initBuff>(field:600000)</initBuff>
+					</settings>
+					<enemy>
+						<pet id="905" level="105">
+							<status>
+								<atk>600</atk>
+								<mat>600</mat>
+								<def>400</def>
+								<mdf>400</mdf>
+								<spd>400</spd>
+								<hp>20270000</hp>
+							</status>
+							<initBuff>13,14,17,99,61</initBuff>
+							<loopSkill>15481,15481,15471,15474,15478,15482,15472,15479</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setItem</action>
+							<param>add_with_hint</param>
+							<param>4,3</param>
+							<condition>activity[2027].done[6v6]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>2027</param>
+							<param>done[6v6]=true</param>
+							<condition>activity[2027].done[6v6]=[bool]false[default]false</condition>
+						</button>						
+					</winHandler>
+				</branch>
+				<branch id="2v2">
+					<settings count="2" parallel="2"/>
+					<enemy>
+						<pet id="905" level="100">
+							<status>
+								<hp>2027</hp>
+							</status>
+							<initBuff>-8,61</initBuff>
+							<loopSkill>15481,15481,15471</loopSkill>
+						</pet>
+						<pet id="953" level="100">
+							<status>
+								<hp>2027</hp>
+							</status>
+							<initBuff>-8,61</initBuff>
+							<loopSkill>15505,15501,15501,15509</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setItem</action>
+							<param>add_with_hint</param>
+							<param>random[400031~400034],2</param>
+						</button>
+					</winHandler>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>openDialog</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<npc id="60002" resId="Pets/pet/909.png" name="北方界王" size="141,152" pos="280,200" namePos="10,-15">
+			<description>四方界王</description>
+			<dialog>
+				<branch id="default" name="北方界王" icon="Pets/pet/909" size="128,138" pos="10,45">
+					<content><![CDATA[战胜会获得最后一位上场的界王，想办法搜集所有界王吧]]></content>
+					<functionHandler>
+						<func type="click">
+							<description><![CDATA[挑战四方界王]]></description>
+							<action>battle</action>
+							<param>default</param>
+						</func>
+					</functionHandler>
+					<replyHandler>
+						<reply type="click">
+							<description><![CDATA[我方向感不好]]></description>
+							<action>openDialog</action>
+							<param>null</param>
+						</reply>
+					</replyHandler>
+				</branch>
+			</dialog>
+			<battle>
+				<branch id="default">
+					<settings count="4" />
+					<enemy>
+						<pet id="906" level="100">
+							<status>
+								<atk>600</atk>
+								<mat>600</mat>
+								<def>600</def>
+								<mdf>600</mdf>
+								<spd>400</spd>
+								<hp>2000</hp>
+							</status>
+							<initBuff>-3,17,20</initBuff>
+							<loopSkill>15515,15516,15517,15518,15519,15520,15521,15522,15523,15524,15525,15526</loopSkill>
+						</pet>
+						<pet id="907" level="100">
+							<status>
+								<atk>600</atk>
+								<mat>600</mat>
+								<def>600</def>
+								<mdf>600</mdf>
+								<spd>400</spd>
+								<hp>2000</hp>
+							</status>
+							<initBuff>-3,17,20</initBuff>
+							<loopSkill>15531,15532,15533,15534,15535,15536,15537,15538,15539,15540,15541,15542,15543</loopSkill>
+						</pet>
+						<pet id="908" level="100">
+							<status>
+								<atk>600</atk>
+								<mat>600</mat>
+								<def>600</def>
+								<mdf>600</mdf>
+								<spd>400</spd>
+								<hp>2000</hp>
+							</status>
+							<initBuff>-3,17,20</initBuff>
+							<loopSkill>15549,15550,15551,15552,15553,15554,15555,15556,15557,15558,15559,15560</loopSkill>
+						</pet>
+						<pet id="909" level="100">
+							<status>
+								<atk>600</atk>
+								<mat>600</mat>
+								<def>600</def>
+								<mdf>600</mdf>
+								<spd>400</spd>
+								<hp>2000</hp>
+							</status>
+							<initBuff>-3,17,20</initBuff>
+							<loopSkill>15565,15566,15567,15568,15569,15570,15571,15572,15573,15574,15575,15576,15577</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>getPet</action>
+							<param>906,1</param>
+							<condition>battle.op.pet.id=906</condition>
+							<condition>activity[20018].done[906]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=【东方界王】已经放入精灵仓库</param>
+							<param>item_icon=pet[906]</param>
+							<param>option_num=1</param>
+							<condition>battle.op.pet.id=906</condition>
+							<condition>activity[20018].done[906]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>20018</param>
+							<param>done[906]=true</param>
+							<condition>battle.op.pet.id=906</condition>
+							<condition>activity[20018].done[906]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>getPet</action>
+							<param>907,1</param>
+							<condition>battle.op.pet.id=907</condition>
+							<condition>activity[20018].done[907]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=【南方界王】已经放入精灵仓库</param>
+							<param>item_icon=pet[907]</param>
+							<param>option_num=1</param>
+							<condition>battle.op.pet.id=907</condition>
+							<condition>activity[20018].done[907]=[bool]false[default]false</condition>		
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>20018</param>
+							<param>done[907]=true</param>
+							<condition>battle.op.pet.id=907</condition>
+							<condition>activity[20018].done[907]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>getPet</action>
+							<param>908,1</param>
+							<condition>battle.op.pet.id=908</condition>
+							<condition>activity[20018].done[908]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=【西方界王】已经放入精灵仓库</param>
+							<param>item_icon=pet[908]</param>
+							<param>option_num=1</param>
+							<condition>battle.op.pet.id=908</condition>
+							<condition>activity[20018].done[908]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>20018</param>
+							<param>done[908]=true</param>
+							<condition>battle.op.pet.id=908</condition>
+							<condition>activity[20018].done[908]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>getPet</action>
+							<param>909,1</param>
+							<condition>battle.op.pet.id=909</condition>
+							<condition>activity[20018].done[909]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>openHintbox</action>
+							<param>type=Item</param>
+							<param>title=提示</param>
+							<param>content=【北方界王】已经放入精灵仓库</param>
+							<param>item_icon=pet[909]</param>
+							<param>option_num=1</param>
+							<condition>battle.op.pet.id=909</condition>
+							<condition>activity[20018].done[909]=[bool]false[default]false</condition>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>20018</param>
+							<param>done[909]=true</param>
+							<condition>battle.op.pet.id=909</condition>
+							<condition>activity[20018].done[909]=[bool]false[default]false</condition>
+						</button>
+					</winHandler>
+				</branch>
+			</battle>
+			<eventHandler>
+				<button type="click">
+					<action>openDialog</action>
+					<param>default</param>
+				</button>
+			</eventHandler>
+		</npc>
+		<teleport id="1" name="诸神之殿" pos="170,85" targetMapId="590" color="255,64,128,255"/>
+	</entities>		
+</map>

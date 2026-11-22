@@ -24,6 +24,7 @@ public static class SecretSkillDescriptionHandler
         "草伊特、水伊特、火伊特",
         "王伊特、源伊特",
         "神奇拉、魔奇拉",
+        "界王神、四方界王",
     };
 
     public static string GreaterThanLevel(this LearnSkillInfo secretSkillInfo) {

@@ -111,6 +111,13 @@ public class BattlePetAnimView : BattleBaseView
             // 修正位置
             battlePetSprite.transform.position = new Vector3((isMyView ? -1 : 1) * 9.6f / (cursorOffset + 1), -5.8f / (cursorOffset + 1), battlePetSprite.transform.position.z);
         }
+
+        /*  換場叫聲
+        if ((!isMyView) || (battle.currentState.phase == EffectTiming.OnBattleStart))
+            return;
+        
+        this.currentPetUI?.PlaySound();
+        */
     }
 
     private void SetPetPresent()
@@ -129,8 +136,7 @@ public class BattlePetAnimView : BattleBaseView
                 CurrentPetSkeletonAnim.SetTimeScale(this.animSpeed);
                 CurrentPetSkeletonAnim.SetSortingOrder(isMyView ? 2 : 1); // spine sorting order 不能双方在同一层
                 this.ApplyAnimation();
-                CurrentPetSkeletonAnim.SetAnimation(0, PetAnimationType.Present, false);
-                CurrentPetSkeletonAnim.AnimationState.Complete += (x) => SetPetIdle(null);
+                CurrentPetSkeletonAnim.SetAnimation(0, PetAnimationType.Present, false).Complete += OnAnimationComplete;
                 return;
             }
 
@@ -270,8 +276,7 @@ public class BattlePetAnimView : BattleBaseView
                     CurrentPetSkeletonAnim.SetTimeScale(skillAnimSpeed);
                     this.ApplyAnimation(false);
                     this.ScreenShake(type);
-                    CurrentPetSkeletonAnim.SetAnimation(0, type, false);
-                    CurrentPetSkeletonAnim.AnimationState.Complete += (x) => SetPetIdle(null);
+                    CurrentPetSkeletonAnim.SetAnimation(0, type, false).Complete += OnAnimationComplete;
 
                     _ = SetDelayCallback((int)(hitFrame * 1000 / (24 * skillAnimSpeed)), () =>
                     {
@@ -393,8 +398,7 @@ public class BattlePetAnimView : BattleBaseView
                 this.currentPetAnim.transform.position = new Vector3(this.currentPetAnim.transform.position.x, this.currentPetAnim.transform.position.y, 0);
                 CurrentPetSkeletonAnim.SetTimeScale(this.animSpeed);
                 this.ApplyAnimation();
-                CurrentPetSkeletonAnim.AnimationState.SetAnimation(0, type.ToString(), false);    
-                CurrentPetSkeletonAnim.AnimationState.Complete += (x) => SetPetIdle(null);
+                CurrentPetSkeletonAnim.SetAnimation(0, type, false).Complete += OnAnimationComplete;
             }
             else if ((tmp = this.currentPetUI.GetBattleAnim(type)) != null)
             {
@@ -499,6 +503,12 @@ public class BattlePetAnimView : BattleBaseView
     {
         isPetDone = true;
         isCaptureDone = true;
+    }
+
+    private void OnAnimationComplete(Spine.TrackEntry trackEntry)
+    {
+        trackEntry.Complete -= OnAnimationComplete;
+        this.SetPetIdle(null);
     }
 
     private void PlaySkillSound(string soundId)

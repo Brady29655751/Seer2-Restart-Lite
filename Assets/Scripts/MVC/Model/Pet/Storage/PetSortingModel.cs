@@ -16,7 +16,7 @@ public class PetSortingModel : Module
             return PetSortingOptions.None;
         
         return sortingType switch {
-            PetSortingType.Storage => (PetSortingOptions)(dropdown.value + 1),
+            PetSortingType.Storage => (PetSortingOptions)(dropdown.value < 3 ? (dropdown.value + 1) : (2 - dropdown.value)),
             PetSortingType.Dict => (PetSortingOptions)((dropdown.value + 1) * Mathf.Sign(dropdown.value - 2)),
             _ => PetSortingOptions.None
         };
@@ -33,9 +33,9 @@ public class PetSortingModel : Module
         switch (option) {
             default:
             case PetSortingOptions.PositiveId:
-                return (Pet x) => (x.GetPetIdentifier("id") > 0) ? (int.MaxValue - x.GetPetIdentifier("id"), -x.GetPetIdentifier("subId")) : (x.GetPetIdentifier("id"), -x.GetPetIdentifier("subId"));
+                return (Pet x) => (x.GetPetIdentifier("id") > 0) ? (int.MaxValue - (int)x.GetPetIdentifier("id"), -(int)x.GetPetIdentifier("subId")) : ((int)x.GetPetIdentifier("id"), -(int)x.GetPetIdentifier("subId"));
             case PetSortingOptions.NegativeId:
-                return (Pet x) => (x.GetPetIdentifier("id") > 0) ? (-x.GetPetIdentifier("id"), -x.GetPetIdentifier("subId")) : (int.MaxValue + x.GetPetIdentifier("id"), -x.GetPetIdentifier("subId"));
+                return (Pet x) => (x.GetPetIdentifier("id") > 0) ? ((int)x.GetPetIdentifier("id"), -(int)x.GetPetIdentifier("subId")) : (int.MaxValue + (int)x.GetPetIdentifier("id"), -(int)x.GetPetIdentifier("subId"));
             case PetSortingOptions.Date:
                 return (Pet x) => x.basic.getPetDate;
             case PetSortingOptions.Level:

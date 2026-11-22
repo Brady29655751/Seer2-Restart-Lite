@@ -658,6 +658,85 @@
 						</button>
 					</winHandler>
 				</branch>
+				<branch id="9">
+					<settings count="6">
+						<mode>1</mode>
+					</settings>
+					<enemy>
+						<pet id="403" level="100">
+						    <status>
+								<atk>1500</atk>
+								<mat>1500</mat>
+						        <hp>7500</hp>
+						    </status>
+						    <initBuff>-8,61,-3059,100,-3112,3607,-3136,-3139,-3048</initBuff>
+							<loopSkill>14292,14289,14297</loopSkill>
+						</pet>
+						<pet id="414" level="100">
+						    <status>
+								<def>2000</def>
+								<mdf>2000</mdf>
+						        <hp>7500</hp>
+						    </status>
+						    <initBuff>-8,61,-3059,100,3623[7],-3045,-3138</initBuff>
+							<loopSkill>14440,14437,14442,14436</loopSkill>
+						</pet>
+						<pet id="468" level="100">
+						    <status>
+								<def>2500</def>
+								<mdf>2500</mdf>
+						        <hp>7500</hp>
+						    </status>
+						    <initBuff>-8,61,-3059,100,-3112,-3136,-3140,-3118,-3119</initBuff>
+							<loopSkill>14486,14484</loopSkill>
+						</pet>
+						<pet id="705" level="100">
+						    <status>
+								<atk>3000</atk>
+								<mat>3000</mat>
+						        <hp>7500</hp>
+						    </status>
+						    <initBuff>-8,61,-3059,100,-3112,3607,-3136,-3139,-3048,3614,-3134</initBuff>
+							<loopSkill>14347,14534</loopSkill>
+						</pet>
+						<pet id="201" level="100">
+						    <status>
+								<def>3500</def>
+								<mdf>3500</mdf>
+						        <hp>7500</hp>
+						    </status>
+						    <initBuff>-8,61,-3059,100,-3112,-3118,-3062,-3049,-3128,-3136</initBuff>
+							<loopSkill>10198,10193,10198,10194</loopSkill>
+						</pet>
+						<pet id="203" level="100">
+						    <status>
+								<def>4000</def>
+								<mdf>4000</mdf>
+						        <hp>7500</hp>
+						    </status>
+						    <initBuff>-8,61,-3059,100,-3112,-3118,-4[0][2],31[99999],-3136</initBuff>
+							<loopSkill>12977,12975</loopSkill>
+						</pet>
+					</enemy>
+					<winHandler>
+						<button type="auto">
+							<action>setItem</action>
+							<param>add_with_hint</param>
+							<param>3,100</param>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>door</param>
+							<param>king[floor]=10</param>
+						</button>
+						<button type="auto">
+							<action>setActivity</action>
+							<param>door</param>
+							<param>king[max]=9</param>
+							<condition>activity[door].king[max]=[int]8[default]0</condition>
+						</button>
+					</winHandler>
+				</branch>
 			</battle>
 			<eventHandler>
 				<button type="click">

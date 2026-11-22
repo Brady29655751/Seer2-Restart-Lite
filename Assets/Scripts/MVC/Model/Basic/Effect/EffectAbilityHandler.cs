@@ -1201,6 +1201,11 @@ public static class EffectAbilityHandler
         string op = effect.abilityOptionDict.Get("op", "+");
         string value = effect.abilityOptionDict.Get("value", "0");
         string randomCountExpr = effect.abilityOptionDict.Get("random_count", "-1");
+        string options = effect.abilityOptionDict.Get("option", string.Empty);
+
+        var typeExpr = type.TryTrimStart("!", out var typeListExpr) ? typeListExpr.Substring(1, typeListExpr.Length - 2).Split('/') : new string[] { type };
+        var opExpr = op.TryTrimStart("!", out var opListExpr) ? opListExpr.Substring(1, opListExpr.Length - 2).Split('/') : new string[] { op };
+        var valueExpr = value.TryTrimStart("!", out var valueListExpr) ? valueListExpr.Substring(1, valueListExpr.Length - 2).Split('/') : new string[] { value };
 
         Unit invokeUnit = (Unit)effect.invokeUnit;
         Unit lhsUnit = (who == "me") ? state.GetUnitById(invokeUnit.id) : state.GetRhsUnitById(invokeUnit.id);
@@ -1232,46 +1237,59 @@ public static class EffectAbilityHandler
         if (randomCount >= 0)
             buffList = buffList.Random(randomCount);
 
+        // 特殊通道：多個印記轉化為一個印記
+        if (string.IsNullOrEmpty(key) && (buffList.Count > 1) && (typeExpr[0] == "id") && (opExpr[0] == "SET") && (options == "merge"))
+        {
+            var buff = buffList[0];
+            buff.SetBuffIdentifier("id", Parser.ParseEffectOperation(valueExpr[0], effect, lhsUnit, rhsUnit));
+            buff.turn += buffList.Skip(1).Sum(x => x.turn);
+            lhsUnit.pet.buffController.RemoveRangeBuff(buffList.Skip(1), lhsUnit, null);
+            lhsUnit.pet.buffController.OnAddBuff(buff, lhsUnit, state);
+            return true;
+        }
+
         var success = false;
         foreach (var buff in buffList)
         {
             if (buff == null)
                 continue;
 
-            if (type == "option[infoSize]")
+            for (int i = 0; i < typeExpr.Length; i++)
             {
-                buff.options.Set("infoSize", value);
+                var currentType = typeExpr[i];
+                var currentOp = opExpr[i];
+                var currentValue = valueExpr[i];
+
+                if (currentType == "option[infoSize]")
+                {
+                    buff.options.Set("infoSize", currentValue);
+                    success = true;
+                    continue;
+                }
+
+                float oldValue = buff.GetBuffIdentifier(currentType);
+                float newValue = Parser.ParseEffectOperation(currentValue, effect, lhsUnit, rhsUnit);
+
+                buff.SetBuffIdentifier(currentType, Operator.Operate(currentOp, oldValue, newValue));
+
+                if (currentType == "id")
+                {
+                    if (string.IsNullOrEmpty(key))
+                        lhsUnit.pet.buffController.OnAddBuff(buff, lhsUnit, state);
+                }
+
+                if (buff.info.autoRemove && buff.value <= 0)
+                {
+                    if (string.IsNullOrEmpty(key))
+                        lhsUnit.pet.buffController.RemoveBuff(buff, lhsUnit, state);
+                    else if (key == "unit")
+                        lhsUnit.unitBuffs.RemoveAll(x => x == buff);
+                    else
+                        state.stateBuffs.RemoveAll(x => x.Value == buff);
+                }
+
                 success = true;
-                continue;
             }
-
-            float oldValue = buff.GetBuffIdentifier(type);
-            float newValue = Parser.ParseEffectOperation(value, effect, lhsUnit, rhsUnit);
-
-            if (type == "id")
-            {
-                // if (string.IsNullOrEmpty(key))
-                //     lhsUnit.pet.buffController.OnRemoveBuff(buff, lhsUnit, state);
-            }
-
-            buff.SetBuffIdentifier(type, Operator.Operate(op, oldValue, newValue));
-
-            if (type == "id")
-            {
-                if (string.IsNullOrEmpty(key))
-                    lhsUnit.pet.buffController.OnAddBuff(buff, lhsUnit, state);
-            }
-
-            if (buff.info.autoRemove && buff.value <= 0)
-            {
-                if (string.IsNullOrEmpty(key))
-                    lhsUnit.pet.buffController.RemoveBuff(buff, lhsUnit, state);
-                else if (key == "unit")
-                    lhsUnit.unitBuffs.RemoveAll(x => x == buff);
-                else
-                    state.stateBuffs.RemoveAll(x => x.Value == buff);
-            }
-            success = true;
         }
         return success;
     }

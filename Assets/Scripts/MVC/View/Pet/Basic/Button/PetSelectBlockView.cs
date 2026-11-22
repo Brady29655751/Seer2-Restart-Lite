@@ -181,15 +181,18 @@ public class PetSelectBlockView : Module
     public void SetBanPick(List<int> ban, List<int> pick)
     {
         var banned = !isNull && !ListHelper.IsNullOrEmpty(ban) && ban.Contains(currentPet.id);
-        var picked = !isNull && !ListHelper.IsNullOrEmpty(pick) && pick.Contains(currentPet.id);
-        var first = !isNull && !ListHelper.IsNullOrEmpty(pick) && currentPet.id == pick.FirstOrDefault();
+        var picked = !isNull && !ListHelper.IsNullOrEmpty(pick) && pick.Contains(currentPet.id) && (!banned);
+        var first = !isNull && !ListHelper.IsNullOrEmpty(pick) && (currentPet.id == pick.FirstOrDefault());
         
-        banPick?.gameObject.SetActive(banned || picked);
+        if (banPick == null)
+            return;   
+
+        banPick.gameObject.SetActive(banned || picked);
         if (first)
-            banPick?.SetSprite(firstSprite);
+            banPick.SetSprite(firstSprite);
         else if (banned)
-            banPick?.SetSprite(banSprite);
+            banPick.SetSprite(banSprite);
         else if (picked)
-            banPick?.SetSprite(pickSprite);
+            banPick.SetSprite(pickSprite);
     }
 }

@@ -136,12 +136,17 @@ public class PetUIInfo
     {
         var currentPetUI = currentPet.ui;
         var currentSkinId = currentPetUI.skinId;
-        var allEvovlePetIds = PetExpSystem.GetEvolveChain(baseId, id);
-        var allDefaultSkinIds = allEvovlePetIds.Select(x => Pet.GetPetInfo(x).ui.defaultSkinId).Distinct().ToList();
-        if (!allDefaultSkinIds.Contains(defaultSkinId))
-            allDefaultSkinIds.Add(defaultSkinId);
+        var allEvolvePetIds = PetExpSystem.GetEvolveChain(baseId, id);
+        var allSkinList = allEvolvePetIds.Select(x => Pet.GetPetInfo(x).ui.defaultSkinId).ToList();
+        if (!allSkinList.Contains(defaultSkinId))
+            allSkinList.Add(defaultSkinId);
 
-        var allSkinList = specialSkinList.Where((x, i) => currentPet.kizuna >= specialSkinKizunaList.Get(i, int.MinValue)).Concat(allDefaultSkinIds).ToList();
+        foreach (var evolvePetId in allEvolvePetIds)
+        {
+            var evolvePetInfo = Pet.GetPetInfo(evolvePetId).ui;
+            allSkinList.AddRange(evolvePetInfo.specialSkinList.Where((x, i) => currentPet.kizuna >= evolvePetInfo.specialSkinKizunaList.Get(i, int.MinValue)));
+        }
+
         if (!ListHelper.IsNullOrEmpty(currentPetUI.specialSkinList))
             allSkinList.AddRange(currentPetUI.specialSkinList);
 
@@ -150,6 +155,6 @@ public class PetUIInfo
             allSkinList.Remove(currentSkinId);
             allSkinList.Insert(0, currentSkinId);
         }
-        return allSkinList;
+        return allSkinList.Distinct().ToList();
     }
 }

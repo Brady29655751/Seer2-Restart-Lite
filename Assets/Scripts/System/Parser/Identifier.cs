@@ -429,7 +429,11 @@ public static class Identifier
         if (skillSystem.TryGetSkillSystemIdentifier(id, out num))
             return num;
 
-        return skillSystem.GetSkillByKey(key).TryGetSkillIdentifier(id, out num) ? num : GetNumIdentifier(id);
+        var skill = skillSystem.GetSkillByKey(key);
+        if (skill == null)
+            return float.MinValue;
+
+        return skill.TryGetSkillIdentifier(id, out num) ? num : GetNumIdentifier(id);
     }
 
     public static float GetBuffIdentifier(string id, PetBattleBuffController buffController)

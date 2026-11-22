@@ -187,6 +187,8 @@ public class RoomManager : Manager<RoomManager>
 
     private void OnAllReady()
     {
+        RemoveSubscriptions();
+
         var otherPlayer = PhotonNetwork.PlayerListOthers;
         Battle battle = new Battle
         (

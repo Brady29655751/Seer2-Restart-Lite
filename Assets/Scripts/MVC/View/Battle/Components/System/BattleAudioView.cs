@@ -19,6 +19,8 @@ public class BattleAudioView : BattleBaseView
         
         yield return new WaitForSeconds(1.5f);
 
+        battle.currentState.myUnit.petSystem.pet?.ui?.PlaySound();
+
         /*
         AudioClip bgm = null;
 

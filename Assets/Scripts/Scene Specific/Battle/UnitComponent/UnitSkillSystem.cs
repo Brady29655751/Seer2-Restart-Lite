@@ -291,22 +291,22 @@ public class UnitSkillSystem
                 GetSkillByKey(key).SetSkillIdentifier(id, num);
                 return;
             case "level":
-                level = num;
+                level = Mathf.Max(num, 0);
                 return;
             case "atk":
-                atk = num;
+                atk = Mathf.Max(num, 1);
                 return;
             case "def":
-                def = num;
+                def = Mathf.Max(num, 1);
                 return;
             case "weather":
-                weatherBuff = num;
+                weatherBuff = Mathf.Max(num, 0);
                 return;
             case "sameElement":
-                sameElementBuff = num;
+                sameElementBuff = Mathf.Max(num, 0);
                 return;
             case "elementRelation":
-                elementRelation = num;
+                elementRelation = Mathf.Max(num, 0);
                 return;
             case "damage":
                 skillDamage = (int)num;
